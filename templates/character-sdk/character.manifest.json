@@ -1,0 +1,23 @@
+{
+  "$schema": "../../schema/character.schema.json",
+  "character_id": "replace-me",
+  "character_name": "Replace Me",
+  "character_type": "virtual-human",
+  "sdk_version": "1.0.0",
+  "identity_version": "1.0.0",
+  "status": "draft",
+  "primary_role": "replace-me",
+  "paths": {
+    "identity": "00_IDENTITY.md",
+    "appearance": "01_APPEARANCE.md",
+    "personality": "02_PERSONALITY.md",
+    "wardrobe": "03_WARDROBE.md",
+    "voice": "04_VOICE.md",
+    "camera": "05_CAMERA.md",
+    "brand": "06_BRAND.md",
+    "behavior": "07_BEHAVIOR.md",
+    "capabilities": "11_CAPABILITIES.md",
+    "limitations": "12_LIMITATIONS.md",
+    "character_lock": "99_CHARACTER_LOCK.md"
+  }
+}

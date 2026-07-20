@@ -1,0 +1,48 @@
+{
+    "id": "LOOK_010",
+    "version": "1.0",
+    "status": "production",
+    "default": false,
+    "priority": 10,
+    "name": "Studio Presenter",
+    "description": "Official studio presentation outfit.",
+    "style": [
+      "studio",
+      "professional",
+      "presenter"
+    ],
+    "clothing": {
+      "top": "Studio blouse",
+      "bottom": "Elegant trousers",
+      "shoes": "Studio shoes"
+    },
+    "best_for": [
+      "tutorial",
+      "training",
+      "youtube",
+      "english_ai",
+      "ridecloud",
+      "presentation"
+    ],
+    "locations": [
+      "studio",
+      "green_screen",
+      "office"
+    ],
+    "compatible_expressions": [
+      "neutral",
+      "smile",
+      "explaining",
+      "serious"
+    ],
+    "compatible_poses": [
+      "presenting",
+      "pointing",
+      "phone",
+      "thumbs_up"
+    ],
+    "lighting": [
+      "studio",
+      "softbox"
+    ]
+  }

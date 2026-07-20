@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://virtual-humans.local/schema/character-lock.schema.json",
+  "title": "Character Lock",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "character_id": { "type": "string" },
+    "locked": { "type": "boolean" },
+    "version": { "type": "string" }
+  },
+  "required": ["character_id", "locked"]
+}

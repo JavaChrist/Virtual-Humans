@@ -1,0 +1,13 @@
+{
+    "$schema":"https://json-schema.org/draft/2020-12/schema",
+    "title":"Scene",
+    "type":"object",
+  
+    "required":[
+      "location",
+      "camera",
+      "lighting",
+      "character",
+      "outfit"
+    ]
+  }

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://virtual-humans.local/schema/quality-report.schema.json",
+  "title": "Quality Report",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "report_id": { "type": "string" },
+    "target": { "type": "string" },
+    "score": { "type": "number" },
+    "issues": {
+      "type": "array",
+      "items": { "type": "object", "additionalProperties": true }
+    }
+  },
+  "required": ["report_id"]
+}

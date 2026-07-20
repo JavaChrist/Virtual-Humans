@@ -1,0 +1,118 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Virtual Human Outfit",
+    "type": "object",
+  
+    "required": [
+      "id",
+      "version",
+      "status",
+      "default",
+      "priority",
+      "name",
+      "description",
+      "style",
+      "clothing",
+      "best_for",
+      "locations",
+      "compatible_expressions",
+      "compatible_poses",
+      "lighting"
+    ],
+  
+    "properties": {
+  
+      "id": {
+        "type": "string"
+      },
+  
+      "version": {
+        "type": "string"
+      },
+  
+      "status": {
+        "type": "string"
+      },
+  
+      "default": {
+        "type": "boolean"
+      },
+  
+      "priority": {
+        "type": "integer"
+      },
+  
+      "name": {
+        "type": "string"
+      },
+  
+      "description": {
+        "type": "string"
+      },
+  
+      "style": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+  
+      "clothing": {
+  
+        "type": "object",
+  
+        "properties": {
+  
+          "top": {
+            "type": "string"
+          },
+  
+          "bottom": {
+            "type": "string"
+          },
+  
+          "shoes": {
+            "type": "string"
+          }
+  
+        }
+  
+      },
+  
+      "best_for": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+  
+      "locations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+  
+      "compatible_expressions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+  
+      "compatible_poses": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+  
+      "lighting": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+  
+    }
+  }

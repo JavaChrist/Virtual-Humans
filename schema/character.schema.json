@@ -1,0 +1,63 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "title":"Virtual Human",
+  "type":"object",
+
+  "required":[
+    "identity",
+    "personality",
+    "voice",
+    "memory",
+    "assets"
+  ],
+
+  "properties":{
+
+    "identity":{
+      "$ref":"identity.schema.json"
+    },
+
+    "personality":{
+      "$ref":"personality.schema.json"
+    },
+
+    "voice":{
+      "$ref":"voice.schema.json"
+    },
+
+    "memory":{
+      "$ref":"memory.schema.json"
+    },
+
+    "assets":{
+
+      "type":"object",
+
+      "properties":{
+
+        "expressions":{
+          "type":"array"
+        },
+
+        "poses":{
+          "type":"array"
+        },
+
+        "outfits":{
+          "type":"array"
+        },
+
+        "videos":{
+          "type":"array"
+        },
+
+        "prompts":{
+          "type":"array"
+        }
+
+      }
+
+    }
+
+  }
+}

@@ -1,0 +1,43 @@
+{
+    "id": "LOOK_005",
+    "version": "1.0",
+    "status": "production",
+    "default": false,
+    "priority": 5,
+    "name": "Business Casual",
+    "description": "Elegant but approachable business outfit.",
+    "style": [
+      "business",
+      "casual",
+      "premium"
+    ],
+    "clothing": {
+      "top": "Elegant blouse",
+      "bottom": "Tailored trousers",
+      "shoes": "Loafers"
+    },
+    "best_for": [
+      "meeting",
+      "presentation",
+      "startup",
+      "business"
+    ],
+    "locations": [
+      "office",
+      "meeting_room"
+    ],
+    "compatible_expressions": [
+      "neutral",
+      "smile",
+      "explaining"
+    ],
+    "compatible_poses": [
+      "presenting",
+      "pointing",
+      "phone"
+    ],
+    "lighting": [
+      "studio",
+      "office"
+    ]
+  }

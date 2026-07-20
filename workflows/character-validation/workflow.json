@@ -1,0 +1,10 @@
+{
+  "workflow_id": "character-validation",
+  "version": "1.0.0",
+  "status": "draft",
+  "description": "To be completed.",
+  "inputs": [],
+  "steps": [],
+  "outputs": [],
+  "validation": []
+}

@@ -1,0 +1,9 @@
+{
+  "character_id": "example-character",
+  "character_name": "Example Character",
+  "character_type": "virtual-human",
+  "sdk_version": "1.0.0",
+  "identity_version": "1.0.0",
+  "status": "draft",
+  "primary_role": "presenter"
+}

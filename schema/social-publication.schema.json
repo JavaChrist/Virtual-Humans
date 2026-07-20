@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://virtual-humans.local/schema/social-publication.schema.json",
+  "title": "Social Publication",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "publication_id": { "type": "string" },
+    "platform": { "type": "string" },
+    "status": { "type": "string", "enum": ["draft", "scheduled", "published"] },
+    "scheduled_at": { "type": "string" }
+  },
+  "required": ["publication_id", "platform"]
+}

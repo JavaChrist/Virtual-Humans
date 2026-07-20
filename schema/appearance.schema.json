@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://virtual-humans.local/schema/appearance.schema.json",
+  "title": "Appearance",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "string" },
+    "summary": { "type": "string" },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "required": []
+}

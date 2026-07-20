@@ -1,0 +1,9 @@
+{
+  "generation_id": "vid-000001",
+  "category": "video",
+  "provider": "generic-video",
+  "model": "replace-me",
+  "status": "draft",
+  "inputs": {},
+  "outputs": []
+}

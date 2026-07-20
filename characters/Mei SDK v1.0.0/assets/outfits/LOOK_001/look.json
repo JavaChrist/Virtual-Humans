@@ -1,0 +1,57 @@
+{
+    "id": "LOOK_001",
+    "version": "1.0",
+    "status": "production",
+    "default": true,
+    "priority": 1,
+    "name": "Casual Street",
+    "description": "Official everyday outfit for Mei.",
+    "style": [
+      "casual",
+      "street",
+      "modern",
+      "friendly",
+      "urban"
+    ],
+    "clothing": {
+      "top": "Premium white t-shirt",
+      "bottom": "Light blue slim jeans",
+      "shoes": "White sneakers"
+    },
+    "best_for": [
+      "daily_content",
+      "instagram",
+      "tiktok",
+      "youtube_shorts",
+      "micro_trottoir"
+    ],
+    "locations": [
+      "street",
+      "park",
+      "coffee_shop",
+      "shopping_center",
+      "train_station"
+    ],
+    "compatible_expressions": [
+      "neutral",
+      "smile",
+      "big_smile",
+      "laugh",
+      "thinking",
+      "curious",
+      "listening",
+      "explaining"
+    ],
+    "compatible_poses": [
+      "walking",
+      "pointing",
+      "presenting",
+      "phone",
+      "thumbs_up"
+    ],
+    "lighting": [
+      "natural",
+      "soft_daylight",
+      "golden_hour"
+    ]
+  }

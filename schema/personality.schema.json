@@ -1,0 +1,13 @@
+{
+    "$schema":"https://json-schema.org/draft/2020-12/schema",
+    "title":"Personality",
+    "type":"object",
+  
+    "required":[
+      "tone",
+      "traits",
+      "values",
+      "speaking_style",
+      "humor"
+    ]
+  }
