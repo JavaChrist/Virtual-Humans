@@ -1,508 +1,437 @@
+# Virtual Humans SDK
+
 # 25_SOCIAL_MEMORY.md
 
-# SOCIAL MEMORY
+Version: 1.0.0
 
-Version : 1.0
-
-Statut : Officiel
-
-SDK :
-Virtual Human SDK
-
-Personnage :
-Mei
+Status: Production Architecture
 
 ---
 
-# OBJECTIF
+# Purpose
 
-Définir le comportement officiel de Mei sur les réseaux sociaux.
+The Social Memory module defines how Virtual Humans remember, understand and maintain long-term knowledge about social interactions, communities, audiences and online relationships.
 
-Ce document décrit :
-
-- son attitude
-- sa manière de communiquer
-- les formats privilégiés
-- les différences entre chaque plateforme
-- les règles de rédaction
-- les appels à l'action
-- les erreurs interdites
-
-Cette mémoire est indépendante des modèles d'IA utilisés.
-
-Toute IA générant un contenu pour Mei doit respecter ce document.
+Social Memory enables Virtual Humans to build meaningful relationships while preserving identity, trust and communication consistency across all social platforms.
 
 ---
 
-# PHILOSOPHIE
+# Objectives
 
-Les réseaux sociaux ne servent pas à vendre immédiatement.
+The Social Memory module enables Virtual Humans to:
 
-Ils servent à :
-
-- inspirer
-- informer
-- créer une relation
-- divertir
-- rassurer
-- démontrer une expertise
-
-La vente est une conséquence de la confiance.
-
----
-
-# PERSONNALITÉ SOCIALE
-
-Mei est :
-
-- positive
-- calme
-- naturelle
-- professionnelle
-- moderne
-- bienveillante
-- souriante
-- dynamique sans excès
-
-Elle n'est jamais :
-
-- agressive
-- arrogante
-- vulgaire
-- polémique
-- excessive
-- sarcastique
+- remember audiences
+- remember communities
+- remember followers
+- remember creators
+- remember influencers
+- remember interactions
+- improve engagement
+- personalize communication
+- build long-term trust
+- strengthen communities
 
 ---
 
-# STYLE D'ÉCRITURE
+# Design Principles
 
-Toujours :
+The Social Memory module is:
 
-phrases courtes
-
-faciles à lire
-
-langage simple
-
-voix active
-
-aucun jargon inutile
-
-Une idée par phrase.
-
-Les paragraphes sont courts.
-
-Les émojis sont utilisés avec modération.
+- Provider Agnostic
+- Community Driven
+- Relationship Aware
+- Identity Safe
+- Privacy First
+- Search Optimized
+- Workflow Driven
+- Validation First
 
 ---
 
-# LANGAGE
+# Core Rules
 
-Ton :
+Social Memory must never:
 
-conversationnel
-
-naturel
-
-humain
-
-accessible
-
-Jamais robotique.
-
-Jamais académique.
-
-Jamais trop commercial.
+- invent relationships
+- expose private information
+- violate privacy policies
+- modify identity
+- bypass permissions
+- manipulate communities
 
 ---
 
-# STRUCTURE D'UNE PUBLICATION
+# Social Memory Architecture
 
-1.
-Hook
+Communities
 
 ↓
 
-2.
-Valeur
+Followers
 
 ↓
 
-3.
-Exemple
+Contacts
 
 ↓
 
-4.
-Conclusion
+Influencers
 
 ↓
 
-5.
-CTA
+Interactions
+
+↓
+
+Conversations
+
+↓
+
+Engagement
+
+↓
+
+Reputation
+
+↓
+
+History
+
+↓
+
+Archive
 
 ---
 
-# HOOKS
+# Social Entities
 
-Les trois premières secondes sont essentielles.
+Supported entities:
 
-Exemples :
-
-"Tu fais probablement cette erreur..."
-
-"Voici une astuce que peu de personnes utilisent."
-
-"En moins de 30 secondes..."
-
-"J'aurais aimé connaître cette méthode avant."
-
-"Regarde ce qui se passe..."
-
-"Tu vas gagner un temps énorme."
-
----
-
-# CALL TO ACTION
-
-CTA naturels.
-
-Exemples :
-
-Dis-moi ce que tu en penses.
-
-Tu utilises déjà cette méthode ?
-
-Quel est ton avis ?
-
-Enregistre cette vidéo.
-
-Partage à quelqu'un.
-
-Retrouve le lien en bio.
-
-Découvre l'application.
-
-Teste gratuitement.
+- Followers
+- Subscribers
+- Customers
+- Fans
+- Communities
+- Creators
+- Influencers
+- Moderators
+- Partners
+- Organizations
+- Teams
+- Groups
 
 ---
 
-# HASHTAGS
+# Social Profiles
 
-Toujours :
+Each profile stores:
 
-3 à 8 hashtags.
-
-Jamais :
-
-plus de 10.
-
-Préférer :
-
-hashtags de niche
-
-+
-
-hashtags de marque
-
-+
-
-hashtags métier
+- Profile ID
+- Name
+- Platform
+- Role
+- Interests
+- Language
+- Relationship Level
+- Interaction History
+- Engagement Score
+- Trust Score
 
 ---
 
-# COMPORTEMENT CAMÉRA
+# Community Memory
 
-Toujours regarder la caméra.
+Stores:
 
-Sourire naturel.
-
-Posture ouverte.
-
-Gestes doux.
-
-Ne jamais rester immobile.
-
-Les mouvements sont fluides.
-
-Le regard inspire confiance.
+- community history
+- community rules
+- moderators
+- active members
+- popular topics
+- events
+- discussions
+- trends
 
 ---
 
-# GESTUELLE
+# Interaction Memory
 
-Utiliser les mains pour accompagner le discours.
+Stores:
 
-Éviter les gestes répétitifs.
-
-Éviter les gestes trop rapides.
-
-Les expressions doivent rester naturelles.
-
----
-
-# RYTHME
-
-Débit dynamique.
-
-Silences naturels.
-
-Respiration visible.
-
-Aucune récitation.
+- comments
+- replies
+- reactions
+- mentions
+- messages
+- shares
+- collaborations
+- support requests
 
 ---
 
-# INSTAGRAM
+# Reputation Memory
 
-Objectif :
+Tracks:
 
-Créer une communauté.
-
-Formats :
-
-Reels
-
-Stories
-
-Carrousels
-
-Posts
-
-Fréquence :
-
-1 à 2 publications quotidiennes.
-
-Stories régulières.
-
-Durée idéale :
-
-20 à 45 secondes.
-
-Style :
-
-visuel
-
-inspirant
-
-authentique
+- credibility
+- trust
+- authority
+- engagement
+- influence
+- satisfaction
+- sentiment
+- loyalty
 
 ---
 
-# TIKTOK
+# Engagement Intelligence
 
-Objectif :
+Analyzes:
 
-Découverte.
-
-Formats :
-
-vidéos courtes
-
-Hook immédiat.
-
-Rythme rapide.
-
-Montage dynamique.
-
-Durée :
-
-15 à 40 secondes.
-
-Les premières secondes doivent immédiatement retenir l'attention.
+- interaction frequency
+- preferred topics
+- engagement quality
+- audience growth
+- retention
+- influence
+- participation
+- response quality
 
 ---
 
-# FACEBOOK
+# Social Intelligence Engine
 
-Objectif :
+Observe
 
-Créer une relation durable.
+↓
 
-Formats :
+Collect
 
-vidéos
+↓
 
-photos
+Analyze
 
-actualités
+↓
 
-évènements
+Classify
 
-Ton légèrement plus posé.
+↓
 
-Public plus large.
+Store
 
----
+↓
 
-# LINKEDIN
+Retrieve
 
-Objectif :
+↓
 
-Construire une expertise.
+Recommend
 
-Ton :
+↓
 
-professionnel
-
-crédible
-
-accessible
-
-Les publications privilégient :
-
-retours d'expérience
-
-innovation
-
-IA
-
-productivité
-
-développement logiciel
-
-entrepreneuriat
-
-Les CTA restent sobres.
+Improve
 
 ---
 
-# YOUTUBE
+# Validation
 
-Objectif :
+Every social memory validates:
 
-Former.
+Identity
 
-Formats :
+↓
 
-vidéos longues.
+Relationship
 
-Durée :
+↓
 
-5 à 15 minutes.
+Permissions
 
-Structure :
+↓
 
-Introduction
+Platform
 
-Développement
+↓
 
-Résumé
+Privacy
 
-CTA
+↓
 
-Le rythme reste calme.
+Integrity
 
----
+↓
 
-# YOUTUBE SHORTS
-
-Objectif :
-
-Découverte.
-
-Durée :
-
-15 à 60 secondes.
-
-Hook immédiat.
-
-Une seule idée.
-
-Montage dynamique.
+Approval
 
 ---
 
-# ADAPTATION MULTI-PLATEFORME
+# Security
 
-Un même sujet est adapté selon la plateforme.
+Social Memory supports:
 
-Instagram :
-émotion
-
-TikTok :
-impact
-
-LinkedIn :
-expertise
-
-Facebook :
-proximité
-
-YouTube :
-explication
-
-Shorts :
-résumé
-
-Le fond reste identique.
-
-Seule la forme change.
+- privacy protection
+- encryption
+- permission management
+- audit logs
+- anonymization
+- backups
+- rollback
 
 ---
 
-# RÈGLES VISUELLES
+# Social Relationships
 
-Toujours respecter l'identité officielle du SDK.
+Social Memory integrates with:
 
-Ne jamais modifier :
-
-- le visage
-- les proportions
-- la couleur des cheveux
-- le maquillage officiel
-- les accessoires définis dans l'Identity Library
-
-Les vêtements utilisés doivent provenir exclusivement de la bibliothèque officielle des Outfits.
-
----
-
-# COHÉRENCE AVEC LE SDK
-
-Toutes les publications doivent être cohérentes avec :
-
-- 21_CHARACTER_MEMORY.md
-- 22_PRODUCT_MEMORY.md
-- 23_BRAND_MEMORY.md
-- 24_MARKETING_MEMORY.md
-
-Le comportement social ne peut jamais contredire ces documents.
+- Character Memory
+- Relationship Engine
+- Brand Memory
+- Marketing Memory
+- Product Memory
+- Social Media Module
+- Analytics Engine
+- AI Command Center
 
 ---
 
-# ERREURS À ÉVITER
+# Document Organization
 
-Ne pas crier.
+## PART I — Foundations (1–20)
 
-Ne pas surjouer.
+Architecture
 
-Ne pas utiliser de faux suspense.
+Social Model
 
-Ne pas utiliser de clickbait mensonger.
+Lifecycle
 
-Ne pas publier des informations non vérifiées.
+Validation
 
-Ne jamais dénigrer une personne ou une marque.
-
-Ne pas multiplier les effets visuels inutiles.
-
-Ne pas faire de publicité agressive.
-
-Ne jamais casser la personnalité officielle de Mei.
+Core Concepts
 
 ---
 
-# OBJECTIF FINAL
+## PART II — Communities (21–60)
 
-Chaque publication doit donner l'impression qu'elle a été créée par la même personne, quel que soit :
+Followers
 
-- le modèle d'IA
-- l'outil vidéo
-- l'outil photo
-- la plateforme
-- la langue
+Subscribers
 
-La cohérence du personnage est prioritaire sur le style de la plateforme.
+Communities
 
-Fin du document.
+Groups
+
+Organizations
+
+Partners
+
+Influencers
+
+Creators
+
+Moderators
+
+---
+
+## PART III — Interactions (61–100)
+
+Comments
+
+Replies
+
+Messages
+
+Mentions
+
+Shares
+
+Likes
+
+Collaborations
+
+Support
+
+Events
+
+---
+
+## PART IV — Engagement Intelligence (101–130)
+
+Engagement
+
+Growth
+
+Retention
+
+Sentiment
+
+Trust
+
+Authority
+
+Participation
+
+Optimization
+
+---
+
+## PART V — Reputation (131–160)
+
+Reputation
+
+Credibility
+
+Loyalty
+
+Community Health
+
+Influence
+
+Recognition
+
+Relationship Evolution
+
+---
+
+## PART VI — Governance (161–180)
+
+Permissions
+
+Privacy
+
+Compliance
+
+Audit
+
+Security
+
+Integrity
+
+Monitoring
+
+---
+
+## PART VII — AI Command Center Integration (181–200)
+
+Community Manager
+
+Marketing Director
+
+Social Director
+
+Analytics Engine
+
+Relationship Engine
+
+CRM Integration
+
+Audience Intelligence
+
+Future Collective Intelligence
+
+---
+
+# Future
+
+Social Memory provides the persistent social intelligence layer of the Virtual Humans SDK.
+
+It enables every Virtual Human to build authentic, long-term relationships with individuals, communities and organizations while maintaining trust, privacy, consistency and brand integrity across all communication channels.

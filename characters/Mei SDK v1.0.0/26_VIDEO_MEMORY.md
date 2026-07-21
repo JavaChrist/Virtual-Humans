@@ -1,509 +1,472 @@
+# Virtual Humans SDK
+
 # 26_VIDEO_MEMORY.md
 
-# VIDEO MEMORY
+Version: 1.0.0
 
-Version : 1.0
-
-Statut : Officiel
-
-SDK :
-Virtual Human SDK
-
-Personnage :
-Mei
+Status: Production Architecture
 
 ---
 
-# OBJECTIF
+# Purpose
 
-Définir les règles officielles de production vidéo de Mei.
+The Video Memory module defines how Virtual Humans permanently store, organize and improve knowledge related to video production.
 
-Ce document garantit une cohérence visuelle, comportementale et cinématographique sur toutes les plateformes et avec tous les modèles d'IA.
+Video Memory enables Virtual Humans to remember previous productions, creative decisions, editing styles and publishing performance while maintaining consistent visual identity.
 
-Toutes les vidéos produites avec Mei doivent respecter ces règles.
-
----
-
-# PHILOSOPHIE
-
-Une vidéo de Mei doit toujours donner l'impression d'être filmée par une véritable créatrice de contenu.
-
-Le spectateur ne doit jamais avoir l'impression de regarder une démonstration technique d'intelligence artificielle.
-
-L'attention doit être portée sur le message, jamais sur la technologie.
+The module serves as the long-term intelligence layer for video creation.
 
 ---
 
-# STYLE VISUEL
+# Objectives
 
-Le rendu doit être :
+The Video Memory module enables Virtual Humans to:
 
-naturel
-
-premium
-
-lumineux
-
-moderne
-
-minimaliste
-
-professionnel
-
-authentique
-
-La qualité doit rappeler une vidéo tournée avec un smartphone haut de gamme ou une caméra hybride récente.
+- remember previous videos
+- remember production workflows
+- remember editing styles
+- remember successful formats
+- remember audience preferences
+- improve future productions
+- preserve visual identity
+- optimize engagement
+- accelerate content creation
+- build consistent video series
 
 ---
 
-# IDENTITÉ VISUELLE
+# Design Principles
 
-Toujours respecter :
+The Video Memory module is:
 
-Identity Library
-
-Expressions Library
-
-Pose Library
-
-Outfit Library
-
-Aucun élément physique officiel du personnage ne peut être modifié.
-
----
-
-# MOUVEMENTS
-
-Les mouvements sont :
-
-fluides
-
-naturels
-
-légers
-
-progressifs
-
-Aucun mouvement brutal.
-
-Aucun changement instantané de posture.
+- Provider Agnostic
+- Workflow Driven
+- Media Aware
+- Identity Safe
+- Performance Driven
+- Version Controlled
+- Validation First
+- Search Optimized
 
 ---
 
-# REGARD
+# Core Rules
 
-Le regard constitue le principal point de connexion avec le spectateur.
+Video Memory must never:
 
-Par défaut :
+- modify character identity
+- lose production history
+- overwrite validated assets
+- bypass copyright validation
+- violate publishing policies
+- invent production results
 
-regard caméra.
+---
 
-Lorsqu'un objet est présenté :
+# Video Memory Architecture
 
-regard alterné :
-
-objet
+Video Projects
 
 ↓
 
-caméra
+Scripts
 
 ↓
 
-objet
+Storyboards
 
 ↓
 
-caméra
+Scenes
 
-Le contact visuel reste majoritaire.
+↓
 
----
+Shots
 
-# EXPRESSIONS
+↓
 
-Toujours utiliser des expressions naturelles.
+Animations
 
-Micro-expressions privilégiées :
+↓
 
-léger sourire
+Audio
 
-surprise légère
+↓
 
-intérêt
+Editing
 
-enthousiasme
+↓
 
-écoute
+Publishing
 
-Les expressions doivent évoluer progressivement.
+↓
 
-Jamais de changement brutal.
+Analytics
 
----
+↓
 
-# GESTUELLE
-
-Les mains accompagnent le discours.
-
-Les gestes restent :
-
-ouverts
-
-calmes
-
-élégants
-
-naturels
-
-Éviter :
-
-bras croisés
-
-gestes répétitifs
-
-gestes agressifs
-
-gestes très rapides
+Archive
 
 ---
 
-# POSTURE
+# Video Categories
 
-Dos droit.
+Supported categories:
 
-Épaules détendues.
-
-Tête légèrement mobile.
-
-Position équilibrée.
-
-Jamais figée.
-
----
-
-# DÉPLACEMENTS
-
-Les déplacements sont limités.
-
-Quelques pas maximum.
-
-Les mouvements servent le discours.
-
-Ils ne distraient jamais.
+- Short Videos
+- Long Videos
+- Tutorials
+- Commercials
+- Product Demos
+- Educational Videos
+- Social Media Videos
+- Presentations
+- Livestreams
+- Interviews
+- Documentaries
+- Promotional Videos
 
 ---
 
-# CADRAGES
+# Video Assets
 
-Plans autorisés :
+Each video stores:
 
-Plan poitrine
-
-Plan taille
-
-Plan américain
-
-Plan moyen
-
-Plein pied
-
-Le gros plan est réservé aux moments émotionnels.
-
-Les très grands angles sont évités.
+- Video ID
+- Title
+- Description
+- Version
+- Duration
+- Resolution
+- Aspect Ratio
+- Language
+- Status
+- Owner
 
 ---
 
-# CAMÉRA
+# Production Memory
 
-La caméra reste stable.
+Stores:
 
-Mouvements possibles :
-
-léger travelling
-
-léger dolly
-
-léger zoom
-
-léger panoramique
-
-Les mouvements sont lents.
-
-Jamais de caméra nerveuse.
+- scripts
+- prompts
+- storyboards
+- shot lists
+- camera movements
+- transitions
+- visual effects
+- subtitles
+- thumbnails
+- publishing settings
 
 ---
 
-# OBJECTIF CAMÉRA
+# Character Performance
 
-Perspective naturelle.
+Stores:
 
-Hauteur des yeux.
-
-Éviter :
-
-contre-plongée excessive
-
-plongée marquée
-
-déformation grand angle
-
-fisheye
+- facial expressions
+- gestures
+- poses
+- camera positions
+- eye contact
+- voice performance
+- timing
+- emotions
+- presentation quality
 
 ---
 
-# PROFONDEUR DE CHAMP
+# Editing Memory
 
-Profondeur légère.
+Stores:
 
-Arrière-plan légèrement flou.
-
-Sujet parfaitement net.
-
----
-
-# ÉCLAIRAGE
-
-Toujours lumineux.
-
-Lumière douce.
-
-Ombres naturelles.
-
-Le visage reste parfaitement visible.
-
-Éviter :
-
-contre-jour
-
-ombres dures
-
-éclairage coloré
-
-surexposition
-
-sous-exposition
+- editing templates
+- transitions
+- effects
+- color grading
+- overlays
+- captions
+- animations
+- music
+- sound effects
+- rendering settings
 
 ---
 
-# COULEURS
+# Publishing Memory
 
-Couleurs naturelles.
+Stores:
 
-Balance des blancs neutre.
-
-Saturation modérée.
-
-Contraste doux.
-
----
-
-# DÉCOR
-
-Le décor soutient le message.
-
-Il reste :
-
-propre
-
-simple
-
-moderne
-
-cohérent
-
-Il ne détourne jamais l'attention.
+- publishing dates
+- platforms
+- hashtags
+- titles
+- descriptions
+- playlists
+- audience targeting
+- scheduling
+- performance history
 
 ---
 
-# RYTHME
+# Analytics Memory
 
-Débit naturel.
+Tracks:
 
-Respiration visible.
-
-Silences possibles.
-
-Les phrases importantes sont légèrement ralenties.
-
----
-
-# DURÉES
-
-Short :
-
-15–30 s
-
-Standard :
-
-30–60 s
-
-Explication :
-
-2–5 min
-
-Formation :
-
-5–15 min
-
-Présentation :
-
-3–10 min
+- views
+- watch time
+- retention
+- engagement
+- shares
+- comments
+- CTR
+- completion rate
+- conversions
+- ROI
 
 ---
 
-# MONTAGE
+# Video Intelligence Engine
 
-Transitions discrètes.
+Capture
 
-Coupe au rythme de la parole.
+↓
 
-Éviter :
+Analyze
 
-transitions spectaculaires
+↓
 
-effets inutiles
+Index
 
-animations excessives
+↓
 
----
+Retrieve
 
-# TEXTE À L'ÉCRAN
+↓
 
-Le texte complète la vidéo.
+Recommend
 
-Il ne remplace jamais la narration.
+↓
 
-Peu de texte.
+Optimize
 
-Lisible.
+↓
 
-Hiérarchisé.
+Publish
 
----
+↓
 
-# AUDIO
-
-La voix reste prioritaire.
-
-La musique est discrète.
-
-Les effets sonores restent limités.
-
-Le message doit toujours être parfaitement compréhensible.
+Learn
 
 ---
 
-# SYNCHRONISATION
+# Validation
 
-Les lèvres doivent rester synchronisées avec la voix.
+Every video memory validates:
 
-Les gestes doivent accompagner la parole.
+Identity
 
-Les expressions suivent le discours.
+↓
 
----
+Brand
 
-# PLATEFORMES
+↓
 
-Instagram
+Script
 
-vidéo verticale
+↓
 
-TikTok
+Media Assets
 
-vidéo verticale
+↓
 
-YouTube Shorts
+Copyright
 
-vidéo verticale
+↓
 
-Facebook
+Platform Rules
 
-verticale ou horizontale
+↓
 
-LinkedIn
+Publishing
 
-verticale privilégiée
+↓
 
-YouTube
-
-horizontal 16:9
+Analytics
 
 ---
 
-# ERREURS INTERDITES
+# Security
 
-Ne jamais produire :
+Video Memory supports:
 
-mouvements robotiques
-
-clignements anormaux
-
-mains déformées
-
-yeux instables
-
-changements de visage
-
-changements de coiffure
-
-changements de morphologie
-
-variations de couleur de peau
-
-sourires figés
-
-gestes incohérents
-
-saccades caméra
-
-effets excessifs
+- encryption
+- access control
+- digital signatures
+- audit logs
+- backups
+- rollback
+- version history
 
 ---
 
-# PRIORITÉS
+# Video Relationships
 
-Toujours privilégier :
+Video Memory integrates with:
 
-la crédibilité
-
-la cohérence
-
-la fluidité
-
-la simplicité
-
-la stabilité
-
-La qualité perçue est plus importante que la complexité technique.
+- Character Memory
+- Product Memory
+- Brand Memory
+- Marketing Memory
+- Social Memory
+- Workflow Engine
+- Media Generator
+- AI Command Center
 
 ---
 
-# COMPATIBILITÉ
+# Document Organization
 
-Ce document est compatible avec tous les modèles vidéo supportés par le Virtual Human SDK.
+## PART I — Foundations (1–20)
 
-Les implémentations spécifiques sont documentées séparément dans :
+Architecture
 
-videos/runway.md
+Core Concepts
 
-videos/veo.md
+Memory Model
 
-videos/kling.md
+Lifecycle
 
-videos/minimax.md
-
-videos/openai.md
+Validation
 
 ---
 
-# OBJECTIF FINAL
+## PART II — Production (21–60)
 
-Une vidéo générée aujourd'hui ou dans cinq ans, avec n'importe quelle IA, doit être immédiatement identifiable comme une vidéo officielle de Mei.
+Projects
 
-La technologie peut évoluer.
+Scripts
 
-Le personnage ne change pas.
+Storyboards
 
-Fin du document.
+Scenes
+
+Shots
+
+Camera
+
+Audio
+
+Editing
+
+Rendering
+
+---
+
+## PART III — Media Assets (61–100)
+
+Images
+
+Videos
+
+Animations
+
+Audio
+
+Music
+
+Voice
+
+Effects
+
+Subtitles
+
+Thumbnails
+
+Templates
+
+---
+
+## PART IV — Publishing (101–130)
+
+Platforms
+
+Scheduling
+
+Metadata
+
+SEO
+
+Hashtags
+
+Descriptions
+
+Campaigns
+
+Analytics
+
+---
+
+## PART V — Performance Intelligence (131–160)
+
+Engagement
+
+Retention
+
+Audience
+
+Optimization
+
+Recommendations
+
+Benchmarks
+
+Learning
+
+---
+
+## PART VI — Governance (161–180)
+
+Permissions
+
+Compliance
+
+Copyright
+
+Security
+
+Audit
+
+Recovery
+
+Versioning
+
+---
+
+## PART VII — AI Command Center Integration (181–200)
+
+Video Director
+
+Media Generator
+
+Content Director
+
+Marketing Director
+
+Publishing Engine
+
+Analytics Engine
+
+Campaign Manager
+
+Future Autonomous Video Production
+
+---
+
+# Future
+
+Video Memory provides the persistent audiovisual intelligence layer of the Virtual Humans SDK.
+
+It enables every Virtual Human to continuously improve video quality, production efficiency and audience engagement while preserving character identity, brand consistency and provider independence across all video platforms.

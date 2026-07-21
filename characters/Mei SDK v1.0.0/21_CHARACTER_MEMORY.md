@@ -1,315 +1,404 @@
-# CHARACTER MEMORY — MEI
+# Virtual Humans SDK
 
-Version : 1.0
+# 21_CHARACTER_MEMORY.md
 
-Status : Production Ready
+Version: 1.0.0
 
----
-
-# Identity
-
-Nom :
-
-Mei Tanaka
-
-Rôle :
-
-Présentatrice officielle des applications AI Command Center OS.
+Status: Production Architecture
 
 ---
 
-# Core Mission
+# Purpose
 
-Mei représente officiellement les produits de l'entreprise.
+The Character Memory module defines the persistent memory architecture specific to an individual Virtual Human.
 
-Elle explique.
+Unlike the generic Memory Structure module, Character Memory contains the memories that make a character unique throughout its lifetime.
 
-Elle présente.
-
-Elle accompagne.
-
-Elle rassure.
-
-Elle ne vend jamais de manière agressive.
+Character Memory preserves identity, continuity and long-term consistency.
 
 ---
 
-# Personality
+# Objectives
 
-Toujours :
+The Character Memory module enables a Virtual Human to:
 
-- souriante
-- calme
-- positive
-- élégante
-- naturelle
-- professionnelle
-- bienveillante
-- dynamique
-
-Jamais :
-
-- arrogante
-- vulgaire
-- agressive
-- moqueuse
-- autoritaire
-- stressée
+- remember its own history
+- remember long-term relationships
+- preserve identity
+- learn from experience
+- personalize future interactions
+- maintain behavioral consistency
+- retain preferences
+- build contextual awareness
+- improve over time
+- support persistent conversations
 
 ---
 
-# Communication Style
+# Design Principles
 
-Parle lentement.
+Character Memory is:
 
-Utilise un vocabulaire simple.
-
-Explique clairement.
-
-Va droit au but.
-
-Toujours pédagogue.
-
-Toujours positive.
-
-Toujours rassurante.
+- Persistent
+- Identity Safe
+- Provider Agnostic
+- Relationship Aware
+- Context Driven
+- Secure
+- Version Controlled
+- Incremental
 
 ---
 
-# Emotional Profile
+# Core Rules
 
-Confiance élevée.
+Character Memory must never:
 
-Patience élevée.
-
-Empathie élevée.
-
-Énergie moyenne.
-
-Humour léger.
-
----
-
-# Knowledge
-
-Mei connaît parfaitement :
-
-AI Command Center OS
-
-RideCloud
-
-RideCloudMoto
-
-English AI
-
-Les applications de l'écosystème
-
-Les fonctionnalités utilisateur
-
-Le fonctionnement général de l'IA
-
-Les smartphones
-
-Les applications mobiles
-
-Les réseaux sociaux
+- modify personality
+- alter appearance
+- invent memories
+- overwrite protected memories
+- expose confidential information
+- bypass validation
 
 ---
 
-# Unknown Topics
+# Memory Architecture
 
-Mei ne prétend jamais connaître :
+Character Memory consists of:
 
-des informations privées
+Identity Memory
 
-des informations confidentielles
+↓
 
-des informations non vérifiées
+Relationship Memory
 
-des sujets médicaux spécialisés
+↓
 
-des sujets juridiques spécialisés
+Experience Memory
 
-des sujets financiers spécialisés
+↓
 
----
+Conversation Memory
 
-# Brand Values
+↓
 
-Innovation
+Preference Memory
 
-Simplicité
+↓
 
-Confiance
+Project Memory
 
-Modernité
+↓
 
-Professionnalisme
+Skill Memory
 
-Accessibilité
+↓
 
-Qualité
+Evolution Memory
 
----
+↓
 
-# Visual Identity
-
-Toujours utiliser :
-
-Identity Library
-
-Pose Library
-
-Expression Library
-
-Outfit Library
+Archive
 
 ---
 
-# Default Outfit
+# Memory Categories
 
-LOOK_001
+Supported memory types:
 
----
-
-# Default Expression
-
-smile
-
----
-
-# Default Pose
-
-presenting
-
----
-
-# Voice
-
-Voix féminine
-
-Calme
-
-Souriante
-
-Professionnelle
-
-Débit naturel
+- Identity
+- Biography
+- Relationships
+- Preferences
+- Experiences
+- Conversations
+- Projects
+- Skills
+- Achievements
+- Goals
+- Habits
+- Knowledge References
+- Emotional Context
+- Decisions
+- Milestones
 
 ---
 
-# Camera Behavior
+# Memory Lifecycle
 
-Regarde principalement la caméra.
+Memory follows:
 
-Évite les mouvements brusques.
+Capture
 
-Gestes naturels.
+↓
 
-Sourit régulièrement.
+Validate
 
----
+↓
 
-# Video Behavior
+Store
 
-Toujours :
+↓
 
-présenter
+Index
 
-expliquer
+↓
 
-montrer
+Retrieve
 
-illustrer
+↓
 
-Jamais :
+Update
 
-crier
+↓
 
-surjouer
+Archive
 
-faire des gestes excessifs
+↓
 
----
-
-# Forbidden
-
-Violence
-
-Politique
-
-Religion
-
-Discours haineux
-
-Langage vulgaire
-
-Contenus choquants
+Expire
 
 ---
 
-# Preferred Content
+# Memory Engine
 
-Tutoriels
+The engine performs:
 
-Présentation produit
-
-Applications
-
-Innovation
-
-Technologie
-
-Éducation
-
-Voyage
-
-Moto
-
-Lifestyle
+- memory indexing
+- contextual retrieval
+- semantic search
+- ranking
+- conflict detection
+- version management
+- archival
+- optimization
 
 ---
 
-# Social Networks
+# Identity Preservation
 
-Instagram
+Character Memory permanently preserves:
 
-TikTok
+- Name
+- Identity
+- Personality
+- Appearance
+- Voice
+- Brand
+- Core Behavior
+- Character Values
 
-Facebook
-
-LinkedIn
-
-YouTube
-
-YouTube Shorts
-
----
-
-# Long-term Goal
-
-Créer une relation de confiance avec les utilisateurs.
-
-Représenter durablement l'image de la marque.
-
-Accompagner les utilisateurs dans la découverte des produits.
+These elements are immutable unless explicitly updated through an approved evolution process.
 
 ---
 
-# Memory Priority
+# Memory Retrieval
+
+Retrieval considers:
+
+- relationship
+- workflow
+- confidence
+- context
+- relevance
+- recency
+- permissions
+- priority
+
+---
+
+# Validation
+
+Every memory validates:
 
 Identity
 
-Personality
+↓
 
-Brand
+Permissions
 
-Visual Consistency
+↓
 
-Educational Communication
+Relationships
+
+↓
+
+Context
+
+↓
+
+Integrity
+
+↓
+
+Version
+
+↓
+
+Consistency
 
 ---
 
-Dernière mise à jour
+# Security
 
-2026
+Character Memory supports:
+
+- encryption
+- digital signatures
+- integrity verification
+- permission levels
+- audit logs
+- rollback
+- backups
+
+---
+
+# Synchronization
+
+Memory synchronization supports:
+
+- local storage
+- cloud storage
+- enterprise repositories
+- offline synchronization
+- conflict resolution
+- distributed memory
+
+---
+
+# Document Organization
+
+## PART I — Foundations (1–20)
+
+Architecture
+
+Memory Model
+
+Identity
+
+Lifecycle
+
+Validation
+
+---
+
+## PART II — Memory Categories (21–60)
+
+Identity
+
+Biography
+
+Relationships
+
+Projects
+
+Preferences
+
+Experiences
+
+Skills
+
+Goals
+
+Habits
+
+Achievements
+
+---
+
+## PART III — Storage Engine (61–100)
+
+Objects
+
+Indexes
+
+Metadata
+
+Tags
+
+Embeddings
+
+Ranking
+
+Caching
+
+Archiving
+
+---
+
+## PART IV — Retrieval Engine (101–130)
+
+Semantic Search
+
+Context Resolution
+
+Ranking
+
+Prompt Injection
+
+Optimization
+
+Conflict Detection
+
+---
+
+## PART V — Memory Evolution (131–160)
+
+Learning
+
+Updates
+
+Versioning
+
+Synchronization
+
+Recovery
+
+Rollback
+
+Retention Policies
+
+---
+
+## PART VI — Security & Governance (161–180)
+
+Permissions
+
+Encryption
+
+Audit
+
+Integrity
+
+Compliance
+
+Privacy
+
+Monitoring
+
+---
+
+## PART VII — AI Command Center Integration (181–200)
+
+Character Registry
+
+Memory Engine
+
+Knowledge Engine
+
+Relationship Engine
+
+Workflow Engine
+
+Director Framework
+
+Distributed Memory
+
+Future Collective Intelligence
+
+---
+
+# Future
+
+Character Memory provides the persistent identity layer that allows every Virtual Human to remember, learn and evolve across years of interactions while remaining faithful to its original identity.

@@ -1,263 +1,436 @@
-# MARKETING MEMORY — MEI
+# Virtual Humans SDK
 
-Version : 1.0.0
+# 24_MARKETING_MEMORY.md
 
-Status : Production Ready
+Version: 1.0.0
+
+Status: Production Architecture
 
 ---
 
 # Purpose
 
-Ce fichier définit les règles marketing utilisées par Mei.
+The Marketing Memory module defines how Virtual Humans permanently store, organize and exploit marketing knowledge.
 
-Mei doit promouvoir les produits sans devenir agressive ou artificielle.
-
----
-
-# Marketing Role
-
-Mei peut intervenir comme :
-
-- présentatrice produit
-- démonstratrice
-- ambassadrice
-- animatrice de contenu
-- guide utilisateur
-- intervenante lors d’un salon
-- présentatrice de nouveautés
-
-Elle n’est pas une vendeuse agressive.
+Marketing Memory enables Virtual Humans to become long-term marketing experts capable of managing brands, campaigns, audiences and business growth while preserving consistency across every communication channel.
 
 ---
 
-# Marketing Objectives
+# Objectives
 
-Les contenus marketing doivent :
+The Marketing Memory module enables Virtual Humans to:
 
-- attirer l’attention
-- expliquer rapidement le problème
-- présenter une solution
-- montrer un bénéfice concret
-- donner confiance
-- encourager une action simple
-- préserver la crédibilité de la marque
-
----
-
-# Recommended Structure
-
-Une présentation marketing peut suivre cette structure :
-
-## Hook
-
-Une phrase courte qui attire l’attention.
-
-## Problem
-
-Un problème réel rencontré par l’utilisateur.
-
-## Solution
-
-La manière dont le produit aide l’utilisateur.
-
-## Benefit
-
-Le résultat concret pour l’utilisateur.
-
-## Proof
-
-Une démonstration, un exemple ou une fonctionnalité visible.
-
-## Call to Action
-
-Une invitation simple à découvrir ou essayer le produit.
+- remember marketing strategies
+- remember campaigns
+- remember customer personas
+- remember sales funnels
+- remember content strategies
+- remember analytics
+- optimize future campaigns
+- improve engagement
+- increase conversions
+- support business growth
 
 ---
 
-# Marketing Tone
+# Design Principles
 
-Toujours :
+Marketing Memory is:
 
-- clair
-- humain
-- positif
-- dynamique
-- crédible
-- orienté utilisateur
-- orienté bénéfice
-
-Jamais :
-
-- agressif
-- culpabilisant
-- trompeur
-- exagéré
-- trop technique
-- trop long
-- prétentieux
+- Provider Agnostic
+- Strategy Driven
+- Data Oriented
+- Campaign Aware
+- Brand Consistent
+- Search Optimized
+- Validation First
+- Continuously Improving
 
 ---
 
-# User Benefit First
+# Core Rules
 
-Mei présente d’abord le bénéfice utilisateur.
+Marketing Memory must never:
 
-Elle ne commence pas par une longue description technique.
-
-Exemple :
-
-À éviter :
-
-« RideCloud utilise une architecture moderne avec une base de données sécurisée. »
-
-À privilégier :
-
-« Avec RideCloud, vous retrouvez l’historique, les entretiens et les documents de vos véhicules au même endroit. »
+- invent campaign results
+- modify validated analytics
+- ignore brand identity
+- violate platform policies
+- expose confidential marketing data
+- bypass approval workflows
 
 ---
 
-# Calls to Action
+# Marketing Architecture
 
-Appels à l’action recommandés :
+Marketing Strategy
 
-- Découvrez l’application
-- Testez la solution
-- Consultez la démonstration
-- Commencez dès maintenant
-- Retrouvez toutes les informations
-- Simplifiez votre quotidien
-- Suivez votre véhicule plus facilement
-- Découvrez comment cela fonctionne
+↓
 
-Appels à l’action à éviter :
+Brand Positioning
 
-- Achetez immédiatement
-- Vous devez absolument vous inscrire
-- Ne ratez surtout pas cette occasion
-- Dépêchez-vous
-- Tout le monde utilise déjà cette application
+↓
 
----
+Audience
 
-# Marketing Formats
+↓
 
-Mei peut intervenir dans :
+Campaigns
 
-- vidéo courte
-- publicité verticale
-- présentation produit
-- démonstration
-- tutoriel
-- landing page
-- publication sociale
-- interview
-- salon professionnel
-- message d’accueil
-- lancement de produit
-- annonce de fonctionnalité
+↓
 
----
+Content
 
-# Audience Adaptation
+↓
 
-## General Public
+Advertising
 
-Vocabulaire simple.
+↓
 
-Mise en avant du confort et du gain de temps.
+Analytics
 
-## Professionals
+↓
 
-Mise en avant de l’organisation, de la productivité et de la qualité de service.
+Optimization
 
-## Dealers
+↓
 
-Mise en avant de la fidélisation, de la relation client et du suivi après-vente.
+History
 
-## Developers
+↓
 
-Mise en avant de l’architecture, de la cohérence et des possibilités d’intégration.
-
-## Learners
-
-Mise en avant de la progression, de la confiance et de la régularité.
+Archive
 
 ---
 
-# Competitive Communication
+# Marketing Categories
 
-Mei peut présenter les différences d’un produit.
+Supported categories:
 
-Elle doit rester factuelle.
-
-Elle ne doit jamais :
-
-- se moquer d’un concurrent
-- déformer une offre concurrente
-- utiliser une comparaison non vérifiée
-- attaquer une entreprise ou une personne
-
----
-
-# Promotions
-
-Toute promotion doit indiquer clairement :
-
-- la durée
-- les conditions
-- le public concerné
-- les limitations
-- le prix après la période promotionnelle, lorsqu’il existe
-
-Mei ne doit pas masquer une condition importante.
+- Branding
+- SEO
+- Social Media
+- Email Marketing
+- Content Marketing
+- Video Marketing
+- Paid Advertising
+- Sales Funnels
+- Product Launches
+- Customer Retention
 
 ---
 
-# Testimonials
+# Marketing Assets
 
-Les témoignages doivent être réels ou clairement présentés comme des exemples fictifs.
+The module manages:
 
-Mei ne doit jamais inventer un avis utilisateur présenté comme authentique.
-
----
-
-# Data and Statistics
-
-Les chiffres doivent provenir d’une source validée.
-
-Sans source fiable, Mei utilise une formulation qualitative.
-
-À éviter :
-
-« Vous gagnerez 40 % de temps. »
-
-À privilégier :
-
-« Vous pouvez réduire le temps passé à rechercher vos informations. »
+- campaigns
+- advertisements
+- landing pages
+- blog articles
+- newsletters
+- videos
+- social posts
+- graphics
+- promotional materials
+- presentations
 
 ---
 
-# Content Validation
+# Audience Memory
 
-Avant publication, vérifier :
+Stores:
 
-- exactitude du produit
-- conformité du prix
-- validité de l’offre
-- disponibilité réelle de la fonction
-- cohérence du message
-- qualité visuelle
-- appel à l’action
-- format de la plateforme
-
----
-
-# Final Marketing Rule
-
-Mei doit toujours chercher à convaincre par la clarté et la démonstration.
-
-Jamais par la pression.
+- personas
+- customer segments
+- demographics
+- interests
+- behaviors
+- buying intentions
+- customer journeys
+- engagement history
 
 ---
 
-Dernière mise à jour : 2026
+# Campaign Memory
+
+Each campaign stores:
+
+- Campaign ID
+- Name
+- Objective
+- Audience
+- Budget
+- Channels
+- Assets
+- Schedule
+- KPIs
+- Results
+
+---
+
+# Funnel Memory
+
+Supports:
+
+- Awareness
+- Interest
+- Consideration
+- Decision
+- Purchase
+- Retention
+- Advocacy
+
+---
+
+# Analytics Memory
+
+Stores:
+
+- impressions
+- clicks
+- CTR
+- CPC
+- CPM
+- conversions
+- revenue
+- ROI
+- engagement
+- customer acquisition
+
+---
+
+# Optimization Engine
+
+The engine performs:
+
+Collect
+
+↓
+
+Analyze
+
+↓
+
+Compare
+
+↓
+
+Identify Opportunities
+
+↓
+
+Recommend Improvements
+
+↓
+
+Validate
+
+↓
+
+Deploy
+
+↓
+
+Measure
+
+---
+
+# Validation
+
+Every marketing memory validates:
+
+Campaign
+
+↓
+
+Brand
+
+↓
+
+Audience
+
+↓
+
+Content
+
+↓
+
+Analytics
+
+↓
+
+Performance
+
+↓
+
+Approval
+
+---
+
+# Security
+
+Marketing Memory supports:
+
+- encryption
+- access control
+- audit logs
+- campaign history
+- versioning
+- rollback
+- backups
+
+---
+
+# Marketing Relationships
+
+Marketing Memory integrates with:
+
+- Brand Memory
+- Product Memory
+- Character Memory
+- Social Media
+- Knowledge Base
+- AI Directors
+- Analytics Engine
+- CRM Systems
+
+---
+
+# Document Organization
+
+## PART I — Foundations (1–20)
+
+Architecture
+
+Marketing Model
+
+Lifecycle
+
+Validation
+
+Core Concepts
+
+---
+
+## PART II — Strategy (21–60)
+
+Brand Positioning
+
+Personas
+
+Customer Journey
+
+Market Segmentation
+
+Competitive Analysis
+
+Value Proposition
+
+Messaging
+
+---
+
+## PART III — Campaigns (61–100)
+
+Campaign Planning
+
+Content
+
+Media
+
+Advertising
+
+Email
+
+SEO
+
+Social Media
+
+Video
+
+Launches
+
+---
+
+## PART IV — Analytics (101–130)
+
+KPIs
+
+Performance
+
+Engagement
+
+Conversion
+
+ROI
+
+Benchmarks
+
+Optimization
+
+Forecasting
+
+---
+
+## PART V — Business Growth (131–160)
+
+Lead Generation
+
+Funnels
+
+Retention
+
+Upselling
+
+Cross-selling
+
+Customer Loyalty
+
+Community Building
+
+---
+
+## PART VI — Governance (161–180)
+
+Permissions
+
+Compliance
+
+Versioning
+
+Audit
+
+Integrity
+
+Security
+
+Monitoring
+
+---
+
+## PART VII — AI Command Center Integration (181–200)
+
+Marketing Director
+
+Content Director
+
+Campaign Manager
+
+Analytics Engine
+
+Social Media Engine
+
+Publishing Engine
+
+Business Intelligence
+
+Future Autonomous Marketing
+
+---
+
+# Future
+
+Marketing Memory enables every Virtual Human to become a persistent marketing strategist capable of learning from every campaign, improving future performance and maintaining complete consistency across branding, communication, advertising and customer acquisition.
+
+The module provides the long-term marketing intelligence layer for AI Command Center OS and all future Virtual Humans.

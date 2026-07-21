@@ -1,238 +1,415 @@
-# PRODUCT MEMORY — MEI
+# Virtual Humans SDK
 
-Version : 1.0.0
+# 22_PRODUCT_MEMORY.md
 
-Status : Production Ready
+Version: 1.0.0
+
+Status: Production Architecture
 
 ---
 
 # Purpose
 
-Ce fichier contient les connaissances produit utilisées par Mei.
+The Product Memory module defines how Virtual Humans understand, remember and continuously maintain knowledge about products, services, applications and digital assets.
 
-La personnalité de Mei ne doit pas être modifiée dans ce fichier.
+Unlike Character Memory, Product Memory is shared knowledge dedicated to products rather than personal experiences.
 
-Les informations produit doivent être mises à jour dès qu’une application évolue.
-
----
-
-# Ecosystem
-
-Mei peut présenter les applications et services de l’écosystème AI Command Center OS.
-
-Produits principaux :
-
-- AI Command Center OS
-- RideCloud
-- RideCloudMoto
-- English AI
-
-D’autres produits peuvent être ajoutés progressivement.
+Product Memory enables Virtual Humans to become long-term product experts.
 
 ---
 
-# AI Command Center OS
+# Objectives
 
-## Description
+The Product Memory module enables Virtual Humans to:
 
-AI Command Center OS est un centre de commandement intelligent permettant de piloter des projets, des agents IA, des tâches et des processus métier depuis une interface centralisée.
-
-## Role of Léo
-
-Léo est le CTO virtuel principal d’AI Command Center OS.
-
-L’utilisateur communique directement avec Léo.
-
-Les agents spécialisés travaillent en arrière-plan.
-
-## Main Capabilities
-
-- conversation avec Léo
-- gestion du contexte projet
-- mémoire persistante
-- orchestration d’agents
-- supervision de projets
-- génération de livrables
-- analyse métier
-- aide à la décision
-- suivi des tâches
-- assistance au développement
-- accompagnement marketing
-
-## Communication Rule
-
-Mei présente AI Command Center OS comme un outil professionnel, accessible et évolutif.
-
-Elle ne promet jamais une fonctionnalité qui n’existe pas encore.
+- understand products
+- remember product history
+- manage product knowledge
+- track product evolution
+- support product demonstrations
+- answer customer questions
+- generate documentation
+- assist marketing
+- assist sales
+- preserve product consistency
 
 ---
 
-# RideCloud
+# Design Principles
 
-## Description
+Product Memory is:
 
-RideCloud est une application de gestion et de suivi de véhicules.
-
-Elle permet de centraliser les informations importantes liées à une voiture, une moto, un scooter ou un véhicule utilitaire.
-
-## Main Capabilities
-
-- gestion de plusieurs véhicules
-- historique d’entretien
-- plan d’entretien
-- suivi kilométrique
-- échéances par date
-- rappels
-- gestion des documents
-- suivi des coûts
-- informations techniques
-- modifications du véhicule
-- export des données
-- import des données
-- utilisation en PWA
-
-## Target Users
-
-- particuliers
-- familles
-- motards
-- automobilistes
-- propriétaires de plusieurs véhicules
-- petites flottes professionnelles
-
-## Product Promise
-
-Aider l’utilisateur à mieux entretenir ses véhicules et à conserver toutes les informations importantes au même endroit.
-
-## Communication Rule
-
-Mei met en avant :
-
-- la simplicité
-- la centralisation
-- la tranquillité
-- le suivi
-- la prévention
-- la conservation des documents
-
-Elle évite les promesses techniques non vérifiées.
+- Provider Agnostic
+- Product Independent
+- Knowledge Driven
+- Version Controlled
+- Search Optimized
+- Validation First
+- Extensible
+- Machine Readable
 
 ---
 
-# RideCloudMoto
+# Core Rules
 
-## Description
+Product Memory must never:
 
-RideCloudMoto est une version de RideCloud adaptée aux concessionnaires moto et à leurs clients.
-
-## Main Objectives
-
-- renforcer la relation entre le concessionnaire et le client
-- faciliter le suivi de la moto
-- centraliser les entretiens et documents
-- valoriser les services du concessionnaire
-- fidéliser les clients
-- accompagner le propriétaire après l’achat
-
-## Dealer Integration
-
-L’application peut afficher :
-
-- le logo du concessionnaire
-- ses coordonnées
-- ses services
-- ses informations de contact
-- ses recommandations
-- les opérations d’entretien
-
-## Customer Offer
-
-Une offre promotionnelle peut être associée à l’achat d’un véhicule.
-
-La plaque d’immatriculation peut être utilisée pour valider une période d’accès offerte.
-
-## Communication Rule
-
-Mei présente RideCloudMoto comme un service utile pour le client et comme un outil de fidélisation pour le concessionnaire.
-
-Elle ne présente jamais l’application comme un remplacement du professionnel.
+- modify product identity
+- invent product features
+- bypass validation
+- expose confidential information
+- ignore version history
+- generate unsupported documentation
 
 ---
 
-# English AI
+# Product Memory Architecture
 
-## Description
+Product Identity
 
-English AI est une application d’apprentissage de l’anglais oral assistée par intelligence artificielle.
+↓
 
-## Learning Approach
+Specifications
 
-La méthode repose notamment sur :
+↓
 
-- l’exposition à un anglais compréhensible
-- l’adaptation au niveau de l’utilisateur
-- la pratique orale
-- la répétition espacée
-- la mémoire active
-- la réactivation des connaissances
-- la progression personnalisée
-- la gamification
+Features
 
-## Main Objectives
+↓
 
-- comprendre l’anglais parlé
-- améliorer la prononciation
-- développer la confiance
-- pratiquer régulièrement
-- apprendre dans des situations concrètes
-- progresser à son rythme
+Capabilities
 
-## Communication Rule
+↓
 
-Mei adopte un ton encourageant et non scolaire.
+Roadmap
 
-Elle ne culpabilise jamais l’utilisateur.
+↓
 
-Elle valorise les progrès, même petits.
+Documentation
 
----
+↓
 
-# Product Knowledge Rules
+Media Assets
 
-Mei doit :
+↓
 
-- utiliser uniquement des informations validées
-- distinguer les fonctions disponibles des fonctions prévues
-- préciser lorsqu’une fonction est en développement
-- éviter les chiffres non vérifiés
-- éviter les dates de sortie non confirmées
-- adapter son discours au public
-- rester simple et pédagogique
+Release History
+
+↓
+
+Support Knowledge
+
+↓
+
+Archive
 
 ---
 
-# Unknown Information
+# Product Categories
 
-Lorsqu’une information produit n’est pas disponible, Mei doit dire :
+Supported products include:
 
-« Cette information doit encore être confirmée. »
-
-ou :
-
-« Cette fonctionnalité est actuellement à l’étude. »
-
-Elle ne doit jamais inventer une réponse.
-
----
-
-# Update Policy
-
-Chaque évolution importante d’un produit doit entraîner une mise à jour de ce fichier.
-
-Les informations obsolètes doivent être supprimées.
-
-Les fonctions futures doivent être clairement identifiées comme telles.
+- Mobile Applications
+- Web Applications
+- SaaS Platforms
+- APIs
+- SDKs
+- AI Agents
+- AI Models
+- Digital Services
+- Hardware Products
+- Enterprise Solutions
 
 ---
 
-Dernière mise à jour : 2026
+# Product Information
+
+Each product stores:
+
+- Product ID
+- Name
+- Version
+- Description
+- Features
+- Roadmap
+- Documentation
+- Pricing
+- Licensing
+- Status
+
+---
+
+# Product Knowledge
+
+The module manages:
+
+- technical documentation
+- functional documentation
+- FAQs
+- tutorials
+- onboarding
+- troubleshooting
+- changelogs
+- release notes
+- architecture
+- integrations
+
+---
+
+# Memory Lifecycle
+
+Create
+
+↓
+
+Validate
+
+↓
+
+Store
+
+↓
+
+Index
+
+↓
+
+Retrieve
+
+↓
+
+Update
+
+↓
+
+Archive
+
+↓
+
+Deprecate
+
+---
+
+# Knowledge Retrieval
+
+Retrieval considers:
+
+- relevance
+- product version
+- confidence
+- permissions
+- context
+- customer profile
+- workflow
+- priority
+
+---
+
+# Validation
+
+Every product memory validates:
+
+Product Identity
+
+↓
+
+Version
+
+↓
+
+Documentation
+
+↓
+
+Capabilities
+
+↓
+
+Dependencies
+
+↓
+
+Integrity
+
+↓
+
+Approval
+
+---
+
+# Security
+
+Product Memory supports:
+
+- access control
+- encryption
+- audit logs
+- digital signatures
+- backups
+- rollback
+- version history
+
+---
+
+# Synchronization
+
+Supports:
+
+- cloud repositories
+- enterprise repositories
+- Git repositories
+- AI Command Center
+- offline synchronization
+- distributed storage
+
+---
+
+# Product Relationships
+
+Products may be linked to:
+
+- Projects
+- Customers
+- Organizations
+- Developers
+- Virtual Humans
+- Knowledge Bases
+- APIs
+- Services
+- Marketplace Assets
+
+---
+
+# Document Organization
+
+## PART I — Foundations (1–20)
+
+Architecture
+
+Core Concepts
+
+Knowledge Model
+
+Lifecycle
+
+Validation
+
+---
+
+## PART II — Product Knowledge (21–60)
+
+Identity
+
+Specifications
+
+Features
+
+Documentation
+
+Media
+
+Roadmap
+
+Pricing
+
+Licensing
+
+---
+
+## PART III — Knowledge Engine (61–100)
+
+Storage
+
+Indexing
+
+Embeddings
+
+Search
+
+Ranking
+
+Metadata
+
+Caching
+
+Optimization
+
+---
+
+## PART IV — Product Evolution (101–130)
+
+Releases
+
+Updates
+
+Versioning
+
+Migration
+
+Deprecation
+
+Compatibility
+
+History
+
+---
+
+## PART V — Customer Intelligence (131–160)
+
+FAQ
+
+Support
+
+Troubleshooting
+
+Sales Knowledge
+
+Marketing Knowledge
+
+Demonstrations
+
+Training
+
+---
+
+## PART VI — Governance (161–180)
+
+Permissions
+
+Audit
+
+Compliance
+
+Integrity
+
+Security
+
+Recovery
+
+Monitoring
+
+---
+
+## PART VII — AI Command Center Integration (181–200)
+
+Product Registry
+
+Knowledge Engine
+
+Marketing Director
+
+Sales Director
+
+Support Director
+
+Documentation Engine
+
+Marketplace
+
+Future Product Intelligence
+
+---
+
+# Future
+
+Product Memory enables Virtual Humans to become permanent product specialists capable of assisting users, customers and organizations throughout the complete lifecycle of any digital or physical product while maintaining complete consistency across documentation, marketing, sales and support.
