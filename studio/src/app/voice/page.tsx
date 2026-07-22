@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { apiGet, apiPost, refreshBudget, usd } from "@/lib/client";
+import { useCharacter } from "@/lib/character-context";
 import { PageHeader } from "@/components/page-header";
 import type { SettingsResponse } from "@/lib/types";
 
 export default function VoiceStudio() {
+  const { characterId, characterName } = useCharacter();
   const [ready, setReady] = useState(false);
   const [hasVoice, setHasVoice] = useState(false);
   const [text, setText] = useState("");
@@ -39,6 +41,7 @@ export default function VoiceStudio() {
       const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", {
         text,
         voiceId: voiceId || undefined,
+        character: characterId,
       });
       setAudio(res.dataUrl);
       refreshBudget();
@@ -73,12 +76,14 @@ export default function VoiceStudio() {
 
         <div className="grid grid-cols-2 gap-3 mt-4">
           <div>
-            <label className="label">Voice ID {hasVoice ? "(par défaut configuré)" : "(requis)"}</label>
+            <label className="label">
+              Voice ID {hasVoice ? "(laisser vide = voix du personnage)" : "(requis)"}
+            </label>
             <input
               className="input"
               value={voiceId}
               onChange={(e) => setVoiceId(e.target.value)}
-              placeholder={hasVoice ? "ELEVENLABS_VOICE_ID (env)" : "ex. 21m00Tcm4TlvDq8ikWAM"}
+              placeholder={hasVoice ? `Voix par défaut de ${characterName || "ton personnage"}` : "ex. 21m00Tcm4TlvDq8ikWAM"}
             />
           </div>
           <div className="flex flex-col justify-end text-sm text-[var(--muted)]">

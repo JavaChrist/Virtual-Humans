@@ -4,9 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiGet, usd } from "@/lib/client";
+import { useCharacter } from "@/lib/character-context";
 
 const LINKS = [
   { href: "/", label: "Tableau de bord", icon: "◧" },
+  { href: "/characters", label: "Personnages", icon: "☺" },
+  { href: "/scene", label: "Studio Scène", icon: "◈" },
+  { href: "/products", label: "Produits / Apps", icon: "▦" },
   { href: "/image", label: "Studio Image", icon: "▣" },
   { href: "/voice", label: "Studio Voix", icon: "◉" },
   { href: "/video", label: "Studio Vidéo", icon: "►" },
@@ -19,6 +23,7 @@ const LINKS = [
 export function Nav() {
   const pathname = usePathname();
   const [total, setTotal] = useState<number | null>(null);
+  const { characters, characterId, setCharacterId } = useCharacter();
 
   useEffect(() => {
     const load = () =>
@@ -37,6 +42,23 @@ export function Nav() {
           Virtual Humans <span className="text-[var(--accent)]">Studio</span>
         </div>
         <div className="text-xs text-[var(--muted)] mt-1">Génération multi-fournisseurs</div>
+      </div>
+
+      <div className="px-2">
+        <label className="label mb-1 block">Personnage actif</label>
+        <select
+          className="select"
+          value={characterId}
+          onChange={(e) => setCharacterId(e.target.value)}
+          disabled={characters.length === 0}
+        >
+          {characters.length === 0 && <option value="">…</option>}
+          {characters.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <nav className="flex flex-col gap-1">

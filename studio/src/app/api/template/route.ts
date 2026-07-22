@@ -7,7 +7,8 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   const category = req.nextUrl.searchParams.get("category") ?? "";
   const name = req.nextUrl.searchParams.get("name") ?? "";
-  const md = getTemplate(category, name);
+  const character = req.nextUrl.searchParams.get("character") ?? undefined;
+  const md = getTemplate(category, name, character);
   if (md === null) {
     return NextResponse.json({ error: "Template not found" }, { status: 404 });
   }

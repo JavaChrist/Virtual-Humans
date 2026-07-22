@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { apiGet, apiPost, refreshBudget, usd } from "@/lib/client";
+import { useCharacter } from "@/lib/character-context";
+import { getLastVideo } from "@/lib/media-store";
 import { PageHeader } from "@/components/page-header";
 import type { SettingsResponse } from "@/lib/types";
 
@@ -12,6 +14,7 @@ interface LipsyncModel {
 }
 
 export default function LipsyncStudio() {
+  const { characterId, characterName } = useCharacter();
   const [ready, setReady] = useState({ fal: false, eleven: false });
   const [models, setModels] = useState<LipsyncModel[]>([]);
   const [modelId, setModelId] = useState("");
@@ -34,16 +37,19 @@ export default function LipsyncStudio() {
       setModels(d.lipsyncModels);
       if (d.lipsyncModels[0]) setModelId(d.lipsyncModels[0].id);
     });
-    if (typeof window !== "undefined") {
-      const v = localStorage.getItem("mei:lastVideo");
-      const s = localStorage.getItem("mei:lastVideoSeconds");
-      if (v) setVideoUrl(v);
-      if (s) setSeconds(Number(s));
-    }
     return () => {
       if (polling.current) clearInterval(polling.current);
     };
   }, []);
+
+  // Prefill with the active character's last generated video.
+  useEffect(() => {
+    const last = getLastVideo(characterId);
+    if (last) {
+      setVideoUrl(last.url);
+      setSeconds(last.seconds);
+    }
+  }, [characterId]);
 
   useEffect(() => {
     if (!modelId) return;
@@ -56,7 +62,7 @@ export default function LipsyncStudio() {
     setVoiceBusy(true);
     setError(null);
     try {
-      const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", { text });
+      const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", { text, character: characterId });
       setAudioDataUrl(res.dataUrl);
       refreshBudget();
     } catch (e) {
@@ -82,11 +88,17 @@ export default function LipsyncStudio() {
       setStatus("En file d'attente…");
       polling.current = setInterval(async () => {
         try {
-          const r = await apiPost<{ status: string; videoUrl?: string }>("/api/generate/status", {
+          const r = await apiPost<{ status: string; videoUrl?: string; error?: string }>("/api/generate/status", {
             model: sub.model,
             requestId: sub.requestId,
           });
           setStatus(r.status);
+          if (r.status === "FAILED") {
+            if (polling.current) clearInterval(polling.current);
+            setError(r.error ? `Échec fal : ${r.error}` : "Échec");
+            setStatus(null);
+            return;
+          }
           if (r.status === "COMPLETED") {
             if (polling.current) clearInterval(polling.current);
             setResultUrl(r.videoUrl ?? null);
@@ -137,7 +149,7 @@ export default function LipsyncStudio() {
           </div>
 
           <div>
-            <label className="label">2. Réplique de {`{character}`} (voix ElevenLabs)</label>
+            <label className="label">2. Réplique de {characterName || "ton personnage"} (voix ElevenLabs)</label>
             <textarea
               className="input min-h-[90px]"
               value={text}

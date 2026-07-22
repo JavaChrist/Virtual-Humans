@@ -17,23 +17,46 @@ export async function submitJob(model: string, input: Record<string, unknown>): 
 }
 
 export interface JobStatus {
-  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED" | string;
+  status: "IN_QUEUE" | "IN_PROGRESS" | "COMPLETED" | "FAILED" | string;
   videoUrl?: string;
+  error?: string;
+}
+
+function extractFalError(e: unknown): string {
+  const err = e as { body?: { detail?: unknown; message?: string }; message?: string };
+  const detail = err?.body?.detail;
+  if (Array.isArray(detail)) {
+    return detail
+      .map((d) => {
+        const item = d as { loc?: unknown[]; msg?: string };
+        const loc = Array.isArray(item?.loc) ? item.loc.join(".") : "";
+        return [loc, item?.msg].filter(Boolean).join(": ");
+      })
+      .filter(Boolean)
+      .join(" | ");
+  }
+  return err?.body?.message ?? err?.message ?? "Erreur inconnue";
 }
 
 /** Check a fal job; when completed, extract the output video URL. */
 export async function checkJob(model: string, requestId: string): Promise<JobStatus> {
   ensureConfig();
-  const status = await fal.queue.status(model, { requestId });
-  if (status.status !== "COMPLETED") return { status: status.status };
+  try {
+    const status = await fal.queue.status(model, { requestId });
+    if (status.status !== "COMPLETED") return { status: status.status };
 
-  const result = await fal.queue.result(model, { requestId });
-  const data = result.data as {
-    video?: { url?: string };
-    videos?: { url?: string }[];
-  };
-  const videoUrl = data.video?.url ?? data.videos?.[0]?.url;
-  return { status: "COMPLETED", videoUrl };
+    const result = await fal.queue.result(model, { requestId });
+    const data = result.data as {
+      video?: { url?: string };
+      videos?: { url?: string }[];
+    };
+    const videoUrl = data.video?.url ?? data.videos?.[0]?.url;
+    return { status: "COMPLETED", videoUrl };
+  } catch (e) {
+    // A failed job surfaces here (e.g. fal 422 validation on the model runner).
+    console.error("[fal] job failed", model, requestId, JSON.stringify((e as { body?: unknown })?.body));
+    return { status: "FAILED", error: extractFalError(e) };
+  }
 }
 
 /** Upload a data URL (data:<mime>;base64,<...>) to fal storage and return a public URL. */
@@ -51,4 +74,17 @@ export async function uploadDataUrl(dataUrl: string, fallbackName = "file"): Pro
   const blob = new Blob([buffer], { type: mime });
   // The client accepts a Blob/File; name is derived from type when omitted.
   return fal.storage.upload(new File([blob], `${fallbackName}.${ext}`, { type: mime }));
+}
+
+/** Upload several data URLs / URLs, returning public URLs in order. */
+export async function uploadMany(items: string[], prefix = "ref"): Promise<string[]> {
+  return Promise.all(items.map((it, i) => uploadDataUrl(it, `${prefix}-${i}`)));
+}
+
+/** Upload raw bytes (e.g. an SDK asset read from disk) to fal storage. */
+export async function uploadBuffer(buffer: Buffer, mime: string, name = "asset"): Promise<string> {
+  ensureConfig();
+  const ext = mime.split("/")[1] ?? "bin";
+  const blob = new Blob([new Uint8Array(buffer)], { type: mime });
+  return fal.storage.upload(new File([blob], `${name}.${ext}`, { type: mime }));
 }

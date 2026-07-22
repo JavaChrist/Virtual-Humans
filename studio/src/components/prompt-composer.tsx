@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { apiGet } from "@/lib/client";
+import { apiGet, withCharacter } from "@/lib/client";
+import { useCharacter } from "@/lib/character-context";
 import type { CharacterResponse, Lang, TemplateResponse } from "@/lib/types";
 
 interface Props {
   categories: string[];
-  characterName: string;
+  characterName?: string;
   value: string;
   onChange: (prompt: string) => void;
 }
@@ -28,6 +29,8 @@ const NO_TEXT = (lang: Lang) =>
     : `No text, letters, captions or logos rendered in the image.`;
 
 export function PromptComposer({ categories, characterName, value, onChange }: Props) {
+  const { characterId, characterName: ctxName } = useCharacter();
+  const name = ctxName || characterName || "";
   const [char, setChar] = useState<CharacterResponse | null>(null);
   const [category, setCategory] = useState(categories[0]);
   const [templateName, setTemplateName] = useState<string>("");
@@ -38,8 +41,13 @@ export function PromptComposer({ categories, characterName, value, onChange }: P
   const [noText, setNoText] = useState(true);
 
   useEffect(() => {
-    apiGet<CharacterResponse>("/api/character").then(setChar).catch(() => {});
-  }, []);
+    apiGet<CharacterResponse>(withCharacter("/api/character", characterId))
+      .then(setChar)
+      .catch(() => {});
+    // Templates may differ per character: reset the current selection.
+    setTemplateName("");
+    setTpl(null);
+  }, [characterId]);
 
   const templates = char?.templates[category] ?? [];
 
@@ -48,24 +56,26 @@ export function PromptComposer({ categories, characterName, value, onChange }: P
       setTpl(null);
       return;
     }
-    apiGet<TemplateResponse>(`/api/template?category=${category}&name=${templateName}`)
+    apiGet<TemplateResponse>(
+      withCharacter(`/api/template?category=${category}&name=${templateName}`, characterId),
+    )
       .then((t) => {
         setTpl(t);
-        // Pre-fill the character variable with the current character name.
-        setVars({ character: characterName });
+        // Pre-fill the character variable with the active character name.
+        setVars({ character: name });
       })
       .catch(() => setTpl(null));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, templateName]);
+  }, [category, templateName, characterId]);
 
   const block = tpl?.blocks[lang];
   const composed = useMemo(() => {
     if (!block?.prompt) return "";
     let out = fill(block.prompt, vars);
     if (noText) out += `\n\n${NO_TEXT(lang)}`;
-    if (injectIdentity) out += `\n\n${IDENTITY(characterName, lang)}`;
+    if (injectIdentity) out += `\n\n${IDENTITY(name, lang)}`;
     return out;
-  }, [block, vars, injectIdentity, noText, characterName, lang]);
+  }, [block, vars, injectIdentity, noText, name, lang]);
 
   // Push composed prompt up whenever it changes.
   useEffect(() => {

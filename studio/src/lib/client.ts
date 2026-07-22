@@ -27,3 +27,10 @@ export function usd(n: number | undefined | null): string {
   if (n == null) return "—";
   return `$${n.toFixed(n < 1 ? 4 : 2)}`;
 }
+
+/** Append the active character id to an API URL as a query param. */
+export function withCharacter(url: string, characterId?: string): string {
+  if (!characterId) return url;
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}character=${encodeURIComponent(characterId)}`;
+}

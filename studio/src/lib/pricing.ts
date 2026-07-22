@@ -48,23 +48,45 @@ export interface VideoModel {
   id: string; // fal model id
   label: string;
   engine: string; // maps to the SDK video engine docs
-  mode: "text-to-video" | "image-to-video";
+  mode: "text-to-video" | "image-to-video" | "reference-to-video";
   audio: "native" | "silent";
   usdPerSecond: number;
   defaultSeconds: number;
   seconds: number[];
+  // How the `duration` field must be sent to fal: "8s" (suffix) or "8" (plain).
+  durationSuffix: string;
+  // Whether to send aspect_ratio to this model.
+  sendAspectRatio: boolean;
+  // Aspect ratios accepted by this model (Veo rejects 1:1).
+  aspectRatios: string[];
 }
 
 export const VIDEO_MODELS: VideoModel[] = [
   {
-    id: "fal-ai/veo3/fast",
-    label: "Veo 3 Fast — voix + lèvres natives",
+    id: "fal-ai/veo3.1/fast",
+    label: "Veo 3.1 Fast — voix + lèvres natives",
     engine: "veo",
     mode: "text-to-video",
     audio: "native",
     usdPerSecond: num(process.env.FAL_VEO_USD_PER_SEC, 0.4),
     defaultSeconds: 8,
-    seconds: [8],
+    seconds: [4, 6, 8],
+    durationSuffix: "s",
+    sendAspectRatio: true,
+    aspectRatios: ["9:16", "16:9"],
+  },
+  {
+    id: "bytedance/seedance-2.0/reference-to-video",
+    label: "Seedance 2.0 — identité cohérente (images de réf. + voix)",
+    engine: "seedance",
+    mode: "reference-to-video",
+    audio: "native",
+    usdPerSecond: num(process.env.FAL_SEEDANCE_USD_PER_SEC, 0.15),
+    defaultSeconds: 8,
+    seconds: [4, 6, 8, 10],
+    durationSuffix: "",
+    sendAspectRatio: true,
+    aspectRatios: ["9:16", "16:9", "1:1"],
   },
   {
     id: "fal-ai/runway-gen3/turbo/image-to-video",
@@ -75,6 +97,9 @@ export const VIDEO_MODELS: VideoModel[] = [
     usdPerSecond: num(process.env.FAL_RUNWAY_USD_PER_SEC, 0.05),
     defaultSeconds: 5,
     seconds: [5, 10],
+    durationSuffix: "",
+    sendAspectRatio: false,
+    aspectRatios: ["9:16", "16:9", "1:1"],
   },
   {
     id: "fal-ai/kling-video/v2/master/text-to-video",
@@ -85,6 +110,9 @@ export const VIDEO_MODELS: VideoModel[] = [
     usdPerSecond: num(process.env.FAL_KLING_USD_PER_SEC, 0.28),
     defaultSeconds: 5,
     seconds: [5, 10],
+    durationSuffix: "",
+    sendAspectRatio: true,
+    aspectRatios: ["9:16", "16:9", "1:1"],
   },
   {
     id: "fal-ai/minimax/hailuo-02/standard/text-to-video",
@@ -95,6 +123,9 @@ export const VIDEO_MODELS: VideoModel[] = [
     usdPerSecond: num(process.env.FAL_MINIMAX_USD_PER_SEC, 0.05),
     defaultSeconds: 6,
     seconds: [6, 10],
+    durationSuffix: "",
+    sendAspectRatio: false,
+    aspectRatios: ["9:16", "16:9"],
   },
 ];
 
@@ -138,4 +169,14 @@ export function estimateLipsync(modelId: string, seconds: number): number {
   const m = getLipsyncModel(modelId);
   if (!m) return 0;
   return +((m.usdPerMinute / 60) * seconds).toFixed(4);
+}
+
+// ---------------------------------------------------------------------------
+// Assembly — fal FFmpeg merge (compute-based, effectively negligible)
+// ---------------------------------------------------------------------------
+export const MERGE_MODEL_ID = "fal-ai/ffmpeg-api/merge-videos";
+
+export function estimateMerge(totalSeconds: number): number {
+  // ~$0.00017 per compute-second; keep a small, safe upper estimate.
+  return +(0.0005 * Math.max(totalSeconds, 1)).toFixed(4);
 }

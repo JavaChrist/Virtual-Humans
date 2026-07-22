@@ -2,15 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { apiGet, apiPost, refreshBudget, usd } from "@/lib/client";
+import { useCharacter } from "@/lib/character-context";
 import { PageHeader } from "@/components/page-header";
 import { PromptComposer } from "@/components/prompt-composer";
-import type { CharacterResponse, SettingsResponse } from "@/lib/types";
+import { addRefImage } from "@/lib/reflib";
+import { setLastRefImage } from "@/lib/media-store";
+import type { SettingsResponse } from "@/lib/types";
 
 const SIZES = ["1024x1024", "1024x1536", "1536x1024"] as const;
 const QUALITIES = ["low", "medium", "high"] as const;
 
 export default function ImageStudio() {
-  const [name, setName] = useState("Mei");
+  const { characterId, characterName } = useCharacter();
+  const name = characterName || "Mei";
   const [ready, setReady] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [size, setSize] = useState<(typeof SIZES)[number]>("1024x1024");
@@ -19,10 +23,10 @@ export default function ImageStudio() {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [refLabel, setRefLabel] = useState("");
   const [savedRef, setSavedRef] = useState(false);
 
   useEffect(() => {
-    apiGet<CharacterResponse>("/api/character").then((c) => setName(c.overview.name)).catch(() => {});
     apiGet<SettingsResponse>("/api/settings").then((s) => setReady(s.keys.openai)).catch(() => {});
   }, []);
 
@@ -102,20 +106,34 @@ export default function ImageStudio() {
             <div className="w-full">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={image} alt="résultat" className="w-full rounded-xl border border-[var(--border)]" />
-              <div className="flex gap-3 mt-4">
-                <a href={image} download="mei-image.png" className="btn btn-ghost flex-1">
-                  Télécharger
-                </a>
-                <button
-                  className="btn btn-primary flex-1"
-                  onClick={() => {
-                    localStorage.setItem("mei:refImage", image);
-                    setSavedRef(true);
-                    setTimeout(() => setSavedRef(false), 2500);
-                  }}
-                >
-                  {savedRef ? "✓ Enregistrée" : "Utiliser comme référence vidéo"}
-                </button>
+              <a href={image} download="mei-image.png" className="btn btn-ghost mt-4 w-full">
+                Télécharger
+              </a>
+              <div className="mt-3 border-t border-[var(--border)] pt-3">
+                <label className="label">Ajouter à la bibliothèque de références</label>
+                <div className="flex gap-2">
+                  <input
+                    className="input flex-1"
+                    value={refLabel}
+                    onChange={(e) => setRefLabel(e.target.value)}
+                    placeholder={`Ex. : ${name} studio, ${name} rue, tenue rouge…`}
+                  />
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => {
+                      addRefImage(characterId, image, refLabel || `${name}`);
+                      setLastRefImage(characterId, image);
+                      setRefLabel("");
+                      setSavedRef(true);
+                      setTimeout(() => setSavedRef(false), 2500);
+                    }}
+                  >
+                    {savedRef ? "✓ Ajoutée" : "Enregistrer"}
+                  </button>
+                </div>
+                <p className="text-xs text-[var(--muted)] mt-1">
+                  Ces images serviront à garder le visage de {name} cohérent (Seedance, image→vidéo).
+                </p>
               </div>
             </div>
           )}

@@ -2,18 +2,26 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { apiGet, usd } from "@/lib/client";
+import { apiGet, usd, withCharacter } from "@/lib/client";
+import { useCharacter } from "@/lib/character-context";
 import { PageHeader } from "@/components/page-header";
 import type { CharacterResponse, SettingsResponse } from "@/lib/types";
 
 export default function Dashboard() {
+  const { characterId } = useCharacter();
   const [char, setChar] = useState<CharacterResponse | null>(null);
   const [settings, setSettings] = useState<SettingsResponse | null>(null);
   const [budget, setBudget] = useState<{ total: number; count: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    apiGet<CharacterResponse>("/api/character").then(setChar).catch((e) => setError(e.message));
+    setError(null);
+    apiGet<CharacterResponse>(withCharacter("/api/character", characterId))
+      .then(setChar)
+      .catch((e) => setError(e.message));
+  }, [characterId]);
+
+  useEffect(() => {
     apiGet<SettingsResponse>("/api/settings").then(setSettings).catch(() => {});
     apiGet<{ total: number; count: number }>("/api/budget").then(setBudget).catch(() => {});
   }, []);
