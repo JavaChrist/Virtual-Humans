@@ -74,7 +74,7 @@ export default function VoiceStudio() {
           placeholder="Écris ici le texte que le personnage doit dire…"
         />
 
-        <div className="grid grid-cols-2 gap-3 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
           <div>
             <label className="label">
               Voice ID {hasVoice ? "(laisser vide = voix du personnage)" : "(requis)"}

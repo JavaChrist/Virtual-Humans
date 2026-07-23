@@ -141,3 +141,43 @@ body {
     transform: translateY(0) scale(1);
   }
 }
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* iOS safe areas (viewport-fit=cover : Dynamic Island / encoche / barre d'accueil).
+   Ces utilitaires ajoutent l'inset au padding déjà présent, sans l'écraser. */
+.safe-t {
+  padding-top: env(safe-area-inset-top);
+}
+.safe-b {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.safe-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Sur mobile, iOS zoome automatiquement sur un champ dont la police fait < 16px.
+   On force 16px pour les champs sur petits écrans afin d'éviter ce zoom gênant. */
+@media (max-width: 767px) {
+  .input,
+  .select,
+  .textarea {
+    font-size: 16px;
+  }
+}
+
+/* Zone de frappe tactile confortable pour les liens/boutons de navigation. */
+@media (hover: none) and (pointer: coarse) {
+  .nav-link {
+    padding-top: 0.7rem;
+    padding-bottom: 0.7rem;
+  }
+}

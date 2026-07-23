@@ -480,7 +480,7 @@ export default function Storyboard() {
             <span className="text-[var(--foreground)] font-semibold">budget estimé {usd(totalCost)}</span>
             {totalSeconds < 60 && <span className="ml-2 text-[var(--muted)]">(vise ~60s)</span>}
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <button className="btn btn-ghost" disabled={!ready} onClick={generateAll}>
               Générer les plans restants
             </button>

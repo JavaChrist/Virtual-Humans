@@ -67,7 +67,7 @@ export default function ImageStudio() {
         <div className="card p-6">
           <PromptComposer categories={["image", "social", "marketing"]} characterName={name} value={prompt} onChange={setPrompt} />
 
-          <div className="grid grid-cols-2 gap-3 mt-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5">
             <div>
               <label className="label">Taille</label>
               <select className="select" value={size} onChange={(e) => setSize(e.target.value as typeof size)}>

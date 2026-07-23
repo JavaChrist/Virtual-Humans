@@ -291,7 +291,7 @@ export default function SceneStudio() {
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="label">Lieu / décor</label>
               <input className="input" list="loc-presets" value={location} onChange={(e) => setLocation(e.target.value)} />
@@ -311,7 +311,7 @@ export default function SceneStudio() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="label">Application à présenter</label>
               <select className="select" value={productId} onChange={(e) => setProductId(e.target.value)}>

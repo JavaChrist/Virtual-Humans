@@ -113,7 +113,7 @@ export default function ProductsStudio() {
               <label className="label">Pitch (1 phrase)</label>
               <input className="input" value={pitch} onChange={(e) => setPitch(e.target.value)} placeholder="Gère ton budget en 30 secondes par jour." />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="label">Lien (bio / store)</label>
                 <input className="input" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://…" />

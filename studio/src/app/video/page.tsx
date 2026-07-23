@@ -193,8 +193,8 @@ export default function VideoStudio() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card p-6">
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="sm:col-span-2">
               <label className="label">Moteur / modèle</label>
               <select className="select" value={modelId} onChange={(e) => selectModel(e.target.value)}>
                 {models.map((m) => (
