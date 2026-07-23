@@ -13,6 +13,16 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Cette règle (eslint-config-next 16) interdit tout setState synchrone dans un
+      // useEffect. Or on s'en sert volontairement pour des synchronisations légitimes :
+      // chargement de données, réinitialisation d'état quand le personnage/lieu change,
+      // clamp de valeurs selon le modèle, timer d'attente. On la garde en avertissement
+      // (visible) plutôt qu'en erreur (qui bloque le build Vercel).
+      "react-hooks/set-state-in-effect": "warn",
+    },
+  },
 ]);
 
 export default eslintConfig;
