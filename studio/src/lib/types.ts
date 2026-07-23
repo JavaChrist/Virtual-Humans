@@ -19,7 +19,7 @@ export interface TemplateResponse {
 }
 
 export interface SettingsResponse {
-  keys: { openai: boolean; elevenlabs: boolean; elevenlabsVoice: boolean; fal: boolean };
+  keys: { openai: boolean; elevenlabs: boolean; elevenlabsVoice: boolean; fal: boolean; supabase: boolean };
   sdk: { repoRoot: string; character: string };
   pricing: { elevenlabsUsdPer1kChars: number };
 }

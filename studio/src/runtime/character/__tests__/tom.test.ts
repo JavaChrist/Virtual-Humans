@@ -48,15 +48,17 @@ test("Tom exposes its own assets (Mei placeholders replaced)", () => {
   assert.equal(pending.length, 0, "no pending/copied-asset warnings remain");
 });
 
-test("Tom personality is a parsed provisional base with no Mei phrases", () => {
+test("Tom personality is a parsed provisional base with its own candidate phrases", () => {
   const tom = registry.getCharacter("tom");
   assert.ok(tom.personality.coreTraits.length > 0, "provisional core traits parsed");
   assert.ok(tom.personality.primaryTraits.length > 0, "provisional primary traits parsed");
-  // No official opening/closing phrase is defined for Tom.
-  assert.equal(tom.personality.greetings.length, 0, "no greeting phrase defined");
-  assert.equal(tom.personality.conclusions.length, 0, "no conclusion phrase defined");
+  // Tom now has candidate opening/closing phrases (provided by Christian) —
+  // extracted as candidates, never invented, and never Mei's phrases.
+  assert.ok(tom.personality.greetings.length > 0, "greeting candidate parsed");
+  assert.ok(tom.personality.conclusions.length > 0, "conclusion candidate parsed");
+  // Since candidates now exist, the "missing phrases" warning must be gone.
   const phrasesMissing = tom.dataQuality.find((i) => i.code === "PHRASES_MISSING");
-  assert.ok(phrasesMissing, "missing official phrases is surfaced");
+  assert.equal(phrasesMissing, undefined, "phrases are now present");
   // The id/code distinction must not be reported as a contradiction.
   const mismatch = tom.dataQuality.find((i) => i.code === "CHARACTER_ID_MISMATCH");
   assert.equal(mismatch, undefined);

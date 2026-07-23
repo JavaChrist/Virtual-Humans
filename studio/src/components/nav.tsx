@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { apiGet, usd } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
+import { useConfirm } from "@/components/confirm";
 
 const LINKS = [
   { href: "/", label: "Tableau de bord", icon: "◧" },
@@ -24,6 +25,7 @@ export function Nav() {
   const pathname = usePathname();
   const [total, setTotal] = useState<number | null>(null);
   const { characters, characterId, setCharacterId } = useCharacter();
+  const confirm = useConfirm();
 
   useEffect(() => {
     const load = () =>
@@ -34,6 +36,22 @@ export function Nav() {
     window.addEventListener("budget:refresh", load);
     return () => window.removeEventListener("budget:refresh", load);
   }, []);
+
+  async function resetBudget() {
+    const ok = await confirm({
+      title: "Réinitialiser la dépense",
+      message: "Remettre le cumul des dépenses estimées à zéro ?\nUtile en début de campagne.",
+      confirmLabel: "Réinitialiser",
+    });
+    if (!ok) return;
+    try {
+      await fetch("/api/budget", { method: "DELETE" });
+      setTotal(0);
+      window.dispatchEvent(new Event("budget:refresh"));
+    } catch {
+      /* ignore */
+    }
+  }
 
   return (
     <aside className="w-64 shrink-0 border-r border-[var(--border)] bg-[color-mix(in_oklab,var(--surface)_70%,transparent)] px-4 py-6 flex flex-col gap-6 sticky top-0 h-screen">
@@ -82,7 +100,17 @@ export function Nav() {
       </nav>
 
       <div className="mt-auto card p-4">
-        <div className="label mb-1">Dépense estimée</div>
+        <div className="flex items-center justify-between mb-1">
+          <div className="label">Dépense estimée</div>
+          <button
+            type="button"
+            onClick={resetBudget}
+            title="Remettre le cumul à zéro (par campagne)"
+            className="text-xs text-[var(--muted)] hover:text-[var(--danger)] transition-colors"
+          >
+            reset
+          </button>
+        </div>
         <div className="text-2xl font-bold tabular-nums">{usd(total)}</div>
         <Link href="/budget" className="text-xs text-[var(--accent-2)] hover:underline">
           Voir le détail →

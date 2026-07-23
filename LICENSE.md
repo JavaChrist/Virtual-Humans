@@ -1,6 +1,6 @@
 # License
 
-Copyright © Christian.
+Copyright © JavaChrist.
 
 All rights reserved.
 

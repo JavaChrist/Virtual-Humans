@@ -1,0 +1,45 @@
+{
+    "id": "LOOK_004",
+    "version": "1.0",
+    "status": "production",
+    "default": false,
+    "priority": 4,
+    "name": "Reporter",
+    "description": "Field reporter outfit.",
+    "style": [
+      "journalist",
+      "professional"
+    ],
+    "clothing": {
+      "top": "Reporter jacket",
+      "bottom": "Dark jeans",
+      "shoes": "Comfort sneakers"
+    },
+    "best_for": [
+      "interview",
+      "micro_trottoir",
+      "event",
+      "report"
+    ],
+    "locations": [
+      "street",
+      "expo",
+      "station",
+      "city"
+    ],
+    "compatible_expressions": [
+      "curious",
+      "listening",
+      "explaining",
+      "smile"
+    ],
+    "compatible_poses": [
+      "microphone",
+      "walking",
+      "pointing",
+      "presenting"
+    ],
+    "lighting": [
+      "natural"
+    ]
+  }

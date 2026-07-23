@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
   try {
     const result = await generateImage({ prompt, size, quality });
     const usd = estimateImage(size, quality, 1);
-    addSpend({ type: "image", provider: "openai", model: "gpt-image-1", estimateUSD: usd, note: `${size} ${quality}` });
+    await addSpend({ type: "image", provider: "openai", model: "gpt-image-1", estimateUSD: usd, note: `${size} ${quality}` });
     return NextResponse.json({ ...result, estimateUSD: usd });
   } catch (e) {
     return NextResponse.json(

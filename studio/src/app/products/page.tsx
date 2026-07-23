@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { apiGet, apiPost } from "@/lib/client";
 import { PageHeader } from "@/components/page-header";
+import { useConfirm } from "@/components/confirm";
 
 interface Product {
   id: string;
@@ -31,6 +32,7 @@ export default function ProductsStudio() {
   const [pending, setPending] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const confirm = useConfirm();
 
   function load() {
     apiGet<{ products: Product[] }>("/api/products").then((d) => setProducts(d.products)).catch(() => {});
@@ -66,6 +68,30 @@ export default function ProductsStudio() {
     const urls = await Promise.all(Array.from(files).map(fileToDataUrl));
     await apiPost("/api/products", { id: productId, name: productName, screens: urls });
     load();
+  }
+
+  async function deleteScreen(productId: string, name: string) {
+    const ok = await confirm({
+      title: "Supprimer la capture",
+      message: "Supprimer cette capture ?\nCette action est définitive.",
+      confirmLabel: "Supprimer",
+      danger: true,
+    });
+    if (!ok) return;
+    setError(null);
+    try {
+      const res = await fetch(
+        `/api/product-screen?product=${encodeURIComponent(productId)}&name=${encodeURIComponent(name)}`,
+        { method: "DELETE" },
+      );
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error((data as { error?: string }).error ?? "Suppression impossible");
+      }
+      load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Suppression impossible");
+    }
   }
 
   return (
@@ -135,13 +161,23 @@ export default function ProductsStudio() {
               {p.screens.length > 0 && (
                 <div className="grid grid-cols-6 gap-2 mt-3">
                   {p.screens.map((s) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      key={s}
-                      src={`/api/product-screen?product=${encodeURIComponent(p.id)}&name=${encodeURIComponent(s)}`}
-                      alt={s}
-                      className="h-24 w-full object-cover rounded-lg border border-[var(--border)]"
-                    />
+                    <div key={s} className="relative group">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`/api/product-screen?product=${encodeURIComponent(p.id)}&name=${encodeURIComponent(s)}`}
+                        alt={s}
+                        className="h-24 w-full object-cover rounded-lg border border-[var(--border)]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => deleteScreen(p.id, s)}
+                        title="Supprimer cette capture"
+                        aria-label="Supprimer cette capture"
+                        className="absolute top-1 right-1 h-6 w-6 rounded-full bg-black/60 text-white text-sm leading-none flex items-center justify-center opacity-0 group-hover:opacity-100 transition hover:bg-[var(--danger)]"
+                      >
+                        ✕
+                      </button>
+                    </div>
                   ))}
                 </div>
               )}

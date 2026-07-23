@@ -1,0 +1,49 @@
+{
+    "id": "LOOK_002",
+    "version": "1.0",
+    "status": "production",
+    "default": false,
+    "priority": 2,
+    "name": "Tech Conference",
+    "description": "Professional technology conference outfit.",
+    "style": [
+      "business",
+      "startup",
+      "tech",
+      "professional"
+    ],
+    "clothing": {
+      "top": "Modern blazer",
+      "bottom": "Elegant trousers",
+      "shoes": "Business sneakers"
+    },
+    "best_for": [
+      "conference",
+      "keynote",
+      "product_launch",
+      "ai_demo",
+      "ridecloud"
+    ],
+    "locations": [
+      "conference_center",
+      "coworking",
+      "office",
+      "expo"
+    ],
+    "compatible_expressions": [
+      "neutral",
+      "smile",
+      "explaining",
+      "thinking"
+    ],
+    "compatible_poses": [
+      "presenting",
+      "pointing",
+      "phone",
+      "thumbs_up"
+    ],
+    "lighting": [
+      "studio",
+      "conference"
+    ]
+  }

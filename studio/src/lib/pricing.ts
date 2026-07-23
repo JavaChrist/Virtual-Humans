@@ -89,6 +89,22 @@ export const VIDEO_MODELS: VideoModel[] = [
     aspectRatios: ["9:16", "16:9", "1:1"],
   },
   {
+    // Studio Scène : identité "verrouillée" par la PREMIÈRE FRAME (photo du perso).
+    // Contrairement à Seedance (reference/image-to-video), Kling n'applique pas de
+    // modération anti-ressemblance humaine sur l'image d'entrée. Vérifié en réel.
+    id: "fal-ai/kling-video/v2/master/image-to-video",
+    label: "Kling 2 Master (image→vidéo, identité par 1re frame)",
+    engine: "kling",
+    mode: "image-to-video",
+    audio: "silent",
+    usdPerSecond: num(process.env.FAL_KLING_USD_PER_SEC, 0.28),
+    defaultSeconds: 5,
+    seconds: [5, 10],
+    durationSuffix: "",
+    sendAspectRatio: false,
+    aspectRatios: ["9:16", "16:9", "1:1"],
+  },
+  {
     id: "fal-ai/runway-gen3/turbo/image-to-video",
     label: "Runway Gen-3 Turbo (image→vidéo)",
     engine: "runway",
@@ -174,6 +190,12 @@ export function estimateLipsync(modelId: string, seconds: number): number {
 // ---------------------------------------------------------------------------
 // Assembly — fal FFmpeg merge (compute-based, effectively negligible)
 // ---------------------------------------------------------------------------
+// Scene still — identity-preserving image (PuLID Flux) used as a start frame.
+export const SCENE_IMAGE_MODEL_ID = "fal-ai/flux-pulid";
+export function estimateSceneImage(): number {
+  return num(process.env.FAL_PULID_USD_PER_IMAGE, 0.05);
+}
+
 export const MERGE_MODEL_ID = "fal-ai/ffmpeg-api/merge-videos";
 
 export function estimateMerge(totalSeconds: number): number {

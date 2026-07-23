@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
       speed: cfg?.speed,
     });
     const { usd, credits } = estimateVoice(text.length);
-    addSpend({ type: "voice", provider: "elevenlabs", model: modelId || "eleven_multilingual_v2", estimateUSD: usd, note: `${credits} chars` });
+    await addSpend({ type: "voice", provider: "elevenlabs", model: modelId || "eleven_multilingual_v2", estimateUSD: usd, note: `${credits} chars` });
     return NextResponse.json({ ...result, estimateUSD: usd, credits });
   } catch (e) {
     return NextResponse.json(

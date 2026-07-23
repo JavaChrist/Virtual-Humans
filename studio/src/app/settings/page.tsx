@@ -10,6 +10,7 @@ const KEYS = [
   { id: "elevenlabs", env: "ELEVENLABS_API_KEY", use: "Voix (TTS)", url: "https://elevenlabs.io/app/settings/api-keys" },
   { id: "elevenlabsVoice", env: "ELEVENLABS_VOICE_ID", use: "Voix par défaut du personnage", url: "https://elevenlabs.io/app/voice-library" },
   { id: "fal", env: "FAL_KEY", use: "Vidéo (Kling/Veo/MiniMax/Runway)", url: "https://fal.ai/dashboard/keys" },
+  { id: "supabase", env: "SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY", use: "Budget + captures produits (Storage)", url: "https://supabase.com/dashboard/project/ejdbksxaswhdtsudnmvi/settings/api" },
 ] as const;
 
 export default function SettingsPage() {
@@ -59,6 +60,10 @@ export default function SettingsPage() {
 ELEVENLABS_API_KEY=...
 ELEVENLABS_VOICE_ID=...
 FAL_KEY=...
+
+# Supabase (budget + captures produits)
+SUPABASE_URL=https://ejdbksxaswhdtsudnmvi.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=...
 
 # Tarifs (optionnel, pour ajuster les estimations)
 ELEVENLABS_USD_PER_1K_CHARS=0.15

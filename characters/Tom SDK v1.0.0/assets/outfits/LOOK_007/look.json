@@ -1,0 +1,43 @@
+{
+    "id": "LOOK_007",
+    "version": "1.0",
+    "status": "production",
+    "default": false,
+    "priority": 7,
+    "name": "Travel",
+    "description": "Travel and tourism outfit.",
+    "style": [
+      "travel",
+      "casual"
+    ],
+    "clothing": {
+      "top": "Travel jacket",
+      "bottom": "Comfort jeans",
+      "shoes": "Travel sneakers"
+    },
+    "best_for": [
+      "travel",
+      "vlog",
+      "airport",
+      "station"
+    ],
+    "locations": [
+      "airport",
+      "station",
+      "hotel",
+      "street"
+    ],
+    "compatible_expressions": [
+      "smile",
+      "thinking",
+      "curious"
+    ],
+    "compatible_poses": [
+      "walking",
+      "phone",
+      "presenting"
+    ],
+    "lighting": [
+      "natural"
+    ]
+  }

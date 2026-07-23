@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     const requestId = await submitJob(model.id, { video_url, audio_url });
     const usd = estimateLipsync(model.id, seconds);
-    addSpend({ type: "video", provider: "fal", model: model.id, estimateUSD: usd, note: `lipsync ${seconds}s` });
+    await addSpend({ type: "video", provider: "fal", model: model.id, estimateUSD: usd, note: `lipsync ${seconds}s` });
     return NextResponse.json({ requestId, model: model.id, estimateUSD: usd });
   } catch (e) {
     return NextResponse.json(

@@ -1,0 +1,47 @@
+{
+    "id": "LOOK_006",
+    "version": "1.0",
+    "status": "production",
+    "default": false,
+    "priority": 6,
+    "name": "Moto Explorer",
+    "description": "Official RideCloudMoto outfit.",
+    "style": [
+      "motorcycle",
+      "adventure",
+      "outdoor"
+    ],
+    "clothing": {
+      "top": "Adventure motorcycle jacket",
+      "bottom": "Motorcycle jeans",
+      "shoes": "Adventure boots"
+    },
+    "best_for": [
+      "ridecloud",
+      "ridecloudmoto",
+      "dealer",
+      "roadtrip",
+      "motorcycle_review"
+    ],
+    "locations": [
+      "dealer",
+      "mountain",
+      "road",
+      "parking"
+    ],
+    "compatible_expressions": [
+      "smile",
+      "laugh",
+      "curious"
+    ],
+    "compatible_poses": [
+      "helmet",
+      "walking",
+      "pointing",
+      "presenting"
+    ],
+    "lighting": [
+      "natural",
+      "golden_hour"
+    ]
+  }

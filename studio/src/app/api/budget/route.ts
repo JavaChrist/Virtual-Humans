@@ -4,10 +4,10 @@ import { resetSpend, spendSummary } from "@/lib/budget";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  return NextResponse.json(spendSummary());
+  return NextResponse.json(await spendSummary());
 }
 
 export async function DELETE() {
-  resetSpend();
-  return NextResponse.json(spendSummary());
+  await resetSpend();
+  return NextResponse.json(await spendSummary());
 }

@@ -1,0 +1,46 @@
+{
+    "id": "LOOK_003",
+    "version": "1.0",
+    "status": "production",
+    "default": false,
+    "priority": 3,
+    "name": "Coffee Talk",
+    "description": "Friendly lifestyle outfit.",
+    "style": [
+      "lifestyle",
+      "friendly",
+      "casual"
+    ],
+    "clothing": {
+      "top": "Light sweater",
+      "bottom": "Modern jeans",
+      "shoes": "Casual sneakers"
+    },
+    "best_for": [
+      "podcast",
+      "vlog",
+      "coffee",
+      "youtube",
+      "instagram"
+    ],
+    "locations": [
+      "coffee_shop",
+      "library",
+      "coworking"
+    ],
+    "compatible_expressions": [
+      "smile",
+      "laugh",
+      "thinking",
+      "curious"
+    ],
+    "compatible_poses": [
+      "sitting",
+      "phone",
+      "presenting"
+    ],
+    "lighting": [
+      "natural",
+      "warm"
+    ]
+  }

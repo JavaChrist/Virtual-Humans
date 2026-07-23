@@ -81,6 +81,31 @@ export async function uploadMany(items: string[], prefix = "ref"): Promise<strin
   return Promise.all(items.map((it, i) => uploadDataUrl(it, `${prefix}-${i}`)));
 }
 
+/**
+ * Identity-preserving still image: place a character (from a face/reference URL)
+ * into a scene described by `prompt`, keeping the same identity.
+ * Uses PuLID Flux (best face fidelity, not moderated for our AI characters).
+ */
+export async function generateIdentityImage(
+  referenceImageUrl: string,
+  prompt: string,
+  imageSize = "portrait_16_9",
+): Promise<string> {
+  ensureConfig();
+  const result = await fal.subscribe("fal-ai/flux-pulid", {
+    input: {
+      prompt,
+      reference_image_url: referenceImageUrl,
+      id_weight: 1,
+      image_size: imageSize as "portrait_16_9",
+    },
+  });
+  const data = result.data as { images?: { url?: string }[] };
+  const url = data.images?.[0]?.url;
+  if (!url) throw new Error("Aucune image générée par le modèle d'identité");
+  return url;
+}
+
 /** Upload raw bytes (e.g. an SDK asset read from disk) to fal storage. */
 export async function uploadBuffer(buffer: Buffer, mime: string, name = "asset"): Promise<string> {
   ensureConfig();

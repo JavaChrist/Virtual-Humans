@@ -1,0 +1,43 @@
+{
+    "id": "LOOK_008",
+    "version": "1.0",
+    "status": "production",
+    "default": false,
+    "priority": 8,
+    "name": "Summer City",
+    "description": "Summer lifestyle outfit.",
+    "style": [
+      "summer",
+      "lifestyle"
+    ],
+    "clothing": {
+      "top": "Light summer shirt",
+      "bottom": "Summer pants",
+      "shoes": "Light sneakers"
+    },
+    "best_for": [
+      "summer",
+      "holiday",
+      "tourism",
+      "reels"
+    ],
+    "locations": [
+      "beach",
+      "city",
+      "terrace"
+    ],
+    "compatible_expressions": [
+      "big_smile",
+      "smile",
+      "laugh"
+    ],
+    "compatible_poses": [
+      "walking",
+      "selfie",
+      "presenting"
+    ],
+    "lighting": [
+      "sunny",
+      "golden_hour"
+    ]
+  }

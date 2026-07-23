@@ -40,20 +40,29 @@ interface Shot {
   model?: string;
   videoUrl?: string | null;
   error?: string | null;
+  // Décor : lieu + image fixe (identité préservée) servant de frame de départ.
+  location?: string;
+  sceneImageUrl?: string | null;
+  sceneBusy?: boolean;
+  sceneError?: string | null;
 }
 
+// IMAGE→VIDÉO : les prompts NE décrivent PAS l'apparence/le genre du personnage
+// (déjà présent sur l'image de départ) — sinon le modèle "morphe" et change le
+// visage/la tenue. On décrit uniquement l'ACTION + on force la cohérence.
+const CONSISTENCY = "Exactement la même personne et la même tenue que sur l'image, identité inchangée, une seule personne, aucun changement de vêtements.";
 const MICRO_TROTTOIR: Omit<Shot, "status">[] = [
-  { title: "1. Hook caméra", prompt: "Mei, jeune femme tech influenceuse, parle face caméra dans une rue animée, sourire énergique : « J'ai testé 100 apps cette semaine, une seule m'a bluffée. »", seconds: 8 },
-  { title: "2. Question passant #1", prompt: "Mei tend un micro à un passant dans la rue et demande avec enthousiasme : « Tu utilises quoi comme app pour t'organiser ? »", seconds: 8 },
-  { title: "3. Question passant #2", prompt: "Mei interpelle un autre passant, ambiance micro-trottoir, lumière naturelle : « Et toi, tu connais une app qui te fait vraiment gagner du temps ? »", seconds: 8 },
-  { title: "4. Réaction / B-roll", prompt: "Plan d'illustration : mains tenant un smartphone montrant une interface d'application épurée, arrière-plan urbain flou.", seconds: 6 },
-  { title: "5. Démo de l'app", prompt: "Mei montre l'écran de son téléphone face caméra, désigne l'application avec le doigt, expression convaincue.", seconds: 10 },
-  { title: "6. Punchline", prompt: "Mei, gros plan visage, clin d'œil complice : « Franchement, celle-là, elle change tout. »", seconds: 6 },
-  { title: "7. CTA", prompt: "Mei face caméra, pouce levé, énergie positive : « Le lien est en bio, teste-la et dis-moi ce que t'en penses ! »", seconds: 8 },
+  { title: "1. Hook caméra", prompt: `Parle face caméra avec un sourire énergique, léger geste de la main. ${CONSISTENCY}`, seconds: 5, location: "rue animée" },
+  { title: "2. Question passant #1", prompt: `Tend un micro comme en micro-trottoir, attitude enthousiaste, regard caméra. ${CONSISTENCY}`, seconds: 5, location: "rue animée" },
+  { title: "3. Question passant #2", prompt: `Interpelle quelqu'un, hoche la tête, écoute attentivement, micro en main. ${CONSISTENCY}`, seconds: 5, location: "trottoir de centre-ville" },
+  { title: "4. Réaction / B-roll", prompt: "Plan d'illustration : une main tient un smartphone montrant une interface d'application épurée, arrière-plan flou. Aucun visage.", seconds: 5, location: "" },
+  { title: "5. Démo de l'app", prompt: `Montre l'écran du téléphone face caméra, désigne l'application du doigt, expression convaincue. ${CONSISTENCY}`, seconds: 10, location: "rue animée" },
+  { title: "6. Punchline", prompt: `Sourire complice, clin d'œil, léger mouvement de tête. ${CONSISTENCY}`, seconds: 5, location: "rue animée" },
+  { title: "7. CTA", prompt: `Pouce levé, énergie positive, regard caméra. ${CONSISTENCY}`, seconds: 5, location: "rue animée" },
 ];
 
 export default function Storyboard() {
-  const { characterId } = useCharacter();
+  const { characterId, characterName } = useCharacter();
   const [ready, setReady] = useState(false);
   const [models, setModels] = useState<VideoModel[]>([]);
   const [modelId, setModelId] = useState("");
@@ -73,7 +82,12 @@ export default function Storyboard() {
     apiGet<SettingsResponse>("/api/settings").then((s) => setReady(s.keys.fal)).catch(() => {});
     apiGet<{ models: VideoModel[] }>("/api/video-models").then((d) => {
       setModels(d.models);
-      if (d.models[0]) setModelId(d.models[0].id);
+      // Défaut : Kling image→vidéo (identité verrouillée par la 1re frame).
+      const def =
+        d.models.find((m) => m.id === "fal-ai/kling-video/v2/master/image-to-video") ??
+        d.models.find((m) => m.mode === "image-to-video") ??
+        d.models[0];
+      if (def) setModelId(def.id);
     });
     const timersSnapshot = timers.current;
     return () => {
@@ -89,7 +103,8 @@ export default function Storyboard() {
       .then((d) => {
         setAssets(d.assets ?? {});
         const identity = (d.assets?.identity ?? []).map((a) => a.relPath);
-        const preferred = ["identity/master_face_v1.png", "identity/portrait_front.png", "identity/full_body_front.png"];
+        // Portrait d'abord : bon cadrage "parole" (tête + épaules) pour l'image→vidéo.
+        const preferred = ["identity/portrait_front.png", "identity/master_face_v1.png", "identity/full_body_front.png"];
         const preselect = preferred.filter((p) => identity.includes(p));
         setSelectedRefs(preselect.length ? preselect : identity.slice(0, 3));
       })
@@ -97,6 +112,10 @@ export default function Storyboard() {
   }, [characterId]);
 
   const isReference = model?.mode === "reference-to-video";
+  const needsStartImage = model?.mode === "image-to-video";
+  const needsImages = isReference || needsStartImage;
+  // La frame de départ envoyée à Kling est la 1re image sélectionnée.
+  const startFrame = selectedRefs[0];
   const totalAssets = Object.values(assets).reduce((n, list) => n + list.length, 0);
 
   function assetSrc(relPath: string) {
@@ -104,6 +123,11 @@ export default function Storyboard() {
   }
 
   function toggleRef(relPath: string) {
+    // Image→vidéo : une seule frame de départ (sélection unique).
+    if (needsStartImage) {
+      setSelectedRefs((prev) => (prev[0] === relPath ? [] : [relPath]));
+      return;
+    }
     setSelectedRefs((prev) => {
       if (prev.includes(relPath)) return prev.filter((x) => x !== relPath);
       if (prev.length >= 9) return prev;
@@ -130,19 +154,50 @@ export default function Storyboard() {
   const totalSeconds = shots.reduce((a, s) => a + (s.seconds || 0), 0);
   const totalCost = model ? +(model.usdPerSecond * totalSeconds).toFixed(2) : 0;
 
+  async function makeShotDecor(i: number) {
+    const shot = shots[i];
+    const loc = (shot.location ?? "").trim();
+    if (!loc) return;
+    update(i, { sceneBusy: true, sceneError: null });
+    try {
+      const imageSize = aspect === "16:9" ? "landscape_16_9" : aspect === "1:1" ? "square_hd" : "portrait_16_9";
+      const res = await apiPost<{ imageUrl: string }>("/api/generate/scene-image", {
+        character: characterId,
+        refPath: "identity/portrait_front.png",
+        prompt: `Cette personne, dans ${loc}, présente face caméra, ambiance micro-trottoir, lumière naturelle, photoréaliste, cadrage taille.`,
+        imageSize,
+      });
+      update(i, { sceneImageUrl: res.imageUrl, sceneBusy: false });
+      refreshBudget();
+    } catch (e) {
+      update(i, { sceneBusy: false, sceneError: e instanceof Error ? e.message : "Erreur décor" });
+    }
+  }
+
   async function generateShot(i: number) {
     const shot = shots[i];
     if (!shot.prompt) return;
     update(i, { status: "Envoi…", videoUrl: null, error: null });
     if (timers.current[i]) clearInterval(timers.current[i]);
     try {
+      // Priorité à l'image de décor du plan (si générée) comme frame de départ.
+      const shotStart = shot.sceneImageUrl || null;
       const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/video", {
         model: modelId,
         prompt: shot.prompt,
         seconds: shot.seconds,
         aspectRatio: aspect,
-        character: isReference ? characterId : undefined,
-        assetPaths: isReference ? selectedRefs : undefined,
+        character: needsImages ? characterId : undefined,
+        imageUrl: needsStartImage && shotStart ? shotStart : undefined,
+        assetPaths: needsStartImage
+          ? shotStart
+            ? undefined
+            : startFrame
+              ? [startFrame]
+              : []
+          : needsImages
+            ? selectedRefs
+            : undefined,
       });
       refreshBudget();
       update(i, { status: "En file…", requestId: sub.requestId, model: sub.model });
@@ -262,10 +317,12 @@ export default function Storyboard() {
         <button className="btn btn-ghost" onClick={addShot}>+ Ajouter un plan</button>
       </div>
 
-      {isReference && (
+      {needsImages && (
         <div className="card p-5 mb-6">
           <label className="label">
-            Références d&apos;identité (appliquées à tous les plans) — {selectedRefs.length}/9 sélectionnée{selectedRefs.length > 1 ? "s" : ""}
+            {needsStartImage
+              ? `Frame de départ — verrouille l'identité sur tous les plans (1 image)`
+              : `Références d'identité (appliquées à tous les plans) — ${selectedRefs.length}/9 sélectionnée${selectedRefs.length > 1 ? "s" : ""}`}
           </label>
           {totalAssets === 0 ? (
             <p className="text-sm text-[var(--muted)]">
@@ -309,7 +366,9 @@ export default function Storyboard() {
                 })}
               </div>
               <p className="text-xs text-[var(--muted)] mt-2">
-                Ces images verrouillent l&apos;apparence du personnage sur l&apos;ensemble des plans (visage cohérent).
+                {needsStartImage
+                  ? "Frame de départ par défaut (fond studio) pour les plans sans décor. Pour un vrai décor (rue, café…), renseigne le « Décor du plan » ci-dessous : le personnage y sera placé, identité préservée."
+                  : "Ces images verrouillent l'apparence du personnage sur l'ensemble des plans (visage cohérent)."}
               </p>
             </>
           )}
@@ -319,7 +378,7 @@ export default function Storyboard() {
       {model?.audio !== "native" && shots.length > 0 && (
         <div className="card p-4 mb-6">
           <p className="text-sm text-[var(--muted)]">
-            🔇 Ce moteur est muet. Après génération, passe chaque plan (ou le montage) dans le <strong>Studio Lip-sync</strong> pour ajouter la voix de {`{character}`}.
+            🔇 Ce moteur est muet. Après génération, passe chaque plan (ou le montage) dans le <strong>Studio Lip-sync</strong> pour ajouter la voix de {characterName || "ton personnage"}.
           </p>
         </div>
       )}
@@ -348,6 +407,41 @@ export default function Storyboard() {
               onChange={(e) => update(i, { prompt: e.target.value })}
               placeholder="Décris ce plan…"
             />
+
+            {needsStartImage && (
+              <div className="mt-3 rounded-lg border border-[var(--border)] p-3 bg-[var(--surface-2)]/30">
+                <label className="label mb-1 block">Décor du plan (optionnel) — {characterName || "le perso"} placé dans le lieu, identité préservée</label>
+                <div className="flex items-center gap-2">
+                  <input
+                    className="input flex-1"
+                    value={shot.location ?? ""}
+                    onChange={(e) => update(i, { location: e.target.value, sceneImageUrl: null })}
+                    placeholder="ex. rue animée, café, studio…"
+                  />
+                  <button
+                    className="btn btn-ghost whitespace-nowrap"
+                    disabled={!ready || !(shot.location ?? "").trim() || shot.sceneBusy}
+                    onClick={() => makeShotDecor(i)}
+                  >
+                    {shot.sceneBusy ? "Génération…" : shot.sceneImageUrl ? "Régénérer le décor" : "Générer le décor"}
+                  </button>
+                </div>
+                {shot.sceneError && <p className="text-xs text-[var(--danger)] mt-1">{shot.sceneError}</p>}
+                {shot.sceneImageUrl && (
+                  <div className="flex items-center gap-3 mt-2">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={shot.sceneImageUrl} alt="Décor du plan" className="h-20 rounded-lg border border-[var(--border)]" />
+                    <div className="text-xs text-[var(--muted)]">
+                      ✓ Décor prêt — sert de 1re frame.
+                      <button className="block text-[var(--muted)] hover:text-[var(--danger)] mt-1" onClick={() => update(i, { sceneImageUrl: null })}>
+                        retirer (repartir de la frame de départ)
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="flex items-center justify-between mt-3">
               <div className="text-sm">
                 {shot.error && <span className="text-[var(--danger)]">{shot.error}</span>}
@@ -364,7 +458,7 @@ export default function Storyboard() {
                   !shot.prompt ||
                   !ready ||
                   (!!shot.status && !shot.videoUrl && !shot.error) ||
-                  (isReference && selectedRefs.length === 0)
+                  (needsImages && selectedRefs.length === 0 && !shot.sceneImageUrl)
                 }
                 onClick={() => generateShot(i)}
               >

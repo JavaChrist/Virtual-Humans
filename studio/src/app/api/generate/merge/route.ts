@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const input: Record<string, unknown> = { video_urls: videoUrls };
     const requestId = await submitJob(MERGE_MODEL_ID, input);
     const usd = estimateMerge(totalSeconds);
-    addSpend({ type: "video", provider: "fal", model: MERGE_MODEL_ID, estimateUSD: usd, note: `merge ${videoUrls.length} clips` });
+    await addSpend({ type: "video", provider: "fal", model: MERGE_MODEL_ID, estimateUSD: usd, note: `merge ${videoUrls.length} clips` });
     return NextResponse.json({ requestId, model: MERGE_MODEL_ID, estimateUSD: usd });
   } catch (e) {
     return NextResponse.json(

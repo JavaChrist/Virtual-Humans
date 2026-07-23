@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Virtual Humans Studio — Mode d'emploi</title>
+<style>
+  :root{
+    --accent:#7c5cff; --accent2:#0ea5b7; --ink:#1c2230; --muted:#5b6474;
+    --line:#e3e6ee; --bg:#ffffff; --soft:#f6f7fb; --ok:#16a34a; --warn:#d97706; --danger:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;color:var(--ink);background:var(--bg);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;font-size:12px;line-height:1.5;}
+  @page{size:A4;margin:13mm 12mm;}
+  h1,h2,h3{margin:0;line-height:1.2;}
+  code{font-family:"Cascadia Code",Consolas,monospace;background:var(--soft);border:1px solid var(--line);
+    border-radius:4px;padding:.5px 4px;font-size:.9em;}
+  b{color:#111827;}
+
+  .cover{padding:20mm 4mm 0;}
+  .cover .kicker{color:var(--accent);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:11px;}
+  .cover h1{font-size:32px;margin:8px 0 6px;}
+  .cover .sub{color:var(--muted);font-size:14px;max-width:155mm;}
+
+  /* "Avant de commencer" strip */
+  .prep{margin-top:16px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .prep .p{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+  .prep .p b{display:block;margin-bottom:2px;}
+  .prep .p small{color:var(--muted);}
+
+  /* decision table */
+  table{width:100%;border-collapse:collapse;font-size:11px;page-break-inside:avoid;margin-top:6px;}
+  th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--soft);font-weight:700;}
+
+  .sec{margin-top:20px;}
+  .sec-h{display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px;}
+  .sec-h h2{font-size:16px;}
+  .sec-h .n{background:var(--accent);color:#fff;border-radius:6px;min-width:24px;height:24px;padding:0 6px;display:inline-flex;
+    align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+
+  /* recipe */
+  .recipe{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:14px;page-break-inside:avoid;}
+  .recipe .rh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .recipe .rh .emoji{font-size:18px;}
+  .recipe .rh h3{font-size:14.5px;}
+  .recipe .rh .meta{color:var(--muted);font-size:10.5px;margin-left:auto;}
+  .recipe.main{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 10%,#fff);}
+  .badge{display:inline-block;border-radius:999px;padding:1px 8px;font-size:9.5px;font-weight:700;border:1px solid var(--line);background:var(--soft);}
+  .badge.hot{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 35%,#fff);}
+  .badge.ok{color:var(--ok);border-color:#bbf7d0;background:#f0fdf4;}
+  .badge.warn{color:var(--warn);border-color:#fde68a;background:#fffbeb;}
+
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:0;}
+  ol.steps li{counter-increment:s;padding:5px 0 5px 30px;position:relative;}
+  ol.steps li::before{content:counter(s);position:absolute;left:0;top:4px;background:var(--accent);color:#fff;
+    width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10.5px;}
+  .opt{background:var(--soft);border-left:3px solid var(--accent2);border-radius:0 8px 8px 0;padding:6px 10px;margin:8px 0;}
+  .opt b{color:var(--accent2);}
+  .tip{background:#fffbeb;border-left:3px solid var(--warn);border-radius:0 8px 8px 0;padding:6px 10px;margin-top:8px;font-size:11px;}
+  .tip b{color:var(--warn);}
+
+  .break{page-break-before:always;}
+  .foot{margin-top:22px;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:10px;text-align:center;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="kicker">Mode d'emploi · guide pratique</div>
+  <h1>Virtual Humans <span style="color:var(--accent)">Studio</span></h1>
+  <div class="sub">« Je veux créer… voici quoi faire, étape par étape. » Chaque recette indique la page à ouvrir,
+  les réglages conseillés (format, durée, modèle) et les astuces pour garder le même visage.</div>
+
+  <div class="prep">
+    <div class="p"><b>1. Choisis le personnage</b><small>Menu à gauche → « Personnage actif » (Mei ou Tom). Tout le studio travaille dessus.</small></div>
+    <div class="p"><b>2. Vérifie les clés</b><small>Page <b>Réglages</b> : OpenAI (image), ElevenLabs (voix), fal.ai (vidéo) doivent être « configurées ».</small></div>
+    <div class="p"><b>3. Retiens la règle d'or</b><small>Une vidéo « muette » se complète par le <b>Lip-sync</b> pour faire parler le personnage.</small></div>
+  </div>
+</div>
+
+<!-- DECISION HELPER -->
+<div class="sec">
+  <div class="sec-h"><span class="n">?</span><h2>Que veux-tu faire ? (aide au choix)</h2></div>
+  <table>
+    <thead><tr><th>Ton objectif</th><th>Va sur…</th><th>Modèle / réglage conseillé</th><th>Voix ?</th></tr></thead>
+    <tbody>
+      <tr><td><b>Vidéo influenceur promo d'une app</b></td><td>Studio Scène</td><td>Kling (identité verrouillée) + Décor</td><td>via Lip-sync</td></tr>
+      <tr><td><b>Reel Instagram court qui parle</b> (rapide)</td><td>Studio Vidéo</td><td>Veo 3.1 Fast · 9:16 · 8 s</td><td>native 🔊</td></tr>
+      <tr><td><b>Micro-trottoir 60 s (plusieurs plans)</b></td><td>Storyboard 60 s</td><td>Kling image→vidéo · 7 plans · assemblage</td><td>via Lip-sync</td></tr>
+      <tr><td>Ajouter une voix à une vidéo muette</td><td>Studio Lip-sync</td><td>VEED (éco) ou Sync v3 (fidèle)</td><td>—</td></tr>
+      <tr><td>Juste une voix off</td><td>Studio Voix</td><td>voix du personnage</td><td>🔊</td></tr>
+      <tr><td>Juste une image / visuel</td><td>Studio Image</td><td>OpenAI · 9:16 pour Insta</td><td>—</td></tr>
+      <tr><td>Préparer une app à présenter</td><td>Produits / Apps</td><td>+ captures d'écran</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <div class="tip"><b>Format Instagram :</b> Reels &amp; Stories = <b>9:16</b> (vertical) · Publication carrée = <b>1:1</b> · Paysage = <b>16:9</b>. Choisis le ratio <b>avant</b> de générer.</div>
+</div>
+
+<!-- RECIPE 1 : PROMO APP (MAIN) -->
+<div class="sec break">
+  <div class="sec-h"><span class="n">1</span><h2>Recettes détaillées</h2></div>
+
+  <div class="recipe main">
+    <div class="rh"><span class="emoji">🎬</span><h3>Vidéo influenceur pour promouvoir une app</h3>
+      <span class="badge hot">le cas principal</span>
+      <span class="meta">Studio Scène · 9:16 · 5–10 s · identité verrouillée</span>
+    </div>
+    <ol class="steps">
+      <li>Menu de gauche → sélectionne le <b>personnage actif</b> (Mei ou Tom).</li>
+      <li>Ouvre <b>Produits / Apps</b> → crée ton app (nom, pitch, couleur) et ajoute ses <b>captures d'écran</b>.</li>
+      <li>Ouvre <b>Studio Scène</b> → choisis la <b>tenue</b>, le <b>lieu</b>, le <b>pitch</b> et l'<b>app</b> à présenter.</li>
+      <li>Bloc <b>Décor</b> (recommandé) : garde/édite le texte du lieu puis clique <b>« Générer l'image de décor »</b>. Le personnage est placé dans le décor, <b>visage préservé</b> (PuLID Flux, ~2 min). Sinon, l'animation part de la photo de tenue (fond studio).</li>
+      <li>Règle le <b>ratio 9:16</b> (Instagram/TikTok) et la <b>durée</b> (5 ou 10 s).</li>
+      <li>Clique <b>« Générer la vidéo »</b> (Kling, muet). Compte <b>~3–4 min pour 5 s</b> — c'est normal, ne ferme pas l'onglet.</li>
+      <li>Va dans <b>Studio Lip-sync</b> pour ajouter la <b>voix du personnage</b> sur le clip (voir recette 4).</li>
+      <li><b>Ouvre / Télécharge</b> la vidéo finale.</li>
+    </ol>
+    <div class="tip"><b>Astuce identité :</b> le visage et la tenue restent ceux de l'image de départ. Pour un décor de rue, utilise le bloc Décor plutôt que la photo studio.</div>
+  </div>
+
+  <!-- RECIPE 2 : INSTAGRAM REEL -->
+  <div class="recipe">
+    <div class="rh"><span class="emoji">📱</span><h3>Reel / vidéo Instagram courte</h3>
+      <span class="meta">Studio Vidéo · 9:16 · 4–8 s</span>
+    </div>
+    <div class="opt"><b>Option A — la plus rapide (elle parle toute seule) :</b>
+      Studio Vidéo → moteur <b>« Veo 3.1 Fast — voix + lèvres natives »</b> → ratio <b>9:16</b>, durée <b>8 s</b> →
+      écris le prompt (décor + la réplique à dire) → <b>Générer la vidéo</b>. Audio et lèvres inclus, aucun lip-sync.
+      <br><span class="badge warn">à savoir</span> le visage est <b>inventé</b> à partir du texte : idéal pour un plan générique, pas pour garder exactement le visage de ton influenceur.</div>
+    <div class="opt" style="border-color:var(--accent);"><b>Option B — avec le visage de TON influenceur :</b>
+      passe par <b>Studio Scène</b> (recette 1) ou Studio Vidéo en <b>Kling image→vidéo</b> (muet) puis <b>Lip-sync</b>.
+      Plus fidèle : le visage reste identique d'une vidéo à l'autre.</div>
+    <div class="tip"><b>Choix rapide :</b> besoin de vite publier un clip parlant → Option A. Cohérence de marque de l'influenceur → Option B.</div>
+  </div>
+
+  <!-- RECIPE 3 : STORYBOARD 60s -->
+  <div class="recipe">
+    <div class="rh"><span class="emoji">🎞️</span><h3>Micro-trottoir de 60 s (plusieurs plans enchaînés)</h3>
+      <span class="meta">Storyboard 60 s · 7 plans · assemblage auto</span>
+    </div>
+    <ol class="steps">
+      <li>Ouvre <b>Storyboard 60 s</b> : les 7 plans du preset micro-trottoir sont déjà écrits (hook, questions, démo, punchline, CTA).</li>
+      <li>Choisis la <b>frame de départ</b> (une photo d'identité) : elle verrouille le visage et la tenue sur tous les plans.</li>
+      <li>Pour chaque plan, tu peux saisir un <b>Décor du plan</b> (« rue animée », « café »…) puis <b>« Générer le décor »</b> → le personnage y apparaît, visage conservé.</li>
+      <li>Ajuste durées/prompts si besoin, puis <b>« Générer les plans restants »</b> (Kling, muet).</li>
+      <li>Ajoute la voix : passe chaque plan (ou le montage) dans <b>Studio Lip-sync</b>.</li>
+      <li>Clique <b>« Assembler … plans en 60 s »</b> (FFmpeg) pour obtenir une seule vidéo.</li>
+    </ol>
+    <div class="tip"><b>Objectif durée :</b> vise ~60 s au total (le compteur en bas t'indique le cumul et le budget estimé).</div>
+  </div>
+
+  <!-- RECIPE 4 : LIPSYNC -->
+  <div class="recipe">
+    <div class="rh"><span class="emoji">🗣️</span><h3>Ajouter la voix à une vidéo muette (Lip-sync)</h3>
+      <span class="meta">Studio Lip-sync</span>
+    </div>
+    <ol class="steps">
+      <li>Ouvre <b>Studio Lip-sync</b> : il reprend automatiquement la <b>dernière vidéo</b> générée pour ce personnage (ou colle/upload une autre vidéo).</li>
+      <li>Écris le <b>texte à dire</b> → génère la <b>voix du personnage</b> (ElevenLabs, voix propre à Mei/Tom).</li>
+      <li>Choisis le moteur : <b>VEED</b> (économique) ou <b>Sync v3</b> (haute fidélité).</li>
+      <li><b>Générer</b> → la bouche se synchronise sur la voix. Télécharge le résultat.</li>
+    </ol>
+    <div class="tip"><b>Durées :</b> cale la longueur du texte/voix sur la durée du clip pour éviter les décalages.</div>
+  </div>
+
+  <!-- SMALL RECIPES -->
+  <div class="grid2">
+    <div class="recipe">
+      <div class="rh"><span class="emoji">🔊</span><h3>Une voix off seule</h3></div>
+      <ol class="steps">
+        <li>Ouvre <b>Studio Voix</b>.</li>
+        <li>Colle le <b>script</b> → <b>Générer</b> (voix du personnage actif).</li>
+        <li>Écoute et télécharge l'audio.</li>
+      </ol>
+    </div>
+    <div class="recipe">
+      <div class="rh"><span class="emoji">🖼️</span><h3>Une image / un visuel</h3></div>
+      <ol class="steps">
+        <li>Ouvre <b>Studio Image</b>.</li>
+        <li>Décris l'image, choisis <b>taille</b> (9:16 pour Insta) et <b>qualité</b>.</li>
+        <li><b>Générer</b> → sert aussi de référence dans les autres studios.</li>
+      </ol>
+    </div>
+    <div class="recipe">
+      <div class="rh"><span class="emoji">📦</span><h3>Préparer une app à présenter</h3></div>
+      <ol class="steps">
+        <li>Ouvre <b>Produits / Apps</b>.</li>
+        <li>Renseigne nom, pitch, couleur, URL.</li>
+        <li>Ajoute des <b>captures d'écran</b> (réutilisées en Studio Scène).</li>
+      </ol>
+    </div>
+    <div class="recipe">
+      <div class="rh"><span class="emoji">💸</span><h3>Suivre / remettre à zéro le budget</h3></div>
+      <ol class="steps">
+        <li>Le cumul $ s'affiche en bas du menu (détail sur la page <b>Budget</b>).</li>
+        <li>Clique <b>reset</b> sur la carte « Dépense estimée » en début de campagne.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 2. DÉCLINER PAR RÉSEAU SOCIAL ============ -->
+<div class="sec break">
+  <div class="sec-h"><span class="n">2</span><h2>Décliner par réseau social</h2></div>
+  <p style="color:var(--muted);margin:0 0 8px;">Le contenu se fabrique avec les recettes 1 à 3. Il suffit d'ajuster le <b>ratio</b>, la <b>durée</b> et le <b>hook</b> selon la plateforme.</p>
+  <table>
+    <thead><tr><th>Réseau</th><th>Ratio</th><th>Durée cible</th><th>À soigner</th></tr></thead>
+    <tbody>
+      <tr><td>Instagram Reel / Story</td><td><b>9:16</b></td><td>Story ~15 s · Reel 15–30 s</td><td>hook 3 s, sous-titres, CTA final</td></tr>
+      <tr><td>TikTok</td><td><b>9:16</b></td><td>15–60 s</td><td>hook très fort dès la 1re seconde, format « micro-trottoir », sous-titres</td></tr>
+      <tr><td>YouTube Short</td><td><b>9:16</b></td><td>≤ 60 s</td><td>titre accrocheur, #Shorts, punchline + CTA</td></tr>
+      <tr><td>Publication feed</td><td><b>1:1</b> ou 16:9</td><td>—</td><td>visuel net, texte lisible</td></tr>
+    </tbody>
+  </table>
+
+  <div class="recipe">
+    <div class="rh"><span class="emoji">🎵</span><h3>TikTok</h3>
+      <span class="meta">9:16 · 15–60 s · hook immédiat</span>
+    </div>
+    <ol class="steps">
+      <li>Fabrique le clip avec la <b>recette 1</b> (un plan) ou la <b>recette 3</b> (micro-trottoir 60 s), en <b>ratio 9:16</b>.</li>
+      <li>Soigne le <b>hook</b> : la 1re seconde doit interpeller (question, promesse). Adapte le prompt du plan 1.</li>
+      <li>Ajoute la <b>voix</b> par Lip-sync (recette 4), puis <b>Assemble</b> si plusieurs plans.</li>
+      <li>Publie sur TikTok ; ajoute-y <b>sous-titres</b> et éventuelle <b>musique tendance</b> (voir encadré musique).</li>
+    </ol>
+    <div class="tip"><b>Astuce :</b> le preset micro-trottoir du Storyboard colle parfaitement aux codes TikTok (rythme rapide, plans courts).</div>
+  </div>
+
+  <div class="recipe">
+    <div class="rh"><span class="emoji">▶️</span><h3>YouTube Short</h3>
+      <span class="meta">9:16 · ≤ 60 s</span>
+    </div>
+    <ol class="steps">
+      <li>Pour un Short de ~60 s, utilise la <b>recette 3</b> (Storyboard → 7 plans → assemblage).</li>
+      <li>Garde le <b>ratio 9:16</b> et vise le compteur ~60 s en bas de page.</li>
+      <li>Ajoute la voix (Lip-sync), puis <b>Assemble</b> en une vidéo unique.</li>
+      <li>À la publication : titre accrocheur + <b>#Shorts</b> dans la description.</li>
+    </ol>
+  </div>
+
+  <div class="recipe">
+    <div class="rh"><span class="emoji">🎶</span><h3>Story / Reel avec musique de fond</h3>
+      <span class="meta">9:16 · ~15 s</span>
+    </div>
+    <ol class="steps">
+      <li>Génère le clip court (recette 1 ou 2) en <b>9:16</b>, ~15 s.</li>
+      <li>Ajoute la <b>voix</b> du personnage si besoin (Lip-sync).</li>
+      <li><b>Ajoute la musique de fond au moment de publier</b> (Instagram/TikTok proposent une bibliothèque musicale intégrée), ou dans un outil de montage.</li>
+    </ol>
+    <div class="tip"><b>À savoir :</b> le Studio gère la <b>voix</b> (ElevenLabs) mais ne mixe pas de <b>musique de fond</b>. La musique s'ajoute côté plateforme ou en montage externe — ça évite aussi les soucis de droits.</div>
+  </div>
+</div>
+
+<div class="foot">Virtual Humans Studio — mode d'emploi · Mei &amp; Tom · vidéos publicitaires pour la promotion d'apps.</div>
+
+</body>
+</html>

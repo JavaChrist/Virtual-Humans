@@ -11,6 +11,10 @@ export async function GET() {
       elevenlabs: Boolean(process.env.ELEVENLABS_API_KEY),
       elevenlabsVoice: Boolean(process.env.ELEVENLABS_VOICE_ID),
       fal: Boolean(process.env.FAL_KEY),
+      supabase: Boolean(
+        (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL) &&
+          process.env.SUPABASE_SERVICE_ROLE_KEY,
+      ),
     },
     sdk: { repoRoot: REPO_ROOT, character: CHARACTER_NAME },
     pricing: { elevenlabsUsdPer1kChars: ELEVENLABS_USD_PER_1K_CHARS },

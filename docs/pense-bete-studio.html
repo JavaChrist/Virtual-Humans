@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Virtual Humans Studio — Pense-bête</title>
+<style>
+  :root{
+    --accent:#7c5cff; --accent2:#0ea5b7; --ink:#1c2230; --muted:#5b6474;
+    --line:#e3e6ee; --bg:#ffffff; --soft:#f6f7fb; --ok:#16a34a; --warn:#d97706; --danger:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;color:var(--ink);background:var(--bg);
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;font-size:12px;line-height:1.5;}
+  @page{size:A4;margin:14mm 12mm;}
+  h1,h2,h3{margin:0;line-height:1.2;}
+  code{font-family:"Cascadia Code",Consolas,monospace;background:var(--soft);border:1px solid var(--line);
+    border-radius:4px;padding:.5px 4px;font-size:.9em;}
+  a{color:var(--accent2);text-decoration:none;}
+
+  /* Cover */
+  .cover{padding:26mm 4mm 0;}
+  .cover .kicker{color:var(--accent);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:11px;}
+  .cover h1{font-size:34px;margin:8px 0 6px;}
+  .cover .sub{color:var(--muted);font-size:14px;max-width:150mm;}
+  .cover .meta{margin-top:14px;font-size:11px;color:var(--muted);}
+  .flow{margin-top:18px;display:flex;gap:8px;flex-wrap:wrap;}
+  .flow .node{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-weight:600;}
+  .flow .arrow{align-self:center;color:var(--accent);font-weight:700;}
+
+  /* Section headers */
+  .sec{margin-top:22px;page-break-inside:avoid;}
+  .sec-h{display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--accent);padding-bottom:6px;margin-bottom:12px;}
+  .sec-h .n{background:var(--accent);color:#fff;border-radius:6px;width:24px;height:24px;display:inline-flex;
+    align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+  .sec-h h2{font-size:17px;}
+
+  /* Cards grid */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .card{border:1px solid var(--line);border-radius:10px;padding:11px 13px;page-break-inside:avoid;background:#fff;}
+  .card .t{font-weight:700;font-size:12.5px;display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+  .card .path{font-size:10px;color:var(--muted);font-family:"Cascadia Code",Consolas,monospace;}
+  .card p{margin:6px 0 0;color:#2b3242;}
+  .card ul{margin:6px 0 0;padding-left:16px;}
+  .card li{margin:2px 0;}
+  .ico{width:20px;height:20px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;
+    font-size:12px;background:color-mix(in srgb,var(--accent) 14%,#fff);color:var(--accent);flex:0 0 auto;}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse;font-size:11px;page-break-inside:avoid;}
+  th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top;}
+  th{background:var(--soft);font-weight:700;}
+  td code{background:#fff;}
+  .tag{display:inline-block;border-radius:999px;padding:1px 7px;font-size:9.5px;font-weight:700;border:1px solid var(--line);}
+  .tag.ok{color:var(--ok);border-color:#bbf7d0;background:#f0fdf4;}
+  .tag.warn{color:var(--warn);border-color:#fde68a;background:#fffbeb;}
+  .tag.mute{color:var(--muted);}
+
+  .note{background:var(--soft);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:9px 12px;margin-top:10px;}
+  .note b{color:var(--accent);}
+  .steps{counter-reset:s;list-style:none;padding:0;margin:10px 0 0;}
+  .steps li{counter-increment:s;padding:7px 0 7px 34px;position:relative;border-bottom:1px dashed var(--line);}
+  .steps li:last-child{border-bottom:none;}
+  .steps li::before{content:counter(s);position:absolute;left:0;top:6px;background:var(--accent);color:#fff;
+    width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;}
+  .break{page-break-before:always;}
+  .foot{margin-top:26px;padding-top:8px;border-top:1px solid var(--line);color:var(--muted);font-size:10px;text-align:center;}
+  .two{columns:2;column-gap:14px;}
+  .two .card{break-inside:avoid;margin-bottom:10px;display:inline-block;width:100%;}
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="cover">
+  <div class="kicker">Pense-bête · aide-mémoire</div>
+  <h1>Virtual Humans <span style="color:var(--accent)">Studio</span></h1>
+  <div class="sub">Comment fonctionne l'application, module par module : le SDK des personnages virtuels,
+  le Studio Next.js de génération, et les fournisseurs d'IA (image, voix, vidéo).</div>
+  <div class="flow">
+    <span class="node">SDK personnages<br><small style="font-weight:400;color:var(--muted)">characters/</small></span>
+    <span class="arrow">→</span>
+    <span class="node">Studio (Next.js)<br><small style="font-weight:400;color:var(--muted)">interface + API</small></span>
+    <span class="arrow">→</span>
+    <span class="node">Providers IA<br><small style="font-weight:400;color:var(--muted)">OpenAI · ElevenLabs · fal.ai</small></span>
+    <span class="arrow">→</span>
+    <span class="node">Médias<br><small style="font-weight:400;color:var(--muted)">image · voix · vidéo</small></span>
+  </div>
+  <div class="meta">Projet : <code>virtual-humans</code> — Personnages actuels : <b>Mei</b> &amp; <b>Tom</b> · Objectif : vidéos publicitaires (micro-trottoir 60 s) pour promouvoir des apps.</div>
+</div>
+
+<!-- ============ 1. VUE D'ENSEMBLE ============ -->
+<div class="sec">
+  <div class="sec-h"><span class="n">1</span><h2>Vue d'ensemble &amp; concepts clés</h2></div>
+  <div class="grid">
+    <div class="card">
+      <div class="t"><span class="ico">◫</span>Deux briques séparées</div>
+      <p><b>SDK</b> (<code>characters/</code>) = l'identité complète d'un personnage virtuel (fiches, mémoire, assets).<br>
+      <b>Studio</b> (<code>studio/</code>) = l'appli Next.js qui lit le SDK et génère les médias. On ne mélange jamais les deux.</p>
+    </div>
+    <div class="card">
+      <div class="t"><span class="ico">☺</span>Personnage actif</div>
+      <p>Sélecteur global en haut du menu. Toutes les pages (image, voix, vidéo…) travaillent sur ce personnage. Le choix est mémorisé dans le navigateur.</p>
+    </div>
+    <div class="card">
+      <div class="t"><span class="ico">#</span>characterId vs characterCode</div>
+      <p><code>characterId</code> = identifiant technique (URL/API, ex. <code>tom</code>). <code>characterCode</code> = code métier lisible (ex. <code>TOM-001</code>). Les deux sont <b>uniques</b> : deux packages ne peuvent pas les partager.</p>
+    </div>
+    <div class="card">
+      <div class="t"><span class="ico">🔒</span>Identité verrouillée</div>
+      <p>Pour garder le même visage d'un plan à l'autre : une <b>image de départ</b> (photo du perso ou décor généré) sert de 1re frame ; la vidéo se contente de l'<b>animer</b>. Pas d'invention de visage.</p>
+    </div>
+  </div>
+  <div class="note"><b>Le flux type :</b> on choisit le personnage → on prépare une image (tenue/décor) → on anime en vidéo (muette) → on ajoute la voix par lip-sync → on assemble les plans en une pub de 60 s. Chaque génération est estimée en $ avant l'appel.</div>
+</div>
+
+<!-- ============ 2. MODULES (PAGES) ============ -->
+<div class="sec">
+  <div class="sec-h"><span class="n">2</span><h2>Les modules de l'interface (menu de gauche)</h2></div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="t"><span class="ico">◧</span>Tableau de bord</div>
+      <div class="path">/ (page.tsx)</div>
+      <p>Vue d'accueil du personnage actif : cartes Identité, Apparence, Personnalité, Voix. Indicatif — le pilotage se fait dans les Studios.</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">☺</span>Personnages</div>
+      <div class="path">/characters · /characters/[id]</div>
+      <p>Liste des packages détectés + santé de chacun. La fiche détaille tenues, identité, poses, expressions, voix, capacités, limites, 11 mémoires, jauges de personnalité, phrases candidates et <b>alertes qualité</b> (assets manquants, collisions).</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">◈</span>Studio Scène</div>
+      <div class="path">/scene</div>
+      <p>Compose une présentation : tenue + lieu + pitch + produit. Bloc <b>Décor</b> (PuLID Flux) place le perso dans un lieu, puis Kling l'anime (identité verrouillée). Compteur de temps pendant la génération.</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">▦</span>Produits / Apps</div>
+      <div class="path">/products</div>
+      <p>Bibliothèque des apps à promouvoir : nom, pitch, couleur, URL et <b>captures d'écran</b> (ajout/suppression). Réutilisées dans Studio Scène.</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">▣</span>Studio Image</div>
+      <div class="path">/image</div>
+      <p>Génère des images via OpenAI (gpt-image-1) : taille, qualité, quantité. Sert de bibliothèque de références par personnage.</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">◉</span>Studio Voix</div>
+      <div class="path">/voice</div>
+      <p>Synthèse vocale ElevenLabs. Chaque personnage a <b>sa propre voix</b> (<code>voice/config.json</code> : Mei et Tom ont des voiceId distincts).</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">►</span>Studio Vidéo</div>
+      <div class="path">/video</div>
+      <p>Génération vidéo unitaire. Choix du modèle (Veo, Seedance, Kling, Runway, MiniMax), durée et ratio adaptés au modèle. File d'attente + suivi de statut.</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">◑</span>Studio Lip-sync</div>
+      <div class="path">/lipsync</div>
+      <p>Synchronise une voix sur une vidéo muette (VEED ou Sync v3). C'est l'étape qui fait « parler » le personnage face caméra.</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">▤</span>Storyboard 60 s</div>
+      <div class="path">/storyboard</div>
+      <p>Enchaîne 7 plans (preset micro-trottoir). Kling image→vidéo pour l'identité, <b>Décor par plan</b> (un lieu différent, visage conservé), puis <b>assemblage FFmpeg</b> en une vidéo de ~60 s.</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">$</span>Budget</div>
+      <div class="path">/budget</div>
+      <p>Détail des dépenses estimées (par type/modèle) + total. Bouton <b>reset</b> (aussi présent sur la carte du menu) pour repartir de zéro par campagne.</p>
+    </div>
+
+    <div class="card">
+      <div class="t"><span class="ico">⚙</span>Réglages</div>
+      <div class="path">/settings</div>
+      <p>État des clés API (OpenAI, ElevenLabs, fal.ai), modèle de <code>.env.local</code>, source du SDK et tarifs voix.</p>
+    </div>
+
+    <div class="card" style="border-style:dashed;">
+      <div class="t"><span class="ico">✔</span>Modales de confirmation</div>
+      <div class="path">components/confirm.tsx</div>
+      <p>Remplace les pop-ups du navigateur. Hook <code>useConfirm()</code> → modale stylée (Échap = annuler, Entrée = valider), variante rouge pour les suppressions.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ 3. RUNTIME PERSONNAGE ============ -->
+<div class="sec break">
+  <div class="sec-h"><span class="n">3</span><h2>Le runtime « personnage » (le cerveau du SDK)</h2></div>
+  <p style="color:var(--muted);margin:0 0 10px;">Dossier <code>studio/src/runtime/character/</code> — lit un package sur disque, le valide strictement, et l'expose via une API versionnée. Aucun repli silencieux : en cas de problème, une erreur typée explicite.</p>
+  <div class="grid">
+    <div class="card"><div class="t">loader.ts</div><p>Charge un package depuis le disque, valide, remonte les problèmes non bloquants (assets manquants…) et invalide les assets marqués.</p></div>
+    <div class="card"><div class="t">schema.ts (Zod)</div><p>Schémas stricts : identité, tenues, voix, personnalité, mémoires, qualité des données. Type-safe, échec explicite si malformé.</p></div>
+    <div class="card"><div class="t">registry.ts</div><p>Recense tous les personnages et applique la <b>garde d'unicité</b> : collision de <code>characterId</code>/<code>characterCode</code> → erreur (HTTP 409), pas de choix arbitraire.</p></div>
+    <div class="card"><div class="t">personality.ts</div><p>Extrait la personnalité du Markdown (<code>02_PERSONALITY.md</code>) : traits, jauges, style, phrases candidates.</p></div>
+    <div class="card"><div class="t">errors.ts</div><p>Hiérarchie d'erreurs : NotFound, PackageInvalid, DocumentMissing, IdentityAssetMissing, DuplicateId/Code…</p></div>
+    <div class="card"><div class="t">http.ts + api/v1/characters</div><p>Mapping pur lookup → statut/corps HTTP. Routes <code>/api/v1/characters</code> et <code>/api/v1/characters/[id]</code> (testables, 200/404/409).</p></div>
+  </div>
+</div>
+
+<!-- ============ 4. PROVIDERS & MODÈLES ============ -->
+<div class="sec">
+  <div class="sec-h"><span class="n">4</span><h2>Fournisseurs IA &amp; modèles (prix indicatifs)</h2></div>
+  <table>
+    <thead><tr><th>Usage</th><th>Fournisseur / modèle</th><th>Mode</th><th>Prix indicatif *</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Image</td><td>OpenAI <code>gpt-image-1</code></td><td>texte→image</td><td>0,011–0,25 $ / image</td><td>Selon taille &amp; qualité</td></tr>
+      <tr><td>Décor / still identité</td><td>fal <code>flux-pulid</code> (PuLID Flux)</td><td>réf.→image</td><td>~0,05 $ / image</td><td>Préserve le visage ; sert de 1re frame</td></tr>
+      <tr><td>Voix</td><td>ElevenLabs TTS</td><td>texte→audio</td><td>~0,15 $ / 1k car.</td><td>1 voix par personnage</td></tr>
+      <tr><td>Vidéo</td><td>Veo 3.1 Fast</td><td>texte→vidéo</td><td>~0,40 $/s</td><td><span class="tag ok">voix+lèvres natives</span> 9:16, 16:9</td></tr>
+      <tr><td>Vidéo</td><td>Kling 2 Master</td><td>image→vidéo</td><td>~0,28 $/s</td><td><b>défaut Scène/Storyboard</b> ; identité par 1re frame ; muet</td></tr>
+      <tr><td>Vidéo</td><td>Seedance 2.0</td><td>réf.→vidéo</td><td>~0,15 $/s</td><td><span class="tag warn">modéré</span> refuse les visages photoréalistes</td></tr>
+      <tr><td>Vidéo</td><td>Runway Gen-3 Turbo</td><td>image→vidéo</td><td>~0,05 $/s</td><td>muet</td></tr>
+      <tr><td>Vidéo</td><td>MiniMax Hailuo 02</td><td>texte→vidéo</td><td>~0,05 $/s</td><td>muet</td></tr>
+      <tr><td>Lip-sync</td><td>VEED / Sync v3</td><td>vidéo+voix</td><td>0,40 $ / 8 $ /min</td><td>éco vs haute fidélité</td></tr>
+      <tr><td>Montage</td><td>fal <code>ffmpeg-api/merge-videos</code></td><td>assemblage</td><td>négligeable</td><td>concatène les plans</td></tr>
+    </tbody>
+  </table>
+  <div class="note">* Prix publics indicatifs, ajustables via variables d'environnement (<code>FAL_KLING_USD_PER_SEC</code>, <code>ELEVENLABS_USD_PER_1K_CHARS</code>…). Toujours vérifier les tarifs réels chez le fournisseur. Providers : <code>lib/providers/openai-image.ts</code>, <code>elevenlabs-voice.ts</code>, <code>fal.ts</code>.</div>
+</div>
+
+<!-- ============ 5. LIB INTERNE ============ -->
+<div class="sec">
+  <div class="sec-h"><span class="n">5</span><h2>Librairies internes (studio/src/lib)</h2></div>
+  <div class="two">
+    <div class="card"><div class="t">sdk.ts</div><p>Pont vers le disque : liste personnages, assets, tenues, produits, config voix. Accepte un <code>character</code>.</p></div>
+    <div class="card"><div class="t">pricing.ts</div><p>Catalogue des modèles + fonctions d'estimation ($) pour image, voix, vidéo, lip-sync, décor, montage.</p></div>
+    <div class="card"><div class="t">budget.ts</div><p>Journal des dépenses persisté dans <code>.data/spend.json</code> : addSpend, resetSpend, résumé.</p></div>
+    <div class="card"><div class="t">client.ts</div><p>Helpers front : apiGet/apiPost, <code>usd()</code>, <code>withCharacter()</code>, évènement <code>budget:refresh</code>.</p></div>
+    <div class="card"><div class="t">character-context.tsx</div><p>Contexte React du personnage actif (persisté en localStorage).</p></div>
+    <div class="card"><div class="t">media-store.ts + reflib.ts</div><p>Dernières images/vidéos et bibliothèque de références, <b>par personnage</b> (localStorage namespacé).</p></div>
+    <div class="card"><div class="t">assemble.ts</div><p>Logique d'assemblage des plans (montage 60 s).</p></div>
+    <div class="card"><div class="t">providers/*</div><p>Adaptateurs OpenAI, ElevenLabs, fal.ai (upload, file d'attente, statut).</p></div>
+  </div>
+</div>
+
+<!-- ============ 6. API ROUTES ============ -->
+<div class="sec">
+  <div class="sec-h"><span class="n">6</span><h2>Principales routes API (studio/src/app/api)</h2></div>
+  <table>
+    <thead><tr><th>Route</th><th>Rôle</th></tr></thead>
+    <tbody>
+      <tr><td><code>/api/characters</code>, <code>/api/character</code></td><td>Liste des personnages / détail du personnage actif</td></tr>
+      <tr><td><code>/api/assets</code>, <code>/api/asset</code>, <code>/api/outfits</code></td><td>Liste et service des assets (identité, poses, tenues…)</td></tr>
+      <tr><td><code>/api/products</code>, <code>/api/product-screen</code></td><td>CRUD produits + captures (ajout / service / suppression)</td></tr>
+      <tr><td><code>/api/generate/image</code></td><td>Génération d'image (OpenAI)</td></tr>
+      <tr><td><code>/api/generate/voice</code></td><td>Synthèse vocale (ElevenLabs, voix du personnage)</td></tr>
+      <tr><td><code>/api/generate/scene-image</code></td><td>Image de décor identité-préservée (PuLID Flux)</td></tr>
+      <tr><td><code>/api/generate/video</code> + <code>/status</code></td><td>Lance la vidéo (fal) et suit la file d'attente</td></tr>
+      <tr><td><code>/api/generate/lipsync</code></td><td>Synchronisation labiale voix ↔ vidéo</td></tr>
+      <tr><td><code>/api/generate/merge</code></td><td>Assemblage des plans (FFmpeg)</td></tr>
+      <tr><td><code>/api/budget</code></td><td>GET résumé · DELETE reset du cumul</td></tr>
+      <tr><td><code>/api/estimate</code>, <code>/api/video-models</code>, <code>/api/settings</code></td><td>Estimations, catalogue modèles, état config</td></tr>
+      <tr><td><code>/api/v1/characters[/id]</code></td><td>API runtime versionnée (validation stricte, 409 si collision)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ 7. RECETTE ============ -->
+<div class="sec break">
+  <div class="sec-h"><span class="n">7</span><h2>Recette : produire une pub micro-trottoir de 60 s</h2></div>
+  <ol class="steps">
+    <li><b>Choisir le personnage</b> actif (Mei ou Tom) dans le menu de gauche.</li>
+    <li><b>Préparer le produit</b> dans « Produits / Apps » : nom, pitch, captures d'écran de l'app.</li>
+    <li><b>Ouvrir Storyboard 60 s</b> : les 7 plans du preset micro-trottoir sont pré-remplis.</li>
+    <li><b>Frame de départ</b> : sélectionner une photo d'identité (verrouille visage + tenue).</li>
+    <li><b>Décor par plan</b> (optionnel) : saisir un lieu (« rue animée »…) puis « Générer le décor » → le perso est placé dans le décor, identité préservée.</li>
+    <li><b>Générer les plans</b> (Kling image→vidéo, muet) — ~3–4 min pour 5 s, c'est normal.</li>
+    <li><b>Voix + lip-sync</b> : passer chaque plan (ou le montage) dans Studio Lip-sync pour faire parler le personnage.</li>
+    <li><b>Assembler</b> les plans en une vidéo de ~60 s (FFmpeg merge).</li>
+    <li><b>Surveiller le budget</b> : chaque étape s'ajoute au cumul ; <b>reset</b> en début de campagne.</li>
+  </ol>
+</div>
+
+<!-- ============ 8. OÙ SONT LES DONNÉES ============ -->
+<div class="sec">
+  <div class="sec-h"><span class="n">8</span><h2>Où sont stockées les données</h2></div>
+  <div class="grid">
+    <div class="card"><div class="t">characters/&lt;Nom&gt; SDK v1.0.0/</div><p>Le package personnage : fiches Markdown (identité, personnalité…), <code>memory/</code>, <code>prompts/</code>, <code>voice/config.json</code>, <code>assets/</code> (identity, expressions, poses, outfits).</p></div>
+    <div class="card"><div class="t">products/</div><p>Bibliothèque des apps à promouvoir : métadonnées + captures d'écran (à la racine du repo).</p></div>
+    <div class="card"><div class="t">studio/.data/spend.json</div><p>Journal des dépenses estimées (cumul, reset possible).</p></div>
+    <div class="card"><div class="t">Navigateur (localStorage)</div><p>Personnage actif, dernières images/vidéos et bibliothèque de références — <b>par personnage</b>.</p></div>
+  </div>
+  <div class="note"><b>Clés API</b> dans <code>studio/.env.local</code> : <code>OPENAI_API_KEY</code>, <code>ELEVENLABS_API_KEY</code>, <code>ELEVENLABS_VOICE_ID</code>, <code>FAL_KEY</code>. Redémarrer <code>npm run dev</code> après modification.</div>
+</div>
+
+<div class="foot">Virtual Humans Studio — pense-bête généré automatiquement · document indicatif, susceptible d'évoluer avec le code.</div>
+
+</body>
+</html>

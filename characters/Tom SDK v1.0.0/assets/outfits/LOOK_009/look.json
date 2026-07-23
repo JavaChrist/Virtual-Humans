@@ -1,0 +1,45 @@
+{
+    "id": "LOOK_009",
+    "version": "1.0",
+    "status": "production",
+    "default": false,
+    "priority": 9,
+    "name": "Smart Chic",
+    "description": "Premium luxury presentation outfit.",
+    "style": [
+      "luxury",
+      "premium",
+      "business"
+    ],
+    "clothing": {
+      "top": "Elegant blazer",
+      "bottom": "Premium trousers",
+      "shoes": "Elegant shoes"
+    },
+    "best_for": [
+      "brand",
+      "luxury",
+      "advertising",
+      "premium_products"
+    ],
+    "locations": [
+      "hotel",
+      "restaurant",
+      "lobby"
+    ],
+    "compatible_expressions": [
+      "neutral",
+      "smile",
+      "explaining"
+    ],
+    "compatible_poses": [
+      "presenting",
+      "pointing",
+      "walking"
+    ],
+    "lighting": [
+      "studio",
+      "soft"
+    ]
+  }
+  

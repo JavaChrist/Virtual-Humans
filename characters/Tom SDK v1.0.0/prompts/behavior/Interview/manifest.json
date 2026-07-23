@@ -1,0 +1,13 @@
+{
+  "module_id": "interview",
+  "name": "Interview",
+  "type": "behavior-module",
+  "sdk_version": "1.0.0",
+  "status": "stable",
+  "activation": "dynamic",
+  "priority": "normal",
+  "files": {
+    "prompt": "prompt.md",
+    "rules": "rules.md"
+  }
+}
