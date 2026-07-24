@@ -91,9 +91,6 @@ export function Nav() {
   const budgetTone =
     ratio >= 1 ? "text-[var(--danger)]" : ratio >= 0.8 ? "text-[#f59e0b]" : "";
 
-  // La barre de navigation n'a pas de sens sur l'écran de connexion.
-  if (pathname === "/login") return null;
-
   const characterPicker = (
     <div className="px-2">
       <label className="label mb-1 block">Personnage actif</label>

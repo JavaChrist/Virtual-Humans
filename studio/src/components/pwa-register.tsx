@@ -11,6 +11,13 @@ export function PwaRegister() {
     if (typeof window === "undefined") return;
     if (!("serviceWorker" in navigator)) return;
     if (process.env.NODE_ENV !== "production") return;
+    // Ne jamais enregistrer sur localhost / IP locale : un build de prod lancé
+    // localement laisserait un SW actif sur le port 3000 qui interférerait avec
+    // `next dev` (redirections en boucle, recompilations, fuite mémoire).
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1" || /^(10|127|192\.168)\./.test(host) || host.endsWith(".local")) {
+      return;
+    }
 
     // Quand un nouveau service worker prend le contrôle (nouveau déploiement),
     // on recharge une seule fois pour éviter de rester sur d'anciens bundles en cache.

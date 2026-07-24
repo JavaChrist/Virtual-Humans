@@ -1,7 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { AUTH_COOKIE, expectedToken } from "@/lib/auth";
 
-export async function middleware(req: NextRequest) {
+/**
+ * Proxy (ex-middleware, renommé selon la convention Next.js 16).
+ * Porte d'accès par mot de passe : n'agit que si APP_PASSWORD est défini.
+ */
+export async function proxy(req: NextRequest) {
   const expected = await expectedToken();
   // Protection désactivée (pas de APP_PASSWORD) : on laisse tout passer.
   if (!expected) return NextResponse.next();
