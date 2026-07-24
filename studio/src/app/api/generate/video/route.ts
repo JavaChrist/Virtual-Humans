@@ -95,9 +95,10 @@ export async function POST(req: NextRequest) {
       // Kling attend une durée en chaîne ("5"); les autres modèles un nombre.
       input.duration = model.engine === "kling" ? String(seconds) : seconds;
       if (model.engine === "kling") {
-        // Réduit le morphing / dédoublement d'identité observé en image→vidéo.
+        // Réduit le morphing / dédoublement d'identité + la déformation observée
+        // sur les gros mouvements (mains, objet approché de la caméra).
         input.negative_prompt =
-          "morphing, double exposure, two people, extra person, duplicate face, changing clothes, outfit change, deformed, distorted, blurry, warping, identity change, gender change";
+          "morphing, double exposure, two people, extra person, duplicate face, changing clothes, outfit change, deformed, distorted, blurry, warping, identity change, gender change, deformed hands, mangled hands, extra fingers, stretched face, melting face, wobbling, fast camera motion, sudden zoom, object morphing";
         input.cfg_scale = 0.5;
       }
     } else {

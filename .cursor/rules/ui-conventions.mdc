@@ -1,0 +1,45 @@
+---
+description: Conventions UI/UX à respecter partout (menus déroulants, dialogues)
+alwaysApply: true
+---
+
+# Conventions UI/UX
+
+## 1. Menus déroulants (`select`) — chevron avec marge
+
+Le chevron d'un `select` ne doit **jamais** être collé au bord droit. On masque le
+chevron natif et on en dessine un custom avec une marge confortable.
+
+```css
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa4b2' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center; /* la marge : ne pas coller au bord */
+  background-size: 0.7rem;
+  padding-right: 2rem; /* espace pour le chevron */
+}
+```
+
+Adapter la couleur du `stroke` à la couleur « muted » du thème.
+
+## 2. Jamais d'`alert` / `confirm` / `prompt` / pop-up natif — uniquement des modales
+
+Interdits : `window.alert(...)`, `window.confirm(...)`, `window.prompt(...)`,
+et toute pop-up bloquante du navigateur.
+
+À la place : une **modale** stylée cohérente avec l'app.
+
+```tsx
+// ❌ À NE PAS FAIRE
+if (confirm("Supprimer ?")) remove();
+alert("Terminé");
+
+// ✅ FAIRE : modale (ex. ConfirmProvider + useConfirm)
+const confirm = useConfirm();
+if (await confirm({ title: "Supprimer ?", confirmLabel: "Supprimer" })) remove();
+```
+
+Les messages d'erreur/succès s'affichent en ligne dans l'UI ou via une modale,
+jamais via `alert`.

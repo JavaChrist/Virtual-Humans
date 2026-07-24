@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateIdentityImage, uploadBuffer } from "@/lib/providers/fal";
+import { generateIdentityImage, uploadBuffer, extractFalError } from "@/lib/providers/fal";
 import { readAsset } from "@/lib/sdk";
 import { estimateSceneImage } from "@/lib/pricing";
 import { addSpend, capReached } from "@/lib/budget";
@@ -39,9 +39,15 @@ export async function POST(req: NextRequest) {
     await addSpend({ type: "image", provider: "fal", model: "fal-ai/flux-pulid", estimateUSD: usd, note: "scene still" });
     return NextResponse.json({ imageUrl, estimateUSD: usd });
   } catch (e) {
-    return NextResponse.json(
-      { error: e instanceof Error ? e.message : "Génération d'image échouée" },
-      { status: 500 },
-    );
+    const detail = extractFalError(e);
+    console.error("[scene-image] échec", { character, refPath, imageSize, detail });
+    // Solde fal.ai épuisé / compte verrouillé → message explicite + 402.
+    if (/exhausted balance|user is locked|top up/i.test(detail)) {
+      return NextResponse.json(
+        { error: "Solde fal.ai épuisé — recharge ton compte sur fal.ai/dashboard/billing pour relancer les générations." },
+        { status: 402 },
+      );
+    }
+    return NextResponse.json({ error: detail || "Génération d'image échouée" }, { status: 500 });
   }
 }

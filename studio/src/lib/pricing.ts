@@ -202,3 +202,17 @@ export function estimateMerge(totalSeconds: number): number {
   // ~$0.00017 per compute-second; keep a small, safe upper estimate.
   return +(0.0005 * Math.max(totalSeconds, 1)).toFixed(4);
 }
+
+// Carrousel de captures produit — diaporama MP4 (fal ffmpeg images-to-video).
+// Ce sont de VRAIES captures d'écran, pas une génération IA : coût compute minime.
+export const CAROUSEL_MODEL_ID = "fal-ai/ffmpeg-api/images-to-video";
+
+export function estimateCarousel(totalSeconds: number): number {
+  return +(0.01 + 0.002 * Math.max(totalSeconds, 1)).toFixed(4);
+}
+
+// Frame "duo" — fusion multi-références (Nano Banana / Gemini Flash), 1 image.
+export const DUO_FRAME_MODEL_ID = "fal-ai/nano-banana/edit";
+export function estimateDuoFrame(): number {
+  return num(process.env.FAL_NANOBANANA_USD_PER_IMAGE, 0.04);
+}

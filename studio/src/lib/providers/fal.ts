@@ -22,9 +22,12 @@ export interface JobStatus {
   error?: string;
 }
 
-function extractFalError(e: unknown): string {
+export function extractFalError(e: unknown): string {
   const err = e as { body?: { detail?: unknown; message?: string }; message?: string };
   const detail = err?.body?.detail;
+  // fal renvoie parfois `detail` en simple texte (ex. "User is locked. Reason:
+  // Exhausted balance...") plutôt qu'un tableau de validation.
+  if (typeof detail === "string" && detail.trim()) return detail;
   if (Array.isArray(detail)) {
     return detail
       .map((d) => {
@@ -103,6 +106,27 @@ export async function generateIdentityImage(
   const data = result.data as { images?: { url?: string }[] };
   const url = data.images?.[0]?.url;
   if (!url) throw new Error("Aucune image générée par le modèle d'identité");
+  return url;
+}
+
+/**
+ * Route B (prototype) : combine PLUSIEURS personnes (images de référence) dans
+ * une seule photo cohérente, via Nano Banana / Gemini Flash (fusion multi-images).
+ * Sert de frame de départ à Kling pour animer les deux présentateurs ensemble.
+ */
+export async function combineIdentities(
+  imageUrls: string[],
+  prompt: string,
+  aspectRatio = "9:16",
+): Promise<string> {
+  ensureConfig();
+  const ar = aspectRatio === "16:9" ? "16:9" : aspectRatio === "1:1" ? "1:1" : "9:16";
+  const result = await fal.subscribe("fal-ai/nano-banana/edit", {
+    input: { prompt, image_urls: imageUrls, num_images: 1, aspect_ratio: ar, output_format: "png" },
+  });
+  const data = result.data as { images?: { url?: string }[] };
+  const url = data.images?.[0]?.url;
+  if (!url) throw new Error("Aucune image combinée générée par le modèle multi-références");
   return url;
 }
 
