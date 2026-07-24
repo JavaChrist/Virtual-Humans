@@ -2,7 +2,7 @@
  * Safe by design: never touches /api/* or cross-origin requests
  * (fal.ai, Supabase, OpenAI, ElevenLabs), so generation always hits the network.
  */
-const CACHE = "vh-studio-v3";
+const CACHE = "vh-studio-v4";
 const APP_SHELL = [
   "/",
   "/offline",
@@ -48,14 +48,23 @@ self.addEventListener("fetch", (event) => {
   // Navigations: network-first, fall back to a cached page then /offline.
   if (request.mode === "navigate") {
     event.respondWith(
-      fetch(request).catch(async () => {
-        return (
-          (await caches.match(request)) ||
-          (await caches.match("/", { ignoreSearch: true })) ||
-          (await caches.match("/offline")) ||
-          Response.error()
-        );
-      }),
+      (async () => {
+        try {
+          const res = await fetch(request);
+          // CRITIQUE : si le serveur a redirigé (ex. garde d'auth "/" → "/login"),
+          // fetch() suit la redirection en silence et renverrait le HTML de /login
+          // SANS changer l'URL. On renvoie donc une vraie redirection pour que le
+          // navigateur re-navigue vers l'URL finale (URL correcte + routage sain).
+          if (res.redirected) return Response.redirect(res.url, 302);
+          return res;
+        } catch {
+          return (
+            (await caches.match(request)) ||
+            (await caches.match("/offline")) ||
+            Response.error()
+          );
+        }
+      })(),
     );
     return;
   }

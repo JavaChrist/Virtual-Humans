@@ -43,7 +43,7 @@ function LoginForm() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 safe-x">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center px-4 safe-x bg-[var(--background)]">
       <form onSubmit={submit} className="card w-full max-w-sm p-6 space-y-4" style={{ animation: "fadeIn 0.25s ease" }}>
         <div>
           <div className="text-xl font-bold tracking-tight">
