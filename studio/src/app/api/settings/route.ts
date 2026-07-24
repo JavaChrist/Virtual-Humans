@@ -18,5 +18,9 @@ export async function GET() {
     },
     sdk: { repoRoot: REPO_ROOT, character: CHARACTER_NAME },
     pricing: { elevenlabsUsdPer1kChars: ELEVENLABS_USD_PER_1K_CHARS },
+    access: {
+      protected: Boolean(process.env.APP_PASSWORD),
+      budgetCapUSD: process.env.BUDGET_CAP_USD ? Number(process.env.BUDGET_CAP_USD) : null,
+    },
   });
 }

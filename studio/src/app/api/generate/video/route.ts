@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { submitJob, uploadBuffer, uploadDataUrl, uploadMany } from "@/lib/providers/fal";
 import { estimateVideo, getVideoModel } from "@/lib/pricing";
 import { readAsset } from "@/lib/sdk";
-import { addSpend } from "@/lib/budget";
+import { addSpend, capReached } from "@/lib/budget";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -35,6 +35,13 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
+
+  const cap = await capReached();
+  if (cap)
+    return NextResponse.json(
+      { error: `Plafond de budget atteint (${cap.total.toFixed(2)} $ / ${cap.cap.toFixed(2)} $). Réinitialise la dépense ou augmente BUDGET_CAP_USD.` },
+      { status: 402 },
+    );
 
   try {
     const input: Record<string, unknown> = { prompt };

@@ -246,18 +246,6 @@ const MIME: Record<string, string> = {
   ".webp": "image/webp",
 };
 
-function listImageFiles(dir: string): string[] {
-  try {
-    return fs
-      .readdirSync(dir, { withFileTypes: true })
-      .filter((d) => d.isFile() && IMAGE_EXT.has(path.extname(d.name).toLowerCase()))
-      .map((d) => d.name)
-      .sort();
-  } catch {
-    return [];
-  }
-}
-
 // ---------------------------------------------------------------------------
 // Outfits (structured, from assets/outfits/LOOK_*/look.json)
 // ---------------------------------------------------------------------------

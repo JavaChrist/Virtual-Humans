@@ -163,7 +163,6 @@ export default function LipsyncStudio() {
               {audioDataUrl && (
                 <>
                   <span className="badge text-[var(--success)]">✓ voix prête</span>
-                  {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                   <audio src={audioDataUrl} controls className="h-8" />
                 </>
               )}
@@ -212,7 +211,6 @@ export default function LipsyncStudio() {
           )}
           {resultUrl && (
             <div className="w-full">
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <video src={resultUrl} controls className="w-full rounded-xl border border-[var(--border)]" />
               <a href={resultUrl} target="_blank" rel="noreferrer" className="btn btn-ghost mt-4 w-full">
                 Ouvrir / Télécharger

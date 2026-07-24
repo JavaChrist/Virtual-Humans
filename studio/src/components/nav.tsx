@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { apiGet, usd } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
 import { useConfirm } from "@/components/confirm";
+import type { SettingsResponse } from "@/lib/types";
 
 const LINKS = [
   { href: "/", label: "Tableau de bord", icon: "◧" },
@@ -25,6 +26,7 @@ export function Nav() {
   const pathname = usePathname();
   const [total, setTotal] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
+  const [access, setAccess] = useState<SettingsResponse["access"] | null>(null);
   const { characters, characterId, setCharacterId } = useCharacter();
   const confirm = useConfirm();
 
@@ -36,6 +38,12 @@ export function Nav() {
     load();
     window.addEventListener("budget:refresh", load);
     return () => window.removeEventListener("budget:refresh", load);
+  }, []);
+
+  useEffect(() => {
+    apiGet<SettingsResponse>("/api/settings")
+      .then((s) => setAccess(s.access))
+      .catch(() => setAccess(null));
   }, []);
 
   // Ferme le tiroir mobile à chaque changement de page.
@@ -68,6 +76,23 @@ export function Nav() {
       /* ignore */
     }
   }
+
+  async function logout() {
+    try {
+      await fetch("/api/login", { method: "DELETE" });
+    } catch {
+      /* ignore */
+    }
+    window.location.assign("/login");
+  }
+
+  const cap = access?.budgetCapUSD ?? null;
+  const ratio = cap && total != null ? total / cap : 0;
+  const budgetTone =
+    ratio >= 1 ? "text-[var(--danger)]" : ratio >= 0.8 ? "text-[#f59e0b]" : "";
+
+  // La barre de navigation n'a pas de sens sur l'écran de connexion.
+  if (pathname === "/login") return null;
 
   const characterPicker = (
     <div className="px-2">
@@ -123,10 +148,24 @@ export function Nav() {
           reset
         </button>
       </div>
-      <div className="text-2xl font-bold tabular-nums">{usd(total)}</div>
+      <div className={`text-2xl font-bold tabular-nums ${budgetTone}`}>{usd(total)}</div>
+      {cap != null && (
+        <div className="text-xs text-[var(--muted)] mt-0.5">
+          {ratio >= 1 ? "⚠ plafond atteint" : "plafond"} : {usd(cap)}
+        </div>
+      )}
       <Link href="/budget" className="text-xs text-[var(--accent-2)] hover:underline">
         Voir le détail →
       </Link>
+      {access?.protected && (
+        <button
+          type="button"
+          onClick={logout}
+          className="mt-3 w-full text-xs text-[var(--muted)] hover:text-[var(--danger)] transition-colors text-left"
+        >
+          ⏻ Déconnexion
+        </button>
+      )}
     </div>
   );
 

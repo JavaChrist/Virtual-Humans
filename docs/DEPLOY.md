@@ -33,7 +33,14 @@ Déjà créé par l'assistant :
 | `FAL_KEY` | Vidéo / lip-sync / décor (fal.ai) |
 | `SUPABASE_URL` | `https://ejdbksxaswhdtsudnmvi.supabase.co` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Clé secrète service_role Supabase |
+| `APP_PASSWORD` | **Recommandé** : verrouille toute l'app + les routes de génération derrière ce mot de passe. Vide = accès ouvert. |
+| `BUDGET_CAP_USD` | *(optionnel)* Plafond de dépense estimée ; les générations sont bloquées au-delà. |
 | *(optionnel)* `FAL_*_USD_PER_SEC`, `ELEVENLABS_USD_PER_1K_CHARS` | Ajuste les estimations de budget |
+
+> **Sécurité (important)** : l'app appelle des API payantes (OpenAI, fal.ai, ElevenLabs).
+> Sans `APP_PASSWORD`, n'importe qui ayant l'URL peut lancer des générations facturées
+> sur **tes** comptes. Définis `APP_PASSWORD` sur Vercel (Production + Preview) pour
+> exiger une connexion. `BUDGET_CAP_USD` ajoute un garde-fou de dépense.
 
 ---
 

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateVoice } from "@/lib/providers/elevenlabs-voice";
 import { estimateVoice } from "@/lib/pricing";
 import { getVoiceConfig } from "@/lib/sdk";
-import { addSpend } from "@/lib/budget";
+import { addSpend, capReached } from "@/lib/budget";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
@@ -14,6 +14,13 @@ export async function POST(req: NextRequest) {
   const character = body.character ? String(body.character) : undefined;
 
   if (!text) return NextResponse.json({ error: "Text is required" }, { status: 400 });
+
+  const cap = await capReached();
+  if (cap)
+    return NextResponse.json(
+      { error: `Plafond de budget atteint (${cap.total.toFixed(2)} $ / ${cap.cap.toFixed(2)} $). Réinitialise la dépense ou augmente BUDGET_CAP_USD.` },
+      { status: 402 },
+    );
 
   // Character voice config (SDK) supplies the default voice + delivery settings.
   const cfg = getVoiceConfig(character);

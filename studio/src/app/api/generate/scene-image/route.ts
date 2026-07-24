@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateIdentityImage, uploadBuffer } from "@/lib/providers/fal";
 import { readAsset } from "@/lib/sdk";
 import { estimateSceneImage } from "@/lib/pricing";
-import { addSpend } from "@/lib/budget";
+import { addSpend, capReached } from "@/lib/budget";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
@@ -24,6 +24,13 @@ export async function POST(req: NextRequest) {
 
   const asset = readAsset(character ?? "", refPath);
   if (!asset) return NextResponse.json({ error: "Image d'identité introuvable" }, { status: 400 });
+
+  const cap = await capReached();
+  if (cap)
+    return NextResponse.json(
+      { error: `Plafond de budget atteint (${cap.total.toFixed(2)} $ / ${cap.cap.toFixed(2)} $). Réinitialise la dépense ou augmente BUDGET_CAP_USD.` },
+      { status: 402 },
+    );
 
   try {
     const referenceImageUrl = await uploadBuffer(asset.buffer, asset.mime, "identity");

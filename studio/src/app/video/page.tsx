@@ -351,7 +351,6 @@ export default function VideoStudio() {
           )}
           {videoUrl && (
             <div className="w-full">
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <video src={videoUrl} controls className="w-full rounded-xl border border-[var(--border)]" />
               <div className="flex gap-3 mt-4">
                 <a href={videoUrl} target="_blank" rel="noreferrer" className="btn btn-ghost flex-1">

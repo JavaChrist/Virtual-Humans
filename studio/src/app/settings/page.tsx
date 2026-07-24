@@ -52,6 +52,30 @@ export default function SettingsPage() {
       </div>
 
       <div className="card p-6 mb-6">
+        <h3 className="font-semibold mb-4">Sécurité & accès</h3>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between rounded-lg bg-[var(--surface-2)] border border-[var(--border)] px-4 py-3">
+            <div>
+              <code className="text-sm">APP_PASSWORD</code>
+              <div className="text-xs text-[var(--muted)]">Verrouille l&apos;app + les générations payantes</div>
+            </div>
+            <span className={`badge ${s?.access.protected ? "text-[var(--success)]" : "text-[#f59e0b]"}`}>
+              {s?.access.protected ? "protégé" : "accès ouvert"}
+            </span>
+          </div>
+          <div className="flex items-center justify-between rounded-lg bg-[var(--surface-2)] border border-[var(--border)] px-4 py-3">
+            <div>
+              <code className="text-sm">BUDGET_CAP_USD</code>
+              <div className="text-xs text-[var(--muted)]">Bloque les générations au-delà du plafond</div>
+            </div>
+            <span className="badge">
+              {s?.access.budgetCapUSD != null ? `$${s.access.budgetCapUSD}` : "aucun plafond"}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="card p-6 mb-6">
         <h3 className="font-semibold mb-3">Configuration</h3>
         <p className="text-sm text-[var(--muted)] mb-2">
           Crée un fichier <code>.env.local</code> à la racine de <code>studio/</code> :
@@ -64,6 +88,10 @@ FAL_KEY=...
 # Supabase (budget + captures produits)
 SUPABASE_URL=https://ejdbksxaswhdtsudnmvi.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=...
+
+# Sécurité (recommandé en production)
+APP_PASSWORD=un-mot-de-passe-solide
+BUDGET_CAP_USD=50
 
 # Tarifs (optionnel, pour ajuster les estimations)
 ELEVENLABS_USD_PER_1K_CHARS=0.15

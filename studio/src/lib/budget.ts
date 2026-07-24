@@ -67,6 +67,25 @@ export async function resetSpend(): Promise<void> {
   }
 }
 
+export function budgetCapUSD(): number | null {
+  const raw = process.env.BUDGET_CAP_USD;
+  if (!raw) return null;
+  const n = Number(raw);
+  return Number.isFinite(n) && n > 0 ? n : null;
+}
+
+/**
+ * Garde de plafond : renvoie un message d'erreur si le cumul estimé atteint le
+ * plafond `BUDGET_CAP_USD`, sinon `null`. À appeler au début des routes de
+ * génération pour bloquer toute dépense supplémentaire.
+ */
+export async function capReached(): Promise<{ total: number; cap: number } | null> {
+  const cap = budgetCapUSD();
+  if (cap == null) return null;
+  const { total } = await spendSummary();
+  return total >= cap ? { total, cap } : null;
+}
+
 export async function spendSummary() {
   if (!hasSupabase()) return { total: 0, byType: {}, count: 0, entries: [] as SpendEntry[] };
   try {

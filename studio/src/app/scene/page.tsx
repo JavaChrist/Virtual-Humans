@@ -55,7 +55,7 @@ export default function SceneStudio() {
   const [pitch, setPitch] = useState("");
   const [script, setScript] = useState("");
   const [seconds, setSeconds] = useState(8);
-  const [aspect, setAspect] = useState("9:16");
+  const [aspect] = useState("9:16");
 
   const [estimate, setEstimate] = useState<number | null>(null);
   const [status, setStatus] = useState<string | null>(null);
@@ -384,7 +384,6 @@ export default function SceneStudio() {
               {audioUrl && (
                 <>
                   <span className="badge text-[var(--success)]">✓ voix prête</span>
-                  {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                   <audio src={audioUrl} controls className="h-8" />
                 </>
               )}
@@ -418,7 +417,6 @@ export default function SceneStudio() {
           )}
           {videoUrl && (
             <div className="w-full">
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <video src={videoUrl} controls className="w-full rounded-xl border border-[var(--border)]" />
               <div className="flex gap-3 mt-4">
                 <Link href="/lipsync" className="btn btn-primary flex-1">Ajouter la voix (Lip-sync) →</Link>

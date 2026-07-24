@@ -466,7 +466,6 @@ export default function Storyboard() {
               </button>
             </div>
             {shot.videoUrl && (
-              // eslint-disable-next-line jsx-a11y/media-has-caption
               <video src={shot.videoUrl} controls className="w-full rounded-lg border border-[var(--border)] mt-3 max-h-64" />
             )}
           </div>
@@ -505,7 +504,6 @@ export default function Storyboard() {
           )}
           {mergedUrl && (
             <div>
-              {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
               <video src={mergedUrl} controls className="w-full rounded-lg border border-[var(--border)]" />
               <a href={mergedUrl} target="_blank" rel="noreferrer" className="btn btn-primary mt-3 w-full">
                 Ouvrir / Télécharger la vidéo finale

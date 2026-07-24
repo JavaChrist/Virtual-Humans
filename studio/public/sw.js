@@ -2,9 +2,10 @@
  * Safe by design: never touches /api/* or cross-origin requests
  * (fal.ai, Supabase, OpenAI, ElevenLabs), so generation always hits the network.
  */
-const CACHE = "vh-studio-v2";
+const CACHE = "vh-studio-v3";
 const APP_SHELL = [
   "/",
+  "/offline",
   "/manifest.webmanifest",
   "/icon.svg",
   "/icons/icon-192.png",
@@ -44,12 +45,17 @@ self.addEventListener("fetch", (event) => {
   // Never cache API routes (generation, budget, assets, products…).
   if (url.pathname.startsWith("/api/")) return;
 
-  // Navigations: network-first, fall back to the cached app shell when offline.
+  // Navigations: network-first, fall back to a cached page then /offline.
   if (request.mode === "navigate") {
     event.respondWith(
-      fetch(request).catch(() =>
-        caches.match(request).then((r) => r || caches.match("/", { ignoreSearch: true })),
-      ),
+      fetch(request).catch(async () => {
+        return (
+          (await caches.match(request)) ||
+          (await caches.match("/", { ignoreSearch: true })) ||
+          (await caches.match("/offline")) ||
+          Response.error()
+        );
+      }),
     );
     return;
   }
