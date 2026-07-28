@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { apiGet, apiPost, refreshBudget, usd } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
-import { getLastVideo } from "@/lib/media-store";
+import { getLastVideo, getLastVoice, setLastVoice } from "@/lib/media-store";
 import { PageHeader } from "@/components/page-header";
 import { SendToAiccos } from "@/components/send-to-aiccos";
 import type { SettingsResponse } from "@/lib/types";
@@ -43,12 +43,18 @@ export default function LipsyncStudio() {
     };
   }, []);
 
-  // Prefill with the active character's last generated video.
+  // Prefill with the active character's last generated video + voice (script + audio),
+  // notamment lorsqu'on arrive depuis Studio Scène.
   useEffect(() => {
     const last = getLastVideo(characterId);
     if (last) {
       setVideoUrl(last.url);
       setSeconds(last.seconds);
+    }
+    const voice = getLastVoice(characterId);
+    if (voice) {
+      if (voice.text) setText(voice.text);
+      if (voice.dataUrl) setAudioDataUrl(voice.dataUrl);
     }
   }, [characterId]);
 
@@ -65,6 +71,7 @@ export default function LipsyncStudio() {
     try {
       const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", { text, character: characterId });
       setAudioDataUrl(res.dataUrl);
+      setLastVoice(characterId, text, res.dataUrl);
       refreshBudget();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur voix");
@@ -145,8 +152,19 @@ export default function LipsyncStudio() {
               placeholder="URL de la vidéo (pré-remplie depuis le Studio Vidéo)"
             />
             <p className="text-xs text-[var(--muted)] mt-1">
-              Astuce : génère un plan dans le Studio Vidéo, il est repris ici automatiquement.
+              Astuce : ta dernière vidéo (Studio Scène / Vidéo) est reprise ici automatiquement.
+              La vidéo doit montrer un <strong>visage bien visible, de face et en gros plan</strong> (plan taille/portrait) —
+              sinon le modèle ne trouve pas la bouche et les lèvres ne bougent pas.
             </p>
+            {videoUrl && (
+              <video
+                key={videoUrl}
+                src={videoUrl}
+                controls
+                muted
+                className="mt-2 w-full max-h-56 rounded-lg border border-[var(--border)] bg-black"
+              />
+            )}
           </div>
 
           <div>

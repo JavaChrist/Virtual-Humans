@@ -4,9 +4,19 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { apiGet, apiPost, refreshBudget, usd, withCharacter } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
-import { setLastVideo } from "@/lib/media-store";
+import { setLastVideo, setLastVoice } from "@/lib/media-store";
+import { usePersistentState } from "@/lib/use-persistent-state";
 import { PageHeader } from "@/components/page-header";
+import { useConfirm } from "@/components/confirm";
 import type { CharacterResponse } from "@/lib/types";
+
+interface SavedScene {
+  id: string;
+  name: string;
+  characterId: string;
+  config: Record<string, unknown>;
+  createdAt: number;
+}
 
 interface VideoModel {
   id: string;
@@ -48,12 +58,14 @@ export default function SceneStudio() {
   const [behaviors, setBehaviors] = useState<{ id: string; name: string }[]>([]);
   const [ready, setReady] = useState(false);
 
+  // Brouillon auto (persistant par personnage) pour ne rien perdre en changeant de page.
+  const dkey = (field: string) => (characterId ? `vh:draft:scene:${characterId}:${field}` : null);
   const [outfitId, setOutfitId] = useState("");
-  const [location, setLocation] = useState("rue animée");
+  const [location, setLocation] = usePersistentState(dkey("location"), "rue animée");
   const [tone, setTone] = useState("");
   const [productId, setProductId] = useState("");
-  const [pitch, setPitch] = useState("");
-  const [script, setScript] = useState("");
+  const [pitch, setPitch] = usePersistentState(dkey("pitch"), "");
+  const [script, setScript] = usePersistentState(dkey("script"), "");
   const [seconds, setSeconds] = useState(8);
   const [aspect] = useState("9:16");
 
@@ -64,6 +76,12 @@ export default function SceneStudio() {
   const [voiceBusy, setVoiceBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const polling = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Bibliothèque de scènes enregistrées (Supabase).
+  const confirm = useConfirm();
+  const [scenes, setScenes] = useState<SavedScene[]>([]);
+  const [sceneName, setSceneName] = useState("");
+  const [sceneMsg, setSceneMsg] = useState<string | null>(null);
 
   // Décor : image fixe du perso placé dans un lieu (identité préservée, PuLID),
   // utilisée ensuite comme frame de départ pour l'animation.
@@ -91,6 +109,57 @@ export default function SceneStudio() {
       if (polling.current) clearInterval(polling.current);
     };
   }, []);
+
+  useEffect(() => {
+    if (!characterId) return;
+    apiGet<{ scenes: SavedScene[] }>(`/api/scenes?character=${encodeURIComponent(characterId)}`)
+      .then((d) => setScenes(d.scenes ?? []))
+      .catch(() => setScenes([]));
+  }, [characterId]);
+
+  async function saveCurrentScene() {
+    const nm = sceneName.trim();
+    if (!nm || !characterId) return;
+    try {
+      const res = await apiPost<{ scene: SavedScene }>("/api/scenes", {
+        name: nm,
+        character: characterId,
+        config: { outfitId, location, tone, productId, pitch, script, seconds },
+      });
+      setScenes((prev) => [res.scene, ...prev]);
+      setSceneName("");
+      setSceneMsg("Scène enregistrée ✓");
+      setTimeout(() => setSceneMsg(null), 2500);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Échec de l'enregistrement");
+    }
+  }
+
+  function loadScene(s: SavedScene) {
+    const c = s.config ?? {};
+    if (typeof c.outfitId === "string") setOutfitId(c.outfitId);
+    if (typeof c.location === "string") setLocation(c.location);
+    if (typeof c.tone === "string") setTone(c.tone);
+    if (typeof c.productId === "string") setProductId(c.productId);
+    if (typeof c.pitch === "string") setPitch(c.pitch);
+    if (typeof c.script === "string") setScript(c.script);
+    if (typeof c.seconds === "number") setSeconds(c.seconds);
+  }
+
+  async function removeScene(s: SavedScene) {
+    const ok = await confirm({
+      title: "Supprimer la scène",
+      message: `Supprimer « ${s.name} » ? Cette action est définitive.`,
+      confirmLabel: "Supprimer",
+    });
+    if (!ok) return;
+    try {
+      await fetch(`/api/scenes?id=${encodeURIComponent(s.id)}`, { method: "DELETE" });
+      setScenes((prev) => prev.filter((x) => x.id !== s.id));
+    } catch {
+      /* ignore */
+    }
+  }
 
   useEffect(() => {
     if (!characterId) return;
@@ -180,6 +249,8 @@ export default function SceneStudio() {
     try {
       const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", { text: script, character: characterId });
       setAudioUrl(res.dataUrl);
+      // Mémorise script + voix pour les réutiliser directement dans le Studio Lip-sync.
+      setLastVoice(characterId, script, res.dataUrl);
       refreshBudget();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur voix");
@@ -267,6 +338,51 @@ export default function SceneStudio() {
         </div>
       )}
 
+      {/* Bibliothèque de scènes enregistrées (enregistrer / charger / supprimer) */}
+      <div className="card p-5 mb-6">
+        <div className="label mb-2">Scènes enregistrées</div>
+        <div className="flex flex-wrap items-end gap-3 mb-3">
+          <div className="flex-1 min-w-[220px]">
+            <label className="label">Nom de la scène</label>
+            <input
+              className="input"
+              value={sceneName}
+              onChange={(e) => setSceneName(e.target.value)}
+              placeholder={`ex. Promo ${product?.name ?? "app"} — ${location}`}
+            />
+          </div>
+          <button className="btn btn-primary" disabled={!sceneName.trim() || !characterId} onClick={saveCurrentScene}>
+            Enregistrer la scène actuelle
+          </button>
+          {sceneMsg && <span className="text-sm text-[var(--success)]">{sceneMsg}</span>}
+        </div>
+        {scenes.length === 0 ? (
+          <p className="text-xs text-[var(--muted)]">
+            Aucune scène enregistrée pour {name}. Renseigne les champs ci-dessous puis « Enregistrer ».
+          </p>
+        ) : (
+          <ul className="divide-y divide-[var(--border)]">
+            {scenes.map((s) => (
+              <li key={s.id} className="flex items-center justify-between gap-3 py-2">
+                <button
+                  className="text-left text-sm hover:text-[var(--accent)] flex-1 truncate"
+                  onClick={() => loadScene(s)}
+                  title="Charger cette scène dans les champs"
+                >
+                  {s.name}
+                </button>
+                <button
+                  className="text-xs text-[var(--muted)] hover:text-[var(--danger)] transition-colors"
+                  onClick={() => removeScene(s)}
+                >
+                  supprimer
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card p-6 space-y-4">
           <div>
@@ -328,6 +444,9 @@ export default function SceneStudio() {
                   <option key={s} value={s}>{s}</option>
                 ))}
               </select>
+              <p className="mt-1 text-xs text-[var(--muted)]">
+                Kling génère 10 s max par clip. Pour 15–60 s, passe par le Storyboard (plusieurs plans assemblés).
+              </p>
             </div>
           </div>
 

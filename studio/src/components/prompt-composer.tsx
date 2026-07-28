@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { apiGet, withCharacter } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
+import { usePersistentState } from "@/lib/use-persistent-state";
 import type { CharacterResponse, Lang, TemplateResponse } from "@/lib/types";
 
 interface Props {
@@ -31,21 +32,23 @@ const NO_TEXT = (lang: Lang) =>
 export function PromptComposer({ categories, characterName, value, onChange }: Props) {
   const { characterId, characterName: ctxName } = useCharacter();
   const name = ctxName || characterName || "";
+  // Brouillon auto (persistant par personnage) : template + variables survivent au changement de page.
+  const dkey = (field: string) => (characterId ? `vh:draft:composer:${characterId}:${field}` : null);
   const [char, setChar] = useState<CharacterResponse | null>(null);
-  const [category, setCategory] = useState(categories[0]);
-  const [templateName, setTemplateName] = useState<string>("");
-  const [lang, setLang] = useState<Lang>("fr");
+  const [category, setCategory] = usePersistentState(dkey("category"), categories[0]);
+  const [templateName, setTemplateName] = usePersistentState<string>(dkey("template"), "");
+  const [lang, setLang] = usePersistentState<Lang>(dkey("lang"), "fr");
   const [tpl, setTpl] = useState<TemplateResponse | null>(null);
-  const [vars, setVars] = useState<Record<string, string>>({});
-  const [injectIdentity, setInjectIdentity] = useState(true);
-  const [noText, setNoText] = useState(true);
+  const [vars, setVars] = usePersistentState<Record<string, string>>(dkey("vars"), {});
+  const [injectIdentity, setInjectIdentity] = usePersistentState(dkey("injectIdentity"), true);
+  const [noText, setNoText] = usePersistentState(dkey("noText"), true);
 
   useEffect(() => {
     apiGet<CharacterResponse>(withCharacter("/api/character", characterId))
       .then(setChar)
       .catch(() => {});
-    // Templates may differ per character: reset the current selection.
-    setTemplateName("");
+    // Le template et les variables sont restaurés par personnage (brouillon) ;
+    // on efface juste le bloc chargé, il sera re-fetché ci-dessous.
     setTpl(null);
   }, [characterId]);
 
@@ -61,8 +64,8 @@ export function PromptComposer({ categories, characterName, value, onChange }: P
     )
       .then((t) => {
         setTpl(t);
-        // Pre-fill the character variable with the active character name.
-        setVars({ character: name });
+        // On garde les variables déjà saisies (brouillon) et on force juste le nom du personnage.
+        setVars((prev) => ({ ...prev, character: name }));
       })
       .catch(() => setTpl(null));
     // eslint-disable-next-line react-hooks/exhaustive-deps

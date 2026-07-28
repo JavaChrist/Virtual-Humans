@@ -19,6 +19,8 @@ export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
   const productId = String(body.product ?? "");
   const seconds = Math.max(2, Number(body.seconds ?? 6));
+  // Temps d'affichage par image (prioritaire si fourni). Sinon on répartit `seconds`.
+  const secondsPerImage = Number(body.secondsPerImage ?? 0);
 
   if (!productId) return NextResponse.json({ error: "Produit requis" }, { status: 400 });
 
@@ -39,8 +41,14 @@ export async function POST(req: NextRequest) {
     );
 
   try {
+    // Nombre de frames par image : soit le temps/image demandé, soit la répartition de `seconds`.
+    const framesPerImage =
+      secondsPerImage > 0
+        ? Math.max(Math.round(FPS / 2), Math.round(secondsPerImage * FPS))
+        : Math.max(FPS, Math.round((seconds * FPS) / product.screens.length));
+    const totalSeconds =
+      secondsPerImage > 0 ? +(secondsPerImage * product.screens.length).toFixed(1) : seconds;
     // Chaque capture est lue depuis Supabase puis uploadée sur fal (URL accessible).
-    const framesPerImage = Math.max(FPS, Math.round((seconds * FPS) / product.screens.length));
     const images: { url: string; frames: number }[] = [];
     for (const name of product.screens) {
       const screen = await readProductScreen(productId, name);
@@ -53,7 +61,7 @@ export async function POST(req: NextRequest) {
     }
 
     const requestId = await submitJob(CAROUSEL_MODEL_ID, { images, fps: FPS });
-    const usd = estimateCarousel(seconds);
+    const usd = estimateCarousel(totalSeconds);
     await addSpend({ type: "video", provider: "fal", model: CAROUSEL_MODEL_ID, estimateUSD: usd, note: `carrousel ${product.screens.length} captures` });
     return NextResponse.json({ requestId, model: CAROUSEL_MODEL_ID, estimateUSD: usd });
   } catch (e) {

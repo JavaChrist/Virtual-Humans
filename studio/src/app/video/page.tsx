@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { apiGet, apiPost, refreshBudget, usd, withCharacter } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
 import { getLastRefImage, setLastVideo } from "@/lib/media-store";
+import { usePersistentState } from "@/lib/use-persistent-state";
 import { PageHeader } from "@/components/page-header";
 import { PromptComposer } from "@/components/prompt-composer";
 import { SendToAiccos } from "@/components/send-to-aiccos";
@@ -49,7 +50,11 @@ export default function VideoStudio() {
   const [refImage, setRefImage] = useState<string | null>(null);
   const [useRefImage, setUseRefImage] = useState(false);
   const [selectedRefs, setSelectedRefs] = useState<string[]>([]);
-  const [prompt, setPrompt] = useState("");
+  // Brouillon auto du prompt final (persistant par personnage).
+  const [prompt, setPrompt] = usePersistentState(
+    characterId ? `vh:draft:video:${characterId}:prompt` : null,
+    "",
+  );
   const [estimate, setEstimate] = useState<number | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);

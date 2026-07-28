@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { apiGet, apiPost, refreshBudget, usd, withCharacter } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
+import { usePersistentState } from "@/lib/use-persistent-state";
+import { setLastVideo } from "@/lib/media-store";
 import { PageHeader } from "@/components/page-header";
 import { SendToAiccos } from "@/components/send-to-aiccos";
 import type { SettingsResponse } from "@/lib/types";
@@ -45,10 +48,21 @@ interface Shot {
   // "video" = plan animé (Kling) ; "carousel" = diaporama des vraies captures produit.
   kind?: "video" | "carousel";
   productId?: string;
+  perImage?: number; // carrousel : temps d'affichage (s) par capture
   // Présentateur assigné à ce plan (Route A duo/multi). Vide = présentateur principal.
   speakerId?: string;
   // Route B : image de départ imposée (frame "duo" combinant plusieurs présentateurs).
   startImageUrl?: string;
+  // --- Voix + lip-sync PAR PLAN (1 visage continu = lèvres nettes) ---
+  line?: string; // réplique dite par le présentateur dans ce plan
+  audioUrl?: string | null; // voix générée (data URL)
+  voiceBusy?: boolean;
+  voiceError?: string | null;
+  syncedUrl?: string | null; // plan lip-syncé (avec voix), utilisé pour l'assemblage
+  syncStatus?: string | null;
+  syncError?: string | null;
+  syncRequestId?: string;
+  syncModel?: string;
 }
 
 interface Product {
@@ -89,13 +103,30 @@ const EXPRESSION_FR: Record<string, string> = {
 const CONSISTENCY = "Exactement la même personne et la même tenue que sur l'image, identité inchangée, une seule personne au premier plan, aucun changement de vêtements.";
 const MOTION = "Mouvement subtil et naturel, caméra fixe et stable, aucun mouvement brusque ni zoom rapide.";
 
+// speakerSlot : 0 = présentateur principal (contexte), 1 = 1er partenaire, etc.
+type PresetShot = Omit<Shot, "status"> & { speakerSlot?: number };
+
 interface Preset {
   id: string;
   label: string;
   decor?: string;
   note?: string;
-  shots: Omit<Shot, "status">[];
+  aspect?: string; // ratio imposé par le style (ex. "16:9" plateau TV, "9:16" réseaux)
+  shots: PresetShot[];
 }
+
+// Plans du plateau produit (dialogue Mei ↔ Tom + démo carrousel), partagés par les
+// variantes verticale (9:16) et horizontale (16:9).
+const TALKSHOW_SHOTS: PresetShot[] = [
+  { title: "1. Accueil — Mei", speakerSlot: 0, prompt: `Sur un plateau de talk-show, souhaite la bienvenue face caméra, sourire chaleureux, léger geste d'accueil. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Bonjour à tous et bienvenue sur le plateau ! Aujourd'hui, avec Tom, on vous présente [produit]." },
+  { title: "2. Présentation — Tom", speakerSlot: 1, prompt: `Présente le sujet face caméra, léger geste de la main vers l'écran. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Merci Mei ! Alors [produit], c'est l'application qui permet de…" },
+  { title: "3. Démo à l'écran (carrousel)", kind: "carousel", prompt: "", seconds: 8, perImage: 2.5 },
+  { title: "4. Question — Mei", speakerSlot: 0, prompt: `Se tourne légèrement puis regarde la caméra, pose une question, attitude curieuse. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Tom, concrètement, qu'est-ce que ça change pour l'utilisateur au quotidien ?" },
+  { title: "5. Réponse — Tom", speakerSlot: 1, prompt: `Répond avec enthousiasme face caméra, hoche la tête, mains calmes. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Très bonne question. En fait, ce qui change vraiment, c'est…" },
+  { title: "6. Relance — Mei", speakerSlot: 0, prompt: `Pose une seconde question, sourire, léger geste. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Et côté prix / abonnement, comment ça se passe ?" },
+  { title: "7. Réponse — Tom", speakerSlot: 1, prompt: `Explique un point, regard caméra, geste discret. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "C'est simple :…" },
+  { title: "8. Conclusion — Mei", speakerSlot: 0, prompt: `Conclut et remercie face caméra, sourire chaleureux, invite à s'abonner. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Merci Tom ! Testez [produit], le lien est en description. À très vite !" },
+];
 
 const PRESETS: Preset[] = [
   {
@@ -148,6 +179,24 @@ const PRESETS: Preset[] = [
       { title: "5. Conclusion (A)", prompt: `Conclut et remercie face caméra, sourire. ${MOTION} ${CONSISTENCY}`, seconds: 5 },
     ],
   },
+  {
+    id: "talkshow-produit",
+    label: "Plateau produit vertical 9:16 (Mei + Tom + démo)",
+    decor: "plateau de talk-show tech moderne, éclairage studio, grand écran lumineux en arrière-plan",
+    aspect: "9:16",
+    note:
+      "Format réseaux (Reels / TikTok / Short). Dialogue en champ / contre-champ : chaque plan = UN présentateur qui parle (voix + lip-sync par plan). Le carrousel est un plan inséré = « l'écran » qui montre le produit. Ajoute Tom au casting, puis « Charger ce style ». Écris ensuite la réplique de chaque plan.",
+    shots: TALKSHOW_SHOTS,
+  },
+  {
+    id: "talkshow-produit-16-9",
+    label: "Plateau produit TV 16:9 (Mei + Tom + démo)",
+    decor: "plateau de talk-show tech moderne, éclairage studio, grand écran lumineux en arrière-plan",
+    aspect: "16:9",
+    note:
+      "Format plateau TV classique (YouTube / paysage). Dialogue en champ / contre-champ : chaque plan = UN présentateur qui parle (voix + lip-sync par plan). Le carrousel est un plan inséré = « l'écran ». Ajoute Tom au casting, puis « Charger ce style », et écris la réplique de chaque plan.",
+    shots: TALKSHOW_SHOTS,
+  },
 ];
 
 function expressionLabel(a: AssetItem): string {
@@ -166,16 +215,19 @@ export default function Storyboard() {
   const [assets, setAssets] = useState<AssetGroups>({});
   const [outfits, setOutfits] = useState<Outfit[]>([]);
 
+  // Brouillon auto (persistant par personnage) : les plans et le décor survivent au changement de page.
+  const dkey = (field: string) => (characterId ? `vh:draft:storyboard:${characterId}:${field}` : null);
+
   // --- Configuration personnage GLOBALE (définie une fois, appliquée partout) ---
   const [identityRef, setIdentityRef] = useState("");
   const [expressionRef, setExpressionRef] = useState(""); // vide = aucune
   const [outfitId, setOutfitId] = useState("");
-  const [decor, setDecor] = useState("rue animée");
+  const [decor, setDecor] = usePersistentState(dkey("decor"), "rue animée");
   const [masterUrl, setMasterUrl] = useState<string | null>(null);
   const [masterBusy, setMasterBusy] = useState(false);
   const [masterError, setMasterError] = useState<string | null>(null);
 
-  const [shots, setShots] = useState<Shot[]>([]);
+  const [shots, setShots] = usePersistentState<Shot[]>(dkey("shots"), []);
   const [presetId, setPresetId] = useState<string>(PRESETS[0].id);
   const [products, setProducts] = useState<Product[]>([]);
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -184,6 +236,7 @@ export default function Storyboard() {
   const [duoUrl, setDuoUrl] = useState<string | null>(null);
   const [duoError, setDuoError] = useState<string | null>(null);
   const timers = useRef<Record<number, ReturnType<typeof setInterval>>>({});
+  const syncTimers = useRef<Record<number, ReturnType<typeof setInterval>>>({});
   const [mergeStatus, setMergeStatus] = useState<string | null>(null);
   const [mergedUrl, setMergedUrl] = useState<string | null>(null);
   const [mergeError, setMergeError] = useState<string | null>(null);
@@ -207,8 +260,10 @@ export default function Storyboard() {
     });
     apiGet<{ products: Product[] }>("/api/products").then((d) => setProducts(d.products ?? [])).catch(() => {});
     const timersSnapshot = timers.current;
+    const syncSnapshot = syncTimers.current;
     return () => {
       Object.values(timersSnapshot).forEach(clearInterval);
+      Object.values(syncSnapshot).forEach(clearInterval);
       if (mergeTimer.current) clearInterval(mergeTimer.current);
     };
   }, []);
@@ -336,13 +391,35 @@ export default function Storyboard() {
   const preset = PRESETS.find((p) => p.id === presetId) ?? PRESETS[0];
 
   function loadPreset() {
-    const base: Shot[] = preset.shots.map((s) => ({ ...s, kind: "video", status: null }));
-    // Préréglage duo : on alterne les présentateurs du casting (champ / contre-champ).
+    const base: Shot[] = preset.shots.map((ps) => {
+      const { speakerSlot, ...s } = ps;
+      const shot: Shot = { ...s, kind: s.kind ?? "video", status: null };
+      // Assignation explicite du présentateur via speakerSlot (0 = principal, 1 = partenaire…).
+      if (shot.kind !== "carousel" && typeof speakerSlot === "number") {
+        shot.speakerId = cast[speakerSlot]?.id ?? characterId;
+      }
+      return shot;
+    });
+    // Préréglage duo : alternance automatique si aucun speakerSlot défini.
     if (preset.id === "duo" && cast.length > 1) {
-      base.forEach((s, idx) => { s.speakerId = cast[idx % cast.length].id; });
+      base.forEach((s, idx) => {
+        if (s.kind !== "carousel" && !s.speakerId) s.speakerId = cast[idx % cast.length].id;
+      });
     }
+    // Carrousel : produit par défaut + durée déduite du temps/image.
+    base.forEach((s) => {
+      if (s.kind === "carousel") {
+        if (!s.productId) s.productId = products[0]?.id ?? "";
+        s.seconds = carouselDuration(s.perImage ?? 2.5, s.productId);
+      }
+    });
     setShots(base);
     if (preset.decor) { setDecor(preset.decor); resetMaster(); }
+    // Ratio imposé par le style (ex. plateau TV 16:9) — invalide l'image de référence.
+    if (preset.aspect && model?.aspectRatios.includes(preset.aspect)) {
+      setAspect(preset.aspect);
+      resetMaster();
+    }
   }
 
   function addShot() {
@@ -350,10 +427,27 @@ export default function Storyboard() {
   }
 
   function addCarousel() {
+    const pid = products[0]?.id ?? "";
+    const n = products[0]?.screens.length ?? 0;
+    const perImage = 2.5;
     setShots((prev) => [
       ...prev,
-      { title: `Démo produit (carrousel)`, prompt: "", seconds: 6, status: null, kind: "carousel", productId: products[0]?.id ?? "" },
+      {
+        title: `Démo produit (carrousel)`,
+        prompt: "",
+        seconds: Math.max(2, Math.round(perImage * (n || 1))),
+        status: null,
+        kind: "carousel",
+        productId: pid,
+        perImage,
+      },
     ]);
+  }
+
+  // Recalcule la durée totale d'un carrousel = temps/image × nombre de captures.
+  function carouselDuration(perImage: number, productId?: string): number {
+    const n = products.find((p) => p.id === productId)?.screens.length ?? 0;
+    return Math.max(2, +(perImage * (n || 1)).toFixed(1));
   }
 
   function update(i: number, patch: Partial<Shot>) {
@@ -406,6 +500,7 @@ export default function Storyboard() {
       const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/carousel", {
         product: shot.productId,
         seconds: shot.seconds,
+        secondsPerImage: shot.perImage ?? 2.5,
       });
       refreshBudget();
       poll(i, sub);
@@ -509,7 +604,71 @@ export default function Storyboard() {
     }
   }
 
-  const readyClips = shots.filter((s) => s.videoUrl).map((s) => s.videoUrl as string);
+  // --- Voix + lip-sync PAR PLAN ---
+  async function makeShotVoice(i: number) {
+    const shot = shots[i];
+    const line = (shot.line ?? "").trim();
+    if (!line) return update(i, { voiceError: "Écris d'abord la réplique de ce plan" });
+    const speaker = shot.speakerId ?? characterId;
+    update(i, { voiceBusy: true, voiceError: null });
+    try {
+      const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", { text: line, character: speaker });
+      update(i, { audioUrl: res.dataUrl, voiceBusy: false });
+      refreshBudget();
+    } catch (e) {
+      update(i, { voiceBusy: false, voiceError: e instanceof Error ? e.message : "Échec de la voix" });
+    }
+  }
+
+  function pollSync(i: number, sub: { requestId: string; model: string }) {
+    update(i, { syncStatus: "En file…", syncRequestId: sub.requestId, syncModel: sub.model });
+    syncTimers.current[i] = setInterval(async () => {
+      try {
+        const r = await apiPost<{ status: string; videoUrl?: string; error?: string }>("/api/generate/status", {
+          model: sub.model,
+          requestId: sub.requestId,
+        });
+        update(i, { syncStatus: r.status });
+        if (r.status === "FAILED") {
+          clearInterval(syncTimers.current[i]);
+          update(i, { syncStatus: null, syncError: r.error ? `Échec : ${r.error}` : "Échec du lip-sync" });
+          return;
+        }
+        if (r.status === "COMPLETED") {
+          clearInterval(syncTimers.current[i]);
+          update(i, { syncStatus: r.videoUrl ? "Terminé" : "Terminé (pas d'URL)", syncedUrl: r.videoUrl ?? null });
+        }
+      } catch (e) {
+        clearInterval(syncTimers.current[i]);
+        update(i, { syncStatus: null, syncError: e instanceof Error ? e.message : "Erreur" });
+      }
+    }, 4000);
+  }
+
+  async function syncShot(i: number) {
+    const shot = shots[i];
+    if (!shot.videoUrl || !shot.audioUrl) return;
+    update(i, { syncStatus: "Envoi…", syncedUrl: null, syncError: null });
+    if (syncTimers.current[i]) clearInterval(syncTimers.current[i]);
+    try {
+      const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/lipsync", {
+        model: "veed/lipsync",
+        videoUrl: shot.videoUrl,
+        audioUrl: shot.audioUrl,
+        seconds: shot.seconds,
+      });
+      refreshBudget();
+      pollSync(i, sub);
+    } catch (e) {
+      update(i, { syncStatus: null, syncError: e instanceof Error ? e.message : "Erreur" });
+    }
+  }
+
+  // Pour l'assemblage : on préfère la version sonorisée (lip-syncée) si elle existe.
+  const readyClips = shots
+    .filter((s) => s.syncedUrl || s.videoUrl)
+    .map((s) => (s.syncedUrl ?? s.videoUrl) as string);
+  const silentPending = shots.some((s) => s.kind !== "carousel" && s.videoUrl && !s.syncedUrl);
 
   async function assemble() {
     setMergeError(null);
@@ -540,6 +699,8 @@ export default function Storyboard() {
             if (mergeTimer.current) clearInterval(mergeTimer.current);
             setMergedUrl(r.videoUrl ?? null);
             setMergeStatus(r.videoUrl ? "Terminé" : "Terminé (pas d'URL)");
+            // Transmet le montage au Studio Lip-sync (source vidéo pré-remplie).
+            if (r.videoUrl) setLastVideo(characterId, r.videoUrl, totalSeconds);
           }
         } catch (e) {
           if (mergeTimer.current) clearInterval(mergeTimer.current);
@@ -858,7 +1019,9 @@ export default function Storyboard() {
       {model?.audio !== "native" && shots.length > 0 && (
         <div className="card p-4 mb-6">
           <p className="text-sm text-[var(--muted)]">
-            🔇 Ce moteur est muet. Après génération, passe chaque plan (ou le montage) dans le <strong>Studio Lip-sync</strong> pour ajouter la voix de {characterName || "ton personnage"}.
+            🔇 Ce moteur est muet. Pour chaque plan : écris la <strong>réplique</strong>, génère la <strong>voix du présentateur assigné</strong>,
+            puis <strong>synchronise les lèvres</strong>. L&apos;assemblage utilisera automatiquement les plans <strong>sonorisés</strong>.
+            {cast.length > 1 && " Chaque présentateur garde ainsi sa propre voix, et les lèvres restent nettes (1 visage continu par plan)."}
           </p>
         </div>
       )}
@@ -883,33 +1046,67 @@ export default function Storyboard() {
                   {cast.map((c) => <option key={c.id} value={c.id}>🎤 {c.name}</option>)}
                 </select>
               )}
-              <select
-                className="select w-24"
-                value={shot.seconds}
-                onChange={(e) => update(i, { seconds: Number(e.target.value) })}
-              >
-                {(model?.seconds ?? [5, 6, 8, 10]).map((s) => <option key={s} value={s}>{s}s</option>)}
-              </select>
+              {shot.kind !== "carousel" && (
+                <select
+                  className="select w-24"
+                  value={shot.seconds}
+                  onChange={(e) => update(i, { seconds: Number(e.target.value) })}
+                >
+                  {(model?.seconds ?? [5, 6, 8, 10]).map((s) => <option key={s} value={s}>{s}s</option>)}
+                </select>
+              )}
               <button className="btn btn-ghost" onClick={() => remove(i)}>✕</button>
             </div>
             {shot.kind === "carousel" ? (
-              <div className="rounded-lg border border-dashed border-[var(--border)] p-3 space-y-2">
+              <div className="rounded-lg border border-dashed border-[var(--border)] p-3 space-y-3">
                 <p className="text-xs text-[var(--muted)]">
-                  📱 Diaporama de tes <strong>vraies captures d&apos;écran</strong> (pas d&apos;IA). Chaque capture est affichée
-                  ~{products.find((p) => p.id === shot.productId)?.screens.length
-                    ? (shot.seconds / (products.find((p) => p.id === shot.productId)!.screens.length || 1)).toFixed(1)
-                    : "?"}s. Place ce plan entre deux plans du présentateur (intro / conclusion).
+                  📱 Diaporama de tes <strong>vraies captures d&apos;écran</strong> (pas d&apos;IA). Règle le
+                  <strong> temps par image</strong> pour que ça ne défile pas trop vite. Place ce plan entre deux plans
+                  du présentateur (intro / conclusion).
                 </p>
-                <select
-                  className="select"
-                  value={shot.productId ?? ""}
-                  onChange={(e) => update(i, { productId: e.target.value })}
-                >
-                  {products.length === 0 && <option value="">Aucun produit — ajoute des captures dans Produits / Apps</option>}
-                  {products.map((p) => (
-                    <option key={p.id} value={p.id}>{p.name} ({p.screens.length} captures)</option>
-                  ))}
-                </select>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="label">Produit</label>
+                    <select
+                      className="select"
+                      value={shot.productId ?? ""}
+                      onChange={(e) =>
+                        update(i, {
+                          productId: e.target.value,
+                          seconds: carouselDuration(shot.perImage ?? 2.5, e.target.value),
+                        })
+                      }
+                    >
+                      {products.length === 0 && <option value="">Aucun produit — ajoute des captures dans Produits / Apps</option>}
+                      {products.map((p) => (
+                        <option key={p.id} value={p.id}>{p.name} ({p.screens.length} captures)</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="label">Temps par image</label>
+                    <select
+                      className="select"
+                      value={shot.perImage ?? 2.5}
+                      onChange={(e) => {
+                        const perImage = Number(e.target.value);
+                        update(i, { perImage, seconds: carouselDuration(perImage, shot.productId) });
+                      }}
+                    >
+                      {[1, 1.5, 2, 2.5, 3, 4, 5].map((s) => (
+                        <option key={s} value={s}>{s}s / image</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <p className="text-xs text-[var(--muted)]">
+                  {(() => {
+                    const n = products.find((p) => p.id === shot.productId)?.screens.length ?? 0;
+                    return n > 0
+                      ? `${n} capture${n > 1 ? "s" : ""} × ${shot.perImage ?? 2.5}s ≈ durée totale ${carouselDuration(shot.perImage ?? 2.5, shot.productId)}s.`
+                      : "Sélectionne un produit avec des captures.";
+                  })()}
+                </p>
               </div>
             ) : (
               <textarea
@@ -949,8 +1146,59 @@ export default function Storyboard() {
                 </button>
               )}
             </div>
-            {shot.videoUrl && (
+            {shot.videoUrl && !shot.syncedUrl && (
               <video src={shot.videoUrl} controls className="w-full rounded-lg border border-[var(--border)] mt-3 max-h-64" />
+            )}
+
+            {shot.kind !== "carousel" && model?.audio !== "native" && (
+              <div className="mt-3 rounded-lg border border-dashed border-[var(--border)] p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs uppercase tracking-wide text-[var(--muted)]">
+                    🎙️ Voix &amp; lip-sync — {nameOf(shot.speakerId ?? characterId)}
+                  </span>
+                  {shot.syncedUrl && <span className="badge text-[var(--success)]">plan sonorisé ✓</span>}
+                </div>
+                <textarea
+                  className="input min-h-[56px]"
+                  value={shot.line ?? ""}
+                  onChange={(e) => update(i, { line: e.target.value })}
+                  placeholder={`Réplique dite par ${nameOf(shot.speakerId ?? characterId)} dans ce plan…`}
+                />
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    className="btn btn-ghost"
+                    disabled={!ready || !(shot.line ?? "").trim() || shot.voiceBusy}
+                    onClick={() => makeShotVoice(i)}
+                  >
+                    {shot.voiceBusy ? "Voix…" : shot.audioUrl ? "Regénérer la voix" : "1) Générer la voix"}
+                  </button>
+                  {shot.audioUrl && <audio src={shot.audioUrl} controls className="h-8" />}
+                  <button
+                    className="btn btn-primary"
+                    disabled={
+                      !ready ||
+                      !shot.videoUrl ||
+                      !shot.audioUrl ||
+                      (!!shot.syncStatus && !shot.syncedUrl && !shot.syncError)
+                    }
+                    onClick={() => syncShot(i)}
+                    title={!shot.videoUrl ? "Génère d'abord le plan" : !shot.audioUrl ? "Génère d'abord la voix" : ""}
+                  >
+                    {shot.syncStatus && !shot.syncedUrl && !shot.syncError ? "Lip-sync…" : "2) Synchroniser les lèvres"}
+                  </button>
+                </div>
+                {shot.voiceError && <p className="text-xs text-[var(--danger)]">{shot.voiceError}</p>}
+                {shot.syncError && <p className="text-xs text-[var(--danger)]">{shot.syncError}</p>}
+                {!shot.syncError && shot.syncStatus && !shot.syncedUrl && (
+                  <p className="text-xs text-[var(--muted)] animate-pulse">Lip-sync : {shot.syncStatus}</p>
+                )}
+                {shot.syncedUrl && (
+                  <div>
+                    <p className="text-xs text-[var(--muted)] mb-1">Plan avec voix (utilisé pour l&apos;assemblage) :</p>
+                    <video src={shot.syncedUrl} controls className="w-full rounded-lg border border-[var(--border)] max-h-64" />
+                  </div>
+                )}
+              </div>
             )}
           </div>
         ))}
@@ -962,6 +1210,11 @@ export default function Storyboard() {
             {shots.length} plans · {totalSeconds}s au total ·{" "}
             <span className="text-[var(--foreground)] font-semibold">budget estimé {usd(totalCost)}</span>
             {totalSeconds < 60 && <span className="ml-2 text-[var(--muted)]">(vise ~60s)</span>}
+            {silentPending && (
+              <span className="ml-2 block text-[var(--danger)] sm:inline">
+                — des plans ne sont pas encore sonorisés (ils resteront muets dans le montage).
+              </span>
+            )}
           </div>
           <div className="flex flex-wrap gap-3">
             <button className="btn btn-ghost" disabled={!ready} onClick={generateAll}>
@@ -989,9 +1242,19 @@ export default function Storyboard() {
           {mergedUrl && (
             <div>
               <video src={mergedUrl} controls className="w-full rounded-lg border border-[var(--border)]" />
-              <a href={mergedUrl} target="_blank" rel="noreferrer" className="btn btn-primary mt-3 w-full">
-                Ouvrir / Télécharger la vidéo finale
-              </a>
+              <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+                <a href={mergedUrl} target="_blank" rel="noreferrer" className="btn btn-ghost flex-1">
+                  Ouvrir / Télécharger
+                </a>
+                <Link href="/lipsync" className="btn btn-primary flex-1">
+                  Ajouter la voix (Lip-sync) →
+                </Link>
+              </div>
+              <p className="mt-2 text-xs text-[var(--muted)]">
+                Le montage est envoyé au Studio Lip-sync comme vidéo source. ⚠️ Le lip-sync fonctionne mieux sur
+                un plan unique face caméra : sur un montage à plusieurs plans/coupures, la synchro des lèvres
+                peut être imparfaite. Pour un résultat net, applique plutôt le lip-sync plan par plan.
+              </p>
               <SendToAiccos videoUrl={mergedUrl} defaultTitle={`${characterName || "Storyboard"} — clip assemblé`} />
             </div>
           )}

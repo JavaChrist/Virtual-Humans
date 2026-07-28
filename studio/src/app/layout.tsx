@@ -43,7 +43,7 @@ export default function RootLayout({
             <div className="flex min-h-screen flex-col md:flex-row">
               <Nav />
               <main
-                className="flex-1 min-w-0 px-4 pt-5 md:px-10 md:pt-8 safe-x"
+                className="flex-1 min-w-0 pt-5 md:pt-8 content-x"
                 style={{ paddingBottom: "calc(2rem + env(safe-area-inset-bottom))" }}
               >
                 {children}

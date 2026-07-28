@@ -177,6 +177,20 @@ body {
   padding-right: env(safe-area-inset-right);
 }
 
+/* Marge horizontale du contenu principal : base confortable combinée à
+   l'encoche (notch) via max(), pour que le body ne colle pas à la nav.
+   Règle non-layerée volontaire : elle prime sur les utilitaires Tailwind. */
+.content-x {
+  padding-left: max(env(safe-area-inset-left), 1.25rem);
+  padding-right: max(env(safe-area-inset-right), 1.25rem);
+}
+@media (min-width: 768px) {
+  .content-x {
+    padding-left: max(env(safe-area-inset-left), 2.5rem);
+    padding-right: max(env(safe-area-inset-right), 2.5rem);
+  }
+}
+
 /* Sur mobile, iOS zoome automatiquement sur un champ dont la police fait < 16px.
    On force 16px pour les champs sur petits écrans afin d'éviter ce zoom gênant. */
 @media (max-width: 767px) {

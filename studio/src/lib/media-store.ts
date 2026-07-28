@@ -37,3 +37,32 @@ export function setLastVideo(characterId: string, url: string, seconds: number):
   localStorage.setItem(key(characterId, "lastVideo"), url);
   localStorage.setItem(key(characterId, "lastVideoSeconds"), String(seconds));
 }
+
+export interface LastVoice {
+  text: string;
+  dataUrl: string;
+}
+
+/** Dernière voix générée (script + audio) pour transmettre Scène → Lip-sync. */
+export function getLastVoice(characterId: string): LastVoice | null {
+  if (typeof window === "undefined" || !characterId) return null;
+  const dataUrl = localStorage.getItem(key(characterId, "lastVoiceAudio"));
+  if (!dataUrl) return null;
+  return { text: localStorage.getItem(key(characterId, "lastVoiceText")) ?? "", dataUrl };
+}
+
+export function setLastVoice(characterId: string, text: string, dataUrl: string): void {
+  if (typeof window === "undefined" || !characterId) return;
+  try {
+    localStorage.setItem(key(characterId, "lastVoiceText"), text);
+    localStorage.setItem(key(characterId, "lastVoiceAudio"), dataUrl);
+  } catch {
+    // Quota dépassé (audio volumineux) : on garde au moins le texte.
+    try {
+      localStorage.setItem(key(characterId, "lastVoiceText"), text);
+      localStorage.removeItem(key(characterId, "lastVoiceAudio"));
+    } catch {
+      /* ignore */
+    }
+  }
+}

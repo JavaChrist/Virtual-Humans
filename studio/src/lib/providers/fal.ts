@@ -62,6 +62,30 @@ export async function checkJob(model: string, requestId: string): Promise<JobSta
   }
 }
 
+// Extension fiable par type MIME. Important pour l'audio : ElevenLabs renvoie
+// "audio/mpeg" ; sans mapping, on obtiendrait "audio.mpeg" que VEED lipsync ne
+// reconnaît pas comme mp3 (il termine alors sans animer les lèvres ni le son).
+function extForMime(mime: string): string {
+  const map: Record<string, string> = {
+    "audio/mpeg": "mp3",
+    "audio/mp3": "mp3",
+    "audio/wav": "wav",
+    "audio/x-wav": "wav",
+    "audio/ogg": "ogg",
+    "audio/mp4": "m4a",
+    "audio/aac": "aac",
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/gif": "gif",
+    "image/svg+xml": "svg",
+    "video/mp4": "mp4",
+    "video/webm": "webm",
+    "video/quicktime": "mov",
+  };
+  return map[mime] ?? mime.split("/")[1] ?? "bin";
+}
+
 /** Upload a data URL (data:<mime>;base64,<...>) to fal storage and return a public URL. */
 export async function uploadDataUrl(dataUrl: string, fallbackName = "file"): Promise<string> {
   ensureConfig();
@@ -73,7 +97,7 @@ export async function uploadDataUrl(dataUrl: string, fallbackName = "file"): Pro
   }
   const mime = match[1];
   const buffer = Buffer.from(match[2], "base64");
-  const ext = mime.split("/")[1] ?? "bin";
+  const ext = extForMime(mime);
   const blob = new Blob([buffer], { type: mime });
   // The client accepts a Blob/File; name is derived from type when omitted.
   return fal.storage.upload(new File([blob], `${fallbackName}.${ext}`, { type: mime }));
@@ -133,7 +157,7 @@ export async function combineIdentities(
 /** Upload raw bytes (e.g. an SDK asset read from disk) to fal storage. */
 export async function uploadBuffer(buffer: Buffer, mime: string, name = "asset"): Promise<string> {
   ensureConfig();
-  const ext = mime.split("/")[1] ?? "bin";
+  const ext = extForMime(mime);
   const blob = new Blob([new Uint8Array(buffer)], { type: mime });
   return fal.storage.upload(new File([blob], `${name}.${ext}`, { type: mime }));
 }
