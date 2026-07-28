@@ -5,6 +5,7 @@ import { apiGet, apiPost, refreshBudget, usd } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
 import { getLastVideo } from "@/lib/media-store";
 import { PageHeader } from "@/components/page-header";
+import { SendToAiccos } from "@/components/send-to-aiccos";
 import type { SettingsResponse } from "@/lib/types";
 
 interface LipsyncModel {
@@ -215,6 +216,7 @@ export default function LipsyncStudio() {
               <a href={resultUrl} target="_blank" rel="noreferrer" className="btn btn-ghost mt-4 w-full">
                 Ouvrir / Télécharger
               </a>
+              <SendToAiccos videoUrl={resultUrl} defaultTitle={`${characterName || "Clip"} — lip-sync`} />
             </div>
           )}
         </div>

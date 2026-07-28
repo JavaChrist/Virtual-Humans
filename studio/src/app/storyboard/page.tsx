@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { apiGet, apiPost, refreshBudget, usd, withCharacter } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
 import { PageHeader } from "@/components/page-header";
+import { SendToAiccos } from "@/components/send-to-aiccos";
 import type { SettingsResponse } from "@/lib/types";
 
 interface VideoModel {
@@ -991,6 +992,7 @@ export default function Storyboard() {
               <a href={mergedUrl} target="_blank" rel="noreferrer" className="btn btn-primary mt-3 w-full">
                 Ouvrir / Télécharger la vidéo finale
               </a>
+              <SendToAiccos videoUrl={mergedUrl} defaultTitle={`${characterName || "Storyboard"} — clip assemblé`} />
             </div>
           )}
         </div>

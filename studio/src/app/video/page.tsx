@@ -7,6 +7,7 @@ import { useCharacter } from "@/lib/character-context";
 import { getLastRefImage, setLastVideo } from "@/lib/media-store";
 import { PageHeader } from "@/components/page-header";
 import { PromptComposer } from "@/components/prompt-composer";
+import { SendToAiccos } from "@/components/send-to-aiccos";
 import type { SettingsResponse } from "@/lib/types";
 
 interface VideoModel {
@@ -362,6 +363,7 @@ export default function VideoStudio() {
                   </Link>
                 )}
               </div>
+              <SendToAiccos videoUrl={videoUrl} defaultTitle={`${name} — vidéo ${seconds}s`} />
             </div>
           )}
         </div>
