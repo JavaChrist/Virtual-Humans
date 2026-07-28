@@ -34,6 +34,20 @@ npm run dev            # http://localhost:3000
 | ElevenLabs | `ELEVENLABS_API_KEY` + `ELEVENLABS_VOICE_ID` | Voix |
 | fal.ai | `FAL_KEY` | Vidéo (Kling/Veo/MiniMax/Runway) |
 
+## Envoi vers AI Command Center OS
+
+Le bouton « Envoyer vers AICCOS » (studios Vidéo, Lip-sync et Storyboard) pousse le clip généré
+directement dans la Médiathèque d'[AI Command Center OS](https://aicommandcenteros.app), d'où il peut
+être attaché à une publication sur les réseaux sociaux.
+
+| Variable | Usage |
+|---|---|
+| `AICCOS_URL` | URL de l'instance AICCOS (défaut : `https://aicommandcenteros.app`) |
+| `AICCOS_IMPORT_TOKEN` | Jeton partagé — même valeur que `CLIPS_IMPORT_TOKEN` côté AICCOS |
+
+L'envoi passe par la route serveur `/api/aiccos/send` : le jeton n'est jamais exposé au navigateur.
+Limite : 50 Mo par clip (mp4, webm ou mov).
+
 ## Estimation de budget (indicative)
 
 Les prix par défaut sont des ordres de grandeur publics (USD) et peuvent varier selon le plan/la région.
