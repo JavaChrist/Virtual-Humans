@@ -9,6 +9,7 @@ import { dirname, join } from "node:path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUB = join(__dirname, "..", "public");
 const MASTER = join(PUB, "icons", "icon-master.png");
+const SVG = join(PUB, "icon.svg"); // dessin simple, lisible en petit (favicon)
 const BG = "#0b0d12"; // fond de marque (opaque)
 
 async function square(size) {
@@ -31,6 +32,11 @@ async function flat(size) {
   return sharp(MASTER).resize(size, size, { fit: "cover" }).flatten({ background: BG }).png().toBuffer();
 }
 
+// Favicon : rasterisé depuis le SVG SIMPLE (lisible des 16px, contrairement au master 3D detaille).
+async function faviconPng(size) {
+  return sharp(SVG, { density: 512 }).resize(size, size, { fit: "cover" }).flatten({ background: BG }).png().toBuffer();
+}
+
 async function run() {
   const outputs = {
     [join(PUB, "icons", "icon-192.png")]: await square(192),
@@ -44,8 +50,13 @@ async function run() {
     console.log("écrit", file);
   }
 
-  // Favicon .ico multi-tailles (16/32/48) → 3 emplacements.
-  const ico = await pngToIco([await flat(16), await flat(32), await flat(48)]);
+  // Favicon .ico multi-tailles (16/32/48/64) → depuis le SVG simple → 3 emplacements.
+  const ico = await pngToIco([
+    await faviconPng(16),
+    await faviconPng(32),
+    await faviconPng(48),
+    await faviconPng(64),
+  ]);
   for (const f of [
     join(PUB, "favicon.ico"),
     join(PUB, "icons", "favicon.ico"),
