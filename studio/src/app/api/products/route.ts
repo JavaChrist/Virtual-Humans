@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { addProductScreens, listProducts, saveProduct, type Product } from "@/lib/products";
+import { addProductScreens, deleteProduct, listProducts, saveProduct, type Product } from "@/lib/products";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -27,4 +27,12 @@ export async function POST(req: NextRequest) {
   } catch (e) {
     return NextResponse.json({ error: e instanceof Error ? e.message : "Échec" }, { status: 500 });
   }
+}
+
+export async function DELETE(req: NextRequest) {
+  const id = new URL(req.url).searchParams.get("id");
+  if (!id) return NextResponse.json({ error: "id requis" }, { status: 400 });
+  const ok = await deleteProduct(id);
+  if (!ok) return NextResponse.json({ error: "Suppression impossible" }, { status: 500 });
+  return NextResponse.json({ ok: true });
 }

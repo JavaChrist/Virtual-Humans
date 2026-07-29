@@ -139,6 +139,26 @@ export async function readProductScreen(
   }
 }
 
+/** Delete an entire product: its DB row and all its screenshots. */
+export async function deleteProduct(productId: string): Promise<boolean> {
+  if (!hasSupabase()) return false;
+  const id = safeId(productId);
+  try {
+    // Remove all stored screenshots first (Storage isn't cascade-deleted with the row).
+    const names = await listScreens(id);
+    if (names.length) {
+      await supabase()
+        .storage.from(PRODUCT_SCREENS_BUCKET)
+        .remove(names.map((n) => `${id}/${n}`));
+    }
+    const { error } = await supabase().from("vh_products").delete().eq("id", id);
+    return !error;
+  } catch (e) {
+    console.error("deleteProduct failed:", e);
+    return false;
+  }
+}
+
 /** Delete a single product screenshot. Returns true when a file was removed. */
 export async function deleteProductScreen(productId: string, name: string): Promise<boolean> {
   if (!hasSupabase() || !validName(name)) return false;

@@ -203,6 +203,13 @@ export function estimateMerge(totalSeconds: number): number {
   return +(0.0005 * Math.max(totalSeconds, 1)).toFixed(4);
 }
 
+// Voix off collée sur un diaporama/plan (ffmpeg mux audio+vidéo) — compute minime.
+export const MERGE_AUDIO_MODEL_ID = "fal-ai/ffmpeg-api/merge-audio-video";
+
+export function estimateMergeAudio(totalSeconds: number): number {
+  return +(0.005 + 0.0005 * Math.max(totalSeconds, 1)).toFixed(4);
+}
+
 // Carrousel de captures produit — diaporama MP4 (fal ffmpeg images-to-video).
 // Ce sont de VRAIES captures d'écran, pas une génération IA : coût compute minime.
 export const CAROUSEL_MODEL_ID = "fal-ai/ffmpeg-api/images-to-video";

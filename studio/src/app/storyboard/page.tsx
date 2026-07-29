@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { apiGet, apiPost, refreshBudget, usd, withCharacter } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
 import { usePersistentState } from "@/lib/use-persistent-state";
 import { setLastVideo } from "@/lib/media-store";
 import { PageHeader } from "@/components/page-header";
 import { SendToAiccos } from "@/components/send-to-aiccos";
+import { useConfirm } from "@/components/confirm";
 import type { SettingsResponse } from "@/lib/types";
 
 interface VideoModel {
@@ -63,6 +64,7 @@ interface Shot {
   syncError?: string | null;
   syncRequestId?: string;
   syncModel?: string;
+  silent?: boolean; // plan volontairement muet (ambiance / duo) : exclu de l'alerte "sans voix"
 }
 
 interface Product {
@@ -206,6 +208,7 @@ function expressionLabel(a: AssetItem): string {
 
 export default function Storyboard() {
   const { characterId, characterName, characters } = useCharacter();
+  const confirm = useConfirm();
   const [ready, setReady] = useState(false);
   const [models, setModels] = useState<VideoModel[]>([]);
   const [modelId, setModelId] = useState("");
@@ -223,14 +226,52 @@ export default function Storyboard() {
   const [expressionRef, setExpressionRef] = useState(""); // vide = aucune
   const [outfitId, setOutfitId] = useState("");
   const [decor, setDecor] = usePersistentState(dkey("decor"), "rue animée");
-  const [masterUrl, setMasterUrl] = useState<string | null>(null);
+  // Image de référence persistée par personnage (URL légère) : évite les boutons
+  // grisés au retour sur la page (la référence n'était pas mémorisée avant).
+  const [masterUrl, setMasterUrl] = usePersistentState<string | null>(dkey("master"), null);
   const [masterBusy, setMasterBusy] = useState(false);
   const [masterError, setMasterError] = useState<string | null>(null);
 
-  const [shots, setShots] = usePersistentState<Shot[]>(dkey("shots"), []);
+  // Brouillon des plans persistant, MAIS on strippe les audios (base64 lourds) pour
+  // ne pas saturer le quota localStorage — sinon tout le brouillon (dont les vidéos) était perdu.
+  const shotsKey = dkey("shots");
+  const [shots, setShotsRaw] = useState<Shot[]>([]);
+  useEffect(() => {
+    if (!shotsKey || typeof window === "undefined") {
+      setShotsRaw([]);
+      return;
+    }
+    const raw = localStorage.getItem(shotsKey);
+    if (raw) {
+      try {
+        setShotsRaw(JSON.parse(raw) as Shot[]);
+        return;
+      } catch {
+        /* JSON invalide */
+      }
+    }
+    setShotsRaw([]);
+  }, [shotsKey]);
+  const setShots = useCallback<Dispatch<SetStateAction<Shot[]>>>(
+    (updater) => {
+      setShotsRaw((prev) => {
+        const next = typeof updater === "function" ? (updater as (p: Shot[]) => Shot[])(prev) : updater;
+        if (shotsKey && typeof window !== "undefined") {
+          try {
+            const light = next.map((s) => (s.audioUrl ? { ...s, audioUrl: undefined } : s));
+            localStorage.setItem(shotsKey, JSON.stringify(light));
+          } catch {
+            /* quota dépassé : on garde au moins l'état en session */
+          }
+        }
+        return next;
+      });
+    },
+    [shotsKey],
+  );
   const [presetId, setPresetId] = useState<string>(PRESETS[0].id);
   const [products, setProducts] = useState<Product[]>([]);
-  const [partners, setPartners] = useState<Partner[]>([]);
+  const [partners, setPartners] = usePersistentState<Partner[]>(dkey("partners"), []);
   // Route B (prototype) : frame combinant plusieurs présentateurs.
   const [duoBusy, setDuoBusy] = useState(false);
   const [duoUrl, setDuoUrl] = useState<string | null>(null);
@@ -270,7 +311,8 @@ export default function Storyboard() {
 
   useEffect(() => {
     if (!characterId) return;
-    setMasterUrl(null);
+    // Ne pas réinitialiser masterUrl ici : il est persisté par personnage et rechargé
+    // automatiquement (sinon la référence disparaissait au retour sur la page).
     apiGet<{ assets: AssetGroups }>(withCharacter("/api/assets", characterId))
       .then((d) => {
         setAssets(d.assets ?? {});
@@ -494,7 +536,7 @@ export default function Storyboard() {
   async function generateCarousel(i: number) {
     const shot = shots[i];
     if (!shot.productId) return update(i, { error: "Choisis un produit" });
-    update(i, { status: "Envoi…", videoUrl: null, error: null });
+    update(i, { status: "Envoi…", videoUrl: null, syncedUrl: null, error: null });
     if (timers.current[i]) clearInterval(timers.current[i]);
     try {
       const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/carousel", {
@@ -578,7 +620,7 @@ export default function Storyboard() {
     const shot = shots[i];
     if (shot.kind === "carousel") return generateCarousel(i);
     if (!shot.prompt) return;
-    update(i, { status: "Envoi…", videoUrl: null, error: null });
+    update(i, { status: "Envoi…", videoUrl: null, syncedUrl: null, error: null });
     if (timers.current[i]) clearInterval(timers.current[i]);
     try {
       const ref = speakerRef(shot);
@@ -664,14 +706,51 @@ export default function Storyboard() {
     }
   }
 
+  // Carrousel : colle la voix off (narration) sur le diaporama silencieux (mux audio+vidéo).
+  async function mergeCarouselAudio(i: number) {
+    const shot = shots[i];
+    if (!shot.videoUrl || !shot.audioUrl) return;
+    update(i, { syncStatus: "Envoi…", syncedUrl: null, syncError: null });
+    if (syncTimers.current[i]) clearInterval(syncTimers.current[i]);
+    try {
+      const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/merge-audio", {
+        videoUrl: shot.videoUrl,
+        audioUrl: shot.audioUrl,
+        seconds: shot.seconds,
+      });
+      refreshBudget();
+      pollSync(i, sub);
+    } catch (e) {
+      update(i, { syncStatus: null, syncError: e instanceof Error ? e.message : "Erreur" });
+    }
+  }
+
   // Pour l'assemblage : on préfère la version sonorisée (lip-syncée) si elle existe.
   const readyClips = shots
     .filter((s) => s.syncedUrl || s.videoUrl)
     .map((s) => (s.syncedUrl ?? s.videoUrl) as string);
-  // Plans vidéo générés mais sans voix synchronisée (le carrousel est muet par nature → exclu).
-  const silentShots = shots.filter((s) => s.kind !== "carousel" && s.videoUrl && !s.syncedUrl);
+  // Plans vidéo générés mais sans voix synchronisée (le carrousel + les plans marqués
+  // "muet volontaire" sont exclus, ils ne doivent pas déclencher l'alerte).
+  const silentShots = shots.filter(
+    (s) => s.kind !== "carousel" && !s.silent && s.videoUrl && !s.syncedUrl,
+  );
 
   async function assemble() {
+    // Garde-fou : mieux vaut faire voix + lip-sync PAR PLAN avant d'assembler
+    // (le lip-sync sur le montage final ne sait pas qui parle sur quel plan).
+    if (silentShots.length > 0) {
+      const ok = await confirm({
+        title: "Assembler sans toutes les voix ?",
+        message:
+          `${silentShots.length} plan(s) n'ont pas encore de voix synchronisée (` +
+          `${silentShots.map((s) => s.title).join(", ")}).\n\n` +
+          "Conseil : génère la voix + lip-sync SUR CHAQUE PLAN (bloc « Voix & lip-sync ») avant d'assembler — " +
+          "c'est le seul moyen que chaque personne dise son texte. Le lip-sync sur la vidéo déjà montée ne peut pas séparer les intervenants.\n\n" +
+          "Assembler quand même ? Les plans concernés resteront muets.",
+        confirmLabel: "Assembler quand même",
+      });
+      if (!ok) return;
+    }
     setMergeError(null);
     setMergedUrl(null);
     setMergeStatus("Envoi…");
@@ -1153,6 +1232,86 @@ export default function Storyboard() {
             </div>
             {shot.videoUrl && !shot.syncedUrl && (
               <video src={shot.videoUrl} controls className="w-full rounded-lg border border-[var(--border)] mt-3 max-h-64" />
+            )}
+
+            {shot.kind === "carousel" && (
+              <div className="mt-3 rounded-lg border border-dashed border-[var(--border)] p-3 space-y-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-xs uppercase tracking-wide text-[var(--muted)]">🎙️ Voix off (pendant le défilement)</span>
+                  <div className="flex items-center gap-2">
+                    {shot.syncedUrl && <span className="badge text-[var(--success)]">carrousel sonorisé ✓</span>}
+                    <label className="flex items-center gap-1 text-xs text-[var(--muted)] cursor-pointer" title="Le carrousel reste sans voix (pas d'alerte).">
+                      <input
+                        type="checkbox"
+                        checked={!!shot.silent}
+                        onChange={(e) => update(i, { silent: e.target.checked })}
+                      />
+                      🔇 pas de voix
+                    </label>
+                  </div>
+                </div>
+                {shot.silent ? (
+                  <p className="text-xs text-[var(--muted)]">Carrousel sans voix off — il défilera en silence.</p>
+                ) : (
+                  <>
+                    {characters.length > 1 && (
+                      <div>
+                        <label className="label">Voix off — qui parle&nbsp;?</label>
+                        <select
+                          className="select w-56"
+                          value={shot.speakerId ?? characterId}
+                          onChange={(e) => update(i, { speakerId: e.target.value })}
+                          title="Choisis le présentateur qui narre le carrousel (sa voix)"
+                        >
+                          {characters.map((c) => (
+                            <option key={c.id} value={c.id}>🎤 {c.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                    <textarea
+                      className="input min-h-[56px]"
+                      value={shot.line ?? ""}
+                      onChange={(e) => update(i, { line: e.target.value })}
+                      placeholder={`Texte lu en voix off par ${nameOf(shot.speakerId ?? characterId)} pendant le carrousel…`}
+                    />
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        className="btn btn-ghost"
+                        disabled={!ready || !(shot.line ?? "").trim() || shot.voiceBusy}
+                        onClick={() => makeShotVoice(i)}
+                      >
+                        {shot.voiceBusy ? "Voix…" : shot.audioUrl ? "Regénérer la voix off" : "1) Générer la voix off"}
+                      </button>
+                      {shot.audioUrl && <audio src={shot.audioUrl} controls className="h-8" />}
+                      <button
+                        className="btn btn-primary"
+                        disabled={
+                          !ready ||
+                          !shot.videoUrl ||
+                          !shot.audioUrl ||
+                          (!!shot.syncStatus && !shot.syncedUrl && !shot.syncError)
+                        }
+                        onClick={() => mergeCarouselAudio(i)}
+                        title={!shot.videoUrl ? "Génère d'abord le carrousel" : !shot.audioUrl ? "Génère d'abord la voix off" : ""}
+                      >
+                        {shot.syncStatus && !shot.syncedUrl && !shot.syncError ? "Ajout…" : "2) Ajouter la voix off"}
+                      </button>
+                    </div>
+                    {shot.voiceError && <p className="text-xs text-[var(--danger)]">{shot.voiceError}</p>}
+                    {shot.syncError && <p className="text-xs text-[var(--danger)]">{shot.syncError}</p>}
+                    {!shot.syncError && shot.syncStatus && !shot.syncedUrl && (
+                      <p className="text-xs text-[var(--muted)] animate-pulse">Voix off : {shot.syncStatus}</p>
+                    )}
+                    {shot.syncedUrl && (
+                      <div>
+                        <p className="text-xs text-[var(--muted)] mb-1">Carrousel avec voix off (utilisé pour l&apos;assemblage) :</p>
+                        <video src={shot.syncedUrl} controls className="w-full rounded-lg border border-[var(--border)] max-h-64" />
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             )}
 
             {shot.kind !== "carousel" && model?.audio !== "native" && (

@@ -25,6 +25,7 @@ function fileToDataUrl(file: File): Promise<string> {
 
 export default function ProductsStudio() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [pitch, setPitch] = useState("");
   const [url, setUrl] = useState("");
@@ -33,6 +34,49 @@ export default function ProductsStudio() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const confirm = useConfirm();
+
+  function resetForm() {
+    setEditingId(null);
+    setName("");
+    setPitch("");
+    setUrl("");
+    setColor("#6366f1");
+    setPending([]);
+    setError(null);
+  }
+
+  function startEdit(p: Product) {
+    setEditingId(p.id);
+    setName(p.name);
+    setPitch(p.pitch ?? "");
+    setUrl(p.url ?? "");
+    setColor(p.color || "#6366f1");
+    setPending([]);
+    setError(null);
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  async function removeProduct(p: Product) {
+    const ok = await confirm({
+      title: "Supprimer l'application",
+      message: `Supprimer « ${p.name} » et ses ${p.screens.length} capture(s) ?\nCette action est définitive.`,
+      confirmLabel: "Supprimer",
+      danger: true,
+    });
+    if (!ok) return;
+    setError(null);
+    try {
+      const res = await fetch(`/api/products?id=${encodeURIComponent(p.id)}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error((data as { error?: string }).error ?? "Suppression impossible");
+      }
+      if (editingId === p.id) resetForm();
+      load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Suppression impossible");
+    }
+  }
 
   function load() {
     apiGet<{ products: Product[] }>("/api/products").then((d) => setProducts(d.products)).catch(() => {});
@@ -50,11 +94,15 @@ export default function ProductsStudio() {
     setSaving(true);
     setError(null);
     try {
-      await apiPost<{ product: Product }>("/api/products", { name, pitch, url, color, screens: pending });
-      setName("");
-      setPitch("");
-      setUrl("");
-      setPending([]);
+      await apiPost<{ product: Product }>("/api/products", {
+        id: editingId ?? undefined,
+        name,
+        pitch,
+        url,
+        color,
+        screens: pending,
+      });
+      resetForm();
       load();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur");
@@ -103,7 +151,14 @@ export default function ProductsStudio() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="card p-6">
-          <h3 className="font-semibold mb-4">Ajouter une application</h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold">{editingId ? "Modifier l'application" : "Ajouter une application"}</h3>
+            {editingId && (
+              <button className="btn btn-ghost text-xs" onClick={resetForm}>
+                + Nouvelle app
+              </button>
+            )}
+          </div>
           <div className="space-y-3">
             <div>
               <label className="label">Nom</label>
@@ -135,9 +190,14 @@ export default function ProductsStudio() {
                 </div>
               )}
             </div>
+            {editingId && pending.length === 0 && (
+              <p className="text-xs text-[var(--muted)]">
+                Les captures existantes sont conservées. Ajoute des fichiers ci-dessus pour en rajouter.
+              </p>
+            )}
             {error && <p className="text-sm text-[var(--danger)]">{error}</p>}
             <button className="btn btn-primary w-full" disabled={!name.trim() || saving} onClick={save}>
-              {saving ? "Enregistrement…" : "Enregistrer l'application"}
+              {saving ? "Enregistrement…" : editingId ? "Enregistrer les modifications" : "Enregistrer l'application"}
             </button>
           </div>
         </div>
@@ -157,6 +217,22 @@ export default function ProductsStudio() {
                   {p.pitch && <div className="text-xs text-[var(--muted)]">{p.pitch}</div>}
                 </div>
                 <span className="badge">{p.screens.length} capture{p.screens.length > 1 ? "s" : ""}</span>
+                <button
+                  type="button"
+                  className="btn btn-ghost text-xs"
+                  onClick={() => startEdit(p)}
+                  title="Modifier le nom, le pitch, la couleur, le lien"
+                >
+                  Modifier
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-ghost text-xs text-[var(--danger)]"
+                  onClick={() => removeProduct(p)}
+                  title="Supprimer cette application"
+                >
+                  Supprimer
+                </button>
               </div>
               {p.screens.length > 0 && (
                 <div className="grid grid-cols-6 gap-2 mt-3">
