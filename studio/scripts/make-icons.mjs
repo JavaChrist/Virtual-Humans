@@ -9,7 +9,6 @@ import { dirname, join } from "node:path";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUB = join(__dirname, "..", "public");
 const MASTER = join(PUB, "icons", "icon-master.png");
-const SVG = join(PUB, "icon.svg"); // dessin simple, lisible en petit (favicon)
 const BG = "#0b0d12"; // fond de marque (opaque)
 
 async function square(size) {
@@ -32,9 +31,9 @@ async function flat(size) {
   return sharp(MASTER).resize(size, size, { fit: "cover" }).flatten({ background: BG }).png().toBuffer();
 }
 
-// Favicon : rasterisé depuis le SVG SIMPLE (lisible des 16px, contrairement au master 3D detaille).
+// Favicon : depuis le master 3D (comme les logos), aplati sur fond opaque.
 async function faviconPng(size) {
-  return sharp(SVG, { density: 512 }).resize(size, size, { fit: "cover" }).flatten({ background: BG }).png().toBuffer();
+  return flat(size);
 }
 
 async function run() {
@@ -65,6 +64,14 @@ async function run() {
     await writeFile(f, ico);
     console.log("écrit", f);
   }
+
+  // icon.svg = conteneur du rendu 3D (Chrome privilégie le SVG pour l'onglet).
+  const emb = (await flat(256)).toString("base64");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><image width="512" height="512" href="data:image/png;base64,${emb}"/></svg>\n`;
+  const svgPath = join(PUB, "icon.svg");
+  await writeFile(svgPath, svg);
+  console.log("écrit", svgPath);
+
   console.log("Terminé.");
 }
 
