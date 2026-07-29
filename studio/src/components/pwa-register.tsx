@@ -19,11 +19,25 @@ export function PwaRegister() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!("serviceWorker" in navigator)) return;
-    if (process.env.NODE_ENV !== "production") return;
-    // Jamais sur localhost / IP locale : un build de prod lancé localement laisserait
-    // un SW actif sur le port 3000 qui interférerait avec `next dev`.
+
     const host = window.location.hostname;
-    if (host === "localhost" || host === "127.0.0.1" || /^(10|127|192\.168)\./.test(host) || host.endsWith(".local")) {
+    const isLocal =
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      /^(10|127|192\.168)\./.test(host) ||
+      host.endsWith(".local");
+
+    // En dev ou sur localhost : on N'ENREGISTRE PAS de SW, et surtout on NETTOIE tout
+    // SW résiduel + ses caches. Sinon un ancien SW (d'un build prod testé en local)
+    // continue de resservir d'anciennes icônes/pages en cache-first, ce qui survit
+    // au Ctrl+Shift+R et au vidage de cache classique.
+    if (process.env.NODE_ENV !== "production" || isLocal) {
+      navigator.serviceWorker.getRegistrations?.().then((regs) => {
+        regs.forEach((r) => r.unregister());
+      });
+      if ("caches" in window) {
+        caches.keys().then((keys) => keys.forEach((k) => caches.delete(k)));
+      }
       return;
     }
 
