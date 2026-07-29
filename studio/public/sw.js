@@ -2,7 +2,7 @@
  * Safe by design: never touches /api/* or cross-origin requests
  * (fal.ai, Supabase, OpenAI, ElevenLabs), so generation always hits the network.
  */
-const CACHE = "vh-studio-v5";
+const CACHE = "vh-studio-v6";
 const APP_SHELL = [
   "/",
   "/offline",
