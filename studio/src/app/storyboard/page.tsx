@@ -668,7 +668,8 @@ export default function Storyboard() {
   const readyClips = shots
     .filter((s) => s.syncedUrl || s.videoUrl)
     .map((s) => (s.syncedUrl ?? s.videoUrl) as string);
-  const silentPending = shots.some((s) => s.kind !== "carousel" && s.videoUrl && !s.syncedUrl);
+  // Plans vidéo générés mais sans voix synchronisée (le carrousel est muet par nature → exclu).
+  const silentShots = shots.filter((s) => s.kind !== "carousel" && s.videoUrl && !s.syncedUrl);
 
   async function assemble() {
     setMergeError(null);
@@ -1209,14 +1210,16 @@ export default function Storyboard() {
       </div>
 
       {shots.length > 0 && (
-        <div className="card p-5 mt-6 flex flex-wrap items-center justify-between gap-4 sticky bottom-4">
+        <div className="card p-5 mt-6 flex flex-wrap items-center justify-between gap-4">
           <div className="text-sm text-[var(--muted)]">
             {shots.length} plans · {totalSeconds}s au total ·{" "}
             <span className="text-[var(--foreground)] font-semibold">budget estimé {usd(totalCost)}</span>
             {totalSeconds < 60 && <span className="ml-2 text-[var(--muted)]">(vise ~60s)</span>}
-            {silentPending && (
-              <span className="ml-2 block text-[var(--danger)] sm:inline">
-                — des plans ne sont pas encore sonorisés (ils resteront muets dans le montage).
+            {silentShots.length > 0 && (
+              <span className="mt-1 block text-[var(--danger)]">
+                {silentShots.length} plan{silentShots.length > 1 ? "s" : ""} sans voix (
+                {silentShots.map((s) => s.title).join(", ")}) — {silentShots.length > 1 ? "ils resteront muets" : "il restera muet"} dans le montage.
+                Génère la voix + lip-sync sur {silentShots.length > 1 ? "ces plans" : "ce plan"}, ou ignore si {silentShots.length > 1 ? "ce sont" : "c'est"} volontaire.
               </span>
             )}
           </div>

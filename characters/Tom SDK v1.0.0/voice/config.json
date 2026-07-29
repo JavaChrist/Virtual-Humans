@@ -4,11 +4,11 @@
   "voiceId": "zVrWtLr70jn6SeaARX0i",
   "voiceName": "Tom",
   "language": "fr",
-  "stability": 0.5,
+  "stability": 0.6,
   "similarityBoost": 0.75,
   "style": null,
   "speakerBoost": null,
-  "speed": 1.0,
+  "speed": 0.9,
   "status": "defined",
-  "note": "Voix ElevenLabs propre à Tom. Réglages fins (stability, similarity, style, speed) à ajuster si besoin. Ne pas réutiliser la voix de Mei."
+  "note": "Voix ElevenLabs propre à Tom. speed 0.9 (débit posé, respecte la ponctuation) + stability 0.6. Ne pas réutiliser la voix de Mei."
 }
