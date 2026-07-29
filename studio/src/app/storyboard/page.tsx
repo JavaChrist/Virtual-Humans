@@ -1036,12 +1036,16 @@ export default function Storyboard() {
                 value={shot.title}
                 onChange={(e) => update(i, { title: e.target.value })}
               />
-              {shot.kind !== "carousel" && !shot.startImageUrl && cast.length > 1 && (
+              {shot.kind !== "carousel" && cast.length > 1 && (
                 <select
                   className="select w-40"
                   value={shot.speakerId ?? characterId}
                   onChange={(e) => update(i, { speakerId: e.target.value })}
-                  title="Présentateur de ce plan"
+                  title={
+                    shot.startImageUrl
+                      ? "Qui parle sur ce plan (choisit la voix — l'image duo reste inchangée)"
+                      : "Présentateur (voix + visage) de ce plan"
+                  }
                 >
                   {cast.map((c) => <option key={c.id} value={c.id}>🎤 {c.name}</option>)}
                 </select>

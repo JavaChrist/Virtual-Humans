@@ -1,26 +1,33 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /**
- * Registers the service worker so the Studio is installable and works offline.
- * Only runs in production builds to avoid interfering with Next.js dev HMR.
+ * Enregistre le service worker (installable + offline) ET propose une mini-modale
+ * "Mise à jour disponible" quand un nouveau déploiement est prêt.
+ *
+ * Mécanisme : le nouveau SW s'installe puis reste en "waiting" (sw.js ne fait plus
+ * skipWaiting automatiquement). Dès qu'il est prêt, on affiche la modale. Au clic
+ * sur « Mettre à jour », on envoie SKIP_WAITING → le SW s'active → controllerchange
+ * → rechargement unique sur la nouvelle version.
+ *
+ * Ne s'exécute qu'en production (pas d'interférence avec le HMR de `next dev`).
  */
 export function PwaRegister() {
+  const [waiting, setWaiting] = useState<ServiceWorker | null>(null);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!("serviceWorker" in navigator)) return;
     if (process.env.NODE_ENV !== "production") return;
-    // Ne jamais enregistrer sur localhost / IP locale : un build de prod lancé
-    // localement laisserait un SW actif sur le port 3000 qui interférerait avec
-    // `next dev` (redirections en boucle, recompilations, fuite mémoire).
+    // Jamais sur localhost / IP locale : un build de prod lancé localement laisserait
+    // un SW actif sur le port 3000 qui interférerait avec `next dev`.
     const host = window.location.hostname;
     if (host === "localhost" || host === "127.0.0.1" || /^(10|127|192\.168)\./.test(host) || host.endsWith(".local")) {
       return;
     }
 
-    // Quand un nouveau service worker prend le contrôle (nouveau déploiement),
-    // on recharge une seule fois pour éviter de rester sur d'anciens bundles en cache.
+    // Rechargement unique quand le nouveau SW prend le contrôle.
     let reloaded = false;
     const onControllerChange = () => {
       if (reloaded) return;
@@ -29,21 +36,84 @@ export function PwaRegister() {
     };
     navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
 
+    let updateTimer: ReturnType<typeof setInterval> | null = null;
+
     const onLoad = () => {
-      // updateViaCache: "none" → le fichier sw.js n'est jamais servi depuis le
-      // cache HTTP : le navigateur détecte tout de suite une nouvelle version.
       navigator.serviceWorker
         .register("/sw.js", { updateViaCache: "none" })
-        .then((reg) => reg.update().catch(() => {}))
+        .then((reg) => {
+          reg.update().catch(() => {});
+
+          // Une mise à jour est déjà prête (SW en attente) ?
+          if (reg.waiting && navigator.serviceWorker.controller) {
+            setWaiting(reg.waiting);
+          }
+
+          // Nouvelle mise à jour détectée pendant la session.
+          reg.addEventListener("updatefound", () => {
+            const nw = reg.installing;
+            if (!nw) return;
+            nw.addEventListener("statechange", () => {
+              // "installed" + un contrôleur existant = c'est une MISE À JOUR (pas le 1er install).
+              if (nw.state === "installed" && navigator.serviceWorker.controller) {
+                setWaiting(nw);
+              }
+            });
+          });
+
+          // Vérifie périodiquement les nouveaux déploiements (session longue ouverte).
+          updateTimer = setInterval(() => reg.update().catch(() => {}), 15 * 60 * 1000);
+        })
         .catch(() => {
-          /* registration is best-effort */
+          /* registration best-effort */
         });
     };
     window.addEventListener("load", onLoad);
+
     return () => {
       window.removeEventListener("load", onLoad);
       navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+      if (updateTimer) clearInterval(updateTimer);
     };
   }, []);
-  return null;
+
+  function applyUpdate() {
+    if (waiting) waiting.postMessage("SKIP_WAITING");
+    // Le rechargement est déclenché par l'événement controllerchange.
+  }
+
+  if (!waiting) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[200] flex items-end justify-center p-4 sm:items-center"
+      style={{ background: "rgba(0,0,0,0.45)" }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="pwa-update-title"
+    >
+      <div className="card w-full max-w-sm p-5 animate-[fadeIn_0.15s_ease-out]">
+        <div className="flex items-start gap-3">
+          <span className="text-2xl" aria-hidden>🚀</span>
+          <div className="flex-1">
+            <h2 id="pwa-update-title" className="text-base font-semibold">
+              Mise à jour disponible
+            </h2>
+            <p className="mt-1 text-sm text-[var(--muted)]">
+              Une nouvelle version de Virtual Humans Studio est prête. Mets à jour pour profiter des
+              dernières améliorations.
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 flex justify-end gap-2">
+          <button className="btn btn-ghost" onClick={() => setWaiting(null)}>
+            Plus tard
+          </button>
+          <button className="btn btn-primary" onClick={applyUpdate}>
+            Mettre à jour
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }

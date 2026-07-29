@@ -2,7 +2,7 @@
  * Safe by design: never touches /api/* or cross-origin requests
  * (fal.ai, Supabase, OpenAI, ElevenLabs), so generation always hits the network.
  */
-const CACHE = "vh-studio-v4";
+const CACHE = "vh-studio-v5";
 const APP_SHELL = [
   "/",
   "/offline",
@@ -13,12 +13,14 @@ const APP_SHELL = [
 ];
 
 self.addEventListener("install", (event) => {
+  // On NE fait PAS skipWaiting ici : la nouvelle version reste "waiting" tant que
+  // l'utilisateur n'a pas confirmé via la mini-modale (message "SKIP_WAITING").
+  // (Au tout premier install, sans worker actif, le SW s'active de lui-même.)
   event.waitUntil(
     caches
       .open(CACHE)
       .then((c) => c.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
-      .catch(() => self.skipWaiting()),
+      .catch(() => {}),
   );
 });
 
