@@ -266,12 +266,12 @@ export default function SceneStudio() {
   useEffect(() => {
     if (format === "talking-head") {
       setDecorPrompt(
-        `Photorealistic medium close-up (chest-up) of THIS exact person looking at camera, standing in ${location}. Soft natural light, shallow depth of field so the background of ${location} is clearly visible but gently blurred. Single person only, no second person, no clone. High detail face.`,
+        `Photorealistic medium close-up of the EXACT same person as the reference (same face, gender, age, ethnicity), looking at camera in ${location}. Soft natural light, background of ${location} visible. Single person only. Do not invent a different person.`,
       );
     } else {
-      const wear = clothingHint ? ` wearing ${clothingHint},` : ",";
+      const wear = clothingHint ? ` Wearing ${clothingHint}.` : "";
       setDecorPrompt(
-        `Photorealistic FULL BODY shot of THIS exact person${wear} standing outdoors/indoors in ${location}. The environment of ${location} fills the entire background (buildings, street, furniture, sky — NOT a white studio). She holds a smartphone, presents to camera, natural daylight, high resolution. Only ONE person in frame, no twin, no clone, no white backdrop.`,
+        `Photorealistic medium shot of the EXACT same person as the reference (same face, gender, age, ethnicity).${wear} Standing in ${location}; the environment fills the background (NOT a white studio). Holds a smartphone, presents to camera, natural daylight. Only ONE person. Do not invent a different person.`,
       );
     }
     setSceneImageUrl(null);

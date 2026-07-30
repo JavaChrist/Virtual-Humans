@@ -478,23 +478,21 @@ export default function Storyboard() {
       const clothing = outfit?.clothing ? Object.values(outfit.clothing).join(", ") : outfit?.description ?? "";
       const expr = expressionRef ? expressionList.find((e) => e.relPath === expressionRef) : undefined;
       const place = decor.trim() || "a lively city street";
-      // Prompt EN + lieu en tête : évite le fond studio blanc recopié par PuLID.
+      // Prompt EN : identité d'abord, décor ensuite. On utilise l'identité
+      // SÉLECTIONNÉE par l'utilisateur (pas un forçage silencieux).
       const prompt = [
-        `Photorealistic medium shot of THIS exact person standing in ${place}.`,
-        `The environment of ${place} fills the entire background (NOT a white studio, NOT a blank wall).`,
+        `Photorealistic portrait of the EXACT same person as the reference photo — same face, same gender, same age, same ethnicity, identical features.`,
+        `Medium shot standing in ${place}; the environment of ${place} fills the background (not a white studio).`,
         clothing ? `Wearing ${clothing}.` : "",
         expr ? `Expression: ${expressionLabel(expr)}.` : "",
-        "Looking at camera, chest-up framing, natural daylight, high detail face.",
-        "Only ONE person in frame, no twin, no clone, no white backdrop.",
+        "Looking at camera, chest-up framing, natural daylight, sharp face detail.",
+        "Only ONE person in frame. Do not invent a different person.",
       ]
         .filter(Boolean)
         .join(" ");
       const res = await apiPost<{ imageUrl: string }>("/api/generate/scene-image", {
         character: characterId,
-        // Portrait visage (pas photo tenue fond blanc) pour laisser le décor changer.
-        refPath: identityList.some((a) => a.relPath === "identity/portrait_front.png")
-          ? "identity/portrait_front.png"
-          : identityRef,
+        refPath: identityRef,
         prompt,
         imageSize,
       });
@@ -553,16 +551,14 @@ export default function Storyboard() {
       const imageSize = aspect === "16:9" ? "landscape_16_9" : aspect === "1:1" ? "square_hd" : "portrait_16_9";
       const place = decor.trim() || "a lively city street";
       const prompt = [
-        `Photorealistic medium shot of THIS exact person standing in ${place}.`,
-        `The environment of ${place} fills the entire background (NOT a white studio).`,
-        "Looking at camera, chest-up framing, natural daylight, high detail face.",
-        "Only ONE person in frame, no twin, no clone, no white backdrop.",
+        `Photorealistic portrait of the EXACT same person as the reference photo — same face, same gender, same age, same ethnicity.`,
+        `Medium shot standing in ${place}; environment fills the background (not a white studio).`,
+        "Looking at camera, chest-up framing, natural daylight, sharp face detail.",
+        "Only ONE person in frame. Do not invent a different person.",
       ].join(" ");
       const res = await apiPost<{ imageUrl: string }>("/api/generate/scene-image", {
         character: id,
-        refPath: p.identityList.includes("identity/portrait_front.png")
-          ? "identity/portrait_front.png"
-          : p.identityRef,
+        refPath: p.identityRef,
         prompt,
         imageSize,
       });

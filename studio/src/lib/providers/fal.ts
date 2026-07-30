@@ -119,22 +119,20 @@ export async function generateIdentityImage(
   imageSize = "portrait_16_9",
 ): Promise<string> {
   ensureConfig();
-  // Réglages pour CHANGER le décor (sinon PuLID recopie le fond studio blanc
-  // de la photo de référence) tout en gardant le visage :
-  // - id_weight < 1 : laisse le prompt piloter le lieu / l'arrière-plan
-  // - start_step 4 : insertion d'identité plus tard → fond plus éditable
-  // - guidance un peu plus haut : respecte mieux le lieu décrit
+  // Priorité IDENTITÉ (évite les "inventions" de visage), tout en laissant
+  // le prompt changer le décor. id_weight trop bas (0.75) + start_step 4
+  // produisait des personnes totalement différentes.
   const result = await fal.subscribe("fal-ai/flux-pulid", {
     input: {
       prompt,
       reference_image_url: referenceImageUrl,
-      id_weight: 0.75,
-      start_step: 4,
-      guidance_scale: 5.5,
+      id_weight: 0.95,
+      start_step: 1,
+      guidance_scale: 4.5,
       true_cfg: 1,
       num_inference_steps: 28,
       negative_prompt:
-        "white background, plain white backdrop, studio seamless paper, blank wall, empty background, pure white, solid color background, green screen, cutout, collage, text, watermark, logo, extra person, duplicate face, deformed hands",
+        "different person, wrong gender, face morph, identity change, lookalike, white background, plain white backdrop, studio seamless paper, blank wall, solid color background, green screen, text, watermark, logo, extra person, duplicate face, deformed hands",
       image_size: imageSize as "portrait_16_9",
     },
   });
