@@ -52,31 +52,47 @@ export function PwaRegister() {
 
     let updateTimer: ReturnType<typeof setInterval> | null = null;
 
+    const watchRegistration = (reg: ServiceWorkerRegistration) => {
+      const showIfWaiting = () => {
+        if (reg.waiting && navigator.serviceWorker.controller) {
+          setWaiting(reg.waiting);
+        }
+      };
+      showIfWaiting();
+
+      reg.addEventListener("updatefound", () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener("statechange", () => {
+          // "installed" + un contrôleur existant = MISE À JOUR (pas le 1er install).
+          if (nw.state === "installed" && navigator.serviceWorker.controller) {
+            setWaiting(nw);
+          }
+        });
+      });
+
+      // Poll + check au retour sur l'onglet (sinon on rate les déploiements).
+      const check = () => reg.update().then(showIfWaiting).catch(() => {});
+      check();
+      updateTimer = setInterval(check, 60 * 1000);
+      const onVisible = () => {
+        if (document.visibilityState === "visible") check();
+      };
+      document.addEventListener("visibilitychange", onVisible);
+      window.addEventListener("focus", check);
+
+      return () => {
+        document.removeEventListener("visibilitychange", onVisible);
+        window.removeEventListener("focus", check);
+      };
+    };
+
+    let stopWatch: (() => void) | undefined;
     const onLoad = () => {
       navigator.serviceWorker
         .register("/sw.js", { updateViaCache: "none" })
         .then((reg) => {
-          reg.update().catch(() => {});
-
-          // Une mise à jour est déjà prête (SW en attente) ?
-          if (reg.waiting && navigator.serviceWorker.controller) {
-            setWaiting(reg.waiting);
-          }
-
-          // Nouvelle mise à jour détectée pendant la session.
-          reg.addEventListener("updatefound", () => {
-            const nw = reg.installing;
-            if (!nw) return;
-            nw.addEventListener("statechange", () => {
-              // "installed" + un contrôleur existant = c'est une MISE À JOUR (pas le 1er install).
-              if (nw.state === "installed" && navigator.serviceWorker.controller) {
-                setWaiting(nw);
-              }
-            });
-          });
-
-          // Vérifie périodiquement les nouveaux déploiements (session longue ouverte).
-          updateTimer = setInterval(() => reg.update().catch(() => {}), 15 * 60 * 1000);
+          stopWatch = watchRegistration(reg);
         })
         .catch(() => {
           /* registration best-effort */
@@ -88,6 +104,7 @@ export function PwaRegister() {
       window.removeEventListener("load", onLoad);
       navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
       if (updateTimer) clearInterval(updateTimer);
+      stopWatch?.();
     };
   }, []);
 
