@@ -504,13 +504,22 @@ export default function SceneStudio() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="label">Lieu / décor</label>
-              <input className="input" list="loc-presets" value={location} onChange={(e) => setLocation(e.target.value)} />
+              <label className="label">Lieu (texte)</label>
+              <input
+                className="input"
+                list="loc-presets"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="ex. rue animée, devant le château de Rouen…"
+              />
               <datalist id="loc-presets">
                 {[...LOCATION_PRESETS, ...(outfit?.locations ?? [])].map((l) => (
                   <option key={l} value={l} />
                 ))}
               </datalist>
+              <p className="mt-1 text-xs text-[var(--muted)]">
+                Ce n&apos;est qu&apos;un texte : il alimente le prompt ci-dessous. Le fond réel se crée avec le bouton « Générer l&apos;image de décor ».
+              </p>
             </div>
             <div>
               <label className="label">Ton / personnalité</label>
@@ -553,13 +562,16 @@ export default function SceneStudio() {
           <div className="border-t border-[var(--border)] pt-4">
             <label className="label">
               {format === "talking-head"
-                ? `Décor (optionnel) — buste de ${name} dans le lieu`
-                : `Décor — obligatoire : ${name} EN PIED, seule, dans le lieu`}
+                ? `Image de décor (optionnel) — buste de ${name} dans « ${location} »`
+                : `Image de décor — obligatoire : ${name} EN PIED dans « ${location} »`}
             </label>
+            <p className="text-xs text-[var(--muted)] mb-2">
+              Étape qui crée vraiment le fond. Sans ce bouton, la vidéo part d&apos;une photo studio (fond blanc).
+            </p>
             <textarea className="input min-h-[60px]" value={decorPrompt} onChange={(e) => setDecorPrompt(e.target.value)} />
             <div className="flex items-center gap-3 mt-2">
-              <button className="btn btn-ghost" disabled={!decorPrompt.trim() || sceneImgBusy || !ready} onClick={makeSceneImage}>
-                {sceneImgBusy ? "Génération de l'image…" : sceneImageUrl ? "Régénérer le décor" : "1) Générer l'image de décor"}
+              <button className="btn btn-primary" disabled={!decorPrompt.trim() || sceneImgBusy || !ready} onClick={makeSceneImage}>
+                {sceneImgBusy ? "Génération de l'image…" : sceneImageUrl ? "Régénérer l'image de décor" : "1) Générer l'image de décor"}
               </button>
               {sceneImageUrl && (
                 <>
