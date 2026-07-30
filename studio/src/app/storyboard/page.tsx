@@ -367,7 +367,9 @@ export default function Storyboard() {
   // ne pas saturer le quota localStorage — sinon tout le brouillon (dont les vidéos) était perdu.
   const shotsKey = dkey("shots");
   const [shots, setShotsRaw] = useState<Shot[]>([]);
+  const shotsResumeDone = useRef(false);
   useEffect(() => {
+    shotsResumeDone.current = false;
     if (!shotsKey || typeof window === "undefined") {
       setShotsRaw([]);
       return;
@@ -375,7 +377,20 @@ export default function Storyboard() {
     const raw = localStorage.getItem(shotsKey);
     if (raw) {
       try {
-        setShotsRaw(JSON.parse(raw) as Shot[]);
+        const parsed = JSON.parse(raw) as Shot[];
+        // Nettoie les états "figés" (Terminé sans URL, etc.) ; les jobs encore
+        // récupérables (requestId) sont repris juste après.
+        setShotsRaw(
+          parsed.map((s) => {
+            let status = s.status;
+            let syncStatus = s.syncStatus ?? null;
+            if (status === "Terminé" && !s.videoUrl) status = null;
+            if (syncStatus === "Terminé" && !s.syncedUrl) syncStatus = null;
+            if (status && !s.videoUrl && !s.error && !s.requestId) status = null;
+            if (syncStatus && !s.syncedUrl && !s.syncError && !s.syncRequestId) syncStatus = null;
+            return { ...s, status, syncStatus, voiceBusy: false };
+          }),
+        );
         return;
       } catch {
         /* JSON invalide */
@@ -389,6 +404,8 @@ export default function Storyboard() {
         const next = typeof updater === "function" ? (updater as (p: Shot[]) => Shot[])(prev) : updater;
         if (shotsKey && typeof window !== "undefined") {
           try {
+            // Persiste requestId/model pour pouvoir RÉCUPÉRER un job après refresh,
+            // mais pas les audios base64 (trop lourds).
             const light = next.map((s) => (s.audioUrl ? { ...s, audioUrl: undefined } : s));
             localStorage.setItem(shotsKey, JSON.stringify(light));
           } catch {
@@ -648,7 +665,8 @@ export default function Storyboard() {
   const startFrame = masterUrl ? null : identityRef || null;
 
   function poll(i: number, sub: { requestId: string; model: string }) {
-    update(i, { status: "En file…", requestId: sub.requestId, model: sub.model });
+    if (timers.current[i]) clearInterval(timers.current[i]);
+    update(i, { status: "En file…", requestId: sub.requestId, model: sub.model, error: null });
     timers.current[i] = setInterval(async () => {
       try {
         const r = await apiPost<{ status: string; videoUrl?: string; error?: string }>("/api/generate/status", {
@@ -663,14 +681,34 @@ export default function Storyboard() {
         }
         if (r.status === "COMPLETED") {
           clearInterval(timers.current[i]);
-          update(i, { status: r.videoUrl ? "Terminé" : "Terminé (pas d'URL)", videoUrl: r.videoUrl ?? null });
+          if (r.videoUrl) {
+            update(i, { status: "Terminé", videoUrl: r.videoUrl });
+          } else {
+            update(i, { status: null, error: "Job terminé mais sans URL vidéo — relance le plan." });
+          }
         }
       } catch (e) {
-        clearInterval(timers.current[i]);
-        update(i, { status: null, error: e instanceof Error ? e.message : "Erreur" });
+        // Erreur réseau ponctuelle : on continue de poller (ne bloque pas le plan).
+        update(i, { status: `En file… (${e instanceof Error ? e.message : "retry"})` });
       }
     }, 4000);
   }
+
+  // Après rechargement : reprend le polling des jobs fal encore en cours (évite
+  // les plans coincés en IN_PROGRESS avec bouton grisé et vidéo "disparue").
+  useEffect(() => {
+    if (!shots.length || shotsResumeDone.current) return;
+    shotsResumeDone.current = true;
+    shots.forEach((s, i) => {
+      if (s.requestId && s.model && !s.videoUrl && !s.error) {
+        poll(i, { requestId: s.requestId, model: s.model });
+      }
+      if (s.syncRequestId && s.syncModel && !s.syncedUrl && !s.syncError) {
+        pollSync(i, { requestId: s.syncRequestId, model: s.syncModel });
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shots]);
 
   async function generateCarousel(i: number) {
     const shot = shots[i];
@@ -1440,30 +1478,55 @@ export default function Storyboard() {
                   </a>
                 )}
               </div>
-              {shot.kind === "carousel" ? (
-                <button
-                  className="btn btn-primary"
-                  disabled={!ready || !shot.productId || (!!shot.status && !shot.videoUrl && !shot.error)}
-                  onClick={() => generateShot(i)}
-                >
-                  Générer le carrousel
-                </button>
-              ) : (
-                <button
-                  className="btn btn-primary"
-                  disabled={!shot.prompt || !ready || !shotReady(shot) || (!!shot.status && !shot.videoUrl && !shot.error)}
-                  onClick={() => generateShot(i)}
-                  title={
-                    !shotReady(shot)
-                      ? "Génère d'abord la référence de ce présentateur"
-                      : shot.role === "guest"
-                        ? "Passant : text→vidéo (sans identité SDK)"
-                        : ""
-                  }
-                >
-                  {shot.role === "guest" ? "Générer le passant" : "Générer ce plan"}
-                </button>
-              )}
+              {(() => {
+                const canRecover = Boolean(shot.requestId && shot.model && !shot.videoUrl);
+                const busy = Boolean(shot.status && !shot.videoUrl && !shot.error);
+                return (
+                  <>
+                    {shot.kind === "carousel" ? (
+                      <button
+                        className="btn btn-primary"
+                        disabled={!ready || !shot.productId || (busy && !canRecover)}
+                        onClick={() => (canRecover ? poll(i, { requestId: shot.requestId!, model: shot.model! }) : generateShot(i))}
+                      >
+                        {canRecover ? "Récupérer le carrousel" : "Générer le carrousel"}
+                      </button>
+                    ) : (
+                      <button
+                        className="btn btn-primary"
+                        disabled={!shot.prompt || !ready || !shotReady(shot) || (busy && !canRecover)}
+                        onClick={() => (canRecover ? poll(i, { requestId: shot.requestId!, model: shot.model! }) : generateShot(i))}
+                        title={
+                          !shotReady(shot)
+                            ? "Génère d'abord la référence de ce présentateur"
+                            : canRecover
+                              ? "Reprend le suivi du job fal — sans nouveau paiement si le job existe encore"
+                              : shot.role === "guest"
+                                ? "Passant : text→vidéo (sans identité SDK)"
+                                : ""
+                        }
+                      >
+                        {canRecover
+                          ? "Récupérer ce plan"
+                          : shot.role === "guest"
+                            ? "Générer le passant"
+                            : "Générer ce plan"}
+                      </button>
+                    )}
+                    {canRecover && (
+                      <button
+                        className="btn btn-ghost text-xs"
+                        onClick={() =>
+                          update(i, { status: null, requestId: undefined, model: undefined, error: null })
+                        }
+                        title="Abandonne ce job et permet de relancer une nouvelle génération (nouveau coût)"
+                      >
+                        Abandonner &amp; relancer
+                      </button>
+                    )}
+                  </>
+                );
+              })()}
             </div>
             {shot.videoUrl && !shot.syncedUrl && (
               <video src={shot.videoUrl} controls className="w-full rounded-lg border border-[var(--border)] mt-3 max-h-64" />
