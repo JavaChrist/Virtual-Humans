@@ -65,6 +65,8 @@ interface Shot {
   syncRequestId?: string;
   syncModel?: string;
   silent?: boolean; // plan volontairement muet (ambiance / duo) : exclu de l'alerte "sans voix"
+  // Micro-trottoir : "guest" = passant généré sans identité SDK (text→vidéo).
+  role?: "host" | "guest";
 }
 
 interface Product {
@@ -133,15 +135,60 @@ const TALKSHOW_SHOTS: PresetShot[] = [
 const PRESETS: Preset[] = [
   {
     id: "micro-trottoir",
-    label: "Micro-trottoir (rue)",
-    decor: "rue animée",
+    label: "2. Micro-trottoir (présentateur + passant)",
+    decor: "rue animée en ville, jour, lumière naturelle",
+    note:
+      "Champ / contre-champ fiable : plans PRÉSENTATEUR (identité verrouillée + lip-sync) alternés avec plans PASSANT (générés sans identité SDK, text→vidéo). Un seul visage par plan. Génère d'abord le personnage de référence dans le décor, puis chaque plan.",
     shots: [
-      { title: "1. Accroche caméra", prompt: `Regarde la caméra et parle avec un sourire, très léger hochement de tête. ${MOTION} ${CONSISTENCY}`, seconds: 5 },
-      { title: "2. Question micro-trottoir", prompt: `Tient un micro près du visage, attitude enthousiaste, léger mouvement des lèvres. ${MOTION} ${CONSISTENCY}`, seconds: 5 },
-      { title: "3. Écoute / réaction", prompt: `Hoche la tête en écoutant, sourit, expression engageante. ${MOTION} ${CONSISTENCY}`, seconds: 5 },
-      { title: "4. Argument", prompt: `Explique face caméra, gestes discrets des mains près du buste. ${MOTION} ${CONSISTENCY}`, seconds: 5 },
-      { title: "5. Punchline", prompt: `Sourire complice, léger clin d'œil, petit mouvement de tête. ${MOTION} ${CONSISTENCY}`, seconds: 5 },
-      { title: "6. CTA", prompt: `Pouce levé près du buste, sourire chaleureux, regard caméra. ${MOTION} ${CONSISTENCY}`, seconds: 5 },
+      {
+        title: "1. Accroche — présentateur",
+        role: "host",
+        speakerSlot: 0,
+        prompt: `Cadrage buste, regarde la caméra et parle avec un sourire, très léger hochement de tête. ${MOTION} ${CONSISTENCY}`,
+        seconds: 5,
+        line: "Salut ! Aujourd'hui je suis dans la rue pour vous faire découvrir [produit].",
+      },
+      {
+        title: "2. Question — présentateur",
+        role: "host",
+        speakerSlot: 0,
+        prompt: `Cadrage buste, tient un micro près du visage, attitude enthousiaste, parle face caméra. ${MOTION} ${CONSISTENCY}`,
+        seconds: 5,
+        line: "Excusez-moi, vous connaissez [produit] ?",
+      },
+      {
+        title: "3. Réponse — passant",
+        role: "guest",
+        prompt:
+          "Street interview: a single random passerby (not a celebrity), medium close-up, looking slightly off-camera as if answering an interviewer on a busy city street, natural daylight, photorealistic. Only one person in frame. Subtle natural motion, talking, blinking. No text, no logos.",
+        seconds: 5,
+        line: "Ah oui, j'en ai entendu parler, ça a l'air pratique !",
+        silent: false,
+      },
+      {
+        title: "4. Argument — présentateur",
+        role: "host",
+        speakerSlot: 0,
+        prompt: `Cadrage buste, explique face caméra, gestes discrets des mains près du buste. ${MOTION} ${CONSISTENCY}`,
+        seconds: 5,
+        line: "Exactement — [produit] te permet de… en quelques secondes.",
+      },
+      {
+        title: "5. Réaction — passant",
+        role: "guest",
+        prompt:
+          "Street interview: a different single passerby, medium close-up, nodding and smiling while answering, busy city street background, natural daylight, photorealistic. Only one person in frame. Subtle motion. No text, no logos.",
+        seconds: 5,
+        line: "Carrément, je vais essayer !",
+      },
+      {
+        title: "6. Appel à l'action — présentateur",
+        role: "host",
+        speakerSlot: 0,
+        prompt: `Cadrage buste, pouce levé près du buste, sourire chaleureux, regard caméra. ${MOTION} ${CONSISTENCY}`,
+        seconds: 5,
+        line: "Le lien est en description — teste [produit] dès maintenant. À bientôt !",
+      },
     ],
   },
   {
@@ -611,10 +658,16 @@ export default function Storyboard() {
 
   function shotReady(shot: Shot): boolean {
     if (shot.kind === "carousel") return Boolean(shot.productId);
+    // Passant (micro-trottoir) : text→vidéo, pas besoin d'image d'identité.
+    if (shot.role === "guest") return true;
     if (!needsStartImage) return true;
     const ref = speakerRef(shot);
     return Boolean(ref.imageUrl || (ref.assetPaths && ref.assetPaths.length));
   }
+
+  const guestModelId =
+    models.find((m) => m.id === "fal-ai/kling-video/v2/master/text-to-video")?.id ??
+    models.find((m) => m.mode === "text-to-video")?.id;
 
   async function generateShot(i: number) {
     const shot = shots[i];
@@ -623,6 +676,22 @@ export default function Storyboard() {
     update(i, { status: "Envoi…", videoUrl: null, syncedUrl: null, error: null });
     if (timers.current[i]) clearInterval(timers.current[i]);
     try {
+      // Passant : text→vidéo (pas d'identité SDK → pas de clone du présentateur).
+      if (shot.role === "guest") {
+        if (!guestModelId) {
+          update(i, { status: null, error: "Aucun modèle text→vidéo disponible pour le passant" });
+          return;
+        }
+        const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/video", {
+          model: guestModelId,
+          prompt: shot.prompt,
+          seconds: shot.seconds,
+          aspectRatio: aspect,
+        });
+        refreshBudget();
+        poll(i, sub);
+        return;
+      }
       const ref = speakerRef(shot);
       const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/video", {
         model: modelId,
@@ -651,10 +720,14 @@ export default function Storyboard() {
     const shot = shots[i];
     const line = (shot.line ?? "").trim();
     if (!line) return update(i, { voiceError: "Écris d'abord la réplique de ce plan" });
-    const speaker = shot.speakerId ?? characterId;
+    // Passant : voix générique (pas celle du présentateur SDK).
+    const speaker = shot.role === "guest" ? undefined : (shot.speakerId ?? characterId);
     update(i, { voiceBusy: true, voiceError: null });
     try {
-      const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", { text: line, character: speaker });
+      const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", {
+        text: line,
+        ...(speaker ? { character: speaker } : {}),
+      });
       update(i, { audioUrl: res.dataUrl, voiceBusy: false });
       refreshBudget();
     } catch (e) {
@@ -798,7 +871,7 @@ export default function Storyboard() {
     <div className="max-w-6xl">
       <PageHeader
         title="Storyboard 60 s"
-        subtitle="Définis le personnage une fois, découpe ta vidéo en plans, génère-les, puis assemble automatiquement"
+        subtitle="Micro-trottoir (présentateur + passant), plateau produit, multi-plans. Identité une fois, puis voix + lip-sync par plan, puis assemblage."
       />
 
       {!ready && (
@@ -1110,13 +1183,31 @@ export default function Storyboard() {
       <div className="space-y-4">
         {shots.map((shot, i) => (
           <div key={i} className="card p-5">
-            <div className="flex items-center gap-3 mb-3">
+            <div className="flex flex-wrap items-center gap-3 mb-3">
               <input
-                className="input flex-1"
+                className="input flex-1 min-w-[160px]"
                 value={shot.title}
                 onChange={(e) => update(i, { title: e.target.value })}
               />
-              {shot.kind !== "carousel" && cast.length > 1 && (
+              {shot.kind !== "carousel" && (
+                <select
+                  className="select w-44"
+                  value={shot.role === "guest" ? "guest" : "host"}
+                  onChange={(e) => {
+                    const role = e.target.value === "guest" ? "guest" : "host";
+                    update(i, {
+                      role,
+                      // Passant : plus de speaker SDK (voix générique).
+                      ...(role === "guest" ? { speakerId: undefined } : {}),
+                    });
+                  }}
+                  title="Présentateur = identité SDK. Passant = text→vidéo sans clone."
+                >
+                  <option value="host">🎤 Présentateur</option>
+                  <option value="guest">🚶 Passant</option>
+                </select>
+              )}
+              {shot.kind !== "carousel" && shot.role !== "guest" && cast.length > 1 && (
                 <select
                   className="select w-40"
                   value={shot.speakerId ?? characterId}
@@ -1141,6 +1232,11 @@ export default function Storyboard() {
               )}
               <button className="btn btn-ghost" onClick={() => remove(i)}>✕</button>
             </div>
+            {shot.role === "guest" && (
+              <p className="text-xs text-[var(--muted)] mb-2">
+                Plan passant : généré en text→vidéo (visage aléatoire, 1 personne). Pas besoin de référence d&apos;identité.
+              </p>
+            )}
             {shot.kind === "carousel" ? (
               <div className="rounded-lg border border-dashed border-[var(--border)] p-3 space-y-3">
                 <p className="text-xs text-[var(--muted)]">
@@ -1224,9 +1320,15 @@ export default function Storyboard() {
                   className="btn btn-primary"
                   disabled={!shot.prompt || !ready || !shotReady(shot) || (!!shot.status && !shot.videoUrl && !shot.error)}
                   onClick={() => generateShot(i)}
-                  title={!shotReady(shot) ? "Génère d'abord la référence de ce présentateur" : ""}
+                  title={
+                    !shotReady(shot)
+                      ? "Génère d'abord la référence de ce présentateur"
+                      : shot.role === "guest"
+                        ? "Passant : text→vidéo (sans identité SDK)"
+                        : ""
+                  }
                 >
-                  Générer ce plan
+                  {shot.role === "guest" ? "Générer le passant" : "Générer ce plan"}
                 </button>
               )}
             </div>
@@ -1318,7 +1420,8 @@ export default function Storyboard() {
               <div className="mt-3 rounded-lg border border-dashed border-[var(--border)] p-3 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs uppercase tracking-wide text-[var(--muted)]">
-                    🎙️ Voix &amp; lip-sync — {nameOf(shot.speakerId ?? characterId)}
+                    🎙️ Voix &amp; lip-sync —{" "}
+                    {shot.role === "guest" ? "passant (voix générique)" : nameOf(shot.speakerId ?? characterId)}
                   </span>
                   {shot.syncedUrl && <span className="badge text-[var(--success)]">plan sonorisé ✓</span>}
                 </div>
@@ -1326,7 +1429,11 @@ export default function Storyboard() {
                   className="input min-h-[56px]"
                   value={shot.line ?? ""}
                   onChange={(e) => update(i, { line: e.target.value })}
-                  placeholder={`Réplique dite par ${nameOf(shot.speakerId ?? characterId)} dans ce plan…`}
+                  placeholder={
+                    shot.role === "guest"
+                      ? "Réplique dite par le passant dans ce plan…"
+                      : `Réplique dite par ${nameOf(shot.speakerId ?? characterId)} dans ce plan…`
+                  }
                 />
                 <div className="flex flex-wrap items-center gap-2">
                   <button

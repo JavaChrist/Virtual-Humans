@@ -19,6 +19,79 @@ function fill(text: string, values: Record<string, string>): string {
   );
 }
 
+/** Libellés FR des variables de templates (Hook, Duration, CTA…). */
+const VAR_LABELS_FR: Record<string, string> = {
+  character: "Personnage",
+  hook: "Accroche",
+  duration: "Durée",
+  cta: "Appel à l'action",
+  topic: "Sujet",
+  mood: "Ambiance",
+  message: "Message",
+  location: "Lieu",
+  question: "Question",
+  outfit: "Tenue",
+  tone: "Ton",
+  expression: "Expression",
+  background: "Arrière-plan",
+  product: "Produit",
+  brand: "Marque",
+  audience: "Audience",
+  offer: "Offre",
+  objective: "Objectif",
+  channels: "Canaux",
+  benefits: "Bénéfices",
+  value: "Valeur",
+  title: "Titre",
+  title_text: "Texte du titre",
+  outline: "Plan",
+  setting: "Cadre",
+  questions: "Questions",
+  environment: "Environnement",
+  theme: "Thème",
+  items: "Éléments",
+  insight: "Insight",
+  angle: "Angle",
+  points: "Points",
+  headline: "Titre d'accroche",
+  event: "Événement",
+  context: "Contexte",
+  availability: "Disponibilité",
+  client: "Client",
+  previous: "Échange précédent",
+  objection: "Objection",
+  need: "Besoin",
+  solution: "Solution",
+  terms: "Conditions",
+  pricing: "Tarifs",
+  validity: "Validité",
+  system: "Système",
+  components: "Composants",
+  decisions: "Décisions",
+  project: "Projet",
+  purpose: "Objectif",
+  usage: "Utilisation",
+  subject: "Sujet",
+  requirements: "Exigences",
+  constraints: "Contraintes",
+  goal: "But",
+  prerequisites: "Prérequis",
+  steps: "Étapes",
+};
+
+const CATEGORY_LABELS_FR: Record<string, string> = {
+  video: "Vidéo",
+  image: "Image",
+  social: "Réseaux sociaux",
+  marketing: "Marketing",
+  sales: "Ventes",
+  documentation: "Documentation",
+};
+
+function varLabel(v: string): string {
+  return VAR_LABELS_FR[v] ?? v.replace(/_/g, " ");
+}
+
 const IDENTITY = (name: string, lang: Lang) =>
   lang === "fr"
     ? `Préserver l'identité exacte de ${name} : visage, coiffure, proportions, teint, tenue et accessoires. Mouvement humain naturel, aucune déformation.`
@@ -101,18 +174,18 @@ export function PromptComposer({ categories, characterName, value, onChange }: P
           >
             {categories.map((c) => (
               <option key={c} value={c}>
-                {c}
+                {CATEGORY_LABELS_FR[c] ?? c}
               </option>
             ))}
           </select>
         </div>
         <div>
-          <label className="label">Template</label>
+          <label className="label">Modèle de prompt</label>
           <select className="select" value={templateName} onChange={(e) => setTemplateName(e.target.value)}>
             <option value="">— choisir —</option>
             {templates.map((t) => (
               <option key={t.name} value={t.name}>
-                {t.name}
+                {t.name.replace(/_/g, " ")}
               </option>
             ))}
           </select>
@@ -158,10 +231,10 @@ export function PromptComposer({ categories, characterName, value, onChange }: P
         <div className="grid grid-cols-2 gap-3">
           {block.variables.map((v) => (
             <div key={v}>
-              <label className="label">{v}</label>
+              <label className="label">{varLabel(v)}</label>
               <input
                 className="input"
-                placeholder={`{{${v}}}`}
+                placeholder={varLabel(v)}
                 value={vars[v] ?? ""}
                 onChange={(e) => setVars((s) => ({ ...s, [v]: e.target.value }))}
               />

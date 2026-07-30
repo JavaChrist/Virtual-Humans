@@ -48,6 +48,25 @@ interface Product {
 
 const LOCATION_PRESETS = ["rue animée", "studio épuré", "café branché", "bureau moderne", "parc urbain", "centre commercial"];
 
+/** 3 parcours fiables — ordre demandé : plein pied → (micro-trottoir = Storyboard) → talking-head. */
+type SceneFormat = "plein-pied" | "talking-head";
+
+const FORMAT_META: Record<
+  SceneFormat,
+  { label: string; blurb: string; decorRequired: boolean }
+> = {
+  "plein-pied": {
+    label: "1. Présentation plein pied",
+    blurb: "Une seule personne en pied dans un décor, présente ton app. Décor obligatoire (évite les clones).",
+    decorRequired: true,
+  },
+  "talking-head": {
+    label: "3. Gros plan qui parle",
+    blurb: "Visage / buste face caméra — idéal pour la voix + lip-sync. Le micro-trottoir (2) est dans le Storyboard.",
+    decorRequired: false,
+  },
+};
+
 export default function SceneStudio() {
   const { characterId, characterName } = useCharacter();
   const name = characterName || "Mei";
@@ -60,13 +79,14 @@ export default function SceneStudio() {
 
   // Brouillon auto (persistant par personnage) pour ne rien perdre en changeant de page.
   const dkey = (field: string) => (characterId ? `vh:draft:scene:${characterId}:${field}` : null);
+  const [format, setFormat] = usePersistentState<SceneFormat>(dkey("format"), "plein-pied");
   const [outfitId, setOutfitId] = useState("");
   const [location, setLocation] = usePersistentState(dkey("location"), "rue animée");
   const [tone, setTone] = useState("");
   const [productId, setProductId] = useState("");
   const [pitch, setPitch] = usePersistentState(dkey("pitch"), "");
   const [script, setScript] = usePersistentState(dkey("script"), "");
-  const [seconds, setSeconds] = useState(8);
+  const [seconds, setSeconds] = useState(5);
   const [aspect] = useState("9:16");
 
   const [estimate, setEstimate] = useState<number | null>(null);
@@ -124,7 +144,7 @@ export default function SceneStudio() {
       const res = await apiPost<{ scene: SavedScene }>("/api/scenes", {
         name: nm,
         character: characterId,
-        config: { outfitId, location, tone, productId, pitch, script, seconds },
+        config: { outfitId, location, tone, productId, pitch, script, seconds, format },
       });
       setScenes((prev) => [res.scene, ...prev]);
       setSceneName("");
@@ -137,6 +157,7 @@ export default function SceneStudio() {
 
   function loadScene(s: SavedScene) {
     const c = s.config ?? {};
+    if (c.format === "plein-pied" || c.format === "talking-head") setFormat(c.format);
     if (typeof c.outfitId === "string") setOutfitId(c.outfitId);
     if (typeof c.location === "string") setLocation(c.location);
     if (typeof c.tone === "string") setTone(c.tone);
@@ -191,35 +212,68 @@ export default function SceneStudio() {
   const prompt = useMemo(() => {
     const appName = product?.name ?? "l'application";
     const appPitch = pitch || product?.pitch || "";
+    const antiClone =
+      "UNE SEULE personne dans le cadre. Pas de deuxième personne, pas de clone, pas de jumeau. Arrière-plan stable, aucun changement de vêtements, aucun texte ni logo.";
+    const identity = `Exactement la même personne et la même identité que sur l'image, sans aucune variation.`;
+    if (format === "talking-head") {
+      return [
+        `${name} parle face caméra, cadrage buste (visage et épaules bien visibles).`,
+        identity,
+        tone ? `Ton ${tone.toLowerCase()}.` : "",
+        appPitch ? `Elle présente ${appName} : ${appPitch}.` : `Elle présente ${appName}.`,
+        `Mouvement subtil : elle parle, cligne des yeux, légers mouvements de tête, lumière stable.`,
+        antiClone,
+      ]
+        .filter(Boolean)
+        .join(" ");
+    }
+    // Parcours 1 — plein pied + décor
     return [
-      `${name} présente ${appName} face caméra.`,
-      `Exactement la même personne, la même tenue et la même identité que sur l'image, sans aucune variation.`,
+      `${name}, présentatrice en pied dans ${location}, présente ${appName} face caméra.`,
+      identity,
       tone ? `Ton ${tone.toLowerCase()}.` : "",
       appPitch ? `Message : ${appPitch}.` : "",
-      `Mouvement subtil et naturel : léger geste, tient un smartphone, regard caméra, lumière stable.`,
-      `Une seule personne, arrière-plan stable, aucun changement de vêtements, aucun texte ni logo incrusté.`,
+      `Mouvement subtil et naturel : elle parle, léger geste, tient un smartphone, regard caméra, lumière stable.`,
+      antiClone,
     ]
       .filter(Boolean)
       .join(" ");
-  }, [name, product, pitch, tone]);
+  }, [name, product, pitch, tone, location, format]);
 
-  // Une seule image de départ : la photo de la tenue choisie (le personnage EST
-  // déjà sur cette image → identité verrouillée sans "référence d'identité").
-  const assetPaths = useMemo(() => (outfit ? [outfit.lookPath] : []), [outfit]);
+  // Frame de secours (si pas de décor) : portrait pour talking-head, tenue pour plein pied.
+  const assetPaths = useMemo(() => {
+    if (format === "talking-head") return ["identity/portrait_front.png"];
+    return outfit ? [outfit.lookPath] : ["identity/portrait_front.png"];
+  }, [outfit, format]);
+
+  // Réf PuLID : tenue (meilleure cohérence vestimentaire) sinon portrait.
+  const decorRefPath = outfit?.lookPath || "identity/portrait_front.png";
+  const safeFormat: SceneFormat = format === "talking-head" ? "talking-head" : "plein-pied";
+  const formatMeta = FORMAT_META[safeFormat];
+  const canGenerate =
+    !!outfit &&
+    !!ready &&
+    !(formatMeta.decorRequired && !sceneImageUrl);
 
   // Ajuste la durée aux valeurs acceptées par le modèle courant.
   useEffect(() => {
     if (model && !model.seconds.includes(seconds)) setSeconds(model.defaultSeconds);
   }, [model, seconds]);
 
-  // Prompt décor par défaut (éditable) recalculé quand le lieu change.
+  // Prompt décor par défaut (éditable) recalculé quand le lieu / format change.
   const [decorPrompt, setDecorPrompt] = useState("");
   useEffect(() => {
-    setDecorPrompt(
-      `Cette personne, dans ${location}, tient un micro et présente face caméra, ambiance micro-trottoir, lumière naturelle, photoréaliste, cadrage taille.`,
-    );
-    setSceneImageUrl(null); // le décor doit être régénéré si le lieu change
-  }, [location]);
+    if (format === "talking-head") {
+      setDecorPrompt(
+        `Portrait rapproché (cadrage buste) d'UNE SEULE personne, la même que sur la photo, regard caméra, arrière-plan ${location} en flou doux, lumière naturelle douce, photoréaliste. Pas de deuxième personne, pas de clone.`,
+      );
+    } else {
+      setDecorPrompt(
+        `UNE SEULE personne, la même que sur la photo, EN PIED (plan large, corps entier visible) dans ${location}, elle présente un produit face caméra et tient un smartphone, lumière naturelle, photoréaliste, haute résolution. Une seule personne, pas de deuxième personne, pas de clone, pas de jumeau.`,
+      );
+    }
+    setSceneImageUrl(null);
+  }, [location, format]);
 
   async function makeSceneImage() {
     if (!decorPrompt.trim()) return;
@@ -229,7 +283,7 @@ export default function SceneStudio() {
       const imageSize = aspect === "16:9" ? "landscape_16_9" : aspect === "1:1" ? "square_hd" : "portrait_16_9";
       const res = await apiPost<{ imageUrl: string }>("/api/generate/scene-image", {
         character: characterId,
-        refPath: "identity/portrait_front.png",
+        refPath: format === "talking-head" ? "identity/portrait_front.png" : decorRefPath,
         prompt: decorPrompt,
         imageSize,
       });
@@ -261,6 +315,10 @@ export default function SceneStudio() {
 
   async function generate() {
     if (!model) return;
+    if (formatMeta.decorRequired && !sceneImageUrl) {
+      setError("Parcours plein pied : génère d'abord l'image de décor (une seule personne en pied dans le lieu).");
+      return;
+    }
     setError(null);
     setVideoUrl(null);
     setStatus("Envoi…");
@@ -329,7 +387,7 @@ export default function SceneStudio() {
     <div className="max-w-6xl">
       <PageHeader
         title="Studio Scène"
-        subtitle={`Compose une scène pub : ${name} présente ton app (tenue + lieu + ton + script). Identité verrouillée par la photo de tenue (1re frame). Vidéo muette → ajoute la voix via Lip-sync.`}
+        subtitle={`${name} présente ton app. Choisis un parcours fiable, génère le plan, puis ajoute la voix via Lip-sync. Le micro-trottoir (présentateur + passant) est dans le Storyboard.`}
       />
 
       {!ready && (
@@ -337,6 +395,38 @@ export default function SceneStudio() {
           <p className="text-sm text-[var(--danger)]">Clé <code>FAL_KEY</code> manquante (voir Réglages).</p>
         </div>
       )}
+
+      {/* Choix du parcours */}
+      <div className="card p-5 mb-6 space-y-3">
+        <div className="label">Parcours</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {(Object.keys(FORMAT_META) as SceneFormat[]).map((id) => {
+            const m = FORMAT_META[id];
+            const active = format === id;
+            return (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setFormat(id)}
+                className={`text-left rounded-xl border p-4 transition-colors ${
+                  active
+                    ? "border-[var(--accent)] bg-[var(--accent)]/10"
+                    : "border-[var(--border)] hover:border-[var(--muted)]"
+                }`}
+              >
+                <div className="font-semibold text-sm">{m.label}</div>
+                <p className="text-xs text-[var(--muted)] mt-1">{m.blurb}</p>
+              </button>
+            );
+          })}
+        </div>
+        <p className="text-xs text-[var(--muted)]">
+          <Link href="/storyboard" className="text-[var(--accent)] underline">
+            2. Micro-trottoir (présentateur + passant)
+          </Link>{" "}
+          — champ / contre-champ dans le Storyboard (style « Micro-trottoir »).
+        </p>
+      </div>
 
       {/* Bibliothèque de scènes enregistrées (enregistrer / charger / supprimer) */}
       <div className="card p-5 mb-6">
@@ -451,21 +541,29 @@ export default function SceneStudio() {
           </div>
 
           <div>
-            <label className="label">Pitch de la scène</label>
-            <input className="input" value={pitch} onChange={(e) => setPitch(e.target.value)} placeholder={product?.pitch || "Ce que Mei doit mettre en avant…"} />
+            <label className="label">Argumentaire de la scène</label>
+            <input className="input" value={pitch} onChange={(e) => setPitch(e.target.value)} placeholder={product?.pitch || `Ce que ${name} doit mettre en avant…`} />
           </div>
 
           <div className="border-t border-[var(--border)] pt-4">
-            <label className="label">Décor (optionnel) — place {name} dans le lieu, identité préservée</label>
+            <label className="label">
+              {format === "talking-head"
+                ? `Décor (optionnel) — buste de ${name} dans le lieu`
+                : `Décor — obligatoire : ${name} EN PIED, seule, dans le lieu`}
+            </label>
             <textarea className="input min-h-[60px]" value={decorPrompt} onChange={(e) => setDecorPrompt(e.target.value)} />
             <div className="flex items-center gap-3 mt-2">
               <button className="btn btn-ghost" disabled={!decorPrompt.trim() || sceneImgBusy || !ready} onClick={makeSceneImage}>
-                {sceneImgBusy ? "Génération de l'image…" : sceneImageUrl ? "Régénérer le décor" : "Générer l'image de décor"}
+                {sceneImgBusy ? "Génération de l'image…" : sceneImageUrl ? "Régénérer le décor" : "1) Générer l'image de décor"}
               </button>
               {sceneImageUrl && (
                 <>
                   <span className="badge text-[var(--success)]">✓ décor prêt</span>
-                  <button className="btn btn-ghost text-xs" onClick={() => setSceneImageUrl(null)}>utiliser la tenue à la place</button>
+                  {!formatMeta.decorRequired && (
+                    <button className="btn btn-ghost text-xs" onClick={() => setSceneImageUrl(null)}>
+                      utiliser le portrait SDK
+                    </button>
+                  )}
                 </>
               )}
             </div>
@@ -477,7 +575,9 @@ export default function SceneStudio() {
               </div>
             )}
             <p className="text-xs text-[var(--muted)] mt-2">
-              Sans décor, l&apos;animation part de la photo de tenue (fond studio). Avec décor, {name} apparaît dans le lieu choisi (~2 min, PuLID Flux).
+              {format === "talking-head"
+                ? `Sans décor, on part du portrait SDK (visage assez grand pour le lip-sync).`
+                : `Étape obligatoire : vérifie qu'il n'y a qu'UNE ${name} en pied sur l'image avant d'animer (~2 min, PuLID Flux).`}
             </p>
           </div>
 
@@ -513,8 +613,23 @@ export default function SceneStudio() {
             <div className="text-sm text-[var(--muted)]">
               Coût estimé : <span className="text-[var(--foreground)] font-semibold">{usd(estimate)}</span>
             </div>
-            <button className="btn btn-primary" disabled={busy || !ready || !outfit} onClick={generate}>
-              {busy ? "En cours…" : "Générer le plan de présentation"}
+            <button
+              className="btn btn-primary"
+              disabled={busy || !canGenerate}
+              onClick={generate}
+              title={
+                formatMeta.decorRequired && !sceneImageUrl
+                  ? "Génère d'abord l'image de décor"
+                  : !outfit
+                    ? "Choisis une tenue"
+                    : ""
+              }
+            >
+              {busy
+                ? "En cours…"
+                : formatMeta.decorRequired
+                  ? "2) Animer le plan"
+                  : "Générer le plan"}
             </button>
           </div>
         </div>

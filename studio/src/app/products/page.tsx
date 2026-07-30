@@ -165,7 +165,7 @@ export default function ProductsStudio() {
               <input className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex. : BudgetZen" />
             </div>
             <div>
-              <label className="label">Pitch (1 phrase)</label>
+              <label className="label">Argumentaire (1 phrase)</label>
               <input className="input" value={pitch} onChange={(e) => setPitch(e.target.value)} placeholder="Gère ton budget en 30 secondes par jour." />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -221,7 +221,7 @@ export default function ProductsStudio() {
                   type="button"
                   className="btn btn-ghost text-xs"
                   onClick={() => startEdit(p)}
-                  title="Modifier le nom, le pitch, la couleur, le lien"
+                  title="Modifier le nom, l'argumentaire, la couleur, le lien"
                 >
                   Modifier
                 </button>

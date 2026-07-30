@@ -199,8 +199,8 @@ export default function CharacterDetailPage() {
       <Section title="Phrases (candidats)" ok source={p.source}>
         <PhraseList label="Salutations" items={p.greetings} />
         <PhraseList label="Conclusions" items={p.conclusions} />
-        <PhraseList label="CTA préférés" items={p.ctaPreferred} />
-        <PhraseList label="CTA à éviter" items={p.ctaAvoided} danger />
+        <PhraseList label="Appels à l'action préférés" items={p.ctaPreferred} />
+        <PhraseList label="Appels à l'action à éviter" items={p.ctaAvoided} danger />
       </Section>
 
       <Section title="Assets" ok={pkg.outfits.length > 0}>
