@@ -393,17 +393,25 @@ export default function Storyboard() {
       const imageSize = aspect === "16:9" ? "landscape_16_9" : aspect === "1:1" ? "square_hd" : "portrait_16_9";
       const clothing = outfit?.clothing ? Object.values(outfit.clothing).join(", ") : outfit?.description ?? "";
       const expr = expressionRef ? expressionList.find((e) => e.relPath === expressionRef) : undefined;
-      const parts = [
-        "Cette personne",
-        clothing ? `portant ${clothing}` : "",
-        expr ? `expression ${expressionLabel(expr)}` : "",
-        decor.trim() ? `dans ${decor.trim()}` : "en studio épuré",
-        "présente face caméra, plan taille (visage et buste bien cadrés, centrés), lumière naturelle, photoréaliste, une seule personne, identité et tenue inchangées",
-      ].filter(Boolean);
+      const place = decor.trim() || "a lively city street";
+      // Prompt EN + lieu en tête : évite le fond studio blanc recopié par PuLID.
+      const prompt = [
+        `Photorealistic medium shot of THIS exact person standing in ${place}.`,
+        `The environment of ${place} fills the entire background (NOT a white studio, NOT a blank wall).`,
+        clothing ? `Wearing ${clothing}.` : "",
+        expr ? `Expression: ${expressionLabel(expr)}.` : "",
+        "Looking at camera, chest-up framing, natural daylight, high detail face.",
+        "Only ONE person in frame, no twin, no clone, no white backdrop.",
+      ]
+        .filter(Boolean)
+        .join(" ");
       const res = await apiPost<{ imageUrl: string }>("/api/generate/scene-image", {
         character: characterId,
-        refPath: identityRef,
-        prompt: parts.join(", ") + ".",
+        // Portrait visage (pas photo tenue fond blanc) pour laisser le décor changer.
+        refPath: identityList.includes("identity/portrait_front.png")
+          ? "identity/portrait_front.png"
+          : identityRef,
+        prompt,
         imageSize,
       });
       setMasterUrl(res.imageUrl);
@@ -459,15 +467,19 @@ export default function Storyboard() {
     updatePartner(id, { busy: true, error: null });
     try {
       const imageSize = aspect === "16:9" ? "landscape_16_9" : aspect === "1:1" ? "square_hd" : "portrait_16_9";
-      const parts = [
-        "Cette personne",
-        decor.trim() ? `dans ${decor.trim()}` : "en studio épuré",
-        "présente face caméra, plan taille (visage et buste bien cadrés, centrés), lumière naturelle, photoréaliste, une seule personne, identité inchangée",
-      ].filter(Boolean);
+      const place = decor.trim() || "a lively city street";
+      const prompt = [
+        `Photorealistic medium shot of THIS exact person standing in ${place}.`,
+        `The environment of ${place} fills the entire background (NOT a white studio).`,
+        "Looking at camera, chest-up framing, natural daylight, high detail face.",
+        "Only ONE person in frame, no twin, no clone, no white backdrop.",
+      ].join(" ");
       const res = await apiPost<{ imageUrl: string }>("/api/generate/scene-image", {
         character: id,
-        refPath: p.identityRef,
-        prompt: parts.join(", ") + ".",
+        refPath: p.identityList.includes("identity/portrait_front.png")
+          ? "identity/portrait_front.png"
+          : p.identityRef,
+        prompt,
         imageSize,
       });
       updatePartner(id, { masterUrl: res.imageUrl, busy: false });

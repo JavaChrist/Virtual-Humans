@@ -246,8 +246,6 @@ export default function SceneStudio() {
     return outfit ? [outfit.lookPath] : ["identity/portrait_front.png"];
   }, [outfit, format]);
 
-  // Réf PuLID : tenue (meilleure cohérence vestimentaire) sinon portrait.
-  const decorRefPath = outfit?.lookPath || "identity/portrait_front.png";
   const safeFormat: SceneFormat = format === "talking-head" ? "talking-head" : "plein-pied";
   const formatMeta = FORMAT_META[safeFormat];
   const canGenerate =
@@ -260,20 +258,25 @@ export default function SceneStudio() {
     if (model && !model.seconds.includes(seconds)) setSeconds(model.defaultSeconds);
   }, [model, seconds]);
 
-  // Prompt décor par défaut (éditable) recalculé quand le lieu / format change.
+  // Prompt décor (EN) : Flux/PuLID suit beaucoup mieux l'anglais + le LIEU en tête.
+  // On décrit la tenue dans le texte (réf = portrait visage, pas la photo studio blanche).
+  const clothingHint = outfit?.clothing
+    ? Object.values(outfit.clothing).filter(Boolean).join(", ")
+    : outfit?.name ?? "";
   const [decorPrompt, setDecorPrompt] = useState("");
   useEffect(() => {
     if (format === "talking-head") {
       setDecorPrompt(
-        `Portrait rapproché (cadrage buste) d'UNE SEULE personne, la même que sur la photo, regard caméra, arrière-plan ${location} en flou doux, lumière naturelle douce, photoréaliste. Pas de deuxième personne, pas de clone.`,
+        `Photorealistic medium close-up (chest-up) of THIS exact person looking at camera, standing in ${location}. Soft natural light, shallow depth of field so the background of ${location} is clearly visible but gently blurred. Single person only, no second person, no clone. High detail face.`,
       );
     } else {
+      const wear = clothingHint ? ` wearing ${clothingHint},` : ",";
       setDecorPrompt(
-        `UNE SEULE personne, la même que sur la photo, EN PIED (plan large, corps entier visible) dans ${location}, elle présente un produit face caméra et tient un smartphone, lumière naturelle, photoréaliste, haute résolution. Une seule personne, pas de deuxième personne, pas de clone, pas de jumeau.`,
+        `Photorealistic FULL BODY shot of THIS exact person${wear} standing outdoors/indoors in ${location}. The environment of ${location} fills the entire background (buildings, street, furniture, sky — NOT a white studio). She holds a smartphone, presents to camera, natural daylight, high resolution. Only ONE person in frame, no twin, no clone, no white backdrop.`,
       );
     }
     setSceneImageUrl(null);
-  }, [location, format]);
+  }, [location, format, clothingHint]);
 
   async function makeSceneImage() {
     if (!decorPrompt.trim()) return;
@@ -281,9 +284,11 @@ export default function SceneStudio() {
     setError(null);
     try {
       const imageSize = aspect === "16:9" ? "landscape_16_9" : aspect === "1:1" ? "square_hd" : "portrait_16_9";
+      // Toujours le portrait visage en réf PuLID (pas la photo de tenue fond blanc),
+      // sinon le modèle recolle le studio blanc. La tenue est dans le prompt.
       const res = await apiPost<{ imageUrl: string }>("/api/generate/scene-image", {
         character: characterId,
-        refPath: format === "talking-head" ? "identity/portrait_front.png" : decorRefPath,
+        refPath: "identity/portrait_front.png",
         prompt: decorPrompt,
         imageSize,
       });
@@ -577,7 +582,7 @@ export default function SceneStudio() {
             <p className="text-xs text-[var(--muted)] mt-2">
               {format === "talking-head"
                 ? `Sans décor, on part du portrait SDK (visage assez grand pour le lip-sync).`
-                : `Étape obligatoire : vérifie qu'il n'y a qu'UNE ${name} en pied sur l'image avant d'animer (~2 min, PuLID Flux).`}
+                : `Étape obligatoire (~2 min) : l'aperçu doit montrer ${name} DANS le lieu (pas un fond blanc). Si fond blanc → Régénérer le décor avant d'animer.`}
             </p>
           </div>
 
