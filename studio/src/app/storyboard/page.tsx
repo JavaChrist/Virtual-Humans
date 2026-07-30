@@ -408,7 +408,7 @@ export default function Storyboard() {
       const res = await apiPost<{ imageUrl: string }>("/api/generate/scene-image", {
         character: characterId,
         // Portrait visage (pas photo tenue fond blanc) pour laisser le décor changer.
-        refPath: identityList.includes("identity/portrait_front.png")
+        refPath: identityList.some((a) => a.relPath === "identity/portrait_front.png")
           ? "identity/portrait_front.png"
           : identityRef,
         prompt,
