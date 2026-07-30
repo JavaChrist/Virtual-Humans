@@ -6,12 +6,9 @@ import { useEffect, useState } from "react";
  * Enregistre le service worker (installable + offline) ET propose une mini-modale
  * "Mise à jour disponible" quand un nouveau déploiement est prêt.
  *
- * Mécanisme : le nouveau SW s'installe puis reste en "waiting" (sw.js ne fait plus
- * skipWaiting automatiquement). Dès qu'il est prêt, on affiche la modale. Au clic
- * sur « Mettre à jour », on envoie SKIP_WAITING → le SW s'active → controllerchange
- * → rechargement unique sur la nouvelle version.
- *
- * Ne s'exécute qu'en production (pas d'interférence avec le HMR de `next dev`).
+ * Important : en Next.js le useEffect tourne souvent APRÈS l'événement window "load".
+ * Il ne faut donc PAS attendre "load" sinon update() ne part jamais et l'UI reste
+ * coincée sur une vieille version en cache.
  */
 export function PwaRegister() {
   const [waiting, setWaiting] = useState<ServiceWorker | null>(null);
@@ -27,10 +24,6 @@ export function PwaRegister() {
       /^(10|127|192\.168)\./.test(host) ||
       host.endsWith(".local");
 
-    // En dev ou sur localhost : on N'ENREGISTRE PAS de SW, et surtout on NETTOIE tout
-    // SW résiduel + ses caches. Sinon un ancien SW (d'un build prod testé en local)
-    // continue de resservir d'anciennes icônes/pages en cache-first, ce qui survit
-    // au Ctrl+Shift+R et au vidage de cache classique.
     if (process.env.NODE_ENV !== "production" || isLocal) {
       navigator.serviceWorker.getRegistrations?.().then((regs) => {
         regs.forEach((r) => r.unregister());
@@ -41,7 +34,6 @@ export function PwaRegister() {
       return;
     }
 
-    // Rechargement unique quand le nouveau SW prend le contrôle.
     let reloaded = false;
     const onControllerChange = () => {
       if (reloaded) return;
@@ -51,6 +43,7 @@ export function PwaRegister() {
     navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
 
     let updateTimer: ReturnType<typeof setInterval> | null = null;
+    let stopWatch: (() => void) | undefined;
 
     const watchRegistration = (reg: ServiceWorkerRegistration) => {
       const showIfWaiting = () => {
@@ -64,14 +57,12 @@ export function PwaRegister() {
         const nw = reg.installing;
         if (!nw) return;
         nw.addEventListener("statechange", () => {
-          // "installed" + un contrôleur existant = MISE À JOUR (pas le 1er install).
           if (nw.state === "installed" && navigator.serviceWorker.controller) {
             setWaiting(nw);
           }
         });
       });
 
-      // Poll + check au retour sur l'onglet (sinon on rate les déploiements).
       const check = () => reg.update().then(showIfWaiting).catch(() => {});
       check();
       updateTimer = setInterval(check, 60 * 1000);
@@ -87,21 +78,16 @@ export function PwaRegister() {
       };
     };
 
-    let stopWatch: (() => void) | undefined;
-    const onLoad = () => {
-      navigator.serviceWorker
-        .register("/sw.js", { updateViaCache: "none" })
-        .then((reg) => {
-          stopWatch = watchRegistration(reg);
-        })
-        .catch(() => {
-          /* registration best-effort */
-        });
-    };
-    window.addEventListener("load", onLoad);
+    navigator.serviceWorker
+      .register("/sw.js", { updateViaCache: "none" })
+      .then((reg) => {
+        stopWatch = watchRegistration(reg);
+      })
+      .catch(() => {
+        /* registration best-effort */
+      });
 
     return () => {
-      window.removeEventListener("load", onLoad);
       navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
       if (updateTimer) clearInterval(updateTimer);
       stopWatch?.();
@@ -110,7 +96,6 @@ export function PwaRegister() {
 
   function applyUpdate() {
     if (waiting) waiting.postMessage("SKIP_WAITING");
-    // Le rechargement est déclenché par l'événement controllerchange.
   }
 
   if (!waiting) return null;
@@ -125,7 +110,9 @@ export function PwaRegister() {
     >
       <div className="card w-full max-w-sm p-5 animate-[fadeIn_0.15s_ease-out]">
         <div className="flex items-start gap-3">
-          <span className="text-2xl" aria-hidden>🚀</span>
+          <span className="text-2xl" aria-hidden>
+            🚀
+          </span>
           <div className="flex-1">
             <h2 id="pwa-update-title" className="text-base font-semibold">
               Mise à jour disponible

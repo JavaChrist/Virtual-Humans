@@ -2,7 +2,7 @@
  * Safe by design: never touches /api/* or cross-origin requests
  * (fal.ai, Supabase, OpenAI, ElevenLabs), so generation always hits the network.
  */
-const CACHE = "vh-studio-v10";
+const CACHE = "vh-studio-v11";
 const APP_SHELL = [
   "/",
   "/offline",
@@ -15,7 +15,6 @@ const APP_SHELL = [
 self.addEventListener("install", (event) => {
   // On NE fait PAS skipWaiting ici : la nouvelle version reste "waiting" tant que
   // l'utilisateur n'a pas confirmé via la mini-modale (message "SKIP_WAITING").
-  // (Au tout premier install, sans worker actif, le SW s'active de lui-même.)
   event.waitUntil(
     caches
       .open(CACHE)
@@ -25,6 +24,7 @@ self.addEventListener("install", (event) => {
 });
 
 self.addEventListener("activate", (event) => {
+  // Purge TOUS les anciens caches (sinon d'anciens chunks /_next restent servis).
   event.waitUntil(
     caches
       .keys()
@@ -42,21 +42,17 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
 
   const url = new URL(request.url);
-  // Only handle same-origin GETs. Leave provider calls (Supabase/fal/OpenAI) alone.
   if (url.origin !== self.location.origin) return;
-  // Never cache API routes (generation, budget, assets, products…).
   if (url.pathname.startsWith("/api/")) return;
+  // Ne jamais intercepter le SW lui-même.
+  if (url.pathname === "/sw.js") return;
 
-  // Navigations: network-first, fall back to a cached page then /offline.
+  // Navigations: network-first.
   if (request.mode === "navigate") {
     event.respondWith(
       (async () => {
         try {
           const res = await fetch(request);
-          // CRITIQUE : si le serveur a redirigé (ex. garde d'auth "/" → "/login"),
-          // fetch() suit la redirection en silence et renverrait le HTML de /login
-          // SANS changer l'URL. On renvoie donc une vraie redirection pour que le
-          // navigateur re-navigue vers l'URL finale (URL correcte + routage sain).
           if (res.redirected) return Response.redirect(res.url, 302);
           return res;
         } catch {
@@ -71,9 +67,25 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Static assets: cache-first with background fill.
+  // Bundles Next : NETWORK-FIRST (sinon l'UI reste figée sur une vieille version).
+  if (url.pathname.startsWith("/_next/")) {
+    event.respondWith(
+      (async () => {
+        try {
+          const res = await fetch(request);
+          const copy = res.clone();
+          caches.open(CACHE).then((c) => c.put(request, copy)).catch(() => {});
+          return res;
+        } catch {
+          return (await caches.match(request)) || Response.error();
+        }
+      })(),
+    );
+    return;
+  }
+
+  // Icônes / manifest : cache-first OK.
   if (
-    url.pathname.startsWith("/_next/") ||
     url.pathname.startsWith("/icons/") ||
     url.pathname === "/manifest.webmanifest" ||
     url.pathname === "/icon.svg"

@@ -11,13 +11,32 @@ import path from "node:path";
 // ne sont pas tracées automatiquement — on force donc leur inclusion.
 const isDev = process.env.NODE_ENV === "development";
 
-const nextConfig: NextConfig = isDev
-  ? {}
-  : {
-      outputFileTracingRoot: path.join(process.cwd(), ".."),
-      outputFileTracingIncludes: {
-        "/api/**": ["../characters/**"],
+const nextConfig: NextConfig = {
+  ...(isDev
+    ? {}
+    : {
+        outputFileTracingRoot: path.join(process.cwd(), ".."),
+        outputFileTracingIncludes: {
+          "/api/**": ["../characters/**"],
+        },
+      }),
+  // Le SW et le manifest ne doivent JAMAIS être mis en cache longtemps,
+  // sinon les mises à jour PWA restent invisibles.
+  async headers() {
+    return [
+      {
+        source: "/sw.js",
+        headers: [
+          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
+          { key: "Service-Worker-Allowed", value: "/" },
+        ],
       },
-    };
+      {
+        source: "/manifest.webmanifest",
+        headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }],
+      },
+    ];
+  },
+};
 
 export default nextConfig;
