@@ -114,6 +114,7 @@ type PresetShot = Omit<Shot, "status"> & { speakerSlot?: number };
 interface Preset {
   id: string;
   label: string;
+  group: "extérieurs" | "studio" | "multi";
   decor?: string;
   note?: string;
   aspect?: string; // ratio imposé par le style (ex. "16:9" plateau TV, "9:16" réseaux)
@@ -136,7 +137,8 @@ const TALKSHOW_SHOTS: PresetShot[] = [
 const PRESETS: Preset[] = [
   {
     id: "micro-trottoir",
-    label: "2. Micro-trottoir (présentateur + passant)",
+    label: "Micro-trottoir (présentateur + passant)",
+    group: "extérieurs",
     decor: "rue animée en ville, jour, lumière naturelle",
     note:
       "Champ / contre-champ fiable : plans PRÉSENTATEUR (identité verrouillée + lip-sync) alternés avec plans PASSANT (générés sans identité SDK, text→vidéo). Un seul visage par plan. Génère d'abord le personnage de référence dans le décor, puis chaque plan.",
@@ -194,7 +196,8 @@ const PRESETS: Preset[] = [
   },
   {
     id: "exterieur-rue",
-    label: "Extérieur — présentation rue",
+    label: "Présentation rue",
+    group: "extérieurs",
     decor: "rue animée en ville, jour, lumière naturelle",
     note: "Présentateur seul en extérieur (identité verrouillée). Idéal pour une promo app en ville. Remplace [produit] dans les répliques.",
     shots: [
@@ -207,7 +210,8 @@ const PRESETS: Preset[] = [
   },
   {
     id: "exterieur-promenade",
-    label: "Extérieur — promenade urbaine",
+    label: "Promenade urbaine",
+    group: "extérieurs",
     decor: "trottoir en ville, jour, lumière naturelle, passants en arrière-plan flou",
     note: "Ambiance « en marchant » (mouvement subtil, pas de course). Un seul présentateur, plans buste.",
     shots: [
@@ -219,7 +223,8 @@ const PRESETS: Preset[] = [
   },
   {
     id: "exterieur-terrasse",
-    label: "Extérieur — terrasse / rooftop",
+    label: "Terrasse / rooftop",
+    group: "extérieurs",
     decor: "terrasse rooftop avec vue sur la ville, jour, ciel clair, lumière douce",
     note: "Ambiance lifestyle / premium. Présentateur seul face caméra.",
     shots: [
@@ -231,7 +236,8 @@ const PRESETS: Preset[] = [
   },
   {
     id: "exterieur-mer",
-    label: "Extérieur — front de mer",
+    label: "Front de mer",
+    group: "extérieurs",
     decor: "promenade en front de mer, ciel bleu, lumière naturelle, vaguelette au loin",
     note: "Ambiance détente / vacances. Présentateur seul, cadrage buste.",
     shots: [
@@ -242,7 +248,8 @@ const PRESETS: Preset[] = [
   },
   {
     id: "exterieur-parc",
-    label: "Extérieur — parc / jardin",
+    label: "Parc / jardin",
+    group: "extérieurs",
     decor: "parc urbain, allée arborée, jour, lumière naturelle douce",
     note: "Ambiance calme et accessible. Présentateur seul.",
     shots: [
@@ -253,7 +260,8 @@ const PRESETS: Preset[] = [
   },
   {
     id: "exterieur-marche",
-    label: "Extérieur — marché en plein air",
+    label: "Marché en plein air",
+    group: "extérieurs",
     decor: "marché en plein air, étals colorés, jour, lumière naturelle",
     note: "Ambiance vivante / locale. Présentateur seul au premier plan (les passants restent flous).",
     shots: [
@@ -265,6 +273,7 @@ const PRESETS: Preset[] = [
   {
     id: "table-ronde",
     label: "Plateau / table ronde",
+    group: "studio",
     decor: "plateau TV moderne, assis à une table ronde",
     note: "Les invités autour de la table sont générés par l'IA et varient d'un plan à l'autre : garde le personnage seul au premier plan.",
     shots: [
@@ -277,6 +286,7 @@ const PRESETS: Preset[] = [
   {
     id: "interview",
     label: "Interview (présentateur + invité)",
+    group: "studio",
     decor: "studio d'interview, deux fauteuils, ambiance chaleureuse",
     note: "L'invité est généré par l'IA et n'est pas cohérent entre les plans : privilégie les plans centrés sur le présentateur.",
     shots: [
@@ -289,6 +299,7 @@ const PRESETS: Preset[] = [
   {
     id: "duo",
     label: "Duo / interview (2 présentateurs)",
+    group: "multi",
     decor: "studio d'interview, deux fauteuils, ambiance chaleureuse",
     note: "Champ / contre-champ : chaque plan est assigné à UN présentateur (identité parfaite). Ajoute un 2e présentateur dans le casting, puis « Charger ce style » alterne automatiquement les plans.",
     shots: [
@@ -302,6 +313,7 @@ const PRESETS: Preset[] = [
   {
     id: "talkshow-produit",
     label: "Plateau produit vertical 9:16 (Mei + Tom + démo)",
+    group: "multi",
     decor: "plateau de talk-show tech moderne, éclairage studio, grand écran lumineux en arrière-plan",
     aspect: "9:16",
     note:
@@ -311,6 +323,7 @@ const PRESETS: Preset[] = [
   {
     id: "talkshow-produit-16-9",
     label: "Plateau produit TV 16:9 (Mei + Tom + démo)",
+    group: "multi",
     decor: "plateau de talk-show tech moderne, éclairage studio, grand écran lumineux en arrière-plan",
     aspect: "16:9",
     note:
@@ -994,13 +1007,30 @@ export default function Storyboard() {
             {(model?.aspectRatios ?? ["9:16", "16:9"]).map((a) => <option key={a} value={a}>{a}</option>)}
           </select>
         </div>
-        <div className="min-w-[200px]">
+        <div className="min-w-[280px] flex-1">
           <label className="label">Style de scène</label>
           <select className="select" value={presetId} onChange={(e) => setPresetId(e.target.value)}>
-            {PRESETS.map((p) => <option key={p.id} value={p.id}>{p.label}</option>)}
+            <optgroup label="—— Extérieurs ——">
+              {PRESETS.filter((p) => p.group === "extérieurs").map((p) => (
+                <option key={p.id} value={p.id}>{p.label}</option>
+              ))}
+            </optgroup>
+            <optgroup label="—— Studio / intérieur ——">
+              {PRESETS.filter((p) => p.group === "studio").map((p) => (
+                <option key={p.id} value={p.id}>{p.label}</option>
+              ))}
+            </optgroup>
+            <optgroup label="—— Multi-présentateurs ——">
+              {PRESETS.filter((p) => p.group === "multi").map((p) => (
+                <option key={p.id} value={p.id}>{p.label}</option>
+              ))}
+            </optgroup>
           </select>
+          <p className="mt-1 text-xs text-[var(--muted)]">
+            Choisis un style puis clique « Charger ce style » ({PRESETS.length} styles).
+          </p>
         </div>
-        <button className="btn btn-ghost" onClick={loadPreset}>Charger ce style</button>
+        <button className="btn btn-primary" onClick={loadPreset}>Charger ce style</button>
         <button className="btn btn-ghost" onClick={addShot}>+ Plan vidéo</button>
         <button className="btn btn-ghost" onClick={addCarousel} title="Diaporama de tes vraies captures d'écran">+ Carrousel captures</button>
       </div>
