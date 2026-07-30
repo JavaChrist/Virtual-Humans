@@ -338,7 +338,7 @@ function expressionLabel(a: AssetItem): string {
 }
 
 export default function Storyboard() {
-  const { characterId, characterName, characters } = useCharacter();
+  const { characterId, characterName, characters, setCharacterId } = useCharacter();
   const confirm = useConfirm();
   const [ready, setReady] = useState(false);
   const [models, setModels] = useState<VideoModel[]>([]);
@@ -1046,10 +1046,34 @@ export default function Storyboard() {
         <div className="card p-5 mb-6">
           <div className="label mb-1">Personnage de référence (verrouillé sur tous les plans)</div>
           <p className="text-xs text-[var(--muted)] mb-4">
-            Choisis l&apos;identité, l&apos;expression, la tenue et le décor <strong>une seule fois</strong>, puis génère l&apos;image
-            de référence. Tous les plans partent de cette même image : {characterName || "le personnage"} garde exactement le
-            même visage et la même tenue.
+            Choisis le <strong>présentateur principal</strong>, puis son identité / tenue / décor. Tous les plans de ce
+            présentateur partent de la même image de référence.
           </p>
+
+          <div className="mb-4 max-w-sm">
+            <label className="label">Présentateur principal</label>
+            <select
+              className="select"
+              value={characterId}
+              onChange={(e) => {
+                const next = e.target.value;
+                if (!next || next === characterId) return;
+                // S'il était en second rôle, on le retire du casting pour éviter le doublon.
+                setPartners((prev) => prev.filter((p) => p.characterId !== next));
+                setCharacterId(next);
+              }}
+              disabled={characters.length === 0}
+            >
+              {characters.map((c) => (
+                <option key={c.id} value={c.id}>
+                  🎤 {c.name}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              Change ici pour Tom (ou un autre) — ce choix devient aussi le personnage actif de l&apos;app.
+            </p>
+          </div>
 
           {identityList.length === 0 ? (
             <p className="text-sm text-[var(--muted)]">
