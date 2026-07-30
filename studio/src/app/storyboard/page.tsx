@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { apiGet, apiPost, refreshBudget, usd, withCharacter } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
@@ -656,6 +655,18 @@ export default function Storyboard() {
     setShots((prev) => prev.filter((_, idx) => idx !== i));
   }
 
+  function moveShot(i: number, dir: -1 | 1) {
+    setShots((prev) => {
+      const j = i + dir;
+      if (j < 0 || j >= prev.length) return prev;
+      const next = [...prev];
+      const tmp = next[i];
+      next[i] = next[j];
+      next[j] = tmp;
+      return next;
+    });
+  }
+
   const totalSeconds = shots.reduce((a, s) => a + (s.seconds || 0), 0);
   const videoSeconds = shots.filter((s) => s.kind !== "carousel").reduce((a, s) => a + (s.seconds || 0), 0);
   const carouselCount = shots.filter((s) => s.kind === "carousel").length;
@@ -928,32 +939,58 @@ export default function Storyboard() {
     }
   }
 
-  // Pour l'assemblage : on préfère la version sonorisée (lip-syncée) si elle existe.
-  const readyClips = shots
-    .filter((s) => s.syncedUrl || s.videoUrl)
-    .map((s) => (s.syncedUrl ?? s.videoUrl) as string);
-  // Plans vidéo générés mais sans voix synchronisée (le carrousel + les plans marqués
-  // "muet volontaire" sont exclus, ils ne doivent pas déclencher l'alerte).
+  // Pour l'assemblage : ordre = ordre des cartes à l'écran. On préfère la version sonorisée.
+  const assemblyOrder = shots.filter((s) => s.syncedUrl || s.videoUrl);
+  const readyClips = assemblyOrder.map((s) => (s.syncedUrl ?? s.videoUrl) as string);
+  // Plans vidéo générés mais sans voix synchronisée (carrousel muet volontaire exclu).
   const silentShots = shots.filter(
     (s) => s.kind !== "carousel" && !s.silent && s.videoUrl && !s.syncedUrl,
   );
+  // Carrousels avec vidéo mais sans voix off (et pas marqués muets).
+  const silentCarousels = shots.filter(
+    (s) => s.kind === "carousel" && !s.silent && s.videoUrl && !s.syncedUrl,
+  );
+  const missingVoice = [...silentShots, ...silentCarousels];
 
-  async function assemble() {
-    // Garde-fou : mieux vaut faire voix + lip-sync PAR PLAN avant d'assembler
-    // (le lip-sync sur le montage final ne sait pas qui parle sur quel plan).
-    if (silentShots.length > 0) {
-      const ok = await confirm({
-        title: "Assembler sans toutes les voix ?",
+  async function assemble(forceMute = false) {
+    // Lip-sync / voix PAR PLAN obligatoire (sauf forceMute). Le lip-sync sur le
+    // montage final ne sait pas qui parle et donne un résultat inutilisable.
+    if (!forceMute && missingVoice.length > 0) {
+      await confirm({
+        title: "Lip-sync manquant — assemblage bloqué",
         message:
-          `${silentShots.length} plan(s) n'ont pas encore de voix synchronisée (` +
-          `${silentShots.map((s) => s.title).join(", ")}).\n\n` +
-          "Conseil : génère la voix + lip-sync SUR CHAQUE PLAN (bloc « Voix & lip-sync ») avant d'assembler — " +
-          "c'est le seul moyen que chaque personne dise son texte. Le lip-sync sur la vidéo déjà montée ne peut pas séparer les intervenants.\n\n" +
-          "Assembler quand même ? Les plans concernés resteront muets.",
-        confirmLabel: "Assembler quand même",
+          `${missingVoice.length} plan(s) n'ont pas encore de voix synchronisée :\n` +
+          `• ${missingVoice.map((s) => s.title).join("\n• ")}\n\n` +
+          "Fais d'abord sur CHAQUE plan : 1) Générer la voix → 2) Synchroniser les lèvres " +
+          "(ou « Ajouter la voix off » pour un carrousel).\n\n" +
+          "Le bouton « Ajouter la voix » sur la vidéo déjà montée ne peut PAS remplacer ça.",
+        confirmLabel: "Compris",
+        cancelLabel: "Fermer",
+      });
+      return;
+    }
+    if (forceMute && missingVoice.length > 0) {
+      const ok = await confirm({
+        title: "Assembler en muet ?",
+        message:
+          `Les plans suivants resteront SANS voix : ${missingVoice.map((s) => s.title).join(", ")}.\n\n` +
+          "Confirmer l'assemblage muet ?",
+        confirmLabel: "Assembler en muet",
       });
       if (!ok) return;
     }
+
+    // Aperçu de l'ordre avant envoi.
+    const orderLabel = assemblyOrder.map((s, idx) => `${idx + 1}. ${s.title}`).join(" → ");
+    const orderOk = await confirm({
+      title: "Confirmer l'ordre du montage",
+      message:
+        `L'assemblage suivra cet ordre (utilise ↑ ↓ sur chaque plan pour le changer) :\n\n${orderLabel}\n\n` +
+        "Le carrousel doit être à la place voulue (souvent à la fin ou au milieu, jamais par erreur en premier).",
+      confirmLabel: "Assembler dans cet ordre",
+    });
+    if (!orderOk) return;
+
     setMergeError(null);
     setMergedUrl(null);
     setMergeStatus("Envoi…");
@@ -1355,6 +1392,29 @@ export default function Storyboard() {
         {shots.map((shot, i) => (
           <div key={i} className="card p-5">
             <div className="flex flex-wrap items-center gap-3 mb-3">
+              <span className="badge shrink-0" title="Ordre dans le montage final">
+                #{i + 1}
+              </span>
+              <div className="flex flex-col gap-0.5">
+                <button
+                  type="button"
+                  className="btn btn-ghost text-xs px-2 py-0.5 leading-none"
+                  disabled={i === 0}
+                  onClick={() => moveShot(i, -1)}
+                  title="Monter (plus tôt dans le montage)"
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-ghost text-xs px-2 py-0.5 leading-none"
+                  disabled={i === shots.length - 1}
+                  onClick={() => moveShot(i, 1)}
+                  title="Descendre (plus tard dans le montage)"
+                >
+                  ↓
+                </button>
+              </div>
               <input
                 className="input flex-1 min-w-[160px]"
                 value={shot.title}
@@ -1401,8 +1461,16 @@ export default function Storyboard() {
                   {(model?.seconds ?? [5, 6, 8, 10]).map((s) => <option key={s} value={s}>{s}s</option>)}
                 </select>
               )}
-              <button className="btn btn-ghost" onClick={() => remove(i)}>✕</button>
+              <button className="btn btn-ghost" onClick={() => remove(i)} title="Supprimer ce plan">
+                ✕
+              </button>
             </div>
+            {shot.kind === "carousel" && i === 0 && (
+              <p className="text-xs text-[var(--danger)] mb-2">
+                ⚠️ Ce carrousel est en position #1 — le montage commencera par les captures. Utilise ↓ pour le
+                placer plus bas (souvent à la fin).
+              </p>
+            )}
             {shot.role === "guest" && (
               <p className="text-xs text-[var(--muted)] mb-2">
                 Plan passant : généré en text→vidéo (visage aléatoire, 1 personne). Pas besoin de référence d&apos;identité.
@@ -1672,31 +1740,76 @@ export default function Storyboard() {
       </div>
 
       {shots.length > 0 && (
-        <div className="card p-5 mt-6 flex flex-wrap items-center justify-between gap-4">
+        <div className="card p-5 mt-6 space-y-4">
           <div className="text-sm text-[var(--muted)]">
             {shots.length} plans · {totalSeconds}s au total ·{" "}
             <span className="text-[var(--foreground)] font-semibold">budget estimé {usd(totalCost)}</span>
             {totalSeconds < 60 && <span className="ml-2 text-[var(--muted)]">(vise ~60s)</span>}
-            {silentShots.length > 0 && (
-              <span className="mt-1 block text-[var(--danger)]">
-                {silentShots.length} plan{silentShots.length > 1 ? "s" : ""} sans voix (
-                {silentShots.map((s) => s.title).join(", ")}) — {silentShots.length > 1 ? "ils resteront muets" : "il restera muet"} dans le montage.
-                Génère la voix + lip-sync sur {silentShots.length > 1 ? "ces plans" : "ce plan"}, ou ignore si {silentShots.length > 1 ? "ce sont" : "c'est"} volontaire.
-              </span>
-            )}
           </div>
+          <div>
+            <div className="label mb-1">Ordre du montage (↑ ↓ sur chaque plan pour réordonner)</div>
+            <ol className="text-sm space-y-1">
+              {shots.map((s, idx) => {
+                const hasClip = Boolean(s.syncedUrl || s.videoUrl);
+                const hasVoice =
+                  s.kind === "carousel"
+                    ? Boolean(s.syncedUrl || s.silent)
+                    : Boolean(s.syncedUrl || s.silent);
+                return (
+                  <li key={idx} className="flex flex-wrap items-center gap-2">
+                    <span className="font-semibold text-[var(--foreground)]">
+                      {idx + 1}. {s.title}
+                    </span>
+                    {s.kind === "carousel" && <span className="badge">carrousel</span>}
+                    {!hasClip && <span className="badge text-[var(--danger)]">pas de vidéo</span>}
+                    {hasClip && hasVoice && <span className="badge text-[var(--success)]">voix OK</span>}
+                    {hasClip && !hasVoice && (
+                      <span className="badge text-[var(--danger)]">sans lip-sync / voix</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+          {missingVoice.length > 0 && (
+            <p className="text-sm text-[var(--danger)]">
+              Assemblage bloqué : fais d&apos;abord voix + lip-sync sur{" "}
+              {missingVoice.map((s) => s.title).join(", ")} (bloc « Voix & lip-sync » de chaque plan).
+            </p>
+          )}
           <div className="flex flex-wrap gap-3">
             <button className="btn btn-ghost" disabled={!ready} onClick={generateAll}>
               Générer les plans restants
             </button>
             <button
               className="btn btn-primary"
-              disabled={readyClips.length < 2 || (!!mergeStatus && !mergedUrl && !mergeError)}
-              onClick={assemble}
-              title={readyClips.length < 2 ? "Génère au moins 2 plans d'abord" : ""}
+              disabled={
+                readyClips.length < 2 ||
+                missingVoice.length > 0 ||
+                (!!mergeStatus && !mergedUrl && !mergeError)
+              }
+              onClick={() => assemble(false)}
+              title={
+                missingVoice.length > 0
+                  ? "Termine le lip-sync sur chaque plan d'abord"
+                  : readyClips.length < 2
+                    ? "Génère au moins 2 plans d'abord"
+                    : ""
+              }
             >
-              {mergeStatus && !mergedUrl && !mergeError ? "Assemblage…" : `Assembler ${readyClips.length} plans en 60 s`}
+              {mergeStatus && !mergedUrl && !mergeError
+                ? "Assemblage…"
+                : `Assembler ${readyClips.length} plans (avec voix)`}
             </button>
+            {missingVoice.length > 0 && readyClips.length >= 2 && (
+              <button
+                className="btn btn-ghost text-xs"
+                disabled={!!mergeStatus && !mergedUrl && !mergeError}
+                onClick={() => assemble(true)}
+              >
+                Assembler en muet (déconseillé)
+              </button>
+            )}
           </div>
         </div>
       )}
@@ -1712,17 +1825,13 @@ export default function Storyboard() {
             <div>
               <video src={mergedUrl} controls className="w-full rounded-lg border border-[var(--border)]" />
               <div className="mt-3 flex flex-col gap-2 sm:flex-row">
-                <a href={mergedUrl} target="_blank" rel="noreferrer" className="btn btn-ghost flex-1">
+                <a href={mergedUrl} target="_blank" rel="noreferrer" className="btn btn-primary flex-1">
                   Ouvrir / Télécharger
                 </a>
-                <Link href="/lipsync" className="btn btn-primary flex-1">
-                  Ajouter la voix (Lip-sync) →
-                </Link>
               </div>
               <p className="mt-2 text-xs text-[var(--muted)]">
-                Le montage est envoyé au Studio Lip-sync comme vidéo source. ⚠️ Le lip-sync fonctionne mieux sur
-                un plan unique face caméra : sur un montage à plusieurs plans/coupures, la synchro des lèvres
-                peut être imparfaite. Pour un résultat net, applique plutôt le lip-sync plan par plan.
+                ⚠️ Ne passe pas ce montage dans Studio Lip-sync : ça ne marche pas bien sur plusieurs plans.
+                Pour une voix correcte, refais voix + lip-sync <strong>sur chaque plan</strong>, puis réassemble.
               </p>
               <SendToAiccos videoUrl={mergedUrl} defaultTitle={`${characterName || "Storyboard"} — clip assemblé`} />
             </div>
