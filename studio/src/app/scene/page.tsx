@@ -8,6 +8,7 @@ import { setLastVideo, setLastVoice } from "@/lib/media-store";
 import { usePersistentState } from "@/lib/use-persistent-state";
 import { PageHeader } from "@/components/page-header";
 import { useConfirm } from "@/components/confirm";
+import { LOCATION_PRESETS } from "@/lib/location-presets";
 import type { CharacterResponse } from "@/lib/types";
 
 interface SavedScene {
@@ -45,8 +46,6 @@ interface Product {
   pitch?: string;
   screens: string[];
 }
-
-const LOCATION_PRESETS = ["rue animée", "studio épuré", "café branché", "bureau moderne", "parc urbain", "centre commercial"];
 
 /** 3 parcours fiables — ordre demandé : plein pied → (micro-trottoir = Storyboard) → talking-head. */
 type SceneFormat = "plein-pied" | "talking-head";
@@ -510,7 +509,7 @@ export default function SceneStudio() {
                 list="loc-presets"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                placeholder="ex. rue animée, devant le château de Rouen…"
+                placeholder="ex. rue animée, front de mer, rooftop, parc…"
               />
               <datalist id="loc-presets">
                 {[...LOCATION_PRESETS, ...(outfit?.locations ?? [])].map((l) => (

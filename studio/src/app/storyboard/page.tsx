@@ -9,6 +9,7 @@ import { setLastVideo } from "@/lib/media-store";
 import { PageHeader } from "@/components/page-header";
 import { SendToAiccos } from "@/components/send-to-aiccos";
 import { useConfirm } from "@/components/confirm";
+import { LOCATION_PRESETS } from "@/lib/location-presets";
 import type { SettingsResponse } from "@/lib/types";
 
 interface VideoModel {
@@ -189,6 +190,76 @@ const PRESETS: Preset[] = [
         seconds: 5,
         line: "Le lien est en description — teste [produit] dès maintenant. À bientôt !",
       },
+    ],
+  },
+  {
+    id: "exterieur-rue",
+    label: "Extérieur — présentation rue",
+    decor: "rue animée en ville, jour, lumière naturelle",
+    note: "Présentateur seul en extérieur (identité verrouillée). Idéal pour une promo app en ville. Remplace [produit] dans les répliques.",
+    shots: [
+      { title: "1. Accroche rue", role: "host", speakerSlot: 0, prompt: `Cadrage buste en rue, sourit à la caméra, léger hochement de tête. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Salut ! Je suis dehors aujourd'hui pour te parler de [produit]." },
+      { title: "2. Problème", role: "host", speakerSlot: 0, prompt: `Cadrage buste, explique un problème face caméra, geste discret. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Tu connais ce moment où… ?" },
+      { title: "3. Solution", role: "host", speakerSlot: 0, prompt: `Cadrage buste, présente le produit avec enthousiasme, tient un smartphone. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Avec [produit], c'est simple :…" },
+      { title: "4. Bénéfice", role: "host", speakerSlot: 0, prompt: `Cadrage buste, argumente face caméra, sourire. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "En concrètement, ça te fait gagner…" },
+      { title: "5. Appel à l'action", role: "host", speakerSlot: 0, prompt: `Cadrage buste, pouce levé, regard caméra, sourire chaleureux. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Le lien est en description — teste [produit] maintenant !" },
+    ],
+  },
+  {
+    id: "exterieur-promenade",
+    label: "Extérieur — promenade urbaine",
+    decor: "trottoir en ville, jour, lumière naturelle, passants en arrière-plan flou",
+    note: "Ambiance « en marchant » (mouvement subtil, pas de course). Un seul présentateur, plans buste.",
+    shots: [
+      { title: "1. Accroche en marchant", role: "host", speakerSlot: 0, prompt: `Cadrage buste, marche très lentement vers la caméra puis s'arrête, parle avec un sourire. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Hey, je te montre un truc pendant ma balade…" },
+      { title: "2. Découverte", role: "host", speakerSlot: 0, prompt: `Cadrage buste, montre un smartphone, regard caméra, geste naturel. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "[produit], c'est l'app qui…" },
+      { title: "3. Démo orale", role: "host", speakerSlot: 0, prompt: `Cadrage buste, explique face caméra, légers gestes des mains. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Tu ouvres, tu fais ça, et hop…" },
+      { title: "4. Conclusion", role: "host", speakerSlot: 0, prompt: `Cadrage buste, clin d'œil discret, sourire, regard caméra. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Essaie [produit] — lien en bio. À plus !" },
+    ],
+  },
+  {
+    id: "exterieur-terrasse",
+    label: "Extérieur — terrasse / rooftop",
+    decor: "terrasse rooftop avec vue sur la ville, jour, ciel clair, lumière douce",
+    note: "Ambiance lifestyle / premium. Présentateur seul face caméra.",
+    shots: [
+      { title: "1. Accueil terrasse", role: "host", speakerSlot: 0, prompt: `Cadrage buste sur une terrasse, sourit à la caméra, lumière douce. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Belle vue, non ? Parlons de [produit]." },
+      { title: "2. Pitch", role: "host", speakerSlot: 0, prompt: `Cadrage buste, présente le produit calmement, geste discret. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "[produit] t'aide à… sans prise de tête." },
+      { title: "3. Preuve", role: "host", speakerSlot: 0, prompt: `Cadrage buste, tient un smartphone, regarde brièvement l'écran puis la caméra. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Regarde : en 30 secondes tu peux…" },
+      { title: "4. Appel à l'action", role: "host", speakerSlot: 0, prompt: `Cadrage buste, sourire chaleureux, regard caméra. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Télécharge [produit] — le lien est juste en dessous." },
+    ],
+  },
+  {
+    id: "exterieur-mer",
+    label: "Extérieur — front de mer",
+    decor: "promenade en front de mer, ciel bleu, lumière naturelle, vaguelette au loin",
+    note: "Ambiance détente / vacances. Présentateur seul, cadrage buste.",
+    shots: [
+      { title: "1. Accroche mer", role: "host", speakerSlot: 0, prompt: `Cadrage buste en bord de mer, cheveux légèrement au vent, sourit à la caméra. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Même en balade, je reste organisée grâce à [produit]." },
+      { title: "2. Bénéfice", role: "host", speakerSlot: 0, prompt: `Cadrage buste, explique face caméra, geste naturel. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Ça me permet de… où que je sois." },
+      { title: "3. Appel à l'action", role: "host", speakerSlot: 0, prompt: `Cadrage buste, pouce levé, sourire, regard caméra. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Teste [produit] — lien en description !" },
+    ],
+  },
+  {
+    id: "exterieur-parc",
+    label: "Extérieur — parc / jardin",
+    decor: "parc urbain, allée arborée, jour, lumière naturelle douce",
+    note: "Ambiance calme et accessible. Présentateur seul.",
+    shots: [
+      { title: "1. Accroche parc", role: "host", speakerSlot: 0, prompt: `Cadrage buste dans un parc, sourit à la caméra, lumière douce. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Petit moment dehors pour te parler de [produit]." },
+      { title: "2. Explication", role: "host", speakerSlot: 0, prompt: `Cadrage buste, explique calmement, gestes discrets. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Le principe est simple :…" },
+      { title: "3. Conclusion", role: "host", speakerSlot: 0, prompt: `Cadrage buste, sourire chaleureux, regard caméra. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Essaie [produit] aujourd'hui — le lien est en bio." },
+    ],
+  },
+  {
+    id: "exterieur-marche",
+    label: "Extérieur — marché en plein air",
+    decor: "marché en plein air, étals colorés, jour, lumière naturelle",
+    note: "Ambiance vivante / locale. Présentateur seul au premier plan (les passants restent flous).",
+    shots: [
+      { title: "1. Accroche marché", role: "host", speakerSlot: 0, prompt: `Cadrage buste sur un marché, ambiance vivante derrière, parle face caméra. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Je suis au marché et j'ai une idée à te partager…" },
+      { title: "2. Produit", role: "host", speakerSlot: 0, prompt: `Cadrage buste, présente le smartphone, enthousiasme mesuré. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "[produit], c'est pour ceux qui veulent…" },
+      { title: "3. Appel à l'action", role: "host", speakerSlot: 0, prompt: `Cadrage buste, clin d'œil, sourire, regard caméra. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Le lien est en description — à tout de suite !" },
     ],
   },
   {
@@ -1033,7 +1104,7 @@ export default function Storyboard() {
                       placeholder="ex. rue animée, café, studio…"
                     />
                     <datalist id="decor-presets">
-                      {["rue animée", "studio épuré", "café branché", "bureau moderne", "parc urbain", "centre commercial"].map((l) => (
+                      {LOCATION_PRESETS.map((l) => (
                         <option key={l} value={l} />
                       ))}
                     </datalist>
