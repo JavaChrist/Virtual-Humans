@@ -23,4 +23,6 @@ export interface SettingsResponse {
   sdk: { repoRoot: string; character: string };
   pricing: { elevenlabsUsdPer1kChars: number };
   access: { protected: boolean; budgetCapUSD: number | null };
+  /** Server feature flags (never read from NEXT_PUBLIC_*). */
+  features?: { directorV2: boolean };
 }

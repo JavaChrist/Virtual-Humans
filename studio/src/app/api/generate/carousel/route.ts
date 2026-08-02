@@ -62,8 +62,15 @@ export async function POST(req: NextRequest) {
 
     const requestId = await submitJob(CAROUSEL_MODEL_ID, { images, fps: FPS });
     const usd = estimateCarousel(totalSeconds);
+    const durationSeconds = +(images.length * (framesPerImage / FPS)).toFixed(2);
     await addSpend({ type: "video", provider: "fal", model: CAROUSEL_MODEL_ID, estimateUSD: usd, note: `carrousel ${product.screens.length} captures` });
-    return NextResponse.json({ requestId, model: CAROUSEL_MODEL_ID, estimateUSD: usd });
+    return NextResponse.json({
+      requestId,
+      model: CAROUSEL_MODEL_ID,
+      estimateUSD: usd,
+      // Durée réelle du diaporama (pour coller la voix off et l'assemblage).
+      durationSeconds,
+    });
   } catch (e) {
     const detail = extractFalError(e);
     console.error("[carousel] échec", { productId, detail });

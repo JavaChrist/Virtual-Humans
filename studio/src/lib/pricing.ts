@@ -196,10 +196,11 @@ export function estimateSceneImage(): number {
   return num(process.env.FAL_PULID_USD_PER_IMAGE, 0.05);
 }
 
-export const MERGE_MODEL_ID = "fal-ai/ffmpeg-api/merge-videos";
+// compose (pas merge-videos) : préserve une piste audio explicite (lip-sync).
+export const MERGE_MODEL_ID = "fal-ai/ffmpeg-api/compose";
 
 export function estimateMerge(totalSeconds: number): number {
-  // ~$0.00017 per compute-second; keep a small, safe upper estimate.
+  // compose ~$0.0002 / s ; marge de sécurité.
   return +(0.0005 * Math.max(totalSeconds, 1)).toFixed(4);
 }
 

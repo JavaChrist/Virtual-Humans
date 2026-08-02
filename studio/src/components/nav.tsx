@@ -8,7 +8,7 @@ import { useCharacter } from "@/lib/character-context";
 import { useConfirm } from "@/components/confirm";
 import type { SettingsResponse } from "@/lib/types";
 
-const LINKS = [
+const BASE_LINKS = [
   { href: "/", label: "Tableau de bord", icon: "◧" },
   { href: "/characters", label: "Personnages", icon: "☺" },
   { href: "/scene", label: "Studio Scène", icon: "◈" },
@@ -20,13 +20,16 @@ const LINKS = [
   { href: "/storyboard", label: "Storyboard 60s", icon: "▤" },
   { href: "/budget", label: "Budget", icon: "$" },
   { href: "/settings", label: "Réglages", icon: "⚙" },
-];
+] as const;
+
+const DIRECTOR_LINK = { href: "/director", label: "Réalisateur IA", icon: "✦" } as const;
 
 export function Nav() {
   const pathname = usePathname();
   const [total, setTotal] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
   const [access, setAccess] = useState<SettingsResponse["access"] | null>(null);
+  const [directorV2, setDirectorV2] = useState(false);
   const { characters, characterId, setCharacterId } = useCharacter();
   const confirm = useConfirm();
 
@@ -42,8 +45,14 @@ export function Nav() {
 
   useEffect(() => {
     apiGet<SettingsResponse>("/api/settings")
-      .then((s) => setAccess(s.access))
-      .catch(() => setAccess(null));
+      .then((s) => {
+        setAccess(s.access);
+        setDirectorV2(Boolean(s.features?.directorV2));
+      })
+      .catch(() => {
+        setAccess(null);
+        setDirectorV2(false);
+      });
   }, []);
 
   // Ferme le tiroir mobile à chaque changement de page.
@@ -110,10 +119,16 @@ export function Nav() {
     </div>
   );
 
+  // Director link is inserted after dashboard only when the server flag is on
+  // (fetched via /api/settings — never from NEXT_PUBLIC_*).
+  const links = directorV2
+    ? [BASE_LINKS[0], DIRECTOR_LINK, ...BASE_LINKS.slice(1)]
+    : [...BASE_LINKS];
+
   const navLinks = (
     <nav className="flex flex-col gap-1">
-      {LINKS.map((l) => {
-        const active = pathname === l.href;
+      {links.map((l) => {
+        const active = pathname === l.href || (l.href !== "/" && pathname.startsWith(l.href + "/"));
         return (
           <Link
             key={l.href}

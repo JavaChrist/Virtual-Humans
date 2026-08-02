@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --import tsx --test src/runtime/character/__tests__/personality.test.ts src/runtime/character/__tests__/registry.test.ts src/runtime/character/__tests__/collision.test.ts src/runtime/character/__tests__/tom.test.ts"
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test \"src/**/__tests__/**/*.test.ts\""
   },
   "dependencies": {
     "@fal-ai/client": "^1.10.1",

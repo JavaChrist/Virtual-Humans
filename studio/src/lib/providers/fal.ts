@@ -52,8 +52,9 @@ export async function checkJob(model: string, requestId: string): Promise<JobSta
     const data = result.data as {
       video?: { url?: string };
       videos?: { url?: string }[];
+      video_url?: string; // ffmpeg-api/compose
     };
-    const videoUrl = data.video?.url ?? data.videos?.[0]?.url;
+    const videoUrl = data.video?.url ?? data.videos?.[0]?.url ?? data.video_url;
     return { status: "COMPLETED", videoUrl };
   } catch (e) {
     // A failed job surfaces here (e.g. fal 422 validation on the model runner).
@@ -132,7 +133,7 @@ export async function generateIdentityImage(
       true_cfg: 1,
       num_inference_steps: 28,
       negative_prompt:
-        "different person, wrong gender, face morph, identity change, lookalike, white background, plain white backdrop, studio seamless paper, blank wall, solid color background, green screen, text, watermark, logo, extra person, duplicate face, deformed hands",
+        "different person, wrong gender, face morph, identity change, lookalike, white background, plain white backdrop, studio seamless paper, blank wall, solid color background, green screen, text, watermark, logo, extra person, duplicate face, deformed hands, clipboard, paper board, binder, printed photos, poster, flyer, documents, random props",
       image_size: imageSize as "portrait_16_9",
     },
   });

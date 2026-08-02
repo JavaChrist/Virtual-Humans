@@ -104,8 +104,12 @@ const EXPRESSION_FR: Record<string, string> = {
 // (déjà présent sur l'image de départ) — sinon le modèle "morphe" et change le
 // visage/la tenue. On décrit uniquement l'ACTION + on force la cohérence.
 // MOTION : on demande un mouvement MINIMAL pour éviter la déformation en gros plan.
-const CONSISTENCY = "Exactement la même personne et la même tenue que sur l'image, identité inchangée, une seule personne au premier plan, aucun changement de vêtements.";
+const CONSISTENCY =
+  "Exactement la même personne et la même tenue que sur l'image, identité inchangée, une seule personne au premier plan, aucun changement de vêtements.";
 const MOTION = "Mouvement subtil et naturel, caméra fixe et stable, aucun mouvement brusque ni zoom rapide.";
+// Anti-inventions : Kling invente souvent presse-papiers, photos, affiches hors pitch.
+const ANTI_INVENT =
+  "Hands empty or only a smartphone if mentioned. No clipboard, no binder, no paper board, no printed photos, no posters, no flyers, no documents, no random props, no invented brand materials.";
 
 // speakerSlot : 0 = présentateur principal (contexte), 1 = 1er partenaire, etc.
 type PresetShot = Omit<Shot, "status"> & { speakerSlot?: number };
@@ -120,12 +124,22 @@ interface Preset {
   shots: PresetShot[];
 }
 
+const DEFAULT_CAROUSEL_LINE =
+  "Voici un aperçu de [produit] à l'écran — regarde comme c'est simple à utiliser au quotidien.";
+
 // Plans du plateau produit (dialogue Mei ↔ Tom + démo carrousel), partagés par les
 // variantes verticale (9:16) et horizontale (16:9).
 const TALKSHOW_SHOTS: PresetShot[] = [
   { title: "1. Accueil — Mei", speakerSlot: 0, prompt: `Sur un plateau de talk-show, souhaite la bienvenue face caméra, sourire chaleureux, léger geste d'accueil. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Bonjour à tous et bienvenue sur le plateau ! Aujourd'hui, avec Tom, on vous présente [produit]." },
   { title: "2. Présentation — Tom", speakerSlot: 1, prompt: `Présente le sujet face caméra, léger geste de la main vers l'écran. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Merci Mei ! Alors [produit], c'est l'application qui permet de…" },
-  { title: "3. Démo à l'écran (carrousel)", kind: "carousel", prompt: "", seconds: 8, perImage: 2.5 },
+  {
+    title: "3. Démo à l'écran (carrousel)",
+    kind: "carousel",
+    prompt: "",
+    seconds: 8,
+    perImage: 2.5,
+    line: DEFAULT_CAROUSEL_LINE,
+  },
   { title: "4. Question — Mei", speakerSlot: 0, prompt: `Se tourne légèrement puis regarde la caméra, pose une question, attitude curieuse. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Tom, concrètement, qu'est-ce que ça change pour l'utilisateur au quotidien ?" },
   { title: "5. Réponse — Tom", speakerSlot: 1, prompt: `Répond avec enthousiasme face caméra, hoche la tête, mains calmes. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Très bonne question. En fait, ce qui change vraiment, c'est…" },
   { title: "6. Relance — Mei", speakerSlot: 0, prompt: `Pose une seconde question, sourire, léger geste. ${MOTION} ${CONSISTENCY}`, seconds: 5, line: "Et côté prix / abonnement, comment ça se passe ?" },
@@ -146,7 +160,7 @@ const PRESETS: Preset[] = [
         title: "1. Accroche — présentateur",
         role: "host",
         speakerSlot: 0,
-        prompt: `Cadrage buste, regarde la caméra et parle avec un sourire, très léger hochement de tête. ${MOTION} ${CONSISTENCY}`,
+        prompt: `Cadrage buste, mains libres, regarde la caméra et parle avec un sourire, très léger hochement de tête. ${MOTION} ${CONSISTENCY} ${ANTI_INVENT}`,
         seconds: 5,
         line: "Salut ! Aujourd'hui je suis dans la rue pour vous faire découvrir [produit].",
       },
@@ -154,7 +168,7 @@ const PRESETS: Preset[] = [
         title: "2. Question — présentateur",
         role: "host",
         speakerSlot: 0,
-        prompt: `Cadrage buste, tient un micro près du visage, attitude enthousiaste, parle face caméra. ${MOTION} ${CONSISTENCY}`,
+        prompt: `Cadrage buste, mains libres près du visage, attitude enthousiaste, parle face caméra. ${MOTION} ${CONSISTENCY} ${ANTI_INVENT}`,
         seconds: 5,
         line: "Excusez-moi, vous connaissez [produit] ?",
       },
@@ -162,7 +176,7 @@ const PRESETS: Preset[] = [
         title: "3. Réponse — passant",
         role: "guest",
         prompt:
-          "Street interview: a single random passerby (not a celebrity), medium close-up, looking slightly off-camera as if answering an interviewer on a busy city street, natural daylight, photorealistic. Only one person in frame. Subtle natural motion, talking, blinking. No text, no logos.",
+          `Street interview: a single random passerby (not a celebrity), medium close-up, looking slightly off-camera as if answering an interviewer on a busy city street, natural daylight, photorealistic. Only one person in frame. Empty hands, no clipboard, no papers, no photos. Subtle natural motion, talking, blinking. No text, no logos. ${ANTI_INVENT}`,
         seconds: 5,
         line: "Ah oui, j'en ai entendu parler, ça a l'air pratique !",
         silent: false,
@@ -171,7 +185,7 @@ const PRESETS: Preset[] = [
         title: "4. Argument — présentateur",
         role: "host",
         speakerSlot: 0,
-        prompt: `Cadrage buste, explique face caméra, gestes discrets des mains près du buste. ${MOTION} ${CONSISTENCY}`,
+        prompt: `Cadrage buste, explique face caméra, gestes discrets des mains près du buste. ${MOTION} ${CONSISTENCY} ${ANTI_INVENT}`,
         seconds: 5,
         line: "Exactement — [produit] te permet de… en quelques secondes.",
       },
@@ -179,7 +193,7 @@ const PRESETS: Preset[] = [
         title: "5. Réaction — passant",
         role: "guest",
         prompt:
-          "Street interview: a different single passerby, medium close-up, nodding and smiling while answering, busy city street background, natural daylight, photorealistic. Only one person in frame. Subtle motion. No text, no logos.",
+          `Street interview: a different single passerby, medium close-up, nodding and smiling while answering, busy city street background, natural daylight, photorealistic. Only one person in frame. Empty hands, no clipboard, no papers. Subtle motion. No text, no logos. ${ANTI_INVENT}`,
         seconds: 5,
         line: "Carrément, je vais essayer !",
       },
@@ -187,7 +201,7 @@ const PRESETS: Preset[] = [
         title: "6. Appel à l'action — présentateur",
         role: "host",
         speakerSlot: 0,
-        prompt: `Cadrage buste, pouce levé près du buste, sourire chaleureux, regard caméra. ${MOTION} ${CONSISTENCY}`,
+        prompt: `Cadrage buste, pouce levé près du buste, sourire chaleureux, regard caméra. ${MOTION} ${CONSISTENCY} ${ANTI_INVENT}`,
         seconds: 5,
         line: "Le lien est en description — teste [produit] dès maintenant. À bientôt !",
       },
@@ -355,10 +369,10 @@ export default function Storyboard() {
   const [identityRef, setIdentityRef] = useState("");
   const [expressionRef, setExpressionRef] = useState(""); // vide = aucune
   const [outfitId, setOutfitId] = useState("");
-  const [decor, setDecor] = usePersistentState(dkey("decor"), "rue animée");
+  const [decor, setDecor, clearDecor] = usePersistentState(dkey("decor"), "rue animée");
   // Image de référence persistée par personnage (URL légère) : évite les boutons
   // grisés au retour sur la page (la référence n'était pas mémorisée avant).
-  const [masterUrl, setMasterUrl] = usePersistentState<string | null>(dkey("master"), null);
+  const [masterUrl, setMasterUrl, clearMaster] = usePersistentState<string | null>(dkey("master"), null);
   const [masterBusy, setMasterBusy] = useState(false);
   const [masterError, setMasterError] = useState<string | null>(null);
 
@@ -384,10 +398,19 @@ export default function Storyboard() {
             let status = s.status;
             let syncStatus = s.syncStatus ?? null;
             if (status === "Terminé" && !s.videoUrl) status = null;
-            if (syncStatus === "Terminé" && !s.syncedUrl) syncStatus = null;
+            // "Terminé" / "Terminé (pas d'URL)" sans syncedUrl = état mort → débloque le bouton.
+            if (syncStatus?.startsWith("Terminé") && !s.syncedUrl) syncStatus = null;
             if (status && !s.videoUrl && !s.error && !s.requestId) status = null;
+            // Envoi… / statut sans job récupérable → ne doit pas griser le lip-sync.
             if (syncStatus && !s.syncedUrl && !s.syncError && !s.syncRequestId) syncStatus = null;
-            return { ...s, status, syncStatus, voiceBusy: false };
+            return {
+              ...s,
+              status,
+              syncStatus,
+              voiceBusy: false,
+              // Audio base64 non persisté : forcer null pour un état cohérent.
+              audioUrl: s.audioUrl ?? null,
+            };
           }),
         );
         return;
@@ -405,7 +428,12 @@ export default function Storyboard() {
           try {
             // Persiste requestId/model pour pouvoir RÉCUPÉRER un job après refresh,
             // mais pas les audios base64 (trop lourds).
-            const light = next.map((s) => (s.audioUrl ? { ...s, audioUrl: undefined } : s));
+            const light = next.map((s) => {
+              const copy = { ...s, audioUrl: undefined as string | null | undefined };
+              // Ne pas persister un "Envoi…" sans requestId (sinon bouton lip-sync grisé au retour).
+              if (copy.syncStatus === "Envoi…" && !copy.syncRequestId) copy.syncStatus = null;
+              return copy;
+            });
             localStorage.setItem(shotsKey, JSON.stringify(light));
           } catch {
             /* quota dépassé : on garde au moins l'état en session */
@@ -418,13 +446,15 @@ export default function Storyboard() {
   );
   const [presetId, setPresetId] = useState<string>(PRESETS[0].id);
   const [products, setProducts] = useState<Product[]>([]);
-  const [partners, setPartners] = usePersistentState<Partner[]>(dkey("partners"), []);
+  const [partners, setPartners, clearPartners] = usePersistentState<Partner[]>(dkey("partners"), []);
   // Route B (prototype) : frame combinant plusieurs présentateurs.
   const [duoBusy, setDuoBusy] = useState(false);
   const [duoUrl, setDuoUrl] = useState<string | null>(null);
   const [duoError, setDuoError] = useState<string | null>(null);
   const timers = useRef<Record<number, ReturnType<typeof setInterval>>>({});
   const syncTimers = useRef<Record<number, ReturnType<typeof setInterval>>>({});
+  const shotsRef = useRef<Shot[]>([]);
+  shotsRef.current = shots;
   const [mergeStatus, setMergeStatus] = useState<string | null>(null);
   const [mergedUrl, setMergedUrl] = useState<string | null>(null);
   const [mergeError, setMergeError] = useState<string | null>(null);
@@ -485,6 +515,56 @@ export default function Storyboard() {
     setMasterUrl(null);
   }
 
+  /** Efface tout le brouillon persisté (plans anciens inclus) pour ce personnage. */
+  async function resetStoryboard() {
+    const ok = await confirm({
+      title: "Réinitialiser le storyboard ?",
+      message:
+        "Efface tous les plans, vidéos, voix, lip-sync, image de référence, partenaires et montage sauvegardés pour ce personnage.\n\n" +
+        "Les brouillons anciens en mémoire locale seront aussi supprimés. Irréversible.",
+      confirmLabel: "Tout effacer",
+      cancelLabel: "Annuler",
+    });
+    if (!ok) return;
+
+    for (const t of Object.values(timers.current)) clearInterval(t);
+    for (const t of Object.values(syncTimers.current)) clearInterval(t);
+    timers.current = {};
+    syncTimers.current = {};
+    if (mergeTimer.current) clearInterval(mergeTimer.current);
+    mergeTimer.current = null;
+    shotsResumeDone.current = false;
+
+    setShots([]);
+    if (shotsKey && typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(shotsKey);
+        // Anciennes clés éventuelles / orphelines pour ce personnage.
+        const prefix = `vh:draft:storyboard:${characterId}:`;
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const k = localStorage.key(i);
+          if (k?.startsWith(prefix)) localStorage.removeItem(k);
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+    clearDecor();
+    clearMaster();
+    clearPartners();
+    setMasterBusy(false);
+    setMasterError(null);
+    setDuoUrl(null);
+    setDuoError(null);
+    setDuoBusy(false);
+    setMergeStatus(null);
+    setMergedUrl(null);
+    setMergeError(null);
+    setIdentityRef("");
+    setExpressionRef("");
+    setOutfitId("");
+  }
+
   async function makeMaster() {
     if (!identityRef) return;
     setMasterBusy(true);
@@ -503,6 +583,7 @@ export default function Storyboard() {
         expr ? `Expression: ${expressionLabel(expr)}.` : "",
         "Looking at camera, chest-up framing, natural daylight, sharp face detail.",
         "Only ONE person in frame. Do not invent a different person.",
+        "Empty hands, no clipboard, no paper board, no printed photos, no posters, no props.",
       ]
         .filter(Boolean)
         .join(" ");
@@ -571,6 +652,7 @@ export default function Storyboard() {
         `Medium shot standing in ${place}; environment fills the background (not a white studio).`,
         "Looking at camera, chest-up framing, natural daylight, sharp face detail.",
         "Only ONE person in frame. Do not invent a different person.",
+        "Empty hands, no clipboard, no paper board, no printed photos, no props.",
       ].join(" ");
       const res = await apiPost<{ imageUrl: string }>("/api/generate/scene-image", {
         character: id,
@@ -603,11 +685,13 @@ export default function Storyboard() {
         if (s.kind !== "carousel" && !s.speakerId) s.speakerId = cast[idx % cast.length].id;
       });
     }
-    // Carrousel : produit par défaut + durée déduite du temps/image.
+    // Carrousel : produit par défaut + durée + narration voix off si absente.
     base.forEach((s) => {
       if (s.kind === "carousel") {
         if (!s.productId) s.productId = products[0]?.id ?? "";
         s.seconds = carouselDuration(s.perImage ?? 2.5, s.productId);
+        if (!(s.line ?? "").trim()) s.line = DEFAULT_CAROUSEL_LINE;
+        if (!s.speakerId) s.speakerId = characterId;
       }
     });
     setShots(base);
@@ -637,6 +721,8 @@ export default function Storyboard() {
         kind: "carousel",
         productId: pid,
         perImage,
+        speakerId: characterId,
+        line: DEFAULT_CAROUSEL_LINE,
       },
     ]);
   }
@@ -675,6 +761,34 @@ export default function Storyboard() {
   // Frame de départ commune : l'image de référence générée, sinon l'image d'identité brute.
   const startFrame = masterUrl ? null : identityRef || null;
 
+  /** Durée réelle d'un MP4 (évite décalage voix off / carrousel à l'assemblage). */
+  function probeVideoDuration(url: string, fallback: number): Promise<number> {
+    return new Promise((resolve) => {
+      if (typeof window === "undefined") {
+        resolve(fallback);
+        return;
+      }
+      const v = document.createElement("video");
+      v.preload = "metadata";
+      let settled = false;
+      const done = (d: number) => {
+        if (settled) return;
+        settled = true;
+        try {
+          v.removeAttribute("src");
+          v.load();
+        } catch {
+          /* ignore */
+        }
+        resolve(Number.isFinite(d) && d > 0.2 ? Math.round(d * 10) / 10 : fallback);
+      };
+      v.onloadedmetadata = () => done(v.duration);
+      v.onerror = () => done(fallback);
+      window.setTimeout(() => done(fallback), 8000);
+      v.src = url;
+    });
+  }
+
   function poll(i: number, sub: { requestId: string; model: string }) {
     if (timers.current[i]) clearInterval(timers.current[i]);
     update(i, { status: "En file…", requestId: sub.requestId, model: sub.model, error: null });
@@ -693,7 +807,9 @@ export default function Storyboard() {
         if (r.status === "COMPLETED") {
           clearInterval(timers.current[i]);
           if (r.videoUrl) {
-            update(i, { status: "Terminé", videoUrl: r.videoUrl });
+            const fallback = shotsRef.current[i]?.seconds ?? 5;
+            const seconds = await probeVideoDuration(r.videoUrl, fallback);
+            update(i, { status: "Terminé", videoUrl: r.videoUrl, seconds });
           } else {
             update(i, { status: null, error: "Job terminé mais sans URL vidéo — relance le plan." });
           }
@@ -727,11 +843,17 @@ export default function Storyboard() {
     update(i, { status: "Envoi…", videoUrl: null, syncedUrl: null, error: null });
     if (timers.current[i]) clearInterval(timers.current[i]);
     try {
-      const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/carousel", {
-        product: shot.productId,
-        seconds: shot.seconds,
-        secondsPerImage: shot.perImage ?? 2.5,
-      });
+      const sub = await apiPost<{ requestId: string; model: string; durationSeconds?: number }>(
+        "/api/generate/carousel",
+        {
+          product: shot.productId,
+          seconds: shot.seconds,
+          secondsPerImage: shot.perImage ?? 2.5,
+        },
+      );
+      if (sub.durationSeconds && sub.durationSeconds > 0) {
+        update(i, { seconds: sub.durationSeconds });
+      }
       refreshBudget();
       poll(i, sub);
     } catch (e) {
@@ -818,6 +940,10 @@ export default function Storyboard() {
     if (timers.current[i]) clearInterval(timers.current[i]);
     try {
       // Passant : text→vidéo (pas d'identité SDK → pas de clone du présentateur).
+      // Anti-inventions systématique (presse-papiers, photos inventées, etc.).
+      const prompt = shot.prompt.includes("No clipboard")
+        ? shot.prompt
+        : `${shot.prompt} ${ANTI_INVENT}`;
       if (shot.role === "guest") {
         if (!guestModelId) {
           update(i, { status: null, error: "Aucun modèle text→vidéo disponible pour le passant" });
@@ -825,7 +951,7 @@ export default function Storyboard() {
         }
         const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/video", {
           model: guestModelId,
-          prompt: shot.prompt,
+          prompt,
           seconds: shot.seconds,
           aspectRatio: aspect,
         });
@@ -836,7 +962,7 @@ export default function Storyboard() {
       const ref = speakerRef(shot);
       const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/video", {
         model: modelId,
-        prompt: shot.prompt,
+        prompt,
         seconds: shot.seconds,
         aspectRatio: aspect,
         character: needsStartImage ? ref.char : undefined,
@@ -857,13 +983,33 @@ export default function Storyboard() {
   }
 
   // --- Voix + lip-sync PAR PLAN ---
+  function clearSyncJob(i: number) {
+    if (syncTimers.current[i]) clearInterval(syncTimers.current[i]);
+    update(i, {
+      syncStatus: null,
+      syncError: null,
+      syncRequestId: undefined,
+      syncModel: undefined,
+    });
+  }
+
   async function makeShotVoice(i: number) {
     const shot = shots[i];
     const line = (shot.line ?? "").trim();
     if (!line) return update(i, { voiceError: "Écris d'abord la réplique de ce plan" });
     // Passant : voix générique (pas celle du présentateur SDK).
     const speaker = shot.role === "guest" ? undefined : (shot.speakerId ?? characterId);
-    update(i, { voiceBusy: true, voiceError: null });
+    // Nouvelle voix → invalide l'ancien lip-sync et débloque le bouton s'il était coincé.
+    if (syncTimers.current[i]) clearInterval(syncTimers.current[i]);
+    update(i, {
+      voiceBusy: true,
+      voiceError: null,
+      syncedUrl: null,
+      syncStatus: null,
+      syncError: null,
+      syncRequestId: undefined,
+      syncModel: undefined,
+    });
     try {
       const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", {
         text: line,
@@ -887,23 +1033,59 @@ export default function Storyboard() {
         update(i, { syncStatus: r.status });
         if (r.status === "FAILED") {
           clearInterval(syncTimers.current[i]);
-          update(i, { syncStatus: null, syncError: r.error ? `Échec : ${r.error}` : "Échec du lip-sync" });
+          update(i, {
+            syncStatus: null,
+            syncError: r.error ? `Échec : ${r.error}` : "Échec du lip-sync",
+            syncRequestId: undefined,
+            syncModel: undefined,
+          });
           return;
         }
         if (r.status === "COMPLETED") {
           clearInterval(syncTimers.current[i]);
-          update(i, { syncStatus: r.videoUrl ? "Terminé" : "Terminé (pas d'URL)", syncedUrl: r.videoUrl ?? null });
+          if (r.videoUrl) {
+            const fallback = shotsRef.current[i]?.seconds ?? 5;
+            const seconds = await probeVideoDuration(r.videoUrl, fallback);
+            update(i, {
+              syncStatus: "Terminé",
+              syncedUrl: r.videoUrl,
+              seconds,
+              syncRequestId: undefined,
+              syncModel: undefined,
+            });
+          } else {
+            // Sans URL : erreur claire + bouton re-cliquable (avant : grisé pour toujours).
+            update(i, {
+              syncStatus: null,
+              syncedUrl: null,
+              syncError: "Lip-sync terminé sans vidéo — réessaie.",
+              syncRequestId: undefined,
+              syncModel: undefined,
+            });
+          }
         }
       } catch (e) {
         clearInterval(syncTimers.current[i]);
-        update(i, { syncStatus: null, syncError: e instanceof Error ? e.message : "Erreur" });
+        update(i, {
+          syncStatus: null,
+          syncError: e instanceof Error ? e.message : "Erreur",
+          syncRequestId: undefined,
+          syncModel: undefined,
+        });
       }
     }, 4000);
   }
 
   async function syncShot(i: number) {
-    const shot = shots[i];
-    if (!shot.videoUrl || !shot.audioUrl) return;
+    const shot = shotsRef.current[i];
+    if (!shot?.videoUrl || !shot.audioUrl) {
+      update(i, {
+        syncError: !shot?.videoUrl
+          ? "Génère d'abord le plan vidéo."
+          : "Génère d'abord la voix (elle n'est pas gardée après rechargement de page).",
+      });
+      return;
+    }
     update(i, { syncStatus: "Envoi…", syncedUrl: null, syncError: null });
     if (syncTimers.current[i]) clearInterval(syncTimers.current[i]);
     try {
@@ -921,15 +1103,23 @@ export default function Storyboard() {
   }
 
   // Carrousel : colle la voix off (narration) sur le diaporama silencieux (mux audio+vidéo).
-  async function mergeCarouselAudio(i: number) {
-    const shot = shots[i];
-    if (!shot.videoUrl || !shot.audioUrl) return;
-    update(i, { syncStatus: "Envoi…", syncedUrl: null, syncError: null });
+  async function mergeCarouselAudio(i: number, audioUrlOverride?: string) {
+    const shot = shotsRef.current[i];
+    const audioUrl = audioUrlOverride ?? shot?.audioUrl;
+    if (!shot?.videoUrl || !audioUrl) {
+      update(i, {
+        syncError: !shot?.videoUrl
+          ? "Génère d'abord le carrousel."
+          : "Génère d'abord la voix off (elle n'est pas gardée après rechargement de page).",
+      });
+      return;
+    }
+    update(i, { syncStatus: "Envoi…", syncedUrl: null, syncError: null, voiceError: null });
     if (syncTimers.current[i]) clearInterval(syncTimers.current[i]);
     try {
       const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/merge-audio", {
         videoUrl: shot.videoUrl,
-        audioUrl: shot.audioUrl,
+        audioUrl,
         seconds: shot.seconds,
       });
       refreshBudget();
@@ -937,6 +1127,50 @@ export default function Storyboard() {
     } catch (e) {
       update(i, { syncStatus: null, syncError: e instanceof Error ? e.message : "Erreur" });
     }
+  }
+
+  /** Un clic : génère la narration si besoin, puis la colle sur le carrousel (pas de lip-sync). */
+  async function applyCarouselVoiceOver(i: number) {
+    const shot = shotsRef.current[i];
+    if (!shot?.videoUrl) {
+      update(i, { syncError: "Génère d'abord le carrousel (bouton « Générer le carrousel »)." });
+      return;
+    }
+    const line = (shot.line ?? "").trim() || DEFAULT_CAROUSEL_LINE;
+    if (!(shot.line ?? "").trim()) update(i, { line });
+    let audioUrl = shot.audioUrl ?? null;
+    if (!audioUrl) {
+      const speaker = shot.speakerId ?? characterId;
+      update(i, { voiceBusy: true, voiceError: null, syncError: null });
+      try {
+        const res = await apiPost<{ dataUrl: string }>("/api/generate/voice", {
+          text: line,
+          character: speaker,
+        });
+        audioUrl = res.dataUrl;
+        update(i, { audioUrl, voiceBusy: false });
+        refreshBudget();
+      } catch (e) {
+        update(i, {
+          voiceBusy: false,
+          voiceError: e instanceof Error ? e.message : "Échec de la voix off",
+        });
+        return;
+      }
+    }
+    await mergeCarouselAudio(i, audioUrl);
+  }
+
+  function syncBusy(shot: Shot): boolean {
+    return Boolean(shot.syncStatus && !shot.syncedUrl && !shot.syncError);
+  }
+
+  function syncDisabledReason(shot: Shot): string {
+    if (!ready) return "Clés API manquantes (Réglages)";
+    if (!shot.videoUrl) return "Génère d'abord le plan";
+    if (!shot.audioUrl) return "Génère d'abord la voix (ou regénère-la si tu as rechargé la page)";
+    if (syncBusy(shot)) return "En cours — Annuler pour relancer";
+    return "";
   }
 
   // Pour l'assemblage : ordre = ordre des cartes à l'écran. On préfère la version sonorisée.
@@ -956,14 +1190,17 @@ export default function Storyboard() {
     // Lip-sync / voix PAR PLAN obligatoire (sauf forceMute). Le lip-sync sur le
     // montage final ne sait pas qui parle et donne un résultat inutilisable.
     if (!forceMute && missingVoice.length > 0) {
+      const missingLabel = missingVoice
+        .map((s) => (s.kind === "carousel" ? `${s.title} (voix off)` : `${s.title} (lip-sync)`))
+        .join("\n• ");
       await confirm({
-        title: "Lip-sync manquant — assemblage bloqué",
+        title: "Voix manquante — assemblage bloqué",
         message:
-          `${missingVoice.length} plan(s) n'ont pas encore de voix synchronisée :\n` +
-          `• ${missingVoice.map((s) => s.title).join("\n• ")}\n\n` +
-          "Fais d'abord sur CHAQUE plan : 1) Générer la voix → 2) Synchroniser les lèvres " +
-          "(ou « Ajouter la voix off » pour un carrousel).\n\n" +
-          "Le bouton « Ajouter la voix » sur la vidéo déjà montée ne peut PAS remplacer ça.",
+          `${missingVoice.length} plan(s) sans audio :\n` +
+          `• ${missingLabel}\n\n` +
+          "• Plan vidéo : 1) Générer la voix → 2) Synchroniser les lèvres\n" +
+          "• Carrousel : 1) Générer la voix off → 2) Ajouter la voix off (pas de lip-sync : ce sont des captures, pas un visage)\n\n" +
+          "Le Studio Lip-sync sur le montage final ne remplace pas ça.",
         confirmLabel: "Compris",
         cancelLabel: "Fermer",
       });
@@ -993,12 +1230,23 @@ export default function Storyboard() {
 
     setMergeError(null);
     setMergedUrl(null);
-    setMergeStatus("Envoi…");
+    setMergeStatus("Mesure des durées…");
     if (mergeTimer.current) clearInterval(mergeTimer.current);
     try {
+      // Durées RÉELLES des MP4 (sinon la voix off du carrousel démarre pendant le plan précédent).
+      const durations = await Promise.all(
+        assemblyOrder.map((s) =>
+          probeVideoDuration((s.syncedUrl ?? s.videoUrl) as string, Math.max(0.5, s.seconds || 5)),
+        ),
+      );
+      const measuredTotal = durations.reduce((a, d) => a + d, 0);
+      setMergeStatus("Envoi…");
       const sub = await apiPost<{ requestId: string; model: string }>("/api/generate/merge", {
         videoUrls: readyClips,
-        totalSeconds,
+        durations,
+        totalSeconds: measuredTotal || totalSeconds,
+        // forceMute = assemblage sans piste audio (sinon lip-sync perdu par l'ancien merge-videos).
+        preserveAudio: !forceMute,
       });
       refreshBudget();
       setMergeStatus("Assemblage…");
@@ -1104,6 +1352,14 @@ export default function Storyboard() {
         <button className="btn btn-primary" onClick={loadPreset}>Charger ce style</button>
         <button className="btn btn-ghost" onClick={addShot}>+ Plan vidéo</button>
         <button className="btn btn-ghost" onClick={addCarousel} title="Diaporama de tes vraies captures d'écran">+ Carrousel captures</button>
+        <button
+          type="button"
+          className="btn btn-ghost text-[var(--danger)] border-[var(--danger)]/40"
+          onClick={resetStoryboard}
+          title="Efface tous les plans et brouillons sauvegardés pour ce personnage"
+        >
+          Réinitialiser tout
+        </button>
       </div>
 
       {preset.note && (
@@ -1601,9 +1857,11 @@ export default function Storyboard() {
             )}
 
             {shot.kind === "carousel" && (
-              <div className="mt-3 rounded-lg border border-dashed border-[var(--border)] p-3 space-y-2">
+              <div className="mt-3 rounded-lg border border-[var(--accent)]/40 bg-[var(--accent)]/5 p-3 space-y-2">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs uppercase tracking-wide text-[var(--muted)]">🎙️ Voix off (pendant le défilement)</span>
+                  <span className="text-xs uppercase tracking-wide text-[var(--foreground)] font-semibold">
+                    🎙️ Narration voix off
+                  </span>
                   <div className="flex items-center gap-2">
                     {shot.syncedUrl && <span className="badge text-[var(--success)]">carrousel sonorisé ✓</span>}
                     <label className="flex items-center gap-1 text-xs text-[var(--muted)] cursor-pointer" title="Le carrousel reste sans voix (pas d'alerte).">
@@ -1616,13 +1874,17 @@ export default function Storyboard() {
                     </label>
                   </div>
                 </div>
+                <p className="text-xs text-[var(--muted)]">
+                  Rien à synchroniser : ce sont des captures, pas un visage. On génère une narration
+                  et on la colle sur le diaporama.
+                </p>
                 {shot.silent ? (
                   <p className="text-xs text-[var(--muted)]">Carrousel sans voix off — il défilera en silence.</p>
                 ) : (
                   <>
                     {characters.length > 1 && (
                       <div>
-                        <label className="label">Voix off — qui parle&nbsp;?</label>
+                        <label className="label">Qui narre&nbsp;?</label>
                         <select
                           className="select w-56"
                           value={shot.speakerId ?? characterId}
@@ -1636,34 +1898,42 @@ export default function Storyboard() {
                       </div>
                     )}
                     <textarea
-                      className="input min-h-[56px]"
+                      className="input min-h-[72px]"
                       value={shot.line ?? ""}
                       onChange={(e) => update(i, { line: e.target.value })}
                       placeholder={`Texte lu en voix off par ${nameOf(shot.speakerId ?? characterId)} pendant le carrousel…`}
                     />
                     <div className="flex flex-wrap items-center gap-2">
                       <button
-                        className="btn btn-ghost"
-                        disabled={!ready || !(shot.line ?? "").trim() || shot.voiceBusy}
-                        onClick={() => makeShotVoice(i)}
+                        className="btn btn-primary"
+                        disabled={!ready || !shot.videoUrl || shot.voiceBusy || syncBusy(shot)}
+                        onClick={() => applyCarouselVoiceOver(i)}
+                        title={
+                          !shot.videoUrl
+                            ? "Génère d'abord le carrousel"
+                            : "Génère la narration et la colle sur le diaporama (pas de lip-sync)"
+                        }
                       >
-                        {shot.voiceBusy ? "Voix…" : shot.audioUrl ? "Regénérer la voix off" : "1) Générer la voix off"}
+                        {shot.voiceBusy
+                          ? "Génération voix…"
+                          : syncBusy(shot)
+                            ? "Collage voix off…"
+                            : shot.syncedUrl
+                              ? "Refaire la voix off"
+                              : "Mettre la voix off"}
                       </button>
                       {shot.audioUrl && <audio src={shot.audioUrl} controls className="h-8" />}
-                      <button
-                        className="btn btn-primary"
-                        disabled={
-                          !ready ||
-                          !shot.videoUrl ||
-                          !shot.audioUrl ||
-                          (!!shot.syncStatus && !shot.syncedUrl && !shot.syncError)
-                        }
-                        onClick={() => mergeCarouselAudio(i)}
-                        title={!shot.videoUrl ? "Génère d'abord le carrousel" : !shot.audioUrl ? "Génère d'abord la voix off" : ""}
-                      >
-                        {shot.syncStatus && !shot.syncedUrl && !shot.syncError ? "Ajout…" : "2) Ajouter la voix off"}
-                      </button>
+                      {syncBusy(shot) && (
+                        <button type="button" className="btn btn-ghost text-xs" onClick={() => clearSyncJob(i)}>
+                          Annuler
+                        </button>
+                      )}
                     </div>
+                    {!shot.videoUrl && (
+                      <p className="text-xs text-[var(--danger)]">
+                        Génère d&apos;abord le carrousel ci-dessus, puis reviens ici pour la voix off.
+                      </p>
+                    )}
                     {shot.voiceError && <p className="text-xs text-[var(--danger)]">{shot.voiceError}</p>}
                     {shot.syncError && <p className="text-xs text-[var(--danger)]">{shot.syncError}</p>}
                     {!shot.syncError && shot.syncStatus && !shot.syncedUrl && (
@@ -1671,7 +1941,7 @@ export default function Storyboard() {
                     )}
                     {shot.syncedUrl && (
                       <div>
-                        <p className="text-xs text-[var(--muted)] mb-1">Carrousel avec voix off (utilisé pour l&apos;assemblage) :</p>
+                        <p className="text-xs text-[var(--muted)] mb-1">Carrousel avec narration (utilisé pour l&apos;assemblage) :</p>
                         <video src={shot.syncedUrl} controls className="w-full rounded-lg border border-[var(--border)] max-h-64" />
                       </div>
                     )}
@@ -1710,18 +1980,23 @@ export default function Storyboard() {
                   {shot.audioUrl && <audio src={shot.audioUrl} controls className="h-8" />}
                   <button
                     className="btn btn-primary"
-                    disabled={
-                      !ready ||
-                      !shot.videoUrl ||
-                      !shot.audioUrl ||
-                      (!!shot.syncStatus && !shot.syncedUrl && !shot.syncError)
-                    }
+                    disabled={!ready || !shot.videoUrl || !shot.audioUrl || syncBusy(shot)}
                     onClick={() => syncShot(i)}
-                    title={!shot.videoUrl ? "Génère d'abord le plan" : !shot.audioUrl ? "Génère d'abord la voix" : ""}
+                    title={syncDisabledReason(shot)}
                   >
-                    {shot.syncStatus && !shot.syncedUrl && !shot.syncError ? "Lip-sync…" : "2) Synchroniser les lèvres"}
+                    {syncBusy(shot) ? "Lip-sync…" : "2) Synchroniser les lèvres"}
                   </button>
+                  {syncBusy(shot) && (
+                    <button type="button" className="btn btn-ghost text-xs" onClick={() => clearSyncJob(i)}>
+                      Annuler
+                    </button>
+                  )}
                 </div>
+                {!shot.audioUrl && shot.videoUrl && (
+                  <p className="text-xs text-[var(--muted)]">
+                    Astuce : après un rechargement de page, clique « Générer la voix » à nouveau (la voix n&apos;est pas sauvegardée).
+                  </p>
+                )}
                 {shot.voiceError && <p className="text-xs text-[var(--danger)]">{shot.voiceError}</p>}
                 {shot.syncError && <p className="text-xs text-[var(--danger)]">{shot.syncError}</p>}
                 {!shot.syncError && shot.syncStatus && !shot.syncedUrl && (
@@ -1762,9 +2037,15 @@ export default function Storyboard() {
                     </span>
                     {s.kind === "carousel" && <span className="badge">carrousel</span>}
                     {!hasClip && <span className="badge text-[var(--danger)]">pas de vidéo</span>}
-                    {hasClip && hasVoice && <span className="badge text-[var(--success)]">voix OK</span>}
+                    {hasClip && hasVoice && (
+                      <span className="badge text-[var(--success)]">
+                        {s.kind === "carousel" ? "voix off OK" : "voix OK"}
+                      </span>
+                    )}
                     {hasClip && !hasVoice && (
-                      <span className="badge text-[var(--danger)]">sans lip-sync / voix</span>
+                      <span className="badge text-[var(--danger)]">
+                        {s.kind === "carousel" ? "sans voix off" : "sans lip-sync / voix"}
+                      </span>
                     )}
                   </li>
                 );
@@ -1773,8 +2054,22 @@ export default function Storyboard() {
           </div>
           {missingVoice.length > 0 && (
             <p className="text-sm text-[var(--danger)]">
-              Assemblage bloqué : fais d&apos;abord voix + lip-sync sur{" "}
-              {missingVoice.map((s) => s.title).join(", ")} (bloc « Voix & lip-sync » de chaque plan).
+              Assemblage bloqué :{" "}
+              {silentShots.length > 0 && (
+                <>
+                  lip-sync manquant sur {silentShots.map((s) => s.title).join(", ")}
+                  {silentCarousels.length > 0 ? " ; " : "."}
+                </>
+              )}
+              {silentCarousels.length > 0 && (
+                <>
+                  voix off manquante sur {silentCarousels.map((s) => s.title).join(", ")}
+                  {" "}(bloc « Voix off » du carrousel — pas de lip-sync).
+                </>
+              )}
+              {silentShots.length > 0 && silentCarousels.length === 0 && (
+                <> (bloc « Voix & lip-sync » de chaque plan).</>
+              )}
             </p>
           )}
           <div className="flex flex-wrap gap-3">
@@ -1791,7 +2086,7 @@ export default function Storyboard() {
               onClick={() => assemble(false)}
               title={
                 missingVoice.length > 0
-                  ? "Termine le lip-sync sur chaque plan d'abord"
+                  ? "Termine la voix (lip-sync ou voix off carrousel) sur chaque plan d'abord"
                   : readyClips.length < 2
                     ? "Génère au moins 2 plans d'abord"
                     : ""
@@ -1830,8 +2125,8 @@ export default function Storyboard() {
                 </a>
               </div>
               <p className="mt-2 text-xs text-[var(--muted)]">
-                ⚠️ Ne passe pas ce montage dans Studio Lip-sync : ça ne marche pas bien sur plusieurs plans.
-                Pour une voix correcte, refais voix + lip-sync <strong>sur chaque plan</strong>, puis réassemble.
+                Montage avec piste audio des plans sonorisés (compose). Ne repasse pas ce fichier dans Studio Lip-sync.
+                Si le son manque encore, vérifie chaque plan « plan sonorisé ✓ » puis réassemble.
               </p>
               <SendToAiccos videoUrl={mergedUrl} defaultTitle={`${characterName || "Storyboard"} — clip assemblé`} />
             </div>

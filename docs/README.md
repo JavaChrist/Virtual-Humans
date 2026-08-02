@@ -6,6 +6,7 @@ Human-readable documentation for the Virtual Humans SDK: architecture, guides, g
 
 ## Contents
 
+- `AUDIT.md`: complete technical audit of the current web app (site).
 - `ARCHITECTURE.md`: high-level architecture overview.
 - `GETTING_STARTED.md`: first steps with the SDK.
 - `CHARACTER_CREATION_GUIDE.md`: how to create a new character SDK.

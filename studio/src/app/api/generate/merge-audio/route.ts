@@ -31,7 +31,12 @@ export async function POST(req: NextRequest) {
     const video_url = videoUrl.startsWith("data:") ? await uploadDataUrl(videoUrl, "video") : videoUrl;
     const audio_url = audio.startsWith("data:") ? await uploadDataUrl(audio, "audio") : audio;
 
-    const requestId = await submitJob(MERGE_AUDIO_MODEL_ID, { video_url, audio_url });
+    // start_offset 0 : la narration commence avec la 1re image du diaporama (pas avant).
+    const requestId = await submitJob(MERGE_AUDIO_MODEL_ID, {
+      video_url,
+      audio_url,
+      start_offset: 0,
+    });
     const usd = estimateMergeAudio(seconds);
     await addSpend({
       type: "video",
