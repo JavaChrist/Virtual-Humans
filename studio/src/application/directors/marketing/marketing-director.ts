@@ -14,6 +14,10 @@ import {
 } from "@/domain/marketing";
 import type { MarketingAnalyzerPort } from "./analyzer-port";
 import { runMarketingDryRun } from "./dry-run";
+import {
+  internalMarketingFailure,
+  isMarketingAnalyzerError,
+} from "./failures";
 import type {
   DirectorRunContext,
   MarketingDirector,
@@ -114,11 +118,13 @@ export function createMarketingDirector(
           context,
         );
       } catch (e) {
-        const message =
-          e instanceof Error ? e.message : "Échec de l'analyse marketing.";
+        // Provider / transport failure — never collapse into invalid_candidate.
+        if (isMarketingAnalyzerError(e)) {
+          return { status: "provider_failed", failure: e.failure };
+        }
         return {
-          status: "invalid",
-          errors: [{ code: "analyzer_failed", message }],
+          status: "provider_failed",
+          failure: internalMarketingFailure("analyzer_unexpected"),
         };
       }
 

@@ -2,16 +2,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { submitJob } from "@/lib/providers/fal";
 import { MERGE_MODEL_ID, estimateMerge } from "@/lib/pricing";
 import { addSpend, capReached } from "@/lib/budget";
+import {
+  buildFalComposePayload,
+  falComposePayloadDurationSeconds,
+  resolveHistoricalComposeDurations,
+} from "@/infrastructure/postproduction/fal-compose";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
-
-type Keyframe = { url: string; timestamp: number; duration: number };
 
 /**
  * Assemble via fal compose (pistes vidéo + audio séparées).
  * merge-videos seul peut perdre l'audio des clips lip-syncés (codecs hétérogènes).
  * La piste audio réutilise les mêmes URLs : fal extrait l'audio de chaque vidéo.
+ *
+ * Payload tracks/keyframes : helper partagé VHS-111B (comportement historique inchangé).
  */
 export async function POST(req: NextRequest) {
   const body = await req.json().catch(() => ({}));
@@ -33,35 +38,24 @@ export async function POST(req: NextRequest) {
       { status: 402 },
     );
 
-  const fallbackSec = Math.max(1, totalSeconds / videoUrls.length);
-  const durationsSec = videoUrls.map((_, i) => {
-    const d = durationsIn[i];
-    return Number.isFinite(d) && d > 0 ? d : fallbackSec;
+  const durationsSec = resolveHistoricalComposeDurations({
+    clipCount: videoUrls.length,
+    durationsIn,
+    totalSeconds,
   });
 
-  let tMs = 0;
-  const keyframes: Keyframe[] = videoUrls.map((url, i) => {
-    const durationMs = Math.max(500, Math.round(durationsSec[i] * 1000));
-    const kf = { url, timestamp: tMs, duration: durationMs };
-    tMs += durationMs;
-    return kf;
+  const payload = buildFalComposePayload({
+    clips: videoUrls.map((sourceUrl, i) => ({
+      sourceUrl,
+      durationSeconds: durationsSec[i]!,
+    })),
+    preserveEmbeddedAudio: preserveAudio,
   });
-
-  const tracks: { id: string; type: string; keyframes: Keyframe[] }[] = [
-    { id: "video", type: "video", keyframes },
-  ];
-  if (preserveAudio) {
-    // Même URL : fal lit la piste audio embarquée (clips lip-sync / carrousel sonorisé).
-    tracks.push({
-      id: "audio",
-      type: "audio",
-      keyframes: keyframes.map((k) => ({ ...k })),
-    });
-  }
+  const timelineSeconds = falComposePayloadDurationSeconds(payload);
 
   try {
-    const requestId = await submitJob(MERGE_MODEL_ID, { tracks });
-    const usd = estimateMerge(totalSeconds || tMs / 1000);
+    const requestId = await submitJob(MERGE_MODEL_ID, { tracks: payload.tracks });
+    const usd = estimateMerge(totalSeconds || timelineSeconds);
     await addSpend({
       type: "video",
       provider: "fal",

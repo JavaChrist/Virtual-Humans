@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local Supabase CLI cache / secrets — never lint or commit
+    "supabase/.temp/**",
   ]),
   {
     rules: {

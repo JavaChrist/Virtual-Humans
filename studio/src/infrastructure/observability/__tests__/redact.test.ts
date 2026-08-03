@@ -92,6 +92,21 @@ test("never logs full prompts / scripts / dialogues", () => {
   assert.deepEqual(out.meta, { size: "1024x1024" });
 });
 
+test("never logs full brief CTA / audience / brand fields", () => {
+  const out = redact({
+    callToAction: "Achetez maintenant",
+    audienceDescription: "Parents urbains 25-40",
+    brandConstraints: "Pas de rouge",
+    subjectDescription: "Produit secret",
+    projectId: "11111111-1111-4111-8111-111111111111",
+  }) as Record<string, unknown>;
+  assert.equal(out.callToAction, REDACTED);
+  assert.equal(out.audienceDescription, REDACTED);
+  assert.equal(out.brandConstraints, REDACTED);
+  assert.equal(out.subjectDescription, REDACTED);
+  assert.equal(out.projectId, "11111111-1111-4111-8111-111111111111");
+});
+
 test("does not mutate nested objects", () => {
   const input = { outer: { password: "secret", keep: 1 } };
   const before = JSON.stringify(input);

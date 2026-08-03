@@ -7,6 +7,7 @@ export const ArtifactTypeValues = [
   "visual_direction",
   "storyboard_project",
   "scene_package",
+  "scene_package_set",
   "generation_plan",
   "production_result",
 ] as const;

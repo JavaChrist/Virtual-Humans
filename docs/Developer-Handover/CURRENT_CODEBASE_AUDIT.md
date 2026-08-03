@@ -5,6 +5,10 @@
 **Protocole :** `03_CURRENT_AUDIT.md` + Phase 0 de `06_ROADMAP_V2.md` (VHS-001)  
 **Statut :** audit terminé — aucune modification d’architecture applicative pendant cet audit
 
+> Mise à jour lot VHS-118B + VHS-119A + VHS-119B : pipeline persistant étendu jusqu’au `VideoScript` (Brief → Marketing → Creative → Script) sous flags AI off ; timing VHS-103 autoritaire ; **0** OpenAI / smoke / apply distant.
+>
+> **Reprise Phase 0 (3 août 2026) :** VHS-120A/B et VHS-121A/B **livrés**. Pipeline `/director` persistant couvre Brief → Marketing → Creative → Script → Art → Storyboard. Prompt/Routing = domaine seul.
+
 > Légende : **[Fait]** = vérifié dans le dépôt / par exécution / via Supabase MCP.  
 > **[Hypothèse]** = non confirmé ou dépendant d’un environnement externe.  
 > Aucun appel payant provider n’a été effectué.
@@ -175,8 +179,8 @@ Pas de queue durable, pas d’idempotence, pas de dry-run, pas de Production Dir
 | Parcours `/director` | 🟡 Stub VHS-112 (flag off par défaut ; brief + autosave local) |
 | Directeurs métier | ❌ Absents |
 | Model Router / Capability Registry | ❌ Absents |
-| Generation Engine unifié | ❌ Absents (providers ad hoc) |
-| Production Director / jobs / reprise | ❌ Absents |
+| Generation Engine unifié | ✅ Domaine + adapters (VHS-109) — non branché routes |
+| Production Director / jobs / reprise | 🟡 Orchestrateur + ports (VHS-110) — pas de queue/store durable |
 | Dry-run / idempotence / correlationId | ❌ Absents |
 | Ledger coûts réels + réservation | ❌ Absents |
 | Migrations versionnées dans le dépôt | ❌ Absentes (2 migrations appliquées côté Supabase uniquement) |
@@ -451,8 +455,422 @@ npm run build        # build production Next 16
 
 **Limites avant activation réelle :** pas d’adaptateur IA, pas de branchement UI, pas de persistance du plan, pas d’approbation workflow branchée.
 
-**Écarts restants :** adaptateur analyzer (hors prod jusqu’à décision) + branchement `/director` ; Creative Director (VHS-102) ; VHS-113 ; finaliser VHS-005 / VHS-006.
+### VHS-102 — Creative Director (domaine + dry-run) — ✅ 2 août 2026
 
-Prochain incrément recommandé : **VHS-102 Creative Director** (domaine + dry-run) **ou** brancher le dry-run Marketing dans `/director` (sans provider) ; sinon finaliser VHS-005 / VHS-006.  
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/creative` — `CreativeConcept` v1.0.0, `EmotionalBeat`, `CreativeDevice`, références génériques, conservation marketing via evidence, Zod, `finalizeCreativeConcept` |
+| Conservation | Objectif, audience, problème, bénéfice, ton, CTA, messages clés, métrique — traçés, non réécrits |
+| Application | `studio/src/application/directors/creative` — `createCreativeDirector(analyzer)`, `runCreativeDryRun`, `DirectorRunContext` partagé |
+| Port | `CreativeAnalyzerPort` → candidat non fiable ; **aucune implémentation provider** |
+| Dry-run | readiness MarketingPlan + brief ; `providerCalled: false` ; **aucun concept inventé** |
+| UI / API / persistance | **Aucune** |
+| Validation | `npm test` → **217/217** ; typecheck / lint (11 warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** pas d’adaptateur IA, pas d’UI, pas de persistance.
+
+### VHS-103 — Script Writer (narration + timing) — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/script` — `VideoScript` v1.0.0, segments, hook/CTA, `ScriptTimingReport`, Zod, `finalizeVideoScript` |
+| Timing | `timing.ts` — profils `speech-fr-v1` / `speech-en-v1` / `speech-fallback-v1` ; segment = `max(oral, écran) + pause` ; tolérance **±10 %** ; recalcul obligatoire |
+| Conservation | Objectif/audience/bénéfice/ton/CTA/messages + grande idée/arc/approche/rythme via evidence |
+| Application | `studio/src/application/directors/script` — `createScriptWriter`, `runScriptDryRun`, `DirectorRunContext` partagé |
+| Port | `ScriptAnalyzerPort` — candidat non fiable ; **aucune implémentation provider** |
+| Dry-run | readiness brief+plan+concept ; `providerCalled: false` ; **aucun script** |
+| UI / API / persistance | **Aucune** |
+| Validation | `npm test` → **256/256** ; typecheck / lint (11 warnings) / build OK (+ NFT) |
+
+**Limites :** pas d’adaptateur IA, pas d’UI, pas d’Art Director, pas de persistance.
+
+### VHS-104 — Art Director (direction visuelle + Runtime snapshot) — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/art` — `VisualDirection` v1.0.0, palette, continuité, `SegmentVisualDirection` lié à `scriptSegmentId`, accessibilité couleurs, Zod, `finalizeVisualDirection` |
+| Alignement script | Exactement une direction par segment du `VideoScript` ; ordre conservé ; pas de découpage en plans |
+| Runtime | Snapshot canonique `CharacterCapabilitiesSnapshot` (domaine) ; builder pur `buildCharacterCapabilitiesSnapshot` dans `application/runtime/` — **aucun** chemin/URL/binaire ; **aucun** appel SDK depuis le domaine |
+| Continuité | `ContinuityRule` structurées ; required non contradictoires ; tenue/lieu stables vérifiés |
+| Application | `studio/src/application/directors/art` — `createArtDirector`, `ArtAnalyzerPort`, dry-run `providerCalled: false` |
+| Frontières | Art = style/lieu/caméra/lumière/assets/composition/continuité ; **pas** storyboard, prompts, modèles, coûts |
+| UI / API / persistance | **Aucune** — `/director` inchangé ; Runtime SDK non modifié |
+| Validation | `npm test` → **309/309** ; typecheck / lint (11 warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** pas d’adaptateur IA, pas d’UI, pas de Storyboard/Prompt Director, pas de persistance.
+
+### VHS-105 — Storyboard Director (contrat de tournage) — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/storyboard` — `StoryboardProject` v1.0.0, `StoryboardScene`, timing déterministe 0,01 s, couverture segment→scènes, continuité projetée, transitions narratives, Zod, `finalizeStoryboardProject` |
+| Segment vs scène | Segment narratif (script) → 1..N scènes de production ; ordre des segments conservé ; reconstruction parlée exacte |
+| Timing | Candidat non autoritaire ; somme exacte = durée cible ; transitions = métadonnées (non additionnées) ; plages 15/20/30/60 → warnings soft |
+| Application | `studio/src/application/directors/storyboard` — `createStoryboardDirector`, `StoryboardAnalyzerPort`, dry-run `providerCalled: false` |
+| Frontières | Découpage / durées / intent / transitions / refs — **pas** prompts, modèles, coûts, merge, Prompt Director |
+| Storyboard historique | `app/storyboard/page.tsx` **inchangé** — seul moteur UI ; domaine = cible d’extraction ; pas de `/storyboard-v2` ; mapping documenté dans `historical-mapping.ts` |
+| UI / API / persistance | **Aucune** — `/director` inchangé |
+| Validation | `npm test` → **356/356** ; typecheck / lint (11 warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** pas d’adaptateur IA, pas de branchement UI, pas de Prompt Director, pas de persistance.
+
+### VHS-106 — Prompt Director (`ScenePackage[]`) — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/prompt` — `ScenePackage` v1.0.0 (`artifactType: scene_package`), blocs sémantiques, contraintes, références, profils abstraits, renderers déterministes `prompt-renderer-v1`, injection-safety, Zod, `finalizeScenePackage` |
+| Enveloppe applicative | `PromptDirectorOutput { storyboardRevisionId, packages }` — **un package par scène** ; pas d’artifact métier concurrent |
+| Blocs | subject / action / environment / camera / lighting / style / composition / dialogue verbatim / audio / screenText (`post_production` par défaut) / constraints / references |
+| Profils | `image.*`, `video.*`, `audio.*`, `motion.carousel` — mapping depuis `productionIntent` ; **aucun** nom provider/modèle/tarif/fallback |
+| Rendu | Assemblage déterministe des blocs délimités ; dialogue verbatim ; négatifs ciblés ; reconstructible ; pas d’URLs/secrets/chemins |
+| Injection | Données brief/produit/réfs = non fiables ; scan FR/EN ; délimitation au rendu ; erreurs typées **sans** logger le payload hostile |
+| Fidélité | Reconstruction depuis brief→…→Storyboard ; candidat non autoritaire ; refus dialogue/assets/refs/durée/intent altérés |
+| Application | `studio/src/application/directors/prompt` — `createPromptDirector`, `PromptAnalyzerPort`, dry-run `providerCalled: false` (aucun package produit) |
+| Frontières | Packages + variantes abstraites — **pas** Model Router, GenerationPlan, provider, coût, UI, persistance |
+| Prompts historiques | `assemble.ts`, `prompt-composer.tsx`, Scene/Storyboard **inchangés** (non déplacés) |
+| UI / API / persistance | **Aucune** — `/director` inchangé |
+| Validation | `npm test` → **390/390** ; typecheck / lint (11 warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** pas d’adaptateur IA, pas de composers modèle-spécifiques, pas de Model Router, pas de branchement UI, pas de persistance.
+
+### VHS-107 — Capability Registry versionné — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/routing/capabilities` — `ProviderDefinition`, `ModelCapabilities`, `CapabilityRegistrySnapshot` v1.0.0, pricing `Money`, evidence/scores 0–100, Zod, freeze |
+| Inventaire importé | Providers `openai`, `elevenlabs`, `fal` ; modèles : `gpt-image-1`, `eleven_multilingual_v2`, `VIDEO_MODELS` (Veo/Seedance/Kling/Runway/MiniMax), `LIPSYNC_MODELS`, `flux-pulid`, `nano-banana/edit`, carousel ffmpeg |
+| Vérifié (structure catalogue/code) | IDs, `mode`→profils abstraits, `audio` native/silent→`nativeAudioOutput`, `seconds[]`, `aspectRatios`, prix USD→cents half-up `source: legacy_catalog` |
+| Inconnu (non inventé) | régions réelles, disponibilité live (`status: unknown`), dialogue natif, multi-personnage, scores qualité, identité hors `flux-pulid` / modes structurés |
+| Requirements | `deriveCapabilityRequirements(scenePackage, storyboard)` — profils depuis `productionIntent`, pas de sélection modèle |
+| Éligibilité | `evaluateEligibility` pur — bloque si info critique inconnue ; warnings sur préférences ; **pas** de ranking |
+| Application | `buildRegistryFromLegacyPricing`, `buildCapabilityRegistry`, `buildRegistryFromStudioPricing` ; dry-run `runRegistryDryRun` → `providerCalled: false` |
+| Frontières | Registre + filtre — **pas** Model Router, GenerationPlan, scoring final, UI, API, persistance |
+| Invariants | `pricing.ts` / adapters providers **inchangés** ; domaine sans React/env/réseau |
+| Validation | `npm test` → **430/430** ; typecheck / lint (11 warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** snapshot partiel ; pas de probe disponibilité ; pas de Model Router ni stratégie de production.
+
+### VHS-108 — Model Router (`GenerationPlan`) — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/routing/router` — `GenerationPlan` v1.0.0, stratégies, scoring, estimation, fallbacks, explications, validation, `routeModelPlan` |
+| Stratégies | `direct_video`, `image_to_video`, `talking_head`, `voice_over`, `carousel`, `product_demo`, `tutorial`, `multi_character` — templates sans provider |
+| Scoring | Politique `routing-policy-v1` ; poids entiers somme 100 ; inconnu = exclusion dénominateur (ou blocage si hard) ; **aucune note inventée** ; tie-break score→fiabilité→coût→durée→ids lexicaux |
+| Estimation | Ligne tarifaire compatible × quantité dérivée ; `CostEstimate` ; coût principal = somme étapes ; exposition fallback séparée |
+| Budget | `decideBudget` dur ; `budget_exceeded` sans réservation/dépense |
+| Fallbacks | 0–2 / étape ; différents du primaire ; même politique déterministe |
+| Application | `createModelRouter`, `runModelRouterDryRun` (`providerCalled: false`, pas d’artifact finalisé) |
+| Registre réel partiel | Souvent `no_eligible_strategy` (dialogue/identité inconnus) — **attendu** ; happy-path via registre synthétique de test |
+| Frontières | Planifie uniquement — **pas** Generation Engine, Production Director, queue, UI, API, persistance |
+| Validation | `npm test` → **450/450** ; typecheck / lint (11 warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** pas d’exécution ; registre legacy insuffisant pour talking_head réel ; pas de merge global routé.
+
+### VHS-109 — Generation Engine et contrats d’adapters — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/generation` — `GenerationCommand`, entrées canoniques, `GenerationResult`, erreurs, idempotence + empreinte SHA-256, port `IdempotencyStore` (sans impl) |
+| Application | `createGenerationEngine`, `ProviderAdapterRegistry`, `resolveCanonicalInput`, dry-run `providerCalled: false` |
+| Infrastructure | Wrappers injectables : `createFalAdapter` (submit+poll queue ; identity sync optionnel), `createOpenAIImageAdapter` (sync completed), `createElevenLabsVoiceAdapter` (sync completed ; voice id explicite requis) |
+| Supporté | fal submit/poll ; OpenAI/ElevenLabs submit→completed |
+| Unsupported (réel) | cancel, webhook, estimate provider, idempotency côté SDK |
+| Erreurs | taxonomie V2 + mapping pur ; `unknown` non retryable ; pas de secret/prompt/URL dans `publicMessage` |
+| Frontières | Une seule étape ; **ignore** `step.fallbacks` ; pas de choix de modèle ; routes historiques / `lib/providers` **inchangés** |
+| Validation | `npm test` → **466/466** ; typecheck / lint (11 warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** pas de store d’idempotence durable ; pas de Production Director / queue / UI / persistance ; pas d’appel réseau en tests.
+
+### VHS-110 — Production Director, orchestration multi-étapes et fallbacks — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/production` — `ProductionRun` / `ProductionResult`, machine d’états d’étape, scheduling pur, tentatives, `decideFallback`, qualité structurée, manifeste redacted, événements |
+| Application | `studio/src/application/production` — `createProductionDirector` (`start` / `advance` / `requestCancellation`), ports run-store / budget / idempotence / qualité / events, dry-run |
+| Pipeline | `GenerationPlan` approuvé → Production Director → `GenerationEngine` (une étape/commande) → `ProductionResult` |
+| Fallbacks | Uniquement ceux du plan (0–2) ; PD seul autorisé à les déclencher ; pas de retry silencieux du primaire |
+| Budget | Réserve → exécute → commit réel ou **provisoire explicite** → release écart ; pas de `vh_spend` |
+| Idempotence | PD appelle `begin`/`complete`/`fail` ; engine **sans** `idempotencyStore` (évite double-begin) ; `durable: false` refuse `start` par défaut |
+| Qualité | Port ; checks MIME/type/durée/dimensions/source ; `needs_review` jamais accepté silencieusement ; pas de score visuel |
+| Annulation / partial | `cancelling` → `cancelled` ; partial si politique + ≥1 scène ok + ≥1 échec/skip/cancel ; pas de merge/export |
+| Validation | `npm test` → **486/486** ; typecheck / lint (**11** warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** pas de queue durable, pas de tables Supabase, pas de reprise crash réelle, pas de merge/export, pas d’UI/API, fakes mémoire **tests only**.
+
+### VHS-111 — Contrôle qualité étendu, MergePlan et export — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Domaine | `studio/src/domain/postproduction` — `FinalQualityReport` (technique/contractuel/éditorial), `HumanReviewDecision`, `MergePlan`, capacités déclarées, `ExportPackage` / manifeste redacted |
+| Application | `PostProductionDirector` (`prepare` / `merge` / `prepareExport` / `recordHumanReview`), dry-run `providerCalled: false` |
+| ProductionResult | **1.1.0** additif : `delivery.status` (`not_started`…`delivered`) ; `status` reste l’exécution scènes ; migration pure `migrateProductionResultToV11` ; pas de nouvel artifact type |
+| MergeEngine | Stub `createUnavailableMergeEngine` → `merge_adapter_not_configured` ; capacités futures fal compose déclarées honnêtement (`cut`/`none`, concat, audio embarqué, async poll ; **pas** fade/overlays/LUFS/cancel) |
+| Export | `download` (validation locale) ; AICCOS stub `destination_not_configured` — **pas** de duplication du Route Handler |
+| Transitions / overlays | Transition ≠ `cut`/`none` → `unsupported_transition` ; texte `post_production` projeté dans le plan mais `exportReady: false` |
+| Validation | `npm test` → **502/502** ; typecheck / lint (**11** warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** aucun merge réel, aucune publication AICCOS, pas d’UI/API, pas de queue/Supabase.
+
+### VHS-111B — Helper fal compose partagé et MergeEngine V2 injectable — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Helper pur | `studio/src/infrastructure/postproduction/fal-compose` — `buildFalComposePayload`, `resolveHistoricalComposeDurations`, validation, résultat, erreurs, `FalComposeClientPort` |
+| Keyframes historiques | `{ url, timestamp, duration }` en ms ; `durationMs = max(500, round(sec*1000))` ; timestamps cumulés ; piste `audio` si `preserveEmbeddedAudio` |
+| Route | `/api/generate/merge` utilise le helper pour le mapping uniquement — `capReached` / `addSpend` / `estimateMerge` / `submitJob` / JSON inchangés |
+| Application | `mapMergePlanToFalComposeInput`, `createFalComposeMergeEngine({ client })`, `createFalComposeClientFromLib` (runtime wire) |
+| Capacités supportées | concat séquentielle, cut/none, audio embarqué on/off, submit async, poll si `client.poll` |
+| Refus explicites | fade/cross_fade/slide/zoom/match_cut, overlays, mix multi-pistes, LUFS, fades audio, cancel, codec/AR/fps imposés, singleAudioMux (merge-audio hors scope) |
+| Dry-run | `merge_adapter_absent` vs `merge_adapter_configured` / `polling_available` / `plan_fal_mappable` ; toujours `providerCalled: false` |
+| Activation | **non** branché Production Director ; stub reste le défaut |
+| Validation | `npm test` → **516/516** ; typecheck / lint (**11** warnings préexistants) / build OK (+ NFT) |
+
+**Limites :** pas d’activation PD ; merge-audio/carousel non extraits ; pas de test HTTP Route Handler (caractérisation pure + adapter fakes) ; TTL expiry via `expiresAtFrom` (hypothèse documentée comme génération).
+
+### VHS-111C — Extraction partagée du pipeline AICCOS — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Infra | `studio/src/infrastructure/export/aiccos` — validation, downloader, import client, uploader, pipeline, http-map, factory |
+| Ordre | validate → download → createImport → PUT → completeImport → validate clip |
+| Route | `/api/aiccos/send` délègue au pipeline — JSON `{ clip }` / erreurs / codes HTTP historiques inchangés |
+| Application | `createAiccosExportAdapter`, `mapExportPackageToAiccosRequest` ; stub `createUnavailableAiccosExportAdapter` inchangé par défaut |
+| Secrets | `AICCOS_IMPORT_TOKEN` uniquement dans la fabrique ; jamais dans domaine/erreurs/logs/snapshots |
+| Observabilité | événements `aiccos.export.*` via logger VHS-005 (correlation, taille, MIME, codes — pas d’URL/token) |
+| Dry-run | `aiccosExport` optionnel (`null` = absent) ; `dryCheckAiccosFinalAsset` ; `providerCalled: false` |
+| Activation | **non** branché Production Director / `/director` ; UI `SendToAiccos` inchangée |
+| Validation | `npm test` → **528/528** ; typecheck / lint (**11** warnings préexistants) / build OK |
+
+**Limites :** pas d’activation PD ; pas de retry auto ; pas de queue/Supabase ; timeout borné ajouté côté pipeline (110 s) sans changer le contrat HTTP.
+
+### VHS-113 — Persistance Supabase, ledger V2 et queue durable — ✅ 2 août 2026 (dépôt uniquement)
+
+| Élément | Détail |
+|---|---|
+| Migrations locales | `studio/supabase/migrations/20260802*` — additive ; **ne recrée pas** `vh_*` |
+| Distant (lecture) | Migrations déjà appliquées : `20260723203021`, `20260728210808` ; tables `vh_spend`, `vh_products`, `vh_scenes` |
+| Tables V2 | workspaces, video_projects, project_artifacts, active_artifact_revisions, artifact_approvals, storyboard_scenes, generation_plans, production_runs, production_jobs, generation_attempts, cost_ledger, budget_reservations, idempotency_records, domain_events, assets, audit_log |
+| RPC | claim/heartbeat/complete/fail/release jobs ; reserve/commit/release budget ; idempotency_begin ; set_active_artifact_revision |
+| RLS | Activée, **aucune** policy anon — service_role only ; REVOKE PUBLIC sur RPC sensibles |
+| Adapters | `infrastructure/db` — Project/Artifact/RunStore/Budget/Idempotency/Events/Queue/Assets ; client injecté ; `DIRECTOR_V2_WORKSPACE_ID` |
+| Décisions | single_workspace ; `vh_spend` // `cost_ledger` ; pas d’auth multi-user |
+| Apply distant | **Non effectué** (interdit sans autorisation séparée) — plan dans `SUPABASE_V2_MIGRATION_PLAN.md` |
+| Validation | `npm test` / typecheck / lint (11 warnings) / build ; **pas** `supabase test db` (CLI absent) |
+
+**Limites :** pas de worker (voir VHS-114) ; pas de branchement PD/UI ; pas de types générés depuis schéma live ; tests SQL locaux non exécutés ici.
+
+### VHS-114 — Worker de production durable et borné — ✅ 2 août 2026 (dépôt uniquement)
+
+| Élément | Détail |
+|---|---|
+| Application | `studio/src/application/worker/*` — `ProductionWorker.runOnce`, policy, lease-guard, dispatcher, dry-run |
+| PD | `planEnqueueCommands` + `processClaimedJob` — scheduling/budget/idempotence/fallback restent dans le PD |
+| Infra | `infrastructure/worker` factory (pas d’auto-start) ; `adaptProductionJobQueue` ; RPC `reschedule_production_job` (migration locale `20260802180400`) |
+| Flags | `DIRECTOR_V2_WORKER_ENABLED=0`, `DIRECTOR_V2_PAID_GENERATION_ENABLED=0` — serveur only, `feature-flags.ts` |
+| Kill switches | worker off → `disabled` / aucun claim ; worker on + paid off → `dry_run` / aucun provider ; les deux on pour exécution réelle |
+| Bornes | claimLimit, max jobs/run, max provider calls, max durée ; pas de boucle infinie ni sleep réel long |
+| Async | `submitted`/`processing` → `reschedule` (mode `poll`, même attempt/idempotency key) |
+| Garantie | **at-least-once** + idempotence durable autant que possible — **pas** exactly-once |
+| Heartbeat | lease défaut (90 s) > max run (25 s) → pas de heartbeat concurrent nécessaire (`needsConcurrentHeartbeat=false`) |
+| Endpoints / cron | **aucun** ; factory non appelée à l’import |
+| Validation | `npm test` → **558/558** ; typecheck / lint (**11** warnings préexistants) / build OK |
+
+**Limites :** migrations V2 + RPC reschedule **non appliquées** distant ; aucun endpoint/cron ; aucune activation provider ; PD `advance()` inline toujours disponible (chemin historique tests) ; atomicité « persist run + complete job » non transactionnelle unique (ordre persist-then-complete + replay `already_done`).
+
+### VHS-115 — Validation locale réelle des migrations Supabase — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Stack | Docker Desktop **29.6.2** + `npx supabase` **2.111.0** + PG major 17 local |
+| Reset | 5 migrations `20260802*` depuis base vide — **2 passages** OK |
+| Tests SQL | **82** assertions (`vhs_113_smoke` + `vhs_115_schema_rls` + `vhs_115_behavior`) PASS |
+| Tests repos | **15** `*.integration.test.ts` — projects, artifacts, runs, queue/leases, budget, idempotence, assets, events, RLS, concurrence `Promise.allSettled` |
+| Défaut corrigé | `GRANT` tables manquant pour `service_role` → 42501 ; fixé dans `20260802180300` |
+| Types | `database.types.ts` généré depuis `--local` (0 `any`) |
+| Baseline | V2 indépendant de `vh_*` — pas de fixture historique |
+| Distant | **Aucune** opération (`link` / `db push` / etc.) |
+| Secrets | `supabase/.temp/` gitignored ; gate sans fallback distant |
+| Validation app | `npm test` 562 ; typecheck ; lint **11** warnings ; build OK |
+
+**Écarts restants :** apply distant (autorisation écrite séparée) ; endpoint/cron worker ; Marketing Adapter IA ; VHS-005 / VHS-006 ; Merge/AICCOS au PD.
+
+### VHS-116 — Persistance brief `/director` + reprise — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Flag | `DIRECTOR_V2_PERSISTENCE_ENABLED` (serveur, défaut off) — exige aussi `DIRECTOR_V2_ENABLED` |
+| Workspace | `DIRECTOR_V2_WORKSPACE_ID` uniquement côté serveur ; seed local `npm run supabase:seed-workspace` (localhost + `CONFIRM_SEED_WORKSPACE=1`) |
+| Atomicité | RPC `create_director_project_with_brief` — projet + brief rev 1 + active pointer + audit + outbox ; idempotence business-payload ; race `unique_violation` gérée |
+| App | `CreateDirectorProject` / `GetDirectorProject` / `ListDirectorProjects` ; API `POST/GET /api/director/projects` ; page `/director/[projectId]` |
+| Wizard | persistence on → « Créer le projet » ; draft local conservé jusqu’au succès ; pas d’autosave serveur |
+| Hors scope | aucun Directeur actif, provider, génération, worker endpoint, apply distant, studios historiques |
+
+**Limites :** pas d’autosave serveur ; pas d’analyse marketing branchée UI ; pas d’auth utilisateur Supabase (shared password) ; UI tests Playwright non ajoutés (manuel + unit/SQL/integration).
+
+### VHS-117A — Adaptateur OpenAI Marketing Director — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| Port | `MarketingAnalyzerPort` → `OpenAIMarketingAnalyzerAdapter` |
+| API | Responses (`POST /v1/responses`) via client `fetch` injectable — **pas** de package `openai` |
+| Sortie | Structured Outputs `text.format.json_schema` strict → `MarketingAnalysisCandidate` non fiable |
+| Prompt / schema | `marketing-analyzer-v1` / candidat `1.0.0` (Zod → JSON Schema strict) |
+| Flags | `DIRECTOR_V2_MARKETING_AI_ENABLED` ∧ `DIRECTOR_V2_PAID_AI_ENABLED` (off) — distincts de `PAID_GENERATION` |
+| Modèle | `OPENAI_MARKETING_MODEL` défaut `gpt-5.6-terra` ; effort `low` ; `store: false` |
+| Coût | price book injecté / env optionnel ; sinon `unknown` ; jamais de tarif marché en dur dans l’adapter |
+| Safety ID | HMAC-SHA256(workspace + `OPENAI_SAFETY_IDENTIFIER_SECRET`) — omis si secret absent |
+| Hors scope | `/director`, route Marketing, persistance plan, Creative Director, appels réels en tests |
+
+**Limites :** pas de branchement UI (levé en VHS-117B pour dry-run) ; pas de second appel de réparation ; pricing non fourni par défaut ; `safety_identifier` absent sans secret dédié.
+
+### VHS-117B — Marketing `/director` dry-run + persistance — ✅ 2 août 2026
+
+| Élément | Détail |
+|---|---|
+| UI | Section « Stratégie marketing » — Vérifier le brief ; execute visible seulement si `executionAvailable` |
+| API | `GET/POST /api/director/projects/[projectId]/marketing` (`dry-run` \| `execute`) |
+| Service | `AnalyzeMarketingForProject` — logique hors route |
+| DB | `director_runs` ; `budget_reservations.scope_type/scope_id` ; RPC marketing persist |
+| Budget | Réservation director sans détourner `production_runs` |
+| Idempotence | clé `mkt:project:briefId:model:prompt:schema` + fingerprint |
+| Flags | AI off → dry-run only ; execute testé avec **fake analyzer** injecté |
+| Distant / OpenAI réel | **Aucun** |
+
+**Limites :** bouton execute désactivé en validation manuelle (flags off) ; pas d’idempotence provider OpenAI ; Creative Director toujours off ; crash post-appel / pré-persist documenté.
+
+### VHS-117C — Smoke Marketing OpenAI local (1 appel) — ⚠️ 3 août 2026
+
+| Élément | Détail |
+|---|---|
+| Runner | `studio/scripts/smoke-marketing-openai.mjs` (`npm run smoke:marketing-openai`) |
+| Garde | `MARKETING_AI_SMOKE_CONFIRM=ONE_CALL_MAX_010_USD` + `SUPABASE_LOCAL_INTEGRATION=1` + URL `127.0.0.1`/`localhost` uniquement |
+| Compteur | `maximumOpenAICalls=1` — tentative consommée avant I/O ; **aucun** retry |
+| Modèle | `gpt-5.6-terra` ; `reasoning.effort=low` ; `max_output_tokens=1200` ; store=false |
+| Price book smoke | `smoke-vhs-117c-2026-08-03` — 2,50 / 15,00 USD/MTok (injecté process-local, pas dans l’adapter) |
+| Plafond | 0,10 USD ; estimation dry-run observée : **1** cent |
+| Chemin | `AnalyzeMarketingForProject.execute` (même stack que `/director`) |
+| Appel | **1** — provider `rate_limited` (429) ; compteur → 0 |
+| Persistance | `director_runs.status=failed` ; `cost_status=released` ; ledger `reservation`+`release` ; **pas** de `marketing_plan` ; **pas** de `vh_spend` |
+| Sécurité | aucun secret / prompt / réponse brute persisté dans le scan local |
+| Flags | process-local uniquement ; worker + paid media off |
+
+**Conclusion smoke :** `VHS-117C échoué — aucun second appel autorisé` (quota/rate OpenAI ; pas de second appel autorisé).
+
+**Cause racine (corrigée en VHS-117D) :** `MarketingDirector` catchait toute erreur analyzer en `status: "invalid"` (`analyzer_failed`) ; `AnalyzeMarketingForProject` forçait ensuite `error_code=invalid_candidate` + HTTP 422.
+
+### VHS-117D — Taxonomie erreurs OpenAI Marketing — ✅ 3 août 2026
+
+| Élément | Détail |
+|---|---|
+| Contrat | `MarketingAnalysisFailure` + `MarketingAnalyzerError` (`application/directors/marketing/failures.ts`) |
+| Frontière | Director → `provider_failed` (pas OpenAI) ; domaine `invalid` inchangé pour candidat métier |
+| Mapping OpenAI | `mapOpenAIAiErrorToMarketingFailure` — `rate_limited` préservé ; 401/403 séparés ; `empty_output`→`empty_response` |
+| HTTP | `mapMarketingFailureToHttp` — 429/504/503/502/422/402/409/500 ; `Retry-After` numérique borné ≤3600 |
+| Persistance (sans migration) | `director_runs.error_code` = code canonique (`rate_limited`, …) ; **pas** de colonnes retryable/httpStatus |
+| UI | messages publics sans « OpenAI » / modèle / HTTP ; dry-run conservé ; pas de retry auto |
+| Observabilité | `marketing.ai.request.failed` + `director.marketing.run.failed` avec `failureCode` / `retryable` |
+| Réseau | **aucun** appel OpenAI ; **aucun** smoke relancé ; tests fakes uniquement |
+
+**Limites :** `retryable` / `provider_http_status` / `internal_code` non persistés (schéma actuel) ; codes service-local (`marketing_ai_disabled`, …) hors taxonomie canonique mais HTTP préservé ; pas d’audit DB `director.marketing.failed`.
+
+### VHS-118A — Adaptateur OpenAI Creative Director — ✅ 3 août 2026
+
+| Élément | Détail |
+|---|---|
+| Port | `CreativeAnalyzerPort` → `OpenAICreativeAnalyzerAdapter` |
+| Mutualisé | client Responses, `mapOpenAIAiErrorTo*`, Structured Outputs, injection scanner, pricing injecté, flags paid AI |
+| Propre Creative | prompt `creative-analyzer-v1`, schema `creative-analysis-candidate-v1` 1.0.0, mapper brief+MarketingPlan |
+| Flags | `DIRECTOR_V2_CREATIVE_AI_ENABLED` ∧ `DIRECTOR_V2_PAID_AI_ENABLED` (off) |
+| Modèle | `OPENAI_CREATIVE_MODEL` défaut `gpt-5.6-terra` ; effort `low` ; max tokens défaut **1600** ; `store: false` |
+| Erreurs | même taxonomie VHS-117D ; Director → `provider_failed` (pas `invalid_candidate`) |
+| Dry-run | `runOpenAICreativeDryRun` → toujours `providerCalled: false` |
+| Hors scope | `/director`, route Creative, persistance, ledger, smoke réel, Script Writer |
+
+**Limites :** pas de branchement UI ; pas de réservation budget Creative ; price book Marketing env réutilisé si modèle identique ; délimiteurs tronqués à 2000 car/bloc (helper injection existant).
+
+### VHS-118B — Creative persistant dans `/director` — ✅ 3 août 2026
+
+| Élément | Détail |
+|---|---|
+| Migration | `20260803120000_vhs_118b_creative_director_runs.sql` |
+| RPC | `begin_or_get_creative_director_run`, `persist_creative_concept` (+ `reserve_director_budget` / `fail_director_run`) |
+| Service | `AnalyzeCreativeForProject` (`dryRun` / `execute`) |
+| API | `GET\|POST /api/director/projects/[projectId]/creative` |
+| UI | `CreativeSection` après Marketing ; confirmation avant appel payant ; anti double-clic |
+| Gate | brief actif + Marketing Plan actif + readiness (pas d’approval Marketing en schéma) |
+| Idempotence | `cre:…` + fingerprint SHA-256 incluant révisions brief/marketing |
+| Budget | estimate → reserve → provider → persist → commit ; release intégral via `fail_director_run` |
+| Checkpoint | reset OK ; SQL 126 ; integration 22 ; unitaires 637 ; typecheck/lint/build OK |
+| Réseau | **0** OpenAI ; **0** smoke ; **0** distant ; flags off |
+
+**Conflit prompt ↔ dépôt :** le prompt parle d’« MarketingPlan approuvé » ; le domaine n’a pas de champ approval — la gate est l’artifact actif + readiness.
+
+**Limites :** exécution payante indisponible tant que flags off ; price book env Marketing réutilisé ; pas d’éditeur Creative ; Script Writer non branché.
+
+### VHS-119A — Adaptateur OpenAI Script Writer — ✅ 3 août 2026
+
+| Élément | Détail |
+|---|---|
+| Port | `ScriptAnalyzerPort` → `OpenAIScriptAnalyzerAdapter` |
+| Schema | `script-analysis-candidate-v1` 1.0.0 |
+| Prompt | `script-analyzer-v1` + délimiteurs `[DATA:BRIEF|MARKETING_PLAN|CREATIVE_CONCEPT]` |
+| Flags | `DIRECTOR_V2_SCRIPT_AI_ENABLED` ∧ `DIRECTOR_V2_PAID_AI_ENABLED` (off) |
+| Config | `OPENAI_SCRIPT_MODEL` défaut `gpt-5.6-terra` ; effort `low` ; max tokens **2400** |
+| Timing | VHS-103 / `SPEECH_TIMING_ENGINE_VERSION` seule autorité ; timing candidat non autoritaire ignoré |
+| Erreurs | taxonomie VHS-117D ; ScriptWriter → `provider_failed` |
+| Dry-run | `runOpenAIScriptDryRun` → `providerCalled: false` |
+| Checkpoint | unitaires **643** ; typecheck/lint/build OK |
+| Hors scope | `/director`, route Script, persistance, migration, smoke |
+
+**Limites :** pas de branchement UI ; pas de ledger Script ; price book Marketing env réutilisé.
+
+### VHS-119B — Script persistant dans `/director` — ✅ 3 août 2026
+
+| Élément | Détail |
+|---|---|
+| Migration | `20260803130000_vhs_119b_script_director_runs.sql` |
+| RPC | `begin_or_get_script_director_run`, `persist_video_script` (+ reserve/fail partagés) |
+| Service | `WriteScriptForProject` (`dryRun` / `execute`) |
+| API | `GET\|POST /api/director/projects/[projectId]/script` |
+| UI | `ScriptSection` après Creative ; confirmation payante ; anti double-clic |
+| Gate | brief + marketing_plan + creative_concept actifs + readiness (pas d’approval en schéma) |
+| Idempotence | `scr:…` + fingerprint incluant `SPEECH_TIMING_ENGINE_VERSION` |
+| Timing | VHS-103 autoritaire ; view model durée cible / calculée / tolérance / warnings |
+| Checkpoint | reset OK (9 mig.) ; SQL **137** ; integration **23** ; unitaires **648** ; typecheck/lint/build OK |
+| Réseau | **0** OpenAI ; **0** smoke ; **0** distant ; flags off |
+
+**Conflit prompt ↔ dépôt :** « approuvé » = artifact actif + readiness, pas de champ approval.
+
+**Limites :** exécution payante off par défaut ; pas d’éditeur Script complet ; Art/Storyboard non branchés.
+
+### Reprise Phase 0 — matrice pipeline (3 août 2026)
+
+| Composant | Domaine | Adapter | Persistance | API | UI | Tests | État |
+|---|---:|---:|---:|---:|---:|---:|---|
+| Brief | ✅ | n/a | ✅ VHS-116 | ✅ | ✅ | ✅ | Complet local |
+| Marketing | ✅ | ✅ OpenAI | ✅ VHS-117B | ✅ | ✅ | ✅ | Complet local (AI off) |
+| Creative | ✅ | ✅ OpenAI | ✅ VHS-118B | ✅ | ✅ | ✅ | Complet local (AI off) |
+| Script | ✅ | ✅ OpenAI | ✅ VHS-119B | ✅ | ✅ | ✅ | Complet local (AI off) |
+| Art | ✅ | ✅ OpenAI | ✅ VHS-120B | ✅ | ✅ | ✅ | Complet local (AI off) |
+| Storyboard | ✅ | ✅ OpenAI | ✅ VHS-121B | ✅ | ✅ | ✅ | Complet local (AI off) |
+| Prompt | ✅ | n/a déterministe | ✅ VHS-122 `scene_package_set` | ✅ | ✅ | ✅ | Complet local — sans provider |
+| Routing | ✅ | registry legacy | ❌ (table projection) | ❌ | ❌ | domaine/app | Domaine seul |
+| Production | ✅ | engine/adapters | ✅ queue/ledger | ❌ | ❌ | app/SQL | Non branché `/director` |
+| Postproduction | ✅ | fal/AICCOS | ❌ | ❌ | ❌ | app | Stub PD ; historique merge OK |
+
+**Flags inventoriés (tous off par défaut) :** `DIRECTOR_V2_ENABLED`, `DIRECTOR_V2_WORKER_ENABLED`, `DIRECTOR_V2_PAID_GENERATION_ENABLED`, `DIRECTOR_V2_PERSISTENCE_ENABLED`, `DIRECTOR_V2_MARKETING_AI_ENABLED`, `DIRECTOR_V2_CREATIVE_AI_ENABLED`, `DIRECTOR_V2_SCRIPT_AI_ENABLED`, `DIRECTOR_V2_ART_AI_ENABLED`, `DIRECTOR_V2_STORYBOARD_AI_ENABLED`, `DIRECTOR_V2_PAID_AI_ENABLED`.
+
+**Routes `/api/director` :** `projects` GET/POST ; `projects/[id]` GET ; `…/marketing|creative|script|art|storyboard|prompts` GET/POST. Absents : routing, approvals, production, worker.
+
+**Migrations locales (12) :** … + `vhs_120b` + `vhs_121b` + `vhs_122`. `director_type` ∈ {marketing, creative, script, art, storyboard, prompt}.
+
+**VHS-122 :** livré et validé localement (Phase 2) — pgTAP **176**, integration **26**, unitaires **672**. Prochain : Routing / GenerationPlan persistant.  
+**Ne pas** appliquer les migrations distantes sans autorisation écrite.  
+**Ne pas** activer worker + paid generation sans store durable et plafond V2.  
+**Ne pas** publier AICCOS depuis le PD sans critères d’activation.  
 **Ne pas** implémenter auth fail-closed (VHS-002) sans réponse à Q1.  
-**Ne pas** migrer Supabase / basculer les routes generate tant que Q3 n’est pas tranchée.
+**Ne pas** créer un second moteur Storyboard UI.  
+**Ne pas** déclencher de fallback depuis le Generation Engine.  
+**Ne pas** relancer le smoke Marketing sans nouvelle autorisation (1 appel / ≤0,10 USD).  
+**Ne pas** activer `DIRECTOR_V2_*_AI_ENABLED` en permanence.

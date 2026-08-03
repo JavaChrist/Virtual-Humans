@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMemo, useRef, useState } from "react";
 import { PageHeader } from "@/components/page-header";
 import { useConfirm } from "@/components/confirm";
 import { useCharacter } from "@/lib/character-context";
@@ -15,6 +16,7 @@ import {
   defaultAspectRatioForPlatform,
   finalizeBrief,
   isBriefDomainError,
+  normalizeBriefFields,
   type BriefPlatform,
   type VideoProjectBrief,
 } from "@/domain/brief";
@@ -24,6 +26,11 @@ import {
   clampStep,
 } from "@/application/director/progress";
 import { useBriefDraft } from "./use-brief-draft";
+
+export type BriefWizardProps = {
+  /** Server-resolved: DIRECTOR_V2_ENABLED ∧ DIRECTOR_V2_PERSISTENCE_ENABLED */
+  persistenceEnabled?: boolean;
+};
 
 const OBJECTIVE_LABELS: Record<(typeof ObjectiveValues)[number], string> = {
   awareness: "Notoriété",
@@ -60,7 +67,8 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   );
 }
 
-export function BriefWizard() {
+export function BriefWizard({ persistenceEnabled = false }: BriefWizardProps) {
+  const router = useRouter();
   const confirm = useConfirm();
   const { characters, ready: charactersReady } = useCharacter();
   const { draft, statusLabel, status, hydrated, patchFields, setStep, resetDraft, flush } =
@@ -68,6 +76,8 @@ export function BriefWizard() {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [finalBrief, setFinalBrief] = useState<VideoProjectBrief | null>(null);
   const [finalizeError, setFinalizeError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const createIdsRef = useRef<{ projectId: string; artifactId: string } | null>(null);
 
   const step = clampStep(draft.currentStep);
   const fields = draft.fields;
@@ -138,6 +148,63 @@ export function BriefWizard() {
     }
   }
 
+  async function createPersistedProject() {
+    if (submitting) return;
+    flush();
+    setFinalizeError(null);
+    setFieldErrors({});
+    setSubmitting(true);
+    try {
+      let fields;
+      try {
+        fields = normalizeBriefFields({ ...draft.fields });
+      } catch (e) {
+        if (isBriefDomainError(e)) {
+          setFinalizeError(e.publicMessage);
+          if (e.field) setFieldErrors({ [e.field]: e.publicMessage });
+        } else {
+          setFinalizeError("Impossible de valider le brief.");
+        }
+        return;
+      }
+
+      if (!createIdsRef.current) {
+        createIdsRef.current = {
+          projectId: crypto.randomUUID(),
+          artifactId: crypto.randomUUID(),
+        };
+      }
+      const { projectId, artifactId } = createIdsRef.current;
+
+      const res = await fetch("/api/director/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectId,
+          artifactId,
+          expectedBriefRevision: 1,
+          fields,
+        }),
+      });
+      const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        projectId?: string;
+      };
+      if (!res.ok) {
+        setFinalizeError(data.error || "Création du projet impossible.");
+        return;
+      }
+      // Clear local draft only after confirmed server success.
+      resetDraft();
+      setFinalBrief(null);
+      router.push(`/director/${data.projectId ?? projectId}`);
+    } catch {
+      setFinalizeError("Création du projet impossible.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   async function onClear() {
     const ok = await confirm({
       title: "Effacer le brouillon",
@@ -160,7 +227,11 @@ export function BriefWizard() {
     <div className="max-w-2xl">
       <PageHeader
         title="Nouveau brief"
-        subtitle="Étape du parcours Réalisateur IA · sauvegarde locale uniquement"
+        subtitle={
+          persistenceEnabled
+            ? "Étape du parcours Réalisateur IA · brouillon local · création projet à la finalisation"
+            : "Étape du parcours Réalisateur IA · sauvegarde locale uniquement"
+        }
       />
 
       <div className="flex flex-wrap items-center justify-between gap-2 mb-6">
@@ -521,9 +592,21 @@ export function BriefWizard() {
               </div>
             </dl>
 
-            <button type="button" className="btn btn-primary" onClick={tryFinalize}>
-              Valider le brief
-            </button>
+            {persistenceEnabled ? (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={createPersistedProject}
+                disabled={submitting}
+                aria-busy={submitting}
+              >
+                {submitting ? "Création en cours…" : "Créer le projet"}
+              </button>
+            ) : (
+              <button type="button" className="btn btn-primary" onClick={tryFinalize}>
+                Valider le brief
+              </button>
+            )}
 
             {finalizeError && (
               <p className="text-sm text-[var(--danger)]" role="alert">
@@ -531,7 +614,13 @@ export function BriefWizard() {
               </p>
             )}
 
-            {finalBrief && (
+            {submitting && (
+              <p className="text-sm text-[var(--muted)]" role="status" aria-live="polite">
+                Enregistrement du projet…
+              </p>
+            )}
+
+            {!persistenceEnabled && finalBrief && (
               <div className="rounded-lg border border-[var(--border)] p-4 space-y-2">
                 <p className="font-semibold text-[var(--accent-2)]">Brief prêt</p>
                 <p className="text-sm text-[var(--muted)]">

@@ -42,3 +42,6 @@ next-env.d.ts
 
 # studio runtime data (spend log)
 /.data
+
+# Local Supabase CLI (secrets, edge runtime cache) — never commit
+/supabase/.temp/

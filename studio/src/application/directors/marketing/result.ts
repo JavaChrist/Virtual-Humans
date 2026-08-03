@@ -4,6 +4,7 @@ import type {
   MarketingWarning,
   MissingInformation,
 } from "@/domain/marketing";
+import type { MarketingAnalysisFailure } from "./failures";
 
 export type DirectorRunMode = "dry-run" | "execute";
 
@@ -34,6 +35,11 @@ export type MarketingDirectorResult =
   | {
       status: "invalid";
       errors: MarketingValidationIssue[];
+    }
+  | {
+      /** Analyzer/provider failed before a domain candidate existed. */
+      status: "provider_failed";
+      failure: MarketingAnalysisFailure;
     };
 
 export interface MarketingDirector {

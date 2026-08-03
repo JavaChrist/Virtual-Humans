@@ -8,7 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test \"src/**/__tests__/**/*.test.ts\""
+    "test": "node --import tsx --test \"src/**/__tests__/**/*.test.ts\"",
+    "supabase:check-local": "node scripts/check-local-supabase.mjs",
+    "supabase:seed-workspace": "node scripts/seed-local-workspace.mjs",
+    "smoke:marketing-openai": "node --import tsx scripts/smoke-marketing-openai.mjs",
+    "test:integration:db": "node scripts/run-local-db-integration.mjs"
   },
   "dependencies": {
     "@fal-ai/client": "^1.10.1",

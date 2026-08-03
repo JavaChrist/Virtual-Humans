@@ -61,6 +61,12 @@ const CONTENT_KEY_NAMES = new Set([
   "usercontent",
   "rawprompt",
   "systemprompt",
+  // Brief / director fields (VHS-116) — never log in full
+  "calltoaction",
+  "audiencedescription",
+  "brandconstraints",
+  "subjectdescription",
+  "brief",
 ]);
 
 export type RedactOptions = {

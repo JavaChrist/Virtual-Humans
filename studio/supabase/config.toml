@@ -1,0 +1,18 @@
+# Minimal Supabase CLI config for LOCAL V2 persistence only (VHS-113 / VHS-115).
+# project_id is a local label — NOT a remote project ref.
+# Never run `supabase link` / `db push` from this workflow without separate written auth.
+# Never commit secrets or remote service_role keys.
+
+project_id = "virtual-humans-studio-local"
+
+[api]
+enabled = true
+port = 54321
+
+[db]
+port = 54322
+major_version = 17
+
+[studio]
+enabled = true
+port = 54323

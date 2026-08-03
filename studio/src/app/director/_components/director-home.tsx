@@ -11,6 +11,7 @@ import {
   clearBriefDraft,
   hasBriefDraft,
 } from "@/application/director/draft";
+import type { DirectorProjectListItem } from "@/application/projects/list-director-projects";
 
 const PLANNED_STEPS = [
   "Brief",
@@ -20,6 +21,14 @@ const PLANNED_STEPS = [
   "Production",
   "Export",
 ] as const;
+
+const PLATFORM_LABELS: Record<string, string> = {
+  instagram: "Instagram",
+  tiktok: "TikTok",
+  linkedin: "LinkedIn",
+  facebook: "Facebook",
+  youtube_shorts: "YouTube Shorts",
+};
 
 function subscribeDraftStorage(onChange: () => void): () => void {
   if (typeof window === "undefined") return () => {};
@@ -38,7 +47,17 @@ function useHasBriefDraft(): boolean {
   return useSyncExternalStore(subscribeDraftStorage, hasBriefDraft, () => false);
 }
 
-export function DirectorHome() {
+export type DirectorHomeProps = {
+  persistenceEnabled?: boolean;
+  recentProjects?: DirectorProjectListItem[];
+  listError?: string | null;
+};
+
+export function DirectorHome({
+  persistenceEnabled = false,
+  recentProjects = [],
+  listError = null,
+}: DirectorHomeProps) {
   const router = useRouter();
   const confirm = useConfirm();
   const hasDraft = useHasBriefDraft();
@@ -101,9 +120,66 @@ export function DirectorHome() {
         )}
       </div>
 
+      {hasDraft && (
+        <p className="mt-4 text-xs text-[var(--muted)]" role="status">
+          Brouillon local présent dans ce navigateur (non synchronisé avec les projets
+          serveur).
+        </p>
+      )}
+
+      {persistenceEnabled && (
+        <section className="mt-10" aria-labelledby="recent-projects-heading">
+          <h2 id="recent-projects-heading" className="text-base font-semibold mb-3">
+            Projets récents
+          </h2>
+          {listError && (
+            <p className="text-sm text-[var(--danger)] mb-3" role="status">
+              {listError} — vous pouvez tout de même créer un nouveau projet.
+            </p>
+          )}
+          {!listError && recentProjects.length === 0 && (
+            <p className="text-sm text-[var(--muted)]" role="status">
+              Aucun projet persisté pour l’instant.
+            </p>
+          )}
+          {recentProjects.length > 0 && (
+            <ul className="space-y-2">
+              {recentProjects.map((p) => {
+                const updated = new Date(p.updatedAt);
+                return (
+                  <li
+                    key={p.id}
+                    className="card px-4 py-3 text-sm flex flex-wrap items-center justify-between gap-3"
+                  >
+                    <div>
+                      <p className="font-medium">{p.name}</p>
+                      <p className="text-xs text-[var(--muted)]">
+                        {p.status}
+                        {p.platform
+                          ? ` · ${PLATFORM_LABELS[p.platform] ?? p.platform}`
+                          : ""}
+                        {p.durationSeconds != null ? ` · ${p.durationSeconds}s` : ""}
+                        {" · "}
+                        {Number.isNaN(updated.getTime())
+                          ? p.updatedAt
+                          : updated.toLocaleString("fr-FR")}
+                      </p>
+                    </div>
+                    <Link href={`/director/${p.id}`} className="btn btn-ghost text-sm">
+                      Reprendre
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+      )}
+
       <p className="mt-6 text-xs text-[var(--muted)]">
-        Le brouillon est sauvegardé uniquement dans ce navigateur. Les Directeurs métier et
-        la production ne sont pas encore actifs.
+        {persistenceEnabled
+          ? "Le brouillon reste local jusqu’à « Créer le projet ». Aucun autosave serveur à chaque frappe. Les Directeurs métier ne sont pas encore actifs."
+          : "Le brouillon est sauvegardé uniquement dans ce navigateur. Les Directeurs métier et la production ne sont pas encore actifs."}
       </p>
     </div>
   );
