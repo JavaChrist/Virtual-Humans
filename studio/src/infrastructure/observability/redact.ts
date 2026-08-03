@@ -39,6 +39,8 @@ const SENSITIVE_KEY_NAMES = new Set([
   "clientsecret",
   "bearer",
   "xapikey",
+  // Internal Storage object keys (VHS-127) — never log durable paths
+  "storagepath",
 ]);
 
 /**

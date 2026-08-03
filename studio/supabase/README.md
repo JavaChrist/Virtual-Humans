@@ -25,30 +25,37 @@ npm run test:e2e
 
 ## Phase 9 — audit final local (3 août 2026)
 
-Deux cycles complets indépendants (ordre strict) :
+Deux cycles complets indépendants (ordre strict) — compteurs historiques Phase 9 : 16 mig. / pgTAP 276 / intégration 30 / unitaires 785.
 
-```powershell
-npx supabase db reset
-npx supabase test db
-npm run test:integration:db
-npm test
-npm run typecheck
-npm run lint
-npm run build
-npm run test:e2e
-```
+## Porte 1 — stockage durable (4 août 2026)
 
-| Gate | Cycle 1 & 2 |
+Migration `20260804090000_vhs_127_director_final_assets_bucket.sql` :
+
+- bucket privé `director-final-assets` (50 MiB, MIME allowlist) ;
+- `public = false` ; aucune policy anon ;
+- **ne touche pas** `product-screens` ;
+- accès via `service_role` + `AssetContentPort` serveur uniquement.
+
+Sélection adapter (`resolveAssetContentBackend`) :
+
+| Contexte | Backend |
 |---|---|
-| Migrations | **16** |
-| pgTAP | **276/276** |
-| Intégration | **30/30** |
-| Unitaires | **785/785** |
-| E2E | **15/15** |
-| Typecheck / lint / build | verts (lint 0 erreur, 16 warnings) |
-| Providers / distant / deploy | **0** |
+| E2E fake local sans `DIRECTOR_V2_E2E_ASSET_STORAGE` | mémoire process (Phase 8/9) |
+| Persistence ON + Supabase | Storage durable |
+| E2E + `DIRECTOR_V2_E2E_ASSET_STORAGE=1` | Storage durable |
+| Vercel / prod / Supabase distant sans config | unconfigured (fail-closed) — **jamais mémoire** |
 
-Store fake-merge mémoire : gate `local-fake-delivery` (local/E2E only). **Aucune** opération distante (`link` / `db push` / apply).
+Conservation : pas de suppression automatique dans cette porte ; nettoyage futur borné par workspace/projet. Rollback local : désactiver persistence / revenir au commit précédent ; ne pas dropper le bucket en prod.
+
+| Gate Porte 1 | Cycle 1 & 2 |
+|---|---|
+| Migrations | **17** |
+| pgTAP | **286/286** |
+| Intégration | **31/31** |
+| Unitaires | **798/798** |
+| E2E | **15/15** |
+| Typecheck / lint / build | verts |
+| Providers / distant / deploy | **0** |
 
 ## Statut VHS-126 — Brief revisions + stale cascade (Phase 6)
 

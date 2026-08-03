@@ -20,7 +20,7 @@ test("migrations V2 — timestamps après historique distant + pas de recreate v
   const files = readdirSync(MIGRATIONS_DIR).filter((f) => f.endsWith(".sql")).sort();
   assert.ok(files.length >= 4);
   for (const f of files) {
-    assert.match(f, /^2026080[23]/);
+    assert.match(f, /^2026080[234]/);
   }
   const sql = allSql();
   assert.ok(!/CREATE TABLE\s+public\.vh_spend/i.test(sql));
@@ -130,4 +130,17 @@ test("migrations V2 — VHS-126 brief revisions + stale columns/RPCs", () => {
   assert.match(sql, /director\.brief\.revised/i);
   assert.match(sql, /GRANT EXECUTE ON FUNCTION public\.revise_project_brief/i);
   assert.match(sql, /REVOKE ALL ON FUNCTION public\.revise_project_brief/i);
+});
+
+test("migrations V2 — VHS-127 director-final-assets bucket privé", () => {
+  const sql = allSql();
+  assert.match(sql, /director-final-assets/);
+  assert.match(sql, /INSERT INTO storage\.buckets/i);
+  assert.match(sql, /file_size_limit/);
+  assert.match(sql, /52428800/);
+  assert.match(sql, /allowed_mime_types/);
+  assert.match(sql, /ON CONFLICT \(id\) DO UPDATE/i);
+  assert.match(sql, /public = EXCLUDED\.public|public = false/i);
+  assert.ok(!/DROP BUCKET/i.test(sql));
+  assert.ok(!/product-screens/.test(sql) || !/DELETE FROM storage\.buckets.*product-screens/i.test(sql));
 });

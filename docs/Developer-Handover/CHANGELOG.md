@@ -2,6 +2,32 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.46] — 2026-08-04
+
+### Added (Préproduction — Porte 1)
+
+- **VHS-127** : bucket Storage privé `director-final-assets` (migration locale idempotente).
+- Adapter durable `createSupabaseStorageAssetContentPort` réutilisant le client Supabase serveur.
+- Chemin déterministe `{workspace}/{project}/{container}/{asset}.{ext}` (UUID validés).
+- Sélection d’adapter explicite (`resolveAssetContentBackend`) : Storage si persistence ; mémoire E2E uniquement derrière flags locaux ; jamais mémoire sur Vercel/production.
+- Flag test `DIRECTOR_V2_E2E_ASSET_STORAGE` (harnais E2E) pour prouver merge → Storage → download multi-requête.
+- Merge : octets persistés avant statut téléchargeable ; échec d’upload → merge failed.
+- Tests : paths/MIME/collision/idempotence ; pgTAP bucket ; intégration multi-client Storage.
+
+### Fixed (audit validation Porte 1)
+
+- Réponses API merge/export : `storagePath` redacted (`[redacted]`) — manifeste déjà safe ; logs observabilité masquent aussi `storagePath`.
+- Test hostile : `VERCEL=1` + `VERCEL_ENV=production` + fake E2E + `ASSET_STORAGE=0` → mémoire refusée.
+- Parsing strict de `DIRECTOR_V2_E2E_ASSET_STORAGE` (`1`/`true` uniquement).
+- Limite documentée : Storage et PostgreSQL ne partagent pas de transaction atomique ; reprise idempotente + fail-closed si put échoue.
+
+### Validation (checkpoint post-audit)
+
+- Migrations **17** ; pgTAP **286/286** ; intégration **31/31** ; unitaires **802/802** ; E2E **15/15** × 2 cycles.
+- typecheck / lint (0 erreur, 16 warnings) / build verts.
+- **0** provider réel / distant / déploiement ; flags payants off.
+- Commit local uniquement — **aucun push**.
+
 ## [2.0.45] — 2026-08-03
 
 ### Security / Fixed (Phase 9 — audit final)

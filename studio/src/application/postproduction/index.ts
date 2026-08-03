@@ -11,6 +11,8 @@ export * from "./map-export-package";
 export * from "./fal-compose-merge-engine";
 export * from "./fake-merge-engine";
 export * from "./asset-content-port";
+export * from "./director-final-asset-path";
+export * from "./redact-director-storage-paths";
 export * from "./aiccos-export-adapter";
 export * from "./dry-run";
 export * from "./post-production-director";

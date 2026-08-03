@@ -34,7 +34,6 @@ import {
   buildSyntheticFakeMp4Bytes,
   createFakeMergeEngine,
   createMemoryAssetContentPort,
-  createUnconfiguredAssetContentPort,
   createPostProductionDirector,
   createDownloadExportAdapter,
   createUnavailableAiccosExportAdapter,
@@ -42,7 +41,7 @@ import {
   type AssetContentBackend,
   type MergeEngine,
 } from "@/application/postproduction";
-import { canUseProcessLocalFakeAssetContent } from "@/infrastructure/config/local-fake-delivery";
+import { resolveAssetContentBackend } from "@/infrastructure/config/asset-content-backend";
 import { createDownloadFinalAssetForProject } from "@/application/directors/delivery/download-final-asset";
 import { createReviseProjectBrief } from "@/application/directors/brief/revise-for-project";
 import type { CapabilityRegistrySnapshot } from "@/domain/routing/capabilities";
@@ -138,11 +137,13 @@ export function resetSharedFakeMergeAssetContentForTests(): void {
 
 function resolveDefaultAssetContent(
   env: Record<string, string | undefined>,
+  client: import("@supabase/supabase-js").SupabaseClient,
 ): AssetContentBackend {
-  if (!canUseProcessLocalFakeAssetContent(env)) {
-    return createUnconfiguredAssetContentPort();
-  }
-  return getSharedFakeMergeAssetContent();
+  return resolveAssetContentBackend({
+    env,
+    supabaseClient: client,
+    memoryPort: getSharedFakeMergeAssetContent(),
+  });
 }
 
 /** Default /director production path — FAKE adapters only (VHS-124). */
@@ -256,8 +257,8 @@ export function createDirectorPersistenceStack(deps?: {
   /** Test injection — Phase 5 delivery uses a fake merge engine only (VHS-125). */
   mergeEngine?: MergeEngine;
   /**
-   * Recoverable asset bytes backend. Default: in-memory port for fake merge local path.
-   * Pass createUnconfiguredAssetContentPort() to assert download fails without fabrication.
+   * Recoverable asset bytes backend. Default: Storage when persistence+Supabase,
+   * else process memory only behind Phase 9 local/E2E gates (never on Vercel).
    */
   assetContent?: AssetContentBackend;
   /** Override content provider for completed merge assets (tests). */
@@ -547,9 +548,8 @@ export function createDirectorPersistenceStack(deps?: {
     sizeBytes: fakeMergeContentBytes.byteLength,
     checksum: sha256Hex(fakeMergeContentBytes),
   });
-  const localFakeContentAllowed = canUseProcessLocalFakeAssetContent(env);
   const assetContent: AssetContentBackend =
-    deps?.assetContent ?? resolveDefaultAssetContent(env);
+    deps?.assetContent ?? resolveDefaultAssetContent(env, client);
   const deliveryMergeEngine: MergeEngine =
     deps?.mergeEngine ??
     createFakeMergeEngine({
@@ -591,11 +591,16 @@ export function createDirectorPersistenceStack(deps?: {
     env,
     nowIso: deps?.nowIso,
   });
+  /**
+   * Synthetic bytes for the fake merge engine only.
+   * Available whenever the default fake merge asset is used — Storage or memory
+   * backends both need the bytes to persist; never invent remote provider media.
+   */
   const defaultProvideMergeBytes = (asset: {
     id: string;
     source: { kind: string; storagePath?: string };
   }) => {
-    if (!localFakeContentAllowed) return null;
+    if (deps?.mergeEngine) return null;
     if (asset.id === fakeMergeAssetId) return fakeMergeContentBytes;
     if (
       asset.source.kind === "internal" &&

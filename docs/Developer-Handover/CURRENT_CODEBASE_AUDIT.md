@@ -19,7 +19,9 @@
 >
 > **Reprise Phase 8 (3 août 2026) :** E2E Playwright local `/director` — fake mode fail-closed, barrière réseau, workspace `e2e-*`.
 >
-> **Phase 9 (3 août 2026) — AUDIT FINAL LOCAL TERMINÉ :** deux cycles complets verts (16 mig. / pgTAP 276 / intégration 30 / unitaires 785 / E2E 15×2). Gate fake-merge mémoire ; redaction data URL ; docs + matrice. **Providers réels / apply distant / deploy : non validés.** Voir `20_FINAL_AUDIT.md`.
+> **Phase 9 (3 août 2026) — AUDIT FINAL LOCAL TERMINÉ :** deux cycles complets verts. Gate fake-merge mémoire ; redaction data URL. Voir `20_FINAL_AUDIT.md`.
+>
+> **Préprod Porte 1 (4 août 2026) :** stockage durable `director-final-assets` (VHS-127) + adapter Supabase Storage ; merge → Storage → download multi-instance validé localement (17 mig. / pgTAP 286 / intégration 31 / unitaires 802 / E2E 15×2). **Apply distant / deploy : non effectués.** Commit local uniquement.
 
 > Légende : **[Fait]** = vérifié dans le dépôt / par exécution / via Supabase MCP.  
 > **[Hypothèse]** = non confirmé ou dépendant d’un environnement externe.  
@@ -47,10 +49,10 @@
 
 | Commande | Résultat |
 |---|---|
-| `npx supabase db reset` | **16** migrations locales |
-| `npx supabase test db` | **276/276** |
-| `npm run test:integration:db` | **30/30** |
-| `npm test` | **785/785** |
+| `npx supabase db reset` | **17** migrations locales (VHS-127 inclus) |
+| `npx supabase test db` | **286/286** |
+| `npm run test:integration:db` | **31/31** |
+| `npm test` | **802/802** |
 | `npm run typecheck` | **exit 0** |
 | `npm run lint` | **exit 0** — 0 erreur, **16 warnings** (dont historiques `set-state-in-effect`) |
 | `npm run build` | **exit 0** — 1 warning NFT/tracing Turbopack `registry.ts` |

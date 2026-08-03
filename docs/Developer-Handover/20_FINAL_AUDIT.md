@@ -18,7 +18,7 @@ Exceptions acceptées (non bloquantes pour la validation locale) :
 | Tables legacy `vh_spend` / `vh_products` absentes du schéma V2 local | Bruit log E2E nav historique ; V2 n’écrit pas `vh_spend` | Ops + VHS-113 follow-up |
 | Warnings lint `react-hooks/set-state-in-effect` (pages historiques + quelques effects Director) | Non bloquant, 0 erreur | Front |
 | Warning build NFT Turbopack `registry.ts` | Historique, inchangé | Infra |
-| Store mémoire fake-merge | Local/E2E only — gate Phase 9 ; incompatible Vercel multi-instance | Infra |
+| Store mémoire fake-merge | Local/E2E only — gate Phase 9 ; **Porte 1** : remplacé par Storage durable quand persistence ON | Infra |
 | Observabilité métriques/traces (VHS-005) | Partiel | Platform |
 
 Aucun P0 ouvert pour la validation **locale**.
@@ -87,18 +87,19 @@ Chaque artifact : workspace, project, type, schema version, revision, provenance
 - [x] flags inventoriés (`.env.example`) ;
 - [ ] propriétaires ops production — à assigner avant apply distant.
 
-## Compteurs Phase 9 (cycles 1 et 2)
+## Compteurs (Porte 1 — 4 août 2026)
 
 | Gate | Résultat |
 |---|---|
-| Migrations locales | **16** |
-| pgTAP | **276/276** |
-| Intégration DB | **30/30** |
-| Unitaires | **785/785** |
-| E2E | **15/15** × **2** cycles |
+| Migrations locales | **17** (VHS-127 Storage) |
+| pgTAP | **286/286** |
+| Intégration DB | **31/31** |
+| Unitaires | **802/802** |
+| E2E | **15/15** × **2** cycles (Storage) |
 | Typecheck | vert |
 | Lint | vert — **0** erreur, **16** warnings |
 | Build | vert — 1 warning NFT historique |
+| Stockage multi-instance local | **oui** |
 
 ## Matrice finale
 

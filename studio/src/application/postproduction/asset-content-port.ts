@@ -24,7 +24,12 @@ export type AssetContentPutInput = {
   projectId: string;
   mimeType: string;
   bytes: Uint8Array;
-  /** Relative logical path marker only — never an absolute FS path. */
+  /**
+   * Server-generated run / merge / export UUID used to build the durable path.
+   * Required by the Supabase Storage adapter; ignored by the memory adapter.
+   */
+  containerId?: string;
+  /** Relative logical path marker only — never an absolute FS path or signed URL. */
   storagePath?: string;
 };
 
@@ -39,14 +44,18 @@ export type AssetContentGetResult = {
   storagePath?: string;
 };
 
+export type AssetContentGetInput = {
+  assetId: string;
+  workspaceId: string;
+  projectId: string;
+  /** Preferred when known (from GeneratedAsset.source.storagePath). */
+  storagePath?: string;
+};
+
 export type AssetContentPort = {
   readonly configured: true;
   put(input: AssetContentPutInput): Promise<void>;
-  get(input: {
-    assetId: string;
-    workspaceId: string;
-    projectId: string;
-  }): Promise<AssetContentGetResult | null>;
+  get(input: AssetContentGetInput): Promise<AssetContentGetResult | null>;
 };
 
 /** Explicitly unconfigured — download must fail without fabricating media. */

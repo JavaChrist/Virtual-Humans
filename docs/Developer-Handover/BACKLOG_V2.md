@@ -18,10 +18,12 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **VHS-111C** ✅ Pipeline AICCOS extractible — stub `/director` ; envoi réel off.
 - **VHS-113** ✅ Persistance Supabase V2 additive locale — **sans** apply distant. *(voir `SUPABASE_V2_MIGRATION_PLAN.md`)*
 - **VHS-114** ✅ Worker borné `run-once` — secret + flags off ; **sans** cron.
-- **VHS-115** ✅ Validation locale migrations — Phase 9 : 16 mig. ; pgTAP 276 ; intégration 30 ; **2 cycles** verts.
+- **VHS-115** ✅ Validation locale migrations — Porte 1 : 17 mig. ; pgTAP 286 ; intégration 31 ; **2 cycles** verts.
 - **VHS-116…VHS-126** ✅ Brief → Marketing → … → stale cascade — livrés localement ; flags off.
+- **VHS-127** ✅ Stockage durable médias finaux — bucket privé `director-final-assets` + `AssetContentPort` Supabase Storage ; mémoire impossible en Production ; **apply distant non effectué**.
 - **VHS-117C** ⚠️ Smoke Marketing OpenAI — échoué (`rate_limited`) ; **nouvelle autorisation** pour rejouer.
 - **Phase 9** ✅ Audit final + gate fake-delivery + docs + 2 cycles complets locaux — **pas** production distante.
+- **Préprod Porte 1** ✅ Stockage durable local validé + commit local (unitaires 802) — **aucun push** ; prochaine porte : backup + migrations distantes (autorisation séparée).
 
 ## P2 — durcissement
 

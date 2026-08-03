@@ -62,14 +62,13 @@ DIRECTOR_V2_E2E_FAKE_MODE=0
 
 Kill switches : worker + paid generation ; AI text directors séparés. Les flags ont propriétaire et date d'expiration.
 
-### Store mémoire fake-merge (Phase 9)
+### Médias finaux Director (Porte 1 / VHS-127)
 
-Le `AssetContentPort` process-local n’est **jamais** un stockage durable. Gate `local-fake-delivery` :
-
-- refusé sur Vercel ;
-- refusé en `NODE_ENV=production` sans `DIRECTOR_V2_E2E_HARNESS=1` ;
-- refusé si `SUPABASE_URL` n’est pas localhost ;
-- **incompatible multi-instance** — stockage durable requis avant prod distante.
+- Bucket privé `director-final-assets` (50 MiB, MIME allowlist) — migration locale `vhs_127`.
+- Persistence ON → `AssetContentPort` Supabase Storage (multi-instance).
+- Mémoire process : uniquement E2E local sans `DIRECTOR_V2_E2E_ASSET_STORAGE` ; **impossible** sur Vercel/production.
+- Download : session auth → contrôles QC/revue/merge → octets serveur ; manifeste séparé ; pas d’URL signée persistée.
+- Apply distant du bucket : **autorisation humaine séparée** (après backup).
 
 ## Observabilité
 

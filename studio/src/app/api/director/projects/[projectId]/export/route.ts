@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
+import { redactDirectorStoragePathsForClient } from "@/application/postproduction/redact-director-storage-paths";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
@@ -48,11 +49,13 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       const loaded = await stack.artifacts.load(ep.artifactId);
       exportPackage = loaded?.value ?? null;
     }
-    return obs.json({
-      dryRun,
-      exportPackage,
-      exportPackageRevision: ep?.revision ?? null,
-    });
+    return obs.json(
+      redactDirectorStoragePathsForClient({
+        dryRun,
+        exportPackage,
+        exportPackageRevision: ep?.revision ?? null,
+      }),
+    );
   } catch (error) {
     if (error instanceof V2SupabaseConfigError) {
       return obs.json({ error: error.message }, { status: 503 });
@@ -118,7 +121,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         { status: result.httpHint },
       );
     }
-    return obs.json(result);
+    return obs.json(redactDirectorStoragePathsForClient(result));
   } catch (error) {
     if (error instanceof V2SupabaseConfigError) {
       return obs.json({ error: error.message }, { status: 503 });

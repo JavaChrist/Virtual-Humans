@@ -80,6 +80,7 @@ const tests = run(
       SUPABASE_LOCAL_INTEGRATION: "1",
       SUPABASE_LOCAL_URL: url,
       SUPABASE_LOCAL_SERVICE_ROLE_KEY: serviceRoleKey,
+      SUPABASE_LOCAL_ANON_KEY: local.ANON_KEY ?? local.PUBLISHABLE_KEY ?? "",
     },
   }
 );

@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
+import { redactDirectorStoragePathsForClient } from "@/application/postproduction/redact-director-storage-paths";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
@@ -55,12 +56,14 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       const loaded = await stack.artifacts.load(mp.artifactId);
       mergeOutcome = loaded?.value ?? null;
     }
-    return obs.json({
-      prepareDryRun: prepareDry,
-      executeDryRun: executeDry,
-      mergeOutcome,
-      mergePlanRevision: mp?.revision ?? null,
-    });
+    return obs.json(
+      redactDirectorStoragePathsForClient({
+        prepareDryRun: prepareDry,
+        executeDryRun: executeDry,
+        mergeOutcome,
+        mergePlanRevision: mp?.revision ?? null,
+      }),
+    );
   } catch (error) {
     if (error instanceof V2SupabaseConfigError) {
       return obs.json({ error: error.message }, { status: 503 });
@@ -127,7 +130,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
           { status: result.httpHint },
         );
       }
-      return obs.json(result);
+      return obs.json(redactDirectorStoragePathsForClient(result));
     }
     const result = await stack.executeMerge.execute(
       { projectId, confirmation: true },
@@ -152,7 +155,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         { status: result.httpHint },
       );
     }
-    return obs.json(result);
+    return obs.json(redactDirectorStoragePathsForClient(result));
   } catch (error) {
     if (error instanceof V2SupabaseConfigError) {
       return obs.json({ error: error.message }, { status: 503 });

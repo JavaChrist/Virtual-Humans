@@ -69,8 +69,8 @@ import type {
 } from "../ports";
 
 const AT = "2026-08-03T12:00:00.000Z";
-const WORKSPACE_ID = "ws-delivery";
-const PROJECT_ID = "proj-1";
+const WORKSPACE_ID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+const PROJECT_ID = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
 
 function makeProject(): PersistedVideoProject {
   return {
@@ -455,7 +455,7 @@ function harness() {
   const brief = makeBrief();
   const storyboard = makeStoryboard();
   const scenePackages = makePackages(false).map(toValidPackage);
-  const productionResult = makeProductionResultV1();
+  const productionResult = makeProductionResultV1({ projectId: PROJECT_ID });
 
   insertArtifact(store, active, {
     id: "brief-active",
@@ -517,7 +517,7 @@ function harness() {
 
   const fakeBytes = buildSyntheticFakeMp4Bytes("unit-delivery");
   const finalAsset = buildFakeInternalVideoAsset({
-    id: "final-asset-1",
+    id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
     sizeBytes: fakeBytes.byteLength,
     checksum: sha256Hex(fakeBytes),
   });

@@ -204,6 +204,7 @@ export function createDownloadFinalAssetForProject(
         assetId: finalAsset.id,
         workspaceId: deps.workspaceId,
         projectId: input.projectId,
+        storagePath: finalAsset.source.storagePath,
       });
       if (!content) {
         return fail("content_missing", "Contenu de l'asset final introuvable.", 404);

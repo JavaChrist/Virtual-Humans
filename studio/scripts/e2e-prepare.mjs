@@ -53,6 +53,8 @@ function writeEnvFiles(runtime) {
     `DIRECTOR_V2_ENABLED=1`,
     `DIRECTOR_V2_PERSISTENCE_ENABLED=1`,
     `DIRECTOR_V2_E2E_FAKE_MODE=1`,
+    // Porte 1 — prove merge→Storage→download across requests (not process memory).
+    `DIRECTOR_V2_E2E_ASSET_STORAGE=1`,
     `DIRECTOR_V2_WORKER_ENABLED=1`,
     // Test-only: worker fake path needs generation flag in the E2E process only.
     `DIRECTOR_V2_PAID_GENERATION_ENABLED=1`,

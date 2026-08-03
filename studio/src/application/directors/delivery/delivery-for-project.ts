@@ -31,6 +31,7 @@ import {
   sha256Hex,
   type AssetContentBackend,
 } from "@/application/postproduction/asset-content-port";
+import { buildDirectorFinalAssetStoragePath } from "@/application/postproduction/director-final-asset-path";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
 import {
   loadProductionContext,
@@ -1238,40 +1239,63 @@ export function createExecuteMergeForProject(deps: ExecuteMergeDeps): ExecuteMer
         }
 
         if (mergeResult.status === "completed") {
-          mergeStatus = "completed";
           finalAsset = mergeResult.asset;
-          // Persist recoverable bytes when a content backend + provider are wired (fake/local only).
-          if (
-            finalAsset &&
-            isAssetContentConfigured(deps.assetContent) &&
-            deps.provideMergeContentBytes
-          ) {
-            const bytes = deps.provideMergeContentBytes(finalAsset);
-            if (bytes && bytes.byteLength > 0) {
-              const storagePath =
-                finalAsset.source.kind === "internal"
-                  ? finalAsset.source.storagePath
-                  : `fake-merge/${finalAsset.id}.mp4`;
-              await deps.assetContent.put({
-                assetId: finalAsset.id,
-                workspaceId: deps.workspaceId,
-                projectId: input.projectId,
-                mimeType: finalAsset.mimeType,
-                bytes,
-                storagePath,
+          if (finalAsset && isAssetContentConfigured(deps.assetContent)) {
+            // Backend configured → bytes must be persisted before downloadable merge.
+            const bytes = deps.provideMergeContentBytes?.(finalAsset);
+            if (!bytes || bytes.byteLength === 0) {
+              mergeStatus = "failed";
+              reason = "asset_content_missing";
+              finalAsset = undefined;
+              updatedProductionResult = patchDelivery(updatedProductionResult, "failed", at, {
+                blockingCodes: [reason],
               });
-              finalAsset = {
-                ...finalAsset,
-                sizeBytes: bytes.byteLength,
-                checksum: sha256Hex(bytes),
-                source: { kind: "internal", storagePath },
-              };
+            } else {
+              try {
+                const storagePath = buildDirectorFinalAssetStoragePath({
+                  workspaceId: deps.workspaceId,
+                  projectId: input.projectId,
+                  containerId: outcome.plan.id,
+                  assetId: finalAsset.id,
+                  mimeType: finalAsset.mimeType,
+                });
+                await deps.assetContent.put({
+                  assetId: finalAsset.id,
+                  workspaceId: deps.workspaceId,
+                  projectId: input.projectId,
+                  containerId: outcome.plan.id,
+                  mimeType: finalAsset.mimeType,
+                  bytes,
+                  storagePath,
+                });
+                finalAsset = {
+                  ...finalAsset,
+                  sizeBytes: bytes.byteLength,
+                  checksum: sha256Hex(bytes),
+                  source: { kind: "internal", storagePath },
+                };
+                mergeStatus = "completed";
+                updatedProductionResult = patchDelivery(updatedProductionResult, "merged", at, {
+                  finalAssetId: finalAsset.id,
+                  mergePlanId: outcome.plan.id,
+                });
+              } catch {
+                mergeStatus = "failed";
+                reason = "asset_content_persist_failed";
+                finalAsset = undefined;
+                updatedProductionResult = patchDelivery(updatedProductionResult, "failed", at, {
+                  blockingCodes: [reason],
+                });
+              }
             }
+          } else {
+            // No content backend — merge metadata only; download remains fail-closed.
+            mergeStatus = "completed";
+            updatedProductionResult = patchDelivery(updatedProductionResult, "merged", at, {
+              finalAssetId: finalAsset?.id,
+              mergePlanId: outcome.plan.id,
+            });
           }
-          updatedProductionResult = patchDelivery(updatedProductionResult, "merged", at, {
-            finalAssetId: finalAsset.id,
-            mergePlanId: outcome.plan.id,
-          });
         } else {
           mergeStatus = "failed";
           reason = mergeResult.status === "failed" ? mergeResult.error.code : "merge_execution_unavailable";

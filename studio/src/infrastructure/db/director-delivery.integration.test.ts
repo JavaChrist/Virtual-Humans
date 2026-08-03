@@ -308,6 +308,14 @@ test("VHS-125 — quality -> human review -> merge -> export (fake merge only)",
   assert.equal(execMerge.status, "completed", JSON.stringify(execMerge));
   if (execMerge.status !== "completed" && execMerge.status !== "existing") return;
   assert.equal(execMerge.finalAsset.source.kind, "internal", "fake merge never returns external URLs");
+  if (execMerge.finalAsset.source.kind === "internal") {
+    assert.match(
+      execMerge.finalAsset.source.storagePath,
+      /^[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\/[0-9a-f-]{36}\.mp4$/i,
+      "durable Storage path after merge",
+    );
+    assert.equal(execMerge.finalAsset.source.storagePath.includes("fake-merge/"), false);
+  }
 
   // prepare + execute each create a merge director_run — assert the latest completed one.
   const { data: mergeRuns } = await client
