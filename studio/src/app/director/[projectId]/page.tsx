@@ -7,16 +7,12 @@ import type { VideoScriptView } from "@/application/directors/script/analyze-for
 import type { VisualDirectionView } from "@/application/directors/art/analyze-for-project";
 import type { StoryboardProjectView } from "@/application/directors/storyboard/analyze-for-project";
 import type { ScenePackageSetView } from "@/application/directors/prompt/build-for-project";
+import type { GenerationPlanView } from "@/application/directors/routing/route-for-project";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
 import { logger } from "@/infrastructure/observability";
-import { MarketingSection } from "../_components/marketing-section";
-import { CreativeSection } from "../_components/creative-section";
-import { ScriptSection } from "../_components/script-section";
-import { ArtSection } from "../_components/art-section";
-import { StoryboardSection } from "../_components/storyboard-section";
-import { PromptSection } from "../_components/prompt-section";
+import { DirectorProjectClient } from "../_components/director-project-client";
 
 export const dynamic = "force-dynamic";
 
@@ -54,10 +50,14 @@ export default async function DirectorProjectPage({ params }: PageProps) {
   let initialVisualDirection: VisualDirectionView | null = null;
   let initialStoryboard: StoryboardProjectView | null = null;
   let initialPackageSet: ScenePackageSetView | null = null;
+  let initialPlanRouting: GenerationPlanView | null = null;
+  let projectActiveRevision = 1;
 
   try {
     const stack = createDirectorPersistenceStack();
     view = await stack.getProject.execute(projectId, stack.workspaceId);
+    const persisted = await stack.projects.load(projectId);
+    if (persisted) projectActiveRevision = persisted.activeRevision;
     if (view.status === "ok") {
       logger.info("director.project.loaded", {
         correlationId: "page-director-project",
@@ -97,6 +97,11 @@ export default async function DirectorProjectPage({ params }: PageProps) {
         { correlationId: "page-director-prompts", mode: "dry-run" }
       );
       initialPackageSet = promptDry.existingPackageSet ?? null;
+      const routingDry = await stack.routeGenerationPlan.dryRun(
+        { projectId },
+        { correlationId: "page-director-routing", mode: "dry-run" }
+      );
+      initialPlanRouting = routingDry.existingPlan ?? null;
     }
   } catch (e) {
     if (e instanceof V2SupabaseConfigError) {
@@ -149,7 +154,6 @@ export default async function DirectorProjectPage({ params }: PageProps) {
   }
 
   const { project, brief } = view.view;
-  const created = new Date(project.createdAt);
 
   return (
     <div className="max-w-2xl">
@@ -158,53 +162,23 @@ export default async function DirectorProjectPage({ params }: PageProps) {
         subtitle="Projet persisté · Réalisateur IA"
       />
 
-      <dl className="card p-5 grid gap-3 text-sm mb-6">
-        <div>
-          <dt className="text-[var(--muted)]">Statut</dt>
-          <dd className="font-medium">{project.status}</dd>
-        </div>
-        <div>
-          <dt className="text-[var(--muted)]">Plateforme</dt>
-          <dd>{PLATFORM_LABELS[brief.platform] ?? brief.platform}</dd>
-        </div>
-        <div>
-          <dt className="text-[var(--muted)]">Durée</dt>
-          <dd>{brief.durationSeconds}s</dd>
-        </div>
-        <div>
-          <dt className="text-[var(--muted)]">Langue</dt>
-          <dd>{brief.language}</dd>
-        </div>
-        <div>
-          <dt className="text-[var(--muted)]">Sujet</dt>
-          <dd>{brief.subjectName}</dd>
-        </div>
-        <div>
-          <dt className="text-[var(--muted)]">Personnage</dt>
-          <dd>{brief.characterId ?? "Aucun"}</dd>
-        </div>
-        <div>
-          <dt className="text-[var(--muted)]">Créé le</dt>
-          <dd>
-            {Number.isNaN(created.getTime())
-              ? project.createdAt
-              : created.toLocaleString("fr-FR")}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-[var(--muted)]">Brief actif</dt>
-          <dd>
-            révision {brief.revision} · {brief.projectName}
-          </dd>
-        </div>
-      </dl>
+      <p className="text-sm text-[var(--muted)] mb-6">
+        Statut {project.status}
+        {brief.platform ? ` · ${PLATFORM_LABELS[brief.platform] ?? brief.platform}` : null}
+      </p>
 
-      <MarketingSection projectId={project.id} initialPlan={initialPlan} />
-      <CreativeSection projectId={project.id} initialConcept={initialConcept} />
-      <ScriptSection projectId={project.id} initialScript={initialScript} />
-      <ArtSection projectId={project.id} initialVisualDirection={initialVisualDirection} />
-      <StoryboardSection projectId={project.id} initialStoryboard={initialStoryboard} />
-      <PromptSection projectId={project.id} initialPackageSet={initialPackageSet} />
+      <DirectorProjectClient
+        projectId={project.id}
+        projectRevision={projectActiveRevision}
+        brief={brief}
+        initialPlan={initialPlan}
+        initialConcept={initialConcept}
+        initialScript={initialScript}
+        initialVisualDirection={initialVisualDirection}
+        initialStoryboard={initialStoryboard}
+        initialPackageSet={initialPackageSet}
+        initialPlanRouting={initialPlanRouting}
+      />
 
       <div className="mt-6">
         <Link href="/director" className="btn btn-ghost">

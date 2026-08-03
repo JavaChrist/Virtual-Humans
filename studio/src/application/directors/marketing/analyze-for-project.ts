@@ -17,6 +17,11 @@ import {
   isDirectorV2PaidAiEnabled,
 } from "@/infrastructure/config/feature-flags";
 import {
+  e2eFakeOpenAiConfig,
+  isDirectorE2eFakeMode,
+  textDirectorExecutionAvailable,
+} from "@/infrastructure/e2e/e2e-text-director-gate";
+import {
   MARKETING_ANALYZER_PROMPT_VERSION,
   MARKETING_CANDIDATE_SCHEMA_VERSION,
   runOpenAIMarketingDryRun,
@@ -26,6 +31,7 @@ import {
   DEFAULT_OPENAI_MARKETING_MODEL,
   parseOpenAIMarketingConfig,
 } from "@/infrastructure/ai/openai/config";
+import { assessMarketingBriefReadiness } from "@/domain/marketing";
 import { createMarketingDirector } from "./marketing-director";
 import type { MarketingAnalyzerPort } from "./analyzer-port";
 import {
@@ -414,10 +420,15 @@ export function createAnalyzeMarketingForProject(
         ? mapStoredPlan(existing.value, existing.revision)
         : undefined;
 
-      const executionAvailable =
-        aiDry.executable &&
-        canExecuteMarketingAi(env) &&
-        aiDry.pricingConfigured;
+      const e2e = isDirectorE2eFakeMode(env);
+      const readiness = assessMarketingBriefReadiness(loaded.brief);
+      const domainExecutable = e2e ? readiness.executable : aiDry.executable;
+      const executionAvailable = textDirectorExecutionAvailable({
+        env,
+        domainExecutable,
+        paidPathAvailable: canExecuteMarketingAi(env),
+        pricingConfigured: aiDry.pricingConfigured,
+      });
 
       let estimatedCostMinor: number | undefined;
       let currency: string | undefined;
@@ -437,15 +448,15 @@ export function createAnalyzeMarketingForProject(
       }
 
       return {
-        executable: aiDry.executable,
+        executable: domainExecutable,
         providerCalled: false,
         executionAvailable,
         briefRevision: loaded.revision,
         briefArtifactId: loaded.artifactId,
-        model: aiDry.model,
+        model: e2e ? e2eFakeOpenAiConfig().model : aiDry.model,
         promptVersion: aiDry.promptVersion,
         schemaVersion: aiDry.schemaVersion,
-        pricingConfigured: aiDry.pricingConfigured,
+        pricingConfigured: e2e ? true : aiDry.pricingConfigured,
         estimatedCostMinor,
         currency,
         confidence,
@@ -466,7 +477,11 @@ export function createAnalyzeMarketingForProject(
           503
         );
       }
-      if (!isDirectorV2MarketingAiEnabled(env) || !isDirectorV2PaidAiEnabled(env)) {
+      const e2e = isDirectorE2eFakeMode(env);
+      if (
+        !e2e &&
+        (!isDirectorV2MarketingAiEnabled(env) || !isDirectorV2PaidAiEnabled(env))
+      ) {
         return failedAnalysis(
           "marketing_ai_disabled",
           "Analyse Marketing IA désactivée.",
@@ -475,21 +490,25 @@ export function createAnalyzeMarketingForProject(
       }
 
       let config;
-      try {
-        config = parseOpenAIMarketingConfig(env);
-      } catch {
-        return failedAnalysis(
-          "invalid_config",
-          "Configuration Marketing IA invalide.",
-          503
-        );
-      }
-      if (!config.apiKeyPresent) {
-        return failedAnalysis(
-          "openai_not_configured",
-          "OpenAI n’est pas configuré.",
-          503
-        );
+      if (e2e) {
+        config = e2eFakeOpenAiConfig();
+      } else {
+        try {
+          config = parseOpenAIMarketingConfig(env);
+        } catch {
+          return failedAnalysis(
+            "invalid_config",
+            "Configuration Marketing IA invalide.",
+            503
+          );
+        }
+        if (!config.apiKeyPresent) {
+          return failedAnalysis(
+            "openai_not_configured",
+            "OpenAI n’est pas configuré.",
+            503
+          );
+        }
       }
 
       const project = await deps.projects.load(input.projectId);
@@ -520,7 +539,21 @@ export function createAnalyzeMarketingForProject(
         env,
         pricing: deps.pricing,
       });
-      if (!aiDry.executable) {
+      if (e2e) {
+        const readiness = assessMarketingBriefReadiness(loaded.brief);
+        if (!readiness.executable) {
+          return {
+            status: "needs_input",
+            missingInformation: [
+              {
+                code: "marketing_readiness",
+                message: "Brief Marketing non prêt.",
+              },
+            ],
+            warnings: [],
+          };
+        }
+      } else if (!aiDry.executable) {
         return {
           status: "needs_input",
           missingInformation: aiDry.validations
@@ -532,7 +565,7 @@ export function createAnalyzeMarketingForProject(
           })),
         };
       }
-      if (!aiDry.pricingConfigured && config.requireFirmPricing) {
+      if (!e2e && !aiDry.pricingConfigured && config.requireFirmPricing) {
         return failedAnalysis(
           "pricing_unknown",
           "Tarification indisponible pour un appel payant.",
@@ -782,7 +815,8 @@ export function createAnalyzeMarketingForProject(
           correlationId: context.correlationId,
           reservationId,
           actualCostMinor: estimatedCostMinor,
-          costStatus: aiDry.pricingConfigured ? "committed" : "unknown",
+          // Ledger CHECK refuse "unknown" — en E2E fake (sans price book) on commit synthétique.
+          costStatus: e2e || aiDry.pricingConfigured ? "committed" : "provisional",
           expectedRunRevision: revisionAfterReserve,
           ledgerIdempotencyKey: `dir-commit-${directorRunId}`,
         });

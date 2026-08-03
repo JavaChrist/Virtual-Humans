@@ -210,9 +210,17 @@ export function buildProductionResult(input: {
   warnings?: ProductionWarning[];
   /** Default true — emit 1.1.0 with delivery.not_started. */
   withDelivery?: boolean;
+  /**
+   * Default true — redact temporary URLs / inline data for client-facing manifests.
+   * Server-side delivery (QC/merge) must pass false so sources remain usable.
+   */
+  redactSources?: boolean;
 }): ProductionResult {
   const { run, meta, completedAt, status } = input;
   const withDelivery = input.withDelivery !== false;
+  const redactSources = input.redactSources !== false;
+  const maybeRedact = (asset: GeneratedAsset): GeneratedAsset =>
+    redactSources ? redactAsset(asset) : asset;
   const scenes: SceneProductionResult[] = run.scenes.map((scene) => ({
     sceneId: scene.sceneId,
     sceneOrder: scene.sceneOrder,
@@ -223,14 +231,14 @@ export function buildProductionResult(input: {
       status: mapStepStatus(step.status),
       attempts: step.attempts.map((a) => ({
         ...a,
-        output: a.output ? redactAsset(a.output) : undefined,
+        output: a.output ? maybeRedact(a.output) : undefined,
       })),
-      outputAssets: step.outputAssets.map(redactAsset),
+      outputAssets: step.outputAssets.map(maybeRedact),
       estimatedCost: step.estimatedCost,
       committedCost: step.committedCost,
       warnings: step.warnings,
     })),
-    outputAssets: scene.outputAssets.map(redactAsset),
+    outputAssets: scene.outputAssets.map(maybeRedact),
     estimatedCost: scene.estimatedCost,
     committedCost: scene.committedCost,
     warnings: scene.warnings,

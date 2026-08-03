@@ -56,12 +56,12 @@ export default function SettingsPage() {
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between rounded-lg bg-[var(--surface-2)] border border-[var(--border)] px-4 py-3">
             <div>
-              <code className="text-sm">APP_PASSWORD</code>
-              <div className="text-xs text-[var(--muted)]">Verrouille l&apos;app + les générations payantes</div>
+              <span className="text-sm font-medium">Session partagée</span>
+              <div className="text-xs text-[var(--muted)]">
+                Accès fail-closed — mot de passe serveur requis (jamais exposé ici)
+              </div>
             </div>
-            <span className={`badge ${s?.access.protected ? "text-[var(--success)]" : "text-[#f59e0b]"}`}>
-              {s?.access.protected ? "protégé" : "accès ouvert"}
-            </span>
+            <span className="badge text-[var(--success)]">session requise</span>
           </div>
           <div className="flex items-center justify-between rounded-lg bg-[var(--surface-2)] border border-[var(--border)] px-4 py-3">
             <div>
@@ -89,8 +89,9 @@ FAL_KEY=...
 SUPABASE_URL=https://ejdbksxaswhdtsudnmvi.supabase.co
 SUPABASE_SERVICE_ROLE_KEY=...
 
-# Sécurité (recommandé en production)
-APP_PASSWORD=un-mot-de-passe-solide
+# Sécurité fail-closed (obligatoire — valeurs synthétiques locales uniquement)
+APP_PASSWORD=
+APP_SESSION_SECRET=
 BUDGET_CAP_USD=50
 
 # Tarifs (optionnel, pour ajuster les estimations)
@@ -108,8 +109,11 @@ FAL_RUNWAY_USD_PER_SEC=0.05`}</pre>
           <div>
             Personnage : <span className="text-[var(--foreground)]">{s?.sdk.character ?? "…"}</span>
           </div>
-          <div className="break-all">
-            Racine : <code className="text-[var(--foreground)]">{s?.sdk.repoRoot ?? "…"}</code>
+          <div>
+            SDK :{" "}
+            <span className="text-[var(--foreground)]">
+              {s?.sdk.configured ? "configuré" : "indisponible"}
+            </span>
           </div>
           <div>
             Prix voix : <span className="text-[var(--foreground)]">${s?.pricing.elevenlabsUsdPer1kChars ?? "…"}/1k car.</span>

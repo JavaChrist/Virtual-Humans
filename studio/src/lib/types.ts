@@ -20,9 +20,10 @@ export interface TemplateResponse {
 
 export interface SettingsResponse {
   keys: { openai: boolean; elevenlabs: boolean; elevenlabsVoice: boolean; fal: boolean; supabase: boolean };
-  sdk: { repoRoot: string; character: string };
+  sdk: { configured: boolean; character: string };
   pricing: { elevenlabsUsdPer1kChars: number };
-  access: { protected: boolean; budgetCapUSD: number | null };
+  /** Fail-closed: session always required when this endpoint is reachable. */
+  access: { sessionRequired: true; budgetCapUSD: number | null };
   /** Server feature flags (never read from NEXT_PUBLIC_*). */
   features?: { directorV2: boolean };
 }

@@ -80,4 +80,54 @@ test("migrations V2 — tables et RPC requis présents", () => {
   assert.match(sql, /begin_or_get_prompt_director_run/i);
   assert.match(sql, /persist_scene_package_set/i);
   assert.match(sql, /scene_package_set/i);
+  assert.match(sql, /begin_or_get_routing_director_run/i);
+  assert.match(sql, /persist_generation_plan/i);
+  assert.match(sql, /persist_artifact_approval/i);
+  assert.match(sql, /director_type IN \([\s\S]*'routing'/i);
+  assert.match(sql, /begin_or_get_production_director_run/i);
+  assert.match(sql, /complete_production_director_run/i);
+  assert.match(sql, /director_type IN \([\s\S]*'production'/i);
+  assert.match(sql, /input_artifact_type IN \([\s\S]*'generation_plan'/i);
+});
+
+test("migrations V2 — VHS-125 postproduction delivery RPCs et table présents", () => {
+  const sql = allSql();
+  assert.match(sql, /CREATE TABLE public\.human_review_decisions/i);
+  assert.match(sql, /human_review_decisions are append-only/i);
+  for (const fn of [
+    "persist_production_result",
+    "begin_or_get_quality_director_run",
+    "persist_quality_report",
+    "persist_human_review_decision",
+    "begin_or_get_merge_director_run",
+    "persist_merge_outcome",
+    "begin_or_get_export_director_run",
+    "persist_export_package",
+  ]) {
+    assert.match(sql, new RegExp(`FUNCTION public\\.${fn}`, "i"));
+  }
+  assert.match(sql, /director_type IN \([\s\S]*'quality'[\s\S]*'merge'[\s\S]*'export'/i);
+  assert.match(sql, /artifact_type IN \([\s\S]*'quality_report'[\s\S]*'merge_plan'[\s\S]*'export_package'/i);
+  assert.match(sql, /input_artifact_type IN \([\s\S]*'production_result'[\s\S]*'quality_report'[\s\S]*'merge_plan'/i);
+  assert.match(sql, /decision text NOT NULL/i);
+  assert.match(sql, /CHECK \(decision IN \('approved', 'rejected'\)\)/i);
+});
+
+test("migrations V2 — VHS-126 brief revisions + stale columns/RPCs", () => {
+  const sql = allSql();
+  assert.match(sql, /ADD COLUMN IF NOT EXISTS stale boolean/i);
+  assert.match(sql, /stale_reason/i);
+  assert.match(sql, /stale_caused_by_artifact_id/i);
+  assert.match(sql, /stale_source_revision/i);
+  for (const fn of [
+    "revise_project_brief",
+    "clear_active_artifact_stale",
+    "list_project_stale_artifacts",
+  ]) {
+    assert.match(sql, new RegExp(`FUNCTION public\\.${fn}`, "i"));
+  }
+  assert.match(sql, /upstream_brief_revised/i);
+  assert.match(sql, /director\.brief\.revised/i);
+  assert.match(sql, /GRANT EXECUTE ON FUNCTION public\.revise_project_brief/i);
+  assert.match(sql, /REVOKE ALL ON FUNCTION public\.revise_project_brief/i);
 });

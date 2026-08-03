@@ -12,6 +12,14 @@
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
+/blob-report/
+/.e2e-runtime.json
+/.e2e-server.env
+/.e2e-server-off.env
+/supabase/.branches/
+/supabase/.temp/
 
 # next.js
 /.next/

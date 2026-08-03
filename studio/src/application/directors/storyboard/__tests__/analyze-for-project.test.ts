@@ -5,7 +5,7 @@ import { makeArtChain, makeValidArtCandidate } from "@/domain/art/__tests__/fixt
 import { makeValidStoryboardCandidate } from "@/domain/storyboard/__tests__/fixtures";
 import type { StoryboardAnalyzerPort } from "../analyzer-port";
 import { createAnalyzeStoryboardForProject, type StoryboardDirectorRunPort } from "../analyze-for-project";
-import type { ArtifactRepository, PersistedArtifact, PersistedVideoProject, ProjectRepository } from "@/application/projects/ports";
+import type { ArtifactRepository, PersistedArtifact, PersistedVideoProject } from "@/application/projects/ports";
 import type { AiTokenPricingPort } from "@/infrastructure/ai/openai/marketing/pricing";
 import { MarketingAnalyzerError, marketingFailure } from "@/application/directors/marketing/failures";
 

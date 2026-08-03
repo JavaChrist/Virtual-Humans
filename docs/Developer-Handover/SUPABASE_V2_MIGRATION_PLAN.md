@@ -1,8 +1,11 @@
 # Plan d’application Supabase V2 (VHS-113)
 
+> **Phase 9 (3 août 2026) :** validation **locale** complète (16 migrations, pgTAP 276, intégration 30, 2 cycles verts).  
+> **Aucune** application distante effectuée. Apply distant = autorisation humaine séparée + backup préalable.
+
 ## Décisions pilote
 
-Migration locale ajoutée : `studio/supabase/migrations/20260803120000_vhs_118b_creative_director_runs.sql` (Creative Director ; aucune application distante).
+Migrations locales : `20260802180000` … `20260803200000` (VHS-113 → VHS-126). Aucune application distante.
 
 | Décision | Choix |
 |---|---|
@@ -187,14 +190,66 @@ SELECT proname FROM pg_proc WHERE pronamespace = 'public'::regnamespace
 | Grants | `service_role` only |
 | Apply distant | **non autorisé** sans décision écrite |
 
-## Tests / VHS-115 ✅ … + VHS-118B … + VHS-122
+## VHS-123 — routing director runs + GenerationPlan approvals
+
+| | |
+|---|---|
+| Migration | `20260803170000_vhs_123_routing_director_runs.sql` |
+| CHECK | `director_type` ∈ `…\|routing` ; `input_artifact_type` ∈ `…\|scene_package_set` |
+| RPC | `begin_or_get_routing_director_run`, `persist_generation_plan`, `persist_artifact_approval` |
+| Input run | `scene_package_set` + storyboard + brief actifs |
+| Output | artifact `generation_plan` + projection `generation_plans` (`ready`) + audit/outbox |
+| Approvals | append-only `artifact_approvals` ; bump `video_projects.active_revision` ; stale via révision active |
+| Budget | **aucune** réservation (`cost_status=none`, provider `deterministic`) |
+| Grants | `service_role` only |
+| Apply distant | **non autorisé** sans décision écrite |
+
+## VHS-124 — production director runs
+
+| | |
+|---|---|
+| Migration | `20260803180000_vhs_124_production_director.sql` |
+| CHECK | `director_type` ∈ `…\|production` ; `input_artifact_type` ∈ `…\|generation_plan` |
+| RPC | `begin_or_get_production_director_run`, `complete_production_director_run` |
+| Input run | `generation_plan` actif (révision vérifiée) |
+| Output | `production_run_id` dans audit/outbox + `director_runs.usage` ; `output_artifact_id` NULL |
+| Budget | **aucune** réservation au begin/complete (`cost_status=none`, provider `deterministic`) |
+| Grants | `service_role` only |
+| Apply distant | **non autorisé** sans décision écrite |
+
+## VHS-125 — postproduction delivery (QC / revue / merge / export)
+
+| | |
+|---|---|
+| Migration | `20260803190000_vhs_125_postproduction_delivery.sql` |
+| CHECK artifacts | `+ quality_report`, `merge_plan`, `export_package` (conserve `scene_package_set`) |
+| CHECK director | `+ quality`, `merge`, `export` ; inputs `production_result` / `quality_report` / `merge_plan` |
+| Table | `human_review_decisions` append-only (trigger interdit UPDATE/DELETE) |
+| RPC | `persist_production_result`, `begin_or_get_quality_director_run`, `persist_quality_report`, `persist_human_review_decision`, `begin_or_get_merge_director_run`, `persist_merge_outcome`, `begin_or_get_export_director_run`, `persist_export_package` |
+| Budget | **aucune** réservation (`cost_status=none`, provider `deterministic`) |
+| Grants | `service_role` only |
+| Apply distant | **non autorisé** sans décision écrite |
+
+## VHS-126 — brief revisions + persistent stale cascade
+
+| | |
+|---|---|
+| Migration | `20260803200000_vhs_126_brief_revisions_stale.sql` |
+| Colonnes | `active_artifact_revisions.stale` (+ reason / since / caused_by / source_revision) |
+| RPC | `revise_project_brief`, `list_project_stale_artifacts`, `clear_active_artifact_stale` |
+| Atomicité | nouvelle révision + activation + cascade provenance + audit + outbox |
+| Refuse | production run non-terminal active ; optimistic conflict ; anon/authenticated |
+| Grants | `service_role` only |
+| Apply distant | **non autorisé** sans décision écrite |
+
+## Tests / VHS-115 ✅ … + VHS-123 + VHS-124 + VHS-125 + VHS-126
 
 | Suite | Statut |
 |---|---|
-| `npm test` | **672** unitaires |
-| `npx supabase db reset` | 12 migrations (`20260802*` + `2026080312*` … `20260803160000`) |
-| `npx supabase test db` | pgTAP **176** (incl. `vhs_122`) |
-| `npm run test:integration:db` | **26** (incl. prompt déterministe) |
+| `npm test` | unitaires **727** (incl. dependency-graph / brief-diff / revise) |
+| `npx supabase db reset` | **16** migrations (jusqu’à `vhs_126`) |
+| `npx supabase test db` | pgTAP **276** (incl. `vhs_126`) |
+| `npm run test:integration:db` | **30** (incl. brief rev2 → stale → production refusée) |
 | Opérations distantes | **Aucune** |
 
 ### Défaut corrigé avant déploiement

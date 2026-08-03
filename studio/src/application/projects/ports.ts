@@ -39,6 +39,10 @@ export type ActiveArtifactPointer = {
   revision: number;
   updatedAt: string;
   updatedBy: string;
+  /** Authoritative stale flag (VHS-126). Absent/false = current. */
+  stale?: boolean;
+  staleReason?: string | null;
+  staleSince?: string | null;
 };
 
 export interface ProjectRepository {

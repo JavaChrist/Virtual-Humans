@@ -142,20 +142,28 @@ export function runProductionDryRun(input: ProductionDryRunInput): ProductionDry
     push("idempotency_store", true, "Store d'idempotence durable présent.");
   }
 
-  // Adapter resolvability via engine dry-run for each primary step
+  // Adapter resolvability via engine dry-run for each primary step.
+  // Required package references are satisfied only at execution (prior step outputs) —
+  // mark them optional here so dry-run can still verify adapter coverage.
   for (const scene of input.plan.scenePlans) {
     const pkg = input.scenePackages.find((p) => p.sceneId === scene.sceneId);
     if (!pkg) {
       push("scene_package", false, `Package manquant pour ${scene.sceneId}`);
       continue;
     }
+    const pkgForDry = {
+      ...pkg,
+      references: pkg.references.map((r) => ({ ...r, required: false })),
+    };
     for (const step of scene.steps) {
+      // Dry-run only proves adapter coverage — deps/refs are filled at execute time.
+      const stepForDry = { ...step, dependsOnStepIds: [] as string[] };
       const command: GenerationCommand = {
         projectId: input.plan.projectId,
         planRevisionId: input.plan.id,
         sceneId: scene.sceneId,
-        step,
-        scenePackage: pkg,
+        step: stepForDry,
+        scenePackage: pkgForDry,
         resolvedInputs: [],
         idempotencyKey: buildIdempotencyKey({
           projectId: input.plan.projectId,
@@ -167,16 +175,24 @@ export function runProductionDryRun(input: ProductionDryRunInput): ProductionDry
         requestedAt: input.at,
         attempt: 1,
       };
-      const dr = runGenerationEngineDryRun({
-        command,
-        registry: input.registry,
-      });
-      if (!dr.adapterResolved) {
+      // Only prove adapter registration — full command/canonical validity needs runtime inputs.
+      try {
+        input.registry.resolve(step.providerId, step.modelId, step.action);
         push(
           "adapter",
-          false,
-          `Adapter absent pour ${step.providerId}/${step.modelId}/${step.action}`
+          true,
+          `Adapter OK pour ${step.providerId}/${step.modelId}/${step.action}`,
         );
+      } catch {
+        // Keep engine dry-run for richer diagnostics when resolve fails.
+        const dr = runGenerationEngineDryRun({
+          command,
+          registry: input.registry,
+        });
+        const detail =
+          dr.validations.find((v) => v.code === "adapter" && !v.passed)?.message ??
+          `Adapter absent pour ${step.providerId}/${step.modelId}/${step.action}`;
+        push("adapter", false, detail);
       }
     }
   }

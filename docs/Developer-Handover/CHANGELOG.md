@@ -2,6 +2,152 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.45] — 2026-08-03
+
+### Security / Fixed (Phase 9 — audit final)
+
+- Gate `local-fake-delivery` : store mémoire fake-merge **interdit** sur Vercel, en production hors harness E2E, et avec Supabase non-local ; backend absent → port non configuré (erreur explicite).
+- Redaction observabilité : clés `dataUrl` / `inlineDataUrl` + détection valeur `data:…` → `[REDACTED]` (jamais de data URL dans logs).
+- Tests de régression : `redactSources` (QC serveur), barrière fake-delivery, redact data URL.
+- Lint : imports inutilisés E2E / tests Art & Storyboard corrigés.
+- `.gitignore` : `supabase/.branches/`, `supabase/.temp/`.
+
+### Validation
+
+- **Deux cycles complets indépendants** verts (ordre : `db reset` → pgTAP → intégration → unitaires → typecheck → lint → build → E2E) :
+  - Migrations **16** ; pgTAP **276/276** ; intégration **30/30** ; unitaires **785/785** ; E2E **15/15** × 2 ;
+  - typecheck / lint (0 erreur, 16 warnings) / build verts.
+- Aucune flakiness constatée entre cycles ; store mémoire nettoyable via harness.
+- **0** provider réel / distant / déploiement / cron ; flags payants off par défaut.
+- Conclusion locale : implémentation terminée avec fakes — **pas** production distante validée.
+
+## [2.0.44] — 2026-08-03
+
+### Added
+
+- **Phase 8** : harnais E2E Playwright local pour `/director` (Chromium/Chrome).
+- Mode `DIRECTOR_V2_E2E_FAKE_MODE` fail-closed (localhost Supabase, non-production, aucune clé provider) + injection analyzers fake via ports existants.
+- Barrière réseau navigateur (refuse OpenAI/fal/ElevenLabs/AICCOS et hosts non locaux).
+- Scripts `e2e:prepare` / `test:e2e` / `test:e2e:headed` ; workspace synthétique `e2e-*` + cleanup borné.
+- Specs : flag off, auth/œil, parcours complet fake, erreurs, double-clic, conflit révision, mobile/clavier, sécurité, barrière réseau.
+
+### Fixed (durcissement E2E)
+
+- QC delivery : `buildProductionResult({ redactSources: false })` côté serveur — les sources `inline_data_url` ne sont plus `[redacted]` avant QC/merge.
+- Store mémoire fake-merge **partagé au processus** (sinon merge écrit / download lit un Map vide).
+- Storyboard E2E : `spokenContent` aligné sur le script ; dry-run filtre le bruit « clé absente » en fake mode.
+- Helpers E2E : revue QC avec commentaire ; export avec modale ; download via API (`VH-FAKE-MP4-V1`).
+
+### Validation
+
+- E2E Playwright : **15/15** × **2** runs consécutifs (≈53 s / run) — Chromium/Chrome.
+- Parcours `/director` complet : brief → … → merge fake → download `VH-FAKE-MP4-V1` + manifeste.
+- Unitaires **776/776** ; typecheck / lint (0 erreur) / build verts ; pgTAP **276/276** ; intégration DB **30/30**.
+- Correctif worker async : `awaiting_provider_job` reschedule en `mode: "poll"` (plus en `execute`).
+- **0** provider réel / distant / déploiement ; flags payants off par défaut.
+
+## [2.0.43] — 2026-08-03
+
+### Fixed
+
+- **Phase 7 correctif** : bouton œil afficher/masquer sur `/login` (masqué par défaut, `type="button"`, SVG local, `aria-label` / `aria-pressed`, `autoComplete="current-password"`) — aucune persistance client du mot de passe.
+- Exemption cookie **wildcard** `/api/internal/**` **supprimée**. Seule exemption exacte : `POST /api/internal/director-worker/run-once` (secret worker + flags + rate-limit). `GET` et toute autre `/api/internal/*` refusés par défaut (cookie insuffisant pour le worker).
+
+### Validation
+
+- Checkpoint correctif Phase 7 : `db reset` 16 mig. ; pgTAP **276/276** ; intégration **30/30** ; unitaires **769/769** ; typecheck / lint (0 erreur) / build verts.
+- **0** provider réel / distant / déploiement ; flags payants off.
+
+## [2.0.42] — 2026-08-03
+
+### Security
+
+- **VHS-002 / Phase 7** : authentification **fail-closed** (plus jamais d’accès ouvert si secrets absents).
+- `APP_PASSWORD` + `APP_SESSION_SECRET` obligatoires (longueur min, refus placeholders).
+- Session cookie `vh_auth` : HMAC signé, TTL 12 h, HttpOnly, SameSite=Lax, Secure en production — plus de hash permanent rejouable.
+- Comparaison mots de passe via digests + égalité temps constant.
+- `POST /api/logout` (DELETE login → 405) ; CSRF Origin/Referer sur mutations cookie ; rate-limit mémoire best-effort (login / generate / director / worker / aiccos).
+- API non authentifiée → **401 JSON** `no-store` (jamais redirect HTML) ; config invalide → **503**.
+- Settings : booléens sûrs uniquement (plus de fuite `protected` / chemin SDK).
+- Worker : secret dédié inchangé ; cookie utilisateur insuffisant ; raisons d’échec non exposées au client.
+- Headers : CSP baseline, nosniff, Referrer-Policy, frame deny, Permissions-Policy ; SW v12 sans cache API / shells sensibles.
+
+### Validation
+
+- Checkpoint Phase 7 : `db reset` 16 mig. ; pgTAP **276/276** ; intégration **30/30** ; unitaires **754/754** ; typecheck / lint (0 erreur) / build verts.
+- **0** provider réel / distant / déploiement ; flags payants off.
+
+## [2.0.41] — 2026-08-03
+
+### Added
+
+- **VHS-126 / Phase 6** : révisions Brief immuables + invalidation descendante persistante.
+- Graphe canonique domaine (`dependency-graph.ts`) : descendants, provenance exacte, `determineRestartPoint`.
+- Diff Brief déterministe champs métier (`brief-diff.ts`) — aucun secret / URI / clé.
+- Migration `20260803200000_vhs_126_brief_revisions_stale.sql` : colonnes stale sur `active_artifact_revisions` ; RPC atomique `revise_project_brief` ; `list_project_stale_artifacts` ; `clear_active_artifact_stale` ; grants `service_role` only.
+- Service `ReviseProjectBrief` + port Supabase ; production refusée si artifacts actifs stale ; approbation refusée si artifact stale ; QC/merge refusés si `production_result` stale.
+- API `GET|POST …/brief/revisions`, `GET …/brief/compare`, `GET …/stale` ; UI édition Brief + badges stale + CTA reprise Marketing.
+
+### Validation
+
+- Checkpoint Phase 6 : `db reset` 16 mig. ; pgTAP **276/276** ; intégration **30/30** ; unitaires **727/727** ; typecheck / lint (0 erreur) / build verts.
+- Anciennes révisions non mutées ; artifacts/approbations historiques conservés ; **0** provider réel / distant / cron ; flags off.
+
+## [2.0.40] — 2026-08-03
+
+### Fixed
+
+- **VHS-125 download** : `GET …/export/download` sert désormais les **octets réels** du média final (`Content-Type` MIME, `Content-Disposition: attachment`, `Cache-Control: private, no-store`, `X-Content-Type-Options: nosniff`) — plus un JSON manifeste.
+- Manifeste redacted déplacé vers `GET …/export/manifest` (distinct du média).
+- `AssetContentPort` (mémoire injectable) + stockage des bytes synthétiques au merge fake ; `DownloadFinalAssetForProject` avec contrôles QC/revue/merge/MIME/taille/workspace.
+- UI `DeliverySection` : boutons séparés « Télécharger le média final » / « Voir le manifeste ».
+
+### Validation
+
+- Checkpoint correctif : `db reset` 15 mig. ; pgTAP **254/254** ; intégration **29/29** ; unitaires **710/710** ; typecheck / lint (0 erreur) / build verts.
+- Backend contenu non configuré → refus explicite (aucune fabrication) ; **0** fal/AICCOS/distant.
+
+## [2.0.39] — 2026-08-03
+
+### Added
+
+- **VHS-125** : QC / revue humaine / merge / export persistants sur `/director` — migration `20260803190000_vhs_125_postproduction_delivery.sql` ; artifacts `quality_report` / `merge_plan` / `export_package` ; table append-only `human_review_decisions` ; director_types `quality` \| `merge` \| `export` ; RPC `persist_production_result`, `begin_or_get_quality_director_run`, `persist_quality_report`, `persist_human_review_decision`, `begin_or_get_merge_director_run`, `persist_merge_outcome`, `begin_or_get_export_director_run`, `persist_export_package`.
+- Services `EvaluateProductionQualityForProject`, `RecordQualityReviewForProject`, `PrepareMergeForProject`, `ExecuteMergeForProject`, `PrepareExportForProject` ; `createFakeMergeEngine` (sync/async/error/timeout) — **aucun** fal réel.
+- API `GET|POST …/quality`, `POST …/quality/review`, `GET|POST …/merge`, `GET|POST …/export`, `GET …/export/download` ; UI `DeliverySection`.
+- Règles : `unknown` ≠ `pass` ; blocages techniques non waivable ; manifeste export redacted ; AICCOS stub non configuré ; destination download uniquement.
+
+### Validation
+
+- Checkpoint Phase 5 : `db reset` vert (15 mig.) ; pgTAP **254/254** ; intégration DB **29/29** ; unitaires **699/699** ; typecheck / lint (0 erreur, warnings préexistants) / build verts.
+- Page `app/storyboard/page.tsx` inchangée ; **0** fal / AICCOS / OpenAI / ElevenLabs réel ; **0** apply distant / cron ; flags off.
+
+## [2.0.38] — 2026-08-03
+
+### Added
+
+- **VHS-124** : Production Director branché `/director` — migration `20260803180000_vhs_124_production_director.sql` ; `director_type=production` ; input `generation_plan` ; RPC `begin_or_get_production_director_run` / `complete_production_director_run` ; service `StartProductionForProject` ; API `GET|POST …/production`, `POST …/production/cancel`, `POST /api/internal/director-worker/run-once` ; UI `ProductionSection`.
+- Fake universal adapters (`fal` / `openai` / `elevenlabs`) uniquement sur le chemin production Director — **aucun** adaptateur réel ni clé `FAL_KEY` / OpenAI / ElevenLabs.
+- Worker `runOnce` exposé (non auto-démarré) derrière `DIRECTOR_V2_WORKER_ENABLED` + `DIRECTOR_V2_PAID_GENERATION_ENABLED` + secret `DIRECTOR_V2_WORKER_SECRET` (`timingSafeEqual`, fail-closed).
+- Approbations API étendues : `video_project_brief` | `storyboard_project` | `generation_plan`.
+
+### Validation
+
+- Checkpoint Phase 4 : `db reset` vert (14 mig.) ; pgTAP **216/216** ; intégration DB **28/28** ; unitaires **686/686** ; typecheck / lint (0 erreur, warnings préexistants) / build verts.
+- Page `app/storyboard/page.tsx` inchangée ; **0** appel réseau provider réel ; **0** apply distant / cron / AICCOS.
+
+## [2.0.37] — 2026-08-03
+
+### Added
+
+- **VHS-123** : Model Router persistant + approbation GenerationPlan — migration `20260803170000_vhs_123_routing_director_runs.sql` ; `director_type=routing` ; input `scene_package_set` ; RPC `begin_or_get_routing_director_run` / `persist_generation_plan` / `persist_artifact_approval` ; service `RouteGenerationPlanForProject` + `ApproveArtifactForProject` ; API `GET|POST …/routing` et `POST …/approvals` ; UI `RoutingSection`.
+- Registry snapshot versionné content-addressé (`legacy-pricing-usd-v1:<hash>`) depuis le catalogue local ; politique `routing-policy-v1` ; zéro provider, zéro réservation budget, zéro `vh_spend`.
+- Approbation append-only sur révision active ; stale automatique après nouvelle révision ; optimistic locking projet.
+
+### Validation
+
+- Checkpoint Phase 3 : `db reset` vert (13 mig.) ; pgTAP **199/199** ; intégration DB **27/27** ; unitaires **678/678** ; typecheck / lint (0 erreur, 14 warnings préexistants) / build verts.
+- Page `app/storyboard/page.tsx` inchangée ; Prompt Director reste déterministe ; **0** OpenAI / provider / distant / déploiement / réservation génération.
+
 ## [2.0.36] — 2026-08-03
 
 ### Added

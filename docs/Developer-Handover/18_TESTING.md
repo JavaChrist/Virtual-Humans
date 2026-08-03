@@ -8,6 +8,21 @@
 - E2E ciblés sur parcours critiques ;
 - tests manuels exploratoires pour qualité audiovisuelle.
 
+## E2E locaux `/director` (Phase 8)
+
+- **Outil :** Playwright (Chromium / Chrome système sur Windows).
+- **Commandes :** `npm run build` puis `npm run test:e2e` (ou `test:e2e:headed` / `test:e2e:checkpoint`).
+- **Prérequis :** Supabase local Docker ; build Next préalable ; Playwright démarre `next start` sur **3100** (parcours) et **3110** (Director off) — évite le verrou `next dev` unique.
+- **Mode fake :** `DIRECTOR_V2_E2E_FAKE_MODE=1` (fail-closed : localhost Supabase, non-production, aucune clé provider).
+- **Barrière réseau :** interception navigateur — refuse hosts hors localhost et domaines OpenAI/fal/ElevenLabs/AICCOS.
+- **Données :** workspace `e2e-<uuid>` ; cleanup borné au marqueur `e2e-` uniquement.
+- **Captures :** screenshots/traces uniquement à l’échec ; jamais de mot de passe/cookie/secret.
+- **Couverture navigateurs :** Chromium only (Firefox/WebKit omis pour stabilité du checkpoint).
+- **Viewports :** desktop + mobile 390×844.
+- Relancer la suite E2E **deux fois** après le premier succès pour détecter flakiness.
+- **Résultat Phase 8 (2026-08-03) :** 15/15 × 2 runs verts ; flakiness non constatée ; bruit log non bloquant `vh_spend` / `vh_products` (tables legacy absentes du schéma V2 local).
+- **Résultat Phase 9 (2026-08-03) :** deux **cycles complets** indépendants verts (`db reset` → … → E2E) — unitaires **785**, E2E **15/15** × 2 ; aucune flakiness ; gate fake-merge + tests `redactSources` / data URL.
+
 ## Gates CI
 
 Format, lint, TypeScript strict, tests unitaires/intégration, migrations, build, scan secrets/dépendances et tests E2E critiques. Aucun appel payant en CI.

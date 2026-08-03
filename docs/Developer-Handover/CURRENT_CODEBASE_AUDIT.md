@@ -7,7 +7,19 @@
 
 > Mise à jour lot VHS-118B + VHS-119A + VHS-119B : pipeline persistant étendu jusqu’au `VideoScript` (Brief → Marketing → Creative → Script) sous flags AI off ; timing VHS-103 autoritaire ; **0** OpenAI / smoke / apply distant.
 >
-> **Reprise Phase 0 (3 août 2026) :** VHS-120A/B et VHS-121A/B **livrés**. Pipeline `/director` persistant couvre Brief → Marketing → Creative → Script → Art → Storyboard. Prompt/Routing = domaine seul.
+> **Reprise Phase 4 (3 août 2026) :** VHS-124 **livré**. Pipeline `/director` persistant couvre Brief → … → GenerationPlan approuvé → Production (fakes) + worker borné (off).
+>
+> **Reprise Phase 5 (3 août 2026) :** VHS-125 **livré**. Suite Livraison : ProductionResult → QC → revue humaine → MergePlan → merge fake → ExportPackage → download **média octets** (+ manifeste séparé). Aucun fal/AICCOS réel.
+>
+> **Correctif download (3 août 2026) :** `…/export/download` ne renvoie plus le JSON ; `AssetContentPort` mémoire + bytes synthétiques au merge fake ; manifeste sur `…/export/manifest`.
+>
+> **Reprise Phase 6 (3 août 2026) :** VHS-126 **livré**. Brief révisable (révisions immuables) + stale descendant persistant + restart Marketing ; production/approbation/QC refusés si stale. Aucun provider réel.
+>
+> **Reprise Phase 7 (3 août 2026) :** VHS-002 **livré** (+ correctif 2.0.43). Auth fail-closed (`APP_PASSWORD` + `APP_SESSION_SECRET`), session HMAC, CSRF, rate-limit, logout POST, œil login, exemption interne exacte worker POST only. Q1 : workspace partagé par mot de passe — pas de multi-user/OAuth.
+>
+> **Reprise Phase 8 (3 août 2026) :** E2E Playwright local `/director` — fake mode fail-closed, barrière réseau, workspace `e2e-*`.
+>
+> **Phase 9 (3 août 2026) — AUDIT FINAL LOCAL TERMINÉ :** deux cycles complets verts (16 mig. / pgTAP 276 / intégration 30 / unitaires 785 / E2E 15×2). Gate fake-merge mémoire ; redaction data URL ; docs + matrice. **Providers réels / apply distant / deploy : non validés.** Voir `20_FINAL_AUDIT.md`.
 
 > Légende : **[Fait]** = vérifié dans le dépôt / par exécution / via Supabase MCP.  
 > **[Hypothèse]** = non confirmé ou dépendant d’un environnement externe.  
@@ -28,19 +40,21 @@
 | Zod | ^4.4.3 | `studio/package.json` |
 | Supabase JS | ^2.110.8 | `studio/package.json` |
 | fal.ai client | ^1.10.1 | `studio/package.json` |
-| Auth app | cookie `vh_auth` + `APP_PASSWORD` optionnel | `proxy.ts`, `auth.ts` |
+| Auth app | cookie `vh_auth` fail-closed (`APP_PASSWORD` + `APP_SESSION_SECRET`) | `proxy.ts`, `auth.ts` |
 | Middleware | `src/proxy.ts` (convention Next 16) | **[Fait]** — pas de `middleware.ts` |
 
-### 1.2 Baseline de vérifications (exécutée le 2 août 2026)
+### 1.2 Baseline de vérifications (Phase 9 — 3 août 2026)
 
 | Commande | Résultat |
 |---|---|
-| `npm test` (cwd `studio/`) | **26/26 pass** (exit 0) |
-| `npx tsc --noEmit` | **exit 0** |
-| `npm run lint` | **exit 0** — 0 erreur, **11 warnings** `react-hooks/set-state-in-effect` |
-| `npm run build` | **exit 0** — 1 warning NFT/tracing Turbopack sur `registry.ts` |
-
-Scripts absents du `package.json` : pas de script `typecheck` dédié (la commande `tsc` fonctionne néanmoins).
+| `npx supabase db reset` | **16** migrations locales |
+| `npx supabase test db` | **276/276** |
+| `npm run test:integration:db` | **30/30** |
+| `npm test` | **785/785** |
+| `npm run typecheck` | **exit 0** |
+| `npm run lint` | **exit 0** — 0 erreur, **16 warnings** (dont historiques `set-state-in-effect`) |
+| `npm run build` | **exit 0** — 1 warning NFT/tracing Turbopack `registry.ts` |
+| `npm run test:e2e` | **15/15** × **2** cycles complets |
 
 ### 1.3 Instructions locales
 
@@ -62,16 +76,17 @@ Chargés via Runtime SDK (`studio/src/runtime/character/*`). Tests d’intégrat
 
 **[Fait]** Défaut env : `CHARACTER_DIR_NAME ?? "Mei SDK v1.0.0"` dans `sdk.ts` — fallback dossier, pas une branche métier Tom/Mei.
 
-### 1.5 Absences structurelles V2
+### 1.5 Structure V2 (Phase 9 — état réel)
 
-**[Fait]** Les dossiers cibles suivants **n’existent pas** :
+**[Fait]** Présents et branchés localement :
 
-- `studio/src/domain/`
-- `studio/src/application/`
-- `studio/src/infrastructure/` (providers sont dans `lib/providers/`)
-- `studio/src/app/director/`
+- `studio/src/domain/` — brief → export, graphe, budget, production, QC…
+- `studio/src/application/` — directors, production, worker, postproduction
+- `studio/src/infrastructure/` — db, ai adapters (flags off), providers fakes, observability
+- `studio/src/app/director/` — UI `/director` sous flags
+- Page historique `studio/src/app/storyboard/page.tsx` **inchangée** (pas de `/storyboard-v2`)
 
-**[Fait]** Aucune occurrence dans le code de : `MarketingDirector`, `ProductionDirector`, `GenerationPlan`, `ScenePackage`, `idempoten*`, `dryRun` / `dry-run`, `correlationId`, `schemaVersion`.
+**[Fait]** Pipeline unique : Brief → … → ExportPackage (fake). Pas de second moteur Storyboard / Prompt / Router / Production / queue / ledger.
 
 ---
 
@@ -174,7 +189,7 @@ Pas de queue durable, pas d’idempotence, pas de dry-run, pas de Production Dir
 | Scènes sauvegardées | ✅ `vh_scenes` |
 | Multi-personnages Runtime | ✅ Mei + Tom |
 | PWA (manifest, SW, offline) | ✅ |
-| Auth mot de passe optionnelle | ✅ |
+| Auth mot de passe fail-closed (VHS-002) | ✅ |
 | Export AICCOS | ✅ |
 | Parcours `/director` | 🟡 Stub VHS-112 (flag off par défaut ; brief + autosave local) |
 | Directeurs métier | ❌ Absents |
@@ -855,17 +870,26 @@ npm run build        # build production Next 16
 | Art | ✅ | ✅ OpenAI | ✅ VHS-120B | ✅ | ✅ | ✅ | Complet local (AI off) |
 | Storyboard | ✅ | ✅ OpenAI | ✅ VHS-121B | ✅ | ✅ | ✅ | Complet local (AI off) |
 | Prompt | ✅ | n/a déterministe | ✅ VHS-122 `scene_package_set` | ✅ | ✅ | ✅ | Complet local — sans provider |
-| Routing | ✅ | registry legacy | ❌ (table projection) | ❌ | ❌ | domaine/app | Domaine seul |
-| Production | ✅ | engine/adapters | ✅ queue/ledger | ❌ | ❌ | app/SQL | Non branché `/director` |
-| Postproduction | ✅ | fal/AICCOS | ❌ | ❌ | ❌ | app | Stub PD ; historique merge OK |
+| Routing | ✅ | registry legacy snapshot | ✅ VHS-123 `generation_plan` + approvals | ✅ | ✅ | ✅ | Complet local — sans provider / sans réservation |
+| Production | ✅ | **fakes** universels | ✅ VHS-124 runs/jobs | ✅ | ✅ | ✅ | Branché `/director` — providers réels interdits |
+| Postproduction | ✅ | **fake merge** / AICCOS stub | ✅ VHS-125 | ✅ | ✅ | ✅ | Branché `/director` — fal/AICCOS réels interdits |
+| Révisions / stale | ✅ | n/a | ✅ VHS-126 | ✅ | ✅ | ✅ | Brief immuable + cascade provenance + restart |
 
-**Flags inventoriés (tous off par défaut) :** `DIRECTOR_V2_ENABLED`, `DIRECTOR_V2_WORKER_ENABLED`, `DIRECTOR_V2_PAID_GENERATION_ENABLED`, `DIRECTOR_V2_PERSISTENCE_ENABLED`, `DIRECTOR_V2_MARKETING_AI_ENABLED`, `DIRECTOR_V2_CREATIVE_AI_ENABLED`, `DIRECTOR_V2_SCRIPT_AI_ENABLED`, `DIRECTOR_V2_ART_AI_ENABLED`, `DIRECTOR_V2_STORYBOARD_AI_ENABLED`, `DIRECTOR_V2_PAID_AI_ENABLED`.
+**Flags inventoriés (tous off par défaut) :** `DIRECTOR_V2_ENABLED`, `DIRECTOR_V2_WORKER_ENABLED`, `DIRECTOR_V2_PAID_GENERATION_ENABLED`, `DIRECTOR_V2_PERSISTENCE_ENABLED`, `DIRECTOR_V2_MARKETING_AI_ENABLED`, `DIRECTOR_V2_CREATIVE_AI_ENABLED`, `DIRECTOR_V2_SCRIPT_AI_ENABLED`, `DIRECTOR_V2_ART_AI_ENABLED`, `DIRECTOR_V2_STORYBOARD_AI_ENABLED`, `DIRECTOR_V2_PAID_AI_ENABLED`, `DIRECTOR_V2_WORKER_SECRET` (vide).
 
-**Routes `/api/director` :** `projects` GET/POST ; `projects/[id]` GET ; `…/marketing|creative|script|art|storyboard|prompts` GET/POST. Absents : routing, approvals, production, worker.
+**Routes `/api/director` :** `projects` GET/POST ; `projects/[id]` GET ; `…/marketing|creative|script|art|storyboard|prompts|routing|production` GET/POST ; `…/production/cancel` POST ; `…/approvals` POST ; `…/quality` (+ review) / `…/merge` / `…/export` (+ download/manifest) ; `…/brief/revisions` GET/POST ; `…/brief/compare` GET ; `…/stale` GET. Interne : `POST /api/internal/director-worker/run-once`.
 
-**Migrations locales (12) :** … + `vhs_120b` + `vhs_121b` + `vhs_122`. `director_type` ∈ {marketing, creative, script, art, storyboard, prompt}.
+**Migrations locales (16) :** … + `vhs_122` … `vhs_126`. `director_type` ∈ {…, routing, production, quality, merge, export}.
 
-**VHS-122 :** livré et validé localement (Phase 2) — pgTAP **176**, integration **26**, unitaires **672**. Prochain : Routing / GenerationPlan persistant.  
+**VHS-124 :** livré (Phase 4) — Production Director + queue + worker fakes. Checkpoint : voir `CHANGELOG` 2.0.38 / `studio/supabase/README.md`.
+
+**VHS-125 :** livré (Phase 5) — QC / revue / merge fake / export persistants + download média réel. Checkpoint : voir `CHANGELOG` 2.0.40 / `studio/supabase/README.md`. Limites : contenu fake en mémoire (pas de bucket Storage V2), pas de fal compose réel, AICCOS non configuré, URLs temporaires jamais source de vérité.
+
+**VHS-126 :** livré (Phase 6) — révisions Brief immuables + stale descendant persistant (provenance) + restart Marketing ; production/approbation/QC bloqués si stale. Checkpoint : voir `CHANGELOG` 2.0.41 / `studio/supabase/README.md`. Limites : édition UI obligatoire = Brief uniquement ; éditeurs complets des autres artifacts non ajoutés artificiellement.
+
+**VHS-002 / Phase 7 :** livré — auth fail-closed. Variables : `APP_PASSWORD` (≥12) + `APP_SESSION_SECRET` (≥32) dans `.env.local` (jamais committer). Cookie `vh_auth` signé TTL 12 h. Matrice publics = `/login`, `POST /api/login`, `/offline`, assets matcher, et **uniquement** `POST /api/internal/director-worker/run-once` (secret worker — **pas** de wildcard `/api/internal/**` ; cookie utilisateur insuffisant pour le worker). Login : champ mot de passe masqué par défaut + bouton œil accessible. Rate-limit mémoire = best-effort multi-instance. Checkpoint : `CHANGELOG` 2.0.43.
+
+**Phase 8 E2E :** Playwright local (`npm run test:e2e`) — `DIRECTOR_V2_E2E_FAKE_MODE` fail-closed, barrière réseau, workspace `e2e-*`, Chromium/Chrome ; **15/15 ×2**. Checkpoint : `CHANGELOG` 2.0.44 (unitaires 776). Phase 9 non commencée.  
 **Ne pas** appliquer les migrations distantes sans autorisation écrite.  
 **Ne pas** activer worker + paid generation sans store durable et plafond V2.  
 **Ne pas** publier AICCOS depuis le PD sans critères d’activation.  

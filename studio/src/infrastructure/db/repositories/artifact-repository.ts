@@ -117,6 +117,9 @@ export function createSupabaseArtifactRepository(deps: {
         revision: data.revision,
         updatedAt: data.updated_at,
         updatedBy: data.updated_by,
+        stale: Boolean((data as { stale?: boolean }).stale),
+        staleReason: (data as { stale_reason?: string | null }).stale_reason ?? null,
+        staleSince: (data as { stale_since?: string | null }).stale_since ?? null,
       } satisfies ActiveArtifactPointer;
     },
 

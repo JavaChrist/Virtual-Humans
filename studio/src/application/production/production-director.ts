@@ -246,6 +246,12 @@ function buildStepCommand(input: {
   return { command, key, fingerprint };
 }
 
+function isUuidLike(value: string): boolean {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    value,
+  );
+}
+
 export function createProductionDirector(
   options: CreateProductionDirectorOptions
 ): ProductionDirector {
@@ -945,6 +951,8 @@ export function createProductionDirector(
 
     const attemptNumber = nextAttemptNumber(attempts);
     const attemptId = input.forcedAttemptId ?? ctx.nextId();
+    // reserve_budget.p_id is uuid — never pass a composite step attempt key.
+    const reservationId = isUuidLike(attemptId) ? attemptId : ctx.nextId();
     const { command, key, fingerprint } = buildStepCommand({
       plan,
       run: current,
@@ -961,7 +969,7 @@ export function createProductionDirector(
     // Budget first
     try {
       await reserveAttemptBudget(ports.budget, {
-        reservationId: attemptId,
+        reservationId,
         runId: current.id,
         sceneId: input.ready.sceneId,
         stepId: input.ready.stepId,
@@ -1000,7 +1008,7 @@ export function createProductionDirector(
 
     if (idemp.action === "conflict") {
       await releaseFullReservation(ports.budget, {
-        reservationId: attemptId,
+        reservationId,
         runId: current.id,
         sceneId: input.ready.sceneId,
         stepId: input.ready.stepId,
@@ -1015,7 +1023,7 @@ export function createProductionDirector(
 
     if (idemp.action === "wait_in_progress") {
       await releaseFullReservation(ports.budget, {
-        reservationId: attemptId,
+        reservationId,
         runId: current.id,
         sceneId: input.ready.sceneId,
         stepId: input.ready.stepId,
@@ -1053,14 +1061,14 @@ export function createProductionDirector(
           ctx,
           events,
           idempotencyKey: key,
-          reservationId: attemptId,
+          reservationId,
           reserved: estimate.total,
         });
         return handled;
       }
       // Store says complete but no output in run — release and fail closed
       await releaseFullReservation(ports.budget, {
-        reservationId: attemptId,
+        reservationId,
         runId: current.id,
         sceneId: input.ready.sceneId,
         stepId: input.ready.stepId,
@@ -1134,10 +1142,24 @@ export function createProductionDirector(
       ctx,
       events,
       idempotencyKey: key,
-      reservationId: attemptId,
+      reservationId,
       reserved: estimate.total,
     });
     return { ...handled, engineResult: result };
+  }
+
+  async function enqueueAfterProgress(
+    run: ProductionRun,
+    plan: GenerationPlan,
+    context: ProductionExecutionContext,
+  ): Promise<EnqueueProductionJobCommand[]> {
+    const events: ProductionEvent[] = [];
+    const latest = (await ports.runStore.load(run.id)) ?? run;
+    const finalized = await maybeFinalize(latest, context, events);
+    if (finalized) return [];
+    const fresh = (await ports.runStore.load(run.id)) ?? latest;
+    const activePlan = resolvePlan(fresh.generationPlanRevisionId) ?? plan;
+    return buildEnqueueCommandsForRun(fresh, activePlan, context);
   }
 
   async function buildEnqueueCommandsForRun(
@@ -1167,6 +1189,8 @@ export function createProductionDirector(
         continue;
       }
       const attemptNumber = nextAttemptNumber(stepRun.attempts);
+      // Deterministic attempt key for queue uniqueness (run/scene/step/attempt).
+      // Budget reservation uses a separate UUID in launchReadyStep when needed.
       const attemptId = `${r.stepId}:a${attemptNumber}`;
       const payloadRef: ProductionPayloadReference = {
         planRevisionId: plan.id,
@@ -1585,9 +1609,15 @@ export function createProductionDirector(
       }
       const plan = resolvePlan(loaded.generationPlanRevisionId);
       if (!plan) return { commands: [], run: loaded };
-      const current = await applySkips(loaded, context, []);
-      const commands = await buildEnqueueCommandsForRun(current, plan, context);
-      return { commands, run: current };
+      const events: ProductionEvent[] = [];
+      const current = await applySkips(loaded, context, events);
+      const finalized = await maybeFinalize(current, context, events);
+      if (finalized?.run) {
+        return { commands: [], run: finalized.run };
+      }
+      const fresh = (await ports.runStore.load(runId)) ?? current;
+      const commands = await buildEnqueueCommandsForRun(fresh, plan, context);
+      return { commands, run: fresh };
     },
 
     async processClaimedJob(claimedJob, lease, context) {
@@ -1805,10 +1835,12 @@ export function createProductionDirector(
         return {
           status: "already_done",
           runId: launched.run.id,
-          enqueueNext: await buildEnqueueCommandsForRun(launched.run, plan, context),
+          enqueueNext: await enqueueAfterProgress(launched.run, plan, context),
         };
       }
 
+      // Async provider submit → always poll (handleEngineResult also sets
+      // waiting: awaiting_provider_job — must not fall through to execute retry).
       const er = launched.engineResult;
       if (er && (er.status === "submitted" || er.status === "processing")) {
         const pollAfter = er.pollAfterMs ?? 3000;
@@ -1826,7 +1858,31 @@ export function createProductionDirector(
             externalJobId: er.providerJob.externalJobId,
             pollAfterMs: pollAfter,
           },
-          enqueueNext: await buildEnqueueCommandsForRun(launched.run, plan, context),
+          enqueueNext: await enqueueAfterProgress(launched.run, plan, context),
+        };
+      }
+
+      // Waiting (budget / idempotency / …) must NOT complete the queue job —
+      // otherwise steps stay ready and dependents are never enqueued.
+      if (launched.waiting) {
+        const delayMs =
+          launched.waiting === "budget_blocked"
+            ? 2_000
+            : launched.waiting === "idempotency_in_progress"
+              ? 1_000
+              : 3_000;
+        const availableAt = new Date(
+          Date.parse(context.nowIso()) + delayMs
+        ).toISOString();
+        return {
+          status: "reschedule",
+          runId: launched.run.id,
+          availableAt,
+          payloadRef: {
+            ...claimedJob.payload,
+            mode: "execute",
+          },
+          enqueueNext: [],
         };
       }
 
@@ -1836,7 +1892,7 @@ export function createProductionDirector(
           runId: launched.run.id,
           errorCode: er.error.code,
           publicMessage: er.error.publicMessage,
-          enqueueNext: await buildEnqueueCommandsForRun(launched.run, plan, context),
+          enqueueNext: await enqueueAfterProgress(launched.run, plan, context),
         };
       }
 
@@ -1847,14 +1903,33 @@ export function createProductionDirector(
           runId: launched.run.id,
           errorCode: "engine_failed",
           publicMessage: "Étape échouée.",
-          enqueueNext: await buildEnqueueCommandsForRun(launched.run, plan, context),
+          enqueueNext: await enqueueAfterProgress(launched.run, plan, context),
+        };
+      }
+
+      if (stepAfter?.status === "skipped") {
+        return {
+          status: "already_done",
+          runId: launched.run.id,
+          enqueueNext: await enqueueAfterProgress(launched.run, plan, context),
+        };
+      }
+
+      // Fail closed: never mark the queue job completed unless the step terminalized.
+      if (stepAfter?.status !== "completed") {
+        return {
+          status: "failed",
+          runId: launched.run.id,
+          errorCode: "step_not_completed",
+          publicMessage: "Étape non terminée après exécution.",
+          enqueueNext: [],
         };
       }
 
       return {
         status: "completed",
         runId: launched.run.id,
-        enqueueNext: await buildEnqueueCommandsForRun(launched.run, plan, context),
+        enqueueNext: await enqueueAfterProgress(launched.run, plan, context),
       };
     },
   };

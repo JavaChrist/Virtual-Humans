@@ -42,6 +42,9 @@ export type ProviderUsage = {
   unit?: string;
   quantity?: number;
   rawLabel?: string;
+  /** Optional settled cost hint in minor units (fake / deterministic adapters). */
+  amountMinor?: number;
+  currency?: string;
 };
 
 export function assertExternalJobRef(

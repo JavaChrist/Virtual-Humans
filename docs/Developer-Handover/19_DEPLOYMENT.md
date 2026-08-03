@@ -8,6 +8,31 @@ Local, preview par changement, staging isolé, production. Bases, buckets, clés
 
 Valider au démarrage les variables serveur. Catégories : Supabase, storage, queue, providers, chiffrement, télémétrie, URLs de callback et feature flags. Aucun secret avec préfixe public.
 
+### Authentification fail-closed (VHS-002)
+
+Obligatoires (accès protégé refusé sinon) :
+
+```text
+APP_PASSWORD=<≥12 chars, non placeholder>
+APP_SESSION_SECRET=<≥32 chars, distinct, non placeholder>
+```
+
+Local (`.env.local` uniquement, jamais committer) :
+
+```text
+APP_PASSWORD=local-dev-password-ok
+APP_SESSION_SECRET=local-dev-session-secret-32chars-min
+```
+
+Comportement :
+
+- pages protégées sans session → redirect `/login?next=<chemin sûr>` ;
+- API sans session → `401` JSON `Cache-Control: no-store` (jamais HTML) ;
+- config invalide → API `503`, pages → login ;
+- session HMAC TTL 12 h ; rotation password/secret invalide toutes les sessions ;
+- HSTS : à activer au reverse-proxy / CDN production uniquement (pas en local) ;
+- rate-limit mémoire : best-effort par instance Vercel — pas une garantie distribuée.
+
 ## Pipeline
 
 1. tests et scans ;
@@ -23,7 +48,28 @@ Valider au démarrage les variables serveur. Catégories : Supabase, storage, qu
 
 ## Feature flags
 
-`director_enabled`, `paid_generation_enabled`, stratégies et adapters individuellement activables, limite pilote et kill switch global. Les flags ont propriétaire et date d'expiration.
+Flags serveur (off par défaut — voir `studio/.env.example`) :
+
+```text
+DIRECTOR_V2_ENABLED=0
+DIRECTOR_V2_PERSISTENCE_ENABLED=0
+DIRECTOR_V2_WORKER_ENABLED=0
+DIRECTOR_V2_PAID_GENERATION_ENABLED=0
+DIRECTOR_V2_*_AI_ENABLED=0
+DIRECTOR_V2_PAID_AI_ENABLED=0
+DIRECTOR_V2_E2E_FAKE_MODE=0
+```
+
+Kill switches : worker + paid generation ; AI text directors séparés. Les flags ont propriétaire et date d'expiration.
+
+### Store mémoire fake-merge (Phase 9)
+
+Le `AssetContentPort` process-local n’est **jamais** un stockage durable. Gate `local-fake-delivery` :
+
+- refusé sur Vercel ;
+- refusé en `NODE_ENV=production` sans `DIRECTOR_V2_E2E_HARNESS=1` ;
+- refusé si `SUPABASE_URL` n’est pas localhost ;
+- **incompatible multi-instance** — stockage durable requis avant prod distante.
 
 ## Observabilité
 

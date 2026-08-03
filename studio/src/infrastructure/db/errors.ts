@@ -45,6 +45,13 @@ export function mapSupabaseError(e: unknown): PersistenceError {
       diagnostic: "optimistic_conflict",
     });
   }
+  if (/generation_plan_not_ready|approval_revision_not_active|confirmation_required|artifact_not_active/.test(lower)) {
+    return new PersistenceError("conflict", "Conflit d'approbation.", {
+      diagnostic: lower.match(
+        /generation_plan_not_ready|approval_revision_not_active|confirmation_required|artifact_not_active/,
+      )?.[0],
+    });
+  }
   if (/insufficient_funds/.test(lower)) {
     return new PersistenceError("insufficient_funds", "Budget insuffisant.", {
       diagnostic: "insufficient_funds",

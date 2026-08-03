@@ -67,6 +67,9 @@ const CONTENT_KEY_NAMES = new Set([
   "brandconstraints",
   "subjectdescription",
   "brief",
+  // Inline media (Phase 9) — never log data URLs in full
+  "dataurl",
+  "inlinedataurl",
 ]);
 
 export type RedactOptions = {
@@ -146,8 +149,13 @@ function truncateString(value: string, max: number): string {
   return `${value.slice(0, max)}…[truncated ${value.length} chars]`;
 }
 
+function looksLikeDataUrl(value: string): boolean {
+  return /^data:[^,\s]+,/i.test(value.trim());
+}
+
 function redactStringValue(value: string, asContent: boolean, maxString: number): string {
   if (asContent) return REDACTED;
+  if (looksLikeDataUrl(value)) return REDACTED;
   if (looksLikeSignedOrSecretUrl(value)) return REDACTED;
   if (looksLikeSecretString(value)) return REDACTED;
   return truncateString(value, maxString);

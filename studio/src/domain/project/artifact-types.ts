@@ -10,6 +10,9 @@ export const ArtifactTypeValues = [
   "scene_package_set",
   "generation_plan",
   "production_result",
+  "quality_report",
+  "merge_plan",
+  "export_package",
 ] as const;
 
 export type ArtifactType = (typeof ArtifactTypeValues)[number];

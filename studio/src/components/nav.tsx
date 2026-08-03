@@ -29,6 +29,7 @@ export function Nav() {
   const [total, setTotal] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
   const [access, setAccess] = useState<SettingsResponse["access"] | null>(null);
+  const [authed, setAuthed] = useState(false);
   const [directorV2, setDirectorV2] = useState(false);
   const { characters, characterId, setCharacterId } = useCharacter();
   const confirm = useConfirm();
@@ -48,10 +49,12 @@ export function Nav() {
       .then((s) => {
         setAccess(s.access);
         setDirectorV2(Boolean(s.features?.directorV2));
+        setAuthed(true);
       })
       .catch(() => {
         setAccess(null);
         setDirectorV2(false);
+        setAuthed(false);
       });
   }, []);
 
@@ -88,7 +91,12 @@ export function Nav() {
 
   async function logout() {
     try {
-      await fetch("/api/login", { method: "DELETE" });
+      await fetch("/api/logout", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: "{}",
+        cache: "no-store",
+      });
     } catch {
       /* ignore */
     }
@@ -169,7 +177,7 @@ export function Nav() {
       <Link href="/budget" className="text-xs text-[var(--accent-2)] hover:underline">
         Voir le détail →
       </Link>
-      {access?.protected && (
+      {authed && (
         <button
           type="button"
           onClick={logout}

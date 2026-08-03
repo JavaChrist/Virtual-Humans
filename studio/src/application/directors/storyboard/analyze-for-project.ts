@@ -6,7 +6,7 @@ import { VideoProjectBriefSchema } from "@/domain/brief";
 import { CreativeConceptSchema } from "@/domain/creative";
 import { MarketingPlanSchema } from "@/domain/marketing";
 import { VideoScriptSchema } from "@/domain/script";
-import { VisualDirectionSchema, type VisualDirection } from "@/domain/art";
+import { VisualDirectionSchema } from "@/domain/art";
 import {
   STORYBOARD_PROJECT_SCHEMA_VERSION,
   StoryboardProjectSchema,
@@ -14,6 +14,11 @@ import {
 } from "@/domain/storyboard";
 import type { ArtifactRepository, ProjectRepository } from "@/application/projects/ports";
 import { canExecuteStoryboardAi, canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  e2eFakeOpenAiConfig,
+  isDirectorE2eFakeMode,
+  textDirectorExecutionAvailable,
+} from "@/infrastructure/e2e/e2e-text-director-gate";
 import { DEFAULT_OPENAI_STORYBOARD_MODEL, parseOpenAIStoryboardConfig } from "@/infrastructure/ai/openai/config";
 import { runOpenAIStoryboardDryRun, STORYBOARD_ANALYZER_PROMPT_VERSION, STORYBOARD_CANDIDATE_SCHEMA_VERSION } from "@/infrastructure/ai/openai/storyboard";
 import type { AiTokenPricingPort } from "@/infrastructure/ai/openai/marketing/pricing";
@@ -171,17 +176,27 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
     const existing = await deps.directorRuns.loadActiveStoryboardProject(input.projectId);
     const price = deps.pricing?.getPriceBook(ai.model);
     const estimated = price ? Math.floor(((ai.approximateInputTokens ?? 0) * price.inputPerMillionMinor) / 1_000_000) + Math.floor((ai.maxOutputTokens * price.outputPerMillionMinor) / 1_000_000) : undefined;
+    const e2e = isDirectorE2eFakeMode(env);
+    const domainExecutable = e2e ? true : ai.executable;
+    const validations = e2e
+      ? ai.validations.filter(
+          (v) =>
+            !/clé|api.?key|openai|price book|flag/i.test(`${v.code} ${v.message}`),
+        )
+      : ai.validations;
     return {
-      executable: ai.executable, providerCalled: false, executionAvailable: ai.executable && canExecuteStoryboardAi(env) && ai.pricingConfigured,
+      executable: domainExecutable, providerCalled: false, executionAvailable: textDirectorExecutionAvailable({
+        env, domainExecutable, paidPathAvailable: canExecuteStoryboardAi(env), pricingConfigured: ai.pricingConfigured,
+      }),
       briefRevision: brief.revision, briefArtifactId: brief.artifactId,
       marketingPlanRevision: plan.revision, marketingPlanArtifactId: plan.artifactId,
       creativeConceptRevision: concept.revision, creativeConceptArtifactId: concept.artifactId,
       videoScriptRevision: script.revision, videoScriptArtifactId: script.artifactId,
       visualDirectionRevision: visual.revision, visualDirectionArtifactId: visual.artifactId,
-      model: ai.model, promptVersion: ai.promptVersion, schemaVersion: ai.schemaVersion,
-      pricingConfigured: ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
-      validations: ai.validations, warnings: ai.warnings,
-      missingInformation: ai.validations.filter((v) => !v.passed).map((v) => ({ code: v.code, message: v.message })),
+      model: e2e ? e2eFakeOpenAiConfig().model : ai.model, promptVersion: ai.promptVersion, schemaVersion: ai.schemaVersion,
+      pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
+      validations, warnings: ai.warnings,
+      missingInformation: validations.filter((v) => !v.passed).map((v) => ({ code: v.code, message: v.message })),
       existingStoryboard: existing ? stored(existing.value, existing.revision) : undefined,
     };
   }
@@ -189,10 +204,14 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
     dryRun: async (input) => dry(input),
     async execute(input, context) {
       if (!canUseDirectorV2Persistence(env)) return failed("persistence_disabled", "Persistance Director désactivée.", 503);
-      if (!canExecuteStoryboardAi(env)) return failed("storyboard_ai_disabled", "Storyboard IA désactivé.", 503);
+      const e2e = isDirectorE2eFakeMode(env);
+      if (!e2e && !canExecuteStoryboardAi(env)) return failed("storyboard_ai_disabled", "Storyboard IA désactivé.", 503);
       let config;
-      try { config = parseOpenAIStoryboardConfig(env); } catch { return failed("invalid_config", "Configuration Storyboard IA invalide.", 503); }
-      if (!config.apiKeyPresent) return failed("openai_not_configured", "OpenAI n'est pas configuré.", 503);
+      if (e2e) { config = e2eFakeOpenAiConfig(); }
+      else {
+        try { config = parseOpenAIStoryboardConfig(env); } catch { return failed("invalid_config", "Configuration Storyboard IA invalide.", 503); }
+        if (!config.apiKeyPresent) return failed("openai_not_configured", "OpenAI n'est pas configuré.", 503);
+      }
       const project = await deps.projects.load(input.projectId);
       if (!project || project.workspaceId !== deps.workspaceId) return failed("not_found", "Projet introuvable.", 400);
       const [brief, plan, concept, script, visual] = await sources(input.projectId);
@@ -263,7 +282,7 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
           briefArtifactId: brief.artifactId, briefRevision: brief.revision,
           storyboard: run.storyboard as unknown as Record<string, unknown>,
           schemaVersion: STORYBOARD_PROJECT_SCHEMA_VERSION, correlationId: context.correlationId,
-          reservationId, actualCostMinor: estimated, costStatus: check.pricingConfigured ? "committed" : "unknown",
+          reservationId, actualCostMinor: estimated, costStatus: e2e || check.pricingConfigured ? "committed" : "provisional",
           expectedRunRevision: begin.revision + 1, ledgerIdempotencyKey: `dir-commit-${runId}`,
         });
         return { status: persisted.status === "existing" ? "existing" : "completed", storyboard: view(run.storyboard, persisted.revision, run.warnings), directorRunId: runId };

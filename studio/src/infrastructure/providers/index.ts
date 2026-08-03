@@ -10,3 +10,4 @@ export { mapCompletedMedia, expiresAtFrom, TEMP_URL_DEFAULT_TTL_MS } from "./out
 export { createFalAdapter } from "./fal-adapter";
 export { createOpenAIImageAdapter } from "./openai-image-adapter";
 export { createElevenLabsVoiceAdapter } from "./elevenlabs-voice-adapter";
+export { createUniversalFakeAdapter } from "./fake-universal-adapter";

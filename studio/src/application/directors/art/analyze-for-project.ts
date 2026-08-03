@@ -13,6 +13,11 @@ import {
 } from "@/domain/art";
 import type { ArtifactRepository, ProjectRepository } from "@/application/projects/ports";
 import { canExecuteArtAi, canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  e2eFakeOpenAiConfig,
+  isDirectorE2eFakeMode,
+  textDirectorExecutionAvailable,
+} from "@/infrastructure/e2e/e2e-text-director-gate";
 import { DEFAULT_OPENAI_ART_MODEL, parseOpenAIArtConfig } from "@/infrastructure/ai/openai/config";
 import { runOpenAIArtDryRun, ART_ANALYZER_PROMPT_VERSION, ART_CANDIDATE_SCHEMA_VERSION } from "@/infrastructure/ai/openai/art";
 import type { AiTokenPricingPort } from "@/infrastructure/ai/openai/marketing/pricing";
@@ -161,14 +166,18 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
     const existing = await deps.directorRuns.loadActiveVisualDirection(input.projectId);
     const price = deps.pricing?.getPriceBook(ai.model);
     const estimated = price ? Math.floor(((ai.approximateInputTokens ?? 0) * price.inputPerMillionMinor) / 1_000_000) + Math.floor((ai.maxOutputTokens * price.outputPerMillionMinor) / 1_000_000) : undefined;
+    const e2e = isDirectorE2eFakeMode(env);
+    const domainExecutable = e2e ? true : ai.executable;
     return {
-      executable: ai.executable, providerCalled: false, executionAvailable: ai.executable && canExecuteArtAi(env) && ai.pricingConfigured,
+      executable: domainExecutable, providerCalled: false, executionAvailable: textDirectorExecutionAvailable({
+        env, domainExecutable, paidPathAvailable: canExecuteArtAi(env), pricingConfigured: ai.pricingConfigured,
+      }),
       briefRevision: brief.revision, briefArtifactId: brief.artifactId,
       marketingPlanRevision: plan.revision, marketingPlanArtifactId: plan.artifactId,
       creativeConceptRevision: concept.revision, creativeConceptArtifactId: concept.artifactId,
       videoScriptRevision: script.revision, videoScriptArtifactId: script.artifactId,
-      model: ai.model, promptVersion: ai.promptVersion, schemaVersion: ai.schemaVersion,
-      pricingConfigured: ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
+      model: e2e ? e2eFakeOpenAiConfig().model : ai.model, promptVersion: ai.promptVersion, schemaVersion: ai.schemaVersion,
+      pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
       validations: ai.validations, warnings: ai.warnings,
       missingInformation: ai.validations.filter((v) => !v.passed).map((v) => ({ code: v.code, message: v.message })),
       existingVisualDirection: existing ? stored(existing.value, existing.revision) : undefined,
@@ -178,10 +187,14 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
     dryRun: async (input) => dry(input),
     async execute(input, context) {
       if (!canUseDirectorV2Persistence(env)) return failed("persistence_disabled", "Persistance Director désactivée.", 503);
-      if (!canExecuteArtAi(env)) return failed("art_ai_disabled", "Direction Art IA désactivée.", 503);
+      const e2e = isDirectorE2eFakeMode(env);
+      if (!e2e && !canExecuteArtAi(env)) return failed("art_ai_disabled", "Direction Art IA désactivée.", 503);
       let config;
-      try { config = parseOpenAIArtConfig(env); } catch { return failed("invalid_config", "Configuration Art IA invalide.", 503); }
-      if (!config.apiKeyPresent) return failed("openai_not_configured", "OpenAI n'est pas configuré.", 503);
+      if (e2e) { config = e2eFakeOpenAiConfig(); }
+      else {
+        try { config = parseOpenAIArtConfig(env); } catch { return failed("invalid_config", "Configuration Art IA invalide.", 503); }
+        if (!config.apiKeyPresent) return failed("openai_not_configured", "OpenAI n'est pas configuré.", 503);
+      }
       const project = await deps.projects.load(input.projectId);
       if (!project || project.workspaceId !== deps.workspaceId) return failed("not_found", "Projet introuvable.", 400);
       const [brief, plan, concept, script] = await sources(input.projectId);
@@ -248,7 +261,7 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
           briefArtifactId: brief.artifactId, briefRevision: brief.revision,
           visualDirection: run.visualDirection as unknown as Record<string, unknown>,
           schemaVersion: VISUAL_DIRECTION_SCHEMA_VERSION, correlationId: context.correlationId,
-          reservationId, actualCostMinor: estimated, costStatus: check.pricingConfigured ? "committed" : "unknown",
+          reservationId, actualCostMinor: estimated, costStatus: e2e || check.pricingConfigured ? "committed" : "provisional",
           expectedRunRevision: begin.revision + 1, ledgerIdempotencyKey: `dir-commit-${runId}`,
         });
         return { status: persisted.status === "existing" ? "existing" : "completed", visualDirection: view(run.visualDirection, persisted.revision, run.warnings), directorRunId: runId };

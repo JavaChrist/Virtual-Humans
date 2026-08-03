@@ -30,6 +30,14 @@ export type DirectorProjectView = {
     characterId?: string;
     objective: string;
     subjectName: string;
+    subjectType: string;
+    subjectDescription: string;
+    aspectRatio: string;
+    tone: string;
+    callToAction?: string;
+    audienceDescription?: string;
+    brandConstraints?: string;
+    createdAt: string;
   };
   nextStep: {
     id: "marketing_analysis";
@@ -130,6 +138,14 @@ export function mapDirectorProjectView(
       characterId: brief.characterId,
       objective: brief.objective,
       subjectName: brief.subjectName,
+      subjectType: brief.subjectType,
+      subjectDescription: brief.subjectDescription,
+      aspectRatio: brief.aspectRatio,
+      tone: brief.tone,
+      callToAction: brief.callToAction,
+      audienceDescription: brief.audienceDescription,
+      brandConstraints: brief.brandConstraints,
+      createdAt: brief.createdAt,
     },
     nextStep: {
       id: "marketing_analysis",

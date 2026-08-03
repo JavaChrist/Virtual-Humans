@@ -88,3 +88,21 @@ export {
   SceneStatusSchema,
   VersionTokenSchema,
 } from "./schemas";
+
+export {
+  ARTIFACT_CHILDREN,
+  PIPELINE_ORDER,
+  PROVENANCE_KEYS,
+  RESTART_DIRECTOR_BY_TYPE,
+  assertArtifactType,
+  dependsOnAny,
+  descendantsOf,
+  determineRestartPoint,
+  extractProvenanceIds,
+} from "./dependency-graph";
+
+export {
+  briefsAreIdentical,
+  diffBriefFields,
+  type BriefFieldChange,
+} from "./brief-diff";

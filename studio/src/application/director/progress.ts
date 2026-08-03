@@ -41,12 +41,19 @@ export function autosaveStatusLabel(status: AutosaveStatus): string {
 /**
  * Debounce helper with injectable timers (testable).
  */
+type DebounceTimers = {
+  setTimeout: (fn: () => void, ms: number) => ReturnType<typeof setTimeout>;
+  clearTimeout: (id: ReturnType<typeof setTimeout>) => void;
+};
+
 export function createDebouncer(
   delayMs: number,
-  timers: {
-    setTimeout: typeof setTimeout;
-    clearTimeout: typeof clearTimeout;
-  } = { setTimeout, clearTimeout },
+  timers: DebounceTimers = {
+    // Ne pas passer `{ setTimeout, clearTimeout }` bruts : en Chromium,
+    // `timers.setTimeout(...)` provoque « Illegal invocation » (this ≠ globalThis).
+    setTimeout: (fn, ms) => globalThis.setTimeout(fn, ms),
+    clearTimeout: (id) => globalThis.clearTimeout(id),
+  },
 ) {
   let handle: ReturnType<typeof setTimeout> | null = null;
 

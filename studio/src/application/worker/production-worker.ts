@@ -304,16 +304,39 @@ export function createProductionWorker(
             break;
         }
 
-        // Optional: after completing a job, ask PD for more enqueue commands
-        if (pr.outcome === "completed" || pr.outcome === "already_done") {
+        // After progress: enqueue next ready steps (finalize is handled inside PD).
+        if (
+          pr.outcome === "completed" ||
+          pr.outcome === "already_done" ||
+          pr.outcome === "failed"
+        ) {
           try {
             const planned = await deps.director.planEnqueueCommands(
               job.runId,
               execCtx
             );
-            await dispatchEnqueueCommands(deps.queue, planned.commands);
-          } catch {
-            // non-fatal — next runOnce can pick up
+            const dispatched = await dispatchEnqueueCommands(
+              deps.queue,
+              planned.commands,
+            );
+            if (dispatched.errors.length > 0) {
+              issues.push({
+                code: "job_failed",
+                publicMessage: dispatched.errors[0]!.publicMessage,
+                jobId: job.jobId,
+                runId: job.runId,
+                projectId: job.projectId,
+              });
+            }
+          } catch (e) {
+            issues.push({
+              code: "job_failed",
+              publicMessage:
+                e instanceof Error ? e.message : "Suivi enqueue impossible.",
+              jobId: job.jobId,
+              runId: job.runId,
+              projectId: job.projectId,
+            });
           }
         }
       }

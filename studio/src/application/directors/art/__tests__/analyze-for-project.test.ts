@@ -5,7 +5,7 @@ import { makeScriptChain, makeValidScriptCandidate } from "@/domain/script/__tes
 import { makeValidArtCandidate } from "@/domain/art/__tests__/fixtures";
 import type { ArtAnalyzerPort } from "../analyzer-port";
 import { createAnalyzeArtForProject, type ArtDirectorRunPort } from "../analyze-for-project";
-import type { ArtifactRepository, PersistedArtifact, PersistedVideoProject, ProjectRepository } from "@/application/projects/ports";
+import type { ArtifactRepository, PersistedArtifact, PersistedVideoProject } from "@/application/projects/ports";
 import type { AiTokenPricingPort } from "@/infrastructure/ai/openai/marketing/pricing";
 import { MarketingAnalyzerError, marketingFailure } from "@/application/directors/marketing/failures";
 

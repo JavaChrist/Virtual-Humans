@@ -2,6 +2,27 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { REDACTED, redact } from "../redact";
 
+test("redacts inline data URLs by value and by key", () => {
+  const dataUrl =
+    "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+  const out = redact({
+    note: "safe",
+    dataUrl,
+    nested: { inlineDataUrl: dataUrl },
+    bare: dataUrl,
+  }) as {
+    note: string;
+    dataUrl: string;
+    nested: { inlineDataUrl: string };
+    bare: string;
+  };
+  assert.equal(out.note, "safe");
+  assert.equal(out.dataUrl, REDACTED);
+  assert.equal(out.nested.inlineDataUrl, REDACTED);
+  assert.equal(out.bare, REDACTED);
+  assert.equal(JSON.stringify(out).includes("base64"), false);
+});
+
 test("redacts sensitive keys at multiple levels", () => {
   const input = {
     ok: true,

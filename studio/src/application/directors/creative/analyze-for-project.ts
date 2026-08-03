@@ -22,6 +22,11 @@ import {
   isDirectorV2PaidAiEnabled,
 } from "@/infrastructure/config/feature-flags";
 import {
+  e2eFakeOpenAiConfig,
+  isDirectorE2eFakeMode,
+  textDirectorExecutionAvailable,
+} from "@/infrastructure/e2e/e2e-text-director-gate";
+import {
   DEFAULT_OPENAI_CREATIVE_MODEL,
   parseOpenAICreativeConfig,
 } from "@/infrastructure/ai/openai/config";
@@ -407,19 +412,25 @@ export function createAnalyzeCreativeForProject(
         }
       }
 
+      const e2e = isDirectorE2eFakeMode(env);
+      const domainExecutable = e2e ? true : aiDry.executable;
       return {
-        executable: aiDry.executable,
+        executable: domainExecutable,
         providerCalled: false,
-        executionAvailable:
-          aiDry.executable && canExecuteCreativeAi(env) && aiDry.pricingConfigured,
+        executionAvailable: textDirectorExecutionAvailable({
+          env,
+          domainExecutable,
+          paidPathAvailable: canExecuteCreativeAi(env),
+          pricingConfigured: aiDry.pricingConfigured,
+        }),
         briefRevision: brief.revision,
         briefArtifactId: brief.artifactId,
         marketingPlanRevision: plan.revision,
         marketingPlanArtifactId: plan.artifactId,
-        model: aiDry.model,
+        model: e2e ? e2eFakeOpenAiConfig().model : aiDry.model,
         promptVersion: aiDry.promptVersion,
         schemaVersion: aiDry.schemaVersion,
-        pricingConfigured: aiDry.pricingConfigured,
+        pricingConfigured: e2e ? true : aiDry.pricingConfigured,
         estimatedCostMinor,
         currency,
         confidence,
@@ -442,7 +453,8 @@ export function createAnalyzeCreativeForProject(
           503
         );
       }
-      if (!canExecuteCreativeAi(env) || !isDirectorV2PaidAiEnabled(env)) {
+      const e2e = isDirectorE2eFakeMode(env);
+      if (!e2e && (!canExecuteCreativeAi(env) || !isDirectorV2PaidAiEnabled(env))) {
         return failedAnalysis(
           "creative_ai_disabled",
           "Analyse Creative IA désactivée.",
@@ -451,21 +463,25 @@ export function createAnalyzeCreativeForProject(
       }
 
       let config;
-      try {
-        config = parseOpenAICreativeConfig(env);
-      } catch {
-        return failedAnalysis(
-          "invalid_config",
-          "Configuration Creative IA invalide.",
-          503
-        );
-      }
-      if (!config.apiKeyPresent) {
-        return failedAnalysis(
-          "openai_not_configured",
-          "OpenAI n’est pas configuré.",
-          503
-        );
+      if (e2e) {
+        config = e2eFakeOpenAiConfig();
+      } else {
+        try {
+          config = parseOpenAICreativeConfig(env);
+        } catch {
+          return failedAnalysis(
+            "invalid_config",
+            "Configuration Creative IA invalide.",
+            503
+          );
+        }
+        if (!config.apiKeyPresent) {
+          return failedAnalysis(
+            "openai_not_configured",
+            "OpenAI n’est pas configuré.",
+            503
+          );
+        }
       }
 
       const project = await deps.projects.load(input.projectId);
@@ -510,7 +526,7 @@ export function createAnalyzeCreativeForProject(
         env,
         pricing: deps.pricing,
       });
-      if (!aiDry.executable) {
+      if (!e2e && !aiDry.executable) {
         return {
           status: "needs_input",
           missingInformation: aiDry.validations
@@ -519,7 +535,7 @@ export function createAnalyzeCreativeForProject(
           warnings: aiDry.warnings,
         };
       }
-      if (!aiDry.pricingConfigured && config.requireFirmPricing) {
+      if (!e2e && !aiDry.pricingConfigured && config.requireFirmPricing) {
         return failedAnalysis(
           "pricing_unknown",
           "Tarification indisponible.",
@@ -745,7 +761,7 @@ export function createAnalyzeCreativeForProject(
           correlationId: context.correlationId,
           reservationId,
           actualCostMinor: estimatedCostMinor,
-          costStatus: aiDry.pricingConfigured ? "committed" : "unknown",
+          costStatus: e2e || aiDry.pricingConfigured ? "committed" : "provisional",
           expectedRunRevision: revisionAfterReserve,
           ledgerIdempotencyKey: `dir-commit-${directorRunId}`,
         });

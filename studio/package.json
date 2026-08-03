@@ -12,7 +12,11 @@
     "supabase:check-local": "node scripts/check-local-supabase.mjs",
     "supabase:seed-workspace": "node scripts/seed-local-workspace.mjs",
     "smoke:marketing-openai": "node --import tsx scripts/smoke-marketing-openai.mjs",
-    "test:integration:db": "node scripts/run-local-db-integration.mjs"
+    "test:integration:db": "node scripts/run-local-db-integration.mjs",
+    "e2e:prepare": "node scripts/e2e-prepare.mjs",
+    "test:e2e": "node scripts/e2e-prepare.mjs && playwright test",
+    "test:e2e:headed": "node scripts/e2e-prepare.mjs && playwright test --headed",
+    "test:e2e:checkpoint": "npm run build && npm run test:e2e"
   },
   "dependencies": {
     "@fal-ai/client": "^1.10.1",
@@ -24,6 +28,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20",

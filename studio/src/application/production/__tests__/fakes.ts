@@ -166,29 +166,4 @@ export function createTestQualityPort(): QualityValidatorPort {
   return createStructuredQualityValidator();
 }
 
-/** Accepts any asset with a usable source — for orchestration happy-path tests. */
-export function createAcceptingQualityPort(): QualityValidatorPort {
-  return {
-    async validate(request) {
-      const hasSource =
-        request.asset.source.kind === "temporary_external"
-          ? Boolean(request.asset.source.url)
-          : request.asset.source.kind === "inline_data_url"
-            ? Boolean(request.asset.source.dataUrl)
-            : Boolean(request.asset.source.storagePath);
-      if (!hasSource || !request.asset.mimeType.includes("/")) {
-        return {
-          status: "rejected",
-          checks: [{ code: "basic", passed: false }],
-          reasons: [{ code: "invalid", message: "Asset invalide." }],
-          retryableWithFallback: false,
-        };
-      }
-      return {
-        status: "accepted",
-        checks: [{ code: "basic", passed: true }],
-        warnings: [],
-      };
-    },
-  };
-}
+export { createAcceptingQualityPort } from "../accepting-quality";

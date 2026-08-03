@@ -145,13 +145,41 @@ export function createSupabaseProductionJobQueue(deps: {
     },
 
     async claim(workerId, limit, leaseSeconds) {
-      const { data, error } = await client.rpc("claim_production_jobs", {
-        p_worker_id: workerId,
-        p_limit: limit,
-        p_lease_seconds: leaseSeconds,
-      });
-      if (error) throw mapSupabaseError(error);
-      return (data ?? []).map(rowToJob);
+      // claim_production_jobs is global across workspaces. Bound retries while
+      // releasing foreign leases so a noisy sibling workspace cannot starve us.
+      const mine: Array<Parameters<typeof rowToJob>[0]> = [];
+      for (let attempt = 0; attempt < 8 && mine.length < limit; attempt += 1) {
+        const { data, error } = await client.rpc("claim_production_jobs", {
+          p_worker_id: workerId,
+          p_limit: limit,
+          p_lease_seconds: leaseSeconds,
+        });
+        if (error) throw mapSupabaseError(error);
+        const rows = data ?? [];
+        if (rows.length === 0) break;
+        let foreign = 0;
+        for (const row of rows) {
+          if (row.workspace_id === workspaceId) {
+            mine.push(row);
+            continue;
+          }
+          foreign += 1;
+          if (row.lease_token && row.id) {
+            try {
+              await client.rpc("release_production_job", {
+                p_job_id: row.id,
+                p_lease_token: row.lease_token,
+                p_worker_id: workerId,
+                p_available_at: null,
+              });
+            } catch {
+              // best-effort release of foreign lease
+            }
+          }
+        }
+        if (foreign === 0) break;
+      }
+      return mine.slice(0, limit).map(rowToJob);
     },
 
     async heartbeat(jobId, leaseToken, workerId, leaseSeconds = 60) {

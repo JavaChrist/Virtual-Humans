@@ -2,43 +2,55 @@
 
 ## Préparation
 
-- [ ] portée, commit et responsables figés ;
-- [ ] changelog, migrations, flags et runbooks relus ;
-- [ ] sauvegarde récente et restauration testée ;
-- [ ] quotas/providers confirmés ;
-- [ ] support et fenêtre de déploiement informés.
+- [x] portée locale figée (Phases 1–9) ;
+- [x] changelog, migrations locales, flags et runbooks relus ;
+- [ ] sauvegarde récente et restauration testée **(distant — autorisation humaine)** ;
+- [ ] quotas/providers confirmés **(distant)** ;
+- [ ] support et fenêtre de déploiement informés **(distant)**.
 
-## Qualité
+## Qualité (locale — Phase 9)
 
-- [ ] build, lint, typecheck et CI au vert ;
-- [ ] tests unitaires, intégration, contrats et E2E critiques ;
-- [ ] dry-run de bout en bout ;
+- [x] build, lint (0 erreur), typecheck au vert ;
+- [x] tests unitaires **785/785**, intégration DB **30/30**, pgTAP **276/276** ;
+- [x] E2E locaux Playwright `/director` (fake + barrière réseau) **15/15 × 2 cycles** ;
+- [x] dry-run de bout en bout (fake) ;
 - [ ] test staging contrôlé ;
-- [ ] accessibilité et non-régression studios.
+- [x] non-régression routes historiques (build inventaire + page `/storyboard` préservée).
 
 ## Sécurité et coûts
 
-- [ ] secrets absents des bundles/logs ;
-- [ ] RLS et URLs signées vérifiées ;
-- [ ] rate limit, permissions et webhooks ;
-- [ ] estimation, plafond dur et kill switch ;
-- [ ] alertes coût/erreur actives.
+- [x] `APP_PASSWORD` + `APP_SESSION_SECRET` fail-closed — jamais dans le dépôt ;
+- [x] secrets absents des bundles/logs / settings JSON ;
+- [x] cookie session HttpOnly + SameSite + Secure (prod) + TTL ;
+- [x] logout POST ; CSRF Origin ; rate-limit best-effort ;
+- [x] worker : secret dédié ; cookie insuffisant ; flags off ;
+- [x] store fake-merge gated (local/E2E only — Phase 9) ;
+- [x] logs : data URLs redacted ;
+- [ ] RLS et URLs signées **distantes** vérifiées ;
+- [ ] alertes coût/erreur actives **(prod)**.
 
-## Déploiement
+## Déploiement (nécessite autorisation humaine)
 
-- [ ] migrations additives appliquées ;
+- [ ] migrations additives appliquées **distantes** ;
 - [ ] app et workers compatibles déployés ;
-- [ ] flags désactivés par défaut ;
-- [ ] smoke tests ;
-- [ ] canary pilote puis montée progressive ;
+- [x] flags désactivés par défaut (code) ;
+- [ ] smoke tests providers bornés ;
+- [ ] canary puis montée progressive ;
 - [ ] métriques et logs surveillés.
 
-## Validation post-release
+## Validation post-release (distant)
 
 - [ ] création et reprise d'un projet ;
-- [ ] génération d'une scène et export ;
+- [ ] génération d'une scène et export réels ;
 - [ ] coûts rapprochés ;
 - [ ] aucun pic d'erreur/latence ;
 - [ ] décision go/rollback enregistrée ;
 - [ ] exceptions reportées au backlog.
 
+## Verdict local Phase 9
+
+```text
+Virtual Humans Studio V2 — implémentation locale terminée, validée avec providers fakes, aucune opération distante
+```
+
+**Pas** : production distante validée.

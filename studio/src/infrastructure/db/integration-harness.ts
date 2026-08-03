@@ -136,6 +136,7 @@ export async function cleanupWorkspace(
   const tables = [
     "audit_log",
     "domain_events",
+    "human_review_decisions",
     "assets",
     "idempotency_records",
     "budget_reservations",
