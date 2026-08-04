@@ -5,7 +5,9 @@
 
 ## Décisions pilote
 
-Migrations locales : `20260802180000` … `20260803200000` (VHS-113 → VHS-126). Aucune application distante.
+Migrations locales : versions numériques alignées Production après Porte 3
+(`20260804134311` … `20260804140422`, **22** fichiers incl. 3 marqueurs remainder VHS-125).
+Voir `21_VHS_125_REMOTE_MIGRATION_INCIDENT.md`. Ne pas confondre avec les anciens préfixes locaux `20260802*` / `20260803*`.
 
 | Décision | Choix |
 |---|---|

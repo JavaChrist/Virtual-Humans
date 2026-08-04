@@ -101,6 +101,19 @@ Chaque artifact : workspace, project, type, schema version, revision, provenance
 | Build | vert — 1 warning NFT historique |
 | Stockage multi-instance local | **oui** |
 
+## Correctif Porte 3 — historique VHS-125 (4 août 2026)
+
+| Élément | Statut |
+|---|---|
+| Schéma Production | inchangé par ce correctif (déjà vert) |
+| Écritures distantes | **0** |
+| Versions locales alignées Production | **22 / 22** (2 legacy + 17 V2 + 3 remainder markers) |
+| SQL VHS-125 canonique | conservé sous `20260804135742_…` |
+| Remainder locaux | no-op documentés (pas de double apply au `db reset`) |
+| Doc | `21_VHS_125_REMOTE_MIGRATION_INCIDENT.md` |
+
+Voir aussi : `CHANGELOG.md` **[2.0.47]**.
+
 ## Matrice finale
 
 | Fonction | Implémentée | Testée avec fake | Testée localement | Active par défaut | Validée provider réel | Validée distant |

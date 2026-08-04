@@ -47,6 +47,7 @@ Utilisateur → AI Video Director (/director)
 - Fondation : `01` à `06`.
 - Contrats métier : `07` à `15`.
 - Interface, données, qualité et opérations : `16` à `20`.
+- Incident historique migrations Production : `21_VHS_125_REMOTE_MIGRATION_INCIDENT.md`.
 - Pilotage : `BACKLOG_V2.md`, `CHECKLIST_RELEASE.md`, `CHANGELOG.md`.
 - Vocabulaire normatif : `GLOSSARY.md`.
 

@@ -2,6 +2,17 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.47] — 2026-08-04
+
+### Fixed (Préproduction — correctif Porte 3 / historique VHS-125)
+
+- Réconciliation **locale uniquement** de l’historique de migrations avec Production `ejdbksxaswhdtsudnmvi` après troncature MCP de `vhs_125_postproduction_delivery`.
+- Fichiers V2 renommés aux **versions numériques Production** (22 entrées alignées).
+- Trois marqueurs no-op : `vhs_125_remainder_part{1,2,3}` (hashes des payloads distants documentés).
+- SQL VHS-125 canonique **complet** conservé (rebuild local sans double apply).
+- Doc incident : `docs/Developer-Handover/21_VHS_125_REMOTE_MIGRATION_INCIDENT.md`.
+- **0** écriture Supabase distante ; **0** `migration repair` ; **0** push.
+
 ## [2.0.46] — 2026-08-04
 
 ### Added (Préproduction — Porte 1)

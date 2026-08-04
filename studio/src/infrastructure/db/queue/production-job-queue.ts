@@ -107,7 +107,7 @@ export type ProductionJobQueue = {
     workerId: string,
     availableAt?: string
   ): Promise<ProductionJobRecord>;
-  /** VHS-114 — release + payload update (mode poll). Requires migration 20260802180400. */
+  /** VHS-114 — release + payload update (mode poll). Requires migration 20260804134537. */
   reschedule(
     jobId: string,
     leaseToken: string,

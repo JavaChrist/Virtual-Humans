@@ -1,5 +1,5 @@
 /**
- * Static checks on VHS-113 SQL migrations (no database) (VHS-113).
+ * Static checks on VHS-113+ SQL migrations (no database) (VHS-113 / Porte 3 reconcile).
  */
 
 import assert from "node:assert/strict";
@@ -14,6 +14,38 @@ const LEGACY_FILES = [
   "20260728210808_create_vh_scenes.sql",
 ] as const;
 
+/** Production schema_migrations versions (MCP apply Porte 3), including VHS-125 remainder markers. */
+const EXPECTED_FILES = [
+  "20260723203021_vh_studio_init_spend_products_storage.sql",
+  "20260728210808_create_vh_scenes.sql",
+  "20260804134311_vhs_113_v2_core.sql",
+  "20260804134410_vhs_113_v2_production_queue.sql",
+  "20260804134443_vhs_113_v2_ledger_events_assets.sql",
+  "20260804134500_vhs_113_v2_rls_grants.sql",
+  "20260804134537_vhs_114_reschedule_payload.sql",
+  "20260804134814_vhs_116_create_project_with_brief.sql",
+  "20260804135019_vhs_117b_director_runs.sql",
+  "20260804135045_vhs_118b_creative_director_runs.sql",
+  "20260804135120_vhs_119b_script_director_runs.sql",
+  "20260804135149_vhs_120b_art_director_runs.sql",
+  "20260804135227_vhs_121b_storyboard_director_runs.sql",
+  "20260804135342_vhs_122_prompt_director_runs.sql",
+  "20260804135608_vhs_123_routing_director_runs.sql",
+  "20260804135702_vhs_124_production_director.sql",
+  "20260804135742_vhs_125_postproduction_delivery.sql",
+  "20260804140056_vhs_125_remainder_part1.sql",
+  "20260804140143_vhs_125_remainder_part2.sql",
+  "20260804140225_vhs_125_remainder_part3.sql",
+  "20260804140309_vhs_126_brief_revisions_stale.sql",
+  "20260804140422_vhs_127_director_final_assets_bucket.sql",
+] as const;
+
+const REMAINDER_MARKERS = [
+  "20260804140056_vhs_125_remainder_part1.sql",
+  "20260804140143_vhs_125_remainder_part2.sql",
+  "20260804140225_vhs_125_remainder_part3.sql",
+] as const;
+
 function listMigrationFiles(): string[] {
   return readdirSync(MIGRATIONS_DIR)
     .filter((f) => f.endsWith(".sql"))
@@ -24,33 +56,49 @@ function v2Files(): string[] {
   return listMigrationFiles().filter((f) => f.startsWith("202608"));
 }
 
-function v2Sql(): string {
+function mutativeV2Sql(): string {
   return v2Files()
+    .filter((f) => !REMAINDER_MARKERS.includes(f as (typeof REMAINDER_MARKERS)[number]))
     .map((f) => readFileSync(join(MIGRATIONS_DIR, f), "utf8"))
     .join("\n");
 }
 
-test("migrations — legacy exactes + 17 V2 après historique distant", () => {
+test("migrations — 22 versions alignées Production (2 legacy + 17 V2 + 3 remainder markers)", () => {
   const files = listMigrationFiles();
+  assert.deepEqual(files, [...EXPECTED_FILES]);
+  assert.equal(files.length, 22);
   assert.deepEqual(
     files.filter((f) => f.startsWith("202607")),
     [...LEGACY_FILES],
   );
-  const v2 = v2Files();
-  assert.equal(v2.length, 17);
-  for (const f of v2) {
-    assert.match(f, /^2026080[234]/);
+  assert.equal(v2Files().length, 20);
+});
+
+test("migrations VHS-125 remainder — marqueurs no-op documentés sans SQL mutatif dupliqué", () => {
+  for (const f of REMAINDER_MARKERS) {
+    const sql = readFileSync(join(MIGRATIONS_DIR, f), "utf8");
+    assert.match(sql, /HISTORICAL NO-OP MARKER/i);
+    assert.match(sql, /21_VHS_125_REMOTE_MIGRATION_INCIDENT\.md/);
+    assert.match(sql, /SHA-256/i);
+    assert.match(sql, /DO \$vhs_125_remainder_part/);
+    assert.ok(!/^\s*CREATE TABLE/im.test(sql));
+    assert.ok(!/^\s*CREATE OR REPLACE FUNCTION/im.test(sql));
+    assert.ok(!/^\s*ALTER TABLE/im.test(sql));
+    assert.ok(!/^\s*GRANT\b/im.test(sql));
+    assert.ok(!/^\s*REVOKE\b/im.test(sql));
+    assert.match(sql, /BEGIN\s*\n\s*NULL;\s*\n\s*END/i);
   }
-  assert.equal(files.length, 19);
-  const sql = v2Sql();
-  assert.ok(!/CREATE TABLE\s+public\.vh_spend/i.test(sql));
-  assert.ok(!/CREATE TABLE\s+public\.vh_products/i.test(sql));
-  assert.ok(!/CREATE TABLE\s+public\.vh_scenes/i.test(sql));
-  assert.ok(!/DROP TABLE\s+.*vh_/i.test(sql));
+  const vhs125 = readFileSync(
+    join(MIGRATIONS_DIR, "20260804135742_vhs_125_postproduction_delivery.sql"),
+    "utf8",
+  );
+  assert.match(vhs125, /PLACEHOLDER_CONTINUE|HISTORY NOTE/i);
+  assert.match(vhs125, /begin_or_get_quality_director_run/i);
+  assert.match(vhs125, /persist_export_package/i);
 });
 
 test("migrations V2 — tables et RPC requis présents", () => {
-  const sql = v2Sql();
+  const sql = mutativeV2Sql();
   for (const table of [
     "workspaces",
     "video_projects",
@@ -108,10 +156,14 @@ test("migrations V2 — tables et RPC requis présents", () => {
   assert.match(sql, /complete_production_director_run/i);
   assert.match(sql, /director_type IN \([\s\S]*'production'/i);
   assert.match(sql, /input_artifact_type IN \([\s\S]*'generation_plan'/i);
+  assert.ok(!/CREATE TABLE\s+public\.vh_spend/i.test(sql));
+  assert.ok(!/CREATE TABLE\s+public\.vh_products/i.test(sql));
+  assert.ok(!/CREATE TABLE\s+public\.vh_scenes/i.test(sql));
+  assert.ok(!/DROP TABLE\s+.*vh_/i.test(sql));
 });
 
 test("migrations V2 — VHS-125 postproduction delivery RPCs et table présents", () => {
-  const sql = v2Sql();
+  const sql = mutativeV2Sql();
   assert.match(sql, /CREATE TABLE public\.human_review_decisions/i);
   assert.match(sql, /human_review_decisions are append-only/i);
   for (const fn of [
@@ -134,7 +186,7 @@ test("migrations V2 — VHS-125 postproduction delivery RPCs et table présents"
 });
 
 test("migrations V2 — VHS-126 brief revisions + stale columns/RPCs", () => {
-  const sql = v2Sql();
+  const sql = mutativeV2Sql();
   assert.match(sql, /ADD COLUMN IF NOT EXISTS stale boolean/i);
   assert.match(sql, /stale_reason/i);
   assert.match(sql, /stale_caused_by_artifact_id/i);
@@ -153,7 +205,7 @@ test("migrations V2 — VHS-126 brief revisions + stale columns/RPCs", () => {
 });
 
 test("migrations V2 — VHS-127 director-final-assets bucket privé", () => {
-  const sql = v2Sql();
+  const sql = mutativeV2Sql();
   assert.match(sql, /director-final-assets/);
   assert.match(sql, /INSERT INTO storage\.buckets/i);
   assert.match(sql, /file_size_limit/);

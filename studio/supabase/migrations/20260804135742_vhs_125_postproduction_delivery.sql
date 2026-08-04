@@ -1,5 +1,13 @@
 -- VHS-125 — Postproduction delivery: quality / human review / merge / export.
 -- Additive after VHS-124. Fake merge only in app layer; no real provider/AICCOS calls here.
+--
+-- HISTORY NOTE (Porte 3 / 2026-08-04):
+-- Production recorded version 20260804135742 with a truncated MCP payload ending at
+-- `-- PLACEHOLDER_CONTINUE` after persist_production_result (SHA-256
+-- 0e1c713efbf0ad68d49439b104cc318475b7cbeb5f2ad0b8f884015205dcf063).
+-- Missing SQL was applied as vhs_125_remainder_part{1,2,3}. This local file keeps the
+-- FULL canonical SQL so `db reset` rebuilds the final schema once; remainder files are
+-- no-op markers. See docs/Developer-Handover/21_VHS_125_REMOTE_MIGRATION_INCIDENT.md.
 BEGIN;
 
 -- ---------------------------------------------------------------------------

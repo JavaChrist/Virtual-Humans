@@ -49,7 +49,7 @@ Conservation : pas de suppression automatique dans cette porte ; nettoyage futur
 
 | Gate Porte 1 | Cycle 1 & 2 |
 |---|---|
-| Migrations | **17** |
+| Migrations | **17** (puis **22** après réconciliation historique Porte 3) |
 | pgTAP | **286/286** |
 | Intégration | **31/31** |
 | Unitaires | **798/798** |
@@ -57,12 +57,22 @@ Conservation : pas de suppression automatique dans cette porte ; nettoyage futur
 | Typecheck / lint / build | verts |
 | Providers / distant / deploy | **0** |
 
+## Historique Production (Porte 3) — versions MCP
+
+Les préfixes de fichiers sous `migrations/` portent les **versions numériques
+Production** (`ejdbksxaswhdtsudnmvi`) après apply MCP. Total attendu : **22**.
+
+VHS-125 : SQL canonique complet dans `20260804135742_vhs_125_postproduction_delivery.sql`.
+Les fichiers `20260804140056` / `20260804140143` / `20260804140225`
+(`vhs_125_remainder_part{1,2,3}`) sont des **marqueurs no-op** d’alignement
+d’historique — voir `docs/Developer-Handover/21_VHS_125_REMOTE_MIGRATION_INCIDENT.md`.
+
 ## Statut VHS-126 — Brief revisions + stale cascade (Phase 6)
 
 Migrations locales clés :
-- `20260803180000_vhs_124_production_director.sql`
-- `20260803190000_vhs_125_postproduction_delivery.sql`
-- `20260803200000_vhs_126_brief_revisions_stale.sql`
+- `20260804135702_vhs_124_production_director.sql`
+- `20260804135742_vhs_125_postproduction_delivery.sql`
+- `20260804140309_vhs_126_brief_revisions_stale.sql`
 
 Checkpoint local **VHS-126 / Phase 6** (3 août 2026) :
 
