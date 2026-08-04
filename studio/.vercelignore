@@ -1,12 +1,20 @@
-# Local / CI artefacts — never needed on Vercel build or runtime (Porte 4B).
-e2e
-playwright-report
-test-results
-coverage
-.next
-.vercel
-supabase/.temp
-supabase/.branches
+# Upload filter for Vercel (Root Directory = studio).
+# Patterns are relative to this file. Prefer rooted paths so we never
+# exclude runtime source such as src/infrastructure/e2e/ (Porte 5A).
+
+# Playwright suite + artefacts (NOT src/infrastructure/e2e)
+/e2e/
+/playwright-report/
+/test-results/
+/coverage/
+
+# Local build / link caches
+/.next/
+/.vercel/
+supabase/.temp/
+supabase/.branches/
 **/*.tsbuildinfo
+
+# Env files (keep example only)
 .env*
 !.env.example

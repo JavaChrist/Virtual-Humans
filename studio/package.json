@@ -36,6 +36,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "ignore": "^7.0.5",
     "png-to-ico": "^3.0.2",
     "sharp": "^0.35.3",
     "tailwindcss": "^4",
