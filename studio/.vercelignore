@@ -1,0 +1,12 @@
+# Local / CI artefacts — never needed on Vercel build or runtime (Porte 4B).
+e2e
+playwright-report
+test-results
+coverage
+.next
+.vercel
+supabase/.temp
+supabase/.branches
+**/*.tsbuildinfo
+.env*
+!.env.example

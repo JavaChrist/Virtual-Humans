@@ -68,8 +68,10 @@ export class CharacterRegistry {
   /** Directory names of every character SDK on disk. */
   listDirectoryNames(): string[] {
     try {
+      // Bound NFT auto-trace: characters are included via file-tracing.ts includes.
+      const root = /* turbopackIgnore: true */ this.charactersRoot;
       return fs
-        .readdirSync(this.charactersRoot, { withFileTypes: true })
+        .readdirSync(root, { withFileTypes: true })
         .filter((d) => d.isDirectory())
         .map((d) => d.name)
         .sort();
@@ -79,7 +81,8 @@ export class CharacterRegistry {
   }
 
   private signature(directoryName: string): string {
-    const dir = path.join(this.charactersRoot, directoryName);
+    const root = /* turbopackIgnore: true */ this.charactersRoot;
+    const dir = path.join(root, directoryName);
     const targets = [
       dir,
       path.join(dir, "memory", "00_IDENTITY.md"),

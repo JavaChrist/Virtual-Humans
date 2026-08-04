@@ -5,14 +5,20 @@ import path from "node:path";
  * Root of the Virtual Humans SDK repository.
  * By default the studio app lives in `<repo>/studio`, so the SDK is one level up.
  * Override with the SDK_ROOT environment variable when deploying.
+ *
+ * `turbopackIgnore` prevents NFT from treating the parent repo as an unbounded
+ * auto-trace root (ENOSPC packaging). Character assets are included explicitly
+ * via `outputFileTracingIncludes` in `file-tracing.ts` for character/media routes.
  */
 export const REPO_ROOT = process.env.SDK_ROOT
   ? path.resolve(process.env.SDK_ROOT)
-  : path.resolve(process.cwd(), "..");
+  : path.join(/* turbopackIgnore: true */ process.cwd(), "..");
 
-export const CHARACTERS_ROOT = path.join(REPO_ROOT, "characters");
+export const CHARACTERS_ROOT = process.env.SDK_ROOT
+  ? path.join(path.resolve(process.env.SDK_ROOT), "characters")
+  : path.join(/* turbopackIgnore: true */ process.cwd(), "..", "characters");
 export const CHARACTER_NAME = process.env.CHARACTER_DIR_NAME ?? "Mei SDK v1.0.0";
-export const CHARACTER_DIR = path.join(REPO_ROOT, "characters", CHARACTER_NAME);
+export const CHARACTER_DIR = path.join(CHARACTERS_ROOT, CHARACTER_NAME);
 
 /** Directory of a character SDK (defaults to the configured one). */
 function charDir(character?: string): string {
