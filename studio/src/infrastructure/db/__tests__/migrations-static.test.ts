@@ -9,20 +9,40 @@ import { test } from "node:test";
 
 const MIGRATIONS_DIR = join(process.cwd(), "supabase", "migrations");
 
-function allSql(): string {
-  const files = readdirSync(MIGRATIONS_DIR)
+const LEGACY_FILES = [
+  "20260723203021_vh_studio_init_spend_products_storage.sql",
+  "20260728210808_create_vh_scenes.sql",
+] as const;
+
+function listMigrationFiles(): string[] {
+  return readdirSync(MIGRATIONS_DIR)
     .filter((f) => f.endsWith(".sql"))
     .sort();
-  return files.map((f) => readFileSync(join(MIGRATIONS_DIR, f), "utf8")).join("\n");
 }
 
-test("migrations V2 — timestamps après historique distant + pas de recreate vh_*", () => {
-  const files = readdirSync(MIGRATIONS_DIR).filter((f) => f.endsWith(".sql")).sort();
-  assert.ok(files.length >= 4);
-  for (const f of files) {
+function v2Files(): string[] {
+  return listMigrationFiles().filter((f) => f.startsWith("202608"));
+}
+
+function v2Sql(): string {
+  return v2Files()
+    .map((f) => readFileSync(join(MIGRATIONS_DIR, f), "utf8"))
+    .join("\n");
+}
+
+test("migrations — legacy exactes + 17 V2 après historique distant", () => {
+  const files = listMigrationFiles();
+  assert.deepEqual(
+    files.filter((f) => f.startsWith("202607")),
+    [...LEGACY_FILES],
+  );
+  const v2 = v2Files();
+  assert.equal(v2.length, 17);
+  for (const f of v2) {
     assert.match(f, /^2026080[234]/);
   }
-  const sql = allSql();
+  assert.equal(files.length, 19);
+  const sql = v2Sql();
   assert.ok(!/CREATE TABLE\s+public\.vh_spend/i.test(sql));
   assert.ok(!/CREATE TABLE\s+public\.vh_products/i.test(sql));
   assert.ok(!/CREATE TABLE\s+public\.vh_scenes/i.test(sql));
@@ -30,7 +50,7 @@ test("migrations V2 — timestamps après historique distant + pas de recreate v
 });
 
 test("migrations V2 — tables et RPC requis présents", () => {
-  const sql = allSql();
+  const sql = v2Sql();
   for (const table of [
     "workspaces",
     "video_projects",
@@ -91,7 +111,7 @@ test("migrations V2 — tables et RPC requis présents", () => {
 });
 
 test("migrations V2 — VHS-125 postproduction delivery RPCs et table présents", () => {
-  const sql = allSql();
+  const sql = v2Sql();
   assert.match(sql, /CREATE TABLE public\.human_review_decisions/i);
   assert.match(sql, /human_review_decisions are append-only/i);
   for (const fn of [
@@ -114,7 +134,7 @@ test("migrations V2 — VHS-125 postproduction delivery RPCs et table présents"
 });
 
 test("migrations V2 — VHS-126 brief revisions + stale columns/RPCs", () => {
-  const sql = allSql();
+  const sql = v2Sql();
   assert.match(sql, /ADD COLUMN IF NOT EXISTS stale boolean/i);
   assert.match(sql, /stale_reason/i);
   assert.match(sql, /stale_caused_by_artifact_id/i);
@@ -133,7 +153,7 @@ test("migrations V2 — VHS-126 brief revisions + stale columns/RPCs", () => {
 });
 
 test("migrations V2 — VHS-127 director-final-assets bucket privé", () => {
-  const sql = allSql();
+  const sql = v2Sql();
   assert.match(sql, /director-final-assets/);
   assert.match(sql, /INSERT INTO storage\.buckets/i);
   assert.match(sql, /file_size_limit/);
@@ -143,4 +163,20 @@ test("migrations V2 — VHS-127 director-final-assets bucket privé", () => {
   assert.match(sql, /public = EXCLUDED\.public|public = false/i);
   assert.ok(!/DROP BUCKET/i.test(sql));
   assert.ok(!/product-screens/.test(sql) || !/DELETE FROM storage\.buckets.*product-screens/i.test(sql));
+});
+
+test("migrations legacy — SQL idempotent sans DROP destructif", () => {
+  for (const f of LEGACY_FILES) {
+    const sql = readFileSync(join(MIGRATIONS_DIR, f), "utf8");
+    assert.match(sql, /create table if not exists/i);
+    assert.ok(!/DROP TABLE/i.test(sql));
+    assert.ok(!/TRUNCATE/i.test(sql));
+    assert.ok(!/DELETE FROM/i.test(sql));
+  }
+  const init = readFileSync(join(MIGRATIONS_DIR, LEGACY_FILES[0]), "utf8");
+  assert.match(init, /vh_spend/);
+  assert.match(init, /vh_products/);
+  assert.match(init, /product-screens/);
+  const scenes = readFileSync(join(MIGRATIONS_DIR, LEGACY_FILES[1]), "utf8");
+  assert.match(scenes, /vh_scenes/);
 });
