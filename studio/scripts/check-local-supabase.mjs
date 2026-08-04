@@ -38,7 +38,7 @@ Prérequis manquants :
 
 Disponible :
   - npx supabase (CLI via npx) — version typique 2.111.x
-  - Ports locaux 54321–54327 libres (vérifier avant start)
+  - Ports locaux configurés dans supabase/config.toml (API 54921 / DB 54922 — hors plages Hyper-V)
 
 Actions autorisées pour débloquer (à faire par un humain) :
   1. Installer Docker Desktop pour Windows (+ WSL2 si requis)

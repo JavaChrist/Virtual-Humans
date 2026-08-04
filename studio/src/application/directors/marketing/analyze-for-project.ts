@@ -32,11 +32,13 @@ import {
   parseOpenAIMarketingConfig,
 } from "@/infrastructure/ai/openai/config";
 import { assessMarketingBriefReadiness } from "@/domain/marketing";
+import { isDirectorHumanRetryableErrorCode } from "@/domain/directors/retryable-error-codes";
 import { createMarketingDirector } from "./marketing-director";
 import type { MarketingAnalyzerPort } from "./analyzer-port";
 import {
   httpStatusForMarketingFailure,
   MARKETING_FAILURE_PUBLIC_MESSAGES,
+  type MarketingAnalysisFailureCode,
 } from "./failures";
 import type { DirectorRunContext } from "./result";
 import type {
@@ -67,6 +69,22 @@ export type MarketingProjectAnalysisInput = {
   expectedBriefRevision?: number;
 };
 
+export type MarketingRetryInput = {
+  projectId: string;
+  previousRunId: string;
+  retryRequestId: string;
+  expectedBriefRevision: number;
+};
+
+export type MarketingRetryCandidate = {
+  previousRunId: string;
+  previousAttemptNumber: number;
+  nextAttemptNumber: number;
+  errorCode: string;
+  model: string;
+  retryAvailable: boolean;
+};
+
 export type MarketingProjectDryRunResult = {
   executable: boolean;
   providerCalled: false;
@@ -84,6 +102,8 @@ export type MarketingProjectDryRunResult = {
   warnings: PublicWarning[];
   missingInformation: Array<{ code: string; message: string; field?: string }>;
   existingPlan?: MarketingPlanView;
+  /** Present when a human retry is eligible (failed retryable, no active plan). */
+  retryCandidate?: MarketingRetryCandidate;
 };
 
 export type MarketingProjectAnalysisResult =
@@ -170,6 +190,55 @@ export type MarketingDirectorRunPort = {
     | { status: "existing"; directorRunId: string; revision: number; outputArtifactId: string }
     | { status: "already_running"; directorRunId: string; revision: number }
   >;
+  beginOrRetry(input: {
+    id: string;
+    workspaceId: string;
+    projectId: string;
+    previousRunId: string;
+    retryRequestId: string;
+    inputArtifactId: string;
+    inputRevision: number;
+    modelId: string;
+    promptVersion: string;
+    schemaVersion: string;
+    commandFingerprint: string;
+    correlationId: string;
+    estimatedCostMinor?: number;
+    currency?: string;
+  }): Promise<
+    | {
+        status: "created";
+        directorRunId: string;
+        revision: number;
+        attemptNumber: number;
+        retryOfRunId: string;
+      }
+    | {
+        status: "existing";
+        directorRunId: string;
+        revision: number;
+        attemptNumber: number;
+        retryOfRunId: string;
+        outputArtifactId: string;
+      }
+    | {
+        status: "already_running";
+        directorRunId: string;
+        revision: number;
+        attemptNumber: number;
+        retryOfRunId: string;
+      }
+    | {
+        status: "terminal_replay";
+        directorRunId: string;
+        revision: number;
+        attemptNumber: number;
+        retryOfRunId: string;
+        runStatus: string;
+        errorCode?: string;
+        outputArtifactId?: string;
+      }
+  >;
   reserveBudget(input: {
     reservationId: string;
     workspaceId: string;
@@ -210,6 +279,16 @@ export type MarketingDirectorRunPort = {
   loadActiveMarketingPlan(
     projectId: string
   ): Promise<{ revision: number; value: unknown } | null>;
+  loadRetryableFailedRun(projectId: string): Promise<{
+    directorRunId: string;
+    attemptNumber: number;
+    errorCode: string;
+    modelId: string;
+    promptVersion: string;
+    schemaVersion: string;
+    inputArtifactId: string;
+    inputRevision: number;
+  } | null>;
 };
 
 function buildIdempotencyKey(parts: {
@@ -315,6 +394,10 @@ export type AnalyzeMarketingForProject = {
   ): Promise<MarketingProjectDryRunResult>;
   execute(
     input: MarketingProjectAnalysisInput,
+    context: DirectorRunContext
+  ): Promise<MarketingProjectAnalysisResult>;
+  executeRetry(
+    input: MarketingRetryInput,
     context: DirectorRunContext
   ): Promise<MarketingProjectAnalysisResult>;
 };
@@ -447,6 +530,35 @@ export function createAnalyzeMarketingForProject(
         }
       }
 
+      let retryCandidate: MarketingRetryCandidate | undefined;
+      if (!existingPlan) {
+        const failed = await deps.directorRuns.loadRetryableFailedRun(
+          input.projectId
+        );
+        if (
+          failed &&
+          failed.inputArtifactId === loaded.artifactId &&
+          failed.inputRevision === loaded.revision &&
+          isDirectorHumanRetryableErrorCode(failed.errorCode)
+        ) {
+          const model = e2e ? e2eFakeOpenAiConfig().model : aiDry.model;
+          const pricingOk = e2e ? true : aiDry.pricingConfigured;
+          retryCandidate = {
+            previousRunId: failed.directorRunId,
+            previousAttemptNumber: failed.attemptNumber,
+            nextAttemptNumber: failed.attemptNumber + 1,
+            errorCode: failed.errorCode,
+            model,
+            retryAvailable:
+              executionAvailable &&
+              pricingOk &&
+              failed.modelId === model &&
+              failed.promptVersion === aiDry.promptVersion &&
+              failed.schemaVersion === aiDry.schemaVersion,
+          };
+        }
+      }
+
       return {
         executable: domainExecutable,
         providerCalled: false,
@@ -466,6 +578,7 @@ export function createAnalyzeMarketingForProject(
           .filter((v) => !v.passed)
           .map((v) => ({ code: v.code, message: v.message })),
         existingPlan,
+        retryCandidate,
       };
     },
 
@@ -646,6 +759,13 @@ export function createAnalyzeMarketingForProject(
             409
           );
         }
+        if (/director_run_terminal_reuse/i.test(msg)) {
+          return failedAnalysis(
+            "retry_required",
+            MARKETING_FAILURE_PUBLIC_MESSAGES.retry_required,
+            409
+          );
+        }
         return failedAnalysis(
           "director_run_failed",
           "Impossible de démarrer l’analyse.",
@@ -675,179 +795,511 @@ export function createAnalyzeMarketingForProject(
         }
       }
 
-      const directorRunId = begin.directorRunId;
-      const runRevision = begin.revision;
-      const reservationId = idFactory();
-      let reserved = false;
+      return finishMarketingExecute({
+        directorRunId: begin.directorRunId,
+        runRevision: begin.revision,
+        attemptNumber: 1,
+        projectId: input.projectId,
+        loaded,
+        estimatedCostMinor,
+        currency,
+        e2e,
+        pricingConfigured: aiDry.pricingConfigured,
+        context,
+      });
+    },
 
-      try {
-        await deps.directorRuns.reserveBudget({
-          reservationId,
-          workspaceId: deps.workspaceId,
-          projectId: input.projectId,
-          directorRunId,
-          attemptId: "marketing-1",
-          amountMinor: estimatedCostMinor,
-          currency,
-          correlationId: context.correlationId,
-          ledgerIdempotencyKey: `dir-reserve-${directorRunId}`,
-        });
-        reserved = true;
-      } catch (e) {
-        const msg = e instanceof Error ? e.message : "";
-        await deps.directorRuns
-          .failRun({
-            directorRunId,
-            workspaceId: deps.workspaceId,
-            expectedRevision: runRevision + (reserved ? 1 : 0),
-            errorCode: "budget_exceeded",
-            status: "failed",
-            correlationId: context.correlationId,
-          })
-          .catch(() => undefined);
+    async executeRetry(input, context) {
+      if (!canUseDirectorV2Persistence(env)) {
         return failedAnalysis(
-          "budget_exceeded",
-          /insufficient/i.test(msg)
-            ? MARKETING_FAILURE_PUBLIC_MESSAGES.budget_exceeded
-            : "Réservation budget impossible.",
+          "persistence_disabled",
+          "Persistance Director désactivée.",
+          503
+        );
+      }
+      const e2e = isDirectorE2eFakeMode(env);
+      if (
+        !e2e &&
+        (!isDirectorV2MarketingAiEnabled(env) || !isDirectorV2PaidAiEnabled(env))
+      ) {
+        return failedAnalysis(
+          "marketing_ai_disabled",
+          "Analyse Marketing IA désactivée.",
+          503
+        );
+      }
+      if (
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+          input.retryRequestId
+        )
+      ) {
+        return failedAnalysis("invalid_retry_request", "Demande de retry invalide.", 400);
+      }
+      if (
+        !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+          input.previousRunId
+        )
+      ) {
+        return failedAnalysis("invalid_previous_run", "Run précédent invalide.", 400);
+      }
+
+      let config;
+      if (e2e) {
+        config = e2eFakeOpenAiConfig();
+      } else {
+        try {
+          config = parseOpenAIMarketingConfig(env);
+        } catch {
+          return failedAnalysis(
+            "invalid_config",
+            "Configuration Marketing IA invalide.",
+            503
+          );
+        }
+        if (!config.apiKeyPresent) {
+          return failedAnalysis(
+            "openai_not_configured",
+            "OpenAI n’est pas configuré.",
+            503
+          );
+        }
+      }
+
+      const project = await deps.projects.load(input.projectId);
+      if (!project || project.workspaceId !== deps.workspaceId) {
+        return failedAnalysis("not_found", "Projet introuvable.", 400);
+      }
+
+      const loaded = await loadActiveBrief(deps.artifacts, input.projectId);
+      if (!loaded) {
+        return failedAnalysis("brief_missing", "Brief actif introuvable.", 422);
+      }
+      if (input.expectedBriefRevision !== loaded.revision) {
+        return failedAnalysis(
+          "brief_revision_conflict",
+          "Le brief a changé depuis la vérification.",
+          409
+        );
+      }
+
+      const aiDry = runOpenAIMarketingDryRun(loaded.brief, {
+        env,
+        pricing: deps.pricing,
+      });
+      if (e2e) {
+        const readiness = assessMarketingBriefReadiness(loaded.brief);
+        if (!readiness.executable) {
+          return {
+            status: "needs_input",
+            missingInformation: [
+              {
+                code: "marketing_readiness",
+                message: "Brief Marketing non prêt.",
+              },
+            ],
+            warnings: [],
+          };
+        }
+      } else if (!aiDry.executable) {
+        return {
+          status: "needs_input",
+          missingInformation: aiDry.validations
+            .filter((v) => !v.passed)
+            .map((v) => ({ code: v.code, message: v.message })),
+          warnings: aiDry.warnings.map((w) => ({
+            code: w.code,
+            message: w.message,
+          })),
+        };
+      }
+      if (!e2e && !aiDry.pricingConfigured && config.requireFirmPricing) {
+        return failedAnalysis(
+          "pricing_unknown",
+          "Tarification indisponible pour un appel payant.",
           402
         );
       }
 
-      // After reserve, revision bumped once in RPC
-      const revisionAfterReserve = runRevision + 1;
-
-      const director = createMarketingDirector({ analyzer: deps.analyzer });
-      const artifactId = idFactory();
-      const result = await director.run(
-        { brief: loaded.brief },
-        {
-          ...context,
-          mode: "execute",
-          planId: artifactId,
-          createdBy: "shared-password-user",
+      let estimatedCostMinor = 1;
+      let currency = "USD";
+      if (deps.pricing) {
+        const book = deps.pricing.getPriceBook(config.model);
+        if (book) {
+          const inTok = aiDry.approximateInputTokens ?? 500;
+          estimatedCostMinor = Math.max(
+            1,
+            Math.floor((inTok * book.inputPerMillionMinor) / 1_000_000) +
+              Math.floor(
+                (config.maxOutputTokens * book.outputPerMillionMinor) / 1_000_000
+              )
+          );
+          currency = book.currency;
+        } else if (config.requireFirmPricing) {
+          return failedAnalysis("pricing_unknown", "Tarification indisponible.", 402);
         }
-      );
+      }
 
-      if (result.status === "needs_input") {
-        await deps.directorRuns.failRun({
-          directorRunId,
+      const fingerprint = buildFingerprint({
+        projectId: input.projectId,
+        briefArtifactId: loaded.artifactId,
+        briefRevision: loaded.revision,
+        model: config.model,
+        promptVersion: MARKETING_ANALYZER_PROMPT_VERSION,
+        schemaVersion: MARKETING_CANDIDATE_SCHEMA_VERSION,
+      });
+
+      const runId = idFactory();
+      let begin;
+      try {
+        begin = await deps.directorRuns.beginOrRetry({
+          id: runId,
           workspaceId: deps.workspaceId,
-          expectedRevision: revisionAfterReserve,
-          errorCode: "needs_input",
-          status: "needs_input",
-          reservationId,
+          projectId: input.projectId,
+          previousRunId: input.previousRunId,
+          retryRequestId: input.retryRequestId,
+          inputArtifactId: loaded.artifactId,
+          inputRevision: loaded.revision,
+          modelId: config.model,
+          promptVersion: MARKETING_ANALYZER_PROMPT_VERSION,
+          schemaVersion: MARKETING_CANDIDATE_SCHEMA_VERSION,
+          commandFingerprint: fingerprint,
           correlationId: context.correlationId,
+          estimatedCostMinor,
+          currency,
         });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "";
+        if (/retry_not_allowed|retry_reservation_active|retry_config_mismatch/i.test(msg)) {
+          return failedAnalysis(
+            "retry_not_allowed",
+            MARKETING_FAILURE_PUBLIC_MESSAGES.retry_not_allowed,
+            422
+          );
+        }
+        if (/retry_superseded|retry_conflict/i.test(msg)) {
+          return failedAnalysis(
+            "retry_conflict",
+            MARKETING_FAILURE_PUBLIC_MESSAGES.retry_conflict,
+            409
+          );
+        }
+        if (/brief_revision/i.test(msg)) {
+          return failedAnalysis(
+            "brief_revision_conflict",
+            "Le brief actif a changé.",
+            409
+          );
+        }
+        if (/fingerprint/i.test(msg)) {
+          return failedAnalysis(
+            "idempotency_conflict",
+            MARKETING_FAILURE_PUBLIC_MESSAGES.idempotency_conflict,
+            409
+          );
+        }
+        return failedAnalysis(
+          "director_run_failed",
+          "Impossible de démarrer le retry.",
+          503
+        );
+      }
+
+      if (begin.status === "already_running") {
         return {
-          status: "needs_input",
-          missingInformation: result.missingInformation.map((m) => ({
-            code: m.code,
-            message: m.message,
-            field: m.field,
-          })),
-          warnings: result.warnings.map((w) => ({
-            code: w.code,
-            message: w.message,
-          })),
-          directorRunId,
+          status: "already_running",
+          directorRunId: begin.directorRunId,
+          publicMessage: "Une analyse marketing est déjà en cours.",
         };
       }
 
-      if (result.status === "provider_failed") {
-        const failure = result.failure;
-        await deps.directorRuns.failRun({
-          directorRunId,
-          workspaceId: deps.workspaceId,
-          expectedRevision: revisionAfterReserve,
-          errorCode: failure.code,
-          status: "failed",
-          reservationId,
-          correlationId: context.correlationId,
-        });
-        const httpHint = httpStatusForMarketingFailure(failure.code);
-        // provider_failed never uses 202 (reserved for already_running)
-        const safeHint =
-          httpHint === 202 ? 500 : httpHint;
+      // Block a *new* attempt if a plan is already active (idempotent replays handled above).
+      if (begin.status === "created") {
+        const existingPlan = await deps.directorRuns.loadActiveMarketingPlan(
+          input.projectId
+        );
+        if (existingPlan) {
+          await deps.directorRuns
+            .failRun({
+              directorRunId: begin.directorRunId,
+              workspaceId: deps.workspaceId,
+              expectedRevision: begin.revision,
+              errorCode: "retry_not_allowed",
+              status: "failed",
+              correlationId: context.correlationId,
+            })
+            .catch(() => undefined);
+          return failedAnalysis(
+            "retry_not_allowed",
+            MARKETING_FAILURE_PUBLIC_MESSAGES.retry_not_allowed,
+            422,
+            { directorRunId: begin.directorRunId }
+          );
+        }
+      }
+
+      if (begin.status === "terminal_replay") {
+        // Same human retryRequestId already finished — never call provider again.
+        if (begin.outputArtifactId) {
+          const art = await deps.artifacts.load(begin.outputArtifactId);
+          const view = art
+            ? mapStoredPlan(art.value, art.revision)
+            : undefined;
+          if (view) {
+            return {
+              status: "existing",
+              plan: view,
+              directorRunId: begin.directorRunId,
+            };
+          }
+        }
+        const code = begin.errorCode ?? "request_failed";
+        const replayableCodes: readonly string[] = [
+          "rate_limited",
+          "timeout",
+          "provider_unavailable",
+          "request_failed",
+          "invalid_candidate",
+          "quota_exceeded",
+        ];
+        const canonical: MarketingAnalysisFailureCode = replayableCodes.includes(
+          code
+        )
+          ? (code as MarketingAnalysisFailureCode)
+          : "request_failed";
+        const httpHint = httpStatusForMarketingFailure(canonical);
         return failedAnalysis(
-          failure.code,
-          failure.publicMessage,
-          safeHint,
+          canonical,
+          MARKETING_FAILURE_PUBLIC_MESSAGES[canonical] ??
+            MARKETING_FAILURE_PUBLIC_MESSAGES.request_failed,
+          httpHint === 202 ? 500 : httpHint,
           {
-            retryable: failure.retryable,
-            retryAfterSeconds: failure.retryAfterSeconds,
-            provider: failure.provider,
-            directorRunId,
+            retryable: isDirectorHumanRetryableErrorCode(canonical),
+            directorRunId: begin.directorRunId,
           }
         );
       }
 
-      if (result.status === "invalid") {
-        await deps.directorRuns.failRun({
-          directorRunId,
-          workspaceId: deps.workspaceId,
-          expectedRevision: revisionAfterReserve,
-          errorCode: "invalid_candidate",
-          status: "failed",
-          reservationId,
-          correlationId: context.correlationId,
-        });
+      if (begin.status === "existing") {
+        const art = begin.outputArtifactId
+          ? await deps.artifacts.load(begin.outputArtifactId)
+          : null;
+        const view = art
+          ? mapStoredPlan(art.value, art.revision)
+          : undefined;
+        if (view) {
+          return {
+            status: "existing",
+            plan: view,
+            directorRunId: begin.directorRunId,
+          };
+        }
+        // Completed/terminal replay without loadable plan — never start a new provider call.
         return failedAnalysis(
-          "invalid_candidate",
-          result.errors[0]?.message ??
-            MARKETING_FAILURE_PUBLIC_MESSAGES.invalid_candidate,
-          422,
-          { directorRunId }
+          "retry_conflict",
+          MARKETING_FAILURE_PUBLIC_MESSAGES.retry_conflict,
+          409,
+          { directorRunId: begin.directorRunId }
         );
       }
 
-      // completed
-      try {
-        const persisted = await deps.directorRuns.persistPlan({
-          workspaceId: deps.workspaceId,
-          projectId: input.projectId,
-          directorRunId,
-          artifactId,
-          briefArtifactId: loaded.artifactId,
-          briefRevision: loaded.revision,
-          plan: { ...result.plan } as unknown as Record<string, unknown>,
-          schemaVersion: MARKETING_PLAN_SCHEMA_VERSION,
-          correlationId: context.correlationId,
-          reservationId,
-          actualCostMinor: estimatedCostMinor,
-          // Ledger CHECK refuse "unknown" — en E2E fake (sans price book) on commit synthétique.
-          costStatus: e2e || aiDry.pricingConfigured ? "committed" : "provisional",
-          expectedRunRevision: revisionAfterReserve,
-          ledgerIdempotencyKey: `dir-commit-${directorRunId}`,
-        });
-        return {
-          status: persisted.status === "existing" ? "existing" : "completed",
-          plan: mapMarketingPlanView(
-            result.plan,
-            persisted.revision,
-            result.warnings.map((w) => ({ code: w.code, message: w.message }))
-          ),
-          directorRunId,
-        };
-      } catch {
-        await deps.directorRuns
-          .failRun({
-            directorRunId,
-            workspaceId: deps.workspaceId,
-            expectedRevision: revisionAfterReserve,
-            errorCode: "persist_failed",
-            status: "failed",
-            reservationId,
-            correlationId: context.correlationId,
-          })
-          .catch(() => undefined);
-        return failedAnalysis(
-          "persist_failed",
-          "L’analyse a peut‑être été produite mais la persistance a échoué. Réessayez avec la même clé d’idempotence.",
-          503,
-          { directorRunId }
-        );
-      }
+      return finishMarketingExecute({
+        directorRunId: begin.directorRunId,
+        runRevision: begin.revision,
+        attemptNumber: begin.attemptNumber,
+        projectId: input.projectId,
+        loaded,
+        estimatedCostMinor,
+        currency,
+        e2e,
+        pricingConfigured: aiDry.pricingConfigured,
+        context,
+      });
     },
   };
+
+  async function finishMarketingExecute(args: {
+    directorRunId: string;
+    runRevision: number;
+    attemptNumber: number;
+    projectId: string;
+    loaded: { brief: VideoProjectBrief; artifactId: string; revision: number };
+    estimatedCostMinor: number;
+    currency: string;
+    e2e: boolean;
+    pricingConfigured: boolean;
+    context: DirectorRunContext;
+  }): Promise<MarketingProjectAnalysisResult> {
+    const {
+      directorRunId,
+      runRevision,
+      attemptNumber,
+      projectId,
+      loaded,
+      estimatedCostMinor,
+      currency,
+      e2e,
+      pricingConfigured,
+      context,
+    } = args;
+    const reservationId = idFactory();
+    let reserved = false;
+
+    try {
+      await deps.directorRuns.reserveBudget({
+        reservationId,
+        workspaceId: deps.workspaceId,
+        projectId,
+        directorRunId,
+        attemptId: `marketing-${attemptNumber}`,
+        amountMinor: estimatedCostMinor,
+        currency,
+        correlationId: context.correlationId,
+        ledgerIdempotencyKey: `dir-reserve-${directorRunId}`,
+      });
+      reserved = true;
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "";
+      await deps.directorRuns
+        .failRun({
+          directorRunId,
+          workspaceId: deps.workspaceId,
+          expectedRevision: runRevision + (reserved ? 1 : 0),
+          errorCode: "budget_exceeded",
+          status: "failed",
+          correlationId: context.correlationId,
+        })
+        .catch(() => undefined);
+      return failedAnalysis(
+        "budget_exceeded",
+        /insufficient/i.test(msg)
+          ? MARKETING_FAILURE_PUBLIC_MESSAGES.budget_exceeded
+          : "Réservation budget impossible.",
+        402
+      );
+    }
+
+    const revisionAfterReserve = runRevision + 1;
+    const director = createMarketingDirector({ analyzer: deps.analyzer });
+    const artifactId = idFactory();
+    const result = await director.run(
+      { brief: loaded.brief },
+      {
+        ...context,
+        mode: "execute",
+        planId: artifactId,
+        createdBy: "shared-password-user",
+      }
+    );
+
+    if (result.status === "needs_input") {
+      await deps.directorRuns.failRun({
+        directorRunId,
+        workspaceId: deps.workspaceId,
+        expectedRevision: revisionAfterReserve,
+        errorCode: "needs_input",
+        status: "needs_input",
+        reservationId,
+        correlationId: context.correlationId,
+      });
+      return {
+        status: "needs_input",
+        missingInformation: result.missingInformation.map((m) => ({
+          code: m.code,
+          message: m.message,
+          field: m.field,
+        })),
+        warnings: result.warnings.map((w) => ({
+          code: w.code,
+          message: w.message,
+        })),
+        directorRunId,
+      };
+    }
+
+    if (result.status === "provider_failed") {
+      const failure = result.failure;
+      await deps.directorRuns.failRun({
+        directorRunId,
+        workspaceId: deps.workspaceId,
+        expectedRevision: revisionAfterReserve,
+        errorCode: failure.code,
+        status: "failed",
+        reservationId,
+        correlationId: context.correlationId,
+      });
+      const httpHint = httpStatusForMarketingFailure(failure.code);
+      const safeHint = httpHint === 202 ? 500 : httpHint;
+      return failedAnalysis(failure.code, failure.publicMessage, safeHint, {
+        retryable: failure.retryable,
+        retryAfterSeconds: failure.retryAfterSeconds,
+        provider: failure.provider,
+        directorRunId,
+      });
+    }
+
+    if (result.status === "invalid") {
+      await deps.directorRuns.failRun({
+        directorRunId,
+        workspaceId: deps.workspaceId,
+        expectedRevision: revisionAfterReserve,
+        errorCode: "invalid_candidate",
+        status: "failed",
+        reservationId,
+        correlationId: context.correlationId,
+      });
+      return failedAnalysis(
+        "invalid_candidate",
+        result.errors[0]?.message ??
+          MARKETING_FAILURE_PUBLIC_MESSAGES.invalid_candidate,
+        422,
+        { directorRunId }
+      );
+    }
+
+    try {
+      const persisted = await deps.directorRuns.persistPlan({
+        workspaceId: deps.workspaceId,
+        projectId,
+        directorRunId,
+        artifactId,
+        briefArtifactId: loaded.artifactId,
+        briefRevision: loaded.revision,
+        plan: { ...result.plan } as unknown as Record<string, unknown>,
+        schemaVersion: MARKETING_PLAN_SCHEMA_VERSION,
+        correlationId: context.correlationId,
+        reservationId,
+        actualCostMinor: estimatedCostMinor,
+        costStatus: e2e || pricingConfigured ? "committed" : "provisional",
+        expectedRunRevision: revisionAfterReserve,
+        ledgerIdempotencyKey: `dir-commit-${directorRunId}`,
+      });
+      return {
+        status: persisted.status === "existing" ? "existing" : "completed",
+        plan: mapMarketingPlanView(
+          result.plan,
+          persisted.revision,
+          result.warnings.map((w) => ({ code: w.code, message: w.message }))
+        ),
+        directorRunId,
+      };
+    } catch {
+      await deps.directorRuns
+        .failRun({
+          directorRunId,
+          workspaceId: deps.workspaceId,
+          expectedRevision: revisionAfterReserve,
+          errorCode: "persist_failed",
+          status: "failed",
+          reservationId,
+          correlationId: context.correlationId,
+        })
+        .catch(() => undefined);
+      return failedAnalysis(
+        "persist_failed",
+        "L’analyse a peut‑être été produite mais la persistance a échoué. Réessayez avec la même clé d’idempotence.",
+        503,
+        { directorRunId }
+      );
+    }
+  }
 }

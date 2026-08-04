@@ -88,6 +88,23 @@ const PUBLIC_MESSAGES: Record<OpenAIAiErrorCode, string> = {
   unknown: "Erreur d’analyse Marketing.",
 };
 
+/** Redacted provider observability — never prompts, bodies, or secrets. */
+export type OpenAIProviderObs = {
+  providerErrorCode?: string;
+  providerErrorType?: string;
+  providerRequestId?: string;
+  rateLimitLimitRequests?: string;
+  rateLimitRemainingRequests?: string;
+  rateLimitResetRequests?: string;
+};
+
+function sanitizeObsToken(raw: string | null | undefined): string | undefined {
+  if (raw == null) return undefined;
+  const trimmed = String(raw).trim().slice(0, 128);
+  if (!/^[a-zA-Z0-9._:-]+$/.test(trimmed)) return undefined;
+  return trimmed;
+}
+
 export class OpenAIAiError extends Error {
   readonly code: OpenAIAiErrorCode;
   readonly retryable: boolean;
@@ -95,6 +112,7 @@ export class OpenAIAiError extends Error {
   readonly internalCode: string;
   readonly httpStatus?: number;
   readonly retryAfterSeconds?: number;
+  readonly providerObs?: OpenAIProviderObs;
 
   constructor(
     code: OpenAIAiErrorCode,
@@ -104,6 +122,7 @@ export class OpenAIAiError extends Error {
       retryable?: boolean;
       httpStatus?: number;
       retryAfterSeconds?: number;
+      providerObs?: OpenAIProviderObs;
     }
   ) {
     const publicMessage = opts?.publicMessage ?? PUBLIC_MESSAGES[code];
@@ -123,6 +142,22 @@ export class OpenAIAiError extends Error {
     ) {
       this.retryAfterSeconds = ra;
     }
+    if (opts?.providerObs) {
+      this.providerObs = {
+        providerErrorCode: sanitizeObsToken(opts.providerObs.providerErrorCode),
+        providerErrorType: sanitizeObsToken(opts.providerObs.providerErrorType),
+        providerRequestId: sanitizeObsToken(opts.providerObs.providerRequestId),
+        rateLimitLimitRequests: sanitizeObsToken(
+          opts.providerObs.rateLimitLimitRequests
+        ),
+        rateLimitRemainingRequests: sanitizeObsToken(
+          opts.providerObs.rateLimitRemainingRequests
+        ),
+        rateLimitResetRequests: sanitizeObsToken(
+          opts.providerObs.rateLimitResetRequests
+        ),
+      };
+    }
   }
 }
 
@@ -134,51 +169,86 @@ export function isOpenAIAiError(e: unknown): e is OpenAIAiError {
 export function mapOpenAIHttpError(
   status: number,
   providerCode?: string,
-  opts?: { retryAfterHeader?: string | null }
+  opts?: {
+    retryAfterHeader?: string | null;
+    providerErrorType?: string | null;
+    providerRequestId?: string | null;
+    rateLimitLimitRequests?: string | null;
+    rateLimitRemainingRequests?: string | null;
+    rateLimitResetRequests?: string | null;
+  }
 ): OpenAIAiError {
   const retryAfterSeconds = parseRetryAfterSeconds(opts?.retryAfterHeader);
+  const providerObs: OpenAIProviderObs = {
+    providerErrorCode: providerCode,
+    providerErrorType: opts?.providerErrorType ?? undefined,
+    providerRequestId: opts?.providerRequestId ?? undefined,
+    rateLimitLimitRequests: opts?.rateLimitLimitRequests ?? undefined,
+    rateLimitRemainingRequests: opts?.rateLimitRemainingRequests ?? undefined,
+    rateLimitResetRequests: opts?.rateLimitResetRequests ?? undefined,
+  };
+  const codeHint = `${providerCode ?? ""} ${opts?.providerErrorType ?? ""}`;
 
   if (status === 401) {
     return new OpenAIAiError("unauthorized", {
       internalCode: `http_${status}`,
       httpStatus: status,
+      providerObs,
     });
   }
   if (status === 403) {
     return new OpenAIAiError("forbidden", {
       internalCode: `http_${status}`,
       httpStatus: status,
+      providerObs,
     });
   }
   if (status === 429) {
-    const quota = /quota|billing|insufficient/i.test(providerCode ?? "");
-    return new OpenAIAiError(quota ? "quota_exceeded" : "rate_limited", {
-      internalCode: providerCode ?? `http_${status}`,
+    // Distinguish rate_limit_exceeded vs insufficient_quota (never treat quota as retryable).
+    const insufficientQuota = /insufficient_quota/i.test(codeHint);
+    const billingQuota =
+      /billing|quota_exceeded/i.test(codeHint) && !/rate_limit/i.test(codeHint);
+    if (insufficientQuota || billingQuota) {
+      return new OpenAIAiError("quota_exceeded", {
+        internalCode: sanitizeObsToken(providerCode) ?? `http_${status}`,
+        httpStatus: status,
+        retryAfterSeconds,
+        retryable: false,
+        providerObs,
+      });
+    }
+    return new OpenAIAiError("rate_limited", {
+      internalCode: sanitizeObsToken(providerCode) ?? `http_${status}`,
       httpStatus: status,
       retryAfterSeconds,
+      providerObs,
     });
   }
-  if (status === 400 && /structured|json_schema|response_format/i.test(providerCode ?? "")) {
+  if (status === 400 && /structured|json_schema|response_format/i.test(codeHint)) {
     return new OpenAIAiError("structured_output_unsupported", {
       internalCode: providerCode ?? "http_400",
       httpStatus: status,
+      providerObs,
     });
   }
-  if (status === 400 && /model/i.test(providerCode ?? "")) {
+  if (status === 400 && /model_not_found|invalid_model|model/i.test(codeHint)) {
     return new OpenAIAiError("unsupported_model", {
       internalCode: providerCode ?? "http_400",
       httpStatus: status,
+      providerObs,
     });
   }
   if (status >= 500) {
     return new OpenAIAiError("provider_unavailable", {
       internalCode: `http_${status}`,
       httpStatus: status,
+      providerObs,
     });
   }
   return new OpenAIAiError("unknown", {
     internalCode: `http_${status}`,
     httpStatus: status,
+    providerObs,
   });
 }
 

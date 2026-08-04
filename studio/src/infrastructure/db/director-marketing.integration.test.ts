@@ -159,3 +159,167 @@ test("VHS-117B — dry-run + execute fake + persist marketing_plan", async () =>
     .eq("action", "director.marketing.completed");
   assert.ok((audit?.length ?? 0) >= 1);
 });
+
+test("VHS-128 — attempt1 rate_limited → human retry attempt2 → completed", async () => {
+  const workspaceId = await seedWs();
+  const projectId = randomUUID();
+  const artifactId = randomUUID();
+  const brief = finalizeBrief(
+    {
+      draftVersion: "1.0.0",
+      updatedAt: "2026-08-02T18:00:00.000Z",
+      currentStep: 5,
+      fields: {
+        projectName: "Campagne 128 retry",
+        subjectType: "product",
+        subjectName: "Widget",
+        subjectDescription: "Produit de mobilité urbaine fiable pour navetteurs.",
+        objective: "conversion",
+        platform: "instagram",
+        durationSeconds: 30,
+        aspectRatio: "9:16",
+        language: "fr",
+        tone: "energetic",
+        callToAction: "Téléchargez l'app et réservez",
+        audienceDescription: "Navetteurs urbains pressés.",
+        mediaReferences: [],
+      },
+    },
+    {
+      id: artifactId,
+      projectId,
+      createdBy: "tester",
+      correlationId: "corr-128-it",
+      createdAt: "2026-08-02T18:00:00.000Z",
+      revision: 1,
+    }
+  );
+
+  const createPort = createSupabaseCreateProjectWithBriefPort({ client });
+  await createPort.execute({
+    workspaceId,
+    projectId,
+    artifactId,
+    projectName: brief.projectName,
+    brief: { ...brief } as unknown as Record<string, unknown>,
+    schemaVersion: BRIEF_SCHEMA_VERSION,
+    correlationId: "corr-128-it",
+    actorType: "shared_password",
+    actorId: "tester",
+    createdBy: "tester",
+  });
+
+  let calls = 0;
+  const analyzer: MarketingAnalyzerPort = {
+    async analyze() {
+      calls += 1;
+      if (calls === 1) {
+        const { MarketingAnalyzerError, marketingFailure } = await import(
+          "@/application/directors/marketing/failures"
+        );
+        throw new MarketingAnalyzerError(
+          marketingFailure("rate_limited", {
+            retryable: true,
+            provider: "openai",
+            httpStatus: 429,
+          })
+        );
+      }
+      return makeValidCandidate({
+        marketingObjective: "conversion",
+        tone: "energetic",
+        callToAction: "Téléchargez l'app et réservez",
+      });
+    },
+  };
+
+  const env = {
+    DIRECTOR_V2_ENABLED: "1",
+    DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+    DIRECTOR_V2_MARKETING_AI_ENABLED: "1",
+    DIRECTOR_V2_PAID_AI_ENABLED: "1",
+    OPENAI_API_KEY: "sk-test-local",
+    OPENAI_MARKETING_MODEL: "gpt-5.6-terra",
+    OPENAI_MARKETING_PRICE_VERSION: "it-v1",
+    OPENAI_MARKETING_PRICE_INPUT_PER_MILLION_MINOR: "100",
+    OPENAI_MARKETING_PRICE_OUTPUT_PER_MILLION_MINOR: "200",
+  };
+
+  const stack = createDirectorPersistenceStack({
+    client,
+    workspaceId,
+    marketingAnalyzer: analyzer,
+    env,
+  });
+
+  const first = await stack.analyzeMarketing.execute(
+    { projectId, expectedBriefRevision: 1 },
+    { correlationId: "corr-128-a1", mode: "execute" }
+  );
+  assert.equal(first.status, "failed");
+  if (first.status !== "failed") return;
+  assert.equal(first.code, "rate_limited");
+  assert.ok(first.directorRunId);
+
+  const dry = await stack.analyzeMarketing.dryRun(
+    { projectId },
+    { correlationId: "corr-128-dry", mode: "dry-run" }
+  );
+  assert.ok(dry.retryCandidate?.retryAvailable);
+  assert.equal(dry.retryCandidate?.previousAttemptNumber, 1);
+  assert.equal(dry.retryCandidate?.nextAttemptNumber, 2);
+
+  const retryRequestId = randomUUID();
+  const second = await stack.analyzeMarketing.executeRetry(
+    {
+      projectId,
+      previousRunId: first.directorRunId!,
+      retryRequestId,
+      expectedBriefRevision: 1,
+    },
+    { correlationId: "corr-128-a2", mode: "execute" }
+  );
+  assert.equal(second.status, "completed");
+  assert.equal(calls, 2);
+
+  const replay = await stack.analyzeMarketing.executeRetry(
+    {
+      projectId,
+      previousRunId: first.directorRunId!,
+      retryRequestId,
+      expectedBriefRevision: 1,
+    },
+    { correlationId: "corr-128-replay", mode: "execute" }
+  );
+  assert.equal(replay.status, "existing");
+  assert.equal(calls, 2);
+
+  const { data: runs } = await client
+    .from("director_runs" as never)
+    .select("id, status, attempt_number, cost_status, retry_of_run_id")
+    .eq("project_id", projectId)
+    .eq("director_type", "marketing")
+    .order("attempt_number", { ascending: true });
+  const typed = (runs ?? []) as Array<{
+    id: string;
+    status: string;
+    attempt_number: number;
+    cost_status: string;
+    retry_of_run_id: string | null;
+  }>;
+  assert.equal(typed.length, 2);
+  assert.equal(typed[0]?.status, "failed");
+  assert.equal(typed[0]?.cost_status, "released");
+  assert.equal(typed[0]?.attempt_number, 1);
+  assert.equal(typed[1]?.status, "completed");
+  assert.equal(typed[1]?.cost_status, "committed");
+  assert.equal(typed[1]?.attempt_number, 2);
+  assert.equal(typed[1]?.retry_of_run_id, first.directorRunId);
+
+  const { count } = await client
+    .from("project_artifacts")
+    .select("*", { count: "exact", head: true })
+    .eq("project_id", projectId)
+    .eq("artifact_type", "marketing_plan");
+  assert.equal(count, 1);
+});

@@ -116,16 +116,30 @@ export function createFetchOpenAIResponsesClient(deps: {
 
         if (!res.ok) {
           let providerCode: string | undefined;
+          let providerErrorType: string | undefined;
           try {
             const errJson = (await res.json()) as {
               error?: { code?: string; type?: string };
             };
-            providerCode = errJson.error?.code ?? errJson.error?.type;
+            providerCode = errJson.error?.code;
+            providerErrorType = errJson.error?.type;
+            if (!providerCode && providerErrorType) {
+              providerCode = providerErrorType;
+            }
           } catch {
-            // ignore body
+            // ignore body — never log raw provider payload
           }
           throw mapOpenAIHttpError(res.status, providerCode, {
             retryAfterHeader: res.headers.get("retry-after"),
+            providerErrorType,
+            providerRequestId:
+              res.headers.get("x-request-id") ??
+              res.headers.get("request-id"),
+            rateLimitLimitRequests: res.headers.get("x-ratelimit-limit-requests"),
+            rateLimitRemainingRequests: res.headers.get(
+              "x-ratelimit-remaining-requests"
+            ),
+            rateLimitResetRequests: res.headers.get("x-ratelimit-reset-requests"),
           });
         }
 

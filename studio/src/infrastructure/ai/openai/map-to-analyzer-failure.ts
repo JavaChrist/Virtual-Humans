@@ -59,6 +59,10 @@ export function mapOpenAIAiErrorToMarketingFailure(
         retryable: false,
       });
     case "quota_exceeded":
+      return marketingFailure("quota_exceeded", {
+        ...base,
+        retryable: false,
+      });
     case "structured_output_unsupported":
     case "unsupported_model":
     case "invalid_request":
@@ -74,7 +78,7 @@ export function mapOpenAIAiErrorToMarketingFailure(
     case "prompt_injection_detected":
       return marketingFailure("request_failed", {
         ...base,
-        retryable: err.retryable,
+        retryable: false,
         internalCode: sanitizeInternalCode(err.code) ?? internalCode,
       });
     case "unknown":

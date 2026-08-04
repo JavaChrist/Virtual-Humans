@@ -193,3 +193,23 @@ test("aucune donnée sensible dans erreurs mappées", () => {
   assert.equal(blob.includes("prompt"), false);
   assert.equal(f.publicMessage.includes("OpenAI"), false);
 });
+
+test("VHS-128 — 429 rate_limit_exceeded ≠ insufficient_quota", () => {
+  const rl = mapOpenAIHttpError(429, "rate_limit_exceeded", {
+    retryAfterHeader: "10",
+    providerRequestId: "req_abc123",
+    rateLimitRemainingRequests: "0",
+  });
+  assert.equal(rl.code, "rate_limited");
+  assert.equal(rl.retryable, true);
+  assert.equal(rl.providerObs?.providerRequestId, "req_abc123");
+  assert.equal(mapOpenAIAiErrorToMarketingFailure(rl).code, "rate_limited");
+
+  const quota = mapOpenAIHttpError(429, "insufficient_quota", {
+    providerErrorType: "insufficient_quota",
+  });
+  assert.equal(quota.code, "quota_exceeded");
+  assert.equal(quota.retryable, false);
+  assert.equal(mapOpenAIAiErrorToMarketingFailure(quota).code, "quota_exceeded");
+  assert.equal(mapOpenAIAiErrorToMarketingFailure(quota).retryable, false);
+});

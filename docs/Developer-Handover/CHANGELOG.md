@@ -2,6 +2,17 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.48] — 2026-08-04
+
+### Added (Porte 7D-A — retry humain Director)
+
+- **VHS-128** : colonnes `attempt_number`, `retry_of_run_id`, `retry_request_id` sur `director_runs`.
+- RPC atomique `begin_or_retry_director_run` (clé `<base>:attempt:<N>`, idempotence `retry_request_id`).
+- API `POST /api/director/projects/[projectId]/marketing/retry` + UI « Réessayer l’analyse ».
+- Distinction 429 `rate_limit_exceeded` vs `insufficient_quota` (`quota_exceeded`) + obs redacted.
+- Doc : `docs/Developer-Handover/22_DIRECTOR_HUMAN_RETRY.md`.
+- **0** provider réel ; **0** migration distante ; **0** push.
+
 ## [2.0.47] — 2026-08-04
 
 ### Fixed (Préproduction — correctif Porte 3 / historique VHS-125)

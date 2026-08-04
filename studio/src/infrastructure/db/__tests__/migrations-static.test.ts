@@ -38,6 +38,7 @@ const EXPECTED_FILES = [
   "20260804140225_vhs_125_remainder_part3.sql",
   "20260804140309_vhs_126_brief_revisions_stale.sql",
   "20260804140422_vhs_127_director_final_assets_bucket.sql",
+  "20260804141000_vhs_128_director_run_retry_attempts.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -63,15 +64,15 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 22 versions alignées Production (2 legacy + 17 V2 + 3 remainder markers)", () => {
+test("migrations — 23 versions (22 Production + VHS-128 retry local)", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
-  assert.equal(files.length, 22);
+  assert.equal(files.length, 23);
   assert.deepEqual(
     files.filter((f) => f.startsWith("202607")),
     [...LEGACY_FILES],
   );
-  assert.equal(v2Files().length, 20);
+  assert.equal(v2Files().length, 21);
 });
 
 test("migrations VHS-125 remainder — marqueurs no-op documentés sans SQL mutatif dupliqué", () => {
@@ -146,6 +147,9 @@ test("migrations V2 — tables et RPC requis présents", () => {
   assert.match(sql, /project_artifacts are append-only/i);
   assert.match(sql, /reschedule_production_job/i);
   assert.match(sql, /begin_or_get_prompt_director_run/i);
+  assert.match(sql, /begin_or_retry_director_run/i);
+  assert.match(sql, /attempt_number/i);
+  assert.match(sql, /retry_request_id/i);
   assert.match(sql, /persist_scene_package_set/i);
   assert.match(sql, /scene_package_set/i);
   assert.match(sql, /begin_or_get_routing_director_run/i);

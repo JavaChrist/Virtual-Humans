@@ -10,6 +10,7 @@ export const MARKETING_ANALYSIS_FAILURE_CODES = [
   "unauthorized",
   "forbidden",
   "request_failed",
+  "quota_exceeded",
   "refused",
   "incomplete",
   "empty_response",
@@ -17,6 +18,9 @@ export const MARKETING_ANALYSIS_FAILURE_CODES = [
   "invalid_candidate",
   "budget_exceeded",
   "idempotency_conflict",
+  "retry_required",
+  "retry_not_allowed",
+  "retry_conflict",
   "run_in_progress",
   "internal_error",
 ] as const;
@@ -48,6 +52,8 @@ export const MARKETING_FAILURE_PUBLIC_MESSAGES: Record<
   unauthorized: "L’analyse n’a pas pu être authentifiée. Réessayez plus tard.",
   forbidden: "L’analyse a été refusée par le service. Réessayez plus tard.",
   request_failed: "L’analyse n’a pas pu aboutir. Réessayez plus tard.",
+  quota_exceeded:
+    "Le quota du service d’analyse est insuffisant. Vérifiez la facturation puis réessayez.",
   refused: "L’analyse a été refusée. Ajustez le brief puis réessayez.",
   incomplete: "La réponse d’analyse est incomplète. Réessayez plus tard.",
   empty_response: "Aucune analyse n’a été produite. Réessayez plus tard.",
@@ -56,6 +62,11 @@ export const MARKETING_FAILURE_PUBLIC_MESSAGES: Record<
   invalid_candidate: "Le candidat marketing est invalide.",
   budget_exceeded: "Budget insuffisant pour lancer l’analyse.",
   idempotency_conflict: "Conflit d’idempotence sur l’analyse marketing.",
+  retry_required:
+    "Cette analyse a déjà échoué. Utilisez « Réessayer l’analyse » pour une nouvelle tentative.",
+  retry_not_allowed: "Cette analyse ne peut pas être relancée.",
+  retry_conflict:
+    "Une autre tentative est déjà en cours ou a été créée. Actualisez l’état avant de réessayer.",
   run_in_progress: "Une analyse marketing est déjà en cours.",
   internal_error: "Erreur interne pendant l’analyse marketing.",
 };
@@ -178,8 +189,14 @@ export function httpStatusForMarketingFailure(
       return 422;
     case "budget_exceeded":
       return 402;
+    case "quota_exceeded":
+      return 402;
     case "idempotency_conflict":
+    case "retry_required":
+    case "retry_conflict":
       return 409;
+    case "retry_not_allowed":
+      return 422;
     case "run_in_progress":
       return 202;
     case "internal_error":

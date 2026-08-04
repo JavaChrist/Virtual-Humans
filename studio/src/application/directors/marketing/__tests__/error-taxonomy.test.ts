@@ -119,6 +119,12 @@ function directorPort(): MarketingDirectorRunPort & {
     async loadActiveMarketingPlan() {
       return null;
     },
+    async beginOrRetry() {
+      throw new Error("beginOrRetry not used in this suite");
+    },
+    async loadRetryableFailedRun() {
+      return null;
+    },
   };
 }
 

@@ -62,6 +62,23 @@ export function mapSupabaseError(e: unknown): PersistenceError {
       diagnostic: "lease_invalid",
     });
   }
+  if (/director_run_terminal_reuse/.test(lower)) {
+    return new PersistenceError("conflict", "Tentative terminale déjà enregistrée.", {
+      diagnostic: "director_run_terminal_reuse",
+    });
+  }
+  if (/retry_not_allowed|retry_reservation_active|retry_config_mismatch/.test(lower)) {
+    return new PersistenceError("conflict", "Retry non autorisé.", {
+      diagnostic: lower.match(
+        /retry_not_allowed|retry_reservation_active|retry_config_mismatch/,
+      )?.[0],
+    });
+  }
+  if (/retry_superseded|retry_conflict/.test(lower)) {
+    return new PersistenceError("conflict", "Conflit de retry.", {
+      diagnostic: lower.match(/retry_superseded|retry_conflict/)?.[0],
+    });
+  }
   if (/duplicate key|unique constraint|23505/.test(lower)) {
     return new PersistenceError("conflict", "Conflit d'unicité.", {
       diagnostic: "unique_violation",

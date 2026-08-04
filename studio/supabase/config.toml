@@ -1,4 +1,4 @@
-# Minimal Supabase CLI config for LOCAL V2 persistence only (VHS-113 / VHS-115).
+﻿# Minimal Supabase CLI config for LOCAL V2 persistence only (VHS-113 / VHS-115).
 # project_id is a local label — NOT a remote project ref.
 # Never run `supabase link` / `db push` from this workflow without separate written auth.
 # Never commit secrets or remote service_role keys.
@@ -7,12 +7,18 @@ project_id = "virtual-humans-studio-local"
 
 [api]
 enabled = true
-port = 54321
+# 54921 — avoids Windows Hyper-V excluded ranges around 54315–54914
+port = 54921
 
 [db]
-port = 54322
+port = 54922
 major_version = 17
 
 [studio]
 enabled = true
-port = 54323
+port = 54923
+
+# Disable optional services whose default ports collide with Windows Hyper-V
+# excluded ranges (≈54315–54914) on this machine.
+[analytics]
+enabled = false

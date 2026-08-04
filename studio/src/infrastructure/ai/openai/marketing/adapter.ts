@@ -183,6 +183,14 @@ export class OpenAIMarketingAnalyzerAdapter implements MarketingAnalyzerPort {
         retryable: analyzerErr.failure.retryable,
         provider: analyzerErr.failure.provider,
         httpStatus: analyzerErr.failure.httpStatus,
+        // Redacted provider obs only — never body/prompt/key
+        providerErrorCode: openaiErr.providerObs?.providerErrorCode,
+        providerErrorType: openaiErr.providerObs?.providerErrorType,
+        providerRequestId: openaiErr.providerObs?.providerRequestId,
+        rateLimitLimitRequests: openaiErr.providerObs?.rateLimitLimitRequests,
+        rateLimitRemainingRequests:
+          openaiErr.providerObs?.rateLimitRemainingRequests,
+        rateLimitResetRequests: openaiErr.providerObs?.rateLimitResetRequests,
       });
       throw analyzerErr;
     }
