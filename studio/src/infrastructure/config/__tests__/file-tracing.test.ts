@@ -43,6 +43,26 @@ test("file-tracing — excludes .git docs e2e et configs", () => {
   }
 });
 
+test("file-tracing — n'exclut jamais .next (runtime Turbopack serverless)", () => {
+  const excludes = fileTracingExcludes()["/**"];
+  assert.ok(!excludes.some((g) => g.includes(".next")));
+  assert.throws(
+    () =>
+      assertTracingBoundsSafe({
+        includes: characterFsTracingIncludes(),
+        excludes: {
+          "/**": [
+            "../.git/**",
+            "../docs/**",
+            "../studio/e2e/**",
+            "../studio/.next/**",
+          ],
+        },
+      }),
+    /interdit|cass/i,
+  );
+});
+
 test("next.config — utilise file-tracing (pas /api/** glob)", () => {
   const cfg = readFileSync(join(process.cwd(), "next.config.ts"), "utf8");
   assert.match(cfg, /characterFsTracingIncludes/);

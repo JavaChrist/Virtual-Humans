@@ -31,6 +31,10 @@ export const CHARACTER_FS_INCLUDE_GLOBS = ["../characters/**"] as const;
 /**
  * Exclusions relative to `outputFileTracingRoot` (repo root when set to `..`).
  * Prevents NFT from packing git history, docs, tests, and local Supabase junk.
+ *
+ * NEVER exclude `studio/.next/**` — Turbopack serverless handlers require
+ * `.next/server/chunks/[turbopack]_runtime.js` (and sibling chunks). Excluding
+ * them caused Production POST /api/login → 500 MODULE_NOT_FOUND (Porte 6).
  */
 export const FILE_TRACING_EXCLUDE_GLOBS = [
   "../.git/**",
@@ -41,7 +45,6 @@ export const FILE_TRACING_EXCLUDE_GLOBS = [
   "../studio/coverage/**",
   "../studio/supabase/.temp/**",
   "../studio/supabase/.branches/**",
-  "../studio/.next/**",
   "../studio/.vercel/**",
   // Config / agent docs must not ride along character NFT graphs.
   "../studio/next.config.ts",
@@ -50,6 +53,13 @@ export const FILE_TRACING_EXCLUDE_GLOBS = [
   "../studio/CLAUDE.md",
   "../studio/README.md",
   "../studio/eslint.config.mjs",
+] as const;
+
+/** Patterns that must never appear in outputFileTracingExcludes. */
+export const FORBIDDEN_TRACING_EXCLUDE_SUBSTRINGS = [
+  ".next",
+  "turbopack",
+  "server/chunks",
 ] as const;
 
 export function characterFsTracingIncludes(): Record<string, string[]> {
@@ -92,6 +102,16 @@ export function assertTracingBoundsSafe(config: {
   for (const required of ["../.git/**", "../docs/**", "../studio/e2e/**"]) {
     if (!excludes.includes(required)) {
       throw new Error(`Tracing exclude manquant: ${required}`);
+    }
+  }
+  for (const g of excludes) {
+    const lower = g.toLowerCase();
+    for (const bad of FORBIDDEN_TRACING_EXCLUDE_SUBSTRINGS) {
+      if (lower.includes(bad)) {
+        throw new Error(
+          `Tracing exclude interdit (casse le packaging serverless): ${g}`,
+        );
+      }
     }
   }
 }
