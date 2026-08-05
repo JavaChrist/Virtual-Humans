@@ -98,11 +98,100 @@ export type OpenAIProviderObs = {
   rateLimitResetRequests?: string;
 };
 
+/** Redacted structured-output validation obs — never brief/response bodies. */
+export type OpenAIStructuredOutputObs = {
+  category:
+    | "json_parse"
+    | "zod_validation"
+    | "empty_output"
+    | "incomplete"
+    | "refused"
+    | "other";
+  zodPaths?: string[];
+  zodCodes?: string[];
+  /** Type-level only: expected/received (e.g. object/null) — never values. */
+  zodTypeMismatches?: Array<{
+    path: string;
+    expected?: string;
+    received?: string;
+  }>;
+  responseStatus?: string;
+  incompleteReason?: string;
+  usage?: {
+    inputTokens?: number;
+    outputTokens?: number;
+    totalTokens?: number;
+    reasoningTokens?: number;
+    cachedInputTokens?: number;
+  };
+  providerRequestId?: string;
+};
+
 function sanitizeObsToken(raw: string | null | undefined): string | undefined {
   if (raw == null) return undefined;
   const trimmed = String(raw).trim().slice(0, 128);
   if (!/^[a-zA-Z0-9._:-]+$/.test(trimmed)) return undefined;
   return trimmed;
+}
+
+function sanitizeTypeToken(raw: unknown): string | undefined {
+  if (typeof raw !== "string") return undefined;
+  const trimmed = raw.trim().slice(0, 64);
+  if (!/^[a-zA-Z0-9_|.\-]+$/.test(trimmed)) return undefined;
+  return trimmed;
+}
+
+export function sanitizeStructuredOutputObs(
+  raw: OpenAIStructuredOutputObs | undefined
+): OpenAIStructuredOutputObs | undefined {
+  if (!raw) return undefined;
+  const zodPaths = raw.zodPaths
+    ?.map((p) => String(p).trim().slice(0, 128))
+    .filter((p) => /^[a-zA-Z0-9_.\[\]]+$/.test(p))
+    .slice(0, 24);
+  const zodCodes = raw.zodCodes
+    ?.map((c) => String(c).trim().slice(0, 64))
+    .filter((c) => /^[a-zA-Z0-9_]+$/.test(c))
+    .slice(0, 24);
+  const zodTypeMismatches = raw.zodTypeMismatches
+    ?.slice(0, 24)
+    .map((m) => ({
+      path: String(m.path).trim().slice(0, 128),
+      expected: sanitizeTypeToken(m.expected),
+      received: sanitizeTypeToken(m.received),
+    }))
+    .filter((m) => /^[a-zA-Z0-9_.\[\]]+$/.test(m.path));
+  const usage = raw.usage
+    ? {
+        inputTokens: Number.isFinite(raw.usage.inputTokens)
+          ? raw.usage.inputTokens
+          : undefined,
+        outputTokens: Number.isFinite(raw.usage.outputTokens)
+          ? raw.usage.outputTokens
+          : undefined,
+        totalTokens: Number.isFinite(raw.usage.totalTokens)
+          ? raw.usage.totalTokens
+          : undefined,
+        reasoningTokens: Number.isFinite(raw.usage.reasoningTokens)
+          ? raw.usage.reasoningTokens
+          : undefined,
+        cachedInputTokens: Number.isFinite(raw.usage.cachedInputTokens)
+          ? raw.usage.cachedInputTokens
+          : undefined,
+      }
+    : undefined;
+  return {
+    category: raw.category,
+    zodPaths: zodPaths?.length ? zodPaths : undefined,
+    zodCodes: zodCodes?.length ? zodCodes : undefined,
+    zodTypeMismatches: zodTypeMismatches?.length
+      ? zodTypeMismatches
+      : undefined,
+    responseStatus: sanitizeObsToken(raw.responseStatus),
+    incompleteReason: sanitizeObsToken(raw.incompleteReason),
+    usage,
+    providerRequestId: sanitizeObsToken(raw.providerRequestId),
+  };
 }
 
 export class OpenAIAiError extends Error {
@@ -113,6 +202,7 @@ export class OpenAIAiError extends Error {
   readonly httpStatus?: number;
   readonly retryAfterSeconds?: number;
   readonly providerObs?: OpenAIProviderObs;
+  readonly structuredOutputObs?: OpenAIStructuredOutputObs;
 
   constructor(
     code: OpenAIAiErrorCode,
@@ -123,6 +213,7 @@ export class OpenAIAiError extends Error {
       httpStatus?: number;
       retryAfterSeconds?: number;
       providerObs?: OpenAIProviderObs;
+      structuredOutputObs?: OpenAIStructuredOutputObs;
     }
   ) {
     const publicMessage = opts?.publicMessage ?? PUBLIC_MESSAGES[code];
@@ -158,8 +249,12 @@ export class OpenAIAiError extends Error {
         ),
       };
     }
+    this.structuredOutputObs = sanitizeStructuredOutputObs(
+      opts?.structuredOutputObs
+    );
   }
 }
+
 
 export function isOpenAIAiError(e: unknown): e is OpenAIAiError {
   return e instanceof OpenAIAiError;

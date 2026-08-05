@@ -172,6 +172,7 @@ export class OpenAIMarketingAnalyzerAdapter implements MarketingAnalyzerPort {
           ? e
           : new OpenAIAiError("unknown", { internalCode: "adapter" });
       const analyzerErr = toMarketingAnalyzerError(openaiErr);
+      const so = openaiErr.structuredOutputObs;
       logger.info("marketing.ai.request.failed", logCtx, {
         model: this.config.model,
         promptVersion: MARKETING_ANALYZER_PROMPT_VERSION,
@@ -180,17 +181,31 @@ export class OpenAIMarketingAnalyzerAdapter implements MarketingAnalyzerPort {
         // Canonical application failure code (preserves rate_limited, etc.)
         failureCode: analyzerErr.failure.code,
         code: analyzerErr.failure.code,
+        internalCode: analyzerErr.failure.internalCode ?? openaiErr.internalCode,
         retryable: analyzerErr.failure.retryable,
         provider: analyzerErr.failure.provider,
         httpStatus: analyzerErr.failure.httpStatus,
         // Redacted provider obs only — never body/prompt/key
         providerErrorCode: openaiErr.providerObs?.providerErrorCode,
         providerErrorType: openaiErr.providerObs?.providerErrorType,
-        providerRequestId: openaiErr.providerObs?.providerRequestId,
+        providerRequestId:
+          openaiErr.providerObs?.providerRequestId ?? so?.providerRequestId,
         rateLimitLimitRequests: openaiErr.providerObs?.rateLimitLimitRequests,
         rateLimitRemainingRequests:
           openaiErr.providerObs?.rateLimitRemainingRequests,
         rateLimitResetRequests: openaiErr.providerObs?.rateLimitResetRequests,
+        // Redacted structured-output diagnostics (7F-A)
+        structuredOutputCategory: so?.category,
+        zodPaths: so?.zodPaths,
+        zodCodes: so?.zodCodes,
+        zodTypeMismatches: so?.zodTypeMismatches,
+        responseStatus: so?.responseStatus,
+        incompleteReason: so?.incompleteReason,
+        inputTokens: so?.usage?.inputTokens,
+        outputTokens: so?.usage?.outputTokens,
+        totalTokens: so?.usage?.totalTokens,
+        reasoningTokens: so?.usage?.reasoningTokens,
+        cachedInputTokens: so?.usage?.cachedInputTokens,
       });
       throw analyzerErr;
     }

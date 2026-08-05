@@ -123,8 +123,49 @@ test("parser — succès / refus / vide / JSON invalide", () => {
         outputText: "{not-json",
       }),
     (e: unknown) =>
-      e instanceof OpenAIAiError && e.code === "invalid_structured_output"
+      e instanceof OpenAIAiError &&
+      e.code === "invalid_structured_output" &&
+      e.internalCode === "json_parse" &&
+      e.structuredOutputObs?.category === "json_parse"
   );
+});
+
+test("parser — null optionals OpenAI-strict (parité 7F-A)", () => {
+  const ok = parseMarketingCandidateResponse({
+    status: "completed",
+    outputText: JSON.stringify({
+      ...makeValidCandidate(),
+      secondaryAudience: null,
+      notes: null,
+      assumptions: null,
+    }),
+    usage: { inputTokens: 10, outputTokens: 20, totalTokens: 30 },
+    id: "resp_test_nulls",
+  });
+  assert.equal(ok.notes, undefined);
+  assert.equal(ok.assumptions, undefined);
+});
+
+test("parser — zod_validation expose chemins redacted sans contenu", () => {
+  try {
+    parseMarketingCandidateResponse({
+      status: "completed",
+      outputText: JSON.stringify({
+        ...makeValidCandidate(),
+        marketingObjective: "not-valid-objective",
+      }),
+      id: "resp_test_zod",
+    });
+    assert.fail("expected throw");
+  } catch (e) {
+    assert.ok(e instanceof OpenAIAiError);
+    assert.equal(e.internalCode, "zod_validation");
+    assert.ok(e.structuredOutputObs?.zodPaths?.includes("marketingObjective"));
+    assert.ok(e.structuredOutputObs?.zodCodes?.length);
+    const serialized = JSON.stringify(e.structuredOutputObs);
+    assert.equal(serialized.includes("RideCloud"), false);
+    assert.equal(serialized.includes("Navetteurs"), false);
+  }
 });
 
 test("pricing — unknown by default; known via injected book", () => {

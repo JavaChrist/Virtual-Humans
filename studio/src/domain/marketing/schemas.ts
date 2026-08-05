@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { ArtifactMetadataSchema, DomainIdSchema } from "@/domain/shared";
+import {
+  ArtifactMetadataSchema,
+  DomainIdSchema,
+  openaiAbsentOptional,
+} from "@/domain/shared";
 import {
   MARKETING_FIELD_LIMITS,
   MARKETING_PLAN_SCHEMA_VERSION,
@@ -30,8 +34,12 @@ export const MarketingAssumptionSchema = z
     id: DomainIdSchema,
     statement: z.string().min(1).max(L.assumptionStatement),
     status: z.enum(AssumptionStatusValues),
-    justification: z.string().min(1).max(L.assumptionJustification).optional(),
-    affectsFields: z.array(z.string().min(1).max(L.evidenceField)).max(8).optional(),
+    justification: openaiAbsentOptional(
+      z.string().min(1).max(L.assumptionJustification)
+    ),
+    affectsFields: openaiAbsentOptional(
+      z.array(z.string().min(1).max(L.evidenceField)).max(8)
+    ),
   })
   .superRefine((value, ctx) => {
     if (
@@ -50,7 +58,9 @@ export const MarketingEvidenceSchema = z
   .object({
     field: z.string().min(1).max(L.evidenceField),
     source: z.enum(EvidenceSourceValues),
-    sourcePath: z.string().min(1).max(L.evidenceSourcePath).optional(),
+    sourcePath: openaiAbsentOptional(
+      z.string().min(1).max(L.evidenceSourcePath)
+    ),
     summary: z.string().min(1).max(L.evidenceSummary),
   })
   .superRefine((value, ctx) => {
@@ -87,7 +97,7 @@ export const MarketingPlanFieldsSchema = z.object({
   briefRevisionId: DomainIdSchema,
   marketingObjective: z.enum(MarketingObjectiveValues),
   primaryAudience: AudienceSchema,
-  secondaryAudience: AudienceSchema.optional(),
+  secondaryAudience: openaiAbsentOptional(AudienceSchema),
   mainProblem: z.string().min(1).max(L.mainProblem),
   mainBenefit: z.string().min(1).max(L.mainBenefit),
   secondaryBenefits: z
@@ -115,13 +125,14 @@ export const MarketingPlanSchema = ArtifactMetadataSchema.extend({
 export const MarketingAnalysisCandidateSchema = z.object({
   marketingObjective: z.enum(MarketingObjectiveValues),
   primaryAudience: AudienceSchema,
-  secondaryAudience: AudienceSchema.optional(),
+  secondaryAudience: openaiAbsentOptional(AudienceSchema),
   mainProblem: z.string().min(1).max(L.mainProblem),
   mainBenefit: z.string().min(1).max(L.mainBenefit),
-  secondaryBenefits: z
-    .array(z.string().min(1).max(L.secondaryBenefit))
-    .max(L.secondaryBenefitsMax)
-    .optional(),
+  secondaryBenefits: openaiAbsentOptional(
+    z
+      .array(z.string().min(1).max(L.secondaryBenefit))
+      .max(L.secondaryBenefitsMax)
+  ),
   uniqueSellingPoint: z.string().min(1).max(L.uniqueSellingPoint),
   emotionalHook: z.string().min(1).max(L.emotionalHook),
   videoStyle: z.enum(VideoStyleValues),
@@ -132,7 +143,11 @@ export const MarketingAnalysisCandidateSchema = z.object({
     .min(L.keyMessagesMin)
     .max(L.keyMessagesMax),
   successMetric: SuccessMetricSchema,
-  assumptions: z.array(MarketingAssumptionSchema).max(L.assumptionsMax).optional(),
-  claimedEvidence: z.array(MarketingEvidenceSchema).max(L.evidenceMax).optional(),
-  notes: z.string().max(500).optional(),
+  assumptions: openaiAbsentOptional(
+    z.array(MarketingAssumptionSchema).max(L.assumptionsMax)
+  ),
+  claimedEvidence: openaiAbsentOptional(
+    z.array(MarketingEvidenceSchema).max(L.evidenceMax)
+  ),
+  notes: openaiAbsentOptional(z.string().max(500)),
 });

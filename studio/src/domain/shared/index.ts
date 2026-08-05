@@ -32,3 +32,5 @@ export {
   type IsoDateTime,
   type Money,
 } from "./units";
+
+export { openaiAbsentOptional } from "./openai-absent-optional";

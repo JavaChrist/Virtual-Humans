@@ -14,45 +14,12 @@ import {
   mapOpenAIHttpError,
   OpenAIAiError,
 } from "./errors";
+import { extractOutputText } from "./extract-output-text";
 import { normalizeAIUsage } from "./usage";
 
 export type FetchLike = typeof fetch;
+export { extractOutputText } from "./extract-output-text";
 
-function extractOutputText(payload: Record<string, unknown>): {
-  outputText?: string;
-  refusal?: string;
-} {
-  // Convenience field when present
-  if (typeof payload.output_text === "string" && payload.output_text.trim()) {
-    return { outputText: payload.output_text };
-  }
-
-  const output = payload.output;
-  if (!Array.isArray(output)) return {};
-
-  let refusal: string | undefined;
-  const texts: string[] = [];
-  for (const item of output) {
-    if (!item || typeof item !== "object") continue;
-    const row = item as Record<string, unknown>;
-    if (row.type === "message" && Array.isArray(row.content)) {
-      for (const part of row.content) {
-        if (!part || typeof part !== "object") continue;
-        const p = part as Record<string, unknown>;
-        if (p.type === "output_text" && typeof p.text === "string") {
-          texts.push(p.text);
-        }
-        if (p.type === "refusal" && typeof p.refusal === "string") {
-          refusal = p.refusal;
-        }
-      }
-    }
-  }
-  return {
-    outputText: texts.length ? texts.join("") : undefined,
-    refusal,
-  };
-}
 
 function buildBody(request: OpenAIResponseRequest): Record<string, unknown> {
   const body: Record<string, unknown> = {
