@@ -75,7 +75,7 @@ test("VHS-121B — chain through storyboard_project + storyboard_scenes", async 
 
   const stack = createDirectorPersistenceStack({
     client, workspaceId, env,
-    marketingAnalyzer: { async analyze() { return makeValidCandidate({ marketingObjective: "conversion", tone: "energetic", callToAction: "Téléchargez l'app et réservez" }); } },
+    marketingAnalyzer: { async analyze() { return { candidate: makeValidCandidate({ marketingObjective: "conversion", tone: "energetic", callToAction: "Téléchargez l'app et réservez" }) }; } },
     creativeAnalyzer: { async analyze() { return makeValidCreativeCandidate(); } },
     scriptAnalyzer: { async analyze() { return makeValidScriptCandidate({ callToActionText: "Téléchargez l'app et réservez" }); } },
     artAnalyzer: {

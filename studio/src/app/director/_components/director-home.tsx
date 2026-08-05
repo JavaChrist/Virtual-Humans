@@ -12,6 +12,7 @@ import {
   hasBriefDraft,
 } from "@/application/director/draft";
 import type { DirectorProjectListItem } from "@/application/projects/list-director-projects";
+import { formatDirectorDateTime } from "./format-director-datetime";
 
 const PLANNED_STEPS = [
   "Brief",
@@ -162,7 +163,7 @@ export function DirectorHome({
                         {" · "}
                         {Number.isNaN(updated.getTime())
                           ? p.updatedAt
-                          : updated.toLocaleString("fr-FR")}
+                          : formatDirectorDateTime(updated)}
                       </p>
                     </div>
                     <Link href={`/director/${p.id}`} className="btn btn-ghost text-sm">

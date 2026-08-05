@@ -100,11 +100,11 @@ test("VHS-119B — chain marketing→creative→script persist video_script", as
 
   const marketingAnalyzer: MarketingAnalyzerPort = {
     async analyze() {
-      return makeValidCandidate({
+      return { candidate: makeValidCandidate({
         marketingObjective: "conversion",
         tone: "energetic",
         callToAction: "Téléchargez l'app et réservez",
-      });
+      }) };
     },
   };
   const creativeAnalyzer: CreativeAnalyzerPort = {

@@ -23,7 +23,7 @@ test("candidat valide → completed", async () => {
   const director = createMarketingDirector({
     analyzer: fakeAnalyzer(async (_req, ctx) => {
       seenCorr = ctx.correlationId;
-      return makeValidCandidate();
+      return { candidate: makeValidCandidate() };
     }),
   });
   const brief = makeBrief();
@@ -41,7 +41,7 @@ test("candidat valide → completed", async () => {
 
 test("données critiques absentes → needs_input", async () => {
   const director = createMarketingDirector({
-    analyzer: fakeAnalyzer(async () => makeValidCandidate()),
+    analyzer: fakeAnalyzer(async () => ({ candidate: makeValidCandidate() })),
   });
   const brief = makeBrief({ audienceDescription: "x", callToAction: undefined });
   const result = await director.run({ brief }, execCtx());
@@ -52,12 +52,12 @@ test("données critiques absentes → needs_input", async () => {
 
 test("candidat invalide → invalid", async () => {
   const director = createMarketingDirector({
-    analyzer: fakeAnalyzer(async () =>
-      makeValidCandidate({
+    analyzer: fakeAnalyzer(async () => ({
+      candidate: makeValidCandidate({
         callToAction: "Bonne soirée",
         emotionalHook: "Garantie 100% miracle sans risque",
       }),
-    ),
+    })),
   });
   const result = await director.run({ brief: makeBrief() }, execCtx());
   assert.equal(result.status, "invalid");
@@ -66,8 +66,10 @@ test("candidat invalide → invalid", async () => {
 test("candidat non fiable (schéma) rejeté", async () => {
   const director = createMarketingDirector({
     analyzer: fakeAnalyzer(async () => ({
-      ...makeValidCandidate(),
-      keyMessages: [],
+      candidate: {
+        ...makeValidCandidate(),
+        keyMessages: [],
+      },
     })),
   });
   const result = await director.run({ brief: makeBrief() }, execCtx());
@@ -79,7 +81,7 @@ test("dry-run ne produit jamais un plan et n'appelle pas le port", async () => {
   const director = createMarketingDirector({
     analyzer: fakeAnalyzer(async () => {
       called = true;
-      return makeValidCandidate();
+      return { candidate: makeValidCandidate() };
     }),
   });
   const result = await director.run(
@@ -95,7 +97,7 @@ test("dry-run ne produit jamais un plan et n'appelle pas le port", async () => {
 
 test("aucune dépendance provider dans le résultat completed", async () => {
   const director = createMarketingDirector({
-    analyzer: fakeAnalyzer(async () => makeValidCandidate()),
+    analyzer: fakeAnalyzer(async () => ({ candidate: makeValidCandidate() })),
   });
   const result = await director.run({ brief: makeBrief() }, execCtx());
   assert.equal(result.status, "completed");

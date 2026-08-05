@@ -98,11 +98,11 @@ test("VHS-118B — dry-run + execute fake + persist creative_concept", async () 
 
   const marketingAnalyzer: MarketingAnalyzerPort = {
     async analyze() {
-      return makeValidCandidate({
+      return { candidate: makeValidCandidate({
         marketingObjective: "conversion",
         tone: "energetic",
         callToAction: "Téléchargez l'app et réservez",
-      });
+      }) };
     },
   };
   const creativeAnalyzer: CreativeAnalyzerPort = {

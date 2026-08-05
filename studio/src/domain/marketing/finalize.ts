@@ -4,6 +4,7 @@ import { MarketingDomainError } from "./errors";
 import { buildMarketingRationale } from "./explanation";
 import {
   MARKETING_PLAN_SCHEMA_VERSION,
+  foldCtaText,
   type MarketingAnalysisCandidate,
   type MarketingAssumption,
   type MarketingPlan,
@@ -35,7 +36,26 @@ export type FinalizeMarketingPlanInput = {
 export function finalizeMarketingPlan(input: FinalizeMarketingPlanInput): MarketingPlan {
   const briefSnapshot = { ...input.brief, mediaReferences: [...input.brief.mediaReferences] };
   const normalized = normalizeMarketingCandidate(input.candidate);
-  const { issues } = validateCandidateAgainstBrief(normalized, briefSnapshot);
+
+  // Canonical CTA = Brief when present, else analyzer candidate.
+  // Applied *before* the hard gate so a divergent model CTA cannot reject a
+  // Brief-compatible plan. Provenance is recorded in assumptions (never silent).
+  const objective = briefSnapshot.objective;
+  const tone = briefSnapshot.tone;
+  const briefCta = briefSnapshot.callToAction?.trim() || "";
+  const analyzerCta = normalized.callToAction;
+  const callToAction = briefCta || analyzerCta;
+  const briefCtaOverrodeAnalyzer =
+    Boolean(briefCta) && foldCtaText(briefCta) !== foldCtaText(analyzerCta);
+
+  const candidateForValidation: MarketingAnalysisCandidate = {
+    ...normalized,
+    marketingObjective: objective,
+    tone,
+    callToAction,
+  };
+
+  const { issues } = validateCandidateAgainstBrief(candidateForValidation, briefSnapshot);
   if (issues.length > 0) {
     throw new MarketingDomainError(
       "invalid_candidate",
@@ -43,11 +63,6 @@ export function finalizeMarketingPlan(input: FinalizeMarketingPlanInput): Market
       issues[0]?.field,
     );
   }
-
-  // Brief wins for objective and tone
-  const objective = briefSnapshot.objective;
-  const tone = briefSnapshot.tone;
-  const callToAction = briefSnapshot.callToAction?.trim() || normalized.callToAction;
 
   const evidence = rebuildEvidence(briefSnapshot, { ...normalized, callToAction });
 
@@ -61,12 +76,22 @@ export function finalizeMarketingPlan(input: FinalizeMarketingPlanInput): Market
       affectsFields: ["primaryAudience"],
     });
   }
-  if (!briefSnapshot.callToAction?.trim()) {
+  if (!briefCta) {
     assumptions.push({
       id: "assumption-cta",
       statement: "Le CTA a été proposé par l'analyse faute de CTA brief.",
       status: "inferred",
       justification: "callToAction absent du brief.",
+      affectsFields: ["callToAction"],
+    });
+  } else if (briefCtaOverrodeAnalyzer) {
+    assumptions.push({
+      id: "assumption-cta-brief-authoritative",
+      statement:
+        "Le CTA du Brief prévaut ; le CTA proposé par l'analyse a été écarté.",
+      status: "explicit",
+      justification:
+        "Brief.callToAction présent et divergent du candidat ; le plan conserve exclusivement le CTA Brief.",
       affectsFields: ["callToAction"],
     });
   }

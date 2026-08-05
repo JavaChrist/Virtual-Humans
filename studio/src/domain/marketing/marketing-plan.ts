@@ -225,9 +225,46 @@ export function ctaTokensForObjective(objective: MarketingObjective): readonly s
         "download",
       ];
     case "education":
-      return ["appren", "learn", "guide", "tuto", "comprend", "understand", "decouv"];
+      // Learn + pedagogical micro-commitment (confirm/validate/quiz). Never conversion verbs.
+      return [
+        "appren",
+        "learn",
+        "guide",
+        "tuto",
+        "comprend",
+        "understand",
+        "decouv",
+        "valid",
+        "confirm",
+        "verif",
+        "quiz",
+        "evalu",
+        "assess",
+        "test",
+      ];
     case "engagement":
       return ["comment", "partag", "share", "like", "reagi", "reagis", "rejoign", "join"];
+  }
+}
+
+/**
+ * Human-readable CTA guidance for prompts — derived from the same token families
+ * as `ctaTokensForObjective` (single source of truth).
+ */
+export function ctaGuidanceForObjective(objective: MarketingObjective): string {
+  switch (objective) {
+    case "awareness":
+      return "discover / learn more / follow / visit (découvrez, en savoir plus, suivez, visitez)";
+    case "traffic":
+      return "click / visit / open link / site (cliquez, visitez, ouvrez le lien)";
+    case "lead_generation":
+      return "sign up / trial / demo / contact / download (inscrivez-vous, essai, démo, contactez, téléchargez)";
+    case "conversion":
+      return "buy / order / subscribe / book / download (achetez, commandez, souscrivez, réservez, téléchargez)";
+    case "education":
+      return "learn / understand / guide / tutorial / confirm or validate understanding / quiz / assess (apprenez, comprenez, validez, confirmez, quiz)";
+    case "engagement":
+      return "comment / share / like / react / join (commentez, partagez, likez, rejoignez)";
   }
 }
 

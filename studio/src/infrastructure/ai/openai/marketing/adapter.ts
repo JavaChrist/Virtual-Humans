@@ -5,9 +5,9 @@
 
 import type {
   MarketingAnalysisRequest,
+  MarketingAnalyzerOutcome,
   MarketingAnalyzerPort,
 } from "@/application/directors/marketing";
-import type { MarketingAnalysisCandidate } from "@/domain/marketing";
 import type { DirectorRunContext } from "@/application/directors/marketing/result";
 import {
   canExecuteMarketingAi,
@@ -71,7 +71,7 @@ export class OpenAIMarketingAnalyzerAdapter implements MarketingAnalyzerPort {
   async analyze(
     request: MarketingAnalysisRequest,
     context: DirectorRunContext
-  ): Promise<MarketingAnalysisCandidate> {
+  ): Promise<MarketingAnalyzerOutcome> {
     const started = this.nowMs();
     const logCtx = {
       correlationId: context.correlationId,
@@ -165,7 +165,29 @@ export class OpenAIMarketingAnalyzerAdapter implements MarketingAnalyzerPort {
         usageWarning: consistency,
       });
 
-      return candidate;
+      return {
+        candidate,
+        metering: {
+          usage: usage
+            ? {
+                inputTokens: usage.inputTokens,
+                cachedInputTokens: usage.cachedInputTokens,
+                outputTokens: usage.outputTokens,
+                reasoningTokens: usage.reasoningTokens,
+                totalTokens: usage.totalTokens,
+              }
+            : undefined,
+          cost:
+            cost.status === "known"
+              ? {
+                  status: "known",
+                  amountMinor: cost.total.amountMinor,
+                  currency: "USD",
+                  pricingVersion: cost.pricingVersion,
+                }
+              : { status: "unknown", reason: cost.reason },
+        },
+      };
     } catch (e) {
       const openaiErr =
         e instanceof OpenAIAiError

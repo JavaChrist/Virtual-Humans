@@ -188,6 +188,8 @@ export function createSupabaseMarketingDirectorRunPort(deps: {
     },
 
     async failRun(input) {
+      const knownCost =
+        input.actualCostMinor != null && Number.isFinite(input.actualCostMinor);
       const { error } = await client.rpc("fail_director_run", {
         p_director_run_id: input.directorRunId,
         p_workspace_id: input.workspaceId,
@@ -196,9 +198,14 @@ export function createSupabaseMarketingDirectorRunPort(deps: {
         p_status: input.status,
         p_reservation_id: input.reservationId ?? null,
         p_ledger_idempotency_key: input.reservationId
-          ? `dir-release-${input.directorRunId}`
+          ? knownCost
+            ? `dir-fail-commit-${input.directorRunId}`
+            : `dir-release-${input.directorRunId}`
           : null,
         p_correlation_id: input.correlationId,
+        p_usage: (input.usage as Json) ?? null,
+        p_actual_cost_minor: input.actualCostMinor ?? null,
+        p_cost_status: input.costStatus ?? null,
       });
       if (error) throw mapSupabaseError(error);
     },

@@ -40,6 +40,8 @@ const EXPECTED_FILES = [
   "20260804140422_vhs_127_director_final_assets_bucket.sql",
   "20260804141000_vhs_128_director_run_retry_attempts.sql",
   "20260805002706_vhs_129_director_human_retryable_error_codes.sql",
+  "20260805140000_vhs_130_fail_director_run_metering.sql",
+  "20260805143000_vhs_131_harden_reschedule_grants.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -65,15 +67,15 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 24 versions (23 Production-aligned + VHS-129 human-retry local)", () => {
+test("migrations — 26 versions (23 Production-aligned + VHS-129/130/131 local)", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
-  assert.equal(files.length, 24);
+  assert.equal(files.length, 26);
   assert.deepEqual(
     files.filter((f) => f.startsWith("202607")),
     [...LEGACY_FILES],
   );
-  assert.equal(v2Files().length, 22);
+  assert.equal(v2Files().length, 24);
 });
 
 test("migrations V2 — VHS-129 human-retry allowlist (not auto-retry)", () => {
@@ -89,6 +91,46 @@ test("migrations V2 — VHS-129 human-retry allowlist (not auto-retry)", () => {
   assert.match(sql, /director_error_code_is_human_retryable\(v_prev\.error_code\)/);
   assert.match(sql, /delegates to director_error_code_is_human_retryable/i);
   assert.ok(!/DELETE FROM|UPDATE\s+public\.director_runs/i.test(sql));
+});
+
+test("migrations V2 — VHS-130 fail_director_run metering", () => {
+  const sql = readFileSync(
+    join(MIGRATIONS_DIR, "20260805140000_vhs_130_fail_director_run_metering.sql"),
+    "utf8"
+  );
+  assert.match(sql, /p_usage jsonb DEFAULT NULL/i);
+  assert.match(sql, /p_actual_cost_minor bigint DEFAULT NULL/i);
+  assert.match(sql, /director_budget_fail_commit/i);
+  assert.match(sql, /director_budget_fail_release_remainder/i);
+  assert.match(sql, /actual_cost_exceeds_reservation/i);
+  assert.match(sql, /REVOKE ALL ON FUNCTION public\.fail_director_run[\s\S]*FROM PUBLIC, anon, authenticated/i);
+  assert.ok(!/DELETE FROM\s+public\.director_runs/i.test(sql));
+});
+
+test("migrations V2 — VHS-114 stays canonical; VHS-131 hardens reschedule grants", () => {
+  // VHS-114 is already applied in Production — never rewrite its grants.
+  const vhs114 = readFileSync(
+    join(MIGRATIONS_DIR, "20260804134537_vhs_114_reschedule_payload.sql"),
+    "utf8"
+  );
+  assert.match(
+    vhs114,
+    /REVOKE ALL ON FUNCTION public\.reschedule_production_job\(uuid, uuid, text, timestamptz, jsonb\) FROM PUBLIC;/i
+  );
+  assert.ok(
+    !/FROM PUBLIC,\s*anon,\s*authenticated/i.test(vhs114),
+    "VHS-114 must not be rewritten with anon/authenticated revoke"
+  );
+  // Additive fix lives only in VHS-131 (idempotent).
+  const vhs131 = readFileSync(
+    join(MIGRATIONS_DIR, "20260805143000_vhs_131_harden_reschedule_grants.sql"),
+    "utf8"
+  );
+  assert.match(
+    vhs131,
+    /REVOKE ALL ON FUNCTION public\.reschedule_production_job[\s\S]*FROM PUBLIC, anon, authenticated/i
+  );
+  assert.match(vhs131, /GRANT EXECUTE[\s\S]*TO service_role/i);
 });
 
 test("migrations VHS-125 remainder — marqueurs no-op documentés sans SQL mutatif dupliqué", () => {

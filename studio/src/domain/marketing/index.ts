@@ -7,6 +7,7 @@ export {
   SuccessMetricKindValues,
   ToneValues,
   VideoStyleValues,
+  ctaGuidanceForObjective,
   ctaTokensForObjective,
   defaultMetricKindForObjective,
   defaultVideoStyleForObjective,

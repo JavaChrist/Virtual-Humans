@@ -74,9 +74,11 @@ test("injection — bloquée sans fuite", () => {
 });
 
 test("prompt — versionné, sans provider / Tom / Mei", () => {
-  assert.equal(MARKETING_ANALYZER_PROMPT_VERSION, "marketing-analyzer-v1");
+  assert.equal(MARKETING_ANALYZER_PROMPT_VERSION, "marketing-analyzer-v2");
   assertPromptSafeForLogs(MARKETING_ANALYZER_SYSTEM_PROMPT);
-  assert.ok(MARKETING_ANALYZER_SYSTEM_PROMPT.length < 1200);
+  assert.ok(MARKETING_ANALYZER_SYSTEM_PROMPT.length < 2500);
+  assert.match(MARKETING_ANALYZER_SYSTEM_PROMPT, /education:/i);
+  assert.match(MARKETING_ANALYZER_SYSTEM_PROMPT, /confirm/i);
 });
 
 test("schema contract — strict + enums Zod", () => {
@@ -257,15 +259,17 @@ test("adapter — happy path, un seul appel, candidat non finalisé", async () =
     pricing: createUnknownAiTokenPricing(),
   });
 
-  const candidate = await adapter.analyze(
+  const outcome = await adapter.analyze(
     { brief },
     { correlationId: "corr-ok", mode: "execute" }
   );
   assert.equal(tracker.calls, 1);
   assert.equal(JSON.stringify(brief), before);
-  assert.equal(candidate.mainBenefit.length > 0, true);
-  assert.equal("id" in candidate, false);
-  assert.equal("schemaVersion" in candidate, false);
+  assert.equal(outcome.candidate.mainBenefit.length > 0, true);
+  assert.equal("id" in outcome.candidate, false);
+  assert.equal("schemaVersion" in outcome.candidate, false);
+  assert.equal(outcome.metering?.usage?.totalTokens, 180);
+  assert.equal(outcome.metering?.cost.status, "unknown");
 
   const last = tracker.last as {
     req: { store: boolean; previous_response_id?: string; tools?: unknown };

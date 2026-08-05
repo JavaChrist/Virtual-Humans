@@ -126,11 +126,11 @@ test("VHS-124 — routing+approvals+production+worker (fakes only)", async () =>
     }),
     marketingAnalyzer: {
       async analyze() {
-        return makeValidCandidate({
+        return { candidate: makeValidCandidate({
           marketingObjective: "conversion",
           tone: "energetic",
           callToAction: "Téléchargez l'app et réservez",
-        });
+        }) };
       },
     },
     creativeAnalyzer: { async analyze() { return makeValidCreativeCandidate(); } },

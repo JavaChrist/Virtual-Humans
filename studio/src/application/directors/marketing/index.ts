@@ -1,4 +1,10 @@
-export type { MarketingAnalyzerPort, MarketingAnalysisRequest } from "./analyzer-port";
+export type {
+  MarketingAnalyzerPort,
+  MarketingAnalysisRequest,
+  MarketingAnalyzerMetering,
+  MarketingAnalyzerOutcome,
+  MarketingAnalyzerUsage,
+} from "./analyzer-port";
 export {
   createAnalyzeMarketingForProject,
   mapMarketingPlanView,

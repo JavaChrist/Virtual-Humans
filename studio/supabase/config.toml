@@ -1,4 +1,4 @@
-﻿# Minimal Supabase CLI config for LOCAL V2 persistence only (VHS-113 / VHS-115).
+# Minimal Supabase CLI config for LOCAL V2 persistence only (VHS-113 / VHS-115).
 # project_id is a local label — NOT a remote project ref.
 # Never run `supabase link` / `db push` from this workflow without separate written auth.
 # Never commit secrets or remote service_role keys.
@@ -12,7 +12,7 @@ port = 54921
 
 [db]
 port = 54922
-major_version = 17
+major_version = 15
 
 [studio]
 enabled = true

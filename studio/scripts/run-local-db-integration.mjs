@@ -54,8 +54,16 @@ for (const line of status.stdout.split(/\r?\n/)) {
   if (match) local[match[1]] = match[2].replace(/^"|"$/g, "");
 }
 
-const url = local.API_URL;
-const serviceRoleKey = local.SERVICE_ROLE_KEY;
+// Newer CLI builds may omit API_URL; derive from STORAGE_S3_URL origin when needed.
+let url = local.API_URL || local.SUPABASE_URL || "";
+if (!url && local.STORAGE_S3_URL) {
+  try {
+    url = new URL(local.STORAGE_S3_URL).origin;
+  } catch {
+    url = "";
+  }
+}
+const serviceRoleKey = local.SERVICE_ROLE_KEY || local.SECRET_KEY;
 if (!url || !serviceRoleKey) {
   fail("`supabase status` n'a pas fourni l'URL et la clé service_role locales.");
 }

@@ -276,6 +276,11 @@ export type MarketingDirectorRunPort = {
     status: "failed" | "needs_input" | "cancelled";
     reservationId?: string;
     correlationId: string;
+    /** Redacted provider usage when tokens were consumed before fail. */
+    usage?: Record<string, unknown>;
+    /** Known actual cost only — never invent from estimate. */
+    actualCostMinor?: number;
+    costStatus?: string;
   }): Promise<void>;
   loadActiveMarketingPlan(
     projectId: string
@@ -1194,6 +1199,14 @@ export function createAnalyzeMarketingForProject(
       }
     );
 
+    const meteringUsage = result.metering?.usage
+      ? ({ ...result.metering.usage } as Record<string, unknown>)
+      : undefined;
+    const meteringKnownCost =
+      result.metering?.cost.status === "known"
+        ? result.metering.cost.amountMinor
+        : undefined;
+
     if (result.status === "needs_input") {
       await deps.directorRuns.failRun({
         directorRunId,
@@ -1203,6 +1216,14 @@ export function createAnalyzeMarketingForProject(
         status: "needs_input",
         reservationId,
         correlationId: context.correlationId,
+        usage: meteringUsage,
+        actualCostMinor: meteringKnownCost,
+        costStatus:
+          meteringKnownCost != null
+            ? "committed"
+            : meteringUsage
+              ? "unknown"
+              : undefined,
       });
       return {
         status: "needs_input",
@@ -1229,6 +1250,14 @@ export function createAnalyzeMarketingForProject(
         status: "failed",
         reservationId,
         correlationId: context.correlationId,
+        usage: meteringUsage,
+        actualCostMinor: meteringKnownCost,
+        costStatus:
+          meteringKnownCost != null
+            ? "committed"
+            : meteringUsage
+              ? "unknown"
+              : undefined,
       });
       const httpHint = httpStatusForMarketingFailure(failure.code);
       const safeHint = httpHint === 202 ? 500 : httpHint;
@@ -1249,6 +1278,14 @@ export function createAnalyzeMarketingForProject(
         status: "failed",
         reservationId,
         correlationId: context.correlationId,
+        usage: meteringUsage,
+        actualCostMinor: meteringKnownCost,
+        costStatus:
+          meteringKnownCost != null
+            ? "committed"
+            : meteringUsage
+              ? "unknown"
+              : undefined,
       });
       return failedAnalysis(
         "invalid_candidate",
@@ -1260,6 +1297,7 @@ export function createAnalyzeMarketingForProject(
     }
 
     try {
+      const actualCostMinor = meteringKnownCost ?? estimatedCostMinor;
       const persisted = await deps.directorRuns.persistPlan({
         workspaceId: deps.workspaceId,
         projectId,
@@ -1271,8 +1309,11 @@ export function createAnalyzeMarketingForProject(
         schemaVersion: MARKETING_PLAN_SCHEMA_VERSION,
         correlationId: context.correlationId,
         reservationId,
-        actualCostMinor: estimatedCostMinor,
-        costStatus: e2e || pricingConfigured ? "committed" : "provisional",
+        actualCostMinor,
+        costStatus: e2e || pricingConfigured || meteringKnownCost != null
+          ? "committed"
+          : "provisional",
+        usage: meteringUsage,
         expectedRunRevision: revisionAfterReserve,
         ledgerIdempotencyKey: `dir-commit-${directorRunId}`,
       });

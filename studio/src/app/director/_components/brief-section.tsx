@@ -13,6 +13,7 @@ import {
 } from "@/domain/brief";
 import type { BriefFieldChange } from "@/domain/project";
 import type { ArtifactType } from "@/domain/project";
+import { formatDirectorDateTime } from "./format-director-datetime";
 
 export type BriefSectionInitial = {
   id: string;
@@ -345,7 +346,7 @@ export function BriefSection({
               <dd>
                 {Number.isNaN(created.getTime())
                   ? brief.createdAt
-                  : created.toLocaleString("fr-FR")}
+                  : formatDirectorDateTime(created)}
               </dd>
             </div>
           </dl>
@@ -596,7 +597,7 @@ export function BriefSection({
                   <li key={r.revision}>
                     rev. {r.revision}
                     {r.isActive ? " (active)" : ""} — {r.projectName} —{" "}
-                    {new Date(r.createdAt).toLocaleString("fr-FR")}
+                    {formatDirectorDateTime(r.createdAt)}
                   </li>
                 ))}
               </ul>

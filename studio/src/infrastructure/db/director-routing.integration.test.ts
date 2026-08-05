@@ -123,11 +123,11 @@ test("VHS-123 — routing GenerationPlan + approval (no provider, no reservation
     }),
     marketingAnalyzer: {
       async analyze() {
-        return makeValidCandidate({
+        return { candidate: makeValidCandidate({
           marketingObjective: "conversion",
           tone: "energetic",
           callToAction: "Téléchargez l'app et réservez",
-        });
+        }) };
       },
     },
     creativeAnalyzer: { async analyze() { return makeValidCreativeCandidate(); } },

@@ -93,13 +93,26 @@ function artifactsRepo(): ArtifactRepository {
 function directorPort(): MarketingDirectorRunPort & {
   calls: string[];
   failCodes: string[];
+  failInputs: Array<{
+    errorCode: string;
+    usage?: Record<string, unknown>;
+    actualCostMinor?: number;
+    costStatus?: string;
+  }>;
 } {
   const calls: string[] = [];
   const failCodes: string[] = [];
+  const failInputs: Array<{
+    errorCode: string;
+    usage?: Record<string, unknown>;
+    actualCostMinor?: number;
+    costStatus?: string;
+  }> = [];
   let revision = 1;
   return {
     calls,
     failCodes,
+    failInputs,
     async beginOrGet() {
       calls.push("begin");
       return { status: "created", directorRunId: "run-1", revision };
@@ -115,6 +128,12 @@ function directorPort(): MarketingDirectorRunPort & {
     async failRun(input) {
       calls.push("fail");
       failCodes.push(input.errorCode);
+      failInputs.push({
+        errorCode: input.errorCode,
+        usage: input.usage,
+        actualCostMinor: input.actualCostMinor,
+        costStatus: input.costStatus,
+      });
     },
     async loadActiveMarketingPlan() {
       return null;
@@ -185,10 +204,12 @@ test("Director — candidat domaine invalide reste invalid", async () => {
   const director = createMarketingDirector({
     analyzer: {
       async analyze() {
-        return makeValidCandidate({
-          callToAction: "Bonne soirée",
-          emotionalHook: "Garantie 100% miracle sans risque",
-        });
+        return {
+          candidate: makeValidCandidate({
+            callToAction: "Bonne soirée",
+            emotionalHook: "Garantie 100% miracle sans risque",
+          }),
+        };
       },
     },
   });
@@ -255,10 +276,16 @@ test("VHS-117C régression — un appel rate_limited, zéro artifact, réserve l
 test("service — invalid_candidate inchangé pour vrai candidat invalide", async () => {
   const analyzer: MarketingAnalyzerPort = {
     async analyze() {
-      return makeValidCandidate({
-        callToAction: "Bonne soirée",
-        emotionalHook: "Garantie 100% miracle sans risque",
-      });
+      return {
+        candidate: makeValidCandidate({
+          callToAction: "Bonne soirée",
+          emotionalHook: "Garantie 100% miracle sans risque",
+        }),
+        metering: {
+          usage: { inputTokens: 10, outputTokens: 20, totalTokens: 30 },
+          cost: { status: "known", amountMinor: 7, currency: "USD" },
+        },
+      };
     },
   };
   const port = directorPort();
@@ -284,6 +311,10 @@ test("service — invalid_candidate inchangé pour vrai candidat invalide", asyn
   }
   assert.deepEqual(port.failCodes, ["invalid_candidate"]);
   assert.equal(port.calls.includes("persist"), false);
+  assert.equal(port.failInputs.length, 1);
+  assert.equal(port.failInputs[0]?.actualCostMinor, 7);
+  assert.equal(port.failInputs[0]?.costStatus, "committed");
+  assert.equal(port.failInputs[0]?.usage?.totalTokens, 30);
 });
 
 test("VHS-129 — invalid_structured_output taxonomy retryable=false (no auto-retry)", () => {

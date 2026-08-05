@@ -111,9 +111,9 @@ export function createMarketingDirector(
         };
       }
 
-      let candidate;
+      let outcome;
       try {
-        candidate = await analyzer.analyze(
+        outcome = await analyzer.analyze(
           { brief, locale: brief.language },
           context,
         );
@@ -128,7 +128,10 @@ export function createMarketingDirector(
         };
       }
 
-      const candidateParsed = MarketingAnalysisCandidateSchema.safeParse(candidate);
+      const metering = outcome.metering;
+      const candidateParsed = MarketingAnalysisCandidateSchema.safeParse(
+        outcome.candidate,
+      );
       if (!candidateParsed.success) {
         return {
           status: "invalid",
@@ -137,6 +140,7 @@ export function createMarketingDirector(
             field: i.path.join(".") || undefined,
             message: i.message,
           })),
+          metering,
         };
       }
 
@@ -157,7 +161,7 @@ export function createMarketingDirector(
           ].includes(i.code),
         );
         if (critical.length > 0) {
-          return { status: "invalid", errors: critical };
+          return { status: "invalid", errors: critical, metering };
         }
         return {
           status: "needs_input",
@@ -168,6 +172,7 @@ export function createMarketingDirector(
             required: true,
           })),
           warnings,
+          metering,
         };
       }
 
@@ -181,12 +186,18 @@ export function createMarketingDirector(
             correlationId: context.correlationId,
           },
         });
-        return { status: "completed", plan, warnings: [...dry.warnings, ...warnings] };
+        return {
+          status: "completed",
+          plan,
+          warnings: [...dry.warnings, ...warnings],
+          metering,
+        };
       } catch (e) {
         if (isMarketingDomainError(e)) {
           return {
             status: "invalid",
             errors: [{ code: e.code, field: e.field, message: e.publicMessage }],
+            metering,
           };
         }
         return {
@@ -197,6 +208,7 @@ export function createMarketingDirector(
               message: e instanceof Error ? e.message : "Finalisation du plan impossible.",
             },
           ],
+          metering,
         };
       }
     },

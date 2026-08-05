@@ -4,6 +4,7 @@ import type {
   MarketingWarning,
   MissingInformation,
 } from "@/domain/marketing";
+import type { MarketingAnalyzerMetering } from "./analyzer-port";
 import type { MarketingAnalysisFailure } from "./failures";
 
 export type DirectorRunMode = "dry-run" | "execute";
@@ -26,20 +27,24 @@ export type MarketingDirectorResult =
       status: "completed";
       plan: MarketingPlan;
       warnings: MarketingWarning[];
+      metering?: MarketingAnalyzerMetering;
     }
   | {
       status: "needs_input";
       missingInformation: MissingInformation[];
       warnings: MarketingWarning[];
+      metering?: MarketingAnalyzerMetering;
     }
   | {
       status: "invalid";
       errors: MarketingValidationIssue[];
+      metering?: MarketingAnalyzerMetering;
     }
   | {
       /** Analyzer/provider failed before a domain candidate existed. */
       status: "provider_failed";
       failure: MarketingAnalysisFailure;
+      metering?: MarketingAnalyzerMetering;
     };
 
 export interface MarketingDirector {

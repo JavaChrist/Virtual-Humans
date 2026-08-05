@@ -87,11 +87,13 @@ function artifactsRepo(): ArtifactRepository {
 function fakeAnalyzer(): MarketingAnalyzerPort {
   return {
     async analyze() {
-      return makeValidCandidate({
-        marketingObjective: brief.objective,
-        tone: brief.tone,
-        callToAction: brief.callToAction ?? "Téléchargez",
-      });
+      return {
+        candidate: makeValidCandidate({
+          marketingObjective: brief.objective,
+          tone: brief.tone,
+          callToAction: brief.callToAction ?? "Téléchargez",
+        }),
+      };
     },
   };
 }
@@ -198,7 +200,7 @@ function directorPort(opts?: {
           attemptNumber: opts.failedRun.attemptNumber,
           errorCode: opts.failedRun.errorCode,
           modelId: "gpt-5.6-terra",
-          promptVersion: "marketing-analyzer-v1",
+          promptVersion: "marketing-analyzer-v2",
           schemaVersion: "1.0.0",
           inputArtifactId: BID,
           inputRevision: 1,
@@ -273,11 +275,13 @@ test("execute — happy path with fake analyzer, no second call", async () => {
   const analyzer: MarketingAnalyzerPort = {
     async analyze() {
       analyzeCalls += 1;
-      return makeValidCandidate({
-        marketingObjective: brief.objective,
-        tone: brief.tone,
-        callToAction: brief.callToAction ?? "Téléchargez",
-      });
+      return {
+        candidate: makeValidCandidate({
+          marketingObjective: brief.objective,
+          tone: brief.tone,
+          callToAction: brief.callToAction ?? "Téléchargez",
+        }),
+      };
     },
   };
   const port = directorPort();
@@ -457,11 +461,13 @@ test("VHS-128 — executeRetry happy path attempt 2, one analyzer call", async (
   const analyzer: MarketingAnalyzerPort = {
     async analyze() {
       analyzeCalls += 1;
-      return makeValidCandidate({
-        marketingObjective: brief.objective,
-        tone: brief.tone,
-        callToAction: brief.callToAction ?? "Téléchargez",
-      });
+      return {
+        candidate: makeValidCandidate({
+          marketingObjective: brief.objective,
+          tone: brief.tone,
+          callToAction: brief.callToAction ?? "Téléchargez",
+        }),
+      };
     },
   };
   const port = directorPort();
@@ -532,7 +538,7 @@ test("VHS-129 — budget insuffisant bloque retry avant analyzer", async () => {
   const analyzer: MarketingAnalyzerPort = {
     async analyze() {
       analyzeCalls += 1;
-      return makeValidCandidate();
+      return { candidate: makeValidCandidate() };
     },
   };
   const port = directorPort();
@@ -580,7 +586,7 @@ test("VHS-128 — terminal_replay same retryRequestId → no provider call", asy
   const analyzer: MarketingAnalyzerPort = {
     async analyze() {
       analyzeCalls += 1;
-      return makeValidCandidate();
+      return { candidate: makeValidCandidate() };
     },
   };
   const port = directorPort({ retryStatus: "terminal_replay" });

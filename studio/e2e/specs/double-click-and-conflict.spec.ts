@@ -32,6 +32,55 @@ test.describe("Double-clic + conflit révision", () => {
     barrier.assertClean();
   });
 
+  test("hydratation Director — load, refresh, modale Marketing sans #418", async ({
+    page,
+  }) => {
+    const barrier = await installNetworkBarrier(page);
+    const hydrationErrors: string[] = [];
+    page.on("pageerror", (err) => {
+      const msg = String(err?.message ?? err);
+      if (/hydrat|Minified React error #418|#418/i.test(msg)) {
+        hydrationErrors.push(msg);
+      }
+    });
+    page.on("console", (msg) => {
+      if (msg.type() !== "error") return;
+      const text = msg.text();
+      if (/hydrat|Minified React error #418|#418|did not match/i.test(text)) {
+        hydrationErrors.push(text);
+      }
+    });
+
+    await loginViaUi(page);
+    await fillSyntheticBrief(page);
+    const projectUrl = page.url();
+
+    await expect(page.getByRole("heading", { name: /Brief/i }).first()).toBeVisible({
+      timeout: 15_000,
+    });
+    await page.reload();
+    await expect(page.getByRole("heading", { name: /Brief/i }).first()).toBeVisible({
+      timeout: 15_000,
+    });
+    expect(page.url()).toContain(new URL(projectUrl).pathname);
+
+    await page.getByRole("button", { name: "Vérifier le brief" }).click();
+    const exec = page.getByRole("button", { name: "Lancer l’analyse marketing" });
+    await expect(exec).toBeEnabled({ timeout: 20_000 });
+    await exec.click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible({ timeout: 10_000 });
+    await dialog.getByRole("button", { name: /Annuler|Fermer|Cancel/i }).click().catch(async () => {
+      await page.keyboard.press("Escape");
+    });
+
+    expect(
+      hydrationErrors,
+      `hydration errors: ${hydrationErrors.join(" | ")}`,
+    ).toEqual([]);
+    barrier.assertClean();
+  });
+
   test("conflit de révision Brief → 409", async ({ page, context }) => {
     const barrier = await installNetworkBarrier(page);
     await loginViaUi(page);

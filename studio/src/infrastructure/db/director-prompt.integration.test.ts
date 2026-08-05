@@ -116,11 +116,11 @@ test("VHS-122 — chain through scene_package_set (deterministic, no budget)", a
     env,
     marketingAnalyzer: {
       async analyze() {
-        return makeValidCandidate({
+        return { candidate: makeValidCandidate({
           marketingObjective: "conversion",
           tone: "energetic",
           callToAction: "Téléchargez l'app et réservez",
-        });
+        }) };
       },
     },
     creativeAnalyzer: { async analyze() { return makeValidCreativeCandidate(); } },

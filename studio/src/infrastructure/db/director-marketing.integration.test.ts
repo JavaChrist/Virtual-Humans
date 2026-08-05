@@ -96,11 +96,11 @@ test("VHS-117B — dry-run + execute fake + persist marketing_plan", async () =>
 
   const analyzer: MarketingAnalyzerPort = {
     async analyze() {
-      return makeValidCandidate({
+      return { candidate: makeValidCandidate({
         marketingObjective: "conversion",
         tone: "energetic",
         callToAction: "Téléchargez l'app et réservez",
-      });
+      }) };
     },
   };
 
@@ -225,11 +225,11 @@ test("VHS-128 — attempt1 rate_limited → human retry attempt2 → completed",
           })
         );
       }
-      return makeValidCandidate({
+      return { candidate: makeValidCandidate({
         marketingObjective: "conversion",
         tone: "energetic",
         callToAction: "Téléchargez l'app et réservez",
-      });
+      }) };
     },
   };
 
@@ -392,11 +392,11 @@ test("VHS-129 — invalid_structured_output human retry attempt 3 + idempotence"
         assert.equal(fail.retryable, false);
         throw new MarketingAnalyzerError(fail);
       }
-      return makeValidCandidate({
+      return { candidate: makeValidCandidate({
         marketingObjective: "conversion",
         tone: "energetic",
         callToAction: "Téléchargez l'app et réservez",
-      });
+      }) };
     },
   };
 

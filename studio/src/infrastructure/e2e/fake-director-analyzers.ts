@@ -290,7 +290,7 @@ export function createE2eFakeDirectorAnalyzers(options?: {
         const cta =
           req.brief.callToAction?.trim() ||
           "Téléchargez l'app et réservez votre premier trajet";
-        return marketingCandidate(cta);
+        return { candidate: marketingCandidate(cta) };
       },
     },
     creativeAnalyzer: {
