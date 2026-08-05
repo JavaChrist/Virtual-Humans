@@ -25,7 +25,7 @@ test("candidat valide → completed avec timing recalculé", async () => {
   const writer = createScriptWriter({
     analyzer: fakeAnalyzer(async (_req, ctx) => {
       seenCorr = ctx.correlationId;
-      return makeValidScriptCandidate();
+      return { candidate: makeValidScriptCandidate() };
     }),
   });
   const chain = makeScriptChain();
@@ -59,18 +59,20 @@ test("script trop long → invalid", async () => {
       const base = makeValidScriptCandidate();
       const hookPrefix = base.hookText;
       return {
-        ...base,
-        segments: base.segments.map((s, i) => {
-          if (i === 0) {
-            const dialogue = `${hookPrefix} ${longSpoken}`.slice(0, 400);
-            return { ...s, dialogue, voiceOver: undefined };
-          }
-          return {
-            ...s,
-            dialogue: s.speaker === "character" ? longSpoken : undefined,
-            voiceOver: s.speaker === "voice_over" ? longSpoken : undefined,
-          };
-        }),
+        candidate: {
+          ...base,
+          segments: base.segments.map((s, i) => {
+            if (i === 0) {
+              const dialogue = `${hookPrefix} ${longSpoken}`.slice(0, 400);
+              return { ...s, dialogue, voiceOver: undefined };
+            }
+            return {
+              ...s,
+              dialogue: s.speaker === "character" ? longSpoken : undefined,
+              voiceOver: s.speaker === "voice_over" ? longSpoken : undefined,
+            };
+          }),
+        },
       };
     }),
   });
@@ -85,7 +87,7 @@ test("script trop long → invalid", async () => {
 
 test("information critique absente → needs_input", async () => {
   const writer = createScriptWriter({
-    analyzer: fakeAnalyzer(async () => makeValidScriptCandidate()),
+    analyzer: fakeAnalyzer(async () => ({ candidate: makeValidScriptCandidate() })),
   });
   const chain = makeScriptChain();
   const result = await writer.run(
@@ -104,7 +106,7 @@ test("dry-run n'appelle pas le port", async () => {
   const writer = createScriptWriter({
     analyzer: fakeAnalyzer(async () => {
       called = true;
-      return makeValidScriptCandidate();
+      return { candidate: makeValidScriptCandidate() };
     }),
   });
   const result = await writer.run(makeScriptChain(), {
@@ -122,7 +124,7 @@ test("erreur du port sans fuite structurée", async () => {
     }),
   });
   const result = await writer.run(makeScriptChain(), execCtx());
-  assert.equal(result.status, "invalid");
-  if (result.status !== "invalid") return;
-  assert.equal(result.errors[0]?.code, "analyzer_failed");
+  assert.equal(result.status, "provider_failed");
+  if (result.status !== "provider_failed") return;
+  assert.equal(result.failure.code, "internal_error");
 });

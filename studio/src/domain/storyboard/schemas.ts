@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { ArtifactMetadataSchema, DomainIdSchema } from "@/domain/shared";
+import {
+  ArtifactMetadataSchema,
+  DomainIdSchema,
+  openaiAbsentOptional,
+} from "@/domain/shared";
 import { AspectRatioValues } from "@/domain/brief";
 import {
   ProductionIntentValues,
@@ -15,7 +19,7 @@ export const SceneSpokenContentSchema = z.discriminatedUnion("kind", [
   z.object({
     kind: z.literal("dialogue"),
     sourceText: z.string().min(1).max(L.spokenText),
-    characterId: DomainIdSchema.optional(),
+    characterId: openaiAbsentOptional(DomainIdSchema),
   }),
   z.object({
     kind: z.literal("voice_over"),
@@ -34,12 +38,12 @@ export const SceneReferenceSchema = z.object({
 
 export const StoryboardTransitionSchema = z.object({
   type: z.enum(TransitionTypeValues),
-  durationSeconds: z
-    .number()
-    .min(0)
-    .max(TRANSITION_DURATION_MAX_SECONDS)
-    .optional(),
-  justification: z.string().min(1).max(L.transitionJustification).optional(),
+  durationSeconds: openaiAbsentOptional(
+    z.number().min(0).max(TRANSITION_DURATION_MAX_SECONDS)
+  ),
+  justification: openaiAbsentOptional(
+    z.string().min(1).max(L.transitionJustification)
+  ),
 });
 
 export const StoryboardSceneSchema = z.object({
@@ -52,7 +56,7 @@ export const StoryboardSceneSchema = z.object({
   visualDirectionSegmentId: DomainIdSchema,
   productionIntent: z.enum(ProductionIntentValues),
   spokenContent: SceneSpokenContentSchema,
-  screenText: z.string().min(1).max(L.screenText).optional(),
+  screenText: openaiAbsentOptional(z.string().min(1).max(L.screenText)),
   references: z.array(SceneReferenceSchema).max(L.referencesMax),
   transition: StoryboardTransitionSchema,
   continuityKeys: z.array(z.string().min(1).max(L.continuityKey)).max(L.continuityKeysMax),
@@ -110,8 +114,12 @@ export const StoryboardAssumptionSchema = z.object({
   id: DomainIdSchema,
   statement: z.string().min(1).max(L.assumptionStatement),
   status: z.enum(["explicit", "inferred", "unverified"]),
-  justification: z.string().min(1).max(L.assumptionJustification).optional(),
-  affectsFields: z.array(z.string().min(1).max(80)).max(12).optional(),
+  justification: openaiAbsentOptional(
+    z.string().min(1).max(L.assumptionJustification)
+  ),
+  affectsFields: openaiAbsentOptional(
+    z.array(z.string().min(1).max(80)).max(12)
+  ),
 });
 
 export const StoryboardEvidenceSchema = z.object({
@@ -125,7 +133,9 @@ export const StoryboardEvidenceSchema = z.object({
     "user_constraint",
     "derived",
   ]),
-  sourcePath: z.string().min(1).max(L.evidenceSourcePath).optional(),
+  sourcePath: openaiAbsentOptional(
+    z.string().min(1).max(L.evidenceSourcePath)
+  ),
   summary: z.string().min(1).max(L.evidenceSummary),
 });
 
@@ -197,16 +207,22 @@ export const StoryboardAnalysisCandidateSchema = z
     scenes: z
       .array(
         StoryboardSceneSchema.omit({ durationSeconds: true }).extend({
-          durationSeconds: z.number().positive().optional(),
+          durationSeconds: openaiAbsentOptional(z.number().positive()),
         }),
       )
       .min(L.scenesMin)
       .max(L.scenesMax),
-    intentionalBreaks: StoryboardContinuityReportSchema.shape.intentionalBreaks.optional(),
-    assumptions: z.array(StoryboardAssumptionSchema).max(L.assumptionsMax).optional(),
-    claimedEvidence: z.array(StoryboardEvidenceSchema).max(L.evidenceMax).optional(),
-    claimedTotalDurationSeconds: z.number().optional(),
-    notes: z.string().max(400).optional(),
-    sceneCountJustification: z.string().max(240).optional(),
+    intentionalBreaks: openaiAbsentOptional(
+      StoryboardContinuityReportSchema.shape.intentionalBreaks
+    ),
+    assumptions: openaiAbsentOptional(
+      z.array(StoryboardAssumptionSchema).max(L.assumptionsMax)
+    ),
+    claimedEvidence: openaiAbsentOptional(
+      z.array(StoryboardEvidenceSchema).max(L.evidenceMax)
+    ),
+    claimedTotalDurationSeconds: openaiAbsentOptional(z.number()),
+    notes: openaiAbsentOptional(z.string().max(400)),
+    sceneCountJustification: openaiAbsentOptional(z.string().max(240)),
   })
   .strict();

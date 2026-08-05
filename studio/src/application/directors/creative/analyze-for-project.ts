@@ -15,6 +15,11 @@ import {
   httpStatusForMarketingFailure,
   MARKETING_FAILURE_PUBLIC_MESSAGES,
 } from "@/application/directors/marketing/failures";
+import {
+  meteringCostStatusForFail,
+  meteringKnownCostMinor,
+  meteringUsageRecord,
+} from "@/application/directors/shared/analyzer-metering";
 import type { ArtifactRepository, ProjectRepository } from "@/application/projects/ports";
 import {
   canExecuteCreativeAi,
@@ -165,6 +170,11 @@ export type CreativeDirectorRunPort = {
     status: "failed" | "needs_input" | "cancelled";
     reservationId?: string;
     correlationId: string;
+    /** Redacted provider usage when tokens were consumed before fail. */
+    usage?: Record<string, unknown>;
+    /** Known actual cost only — never invent from estimate. */
+    actualCostMinor?: number;
+    costStatus?: string;
   }): Promise<void>;
   loadActiveCreativeConcept(
     projectId: string
@@ -685,6 +695,10 @@ export function createAnalyzeCreativeForProject(
         }
       );
 
+      const meteringUsage = meteringUsageRecord(result.metering);
+      const meteringKnownCost = meteringKnownCostMinor(result.metering);
+      const meteringFailCostStatus = meteringCostStatusForFail(result.metering);
+
       if (result.status === "needs_input") {
         await deps.directorRuns.failRun({
           directorRunId,
@@ -694,6 +708,9 @@ export function createAnalyzeCreativeForProject(
           status: "needs_input",
           reservationId,
           correlationId: context.correlationId,
+          usage: meteringUsage,
+          actualCostMinor: meteringKnownCost,
+          costStatus: meteringFailCostStatus,
         });
         return {
           status: "needs_input",
@@ -712,6 +729,9 @@ export function createAnalyzeCreativeForProject(
           status: "failed",
           reservationId,
           correlationId: context.correlationId,
+          usage: meteringUsage,
+          actualCostMinor: meteringKnownCost,
+          costStatus: meteringFailCostStatus,
         });
         const mapped = httpStatusForMarketingFailure(result.failure.code);
         return failedAnalysis(
@@ -736,6 +756,9 @@ export function createAnalyzeCreativeForProject(
           status: "failed",
           reservationId,
           correlationId: context.correlationId,
+          usage: meteringUsage,
+          actualCostMinor: meteringKnownCost,
+          costStatus: meteringFailCostStatus,
         });
         return failedAnalysis(
           "invalid_candidate",
@@ -746,7 +769,32 @@ export function createAnalyzeCreativeForProject(
         );
       }
 
+      if (
+        meteringKnownCost != null &&
+        meteringKnownCost > estimatedCostMinor
+      ) {
+        await deps.directorRuns.failRun({
+          directorRunId,
+          workspaceId: deps.workspaceId,
+          expectedRevision: revisionAfterReserve,
+          errorCode: "budget_exceeded",
+          status: "failed",
+          reservationId,
+          correlationId: context.correlationId,
+          usage: meteringUsage,
+          actualCostMinor: meteringKnownCost,
+          costStatus: "committed",
+        });
+        return failedAnalysis(
+          "budget_exceeded",
+          MARKETING_FAILURE_PUBLIC_MESSAGES.budget_exceeded,
+          402,
+          { directorRunId }
+        );
+      }
+
       try {
+        const actualCostMinor = meteringKnownCost ?? estimatedCostMinor;
         const persisted = await deps.directorRuns.persistConcept({
           workspaceId: deps.workspaceId,
           projectId: input.projectId,
@@ -760,8 +808,12 @@ export function createAnalyzeCreativeForProject(
           schemaVersion: CREATIVE_CONCEPT_SCHEMA_VERSION,
           correlationId: context.correlationId,
           reservationId,
-          actualCostMinor: estimatedCostMinor,
-          costStatus: e2e || aiDry.pricingConfigured ? "committed" : "provisional",
+          actualCostMinor,
+          costStatus:
+            e2e || aiDry.pricingConfigured || meteringKnownCost != null
+              ? "committed"
+              : "provisional",
+          usage: meteringUsage,
           expectedRunRevision: revisionAfterReserve,
           ledgerIdempotencyKey: `dir-commit-${directorRunId}`,
         });

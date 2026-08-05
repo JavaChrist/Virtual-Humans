@@ -123,16 +123,20 @@ export function createCreativeDirector(
         };
       }
 
-      let candidate;
+      let outcome;
       try {
-        candidate = await analyzer.analyze(
+        outcome = await analyzer.analyze(
           { brief, marketingPlan, locale: brief.language },
           context,
         );
       } catch (e) {
         // Provider / transport failure — never collapse into invalid_candidate.
         if (isMarketingAnalyzerError(e)) {
-          return { status: "provider_failed", failure: e.failure };
+          return {
+            status: "provider_failed",
+            failure: e.failure,
+            metering: e.metering,
+          };
         }
         return {
           status: "provider_failed",
@@ -140,7 +144,10 @@ export function createCreativeDirector(
         };
       }
 
-      const candidateParsed = CreativeAnalysisCandidateSchema.safeParse(candidate);
+      const metering = outcome.metering;
+      const candidateParsed = CreativeAnalysisCandidateSchema.safeParse(
+        outcome.candidate,
+      );
       if (!candidateParsed.success) {
         return {
           status: "invalid",
@@ -149,6 +156,7 @@ export function createCreativeDirector(
             field: i.path.join(".") || undefined,
             message: i.message,
           })),
+          metering,
         };
       }
 
@@ -170,7 +178,7 @@ export function createCreativeDirector(
           ].includes(i.code),
         );
         if (critical.length > 0) {
-          return { status: "invalid", errors: critical };
+          return { status: "invalid", errors: critical, metering };
         }
         return {
           status: "needs_input",
@@ -181,6 +189,7 @@ export function createCreativeDirector(
             required: true,
           })),
           warnings,
+          metering,
         };
       }
 
@@ -199,12 +208,14 @@ export function createCreativeDirector(
           status: "completed",
           concept,
           warnings: [...dry.warnings, ...warnings],
+          metering,
         };
       } catch (e) {
         if (isCreativeDomainError(e)) {
           return {
             status: "invalid",
             errors: [{ code: e.code, field: e.field, message: e.publicMessage }],
+            metering,
           };
         }
         return {
@@ -216,6 +227,7 @@ export function createCreativeDirector(
                 e instanceof Error ? e.message : "Finalisation du concept impossible.",
             },
           ],
+          metering,
         };
       }
     },

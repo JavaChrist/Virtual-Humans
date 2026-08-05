@@ -1,4 +1,10 @@
-export type { CreativeAnalyzerPort, CreativeAnalysisRequest } from "./analyzer-port";
+export type {
+  CreativeAnalyzerPort,
+  CreativeAnalysisRequest,
+  CreativeAnalyzerOutcome,
+  CreativeAnalyzerMetering,
+  CreativeAnalyzerUsage,
+} from "./analyzer-port";
 export {
   runCreativeDryRun,
   type CreativeDryRunResult,

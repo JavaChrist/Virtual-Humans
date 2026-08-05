@@ -133,20 +133,20 @@ test("VHS-124 — routing+approvals+production+worker (fakes only)", async () =>
         }) };
       },
     },
-    creativeAnalyzer: { async analyze() { return makeValidCreativeCandidate(); } },
+    creativeAnalyzer: { async analyze() { return { candidate: makeValidCreativeCandidate() }; } },
     scriptAnalyzer: {
       async analyze() {
-        return makeValidScriptCandidate({ callToActionText: "Téléchargez l'app et réservez" });
+        return { candidate: makeValidScriptCandidate({ callToActionText: "Téléchargez l'app et réservez" }) };
       },
     },
     artAnalyzer: {
       async analyze(req: Parameters<ArtAnalyzerPort["analyze"]>[0]) {
-        return makeValidArtCandidate(req.videoScript.segments.map((s) => s.id));
+        return { candidate: makeValidArtCandidate(req.videoScript.segments.map((s) => s.id)) };
       },
     },
     storyboardAnalyzer: {
       async analyze(req: Parameters<StoryboardAnalyzerPort["analyze"]>[0]) {
-        return makeValidStoryboardCandidate(req.videoScript, req.visualDirection);
+        return { candidate: makeValidStoryboardCandidate(req.videoScript, req.visualDirection) };
       },
     },
   });

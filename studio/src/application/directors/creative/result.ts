@@ -5,6 +5,7 @@ import type {
   MissingInformation,
 } from "@/domain/creative";
 import type { MarketingAnalysisFailure } from "@/application/directors/marketing/failures";
+import type { CreativeAnalyzerMetering } from "./analyzer-port";
 
 /** Reuse the canonical run context from Marketing Director to avoid incompatible shapes. */
 export type {
@@ -26,20 +27,24 @@ export type CreativeDirectorResult =
       status: "completed";
       concept: CreativeConcept;
       warnings: CreativeWarning[];
+      metering?: CreativeAnalyzerMetering;
     }
   | {
       status: "needs_input";
       missingInformation: MissingInformation[];
       warnings: CreativeWarning[];
+      metering?: CreativeAnalyzerMetering;
     }
   | {
       status: "invalid";
       errors: CreativeValidationIssue[];
+      metering?: CreativeAnalyzerMetering;
     }
   | {
       /** Analyzer/provider failed before a domain candidate existed (VHS-118A). */
       status: "provider_failed";
       failure: MarketingAnalysisFailure;
+      metering?: CreativeAnalyzerMetering;
     };
 
 export interface CreativeDirector {

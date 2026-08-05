@@ -13,7 +13,7 @@ import {
 } from "@/domain/creative";
 import { MarketingPlanSchema, type MarketingPlan } from "@/domain/marketing";
 import { VideoScriptSchema, type VideoScript } from "@/domain/script";
-import { isMarketingAnalyzerError } from "@/application/directors/marketing/failures";
+import { isMarketingAnalyzerError, internalMarketingFailure } from "@/application/directors/marketing/failures";
 import type { ArtAnalyzerPort } from "./analyzer-port";
 import { runArtDryRun } from "./dry-run";
 import type {
@@ -159,9 +159,9 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
         };
       }
 
-      let candidate;
+      let outcome;
       try {
-        candidate = await analyzer.analyze(
+        outcome = await analyzer.analyze(
           {
             brief,
             marketingPlan,
@@ -174,23 +174,22 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
         );
       } catch (e) {
         if (isMarketingAnalyzerError(e)) {
-          return { status: "provider_failed", failure: e.failure };
+          return {
+            status: "provider_failed",
+            failure: e.failure,
+            metering: e.metering,
+          };
         }
         return {
-          status: "invalid",
-          errors: [
-            {
-              code: "analyzer_failed",
-              message:
-                e instanceof Error
-                  ? e.message.replace(/sk-[a-zA-Z0-9]+/g, "[redacted]")
-                  : "Échec de l'analyse art.",
-            },
-          ],
+          status: "provider_failed",
+          failure: internalMarketingFailure("analyzer_unexpected"),
         };
       }
 
-      const candidateParsed = ArtAnalysisCandidateSchema.safeParse(candidate);
+      const metering = outcome.metering;
+      const candidateParsed = ArtAnalysisCandidateSchema.safeParse(
+        outcome.candidate,
+      );
       if (!candidateParsed.success) {
         return {
           status: "invalid",
@@ -199,6 +198,7 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
             field: i.path.join(".") || undefined,
             message: i.message,
           })),
+          metering,
         };
       }
 
@@ -216,6 +216,7 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
           status: "needs_input",
           missingInformation: missingInformation.filter((m) => m.required),
           warnings: [...dry.warnings, ...warnings],
+          metering,
         };
       }
 
@@ -233,7 +234,7 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
           ].includes(i.code),
         );
         if (critical.length > 0) {
-          return { status: "invalid", errors: critical };
+          return { status: "invalid", errors: critical, metering };
         }
         return {
           status: "needs_input",
@@ -244,6 +245,7 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
             required: true,
           })),
           warnings,
+          metering,
         };
       }
 
@@ -263,7 +265,7 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
         });
 
         const allWarnings: ArtWarning[] = [...dry.warnings, ...warnings];
-        return { status: "completed", visualDirection, warnings: allWarnings };
+        return { status: "completed", visualDirection, warnings: allWarnings, metering };
       } catch (e) {
         if (isArtDomainError(e)) {
           if (e.code === "missing_information") {
@@ -278,6 +280,7 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
                 },
               ],
               warnings: dry.warnings,
+              metering,
             };
           }
           const err: ArtValidationIssue = {
@@ -285,7 +288,7 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
             field: e.field,
             message: e.publicMessage,
           };
-          return { status: "invalid", errors: [err] };
+          return { status: "invalid", errors: [err], metering };
         }
         return {
           status: "invalid",
@@ -295,6 +298,7 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
               message: e instanceof Error ? e.message : "Finalisation impossible.",
             },
           ],
+          metering,
         };
       }
     },

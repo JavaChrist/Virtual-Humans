@@ -76,7 +76,7 @@ test("art dry-run — flags off, providerCalled false", async () => {
   const svc = createAnalyzeArtForProject({
     workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
     artifacts: artifactsRepo(), directorRuns: directorPort(),
-    analyzer: { async analyze() { return makeValidArtCandidate(videoScript.segments.map((s) => s.id)); } },
+    analyzer: { async analyze() { return { candidate: makeValidArtCandidate(videoScript.segments.map((s) => s.id)) }; } },
     pricing, env: { ...enabledEnv, DIRECTOR_V2_ART_AI_ENABLED: "0" },
   });
   const dry = await svc.dryRun({ projectId: PID }, { correlationId: "c1", mode: "dry-run" });
@@ -88,7 +88,7 @@ test("art dry-run — script absent", async () => {
   const svc = createAnalyzeArtForProject({
     workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
     artifacts: artifactsRepo({ script: false }), directorRuns: directorPort(),
-    analyzer: { async analyze() { return makeValidArtCandidate([]); } }, pricing, env: enabledEnv,
+    analyzer: { async analyze() { return { candidate: makeValidArtCandidate([]) }; } }, pricing, env: enabledEnv,
   });
   const dry = await svc.dryRun({ projectId: PID }, { correlationId: "c2", mode: "dry-run" });
   assert.equal(dry.executable, false);
@@ -98,7 +98,7 @@ test("art dry-run — script absent", async () => {
 test("art execute — happy path", async () => {
   let calls = 0;
   const analyzer: ArtAnalyzerPort = {
-    async analyze() { calls += 1; return makeValidArtCandidate(videoScript.segments.map((s) => s.id)); },
+    async analyze() { calls += 1; return { candidate: makeValidArtCandidate(videoScript.segments.map((s) => s.id)) }; },
   };
   const port = directorPort();
   const svc = createAnalyzeArtForProject({

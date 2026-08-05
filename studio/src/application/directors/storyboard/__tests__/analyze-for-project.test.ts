@@ -81,7 +81,7 @@ test("storyboard dry-run — flags off", async () => {
   const svc = createAnalyzeStoryboardForProject({
     workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
     artifacts: artifactsRepo(), directorRuns: directorPort(),
-    analyzer: { async analyze() { return makeValidStoryboardCandidate(videoScript, visualDirection); } },
+    analyzer: { async analyze() { return { candidate: makeValidStoryboardCandidate(videoScript, visualDirection) }; } },
     pricing, env: { ...enabledEnv, DIRECTOR_V2_STORYBOARD_AI_ENABLED: "0" },
   });
   const dry = await svc.dryRun({ projectId: PID }, { correlationId: "c1", mode: "dry-run" });
@@ -93,7 +93,7 @@ test("storyboard dry-run — visual_direction absent", async () => {
   const svc = createAnalyzeStoryboardForProject({
     workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
     artifacts: artifactsRepo({ visual: false }), directorRuns: directorPort(),
-    analyzer: { async analyze() { return makeValidStoryboardCandidate(videoScript, visualDirection); } }, pricing, env: enabledEnv,
+    analyzer: { async analyze() { return { candidate: makeValidStoryboardCandidate(videoScript, visualDirection) }; } }, pricing, env: enabledEnv,
   });
   const dry = await svc.dryRun({ projectId: PID }, { correlationId: "c2", mode: "dry-run" });
   assert.equal(dry.executable, false);
@@ -103,7 +103,7 @@ test("storyboard dry-run — visual_direction absent", async () => {
 test("storyboard execute — happy path", async () => {
   let calls = 0;
   const analyzer: StoryboardAnalyzerPort = {
-    async analyze() { calls += 1; return makeValidStoryboardCandidate(videoScript, visualDirection); },
+    async analyze() { calls += 1; return { candidate: makeValidStoryboardCandidate(videoScript, visualDirection) }; },
   };
   const port = directorPort();
   const svc = createAnalyzeStoryboardForProject({

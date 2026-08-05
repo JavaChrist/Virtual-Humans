@@ -120,7 +120,11 @@ export function createMarketingDirector(
       } catch (e) {
         // Provider / transport failure — never collapse into invalid_candidate.
         if (isMarketingAnalyzerError(e)) {
-          return { status: "provider_failed", failure: e.failure };
+          return {
+            status: "provider_failed",
+            failure: e.failure,
+            metering: e.metering,
+          };
         }
         return {
           status: "provider_failed",

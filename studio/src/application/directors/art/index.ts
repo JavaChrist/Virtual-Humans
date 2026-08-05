@@ -1,5 +1,10 @@
 export { createArtDirector, type CreateArtDirectorOptions } from "./art-director";
-export type { ArtAnalyzerPort, ArtAnalysisRequest } from "./analyzer-port";
+export type {
+  ArtAnalyzerPort,
+  ArtAnalysisRequest,
+  ArtAnalyzerOutcome,
+  ArtAnalyzerMetering,
+} from "./analyzer-port";
 export {
   createAnalyzeArtForProject,
   type AnalyzeArtForProject,

@@ -76,18 +76,18 @@ test("VHS-121B — chain through storyboard_project + storyboard_scenes", async 
   const stack = createDirectorPersistenceStack({
     client, workspaceId, env,
     marketingAnalyzer: { async analyze() { return { candidate: makeValidCandidate({ marketingObjective: "conversion", tone: "energetic", callToAction: "Téléchargez l'app et réservez" }) }; } },
-    creativeAnalyzer: { async analyze() { return makeValidCreativeCandidate(); } },
-    scriptAnalyzer: { async analyze() { return makeValidScriptCandidate({ callToActionText: "Téléchargez l'app et réservez" }); } },
+    creativeAnalyzer: { async analyze() { return { candidate: makeValidCreativeCandidate() }; } },
+    scriptAnalyzer: { async analyze() { return { candidate: makeValidScriptCandidate({ callToActionText: "Téléchargez l'app et réservez" }) }; } },
     artAnalyzer: {
       async analyze(req: Parameters<ArtAnalyzerPort["analyze"]>[0]) {
-        return makeValidArtCandidate(req.videoScript.segments.map((s) => s.id));
+        return { candidate: makeValidArtCandidate(req.videoScript.segments.map((s) => s.id)) };
       },
     },
     storyboardAnalyzer: {
       async analyze(req: Parameters<StoryboardAnalyzerPort["analyze"]>[0]) {
         capturedScript = req.videoScript;
         capturedVisual = req.visualDirection;
-        return makeValidStoryboardCandidate(req.videoScript, req.visualDirection);
+        return { candidate: makeValidStoryboardCandidate(req.videoScript, req.visualDirection) };
       },
     },
   });

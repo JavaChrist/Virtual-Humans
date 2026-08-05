@@ -55,10 +55,20 @@ export function createSupabaseArtDirectorRunPort(deps: {
       return { status: row.status === "existing" ? "existing" as const : "created" as const, artifactId: row.artifact_id, revision: row.revision };
     },
     async failRun(input) {
+      const knownCost =
+        input.actualCostMinor != null && Number.isFinite(input.actualCostMinor);
       const { error } = await client.rpc("fail_director_run", {
         p_director_run_id: input.directorRunId, p_workspace_id: input.workspaceId, p_expected_revision: input.expectedRevision,
         p_error_code: input.errorCode, p_status: input.status, p_reservation_id: input.reservationId ?? null,
-        p_ledger_idempotency_key: input.reservationId ? `dir-release-${input.directorRunId}` : null, p_correlation_id: input.correlationId,
+        p_ledger_idempotency_key: input.reservationId
+          ? knownCost
+            ? `dir-fail-commit-${input.directorRunId}`
+            : `dir-release-${input.directorRunId}`
+          : null,
+        p_correlation_id: input.correlationId,
+        p_usage: (input.usage as Json) ?? null,
+        p_actual_cost_minor: input.actualCostMinor ?? null,
+        p_cost_status: input.costStatus ?? null,
       });
       if (error) throw mapSupabaseError(error);
     },

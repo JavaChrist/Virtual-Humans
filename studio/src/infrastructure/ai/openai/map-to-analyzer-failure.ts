@@ -94,16 +94,25 @@ export function mapOpenAIAiErrorToMarketingFailure(
 /** Alias — same taxonomy for Creative / Marketing adapters. */
 export const mapOpenAIAiErrorToAnalyzerFailure = mapOpenAIAiErrorToMarketingFailure;
 
-export function toMarketingAnalyzerError(e: unknown): MarketingAnalyzerError {
-  if (e instanceof MarketingAnalyzerError) return e;
+export function toMarketingAnalyzerError(
+  e: unknown,
+  opts?: { metering?: import("@/application/directors/shared/analyzer-metering").AnalyzerMetering }
+): MarketingAnalyzerError {
+  if (e instanceof MarketingAnalyzerError) {
+    if (opts?.metering && !e.metering) {
+      return new MarketingAnalyzerError(e.failure, { metering: opts.metering });
+    }
+    return e;
+  }
   if (isOpenAIAiError(e)) {
-    return new MarketingAnalyzerError(mapOpenAIAiErrorToMarketingFailure(e));
+    return new MarketingAnalyzerError(mapOpenAIAiErrorToMarketingFailure(e), opts);
   }
   return new MarketingAnalyzerError(
     marketingFailure("internal_error", {
       retryable: false,
       internalCode: "adapter_unexpected",
-    })
+    }),
+    opts
   );
 }
 

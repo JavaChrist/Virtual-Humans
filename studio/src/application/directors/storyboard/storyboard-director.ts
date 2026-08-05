@@ -14,7 +14,7 @@ import {
   type StoryboardValidationIssue,
   type StoryboardWarning,
 } from "@/domain/storyboard";
-import { isMarketingAnalyzerError } from "@/application/directors/marketing/failures";
+import { isMarketingAnalyzerError, internalMarketingFailure } from "@/application/directors/marketing/failures";
 import type { StoryboardAnalyzerPort } from "./analyzer-port";
 import { runStoryboardDryRun } from "./dry-run";
 import type {
@@ -173,9 +173,9 @@ export function createStoryboardDirector(
         };
       }
 
-      let candidate;
+      let outcome;
       try {
-        candidate = await analyzer.analyze(
+        outcome = await analyzer.analyze(
           {
             brief,
             marketingPlan,
@@ -188,23 +188,22 @@ export function createStoryboardDirector(
         );
       } catch (e) {
         if (isMarketingAnalyzerError(e)) {
-          return { status: "provider_failed", failure: e.failure };
+          return {
+            status: "provider_failed",
+            failure: e.failure,
+            metering: e.metering,
+          };
         }
         return {
-          status: "invalid",
-          errors: [
-            {
-              code: "analyzer_failed",
-              message:
-                e instanceof Error
-                  ? e.message.replace(/sk-[a-zA-Z0-9]+/g, "[redacted]")
-                  : "Échec de l'analyse storyboard.",
-            },
-          ],
+          status: "provider_failed",
+          failure: internalMarketingFailure("analyzer_unexpected"),
         };
       }
 
-      const candidateParsed = StoryboardAnalysisCandidateSchema.safeParse(candidate);
+      const metering = outcome.metering;
+      const candidateParsed = StoryboardAnalysisCandidateSchema.safeParse(
+        outcome.candidate,
+      );
       if (!candidateParsed.success) {
         return {
           status: "invalid",
@@ -213,6 +212,7 @@ export function createStoryboardDirector(
             field: i.path.join(".") || undefined,
             message: i.message,
           })),
+          metering,
         };
       }
 
@@ -230,6 +230,7 @@ export function createStoryboardDirector(
           status: "needs_input",
           missingInformation: missingInformation.filter((m) => m.required),
           warnings: [...dry.warnings, ...warnings],
+          metering,
         };
       }
 
@@ -249,7 +250,7 @@ export function createStoryboardDirector(
           ].includes(i.code),
         );
         if (critical.length > 0) {
-          return { status: "invalid", errors: critical };
+          return { status: "invalid", errors: critical, metering };
         }
         return {
           status: "needs_input",
@@ -260,6 +261,7 @@ export function createStoryboardDirector(
             required: true,
           })),
           warnings,
+          metering,
         };
       }
 
@@ -279,7 +281,7 @@ export function createStoryboardDirector(
         });
 
         const allWarnings: StoryboardWarning[] = [...dry.warnings, ...warnings];
-        return { status: "completed", storyboard, warnings: allWarnings };
+        return { status: "completed", storyboard, warnings: allWarnings, metering };
       } catch (e) {
         if (isStoryboardDomainError(e)) {
           if (e.code === "missing_information") {
@@ -294,6 +296,7 @@ export function createStoryboardDirector(
                 },
               ],
               warnings: dry.warnings,
+              metering,
             };
           }
           const err: StoryboardValidationIssue = {
@@ -301,7 +304,7 @@ export function createStoryboardDirector(
             field: e.field,
             message: e.publicMessage,
           };
-          return { status: "invalid", errors: [err] };
+          return { status: "invalid", errors: [err], metering };
         }
         return {
           status: "invalid",
@@ -311,6 +314,7 @@ export function createStoryboardDirector(
               message: e instanceof Error ? e.message : "Finalisation impossible.",
             },
           ],
+          metering,
         };
       }
     },

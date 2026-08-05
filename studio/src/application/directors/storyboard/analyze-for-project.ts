@@ -23,6 +23,11 @@ import { DEFAULT_OPENAI_STORYBOARD_MODEL, parseOpenAIStoryboardConfig } from "@/
 import { runOpenAIStoryboardDryRun, STORYBOARD_ANALYZER_PROMPT_VERSION, STORYBOARD_CANDIDATE_SCHEMA_VERSION } from "@/infrastructure/ai/openai/storyboard";
 import type { AiTokenPricingPort } from "@/infrastructure/ai/openai/marketing/pricing";
 import { httpStatusForMarketingFailure } from "@/application/directors/marketing/failures";
+import {
+  meteringCostStatusForFail,
+  meteringKnownCostMinor,
+  meteringUsageRecord,
+} from "@/application/directors/shared/analyzer-metering";
 import { createStoryboardDirector } from "./storyboard-director";
 import type { StoryboardAnalyzerPort } from "./analyzer-port";
 import type { DirectorRunContext } from "./result";
@@ -99,7 +104,7 @@ export type StoryboardDirectorRunPort = {
     reservationId?: string; actualCostMinor?: number; costStatus: string;
     usage?: Record<string, unknown>; expectedRunRevision: number; ledgerIdempotencyKey?: string;
   }): Promise<{ status: "created" | "existing"; artifactId: string; revision: number }>;
-  failRun(input: { directorRunId: string; workspaceId: string; expectedRevision: number; errorCode: string; status: "failed" | "needs_input" | "cancelled"; reservationId?: string; correlationId: string }): Promise<void>;
+  failRun(input: { directorRunId: string; workspaceId: string; expectedRevision: number; errorCode: string; status: "failed" | "needs_input" | "cancelled"; reservationId?: string; correlationId: string; usage?: Record<string, unknown>; actualCostMinor?: number; costStatus?: string }): Promise<void>;
   loadActiveStoryboardProject(projectId: string): Promise<{ revision: number; value: unknown } | null>;
 };
 export type AnalyzeStoryboardForProjectDeps = {
@@ -259,20 +264,28 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
         { brief: brief.value, marketingPlan: plan.value, creativeConcept: concept.value, videoScript: script.value, visualDirection: visual.value },
         { ...context, mode: "execute", planId: id(), createdBy: "shared-password-user" },
       );
+      const meteringUsage = meteringUsageRecord(run.metering);
+      const meteringKnownCost = meteringKnownCostMinor(run.metering);
+      const failMetering = {
+        usage: meteringUsage,
+        actualCostMinor: meteringKnownCost,
+        costStatus: meteringCostStatusForFail(run.metering),
+      };
       if (run.status === "needs_input") {
-        await deps.directorRuns.failRun({ directorRunId: runId, workspaceId: deps.workspaceId, expectedRevision: begin.revision + 1, errorCode: "needs_input", status: "needs_input", reservationId, correlationId: context.correlationId });
+        await deps.directorRuns.failRun({ directorRunId: runId, workspaceId: deps.workspaceId, expectedRevision: begin.revision + 1, errorCode: "needs_input", status: "needs_input", reservationId, correlationId: context.correlationId, ...failMetering });
         return { status: "needs_input", missingInformation: run.missingInformation, warnings: run.warnings, directorRunId: runId };
       }
       if (run.status === "provider_failed") {
-        await deps.directorRuns.failRun({ directorRunId: runId, workspaceId: deps.workspaceId, expectedRevision: begin.revision + 1, errorCode: run.failure.code, status: "failed", reservationId, correlationId: context.correlationId });
+        await deps.directorRuns.failRun({ directorRunId: runId, workspaceId: deps.workspaceId, expectedRevision: begin.revision + 1, errorCode: run.failure.code, status: "failed", reservationId, correlationId: context.correlationId, ...failMetering });
         const mapped = httpStatusForMarketingFailure(run.failure.code);
         return failed(run.failure.code, run.failure.publicMessage, mapped === 202 ? 500 : mapped, { retryable: run.failure.retryable, retryAfterSeconds: run.failure.retryAfterSeconds, provider: run.failure.provider, directorRunId: runId });
       }
       if (run.status === "invalid") {
-        await deps.directorRuns.failRun({ directorRunId: runId, workspaceId: deps.workspaceId, expectedRevision: begin.revision + 1, errorCode: "invalid_candidate", status: "failed", reservationId, correlationId: context.correlationId });
+        await deps.directorRuns.failRun({ directorRunId: runId, workspaceId: deps.workspaceId, expectedRevision: begin.revision + 1, errorCode: "invalid_candidate", status: "failed", reservationId, correlationId: context.correlationId, ...failMetering });
         return failed("invalid_candidate", run.errors[0]?.message ?? "Storyboard invalide.", 422, { directorRunId: runId });
       }
       try {
+        const actualCostMinor = meteringKnownCost ?? estimated;
         const persisted = await deps.directorRuns.persistStoryboardProject({
           workspaceId: deps.workspaceId, projectId: input.projectId, directorRunId: runId, artifactId: run.storyboard.id,
           visualDirectionArtifactId: visual.artifactId, visualDirectionRevision: visual.revision,
@@ -282,7 +295,8 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
           briefArtifactId: brief.artifactId, briefRevision: brief.revision,
           storyboard: run.storyboard as unknown as Record<string, unknown>,
           schemaVersion: STORYBOARD_PROJECT_SCHEMA_VERSION, correlationId: context.correlationId,
-          reservationId, actualCostMinor: estimated, costStatus: e2e || check.pricingConfigured ? "committed" : "provisional",
+          reservationId, actualCostMinor, costStatus: e2e || check.pricingConfigured || meteringKnownCost != null ? "committed" : "provisional",
+          usage: meteringUsage,
           expectedRunRevision: begin.revision + 1, ledgerIdempotencyKey: `dir-commit-${runId}`,
         });
         return { status: persisted.status === "existing" ? "existing" : "completed", storyboard: view(run.storyboard, persisted.revision, run.warnings), directorRunId: runId };

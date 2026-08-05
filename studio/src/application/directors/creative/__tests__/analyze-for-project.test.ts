@@ -123,7 +123,7 @@ function artifactsRepo(opts?: { marketing?: boolean }): ArtifactRepository {
 function fakeAnalyzer(): CreativeAnalyzerPort {
   return {
     async analyze() {
-      return makeValidCreativeCandidate();
+      return { candidate: makeValidCreativeCandidate() };
     },
   };
 }
@@ -246,7 +246,7 @@ test("creative execute — happy path fake analyzer, single call", async () => {
   const analyzer: CreativeAnalyzerPort = {
     async analyze() {
       analyzeCalls += 1;
-      return makeValidCreativeCandidate();
+      return { candidate: makeValidCreativeCandidate() };
     },
   };
   const port = directorPort();

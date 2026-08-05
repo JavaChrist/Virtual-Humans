@@ -2,7 +2,12 @@ export {
   createStoryboardDirector,
   type CreateStoryboardDirectorOptions,
 } from "./storyboard-director";
-export type { StoryboardAnalyzerPort, StoryboardAnalysisRequest } from "./analyzer-port";
+export type {
+  StoryboardAnalyzerPort,
+  StoryboardAnalysisRequest,
+  StoryboardAnalyzerOutcome,
+  StoryboardAnalyzerMetering,
+} from "./analyzer-port";
 export {
   createAnalyzeStoryboardForProject,
   type AnalyzeStoryboardForProject,

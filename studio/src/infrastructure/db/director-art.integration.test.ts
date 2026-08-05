@@ -72,12 +72,12 @@ test("VHS-120B — chain through visual_direction", async () => {
   const stack = createDirectorPersistenceStack({
     client, workspaceId, env,
     marketingAnalyzer: { async analyze() { return { candidate: makeValidCandidate({ marketingObjective: "conversion", tone: "energetic", callToAction: "Téléchargez l'app et réservez" }) }; } },
-    creativeAnalyzer: { async analyze() { return makeValidCreativeCandidate(); } },
-    scriptAnalyzer: { async analyze() { return makeValidScriptCandidate({ callToActionText: "Téléchargez l'app et réservez" }); } },
+    creativeAnalyzer: { async analyze() { return { candidate: makeValidCreativeCandidate() }; } },
+    scriptAnalyzer: { async analyze() { return { candidate: makeValidScriptCandidate({ callToActionText: "Téléchargez l'app et réservez" }) }; } },
     artAnalyzer: {
       async analyze(req: Parameters<ArtAnalyzerPort["analyze"]>[0]) {
         scriptSegmentIds = req.videoScript.segments.map((s) => s.id);
-        return makeValidArtCandidate(scriptSegmentIds);
+        return { candidate: makeValidArtCandidate(scriptSegmentIds) };
       },
     },
   });

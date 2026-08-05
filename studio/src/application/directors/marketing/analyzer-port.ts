@@ -5,6 +5,11 @@
 
 import type { VideoProjectBrief } from "@/domain/brief";
 import type { MarketingAnalysisCandidate } from "@/domain/marketing";
+import type {
+  AnalyzerMetering,
+  AnalyzerOutcome,
+  AnalyzerUsage,
+} from "@/application/directors/shared/analyzer-metering";
 import type { DirectorRunContext } from "./result";
 
 export type MarketingAnalysisRequest = {
@@ -13,30 +18,13 @@ export type MarketingAnalysisRequest = {
   locale?: string;
 };
 
-/** Redacted token usage — never prompts or raw provider bodies. */
-export type MarketingAnalyzerUsage = {
-  inputTokens?: number;
-  cachedInputTokens?: number;
-  outputTokens?: number;
-  reasoningTokens?: number;
-  totalTokens?: number;
-};
+/** @deprecated Prefer AnalyzerUsage — alias kept for Marketing call sites. */
+export type MarketingAnalyzerUsage = AnalyzerUsage;
 
-/**
- * Provider metering attached after a successful HTTP analyze.
- * Never invent amounts: unknown means actual_cost stays null.
- */
-export type MarketingAnalyzerMetering = {
-  usage?: MarketingAnalyzerUsage;
-  cost:
-    | { status: "known"; amountMinor: number; currency: "USD"; pricingVersion?: string }
-    | { status: "unknown"; reason?: string };
-};
+/** @deprecated Prefer AnalyzerMetering — alias kept for Marketing call sites. */
+export type MarketingAnalyzerMetering = AnalyzerMetering;
 
-export type MarketingAnalyzerOutcome = {
-  candidate: MarketingAnalysisCandidate;
-  metering?: MarketingAnalyzerMetering;
-};
+export type MarketingAnalyzerOutcome = AnalyzerOutcome<MarketingAnalysisCandidate>;
 
 /**
  * Returns an untrusted structured candidate (+ optional metering).

@@ -13,7 +13,7 @@ import {
   type ScriptWarning,
 } from "@/domain/script";
 import type { ScriptAnalyzerPort } from "./analyzer-port";
-import { isMarketingAnalyzerError } from "@/application/directors/marketing/failures";
+import { isMarketingAnalyzerError, internalMarketingFailure } from "@/application/directors/marketing/failures";
 import { runScriptDryRun } from "./dry-run";
 import type {
   DirectorRunContext,
@@ -126,9 +126,9 @@ export function createScriptWriter(options: CreateScriptWriterOptions): ScriptWr
         };
       }
 
-      let candidate;
+      let outcome;
       try {
-        candidate = await analyzer.analyze(
+        outcome = await analyzer.analyze(
           {
             brief,
             marketingPlan,
@@ -139,20 +139,22 @@ export function createScriptWriter(options: CreateScriptWriterOptions): ScriptWr
         );
       } catch (e) {
         if (isMarketingAnalyzerError(e)) {
-          return { status: "provider_failed", failure: e.failure };
+          return {
+            status: "provider_failed",
+            failure: e.failure,
+            metering: e.metering,
+          };
         }
         return {
-          status: "invalid",
-          errors: [
-            {
-              code: "analyzer_failed",
-              message: e instanceof Error ? e.message : "Échec de l'analyse script.",
-            },
-          ],
+          status: "provider_failed",
+          failure: internalMarketingFailure("analyzer_unexpected"),
         };
       }
 
-      const candidateParsed = ScriptAnalysisCandidateSchema.safeParse(candidate);
+      const metering = outcome.metering;
+      const candidateParsed = ScriptAnalysisCandidateSchema.safeParse(
+        outcome.candidate,
+      );
       if (!candidateParsed.success) {
         return {
           status: "invalid",
@@ -161,6 +163,7 @@ export function createScriptWriter(options: CreateScriptWriterOptions): ScriptWr
             field: i.path.join(".") || undefined,
             message: i.message,
           })),
+          metering,
         };
       }
 
@@ -183,7 +186,7 @@ export function createScriptWriter(options: CreateScriptWriterOptions): ScriptWr
           ].includes(i.code),
         );
         if (critical.length > 0) {
-          return { status: "invalid", errors: critical };
+          return { status: "invalid", errors: critical, metering };
         }
         return {
           status: "needs_input",
@@ -194,6 +197,7 @@ export function createScriptWriter(options: CreateScriptWriterOptions): ScriptWr
             required: true,
           })),
           warnings,
+          metering,
         };
       }
 
@@ -219,7 +223,7 @@ export function createScriptWriter(options: CreateScriptWriterOptions): ScriptWr
           });
         }
 
-        return { status: "completed", script, warnings: allWarnings };
+        return { status: "completed", script, warnings: allWarnings, metering };
       } catch (e) {
         if (isScriptDomainError(e)) {
           const err: ScriptValidationIssue = {
@@ -227,7 +231,7 @@ export function createScriptWriter(options: CreateScriptWriterOptions): ScriptWr
             field: e.field,
             message: e.publicMessage,
           };
-          return { status: "invalid", errors: [err] };
+          return { status: "invalid", errors: [err], metering };
         }
         return {
           status: "invalid",
@@ -237,6 +241,7 @@ export function createScriptWriter(options: CreateScriptWriterOptions): ScriptWr
               message: e instanceof Error ? e.message : "Finalisation impossible.",
             },
           ],
+          metering,
         };
       }
     },

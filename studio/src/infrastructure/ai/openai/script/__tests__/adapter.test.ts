@@ -38,7 +38,7 @@ test("adapter makes exactly one strict Responses call, no tools or retry", async
     env, config: parseOpenAIScriptConfig(env),
   });
   const candidate = await adapter.analyze({ brief, marketingPlan, creativeConcept }, { correlationId: "test", mode: "execute" });
-  assert.equal(candidate.title, "Moins d'attente");
+  assert.equal(candidate.candidate.title, "Moins d'attente");
   assert.equal(state.calls, 1);
   const request = state.request as { store: boolean; tools?: unknown; previous_response_id?: unknown; textFormat: { strict: boolean; name: string } };
   assert.equal(request.store, false); assert.equal(request.tools, undefined); assert.equal(request.previous_response_id, undefined);
@@ -57,7 +57,7 @@ test("provider failure remains provider_failed; timing is finalized deterministi
   const failed = createScriptWriter({ analyzer: { async analyze() { throw new MarketingAnalyzerError(marketingFailure("rate_limited")); } } });
   const failure = await failed.run(chain, { correlationId: "x", mode: "execute" });
   assert.equal(failure.status, "provider_failed");
-  const writer = createScriptWriter({ analyzer: { async analyze() { return makeValidScriptCandidate(); } } });
+  const writer = createScriptWriter({ analyzer: { async analyze() { return { candidate: makeValidScriptCandidate() }; } } });
   const result = await writer.run(chain, { correlationId: "x", mode: "execute" });
   assert.equal(result.status, "completed");
   if (result.status === "completed") assert.equal(result.script.timing.profileId, "speech-fr-v1");

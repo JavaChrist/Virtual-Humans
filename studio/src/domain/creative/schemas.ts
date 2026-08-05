@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { ArtifactMetadataSchema, DomainIdSchema } from "@/domain/shared";
+import {
+  ArtifactMetadataSchema,
+  DomainIdSchema,
+  openaiAbsentOptional,
+} from "@/domain/shared";
 import {
   AllowedReferenceKeywordValues,
   AssumptionStatusValues,
@@ -37,8 +41,12 @@ export const CreativeAssumptionSchema = z
     id: DomainIdSchema,
     statement: z.string().min(1).max(L.assumptionStatement),
     status: z.enum(AssumptionStatusValues),
-    justification: z.string().min(1).max(L.assumptionJustification).optional(),
-    affectsFields: z.array(z.string().min(1).max(L.evidenceField)).max(8).optional(),
+    justification: openaiAbsentOptional(
+      z.string().min(1).max(L.assumptionJustification)
+    ),
+    affectsFields: openaiAbsentOptional(
+      z.array(z.string().min(1).max(L.evidenceField)).max(8)
+    ),
   })
   .superRefine((value, ctx) => {
     if (
@@ -57,7 +65,9 @@ export const CreativeEvidenceSchema = z
   .object({
     field: z.string().min(1).max(L.evidenceField),
     source: z.enum(CreativeEvidenceSourceValues),
-    sourcePath: z.string().min(1).max(L.evidenceSourcePath).optional(),
+    sourcePath: openaiAbsentOptional(
+      z.string().min(1).max(L.evidenceSourcePath)
+    ),
     summary: z.string().min(1).max(L.evidenceSummary),
   })
   .superRefine((value, ctx) => {
@@ -101,7 +111,7 @@ export const CreativeConceptFieldsSchema = z
     narrativeApproach: z.enum(NarrativeApproachValues),
     emotionalArc: z.array(EmotionalBeatSchema).min(L.beatsMin).max(L.beatsMax),
     openingDevice: CreativeDeviceSchema,
-    proofDevice: CreativeDeviceSchema.optional(),
+    proofDevice: openaiAbsentOptional(CreativeDeviceSchema),
     endingDevice: CreativeDeviceSchema,
     rhythm: z.enum(CreativeRhythmValues),
     referenceKeywords: z.array(z.string().min(1).max(L.referenceKeyword)).max(L.referenceKeywordsMax),
@@ -153,16 +163,22 @@ export const CreativeAnalysisCandidateSchema = z
     narrativeApproach: z.enum(NarrativeApproachValues),
     emotionalArc: z.array(EmotionalBeatSchema).min(L.beatsMin).max(L.beatsMax),
     openingDevice: CreativeDeviceSchema,
-    proofDevice: CreativeDeviceSchema.optional(),
+    proofDevice: openaiAbsentOptional(CreativeDeviceSchema),
     endingDevice: CreativeDeviceSchema,
     rhythm: z.enum(CreativeRhythmValues),
     referenceKeywords: z
       .array(z.string().min(1).max(L.referenceKeyword))
       .max(L.referenceKeywordsMax),
-    constraints: z.array(CreativeConstraintSchema).max(L.constraintsMax).optional(),
-    assumptions: z.array(CreativeAssumptionSchema).max(L.assumptionsMax).optional(),
-    claimedEvidence: z.array(CreativeEvidenceSchema).max(L.evidenceMax).optional(),
-    notes: z.string().max(500).optional(),
+    constraints: openaiAbsentOptional(
+      z.array(CreativeConstraintSchema).max(L.constraintsMax)
+    ),
+    assumptions: openaiAbsentOptional(
+      z.array(CreativeAssumptionSchema).max(L.assumptionsMax)
+    ),
+    claimedEvidence: openaiAbsentOptional(
+      z.array(CreativeEvidenceSchema).max(L.evidenceMax)
+    ),
+    notes: openaiAbsentOptional(z.string().max(500)),
   })
   .superRefine((value, ctx) => {
     const orders = value.emotionalArc.map((b) => b.order).sort((a, b) => a - b);

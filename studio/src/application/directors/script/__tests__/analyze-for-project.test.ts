@@ -204,7 +204,7 @@ test("script dry-run — providerCalled false, flags off", async () => {
     projects: projectsRepo(),
     artifacts: artifactsRepo(),
     directorRuns: directorPort(),
-    analyzer: { async analyze() { return makeValidScriptCandidate(); } },
+    analyzer: { async analyze() { return { candidate: makeValidScriptCandidate() }; } },
     pricing,
     env: { ...enabledEnv, DIRECTOR_V2_SCRIPT_AI_ENABLED: "0" },
   });
@@ -222,7 +222,7 @@ test("script dry-run — creative absent", async () => {
     projects: projectsRepo(),
     artifacts: artifactsRepo({ creative: false }),
     directorRuns: directorPort(),
-    analyzer: { async analyze() { return makeValidScriptCandidate(); } },
+    analyzer: { async analyze() { return { candidate: makeValidScriptCandidate() }; } },
     pricing,
     env: enabledEnv,
   });
@@ -239,7 +239,7 @@ test("script execute — happy path single analyzer call", async () => {
   const analyzer: ScriptAnalyzerPort = {
     async analyze() {
       calls += 1;
-      return makeValidScriptCandidate();
+      return { candidate: makeValidScriptCandidate() };
     },
   };
   const port = directorPort();
@@ -313,7 +313,7 @@ test("script execute — creative revision conflict", async () => {
     projects: projectsRepo(),
     artifacts: artifactsRepo(),
     directorRuns: directorPort(),
-    analyzer: { async analyze() { return makeValidScriptCandidate(); } },
+    analyzer: { async analyze() { return { candidate: makeValidScriptCandidate() }; } },
     pricing,
     env: enabledEnv,
   });

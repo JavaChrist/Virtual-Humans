@@ -25,7 +25,7 @@ test("candidat valide → completed", async () => {
   const director = createCreativeDirector({
     analyzer: fakeAnalyzer(async (_req, ctx) => {
       seenCorr = ctx.correlationId;
-      return makeValidCreativeCandidate();
+      return { candidate: makeValidCreativeCandidate() };
     }),
   });
   const brief = makeCreativeBrief();
@@ -46,7 +46,7 @@ test("candidat valide → completed", async () => {
 
 test("information critique absente → needs_input", async () => {
   const director = createCreativeDirector({
-    analyzer: fakeAnalyzer(async () => makeValidCreativeCandidate()),
+    analyzer: fakeAnalyzer(async () => ({ candidate: makeValidCreativeCandidate() })),
   });
   const brief = makeCreativeBrief();
   const plan = makeMarketingPlan(brief, { assumptions: [] });
@@ -56,14 +56,14 @@ test("information critique absente → needs_input", async () => {
 
 test("candidat invalide → invalid", async () => {
   const director = createCreativeDirector({
-    analyzer: fakeAnalyzer(async () =>
-      makeValidCreativeCandidate({
+    analyzer: fakeAnalyzer(async () => ({
+      candidate: makeValidCreativeCandidate({
         openingDevice: {
           kind: "question",
           description: "Use a close-up then dolly with openai gpt-4 prompt:",
         },
       }),
-    ),
+    })),
   });
   const brief = makeCreativeBrief();
   const result = await director.run(
@@ -76,8 +76,10 @@ test("candidat invalide → invalid", async () => {
 test("candidat non fiable (schéma) rejeté", async () => {
   const director = createCreativeDirector({
     analyzer: fakeAnalyzer(async () => ({
-      ...makeValidCreativeCandidate(),
-      emotionalArc: [],
+      candidate: {
+        ...makeValidCreativeCandidate(),
+        emotionalArc: [],
+      },
     })),
   });
   const brief = makeCreativeBrief();
@@ -93,7 +95,7 @@ test("dry-run ne produit jamais un concept et n'appelle pas le port", async () =
   const director = createCreativeDirector({
     analyzer: fakeAnalyzer(async () => {
       called = true;
-      return makeValidCreativeCandidate();
+      return { candidate: makeValidCreativeCandidate() };
     }),
   });
   const brief = makeCreativeBrief();

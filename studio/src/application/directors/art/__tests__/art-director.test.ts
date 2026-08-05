@@ -12,7 +12,7 @@ import type { ArtAnalyzerPort } from "../analyzer-port";
 function fakeAnalyzer(candidate: ArtAnalysisCandidate): ArtAnalyzerPort {
   return {
     async analyze() {
-      return candidate;
+      return { candidate };
     },
   };
 }
@@ -88,10 +88,10 @@ test("erreur du port sans fuite sensible", async () => {
     correlationId: "corr-art-run",
     mode: "execute",
   });
-  assert.equal(result.status, "invalid");
-  if (result.status !== "invalid") return;
-  assert.equal(result.errors[0]!.message.includes("sk-secretKEY123"), false);
-  assert.ok(result.errors[0]!.message.includes("[redacted]"));
+  assert.equal(result.status, "provider_failed");
+  if (result.status !== "provider_failed") return;
+  assert.equal(result.failure.code, "internal_error");
+  assert.equal(result.failure.publicMessage.includes("sk-secretKEY123"), false);
 });
 
 test("entrées non mutées", async () => {

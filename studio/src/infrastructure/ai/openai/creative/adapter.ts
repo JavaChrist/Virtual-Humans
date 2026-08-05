@@ -5,9 +5,9 @@
 
 import type {
   CreativeAnalysisRequest,
+  CreativeAnalyzerOutcome,
   CreativeAnalyzerPort,
 } from "@/application/directors/creative";
-import type { CreativeAnalysisCandidate } from "@/domain/creative";
 import type { DirectorRunContext } from "@/application/directors/creative/result";
 import {
   canExecuteCreativeAi,
@@ -21,13 +21,13 @@ import {
   type OpenAICreativeConfig,
 } from "../config";
 import { OpenAIAiError } from "../errors";
+import { buildAnalyzerMetering } from "../build-analyzer-metering";
 import { toAnalyzerError } from "../map-to-analyzer-failure";
 import { deriveSafetyIdentifier } from "../safety-identifier";
 import { usageConsistencyWarning } from "../usage";
 import {
   createEnvAiTokenPricing,
   createUnknownAiTokenPricing,
-  quoteAiUsageCost,
   type AiTokenPricingPort,
 } from "../marketing/pricing";
 import { parseCreativeCandidateResponse } from "./parser";
@@ -71,7 +71,7 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
   async analyze(
     request: CreativeAnalysisRequest,
     context: DirectorRunContext
-  ): Promise<CreativeAnalysisCandidate> {
+  ): Promise<CreativeAnalyzerOutcome> {
     const started = this.nowMs();
     const logCtx = {
       correlationId: context.correlationId,
@@ -149,10 +149,20 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
         throw new OpenAIAiError("refused");
       }
 
-      const candidate = parseCreativeCandidateResponse(result);
       const usage = result.usage;
       const consistency = usage ? usageConsistencyWarning(usage) : undefined;
-      const cost = quoteAiUsageCost(this.config.model, usage, this.pricing);
+      const metering = buildAnalyzerMetering({
+        model: this.config.model,
+        usage,
+        pricing: this.pricing,
+      });
+
+      let candidate;
+      try {
+        candidate = parseCreativeCandidateResponse(result);
+      } catch (parseErr) {
+        throw toAnalyzerError(parseErr, { metering });
+      }
 
       logger.info("creative.ai.request.completed", logCtx, {
         model: this.config.model,
@@ -162,12 +172,15 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
         inputTokens: usage?.inputTokens,
         outputTokens: usage?.outputTokens,
         totalTokens: usage?.totalTokens,
-        costStatus: cost.status,
-        costMinor: cost.status === "known" ? cost.total.amountMinor : undefined,
+        costStatus: metering.cost.status,
+        costMinor:
+          metering.cost.status === "known"
+            ? metering.cost.amountMinor
+            : undefined,
         usageWarning: consistency,
       });
 
-      return candidate;
+      return { candidate, metering };
     } catch (e) {
       const openaiErr =
         e instanceof OpenAIAiError

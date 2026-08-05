@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { ArtifactMetadataSchema, DomainIdSchema } from "@/domain/shared";
+import {
+  ArtifactMetadataSchema,
+  DomainIdSchema,
+  openaiAbsentOptional,
+} from "@/domain/shared";
 import { CHARACTER_CAPABILITIES_SNAPSHOT_VERSION } from "./runtime-capabilities";
 import {
   ART_FIELD_LIMITS,
@@ -43,10 +47,10 @@ export const CharacterCapabilitiesSnapshotSchema = z.object({
 
 export const CharacterDirectionSchema = z.object({
   characterId: DomainIdSchema,
-  outfitId: DomainIdSchema.optional(),
-  expressionId: DomainIdSchema.optional(),
-  poseId: DomainIdSchema.optional(),
-  referenceId: DomainIdSchema.optional(),
+  outfitId: openaiAbsentOptional(DomainIdSchema),
+  expressionId: openaiAbsentOptional(DomainIdSchema),
+  poseId: openaiAbsentOptional(DomainIdSchema),
+  referenceId: openaiAbsentOptional(DomainIdSchema),
   framingIntent: z.string().min(1).max(L.framingIntent),
 });
 
@@ -55,7 +59,7 @@ export const GlobalVisualStyleSchema = z.object({
   mood: z.string().min(1).max(L.mood),
   realism: z.enum(RealismValues),
   colorIntent: z.string().min(1).max(L.colorIntent),
-  textureIntent: z.string().min(1).max(L.textureIntent).optional(),
+  textureIntent: openaiAbsentOptional(z.string().min(1).max(L.textureIntent)),
   brandAlignment: z.string().min(1).max(L.brandAlignment),
 });
 
@@ -70,8 +74,8 @@ export const ColorTokenSchema = z.object({
 export const LocationDirectionSchema = z.object({
   kind: z.enum(LocationKindValues),
   description: z.string().min(1).max(L.locationDescription),
-  timeOfDay: z.enum(TimeOfDayValues).optional(),
-  weather: z.string().min(1).max(L.weather).optional(),
+  timeOfDay: openaiAbsentOptional(z.enum(TimeOfDayValues)),
+  weather: openaiAbsentOptional(z.string().min(1).max(L.weather)),
   continuityKey: z.string().min(1).max(L.continuityKey),
 });
 
@@ -102,7 +106,9 @@ export const CompositionDirectionSchema = z.object({
   lookDirection: z.enum(["camera", "left", "right", "away", "product"]),
   visualHierarchy: z.string().min(1).max(L.compositionNote),
   textSafeArea: z.enum(["none", "top", "bottom", "left", "right"]),
-  productPlacement: z.string().min(1).max(L.compositionNote).optional(),
+  productPlacement: openaiAbsentOptional(
+    z.string().min(1).max(L.compositionNote)
+  ),
 });
 
 export const SegmentVisualDirectionSchema = z.object({
@@ -111,7 +117,7 @@ export const SegmentVisualDirectionSchema = z.object({
   location: LocationDirectionSchema,
   camera: CameraDirectionSchema,
   lighting: LightingDirectionSchema,
-  character: CharacterDirectionSchema.optional(),
+  character: openaiAbsentOptional(CharacterDirectionSchema),
   environment: EnvironmentDirectionSchema,
   composition: CompositionDirectionSchema,
   transitionIntent: z.enum(TransitionIntentValues),
@@ -129,8 +135,12 @@ export const ArtAssumptionSchema = z.object({
   id: DomainIdSchema,
   statement: z.string().min(1).max(L.assumptionStatement),
   status: z.enum(["explicit", "inferred", "unverified"]),
-  justification: z.string().min(1).max(L.assumptionJustification).optional(),
-  affectsFields: z.array(z.string().min(1).max(80)).max(12).optional(),
+  justification: openaiAbsentOptional(
+    z.string().min(1).max(L.assumptionJustification)
+  ),
+  affectsFields: openaiAbsentOptional(
+    z.array(z.string().min(1).max(80)).max(12)
+  ),
 });
 
 export const ArtEvidenceSchema = z.object({
@@ -144,7 +154,9 @@ export const ArtEvidenceSchema = z.object({
     "user_constraint",
     "derived",
   ]),
-  sourcePath: z.string().min(1).max(L.evidenceSourcePath).optional(),
+  sourcePath: openaiAbsentOptional(
+    z.string().min(1).max(L.evidenceSourcePath)
+  ),
   summary: z.string().min(1).max(L.evidenceSummary),
 });
 
@@ -204,9 +216,13 @@ export const ArtAnalysisCandidateSchema = z
     palette: z.array(ColorTokenSchema).min(1).max(L.paletteMax),
     continuityRules: z.array(ContinuityRuleSchema).max(L.continuityRulesMax),
     segments: z.array(SegmentVisualDirectionSchema).min(1).max(32),
-    assumptions: z.array(ArtAssumptionSchema).max(L.assumptionsMax).optional(),
-    claimedEvidence: z.array(ArtEvidenceSchema).max(L.evidenceMax).optional(),
-    notes: z.string().max(400).optional(),
+    assumptions: openaiAbsentOptional(
+      z.array(ArtAssumptionSchema).max(L.assumptionsMax)
+    ),
+    claimedEvidence: openaiAbsentOptional(
+      z.array(ArtEvidenceSchema).max(L.evidenceMax)
+    ),
+    notes: openaiAbsentOptional(z.string().max(400)),
   })
   .strict()
   .superRefine((c, ctx) => {

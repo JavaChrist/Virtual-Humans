@@ -155,14 +155,16 @@ test("adapter — Responses store false, un outil, un appel, candidat non finali
   });
 
   const before = JSON.stringify({ brief, plan });
-  const candidate = await adapter.analyze(
+  const outcome = await adapter.analyze(
     { brief, marketingPlan: plan },
     { correlationId: "corr-cre", mode: "execute" }
   );
   assert.equal(JSON.stringify({ brief, plan }), before);
   assert.equal(tracker.calls, 1);
-  assert.equal("id" in candidate, false);
-  assert.equal("schemaVersion" in candidate, false);
+  assert.equal("id" in outcome.candidate, false);
+  assert.equal("schemaVersion" in outcome.candidate, false);
+  assert.equal(outcome.metering?.usage?.totalTokens, 210);
+  assert.equal(outcome.metering?.cost.status, "unknown");
 
   const last = tracker.last as {
     req: {
@@ -309,7 +311,7 @@ test("Creative Director — candidat valide + conservation Marketing", async () 
   const director = createCreativeDirector({
     analyzer: {
       async analyze() {
-        return makeValidCreativeCandidate();
+        return { candidate: makeValidCreativeCandidate() };
       },
     },
   });
@@ -359,13 +361,15 @@ test("Creative Director — altérations Marketing / fuites refusées", async ()
   const director = createCreativeDirector({
     analyzer: {
       async analyze() {
-        return makeValidCreativeCandidate({
+        return {
+          candidate: makeValidCreativeCandidate({
           endingDevice: {
             kind: "direct_address",
             description: `Call to action: ${plan.callToAction} PLUS FREE BONUS`,
           },
           bigIdea: "A totally unrelated benefit about crypto wealth",
-        });
+        }),
+        };
       },
     },
   });

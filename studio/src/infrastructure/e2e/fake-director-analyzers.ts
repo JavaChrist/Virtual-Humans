@@ -296,7 +296,7 @@ export function createE2eFakeDirectorAnalyzers(options?: {
     creativeAnalyzer: {
       async analyze() {
         maybeFail("creative");
-        return creativeCandidate();
+        return { candidate: creativeCandidate() };
       },
     },
     scriptAnalyzer: {
@@ -305,13 +305,13 @@ export function createE2eFakeDirectorAnalyzers(options?: {
         const cta =
           req.marketingPlan.callToAction?.trim() ||
           "Téléchargez l'app et réservez votre premier trajet";
-        return scriptCandidate(cta);
+        return { candidate: scriptCandidate(cta) };
       },
     },
     artAnalyzer: {
       async analyze(req) {
         maybeFail("art");
-        return artCandidate(req.videoScript.segments.map((s) => s.id));
+        return { candidate: artCandidate(req.videoScript.segments.map((s) => s.id)) };
       },
     },
     storyboardAnalyzer: {
@@ -361,6 +361,7 @@ export function createE2eFakeDirectorAnalyzers(options?: {
           scenes[scenes.length - 1]!.transition = { type: "none" };
         }
         return {
+          candidate: {
           title: script.title,
           scenes,
           assumptions: [
@@ -371,6 +372,7 @@ export function createE2eFakeDirectorAnalyzers(options?: {
               affectsFields: ["scenes"],
             },
           ],
+        },
         };
       },
     },

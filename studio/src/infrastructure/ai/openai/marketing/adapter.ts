@@ -23,12 +23,12 @@ import {
 import { OpenAIAiError } from "../errors";
 import { deriveSafetyIdentifier } from "../safety-identifier";
 import { usageConsistencyWarning } from "../usage";
+import { buildAnalyzerMetering } from "../build-analyzer-metering";
 import { toMarketingAnalyzerError } from "./map-to-analyzer-failure";
 import { parseMarketingCandidateResponse } from "./parser";
 import {
   createEnvAiTokenPricing,
   createUnknownAiTokenPricing,
-  quoteAiUsageCost,
   type AiTokenPricingPort,
 } from "./pricing";
 import {
@@ -147,10 +147,20 @@ export class OpenAIMarketingAnalyzerAdapter implements MarketingAnalyzerPort {
         throw new OpenAIAiError("refused");
       }
 
-      const candidate = parseMarketingCandidateResponse(result);
       const usage = result.usage;
       const consistency = usage ? usageConsistencyWarning(usage) : undefined;
-      const cost = quoteAiUsageCost(this.config.model, usage, this.pricing);
+      const metering = buildAnalyzerMetering({
+        model: this.config.model,
+        usage,
+        pricing: this.pricing,
+      });
+
+      let candidate;
+      try {
+        candidate = parseMarketingCandidateResponse(result);
+      } catch (parseErr) {
+        throw toMarketingAnalyzerError(parseErr, { metering });
+      }
 
       logger.info("marketing.ai.request.completed", logCtx, {
         model: this.config.model,
@@ -160,34 +170,15 @@ export class OpenAIMarketingAnalyzerAdapter implements MarketingAnalyzerPort {
         inputTokens: usage?.inputTokens,
         outputTokens: usage?.outputTokens,
         totalTokens: usage?.totalTokens,
-        costStatus: cost.status,
-        costMinor: cost.status === "known" ? cost.total.amountMinor : undefined,
+        costStatus: metering.cost.status,
+        costMinor:
+          metering.cost.status === "known"
+            ? metering.cost.amountMinor
+            : undefined,
         usageWarning: consistency,
       });
 
-      return {
-        candidate,
-        metering: {
-          usage: usage
-            ? {
-                inputTokens: usage.inputTokens,
-                cachedInputTokens: usage.cachedInputTokens,
-                outputTokens: usage.outputTokens,
-                reasoningTokens: usage.reasoningTokens,
-                totalTokens: usage.totalTokens,
-              }
-            : undefined,
-          cost:
-            cost.status === "known"
-              ? {
-                  status: "known",
-                  amountMinor: cost.total.amountMinor,
-                  currency: "USD",
-                  pricingVersion: cost.pricingVersion,
-                }
-              : { status: "unknown", reason: cost.reason },
-        },
-      };
+      return { candidate, metering };
     } catch (e) {
       const openaiErr =
         e instanceof OpenAIAiError

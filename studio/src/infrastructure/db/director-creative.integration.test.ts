@@ -107,7 +107,7 @@ test("VHS-118B — dry-run + execute fake + persist creative_concept", async () 
   };
   const creativeAnalyzer: CreativeAnalyzerPort = {
     async analyze() {
-      return makeValidCreativeCandidate();
+      return { candidate: makeValidCreativeCandidate() };
     },
   };
 

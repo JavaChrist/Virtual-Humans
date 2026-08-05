@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { ArtifactMetadataSchema, DomainIdSchema } from "@/domain/shared";
+import {
+  ArtifactMetadataSchema,
+  DomainIdSchema,
+  openaiAbsentOptional,
+} from "@/domain/shared";
 import { DurationValues } from "@/domain/brief";
 import {
   SCRIPT_FIELD_LIMITS,
@@ -13,7 +17,7 @@ const L = SCRIPT_FIELD_LIMITS;
 export const PronunciationNoteSchema = z.object({
   term: z.string().min(1).max(L.pronunciationTerm),
   pronunciation: z.string().min(1).max(L.pronunciationValue),
-  language: z.string().min(2).max(16).optional(),
+  language: openaiAbsentOptional(z.string().min(2).max(16)),
 });
 
 export const ScriptSegmentSchema = z
@@ -22,9 +26,9 @@ export const ScriptSegmentSchema = z
     order: z.number().int().positive(),
     purpose: z.enum(ScriptSegmentPurposeValues),
     speaker: z.enum(ScriptSpeakerValues),
-    dialogue: z.string().min(1).max(L.dialogue).optional(),
-    voiceOver: z.string().min(1).max(L.voiceOver).optional(),
-    screenText: z.string().min(1).max(L.screenText).optional(),
+    dialogue: openaiAbsentOptional(z.string().min(1).max(L.dialogue)),
+    voiceOver: openaiAbsentOptional(z.string().min(1).max(L.voiceOver)),
+    screenText: openaiAbsentOptional(z.string().min(1).max(L.screenText)),
     emotion: z.string().min(1).max(L.emotion),
     pauseAfterMs: z.number().int().min(L.pauseAfterMsMin).max(L.pauseAfterMsMax),
     pronunciationNotes: z.array(PronunciationNoteSchema).max(L.pronunciationNotesMax),
@@ -73,7 +77,9 @@ export const ScriptCallToActionSchema = z.object({
   segmentId: DomainIdSchema,
   text: z.string().min(1).max(L.ctaText),
   sourceMarketingCta: z.string().min(1).max(L.ctaText),
-  adaptationNote: z.string().min(1).max(L.ctaAdaptationNote).optional(),
+  adaptationNote: openaiAbsentOptional(
+    z.string().min(1).max(L.ctaAdaptationNote)
+  ),
 });
 
 export const ScriptAssumptionSchema = z
@@ -81,8 +87,12 @@ export const ScriptAssumptionSchema = z
     id: DomainIdSchema,
     statement: z.string().min(1).max(L.assumptionStatement),
     status: z.enum(["explicit", "inferred", "unverified"]),
-    justification: z.string().min(1).max(L.assumptionJustification).optional(),
-    affectsFields: z.array(z.string().min(1).max(L.evidenceField)).max(8).optional(),
+    justification: openaiAbsentOptional(
+      z.string().min(1).max(L.assumptionJustification)
+    ),
+    affectsFields: openaiAbsentOptional(
+      z.array(z.string().min(1).max(L.evidenceField)).max(8)
+    ),
   })
   .superRefine((value, ctx) => {
     if (
@@ -101,7 +111,9 @@ export const ScriptEvidenceSchema = z
   .object({
     field: z.string().min(1).max(L.evidenceField),
     source: z.enum(["marketing_plan", "creative_concept", "brief", "user_constraint", "derived"]),
-    sourcePath: z.string().min(1).max(L.evidenceSourcePath).optional(),
+    sourcePath: openaiAbsentOptional(
+      z.string().min(1).max(L.evidenceSourcePath)
+    ),
     summary: z.string().min(1).max(L.evidenceSummary),
   })
   .superRefine((value, ctx) => {
@@ -210,8 +222,14 @@ export const ScriptAnalysisCandidateSchema = z.object({
   hookText: z.string().min(1).max(L.hookText),
   segments: z.array(ScriptSegmentSchema).min(L.segmentsMin).max(L.segmentsMax),
   callToActionText: z.string().min(1).max(L.ctaText),
-  adaptationNote: z.string().min(1).max(L.ctaAdaptationNote).optional(),
-  assumptions: z.array(ScriptAssumptionSchema).max(L.assumptionsMax).optional(),
-  claimedEvidence: z.array(ScriptEvidenceSchema).max(L.evidenceMax).optional(),
-  notes: z.string().max(500).optional(),
+  adaptationNote: openaiAbsentOptional(
+    z.string().min(1).max(L.ctaAdaptationNote)
+  ),
+  assumptions: openaiAbsentOptional(
+    z.array(ScriptAssumptionSchema).max(L.assumptionsMax)
+  ),
+  claimedEvidence: openaiAbsentOptional(
+    z.array(ScriptEvidenceSchema).max(L.evidenceMax)
+  ),
+  notes: openaiAbsentOptional(z.string().max(500)),
 });

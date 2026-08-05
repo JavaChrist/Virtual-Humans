@@ -3,6 +3,8 @@
  * Application layer — no OpenAI types, no stacks, no secrets.
  */
 
+import type { AnalyzerMetering } from "@/application/directors/shared/analyzer-metering";
+
 export const MARKETING_ANALYSIS_FAILURE_CODES = [
   "rate_limited",
   "timeout",
@@ -101,14 +103,20 @@ export function marketingFailure(
 /**
  * Typed analyzer failure — thrown by adapters / recognized by Marketing Director.
  * Never serialize the Error instance itself to JSON.
+ * Optional metering when the provider was called and usage/cost is known.
  */
 export class MarketingAnalyzerError extends Error {
   readonly failure: MarketingAnalysisFailure;
+  readonly metering?: AnalyzerMetering;
 
-  constructor(failure: MarketingAnalysisFailure) {
+  constructor(
+    failure: MarketingAnalysisFailure,
+    opts?: { metering?: AnalyzerMetering }
+  ) {
     super(failure.publicMessage);
     this.name = "MarketingAnalyzerError";
     this.failure = failure;
+    this.metering = opts?.metering;
   }
 }
 
