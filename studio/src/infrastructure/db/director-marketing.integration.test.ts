@@ -323,3 +323,194 @@ test("VHS-128 — attempt1 rate_limited → human retry attempt2 → completed",
     .eq("artifact_type", "marketing_plan");
   assert.equal(count, 1);
 });
+
+test("VHS-129 — invalid_structured_output human retry attempt 3 + idempotence", async () => {
+  const workspaceId = await seedWs();
+  const projectId = randomUUID();
+  const artifactId = randomUUID();
+  const draft = {
+    draftVersion: "1.0.0",
+    updatedAt: new Date().toISOString(),
+    currentStep: 5,
+    fields: {
+      projectName: "ISO Retry",
+      subjectType: "product" as const,
+      subjectName: "RideCloud",
+      subjectDescription:
+        "Application de mobilité partagée qui réduit le temps d'attente urbain.",
+      objective: "conversion" as const,
+      platform: "instagram" as const,
+      durationSeconds: 30 as const,
+      aspectRatio: "9:16" as const,
+      language: "fr",
+      tone: "energetic" as const,
+      callToAction: "Téléchargez l'app et réservez",
+      audienceDescription: "Navetteurs urbains pressés.",
+      mediaReferences: [],
+    },
+  };
+  const brief = finalizeBrief(draft, {
+    id: artifactId,
+    projectId,
+    createdBy: "tester",
+    correlationId: "corr-129-it",
+    createdAt: "2026-08-05T00:00:00.000Z",
+    revision: 1,
+  });
+  const createPort = createSupabaseCreateProjectWithBriefPort({ client });
+  await createPort.execute({
+    workspaceId,
+    projectId,
+    artifactId,
+    projectName: brief.projectName,
+    brief: { ...brief } as unknown as Record<string, unknown>,
+    schemaVersion: BRIEF_SCHEMA_VERSION,
+    correlationId: "corr-129-it",
+    actorType: "shared_password",
+    actorId: "tester",
+    createdBy: "tester",
+  });
+
+  let calls = 0;
+  const analyzer: MarketingAnalyzerPort = {
+    async analyze() {
+      calls += 1;
+      const { MarketingAnalyzerError, marketingFailure } = await import(
+        "@/application/directors/marketing/failures"
+      );
+      if (calls === 1) {
+        throw new MarketingAnalyzerError(
+          marketingFailure("rate_limited", {
+            retryable: true,
+            provider: "openai",
+            httpStatus: 429,
+          })
+        );
+      }
+      if (calls === 2) {
+        const fail = marketingFailure("invalid_structured_output");
+        assert.equal(fail.retryable, false);
+        throw new MarketingAnalyzerError(fail);
+      }
+      return makeValidCandidate({
+        marketingObjective: "conversion",
+        tone: "energetic",
+        callToAction: "Téléchargez l'app et réservez",
+      });
+    },
+  };
+
+  const env = {
+    DIRECTOR_V2_ENABLED: "1",
+    DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+    DIRECTOR_V2_MARKETING_AI_ENABLED: "1",
+    DIRECTOR_V2_PAID_AI_ENABLED: "1",
+    OPENAI_API_KEY: "sk-test-local",
+    OPENAI_MARKETING_MODEL: "gpt-5.6-terra",
+    OPENAI_MARKETING_PRICE_VERSION: "it-v1",
+    OPENAI_MARKETING_PRICE_INPUT_PER_MILLION_MINOR: "100",
+    OPENAI_MARKETING_PRICE_OUTPUT_PER_MILLION_MINOR: "200",
+  };
+
+  const stack = createDirectorPersistenceStack({
+    client,
+    workspaceId,
+    marketingAnalyzer: analyzer,
+    env,
+  });
+
+  const first = await stack.analyzeMarketing.execute(
+    { projectId, expectedBriefRevision: 1 },
+    { correlationId: "corr-129-a1", mode: "execute" }
+  );
+  assert.equal(first.status, "failed");
+  if (first.status !== "failed") return;
+
+  const second = await stack.analyzeMarketing.executeRetry(
+    {
+      projectId,
+      previousRunId: first.directorRunId!,
+      retryRequestId: randomUUID(),
+      expectedBriefRevision: 1,
+    },
+    { correlationId: "corr-129-a2", mode: "execute" }
+  );
+  assert.equal(second.status, "failed");
+  if (second.status !== "failed") return;
+  assert.equal(second.code, "invalid_structured_output");
+  assert.equal(second.retryable, false);
+
+  const dry = await stack.analyzeMarketing.dryRun(
+    { projectId },
+    { correlationId: "corr-129-dry", mode: "dry-run" }
+  );
+  assert.equal(dry.retryCandidate?.errorCode, "invalid_structured_output");
+  assert.equal(dry.retryCandidate?.previousAttemptNumber, 2);
+  assert.equal(dry.retryCandidate?.nextAttemptNumber, 3);
+  assert.equal(dry.retryCandidate?.retryAvailable, true);
+
+  const retryRequestId = randomUUID();
+  const third = await stack.analyzeMarketing.executeRetry(
+    {
+      projectId,
+      previousRunId: second.directorRunId!,
+      retryRequestId,
+      expectedBriefRevision: 1,
+    },
+    { correlationId: "corr-129-a3", mode: "execute" }
+  );
+  assert.equal(third.status, "completed");
+  assert.equal(calls, 3);
+
+  const replay = await stack.analyzeMarketing.executeRetry(
+    {
+      projectId,
+      previousRunId: second.directorRunId!,
+      retryRequestId,
+      expectedBriefRevision: 1,
+    },
+    { correlationId: "corr-129-replay", mode: "execute" }
+  );
+  assert.equal(replay.status, "existing");
+  assert.equal(calls, 3);
+
+  const concurrent = await stack.analyzeMarketing.executeRetry(
+    {
+      projectId,
+      previousRunId: second.directorRunId!,
+      retryRequestId: randomUUID(),
+      expectedBriefRevision: 1,
+    },
+    { correlationId: "corr-129-concurrent", mode: "execute" }
+  );
+  assert.equal(concurrent.status, "failed");
+  if (concurrent.status === "failed") {
+    assert.ok(
+      concurrent.code === "retry_not_allowed" ||
+        concurrent.code === "retry_conflict"
+    );
+  }
+  assert.equal(calls, 3);
+
+  const { data: runs } = await client
+    .from("director_runs" as never)
+    .select("id, status, attempt_number, cost_status, error_code")
+    .eq("project_id", projectId)
+    .eq("director_type", "marketing")
+    .order("attempt_number", { ascending: true });
+  const typed = (runs ?? []) as Array<{
+    status: string;
+    attempt_number: number;
+    cost_status: string;
+    error_code: string | null;
+  }>;
+  assert.equal(typed.length, 3);
+  assert.equal(typed[0]?.attempt_number, 1);
+  assert.equal(typed[0]?.cost_status, "released");
+  assert.equal(typed[1]?.attempt_number, 2);
+  assert.equal(typed[1]?.error_code, "invalid_structured_output");
+  assert.equal(typed[1]?.cost_status, "released");
+  assert.equal(typed[2]?.attempt_number, 3);
+  assert.equal(typed[2]?.status, "completed");
+  assert.equal(typed[2]?.cost_status, "committed");
+});

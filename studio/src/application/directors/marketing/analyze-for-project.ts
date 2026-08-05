@@ -38,6 +38,7 @@ import type { MarketingAnalyzerPort } from "./analyzer-port";
 import {
   httpStatusForMarketingFailure,
   MARKETING_FAILURE_PUBLIC_MESSAGES,
+  marketingFailure,
   type MarketingAnalysisFailureCode,
 } from "./failures";
 import type { DirectorRunContext } from "./result";
@@ -1059,6 +1060,7 @@ export function createAnalyzeMarketingForProject(
           "provider_unavailable",
           "request_failed",
           "invalid_candidate",
+          "invalid_structured_output",
           "quota_exceeded",
         ];
         const canonical: MarketingAnalysisFailureCode = replayableCodes.includes(
@@ -1067,13 +1069,14 @@ export function createAnalyzeMarketingForProject(
           ? (code as MarketingAnalysisFailureCode)
           : "request_failed";
         const httpHint = httpStatusForMarketingFailure(canonical);
+        // Failure.retryable = auto/provider taxonomy only — never human allowlist.
+        const taxonomy = marketingFailure(canonical);
         return failedAnalysis(
           canonical,
-          MARKETING_FAILURE_PUBLIC_MESSAGES[canonical] ??
-            MARKETING_FAILURE_PUBLIC_MESSAGES.request_failed,
+          taxonomy.publicMessage,
           httpHint === 202 ? 500 : httpHint,
           {
-            retryable: isDirectorHumanRetryableErrorCode(canonical),
+            retryable: taxonomy.retryable,
             directorRunId: begin.directorRunId,
           }
         );

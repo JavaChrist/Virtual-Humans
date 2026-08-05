@@ -15,6 +15,7 @@ import type {
   ProjectRepository,
 } from "@/application/projects/ports";
 import type { AiTokenPricingPort } from "@/infrastructure/ai/openai/marketing";
+import { marketingFailure } from "../failures";
 
 const WS = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 const PID = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
@@ -394,6 +395,63 @@ test("VHS-128 — dry-run exposes retryCandidate for failed retryable", async ()
   assert.equal(dry.retryCandidate?.retryAvailable, true);
 });
 
+test("VHS-129 — dry-run exposes attempt #3 for invalid_structured_output", async () => {
+  const port = directorPort({
+    failedRun: {
+      directorRunId: "4c316d67-c97b-42e3-89ba-729730eb757c",
+      attemptNumber: 2,
+      errorCode: "invalid_structured_output",
+    },
+  });
+  const svc = createAnalyzeMarketingForProject({
+    workspaceId: WS,
+    projects: projectsRepo(),
+    artifacts: artifactsRepo(),
+    directorRuns: port,
+    analyzer: fakeAnalyzer(),
+    pricing,
+    env: enabledEnv,
+  });
+  const dry = await svc.dryRun(
+    { projectId: PID },
+    { correlationId: "c-iso-dry", mode: "dry-run" }
+  );
+  assert.ok(dry.retryCandidate);
+  assert.equal(dry.retryCandidate?.errorCode, "invalid_structured_output");
+  assert.equal(dry.retryCandidate?.previousAttemptNumber, 2);
+  assert.equal(dry.retryCandidate?.nextAttemptNumber, 3);
+  assert.equal(dry.retryCandidate?.retryAvailable, true);
+  assert.equal(
+    marketingFailure("invalid_structured_output").retryable,
+    false,
+    "taxonomy auto-retry stays false"
+  );
+});
+
+test("VHS-129 — dry-run omits retryCandidate for invalid_candidate", async () => {
+  const port = directorPort({
+    failedRun: {
+      directorRunId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      attemptNumber: 1,
+      errorCode: "invalid_candidate",
+    },
+  });
+  const svc = createAnalyzeMarketingForProject({
+    workspaceId: WS,
+    projects: projectsRepo(),
+    artifacts: artifactsRepo(),
+    directorRuns: port,
+    analyzer: fakeAnalyzer(),
+    pricing,
+    env: enabledEnv,
+  });
+  const dry = await svc.dryRun(
+    { projectId: PID },
+    { correlationId: "c-bad-dry", mode: "dry-run" }
+  );
+  assert.equal(dry.retryCandidate, undefined);
+});
+
 test("VHS-128 — executeRetry happy path attempt 2, one analyzer call", async () => {
   let analyzeCalls = 0;
   const analyzer: MarketingAnalyzerPort = {
@@ -467,6 +525,54 @@ test("VHS-128 — executeRetry non-retryable → refus", async () => {
     assert.equal(r.httpHint, 422);
   }
   assert.equal(port.calls.includes("reserve"), false);
+});
+
+test("VHS-129 — budget insuffisant bloque retry avant analyzer", async () => {
+  let analyzeCalls = 0;
+  const analyzer: MarketingAnalyzerPort = {
+    async analyze() {
+      analyzeCalls += 1;
+      return makeValidCandidate();
+    },
+  };
+  const port = directorPort();
+  port.reserveBudget = async () => {
+    port.calls.push("reserve");
+    throw new Error("insufficient workspace budget");
+  };
+  const svc = createAnalyzeMarketingForProject({
+    workspaceId: WS,
+    projects: projectsRepo(),
+    artifacts: artifactsRepo(),
+    directorRuns: port,
+    analyzer,
+    pricing,
+    env: enabledEnv,
+    idFactory: (() => {
+      let n = 0;
+      return () => {
+        n += 1;
+        return `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
+      };
+    })(),
+  });
+  const r = await svc.executeRetry(
+    {
+      projectId: PID,
+      previousRunId: "4c316d67-c97b-42e3-89ba-729730eb757c",
+      retryRequestId: "55555555-5555-4555-8555-555555555555",
+      expectedBriefRevision: 1,
+    },
+    { correlationId: "c-budget", mode: "execute" }
+  );
+  assert.equal(r.status, "failed");
+  if (r.status === "failed") {
+    assert.equal(r.code, "budget_exceeded");
+    assert.equal(r.httpHint, 402);
+  }
+  assert.equal(analyzeCalls, 0);
+  assert.ok(port.calls.includes("beginRetry"));
+  assert.ok(port.calls.includes("reserve"));
 });
 
 test("VHS-128 — terminal_replay same retryRequestId → no provider call", async () => {

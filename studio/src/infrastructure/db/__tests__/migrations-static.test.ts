@@ -39,6 +39,7 @@ const EXPECTED_FILES = [
   "20260804140309_vhs_126_brief_revisions_stale.sql",
   "20260804140422_vhs_127_director_final_assets_bucket.sql",
   "20260804141000_vhs_128_director_run_retry_attempts.sql",
+  "20260805002706_vhs_129_director_human_retryable_error_codes.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -64,15 +65,30 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 23 versions (22 Production + VHS-128 retry local)", () => {
+test("migrations — 24 versions (23 Production-aligned + VHS-129 human-retry local)", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
-  assert.equal(files.length, 23);
+  assert.equal(files.length, 24);
   assert.deepEqual(
     files.filter((f) => f.startsWith("202607")),
     [...LEGACY_FILES],
   );
-  assert.equal(v2Files().length, 21);
+  assert.equal(v2Files().length, 22);
+});
+
+test("migrations V2 — VHS-129 human-retry allowlist (not auto-retry)", () => {
+  const sql = readFileSync(
+    join(
+      MIGRATIONS_DIR,
+      "20260805002706_vhs_129_director_human_retryable_error_codes.sql"
+    ),
+    "utf8"
+  );
+  assert.match(sql, /director_error_code_is_human_retryable/i);
+  assert.match(sql, /invalid_structured_output/);
+  assert.match(sql, /director_error_code_is_human_retryable\(v_prev\.error_code\)/);
+  assert.match(sql, /delegates to director_error_code_is_human_retryable/i);
+  assert.ok(!/DELETE FROM|UPDATE\s+public\.director_runs/i.test(sql));
 });
 
 test("migrations VHS-125 remainder — marqueurs no-op documentés sans SQL mutatif dupliqué", () => {

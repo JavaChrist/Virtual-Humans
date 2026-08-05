@@ -1,12 +1,20 @@
 /**
- * Director error codes that may receive an explicit human retry attempt.
- * Never used for automatic retry loops.
+ * Director error codes eligible for an **explicit human retry** attempt
+ * (UI « Réessayer l’analyse » / `begin_or_retry_director_run`).
+ *
+ * This allowlist NEVER drives automatic provider retries, backoff loops,
+ * or client auto-resubmit. Failure taxonomy `retryable` remains separate
+ * (`marketingFailure(...).retryable` / RETRYABLE_DEFAULT).
+ *
+ * Keep in sync with SQL `director_error_code_is_human_retryable` (VHS-129).
  */
 
 export const DIRECTOR_HUMAN_RETRYABLE_ERROR_CODES = [
   "rate_limited",
   "timeout",
   "provider_unavailable",
+  /** Human-only after parser/schema fix deploy — not auto-retryable. */
+  "invalid_structured_output",
 ] as const;
 
 export type DirectorHumanRetryableErrorCode =

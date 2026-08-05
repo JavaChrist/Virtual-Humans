@@ -286,6 +286,14 @@ test("service — invalid_candidate inchangé pour vrai candidat invalide", asyn
   assert.equal(port.calls.includes("persist"), false);
 });
 
+test("VHS-129 — invalid_structured_output taxonomy retryable=false (no auto-retry)", () => {
+  const f = marketingFailure("invalid_structured_output");
+  assert.equal(f.retryable, false);
+  const mapped = mapMarketingFailureToHttp(f);
+  assert.equal(mapped.status, 502);
+  assert.equal(mapped.body.error.retryable, false);
+});
+
 test("HTTP map — rate_limited 429 + Retry-After ; timeout 504 ; unavailable 503 ; invalid 422", () => {
   const rl = mapMarketingFailureToHttp(
     marketingFailure("rate_limited", { retryable: true, retryAfterSeconds: 9 })
