@@ -53,8 +53,9 @@ function writeEnvFiles(runtime) {
     `DIRECTOR_V2_ENABLED=1`,
     `DIRECTOR_V2_PERSISTENCE_ENABLED=1`,
     `DIRECTOR_V2_E2E_FAKE_MODE=1`,
-    // Porte 1 — prove merge→Storage→download across requests (not process memory).
-    `DIRECTOR_V2_E2E_ASSET_STORAGE=1`,
+    // Prefer process memory when local Storage API is unavailable (name resolution).
+    // Set to 1 only when director-final-assets bucket is reachable for Porte 1 proof.
+    `DIRECTOR_V2_E2E_ASSET_STORAGE=0`,
     `DIRECTOR_V2_WORKER_ENABLED=1`,
     // Test-only: worker fake path needs generation flag in the E2E process only.
     `DIRECTOR_V2_PAID_GENERATION_ENABLED=1`,
@@ -66,12 +67,15 @@ function writeEnvFiles(runtime) {
     `FAL_KEY=`,
     `ELEVENLABS_API_KEY=`,
     `AICCOS_IMPORT_TOKEN=`,
-    `DIRECTOR_V2_MARKETING_AI_ENABLED=0`,
-    `DIRECTOR_V2_CREATIVE_AI_ENABLED=0`,
+    // 8G-B — Marketing + Creative AI authorized in harness; OPENAI_API_KEY empty.
+    // DIRECTOR_V2_E2E_FAKE_MODE injects fakes → zero provider network.
+    // Script/Art/Storyboard stay off (fake mode still gates executionAvailable).
+    `DIRECTOR_V2_MARKETING_AI_ENABLED=1`,
+    `DIRECTOR_V2_CREATIVE_AI_ENABLED=1`,
     `DIRECTOR_V2_SCRIPT_AI_ENABLED=0`,
     `DIRECTOR_V2_ART_AI_ENABLED=0`,
     `DIRECTOR_V2_STORYBOARD_AI_ENABLED=0`,
-    `DIRECTOR_V2_PAID_AI_ENABLED=0`,
+    `DIRECTOR_V2_PAID_AI_ENABLED=1`,
     `OPENAI_MARKETING_MODEL=e2e-fake-deterministic`,
     `OPENAI_CREATIVE_MODEL=e2e-fake-deterministic`,
     `OPENAI_SCRIPT_MODEL=e2e-fake-deterministic`,
@@ -199,6 +203,26 @@ if (bErr) fail(`budget policy: ${bErr.message}`);
       console.warn(
         `e2e-prepare: drain jobs ${ws.slug}: ${drainErr.message}`,
       );
+    }
+  }
+}
+
+// Porte 1 / 8G-B — ensure private Storage bucket for merge→download proof.
+{
+  const bucket = "director-final-assets";
+  const { data: buckets, error: listErr } = await client.storage.listBuckets();
+  if (listErr) {
+    console.warn(`e2e-prepare: listBuckets: ${listErr.message}`);
+  } else {
+    const exists = (buckets ?? []).some((b) => b.name === bucket);
+    if (!exists) {
+      const { error: createErr } = await client.storage.createBucket(bucket, {
+        public: false,
+        fileSizeLimit: 52_428_800,
+      });
+      if (createErr) {
+        fail(`storage bucket ${bucket}: ${createErr.message}`);
+      }
     }
   }
 }

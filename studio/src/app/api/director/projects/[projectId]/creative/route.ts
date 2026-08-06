@@ -1,5 +1,5 @@
 /**
- * GET/POST Creative analysis for a Director project (VHS-117B / VHS-117D).
+ * GET/POST Creative analysis for a Director project (VHS-117B / VHS-117D / 8G-B).
  * No OpenAI call unless execute mode + flags + service path (tests use fakes).
  */
 
@@ -8,6 +8,12 @@ import { z } from "zod";
 import {
   canUseDirectorV2Persistence,
 } from "@/infrastructure/config/feature-flags";
+import { isDirectorE2eFakeMode } from "@/infrastructure/config/e2e-fake-mode";
+import {
+  E2E_FAKE_FAIL_HEADER,
+  parseE2eFakeFailHeader,
+  runWithE2eRequestContext,
+} from "@/infrastructure/e2e/e2e-request-context";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
 import {
@@ -62,6 +68,15 @@ function failureFromServiceResult(result: {
     provider: result.provider,
     retryAfterSeconds: result.retryAfterSeconds,
   };
+}
+
+/** E2E harness only — never enables provider network. */
+function e2eContextFromRequest(req: NextRequest) {
+  const env = process.env as Record<string, string | undefined>;
+  if (env.DIRECTOR_V2_E2E_HARNESS !== "1" || !isDirectorE2eFakeMode(env)) {
+    return {};
+  }
+  return parseE2eFakeFailHeader(req.headers.get(E2E_FAKE_FAIL_HEADER));
 }
 
 export async function GET(req: NextRequest, { params }: RouteParams) {
@@ -129,119 +144,128 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     resolveCorrelationId(req.headers.get("x-correlation-id")) ??
     generateCorrelationId();
 
-  try {
-    const stack = createDirectorPersistenceStack();
+  const e2eCtx = e2eContextFromRequest(req);
 
-    if (parsed.data.mode === "dry-run") {
-      logger.info("director.creative.dry_run.started", obs.context, { projectId });
-      const dry = await stack.analyzeCreative.dryRun(
-        { projectId },
-        { correlationId, mode: "dry-run" }
-      );
-      logger.info("director.creative.dry_run.completed", obs.context, {
-        projectId,
-        executable: dry.executable,
-        executionAvailable: dry.executionAvailable,
-      });
-      return obs.json({ dryRun: dry });
-    }
+  return runWithE2eRequestContext(e2eCtx, async () => {
+    try {
+      const stack = createDirectorPersistenceStack();
 
-    // execute — gated inside service by flags; UI keeps button off when unavailable
-    logger.info("director.creative.run.started", obs.context, { projectId });
-    const result = await stack.analyzeCreative.execute(
-      {
-        projectId,
-        expectedMarketingPlanRevision: parsed.data.expectedMarketingPlanRevision,
-      },
-      { correlationId, mode: "execute" }
-    );
-
-    if (result.status === "already_running") {
-      return obs.json(
-        {
-          status: result.status,
-          directorRunId: result.directorRunId,
-          error: {
-            code: "run_in_progress",
-            retryable: false,
-            message: result.publicMessage,
-          },
-        },
-        { status: 202 }
-      );
-    }
-    if (result.status === "needs_input") {
-      logger.info("director.creative.run.needs_input", obs.context, { projectId });
-      return obs.json(result, { status: 422 });
-    }
-    if (result.status === "failed") {
-      if (isCanonicalFailureCode(result.code)) {
-        const mapped = mapCreativeFailureToHttp(
-          failureFromServiceResult({
-            code: result.code,
-            publicMessage: result.publicMessage,
-            // Creative: auto-retryable always false (8G-A).
-            retryable: false,
-            retryAfterSeconds: result.retryAfterSeconds,
-            provider: result.provider,
-          })
+      if (parsed.data.mode === "dry-run") {
+        logger.info("director.creative.dry_run.started", obs.context, { projectId });
+        const dry = await stack.analyzeCreative.dryRun(
+          { projectId },
+          { correlationId, mode: "dry-run" }
         );
+        logger.info("director.creative.dry_run.completed", obs.context, {
+          projectId,
+          executable: dry.executable,
+          executionAvailable: dry.executionAvailable,
+          promptVersion: dry.promptVersion,
+        });
+        return obs.json({ dryRun: dry });
+      }
+
+      // execute — gated inside service by flags; UI keeps button off when unavailable
+      logger.info("director.creative.run.started", obs.context, { projectId });
+      const result = await stack.analyzeCreative.execute(
+        {
+          projectId,
+          expectedMarketingPlanRevision:
+            parsed.data.expectedMarketingPlanRevision,
+        },
+        { correlationId, mode: "execute" }
+      );
+
+      if (result.status === "already_running") {
+        return obs.json(
+          {
+            status: result.status,
+            directorRunId: result.directorRunId,
+            error: {
+              code: "run_in_progress",
+              retryable: false,
+              message: result.publicMessage,
+            },
+          },
+          { status: 202 }
+        );
+      }
+      if (result.status === "needs_input") {
+        logger.info("director.creative.run.needs_input", obs.context, {
+          projectId,
+        });
+        return obs.json(result, { status: 422 });
+      }
+      if (result.status === "failed") {
+        if (isCanonicalFailureCode(result.code)) {
+          const mapped = mapCreativeFailureToHttp(
+            failureFromServiceResult({
+              code: result.code,
+              publicMessage: result.publicMessage,
+              // Creative: auto-retryable always false (8G-A).
+              retryable: false,
+              retryAfterSeconds: result.retryAfterSeconds,
+              provider: result.provider,
+            })
+          );
+          logger.info("director.creative.run.failed", obs.context, {
+            projectId,
+            directorRunId: result.directorRunId,
+            failureCode: mapped.body.error.code,
+            retryable: false,
+            provider: result.provider,
+            httpStatus: mapped.status,
+            reservationReleased: true,
+            e2eFakeFail: e2eCtx.creativeFail,
+          });
+          return obs.json(mapped.body, {
+            status: mapped.status,
+            headers: mapped.headers,
+          });
+        }
+        // Service-local codes (flags/config) — preserve httpHint, redacted body
         logger.info("director.creative.run.failed", obs.context, {
           projectId,
           directorRunId: result.directorRunId,
-          failureCode: mapped.body.error.code,
+          failureCode: result.code,
           retryable: false,
-          provider: result.provider,
-          httpStatus: mapped.status,
+          httpStatus: result.httpHint,
           reservationReleased: true,
         });
-        return obs.json(mapped.body, {
-          status: mapped.status,
-          headers: mapped.headers,
-        });
+        return obs.json(
+          {
+            status: "failed",
+            error: {
+              code: result.code,
+              retryable: false,
+              message: result.publicMessage,
+            },
+          },
+          { status: result.httpHint }
+        );
       }
-      // Service-local codes (flags/config) — preserve httpHint, redacted body
-      logger.info("director.creative.run.failed", obs.context, {
+
+      logger.info("director.creative.run.completed", obs.context, {
         projectId,
-        directorRunId: result.directorRunId,
-        failureCode: result.code,
-        retryable: false,
-        httpStatus: result.httpHint,
-        reservationReleased: true,
+        status: result.status,
       });
+      return obs.json(result);
+    } catch (e) {
+      if (e instanceof V2SupabaseConfigError) {
+        return obs.json({ error: e.message }, { status: 503 });
+      }
+      logger.error("route.failure", obs.context, e);
       return obs.json(
         {
           status: "failed",
           error: {
-            code: result.code,
+            code: "internal_error",
             retryable: false,
-            message: result.publicMessage,
+            message: CREATIVE_FAILURE_PUBLIC_MESSAGES.internal_error,
           },
         },
-        { status: result.httpHint }
+        { status: 500 }
       );
     }
-
-    logger.info("director.creative.run.completed", obs.context, {
-      projectId,
-      status: result.status,
-    });
-    return obs.json(result);
-  } catch (e) {
-    if (e instanceof V2SupabaseConfigError) {
-      return obs.json({ error: e.message }, { status: 503 });
-    }
-    logger.error("route.failure", obs.context, e);
-    return obs.json(
-      {
-        status: "failed",
-        error: {
-          code: "internal_error",
-          retryable: false,
-          message: CREATIVE_FAILURE_PUBLIC_MESSAGES.internal_error,
-        },
-      },
-      { status: 500 }
-    );
-  }
+  });
 }

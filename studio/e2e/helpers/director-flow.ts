@@ -407,27 +407,55 @@ export async function runDelivery(page: Page) {
   await confirmDialog(page, /Exécuter QC/);
 
   // needs_review : commentaire obligatoire + modale (unknown ≠ pass).
+  // Do NOT match the pre-existing "quality_review" delivery label as success.
   const reviewComment = delivery.locator("#review-comment");
   if (await reviewComment.isVisible().catch(() => false)) {
+    await reviewComment.click();
     await reviewComment.fill("Revue E2E synthétique — unknowns techniques acceptés.");
     const accept = delivery.getByRole("button", { name: /^Accepter$/ });
     await expect(accept).toBeEnabled({ timeout: 10_000 });
+    const reviewRespPromise = page.waitForResponse(
+      (r) =>
+        r.url().includes("/quality/review") && r.request().method() === "POST",
+      { timeout: 60_000 },
+    );
     await accept.click();
     await confirmDialog(page, /^Accepter$/);
-    await expect(delivery.getByText(/quality_review|accepted|approved|Merge · readiness OK/i).first()).toBeVisible({
-      timeout: 30_000,
-    });
+    const reviewResp = await reviewRespPromise;
+    const reviewBody = await reviewResp.text();
+    expect(
+      reviewResp.ok(),
+      `quality/review HTTP ${reviewResp.status()}: ${reviewBody.slice(0, 800)}`,
+    ).toBeTruthy();
+    await expect(
+      delivery.getByText(/Merge · readiness OK/i).first(),
+    ).toBeVisible({ timeout: 60_000 });
   }
 
   const prepareMerge = delivery.getByRole("button", { name: /Préparer merge/ });
   await expect(prepareMerge).toBeEnabled({ timeout: 30_000 });
   await prepareMerge.click();
-  await expect(delivery.getByText(/Merge · readiness OK/i)).toBeVisible({ timeout: 30_000 });
+  await expect(delivery.getByText(/Merge · readiness OK|état prepared|état blocked/i)).toBeVisible({
+    timeout: 30_000,
+  });
 
   const runMerge = delivery.getByRole("button", { name: /Lancer merge fake/ });
   await expect(runMerge).toBeEnabled({ timeout: 30_000 });
+  const mergeRespPromise = page.waitForResponse(
+    (r) =>
+      r.url().includes("/merge") &&
+      r.request().method() === "POST" &&
+      (r.request().postDataJSON() as { mode?: string } | null)?.mode === "execute",
+    { timeout: 60_000 },
+  );
   await runMerge.click();
   await confirmDialog(page, /Merger \(fake\)/);
+  const mergeResp = await mergeRespPromise;
+  const mergeBody = await mergeResp.text();
+  expect(
+    mergeResp.ok(),
+    `merge execute HTTP ${mergeResp.status()}: ${mergeBody.slice(0, 800)}`,
+  ).toBeTruthy();
   await expect(delivery.getByText(/Asset final|merged|completed/i).first()).toBeVisible({
     timeout: 60_000,
   });

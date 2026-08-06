@@ -86,6 +86,7 @@ import { DEFAULT_WORKER_POLICY } from "@/application/worker/policy";
 import type { ProductionWorker } from "@/application/worker/production-worker";
 import { isDirectorE2eFakeMode } from "@/infrastructure/config/e2e-fake-mode";
 import { buildE2eSyntheticCapabilityRegistry } from "@/infrastructure/e2e/e2e-capability-registry";
+import { getE2eRequestContext } from "@/infrastructure/e2e/e2e-request-context";
 import { createE2eFakeDirectorAnalyzers } from "@/infrastructure/e2e/fake-director-analyzers";
 import { createSupabaseCreateProjectWithBriefPort } from "./repositories/create-project-with-brief";
 import { createSupabaseArtifactRepository } from "./repositories/artifact-repository";
@@ -282,6 +283,8 @@ export function createDirectorPersistenceStack(deps?: {
             env.DIRECTOR_V2_E2E_FAKE_FAIL === "storyboard"
               ? env.DIRECTOR_V2_E2E_FAKE_FAIL
               : undefined,
+          // Request header (AsyncLocalStorage) overrides env for Creative taxonomy E2E.
+          creativeFail: getE2eRequestContext().creativeFail,
         })
       : null;
   const base =

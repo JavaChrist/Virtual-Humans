@@ -11,17 +11,23 @@ test.describe("Double-clic + conflit révision", () => {
     await loginViaUi(page);
     await fillSyntheticBrief(page);
 
-    // Marketing d'abord (prérequis Creative).
-    await page.getByRole("button", { name: "Vérifier le brief" }).click();
-    const mkt = page.getByRole("button", { name: "Lancer l’analyse marketing" });
+    // Marketing d'abord (prérequis Creative) — matcher strict (pas le seul heading).
+    const mktSection = page.locator("section").filter({
+      has: page.getByRole("heading", { name: /Stratégie marketing/i }),
+    });
+    await mktSection.getByRole("button", { name: "Vérifier le brief" }).click();
+    const mkt = mktSection.getByRole("button", {
+      name: "Lancer l’analyse marketing",
+      exact: true,
+    });
     await expect(mkt).toBeEnabled({ timeout: 20_000 });
     await mkt.click();
     const mktDialog = page.getByRole("dialog");
     await expect(mktDialog).toBeVisible();
     await mktDialog.getByRole("button", { name: "Lancer l’analyse" }).click();
-    await expect(page.getByText(/Stratégie marketing|Objectif|USP|Bénéfice/i).first()).toBeVisible({
-      timeout: 60_000,
-    });
+    await expect(
+      mktSection.getByText(/Stratégie marketing enregistrée/i),
+    ).toBeVisible({ timeout: 60_000 });
 
     const section = page.locator("section").filter({
       has: page.getByRole("heading", { name: "Direction créative", exact: true }),

@@ -83,7 +83,7 @@ test("mapping — déterministe", () => {
 });
 
 test("prompt — versionné v2, descripteurs génériques, sans provider / Tom / Mei", () => {
-  assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v2");
+  assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v3");
   assertCreativePromptSafeForLogs(CREATIVE_ANALYZER_SYSTEM_PROMPT);
   assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /generic visual descriptors/i);
   assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /Never name living or deceased artists/i);

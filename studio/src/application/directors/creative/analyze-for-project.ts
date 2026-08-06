@@ -264,9 +264,15 @@ async function loadActiveArtifact<T>(
       value: unknown
     ): { success: true; data: T } | { success: false };
   }
-) {
+): Promise<{
+  value: T;
+  artifactId: string;
+  revision: number;
+} | null> {
   const active = await artifacts.getActive(projectId, type);
   if (!active) return null;
+  // Stale active pointers must not unblock Creative (brief revise invalidation).
+  if (active.stale) return null;
   const art = await artifacts.load(active.artifactId);
   if (!art) return null;
   const parsed = schema.safeParse(art.value);

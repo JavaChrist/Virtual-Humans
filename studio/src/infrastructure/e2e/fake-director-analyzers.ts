@@ -1,11 +1,13 @@
 /**
- * Injected fake analyzers for DIRECTOR_V2_E2E_FAKE_MODE (Phase 8).
+ * Injected fake analyzers for DIRECTOR_V2_E2E_FAKE_MODE (Phase 8 / 8G-B).
  * Deterministic candidates — no network, no OpenAI.
  * Not a second business implementation: same ports as production injection.
  */
 
 import type { MarketingAnalyzerPort } from "@/application/directors/marketing";
 import type { CreativeAnalyzerPort } from "@/application/directors/creative/analyzer-port";
+import { creativeFailure } from "@/application/directors/creative/failures";
+import { MarketingAnalyzerError } from "@/application/directors/marketing/failures";
 import type { ScriptAnalyzerPort } from "@/application/directors/script/analyzer-port";
 import type { ArtAnalyzerPort } from "@/application/directors/art/analyzer-port";
 import type { StoryboardAnalyzerPort } from "@/application/directors/storyboard/analyzer-port";
@@ -16,6 +18,10 @@ import type { ArtAnalysisCandidate } from "@/domain/art";
 import type { StoryboardAnalysisCandidate } from "@/domain/storyboard";
 import { SCRIPT_PURPOSE_TO_SCENE } from "@/domain/storyboard/scene";
 import { defaultContinuityKeys } from "@/domain/storyboard/continuity";
+import {
+  getE2eRequestContext,
+  type E2eCreativeFakeFailMode,
+} from "./e2e-request-context";
 
 export type E2eFakeAnalyzerBundle = {
   marketingAnalyzer: MarketingAnalyzerPort;
@@ -267,16 +273,37 @@ function artCandidate(scriptSegmentIds: string[]): ArtAnalysisCandidate {
   };
 }
 
+function throwCreativeFakeFail(mode: E2eCreativeFakeFailMode): never {
+  const code =
+    mode === "provider_failed"
+      ? ("request_failed" as const)
+      : mode === "refused"
+        ? ("refused" as const)
+        : mode;
+  throw new MarketingAnalyzerError(
+    creativeFailure(code, {
+      provider: "openai",
+      internalCode: `e2e_fake_${mode}`,
+      httpStatus: mode === "provider_failed" ? 502 : 200,
+    }),
+  );
+}
+
 /**
  * @param failStage when set, the named analyzer throws a public-safe error (E2E scenario 17).
+ * @param creativeFail optional default Creative fail mode (overridden by request header).
  */
 export function createE2eFakeDirectorAnalyzers(options?: {
   failStage?: "marketing" | "creative" | "script" | "art" | "storyboard";
+  creativeFail?: E2eCreativeFakeFailMode;
 }): E2eFakeAnalyzerBundle {
   const fail = options?.failStage;
 
   function maybeFail(stage: typeof fail): void {
     if (fail === stage) {
+      if (stage === "creative") {
+        throwCreativeFakeFail("provider_failed");
+      }
       const err = new Error("E2E fake provider failure (synthetic).");
       (err as Error & { code?: string }).code = "provider_failed";
       throw err;
@@ -295,6 +322,18 @@ export function createE2eFakeDirectorAnalyzers(options?: {
     },
     creativeAnalyzer: {
       async analyze() {
+        const mode =
+          getE2eRequestContext().creativeFail ?? options?.creativeFail;
+        if (mode === "invalid_candidate") {
+          // Domain hard-gate path (not provider_failed): forbidden imitation phrase.
+          const bad = creativeCandidate();
+          bad.bigIdea =
+            "Transformer l'attente dans le style de Picasso en départ immédiat.";
+          return { candidate: bad };
+        }
+        if (mode) {
+          throwCreativeFakeFail(mode);
+        }
         maybeFail("creative");
         return { candidate: creativeCandidate() };
       },
@@ -329,7 +368,8 @@ export function createE2eFakeDirectorAnalyzers(options?: {
               seg.purpose as keyof typeof SCRIPT_PURPOSE_TO_SCENE
             ] ?? "presentation";
           // spokenContent must mirror script text — silent scenes with dialogue fail finalize.
-          // Prefer b_roll / voice_over_visual (simple t2v[+voice]) over talking_head lipsync chains.
+          // Prefer b_roll / voice_over_visual (simple t2v[+voice]) over talking_head lipsync chains
+          // when the script segment is already voice_over; character dialogue stays talking_head.
           const spoken =
             seg.speaker === "character" && seg.dialogue
               ? { kind: "dialogue" as const, sourceText: seg.dialogue }

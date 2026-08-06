@@ -463,7 +463,7 @@ export function DeliverySection({ projectId }: { projectId: string }) {
               ))}
             </ul>
           )}
-          {quality.status === "needs_review" && (
+          {quality.status === "needs_review" && !delivery?.humanReviewId && (
             <div className="mt-3 space-y-2">
               <label className="block text-[var(--muted)]" htmlFor="review-comment">
                 Commentaire de revue (requis pour acceptation)
