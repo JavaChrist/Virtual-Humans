@@ -83,6 +83,9 @@ export type CreativeProjectDryRunResult = {
   estimatedCostMinor?: number;
   currency?: string;
   confidence?: string;
+  /** Domain arc budget for this brief (8H-B single source). */
+  durationSeconds?: number;
+  maxBeats?: number;
   validations: Array<{ code: string; passed: boolean; message: string }>;
   warnings: PublicWarning[];
   missingInformation: Array<{ code: string; message: string; field?: string }>;
@@ -459,6 +462,8 @@ export function createAnalyzeCreativeForProject(
         estimatedCostMinor,
         currency,
         confidence,
+        durationSeconds: aiDry.durationSeconds,
+        maxBeats: aiDry.maxBeats,
         validations: aiDry.validations,
         warnings: aiDry.warnings,
         missingInformation: aiDry.validations

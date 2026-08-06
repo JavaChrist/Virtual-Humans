@@ -7,7 +7,7 @@ import { z } from "zod";
 import {
   CREATIVE_FIELD_LIMITS,
   CreativeAnalyzerCandidateSchema,
-  maxBeatsForDurationSeconds,
+  resolveCreativeArcBeatBudget,
 } from "@/domain/creative";
 import { toOpenAIStrictJsonSchema } from "../structured-output";
 
@@ -52,14 +52,16 @@ export function applyEmotionalArcMaxBeats(
 }
 
 export function getCreativeCandidateTextFormat(opts?: {
-  durationSeconds?: number;
+  /** Prefer passing the one-shot budget.maxBeats from resolveCreativeArcBeatBudget. */
   maxBeats?: number;
+  /** Convenience: derives maxBeats via the same domain resolver (tests / callers). */
+  durationSeconds?: number;
 }) {
   const base = getCreativeCandidateJsonSchema();
   const maxBeats =
     opts?.maxBeats ??
     (opts?.durationSeconds != null
-      ? maxBeatsForDurationSeconds(opts.durationSeconds)
+      ? resolveCreativeArcBeatBudget(opts.durationSeconds).maxBeats
       : undefined);
   const schema =
     maxBeats != null ? applyEmotionalArcMaxBeats(base, maxBeats) : base;

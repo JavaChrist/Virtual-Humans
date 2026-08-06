@@ -1,9 +1,9 @@
 import type { VideoProjectBrief } from "@/domain/brief";
 import type { MarketingPlan } from "@/domain/marketing";
+import { resolveCreativeArcBeatBudget } from "./arc-beat-budget";
 import {
   AllowedReferenceKeywordValues,
   CREATIVE_FIELD_LIMITS,
-  maxBeatsForDurationSeconds,
   type CreativeAnalysisCandidate,
   type CreativeConcept,
   type CreativeEvidence,
@@ -120,7 +120,7 @@ export function validateEmotionalArcOrders(
   if (arc.length < CREATIVE_FIELD_LIMITS.beatsMin) {
     issues.push(issue("invariant_violation", "Arc émotionnel trop court.", "emotionalArc"));
   }
-  const maxBeats = maxBeatsForDurationSeconds(durationSeconds);
+  const { maxBeats } = resolveCreativeArcBeatBudget(durationSeconds);
   if (arc.length > maxBeats) {
     issues.push(
       issue(

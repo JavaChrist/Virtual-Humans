@@ -170,6 +170,13 @@ export function CreativeSection({
               Inputs : Brief rev. {dry.briefRevision} · Marketing Plan rev.{" "}
               {dry.marketingPlanRevision}
             </li>
+            <li>Prompt : {dry.promptVersion}</li>
+            <li>Schema : {dry.schemaVersion}</li>
+            {dry.durationSeconds != null && dry.maxBeats != null && (
+              <li>
+                Durée : {dry.durationSeconds}s · maxBeats : {dry.maxBeats}
+              </li>
+            )}
           </ul>
           {dry.missingInformation.length > 0 && (
             <ul className="list-disc pl-5 text-xs text-[var(--muted)] mt-2">

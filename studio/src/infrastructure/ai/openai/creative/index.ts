@@ -21,6 +21,7 @@ export {
 export {
   CREATIVE_ANALYZER_PROMPT_VERSION,
   CREATIVE_ANALYZER_SYSTEM_PROMPT,
+  buildCreativeAnalyzerInstructions,
   assertCreativePromptSafeForLogs,
 } from "./prompt";
 export {

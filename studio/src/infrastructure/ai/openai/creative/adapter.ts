@@ -32,9 +32,10 @@ import {
 } from "../marketing/pricing";
 import { toCreativeAnalyzerError } from "./map-to-creative-failure";
 import { parseCreativeCandidateResponse } from "./parser";
+import { resolveCreativeArcBeatBudget } from "@/domain/creative";
 import {
   CREATIVE_ANALYZER_PROMPT_VERSION,
-  CREATIVE_ANALYZER_SYSTEM_PROMPT,
+  buildCreativeAnalyzerInstructions,
 } from "./prompt";
 import { mapCreativeAnalysisRequest } from "./mapping";
 import {
@@ -123,6 +124,12 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
         });
       }
 
+      // 8H-B — compute once; same budget for prompt + OpenAI maxItems.
+      const arcBudget = resolveCreativeArcBeatBudget(
+        request.brief.durationSeconds,
+      );
+      const instructions = buildCreativeAnalyzerInstructions(arcBudget);
+
       const safetyIdentifier = deriveSafetyIdentifier({
         workspaceId: this.config.workspaceId,
         secret: this.config.safetyIdentifierSecret,
@@ -131,13 +138,13 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
       const result = await this.client.create(
         {
           model: this.config.model,
-          instructions: CREATIVE_ANALYZER_SYSTEM_PROMPT,
+          instructions,
           input: mapped.userMessage,
           store: false,
           maxOutputTokens: this.config.maxOutputTokens,
           reasoningEffort: this.config.reasoningEffort,
           textFormat: getCreativeCandidateTextFormat({
-            durationSeconds: request.brief.durationSeconds,
+            maxBeats: arcBudget.maxBeats,
           }),
           safetyIdentifier,
         },

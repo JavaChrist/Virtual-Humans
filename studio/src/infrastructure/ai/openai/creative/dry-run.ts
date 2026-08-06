@@ -4,7 +4,10 @@
 
 import type { VideoProjectBrief } from "@/domain/brief";
 import type { BudgetDecision } from "@/domain/cost";
-import { assessCreativeReadiness } from "@/domain/creative";
+import {
+  assessCreativeReadiness,
+  resolveCreativeArcBeatBudget,
+} from "@/domain/creative";
 import type { MarketingPlan } from "@/domain/marketing";
 import {
   canExecuteCreativeAi,
@@ -20,7 +23,7 @@ import type { AiTokenPricingPort } from "../marketing/pricing";
 import { createUnknownAiTokenPricing } from "../marketing/pricing";
 import {
   CREATIVE_ANALYZER_PROMPT_VERSION,
-  CREATIVE_ANALYZER_SYSTEM_PROMPT,
+  buildCreativeAnalyzerInstructions,
 } from "./prompt";
 import {
   approximateCreativeTokenCount,
@@ -29,6 +32,7 @@ import {
 import {
   CREATIVE_CANDIDATE_SCHEMA_VERSION,
   getCreativeCandidateJsonSchema,
+  getCreativeCandidateTextFormat,
 } from "./schema";
 
 export type OpenAICreativeDryRunValidation = {
@@ -55,6 +59,9 @@ export type OpenAICreativeDryRunResult = {
   warnings: OpenAICreativeDryRunWarning[];
   approximateInputTokens?: number;
   maxOutputTokens: number;
+  /** Domain-computed once for this brief (8H-B). */
+  durationSeconds?: number;
+  maxBeats?: number;
 };
 
 export type OpenAICreativeDryRunDeps = {
@@ -164,8 +171,27 @@ export function runOpenAICreativeDryRun(
     });
   }
 
+  // 8H-B — same one-shot budget as adapter (prompt + schema maxItems).
+  const arcBudget = resolveCreativeArcBeatBudget(brief.durationSeconds);
+  const instructions = buildCreativeAnalyzerInstructions(arcBudget);
+  const textFormat = getCreativeCandidateTextFormat({
+    maxBeats: arcBudget.maxBeats,
+  });
+  const schemaMaxItems = (
+    (textFormat.schema as { properties?: { emotionalArc?: { maxItems?: number } } })
+      .properties?.emotionalArc?.maxItems
+  );
+  validations.push({
+    code: "arc_beat_budget",
+    passed: schemaMaxItems === arcBudget.maxBeats,
+    message:
+      schemaMaxItems === arcBudget.maxBeats
+        ? `Arc duration=${arcBudget.durationSeconds}s → maxBeats=${arcBudget.maxBeats} (prompt + schema).`
+        : `Incohérence maxBeats (budget=${arcBudget.maxBeats}, schema=${schemaMaxItems}).`,
+  });
+
   const approxIn = approximateCreativeTokenCount(
-    CREATIVE_ANALYZER_SYSTEM_PROMPT + mapped.userMessage
+    instructions + mapped.userMessage
   );
   warnings.push({
     code: "approx_tokens",
@@ -212,5 +238,7 @@ export function runOpenAICreativeDryRun(
     warnings,
     approximateInputTokens: approxIn,
     maxOutputTokens: config.maxOutputTokens,
+    durationSeconds: arcBudget.durationSeconds,
+    maxBeats: arcBudget.maxBeats,
   };
 }
