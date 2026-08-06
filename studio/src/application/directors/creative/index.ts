@@ -5,6 +5,13 @@ export type {
   CreativeAnalyzerMetering,
   CreativeAnalyzerUsage,
 } from "./analyzer-port";
+
+export {
+  CREATIVE_FAILURE_PUBLIC_MESSAGES,
+  creativeFailure,
+  publicMessageForCreativeFailureCode,
+  withCreativePublicMessage,
+} from "./failures";
 export {
   runCreativeDryRun,
   type CreativeDryRunResult,

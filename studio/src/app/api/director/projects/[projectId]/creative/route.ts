@@ -19,10 +19,10 @@ import {
 import { mapMarketingFailureToHttp as mapCreativeFailureToHttp } from "@/application/directors/marketing/http-map";
 import {
   MARKETING_ANALYSIS_FAILURE_CODES,
-  MARKETING_FAILURE_PUBLIC_MESSAGES,
   type MarketingAnalysisFailure as CreativeAnalysisFailure,
   type MarketingAnalysisFailureCode as CreativeAnalysisFailureCode,
 } from "@/application/directors/marketing/failures";
+import { CREATIVE_FAILURE_PUBLIC_MESSAGES } from "@/application/directors/creative/failures";
 
 export const dynamic = "force-dynamic";
 
@@ -180,7 +180,8 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
           failureFromServiceResult({
             code: result.code,
             publicMessage: result.publicMessage,
-            retryable: result.retryable,
+            // Creative: auto-retryable always false (8G-A).
+            retryable: false,
             retryAfterSeconds: result.retryAfterSeconds,
             provider: result.provider,
           })
@@ -189,7 +190,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
           projectId,
           directorRunId: result.directorRunId,
           failureCode: mapped.body.error.code,
-          retryable: mapped.body.error.retryable,
+          retryable: false,
           provider: result.provider,
           httpStatus: mapped.status,
           reservationReleased: true,
@@ -204,7 +205,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         projectId,
         directorRunId: result.directorRunId,
         failureCode: result.code,
-        retryable: result.retryable,
+        retryable: false,
         httpStatus: result.httpHint,
         reservationReleased: true,
       });
@@ -213,7 +214,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
           status: "failed",
           error: {
             code: result.code,
-            retryable: result.retryable,
+            retryable: false,
             message: result.publicMessage,
           },
         },
@@ -237,7 +238,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         error: {
           code: "internal_error",
           retryable: false,
-          message: MARKETING_FAILURE_PUBLIC_MESSAGES.internal_error,
+          message: CREATIVE_FAILURE_PUBLIC_MESSAGES.internal_error,
         },
       },
       { status: 500 }

@@ -269,6 +269,7 @@ test("taxonomie — rate_limited / timeout / 5xx / 401 / 403, jamais invalid_can
     assert.equal(calls, 1);
   }
 
+  // 8G-A — Creative auto-retryable always false (human retry may be gated later).
   await expectCode(
     () => {
       throw mapOpenAIHttpError(429, "rate_limit_exceeded", {
@@ -276,21 +277,21 @@ test("taxonomie — rate_limited / timeout / 5xx / 401 / 403, jamais invalid_can
       });
     },
     "rate_limited",
-    true
+    false
   );
   await expectCode(
     () => {
       throw new OpenAIAiError("timeout");
     },
     "timeout",
-    true
+    false
   );
   await expectCode(
     () => {
       throw mapOpenAIHttpError(503);
     },
     "provider_unavailable",
-    true
+    false
   );
   await expectCode(
     () => {
@@ -305,6 +306,76 @@ test("taxonomie — rate_limited / timeout / 5xx / 401 / 403, jamais invalid_can
     },
     "forbidden",
     false
+  );
+});
+
+test("8G-A — incomplete/ISO préservés (jamais remappés en internal_error)", async () => {
+  const brief = makeCreativeBrief();
+  const plan = makeMarketingPlan(brief);
+
+  async function expectFailure(
+    result: OpenAIResponseResult,
+    code: string,
+    opts?: { incompleteReason?: string; hasUsage?: boolean }
+  ) {
+    const adapter = createOpenAICreativeAnalyzerAdapter({
+      client: fakeClient(async () => result, { calls: 0 }),
+      env: enabledEnv,
+      config: parseOpenAICreativeConfig(enabledEnv),
+      pricing: createUnknownAiTokenPricing(),
+    });
+    await assert.rejects(
+      () =>
+        adapter.analyze(
+          { brief, marketingPlan: plan },
+          { correlationId: "corr-8ga", mode: "execute" }
+        ),
+      (e: unknown) => {
+        assert.ok(e instanceof MarketingAnalyzerError);
+        assert.equal(e.failure.code, code);
+        assert.equal(e.failure.retryable, false);
+        assert.notEqual(e.failure.code, "internal_error");
+        assert.match(e.failure.publicMessage, /créative/i);
+        assert.equal(/marketing/i.test(e.failure.publicMessage), false);
+        if (opts?.incompleteReason) {
+          assert.equal(e.failure.internalCode, opts.incompleteReason);
+        }
+        if (opts?.hasUsage) {
+          assert.ok(e.metering?.usage?.totalTokens);
+        }
+        return true;
+      }
+    );
+  }
+
+  await expectFailure(
+    {
+      status: "incomplete",
+      incompleteReason: "max_output_tokens",
+      usage: {
+        inputTokens: 100,
+        outputTokens: 4000,
+        totalTokens: 4100,
+        reasoningTokens: 3500,
+      },
+    },
+    "incomplete",
+    { incompleteReason: "max_output_tokens", hasUsage: true }
+  );
+  await expectFailure(
+    { status: "completed", outputText: "{not-json", usage: { totalTokens: 10 } },
+    "invalid_structured_output",
+    { hasUsage: true }
+  );
+  await expectFailure(
+    { status: "completed", refusal: "policy", usage: { totalTokens: 3 } },
+    "refused",
+    { hasUsage: true }
+  );
+  await expectFailure(
+    { status: "completed", outputText: "", usage: { totalTokens: 2 } },
+    "empty_response",
+    { hasUsage: true }
   );
 });
 

@@ -1,5 +1,5 @@
 /**
- * OpenAI CreativeAnalyzerPort adapter (VHS-118A).
+ * OpenAI CreativeAnalyzerPort adapter (VHS-118A / 8G-A).
  * Returns untrusted CreativeAnalysisCandidate — never finalizes CreativeConcept.
  */
 
@@ -9,6 +9,7 @@ import type {
   CreativeAnalyzerPort,
 } from "@/application/directors/creative";
 import type { DirectorRunContext } from "@/application/directors/creative/result";
+import { isMarketingAnalyzerError } from "@/application/directors/marketing/failures";
 import {
   canExecuteCreativeAi,
   isDirectorV2CreativeAiEnabled,
@@ -20,9 +21,8 @@ import {
   parseOpenAICreativeConfig,
   type OpenAICreativeConfig,
 } from "../config";
-import { OpenAIAiError } from "../errors";
+import { isOpenAIAiError, OpenAIAiError } from "../errors";
 import { buildAnalyzerMetering } from "../build-analyzer-metering";
-import { toAnalyzerError } from "../map-to-analyzer-failure";
 import { deriveSafetyIdentifier } from "../safety-identifier";
 import { usageConsistencyWarning } from "../usage";
 import {
@@ -30,6 +30,7 @@ import {
   createUnknownAiTokenPricing,
   type AiTokenPricingPort,
 } from "../marketing/pricing";
+import { toCreativeAnalyzerError } from "./map-to-creative-failure";
 import { parseCreativeCandidateResponse } from "./parser";
 import {
   CREATIVE_ANALYZER_PROMPT_VERSION,
@@ -86,6 +87,11 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
       schemaVersion: CREATIVE_CANDIDATE_SCHEMA_VERSION,
       mode: context.mode,
     });
+
+    /** Hoisted so parse/provider failures can still commit known usage. */
+    let meteringForFail:
+      | import("@/application/directors/shared/analyzer-metering").AnalyzerMetering
+      | undefined;
 
     try {
       if (!isDirectorV2CreativeAiEnabled(this.env)) {
@@ -146,7 +152,28 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
           schemaVersion: CREATIVE_CANDIDATE_SCHEMA_VERSION,
           durationMs: this.nowMs() - started,
         });
-        throw new OpenAIAiError("refused");
+        meteringForFail = buildAnalyzerMetering({
+          model: this.config.model,
+          usage: result.usage,
+          pricing: this.pricing,
+        });
+        throw new OpenAIAiError("refused", {
+          structuredOutputObs: {
+            category: "refused",
+            responseStatus: result.status,
+            incompleteReason: result.incompleteReason,
+            usage: result.usage
+              ? {
+                  inputTokens: result.usage.inputTokens,
+                  outputTokens: result.usage.outputTokens,
+                  totalTokens: result.usage.totalTokens,
+                  reasoningTokens: result.usage.reasoningTokens,
+                  cachedInputTokens: result.usage.cachedInputTokens,
+                }
+              : undefined,
+            providerRequestId: result.id,
+          },
+        });
       }
 
       const usage = result.usage;
@@ -156,13 +183,10 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
         usage,
         pricing: this.pricing,
       });
+      meteringForFail = metering;
 
-      let candidate;
-      try {
-        candidate = parseCreativeCandidateResponse(result);
-      } catch (parseErr) {
-        throw toAnalyzerError(parseErr, { metering });
-      }
+      // Keep OpenAIAiError (+ structuredOutputObs) until the outer catch maps once.
+      const candidate = parseCreativeCandidateResponse(result);
 
       logger.info("creative.ai.request.completed", logCtx, {
         model: this.config.model,
@@ -182,11 +206,16 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
 
       return { candidate, metering };
     } catch (e) {
-      const openaiErr =
-        e instanceof OpenAIAiError
-          ? e
-          : new OpenAIAiError("unknown", { internalCode: "adapter" });
-      const analyzerErr = toAnalyzerError(openaiErr);
+      // 8G-A: never collapse MarketingAnalyzerError / OpenAIAiError → unknown.
+      const openaiErr = isOpenAIAiError(e) ? e : undefined;
+      const analyzerErr = isMarketingAnalyzerError(e)
+        ? toCreativeAnalyzerError(e)
+        : toCreativeAnalyzerError(
+            openaiErr ??
+              new OpenAIAiError("unknown", { internalCode: "adapter" }),
+            { metering: meteringForFail }
+          );
+      const so = openaiErr?.structuredOutputObs;
       logger.info("creative.ai.request.failed", logCtx, {
         model: this.config.model,
         promptVersion: CREATIVE_ANALYZER_PROMPT_VERSION,
@@ -194,9 +223,38 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
         durationMs: this.nowMs() - started,
         failureCode: analyzerErr.failure.code,
         code: analyzerErr.failure.code,
+        internalCode:
+          analyzerErr.failure.internalCode ?? openaiErr?.internalCode,
         retryable: analyzerErr.failure.retryable,
         provider: analyzerErr.failure.provider,
         httpStatus: analyzerErr.failure.httpStatus,
+        providerErrorCode: openaiErr?.providerObs?.providerErrorCode,
+        providerErrorType: openaiErr?.providerObs?.providerErrorType,
+        providerRequestId:
+          openaiErr?.providerObs?.providerRequestId ?? so?.providerRequestId,
+        rateLimitLimitRequests: openaiErr?.providerObs?.rateLimitLimitRequests,
+        rateLimitRemainingRequests:
+          openaiErr?.providerObs?.rateLimitRemainingRequests,
+        rateLimitResetRequests: openaiErr?.providerObs?.rateLimitResetRequests,
+        structuredOutputCategory: so?.category,
+        zodPaths: so?.zodPaths,
+        zodCodes: so?.zodCodes,
+        zodTypeMismatches: so?.zodTypeMismatches,
+        responseStatus: so?.responseStatus,
+        incompleteReason: so?.incompleteReason,
+        inputTokens:
+          so?.usage?.inputTokens ?? analyzerErr.metering?.usage?.inputTokens,
+        outputTokens:
+          so?.usage?.outputTokens ?? analyzerErr.metering?.usage?.outputTokens,
+        totalTokens:
+          so?.usage?.totalTokens ?? analyzerErr.metering?.usage?.totalTokens,
+        reasoningTokens:
+          so?.usage?.reasoningTokens ??
+          analyzerErr.metering?.usage?.reasoningTokens,
+        cachedInputTokens:
+          so?.usage?.cachedInputTokens ??
+          analyzerErr.metering?.usage?.cachedInputTokens,
+        costStatus: analyzerErr.metering?.cost.status,
       });
       throw analyzerErr;
     }

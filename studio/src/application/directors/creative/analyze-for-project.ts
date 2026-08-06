@@ -11,10 +11,8 @@ import {
   type CreativeConcept,
 } from "@/domain/creative";
 import { MarketingPlanSchema } from "@/domain/marketing";
-import {
-  httpStatusForMarketingFailure,
-  MARKETING_FAILURE_PUBLIC_MESSAGES,
-} from "@/application/directors/marketing/failures";
+import { httpStatusForMarketingFailure } from "@/application/directors/marketing/failures";
+import { CREATIVE_FAILURE_PUBLIC_MESSAGES } from "@/application/directors/creative/failures";
 import {
   meteringCostStatusForFail,
   meteringKnownCostMinor,
@@ -685,7 +683,7 @@ export function createAnalyzeCreativeForProject(
         return failedAnalysis(
           "budget_exceeded",
           /insufficient/i.test(msg)
-            ? MARKETING_FAILURE_PUBLIC_MESSAGES.budget_exceeded
+            ? CREATIVE_FAILURE_PUBLIC_MESSAGES.budget_exceeded
             : "Réservation budget impossible.",
           402,
           { directorRunId }
@@ -750,7 +748,8 @@ export function createAnalyzeCreativeForProject(
           result.failure.publicMessage,
           mapped === 202 ? 500 : mapped,
           {
-            retryable: result.failure.retryable,
+            // Creative: never auto-retry (human retry gated separately).
+            retryable: false,
             retryAfterSeconds: result.failure.retryAfterSeconds,
             provider: result.failure.provider,
             directorRunId,
@@ -799,7 +798,7 @@ export function createAnalyzeCreativeForProject(
         return failedAnalysis(
           "invalid_candidate",
           result.errors[0]?.message ??
-            MARKETING_FAILURE_PUBLIC_MESSAGES.invalid_candidate,
+            CREATIVE_FAILURE_PUBLIC_MESSAGES.invalid_candidate,
           422,
           { directorRunId }
         );
@@ -823,7 +822,7 @@ export function createAnalyzeCreativeForProject(
         });
         return failedAnalysis(
           "budget_exceeded",
-          MARKETING_FAILURE_PUBLIC_MESSAGES.budget_exceeded,
+          CREATIVE_FAILURE_PUBLIC_MESSAGES.budget_exceeded,
           402,
           { directorRunId }
         );
