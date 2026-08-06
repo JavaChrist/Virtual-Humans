@@ -4,6 +4,77 @@ import { fillSyntheticBrief } from "../helpers/director-flow";
 import { installNetworkBarrier } from "../helpers/network-barrier";
 
 test.describe("Double-clic + conflit révision", () => {
+  test("modale Creative — dry-run + Annuler + double-clic (2 cycles)", async ({
+    page,
+  }) => {
+    const barrier = await installNetworkBarrier(page);
+    await loginViaUi(page);
+    await fillSyntheticBrief(page);
+
+    // Marketing d'abord (prérequis Creative).
+    await page.getByRole("button", { name: "Vérifier le brief" }).click();
+    const mkt = page.getByRole("button", { name: "Lancer l’analyse marketing" });
+    await expect(mkt).toBeEnabled({ timeout: 20_000 });
+    await mkt.click();
+    const mktDialog = page.getByRole("dialog");
+    await expect(mktDialog).toBeVisible();
+    await mktDialog.getByRole("button", { name: "Lancer l’analyse" }).click();
+    await expect(page.getByText(/Stratégie marketing|Objectif|USP|Bénéfice/i).first()).toBeVisible({
+      timeout: 60_000,
+    });
+
+    const section = page.locator("section").filter({
+      has: page.getByRole("heading", { name: "Direction créative", exact: true }),
+    });
+
+    for (let cycle = 1; cycle <= 2; cycle++) {
+      await section.getByRole("button", { name: "Vérifier les prérequis" }).click();
+      const exec = section.getByRole("button", {
+        name: "Lancer l’analyse créative",
+        exact: true,
+      });
+      await expect(exec).toBeEnabled({ timeout: 30_000 });
+
+      // Dry-run card exposes live knobs (not hard-coded).
+      await expect(section.getByText(/Modèle\s*:/i)).toBeVisible();
+      await expect(section.getByText(/Reasoning\s*:/i)).toBeVisible();
+      await expect(section.getByText(/max_output_tokens\s*:/i)).toBeVisible();
+
+      await exec.click();
+      const dialog = page.getByRole("dialog");
+      await expect(dialog).toBeVisible({ timeout: 10_000 });
+      await expect(dialog.getByRole("heading", { name: /analyse créative/i })).toBeVisible();
+      await expect(dialog.getByText(/payant/i)).toBeVisible();
+      await expect(dialog.getByText(/Modèle\s*:/i)).toBeVisible();
+      await expect(dialog.getByText(/Reasoning\s*:/i)).toBeVisible();
+      await expect(dialog.getByText(/max_output_tokens\s*:/i)).toBeVisible();
+      await expect(dialog.getByText(/Aucun retry automatique/i)).toBeVisible();
+      await expect(dialog.getByText(/Brief rev\./i)).toBeVisible();
+      await expect(dialog.getByText(/Marketing Plan rev\./i)).toBeVisible();
+      const cancel = dialog.getByRole("button", { name: /^Annuler$/i });
+      await expect(cancel).toBeVisible();
+
+      if (cycle === 1) {
+        // Accessibilité : Annuler ferme sans exécuter.
+        await cancel.click();
+        await expect(dialog).toBeHidden({ timeout: 5_000 });
+        continue;
+      }
+
+      // Cycle 2 : double-clic confirm → un seul concept.
+      const confirmBtn = dialog.getByRole("button", { name: "Lancer l’analyse" });
+      await confirmBtn.dblclick({ delay: 30 }).catch(async () => {
+        await confirmBtn.click();
+        await confirmBtn.click({ force: true }).catch(() => undefined);
+      });
+      await expect(
+        section.getByText(/Concept créatif enregistré|Big idea|Logline/i).first(),
+      ).toBeVisible({ timeout: 60_000 });
+    }
+
+    barrier.assertClean();
+  });
+
   test("double-clic marketing → un seul artifact durable", async ({ page }) => {
     const barrier = await installNetworkBarrier(page);
     await loginViaUi(page);

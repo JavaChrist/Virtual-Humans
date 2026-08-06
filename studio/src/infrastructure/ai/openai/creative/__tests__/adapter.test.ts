@@ -82,9 +82,12 @@ test("mapping — déterministe", () => {
   assert.equal(a.userMessage, b.userMessage);
 });
 
-test("prompt — versionné, sans provider / Tom / Mei", () => {
-  assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v1");
+test("prompt — versionné v2, descripteurs génériques, sans provider / Tom / Mei", () => {
+  assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v2");
   assertCreativePromptSafeForLogs(CREATIVE_ANALYZER_SYSTEM_PROMPT);
+  assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /generic visual descriptors/i);
+  assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /Never name living or deceased artists/i);
+  assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /reformulate/i);
 });
 
 test("schema contract — strict + enums", () => {
@@ -419,6 +422,8 @@ test("dry-run — flags / clé / injection / pricing / providerCalled false", ()
   assert.equal(ready.providerCalled, false);
   assert.equal(ready.pricingConfigured, false);
   assert.equal(ready.promptVersion, CREATIVE_ANALYZER_PROMPT_VERSION);
+  assert.ok(typeof ready.reasoningEffort === "string" && ready.reasoningEffort.length > 0);
+  assert.ok(ready.maxOutputTokens > 0);
 });
 
 test("régression Marketing — rate_limited préservé (suite Marketing inchangée)", async () => {

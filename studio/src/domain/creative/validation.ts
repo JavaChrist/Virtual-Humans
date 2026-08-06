@@ -9,6 +9,9 @@ import {
   type CreativeEvidence,
 } from "./creative-concept";
 import type { CreativeValidationIssue, CreativeWarning } from "./errors";
+import { detectForbiddenReferences } from "./forbidden-references";
+
+export { detectForbiddenReferences } from "./forbidden-references";
 
 const TECHNICAL_LEAK_KEYS = [
   "provider",
@@ -43,9 +46,6 @@ const GENERATION_COST_LEAK =
 
 const UNSOURCED_PROMISE =
   /\b(guaranteed|garanti|100\s*%|miracle|sans risque|risk[- ]free|double[rz]? (vos|your))\b/i;
-
-const LIVING_ARTIST_OR_IP =
-  /\b(dans le style (exact )?de|in the (exact )?style of|comme\s+[A-Z][a-zéèê]+(?:\s+[A-Z][a-zéèê]+)?|pixar|disney|marvel|star wars|harry potter)\b/i;
 
 const FEATURE_LIST =
   /^(?:[-*•]\s+.+\n){2,}/m;
@@ -86,20 +86,6 @@ export function detectResponsibilityLeaks(text: string, field: string): Creative
   }
   if (GENERATION_COST_LEAK.test(text)) {
     issues.push(issue("responsibility_leak", "Coût ou stratégie de génération détecté.", field));
-  }
-  return issues;
-}
-
-export function detectForbiddenReferences(text: string, field: string): CreativeValidationIssue[] {
-  const issues: CreativeValidationIssue[] = [];
-  if (LIVING_ARTIST_OR_IP.test(text)) {
-    issues.push(
-      issue(
-        "forbidden_reference",
-        "Référence à un artiste, imitation exacte ou IP non autorisée.",
-        field,
-      ),
-    );
   }
   return issues;
 }

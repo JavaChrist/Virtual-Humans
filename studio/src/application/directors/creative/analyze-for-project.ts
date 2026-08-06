@@ -41,6 +41,10 @@ import {
   runOpenAICreativeDryRun,
 } from "@/infrastructure/ai/openai/creative";
 import type { AiTokenPricingPort } from "@/infrastructure/ai/openai/marketing/pricing";
+import {
+  createLogContext,
+  logger,
+} from "@/infrastructure/observability";
 import { createCreativeDirector } from "./creative-director";
 import type { CreativeAnalyzerPort } from "./analyzer-port";
 import type { DirectorRunContext } from "./result";
@@ -73,6 +77,8 @@ export type CreativeProjectDryRunResult = {
   marketingPlanRevision: number;
   marketingPlanArtifactId: string;
   model: string;
+  reasoningEffort: string;
+  maxOutputTokens: number;
   promptVersion: string;
   schemaVersion: string;
   pricingConfigured: boolean;
@@ -316,6 +322,8 @@ function emptyDry(
     marketingPlanRevision: 0,
     marketingPlanArtifactId: "",
     model: DEFAULT_OPENAI_CREATIVE_MODEL,
+    reasoningEffort: "unknown",
+    maxOutputTokens: 0,
     promptVersion: CREATIVE_ANALYZER_PROMPT_VERSION,
     schemaVersion: CREATIVE_CANDIDATE_SCHEMA_VERSION,
     pricingConfigured: false,
@@ -424,6 +432,7 @@ export function createAnalyzeCreativeForProject(
 
       const e2e = isDirectorE2eFakeMode(env);
       const domainExecutable = e2e ? true : aiDry.executable;
+      const e2eCfg = e2e ? e2eFakeOpenAiConfig() : null;
       return {
         executable: domainExecutable,
         providerCalled: false,
@@ -437,7 +446,9 @@ export function createAnalyzeCreativeForProject(
         briefArtifactId: brief.artifactId,
         marketingPlanRevision: plan.revision,
         marketingPlanArtifactId: plan.artifactId,
-        model: e2e ? e2eFakeOpenAiConfig().model : aiDry.model,
+        model: e2eCfg?.model ?? aiDry.model,
+        reasoningEffort: e2eCfg?.reasoningEffort ?? aiDry.reasoningEffort,
+        maxOutputTokens: e2eCfg?.maxOutputTokens ?? aiDry.maxOutputTokens,
         promptVersion: aiDry.promptVersion,
         schemaVersion: aiDry.schemaVersion,
         pricingConfigured: e2e ? true : aiDry.pricingConfigured,
@@ -748,6 +759,31 @@ export function createAnalyzeCreativeForProject(
       }
 
       if (result.status === "invalid") {
+        // Redacted observability only — never log the candidate payload.
+        const corr = context.correlationId;
+        logger.info(
+          "director.creative.invalid_candidate",
+          createLogContext(corr, {
+            projectId: input.projectId,
+            operation: "director.creative.execute",
+          }),
+          {
+            directorRunId,
+            requestIdRedacted:
+              corr.length > 12 ? `${corr.slice(0, 8)}…${corr.slice(-4)}` : "[redacted]",
+            usage: meteringUsage ?? null,
+            actualCostMinor: meteringKnownCost ?? null,
+            issues: result.errors.map((e) => ({
+              validatorCode: e.code,
+              fieldPath: e.field ?? null,
+              matchedRule: e.diagnostics?.matchedRule ?? null,
+              category: e.diagnostics?.category ?? null,
+              matchHash: e.diagnostics?.matchHash ?? null,
+              matchLen: e.diagnostics?.matchLen ?? null,
+              sourceType: e.diagnostics?.sourceType ?? "candidate_field",
+            })),
+          },
+        );
         await deps.directorRuns.failRun({
           directorRunId,
           workspaceId: deps.workspaceId,

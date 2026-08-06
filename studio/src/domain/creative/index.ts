@@ -32,6 +32,7 @@ export {
   CreativeDomainError,
   isCreativeDomainError,
   type CreativeErrorCode,
+  type CreativeIssueDiagnostics,
   type CreativeValidationIssue,
   type CreativeWarning,
   type MissingInformation,
@@ -67,6 +68,12 @@ export {
   validateMarketingConservation,
   validateReferenceKeywords,
 } from "./validation";
+
+export {
+  inspectForbiddenReferences,
+  type ForbiddenReferenceCategory,
+  type ForbiddenReferenceDiagnostics,
+} from "./forbidden-references";
 
 export {
   assessCreativeReadiness,

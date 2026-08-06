@@ -76,4 +76,15 @@ test("mots ordinaires ne bloquent pas (caméra au sens figuré absent)", () => {
 test("artiste / IP refusés", () => {
   assert.ok(detectForbiddenReferences("dans le style exact de Picasso", "bigIdea").length > 0);
   assert.ok(detectForbiddenReferences("comme un film Marvel", "logline").length > 0);
+  assert.ok(detectForbiddenReferences("à la manière de Wes Anderson", "notes").length > 0);
+});
+
+test("faux positifs français / plateforme / générique non refusés", () => {
+  assert.equal(detectForbiddenReferences("comme un film documentaire", "logline").length, 0);
+  assert.equal(detectForbiddenReferences("Publier sur LinkedIn", "openingDevice").length, 0);
+  assert.equal(detectForbiddenReferences("Comme Objectif accélère", "bigIdea").length, 0);
+  assert.equal(
+    detectForbiddenReferences("palette chaude, rythme dynamique, texture grain", "notes").length,
+    0,
+  );
 });

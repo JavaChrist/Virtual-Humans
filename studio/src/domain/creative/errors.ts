@@ -32,10 +32,20 @@ export function isCreativeDomainError(e: unknown): e is CreativeDomainError {
   return e instanceof CreativeDomainError;
 }
 
+/** Redacted diagnostics only — never full candidate text. */
+export type CreativeIssueDiagnostics = {
+  matchedRule?: string;
+  category?: string;
+  matchHash?: string;
+  matchLen?: number;
+  sourceType?: "candidate_field" | "brief" | "marketing_plan";
+};
+
 export type CreativeValidationIssue = {
   code: CreativeErrorCode | string;
   field?: string;
   message: string;
+  diagnostics?: CreativeIssueDiagnostics;
 };
 
 export type CreativeWarning = {

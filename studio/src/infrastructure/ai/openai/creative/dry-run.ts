@@ -46,6 +46,7 @@ export type OpenAICreativeDryRunResult = {
   executable: boolean;
   providerCalled: false;
   model: string;
+  reasoningEffort: string;
   promptVersion: string;
   schemaVersion: string;
   pricingConfigured: boolean;
@@ -80,6 +81,7 @@ export function runOpenAICreativeDryRun(
       executable: false,
       providerCalled: false,
       model: "unknown",
+      reasoningEffort: "unknown",
       promptVersion: CREATIVE_ANALYZER_PROMPT_VERSION,
       schemaVersion: CREATIVE_CANDIDATE_SCHEMA_VERSION,
       pricingConfigured: false,
@@ -201,6 +203,7 @@ export function runOpenAICreativeDryRun(
     executable,
     providerCalled: false,
     model: config.model,
+    reasoningEffort: config.reasoningEffort,
     promptVersion: CREATIVE_ANALYZER_PROMPT_VERSION,
     schemaVersion: CREATIVE_CANDIDATE_SCHEMA_VERSION,
     pricingConfigured,
