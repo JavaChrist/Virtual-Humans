@@ -39,6 +39,10 @@ export type CreativeIssueDiagnostics = {
   matchHash?: string;
   matchLen?: number;
   sourceType?: "candidate_field" | "brief" | "marketing_plan";
+  /** Numeric-only arc shape (8H-A) — never beat prose. */
+  arcLength?: number;
+  /** Beat `order` values only (post-normalization when available). */
+  orders?: number[];
 };
 
 export type CreativeValidationIssue = {

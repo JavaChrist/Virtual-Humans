@@ -26,6 +26,7 @@ export {
 export {
   CREATIVE_CANDIDATE_SCHEMA_NAME,
   CREATIVE_CANDIDATE_SCHEMA_VERSION,
+  applyEmotionalArcMaxBeats,
   getCreativeCandidateJsonSchema,
   getCreativeCandidateTextFormat,
   creativeCandidateSchemaContract,

@@ -82,18 +82,20 @@ test("mapping — déterministe", () => {
   assert.equal(a.userMessage, b.userMessage);
 });
 
-test("prompt — versionné v2, descripteurs génériques, sans provider / Tom / Mei", () => {
-  assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v3");
+test("prompt — versionné v4, descripteurs génériques, paliers durée, sans provider / Tom / Mei", () => {
+  assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v4");
   assertCreativePromptSafeForLogs(CREATIVE_ANALYZER_SYSTEM_PROMPT);
   assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /generic visual descriptors/i);
   assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /Never name living or deceased artists/i);
   assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /reformulate/i);
+  assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /at most 5 when ≤ 30s/i);
+  assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /2 to 6 beats/i);
 });
 
 test("schema contract — strict + enums", () => {
   const c = creativeCandidateSchemaContract();
-  assert.equal(c.name, "creative-analysis-candidate-v1");
-  assert.equal(c.version, "1.0.0");
+  assert.equal(c.name, "creative-analysis-candidate-v1_1");
+  assert.equal(c.version, "1.1.0");
   assert.equal(c.additionalPropertiesFalse, true);
   assert.ok(c.required.includes("title"));
   assert.ok(c.required.includes("bigIdea"));
@@ -182,7 +184,7 @@ test("adapter — Responses store false, un outil, un appel, candidat non finali
   assert.equal(last.req.previous_response_id, undefined);
   assert.equal(last.req.textFormat.type, "json_schema");
   assert.equal(last.req.textFormat.strict, true);
-  assert.equal(last.req.textFormat.name, "creative-analysis-candidate-v1");
+  assert.equal(last.req.textFormat.name, "creative-analysis-candidate-v1_1");
 });
 
 test("injection — zéro appel, erreur sûre, pas d'echo", async () => {

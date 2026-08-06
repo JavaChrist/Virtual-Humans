@@ -8,6 +8,7 @@ import {
   CreativeAnalysisCandidateSchema,
   finalizeCreativeConcept,
   isCreativeDomainError,
+  normalizeCreativeCandidate,
   validateCandidateAgainstMarketing,
   type CreativeValidationIssue,
 } from "@/domain/creative";
@@ -145,8 +146,10 @@ export function createCreativeDirector(
       }
 
       const metering = outcome.metering;
+      // Normalize first so analyzer beats (no order) and messy orders become index+1.
+      const normalizedCandidate = normalizeCreativeCandidate(outcome.candidate);
       const candidateParsed = CreativeAnalysisCandidateSchema.safeParse(
-        outcome.candidate,
+        normalizedCandidate,
       );
       if (!candidateParsed.success) {
         return {
@@ -160,8 +163,9 @@ export function createCreativeDirector(
         };
       }
 
+      const candidate = candidateParsed.data;
       const { issues, warnings } = validateCandidateAgainstMarketing(
-        candidateParsed.data,
+        candidate,
         marketingPlan,
         brief,
       );
@@ -177,8 +181,26 @@ export function createCreativeDirector(
             "invalid_candidate",
           ].includes(i.code),
         );
+        const withArcObs = (list: CreativeValidationIssue[]) =>
+          list.map((i) =>
+            i.field === "emotionalArc" || i.field?.startsWith("emotionalArc")
+              ? {
+                  ...i,
+                  diagnostics: {
+                    ...i.diagnostics,
+                    sourceType: i.diagnostics?.sourceType ?? "candidate_field",
+                    arcLength: candidate.emotionalArc.length,
+                    orders: candidate.emotionalArc.map((b) => b.order),
+                  },
+                }
+              : i,
+          );
         if (critical.length > 0) {
-          return { status: "invalid", errors: critical, metering };
+          return {
+            status: "invalid",
+            errors: withArcObs(critical),
+            metering,
+          };
         }
         return {
           status: "needs_input",
@@ -197,7 +219,7 @@ export function createCreativeDirector(
         const concept = finalizeCreativeConcept({
           brief,
           marketingPlan,
-          candidate: candidateParsed.data,
+          candidate,
           metadata: {
             id: context.planId ?? newConceptId(),
             createdBy: context.createdBy ?? "system",

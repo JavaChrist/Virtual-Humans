@@ -3,6 +3,7 @@ import type { VideoProjectBrief } from "@/domain/brief";
 import type { MarketingPlan } from "@/domain/marketing";
 import {
   CREATIVE_CONCEPT_SCHEMA_VERSION,
+  CREATIVE_FIELD_LIMITS,
   type CreativeAnalysisCandidate,
   type CreativeAssumption,
   type CreativeConcept,
@@ -79,6 +80,19 @@ export function finalizeCreativeConcept(input: FinalizeCreativeConceptInput): Cr
       statement: "Une seule grande idée porte le film court.",
       status: "explicit",
       affectsFields: ["bigIdea"],
+    });
+  }
+  // 8H-A — technical provenance: order is derived from array index, never reordered.
+  if (
+    assumptions.length < CREATIVE_FIELD_LIMITS.assumptionsMax &&
+    !assumptions.some((a) => a.id === "assumption-emotional-arc-array-order")
+  ) {
+    assumptions.push({
+      id: "assumption-emotional-arc-array-order",
+      statement:
+        "Ordre des beats dérivé de la position du tableau (index+1); la séquence narrative n'est jamais réordonnée.",
+      status: "explicit",
+      affectsFields: ["emotionalArc"],
     });
   }
   for (const a of planSnapshot.assumptions) {

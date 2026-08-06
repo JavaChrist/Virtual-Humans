@@ -30,19 +30,55 @@ export function normalizeReferenceKeywords(keywords: string[]): string[] {
   return out;
 }
 
-export function normalizeEmotionalArc(beats: EmotionalBeat[]): EmotionalBeat[] {
-  // Clean texts only — order contiguity is an invariant, never silently repaired.
-  return beats.map((b) => ({
-    order: b.order,
+/**
+ * Array position is the canonical narrative sequence (8H-A).
+ *
+ * - Never reorders beats (content/sequence preserved as emitted).
+ * - Assigns `order = index + 1` deterministically.
+ * - Ignores any model-provided `order` (derived field, not business input).
+ * - Length / emptiness / semantic gates stay in validation (hard gate).
+ */
+export function normalizeEmotionalArc(
+  beats: ReadonlyArray<{
+    order?: number;
+    purpose: EmotionalBeat["purpose"];
+    emotion: string;
+    description: string;
+  }>,
+): EmotionalBeat[] {
+  return beats.map((b, index) => ({
+    order: index + 1,
     purpose: b.purpose,
     emotion: cleanBoundedText(b.emotion, CREATIVE_FIELD_LIMITS.emotion),
-    description: cleanBoundedText(b.description, CREATIVE_FIELD_LIMITS.beatDescription),
+    description: cleanBoundedText(
+      b.description,
+      CREATIVE_FIELD_LIMITS.beatDescription,
+    ),
   }));
 }
 
-export function normalizeCreativeCandidate(
-  candidate: CreativeAnalysisCandidate,
-): CreativeAnalysisCandidate {
+/** Accepts domain candidates or analyzer candidates (beats may omit `order`). */
+export function normalizeCreativeCandidate(candidate: {
+  title: string;
+  logline: string;
+  bigIdea: string;
+  narrativeApproach: CreativeAnalysisCandidate["narrativeApproach"];
+  emotionalArc: ReadonlyArray<{
+    order?: number;
+    purpose: EmotionalBeat["purpose"];
+    emotion: string;
+    description: string;
+  }>;
+  openingDevice: CreativeAnalysisCandidate["openingDevice"];
+  proofDevice?: CreativeAnalysisCandidate["proofDevice"];
+  endingDevice: CreativeAnalysisCandidate["endingDevice"];
+  rhythm: CreativeAnalysisCandidate["rhythm"];
+  referenceKeywords: string[];
+  constraints?: CreativeAnalysisCandidate["constraints"];
+  assumptions?: CreativeAnalysisCandidate["assumptions"];
+  claimedEvidence?: CreativeAnalysisCandidate["claimedEvidence"];
+  notes?: string;
+}): CreativeAnalysisCandidate {
   const L = CREATIVE_FIELD_LIMITS;
   return {
     title: cleanBoundedText(candidate.title, L.title),

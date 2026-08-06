@@ -4,7 +4,7 @@
  */
 
 import {
-  CreativeAnalysisCandidateSchema,
+  CreativeAnalyzerCandidateSchema,
   normalizeCreativeCandidate,
   type CreativeAnalysisCandidate,
 } from "@/domain/creative";
@@ -143,7 +143,7 @@ export function parseCreativeCandidateResponse(
     });
   }
 
-  const zod = CreativeAnalysisCandidateSchema.safeParse(parsed);
+  const zod = CreativeAnalyzerCandidateSchema.safeParse(parsed);
   if (!zod.success) {
     throw new OpenAIAiError("invalid_structured_output", {
       internalCode: "zod_validation",
@@ -151,5 +151,6 @@ export function parseCreativeCandidateResponse(
     });
   }
 
+  // Array position → order = index + 1 (never reorder).
   return normalizeCreativeCandidate(zod.data);
 }

@@ -786,6 +786,9 @@ export function createAnalyzeCreativeForProject(
               matchHash: e.diagnostics?.matchHash ?? null,
               matchLen: e.diagnostics?.matchLen ?? null,
               sourceType: e.diagnostics?.sourceType ?? "candidate_field",
+              // Numeric-only arc shape (8H-A) — never beat prose.
+              arcLength: e.diagnostics?.arcLength ?? null,
+              orders: e.diagnostics?.orders ?? null,
             })),
           },
         );

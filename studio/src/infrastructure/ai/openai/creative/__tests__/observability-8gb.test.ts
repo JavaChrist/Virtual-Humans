@@ -85,24 +85,36 @@ test("8G-B — failed log exposes redacted taxonomy fields, never payload/prompt
 
     const blob = JSON.stringify(infoCalls);
     assert.equal(/sk-test|api[_ ]?key|system prompt|bigIdea|Picasso/i.test(blob), false);
-    assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v3");
-    assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.0.0");
+    assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v4");
+    assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.1.0");
   } finally {
     logger.info = origInfo;
   }
 });
 
-test("8G-B — v3 idempotency material distinct from v1/v2", () => {
+test("8H-A — v4 idempotency material distinct from v1/v2/v3", () => {
   const v1 = "creative-analyzer-v1";
   const v2 = "creative-analyzer-v2";
-  const v3 = CREATIVE_ANALYZER_PROMPT_VERSION;
-  assert.equal(v3, "creative-analyzer-v3");
-  assert.notEqual(v3, v1);
-  assert.notEqual(v3, v2);
-  const keyFor = (version: string) =>
-    ["cre", "proj", "brief", "1", "plan", "1", "gpt-5.6", version, "1.0.0"].join(
-      ":"
-    );
-  assert.notEqual(keyFor(v3), keyFor(v1));
-  assert.notEqual(keyFor(v3), keyFor(v2));
+  const v3 = "creative-analyzer-v3";
+  const v4 = CREATIVE_ANALYZER_PROMPT_VERSION;
+  assert.equal(v4, "creative-analyzer-v4");
+  assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.1.0");
+  assert.notEqual(v4, v1);
+  assert.notEqual(v4, v2);
+  assert.notEqual(v4, v3);
+  const keyFor = (promptVersion: string, schemaVersion: string) =>
+    [
+      "cre",
+      "proj",
+      "brief",
+      "1",
+      "plan",
+      "1",
+      "gpt-5.6",
+      promptVersion,
+      schemaVersion,
+    ].join(":");
+  assert.notEqual(keyFor(v4, "1.1.0"), keyFor(v1, "1.0.0"));
+  assert.notEqual(keyFor(v4, "1.1.0"), keyFor(v2, "1.0.0"));
+  assert.notEqual(keyFor(v4, "1.1.0"), keyFor(v3, "1.0.0"));
 });

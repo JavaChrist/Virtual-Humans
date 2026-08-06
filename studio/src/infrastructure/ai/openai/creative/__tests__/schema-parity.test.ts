@@ -5,11 +5,18 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { makeValidCreativeCandidate } from "@/domain/creative/__tests__/fixtures";
-import { CreativeAnalysisCandidateSchema } from "@/domain/creative";
 import {
+  CreativeAnalysisCandidateSchema,
+  CreativeAnalyzerCandidateSchema,
+  normalizeCreativeCandidate,
+} from "@/domain/creative";
+import {
+  applyEmotionalArcMaxBeats,
   getCreativeCandidateJsonSchema,
   getCreativeCandidateTextFormat,
   creativeCandidateSchemaContract,
+  CREATIVE_CANDIDATE_SCHEMA_NAME,
+  CREATIVE_CANDIDATE_SCHEMA_VERSION,
 } from "../schema";
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
@@ -24,11 +31,33 @@ function isNullUnion(schema: Record<string, unknown>): boolean {
   );
 }
 
-test("textFormat — strict true + json_schema name", () => {
+test("textFormat — strict true + json_schema name v1_1", () => {
   const fmt = getCreativeCandidateTextFormat();
   assert.equal(fmt.type, "json_schema");
   assert.equal(fmt.strict, true);
-  assert.equal(fmt.name, "creative-analysis-candidate-v1");
+  assert.equal(fmt.name, CREATIVE_CANDIDATE_SCHEMA_NAME);
+  assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.1.0");
+  assert.equal(fmt.name, "creative-analysis-candidate-v1_1");
+});
+
+test("OpenAI schema 1.1.0 — beats sans propriété order", () => {
+  const c = creativeCandidateSchemaContract();
+  assert.equal(c.emotionalArcBeatHasOrder, false);
+});
+
+test("textFormat duration 30s — maxItems emotionalArc = 5", () => {
+  const fmt = getCreativeCandidateTextFormat({ durationSeconds: 30 });
+  const props = (fmt.schema.properties ?? {}) as Record<string, unknown>;
+  const arc = props.emotionalArc as Record<string, unknown>;
+  assert.equal(arc.maxItems, 5);
+  assert.equal(arc.minItems, 2);
+});
+
+test("applyEmotionalArcMaxBeats ne mute pas le cache", () => {
+  const base = getCreativeCandidateJsonSchema();
+  const before = JSON.stringify(base);
+  applyEmotionalArcMaxBeats(base, 3);
+  assert.equal(JSON.stringify(getCreativeCandidateJsonSchema()), before);
 });
 
 test("OpenAI schema — additionalProperties false + required optionals", () => {
@@ -48,23 +77,43 @@ test("OpenAI schema — additionalProperties false + required optionals", () => 
   }
 });
 
-test("Zod accepte null OpenAI-strict sur optionnels racine", () => {
+test("Zod analyzer accepte null OpenAI-strict sur optionnels racine", () => {
+  const base = makeValidCreativeCandidate();
   const withNulls = {
-    ...makeValidCreativeCandidate(),
+    title: base.title,
+    logline: base.logline,
+    bigIdea: base.bigIdea,
+    narrativeApproach: base.narrativeApproach,
+    emotionalArc: base.emotionalArc.map(
+      ({ purpose, emotion, description }) => ({
+        purpose,
+        emotion,
+        description,
+      }),
+    ),
+    openingDevice: base.openingDevice,
+    endingDevice: base.endingDevice,
+    rhythm: base.rhythm,
+    referenceKeywords: base.referenceKeywords,
     proofDevice: null,
     constraints: null,
     assumptions: null,
     claimedEvidence: null,
     notes: null,
   };
-  const parsed = CreativeAnalysisCandidateSchema.safeParse(withNulls);
+  const parsed = CreativeAnalyzerCandidateSchema.safeParse(withNulls);
   assert.equal(parsed.success, true);
   if (!parsed.success) return;
-  assert.equal(parsed.data.proofDevice, undefined);
-  assert.equal(parsed.data.constraints, undefined);
-  assert.equal(parsed.data.assumptions, undefined);
-  assert.equal(parsed.data.claimedEvidence, undefined);
-  assert.equal(parsed.data.notes, undefined);
+  const normalized = normalizeCreativeCandidate(parsed.data);
+  assert.equal(normalized.proofDevice, undefined);
+  assert.equal(normalized.constraints, undefined);
+  assert.equal(normalized.assumptions, undefined);
+  assert.equal(normalized.claimedEvidence, undefined);
+  assert.equal(normalized.notes, undefined);
+  assert.equal(
+    CreativeAnalysisCandidateSchema.safeParse(normalized).success,
+    true,
+  );
 });
 
 test("Zod accepte null sur optionnels imbriqués assumption/evidence", () => {

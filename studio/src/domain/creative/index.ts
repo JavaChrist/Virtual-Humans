@@ -40,6 +40,8 @@ export {
 
 export {
   CreativeAnalysisCandidateSchema,
+  CreativeAnalyzerBeatSchema,
+  CreativeAnalyzerCandidateSchema,
   CreativeAssumptionSchema,
   CreativeConceptFieldsSchema,
   CreativeConceptSchema,
@@ -48,6 +50,7 @@ export {
   CreativeEvidenceSchema,
   CreativeRationaleSchema,
   EmotionalBeatSchema,
+  type CreativeAnalyzerCandidate,
 } from "./schemas";
 
 export {

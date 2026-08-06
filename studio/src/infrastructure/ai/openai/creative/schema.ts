@@ -1,41 +1,91 @@
 /**
- * Strict JSON Schema for CreativeAnalysisCandidate (VHS-118A).
+ * Strict JSON Schema for Creative analyzer candidate (VHS-118A / 8H-A).
+ * Schema 1.1.0: emotionalArc beats omit derived `order`.
  */
 
 import { z } from "zod";
-import { CreativeAnalysisCandidateSchema } from "@/domain/creative";
+import {
+  CREATIVE_FIELD_LIMITS,
+  CreativeAnalyzerCandidateSchema,
+  maxBeatsForDurationSeconds,
+} from "@/domain/creative";
 import { toOpenAIStrictJsonSchema } from "../structured-output";
 
-export const CREATIVE_CANDIDATE_SCHEMA_NAME = "creative-analysis-candidate-v1";
-export const CREATIVE_CANDIDATE_SCHEMA_VERSION = "1.0.0";
+export const CREATIVE_CANDIDATE_SCHEMA_NAME = "creative-analysis-candidate-v1_1";
+export const CREATIVE_CANDIDATE_SCHEMA_VERSION = "1.1.0";
 
 let cached: Record<string, unknown> | null = null;
 
 export function getCreativeCandidateJsonSchema(): Record<string, unknown> {
   if (cached) return cached;
-  const zodJson = z.toJSONSchema(CreativeAnalysisCandidateSchema, {
+  const zodJson = z.toJSONSchema(CreativeAnalyzerCandidateSchema, {
     target: "draft-7",
   }) as Record<string, unknown>;
   cached = toOpenAIStrictJsonSchema(zodJson);
   return cached;
 }
 
-export function getCreativeCandidateTextFormat() {
+function cloneJson<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value)) as T;
+}
+
+/**
+ * Cap emotionalArc.maxItems for the brief duration (still ≥ beatsMin).
+ * Does not mutate the cached base schema.
+ */
+export function applyEmotionalArcMaxBeats(
+  schema: Record<string, unknown>,
+  maxBeats: number,
+): Record<string, unknown> {
+  const capped = Math.max(
+    CREATIVE_FIELD_LIMITS.beatsMin,
+    Math.min(maxBeats, CREATIVE_FIELD_LIMITS.beatsMax),
+  );
+  const next = cloneJson(schema);
+  const props = next.properties as Record<string, unknown> | undefined;
+  const arc = props?.emotionalArc as Record<string, unknown> | undefined;
+  if (arc && typeof arc === "object") {
+    arc.maxItems = capped;
+    arc.minItems = CREATIVE_FIELD_LIMITS.beatsMin;
+  }
+  return next;
+}
+
+export function getCreativeCandidateTextFormat(opts?: {
+  durationSeconds?: number;
+  maxBeats?: number;
+}) {
+  const base = getCreativeCandidateJsonSchema();
+  const maxBeats =
+    opts?.maxBeats ??
+    (opts?.durationSeconds != null
+      ? maxBeatsForDurationSeconds(opts.durationSeconds)
+      : undefined);
+  const schema =
+    maxBeats != null ? applyEmotionalArcMaxBeats(base, maxBeats) : base;
   return {
     type: "json_schema" as const,
     name: CREATIVE_CANDIDATE_SCHEMA_NAME,
     strict: true as const,
-    schema: getCreativeCandidateJsonSchema(),
+    schema,
   };
 }
 
 export function creativeCandidateSchemaContract() {
   const schema = getCreativeCandidateJsonSchema();
+  const props = (schema.properties ?? {}) as Record<string, unknown>;
+  const arc = props.emotionalArc as Record<string, unknown> | undefined;
+  const arcItems = arc?.items as Record<string, unknown> | undefined;
+  const arcItemProps = (arcItems?.properties ?? {}) as Record<string, unknown>;
   return {
     name: CREATIVE_CANDIDATE_SCHEMA_NAME,
     version: CREATIVE_CANDIDATE_SCHEMA_VERSION,
     schema,
     additionalPropertiesFalse: schema.additionalProperties === false,
     required: Array.isArray(schema.required) ? (schema.required as string[]) : [],
+    emotionalArcBeatHasOrder: Object.prototype.hasOwnProperty.call(
+      arcItemProps,
+      "order",
+    ),
   };
 }

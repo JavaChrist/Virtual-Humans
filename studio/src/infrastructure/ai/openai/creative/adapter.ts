@@ -136,7 +136,9 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
           store: false,
           maxOutputTokens: this.config.maxOutputTokens,
           reasoningEffort: this.config.reasoningEffort,
-          textFormat: getCreativeCandidateTextFormat(),
+          textFormat: getCreativeCandidateTextFormat({
+            durationSeconds: request.brief.durationSeconds,
+          }),
           safetyIdentifier,
         },
         {
