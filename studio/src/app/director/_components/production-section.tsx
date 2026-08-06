@@ -383,6 +383,39 @@ export function ProductionSection({
             <dt className="text-[var(--muted)]">Statut du run</dt>
             <dd className="font-medium">{run.status}</dd>
           </div>
+          {/* Honest step summary from durable run data only — never invent %. */}
+          <div>
+            <dt className="text-[var(--muted)]">Progression réelle</dt>
+            <dd data-testid="production-real-progress">
+              {(() => {
+                const steps = run.scenes.flatMap((s) => s.steps);
+                const done = steps.filter((st) => st.status === "completed").length;
+                const total = steps.length;
+                const active = steps.find(
+                  (st) =>
+                    st.status === "running" ||
+                    st.status === "waiting_provider" ||
+                    st.status === "queued",
+                );
+                const parts = [
+                  total > 0
+                    ? `${done} étape${done === 1 ? "" : "s"} terminée${done === 1 ? "" : "s"} sur ${total}`
+                    : `${run.scenes.length} scène${run.scenes.length === 1 ? "" : "s"}`,
+                ];
+                if (run.waitingReason) {
+                  parts.push(run.waitingReason);
+                } else if (active?.status === "waiting_provider") {
+                  parts.push("En attente du fournisseur");
+                } else if (active) {
+                  parts.push(`Étape ${active.stepId} · ${active.status}`);
+                }
+                if (TERMINAL.has(run.status)) {
+                  parts.push(`État terminal : ${run.status}`);
+                }
+                return parts.join(" · ");
+              })()}
+            </dd>
+          </div>
           <div>
             <dt className="text-[var(--muted)]">Révision run / plan</dt>
             <dd>

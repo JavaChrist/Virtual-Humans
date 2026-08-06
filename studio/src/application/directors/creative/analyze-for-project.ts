@@ -794,6 +794,17 @@ export function createAnalyzeCreativeForProject(
               // Numeric-only arc shape (8H-A) — never beat prose.
               arcLength: e.diagnostics?.arcLength ?? null,
               orders: e.diagnostics?.orders ?? null,
+              // 8I-A — numeric capacity / Zod too_big only.
+              schemaName: e.diagnostics?.schemaName ?? null,
+              zodCode: e.diagnostics?.zodCode ?? null,
+              arrayName: e.diagnostics?.arrayName ?? null,
+              arrayLength: e.diagnostics?.arrayLength ?? null,
+              arrayMax: e.diagnostics?.arrayMax ?? null,
+              lengthBeforeEnrichment:
+                e.diagnostics?.lengthBeforeEnrichment ?? null,
+              lengthAfterEnrichment:
+                e.diagnostics?.lengthAfterEnrichment ?? null,
+              finalizeStep: e.diagnostics?.finalizeStep ?? null,
             })),
           },
         );

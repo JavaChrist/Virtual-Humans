@@ -104,6 +104,7 @@ import {
 } from "./repositories/routing-director-run-repository";
 import { createSupabaseProductionDirectorRunPort } from "./repositories/production-director-repository";
 import { createSupabaseDeliveryDirectorRunPort } from "./repositories/delivery-director-repository";
+import { createSupabaseTextDirectorRunStatusPort } from "./repositories/text-director-run-status-repository";
 import { createSupabaseBriefRevisePort } from "./repositories/brief-revision-repository";
 import { createSupabaseProductionRunStore } from "./repositories/production-run-store";
 import { createSupabaseBudgetReservationPort } from "./ledger/budget-reservation-port";
@@ -309,6 +310,10 @@ export function createDirectorPersistenceStack(deps?: {
   const artifactApprovals = createSupabaseArtifactApprovalPort({ client });
   const productionDirectorRuns = createSupabaseProductionDirectorRunPort({ client, workspaceId });
   const deliveryDirectorRuns = createSupabaseDeliveryDirectorRunPort({ client, workspaceId });
+  const textDirectorRunStatus = createSupabaseTextDirectorRunStatusPort({
+    client,
+    workspaceId,
+  });
   const briefRevisions = createSupabaseBriefRevisePort({ client, workspaceId });
   const analyzer =
     deps?.marketingAnalyzer ??
@@ -773,5 +778,7 @@ export function createDirectorPersistenceStack(deps?: {
     downloadFinalAsset,
     assetContent,
     createWorker,
+    /** Read-only status for text Director runs (resume / 202 follow-up). */
+    textDirectorRunStatus,
   };
 }

@@ -16,3 +16,24 @@ test("messages Creative — jamais le libellé marketing", () => {
     CREATIVE_FAILURE_PUBLIC_MESSAGES.internal_error,
   );
 });
+
+test("messages Creative — alignement Marketing (message > code > string)", () => {
+  assert.match(
+    messageFromCreativeApiError({
+      error: {
+        code: "invalid_candidate",
+        message: "Concept créatif invalide: tableau « assumptions » trop grand (13/12).",
+      },
+    }),
+    /assumptions/,
+  );
+  assert.equal(
+    messageFromCreativeApiError({ error: "Ancien format" }),
+    "Ancien format",
+  );
+  assert.equal(
+    messageFromCreativeApiError({ code: "timeout" }),
+    CREATIVE_FAILURE_PUBLIC_MESSAGES.timeout,
+  );
+  assert.equal(messageFromCreativeApiError(null), "Analyse créative impossible.");
+});

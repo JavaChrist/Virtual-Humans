@@ -14,24 +14,6 @@ export type CreativeErrorCode =
   | "forbidden_reference"
   | "technical_leak";
 
-export class CreativeDomainError extends Error {
-  readonly code: CreativeErrorCode;
-  readonly publicMessage: string;
-  readonly field?: string;
-
-  constructor(code: CreativeErrorCode, publicMessage: string, field?: string) {
-    super(publicMessage);
-    this.name = "CreativeDomainError";
-    this.code = code;
-    this.publicMessage = publicMessage;
-    this.field = field;
-  }
-}
-
-export function isCreativeDomainError(e: unknown): e is CreativeDomainError {
-  return e instanceof CreativeDomainError;
-}
-
 /** Redacted diagnostics only — never full candidate text. */
 export type CreativeIssueDiagnostics = {
   matchedRule?: string;
@@ -43,7 +25,45 @@ export type CreativeIssueDiagnostics = {
   arcLength?: number;
   /** Beat `order` values only (post-normalization when available). */
   orders?: number[];
+  /** 8I-A — array capacity / Zod too_big (numeric only). */
+  schemaName?: string;
+  zodCode?: string;
+  arrayName?: string;
+  arrayLength?: number;
+  arrayMax?: number;
+  lengthBeforeEnrichment?: number;
+  lengthAfterEnrichment?: number;
+  finalizeStep?:
+    | "candidate"
+    | "normalization"
+    | "enrichment"
+    | "artifact_final";
 };
+
+export class CreativeDomainError extends Error {
+  readonly code: CreativeErrorCode;
+  readonly publicMessage: string;
+  readonly field?: string;
+  readonly diagnostics?: CreativeIssueDiagnostics;
+
+  constructor(
+    code: CreativeErrorCode,
+    publicMessage: string,
+    field?: string,
+    diagnostics?: CreativeIssueDiagnostics,
+  ) {
+    super(publicMessage);
+    this.name = "CreativeDomainError";
+    this.code = code;
+    this.publicMessage = publicMessage;
+    this.field = field;
+    this.diagnostics = diagnostics;
+  }
+}
+
+export function isCreativeDomainError(e: unknown): e is CreativeDomainError {
+  return e instanceof CreativeDomainError;
+}
 
 export type CreativeValidationIssue = {
   code: CreativeErrorCode | string;

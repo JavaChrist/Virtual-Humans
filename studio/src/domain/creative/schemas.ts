@@ -4,6 +4,7 @@ import {
   DomainIdSchema,
   openaiAbsentOptional,
 } from "@/domain/shared";
+import type { CreativeRunCapacities } from "./array-capacities";
 import {
   AllowedReferenceKeywordValues,
   AssumptionStatusValues,
@@ -27,7 +28,7 @@ export const EmotionalBeatSchema = z.object({
 });
 
 /**
- * OpenAI analyzer beat (schema 1.1.0 / 8H-A) — no `order`.
+ * OpenAI analyzer beat (schema 1.2.0 / 8H-A) — no `order`.
  * Array position is the narrative sequence; domain assigns order = index + 1.
  */
 export const CreativeAnalyzerBeatSchema = z.object({
@@ -53,10 +54,10 @@ export const CreativeAssumptionSchema = z
     statement: z.string().min(1).max(L.assumptionStatement),
     status: z.enum(AssumptionStatusValues),
     justification: openaiAbsentOptional(
-      z.string().min(1).max(L.assumptionJustification)
+      z.string().min(1).max(L.assumptionJustification),
     ),
     affectsFields: openaiAbsentOptional(
-      z.array(z.string().min(1).max(L.evidenceField)).max(8)
+      z.array(z.string().min(1).max(L.evidenceField)).max(8),
     ),
   })
   .superRefine((value, ctx) => {
@@ -77,7 +78,7 @@ export const CreativeEvidenceSchema = z
     field: z.string().min(1).max(L.evidenceField),
     source: z.enum(CreativeEvidenceSourceValues),
     sourcePath: openaiAbsentOptional(
-      z.string().min(1).max(L.evidenceSourcePath)
+      z.string().min(1).max(L.evidenceSourcePath),
     ),
     summary: z.string().min(1).max(L.evidenceSummary),
   })
@@ -125,7 +126,9 @@ export const CreativeConceptFieldsSchema = z
     proofDevice: openaiAbsentOptional(CreativeDeviceSchema),
     endingDevice: CreativeDeviceSchema,
     rhythm: z.enum(CreativeRhythmValues),
-    referenceKeywords: z.array(z.string().min(1).max(L.referenceKeyword)).max(L.referenceKeywordsMax),
+    referenceKeywords: z
+      .array(z.string().min(1).max(L.referenceKeyword))
+      .max(L.referenceKeywordsMax),
     constraints: z.array(CreativeConstraintSchema).max(L.constraintsMax),
     assumptions: z.array(CreativeAssumptionSchema).max(L.assumptionsMax),
     evidence: z.array(CreativeEvidenceSchema).min(1).max(L.evidenceMax),
@@ -143,7 +146,9 @@ export const CreativeConceptFieldsSchema = z
         break;
       }
     }
-    const uniqueKeywords = new Set(value.referenceKeywords.map((k) => k.toLowerCase()));
+    const uniqueKeywords = new Set(
+      value.referenceKeywords.map((k) => k.toLowerCase()),
+    );
     if (uniqueKeywords.size !== value.referenceKeywords.length) {
       ctx.addIssue({
         code: "custom",
@@ -166,81 +171,116 @@ export const CreativeConceptSchema = ArtifactMetadataSchema.extend({
   schemaVersion: z.literal(CREATIVE_CONCEPT_SCHEMA_VERSION),
 }).and(CreativeConceptFieldsSchema);
 
-/**
- * Domain candidate after normalization (beats include `order`).
- * Prefer parsing OpenAI output via {@link CreativeAnalyzerCandidateSchema}
- * then {@link normalizeCreativeCandidate}.
- */
-export const CreativeAnalysisCandidateSchema = z
-  .object({
+export type CreativeCandidateArrayCaps = {
+  assumptionsMax: number;
+  constraintsMax: number;
+  beatsMax: number;
+  referenceKeywordsMax?: number;
+  evidenceMax?: number;
+};
+
+function buildCandidateObjectSchema(caps: CreativeCandidateArrayCaps) {
+  const beatsMax = Math.max(L.beatsMin, Math.min(caps.beatsMax, L.beatsMax));
+  const assumptionsMax = Math.max(0, Math.min(caps.assumptionsMax, L.assumptionsMax));
+  const constraintsMax = Math.max(0, Math.min(caps.constraintsMax, L.constraintsMax));
+  const keywordsMax = caps.referenceKeywordsMax ?? L.referenceKeywordsMax;
+  const evidenceMax = caps.evidenceMax ?? L.evidenceMax;
+
+  return {
     title: z.string().min(1).max(L.title),
     logline: z.string().min(1).max(L.logline),
     bigIdea: z.string().min(1).max(L.bigIdea),
     narrativeApproach: z.enum(NarrativeApproachValues),
-    emotionalArc: z.array(EmotionalBeatSchema).min(L.beatsMin).max(L.beatsMax),
+    emotionalArc: z
+      .array(EmotionalBeatSchema)
+      .min(L.beatsMin)
+      .max(beatsMax),
     openingDevice: CreativeDeviceSchema,
     proofDevice: openaiAbsentOptional(CreativeDeviceSchema),
     endingDevice: CreativeDeviceSchema,
     rhythm: z.enum(CreativeRhythmValues),
     referenceKeywords: z
       .array(z.string().min(1).max(L.referenceKeyword))
-      .max(L.referenceKeywordsMax),
+      .max(keywordsMax),
     constraints: openaiAbsentOptional(
-      z.array(CreativeConstraintSchema).max(L.constraintsMax)
+      z.array(CreativeConstraintSchema).max(constraintsMax),
     ),
     assumptions: openaiAbsentOptional(
-      z.array(CreativeAssumptionSchema).max(L.assumptionsMax)
+      z.array(CreativeAssumptionSchema).max(assumptionsMax),
     ),
     claimedEvidence: openaiAbsentOptional(
-      z.array(CreativeEvidenceSchema).max(L.evidenceMax)
+      z.array(CreativeEvidenceSchema).max(evidenceMax),
     ),
     notes: openaiAbsentOptional(z.string().max(500)),
-  })
-  .superRefine((value, ctx) => {
-    const orders = value.emotionalArc.map((b) => b.order).sort((a, b) => a - b);
-    for (let i = 0; i < orders.length; i++) {
-      if (orders[i] !== i + 1) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Emotional beat orders must be unique, contiguous, and start at 1.",
-          path: ["emotionalArc"],
-        });
-        break;
+  };
+}
+
+/** Domain candidate schema with run-computed array maxima (8I-B). */
+export function createCreativeAnalysisCandidateSchema(
+  caps: CreativeCandidateArrayCaps,
+) {
+  return z
+    .object(buildCandidateObjectSchema(caps))
+    .superRefine((value, ctx) => {
+      const orders = value.emotionalArc.map((b) => b.order).sort((a, b) => a - b);
+      for (let i = 0; i < orders.length; i++) {
+        if (orders[i] !== i + 1) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              "Emotional beat orders must be unique, contiguous, and start at 1.",
+            path: ["emotionalArc"],
+          });
+          break;
+        }
       }
-    }
+    });
+}
+
+/** OpenAI analyzer schema (no beat.order) with run-computed maxima (8I-B / v1.2.0). */
+export function createCreativeAnalyzerCandidateSchema(
+  caps: CreativeCandidateArrayCaps,
+) {
+  const base = buildCandidateObjectSchema(caps);
+  return z.object({
+    ...base,
+    emotionalArc: z
+      .array(CreativeAnalyzerBeatSchema)
+      .min(L.beatsMin)
+      .max(Math.max(L.beatsMin, Math.min(caps.beatsMax, L.beatsMax))),
   });
+}
+
+export function candidateCapsFromRun(
+  caps: CreativeRunCapacities,
+): CreativeCandidateArrayCaps {
+  return {
+    assumptionsMax: caps.assumptions.candidateMax,
+    constraintsMax: caps.constraints.candidateMax,
+    beatsMax: caps.emotionalArc.maxBeats,
+    referenceKeywordsMax: caps.referenceKeywords.candidateMax,
+    evidenceMax: caps.evidence.candidateMax,
+  };
+}
 
 /**
- * Untrusted OpenAI structured-output shape (schema 1.1.0).
- * Beats omit `order` — array index is the sequence.
+ * Ceiling schemas (final domain maxima) — used by tests and loose structural parse.
+ * Runtime OpenAI + director validation must use {@link createCreativeAnalyzerCandidateSchema}
+ * with {@link candidateCapsFromRun}.
  */
-export const CreativeAnalyzerCandidateSchema = z.object({
-  title: z.string().min(1).max(L.title),
-  logline: z.string().min(1).max(L.logline),
-  bigIdea: z.string().min(1).max(L.bigIdea),
-  narrativeApproach: z.enum(NarrativeApproachValues),
-  emotionalArc: z
-    .array(CreativeAnalyzerBeatSchema)
-    .min(L.beatsMin)
-    .max(L.beatsMax),
-  openingDevice: CreativeDeviceSchema,
-  proofDevice: openaiAbsentOptional(CreativeDeviceSchema),
-  endingDevice: CreativeDeviceSchema,
-  rhythm: z.enum(CreativeRhythmValues),
-  referenceKeywords: z
-    .array(z.string().min(1).max(L.referenceKeyword))
-    .max(L.referenceKeywordsMax),
-  constraints: openaiAbsentOptional(
-    z.array(CreativeConstraintSchema).max(L.constraintsMax)
-  ),
-  assumptions: openaiAbsentOptional(
-    z.array(CreativeAssumptionSchema).max(L.assumptionsMax)
-  ),
-  claimedEvidence: openaiAbsentOptional(
-    z.array(CreativeEvidenceSchema).max(L.evidenceMax)
-  ),
-  notes: openaiAbsentOptional(z.string().max(500)),
-});
+export const CreativeAnalysisCandidateSchema =
+  createCreativeAnalysisCandidateSchema({
+    assumptionsMax: L.assumptionsMax,
+    constraintsMax: L.constraintsMax,
+    beatsMax: L.beatsMax,
+  });
+
+export const CreativeAnalyzerCandidateSchema =
+  createCreativeAnalyzerCandidateSchema({
+    assumptionsMax: L.assumptionsMax,
+    constraintsMax: L.constraintsMax,
+    beatsMax: L.beatsMax,
+  });
 
 export type CreativeAnalyzerCandidate = z.infer<
   typeof CreativeAnalyzerCandidateSchema

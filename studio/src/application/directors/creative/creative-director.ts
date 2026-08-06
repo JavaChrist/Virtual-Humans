@@ -236,7 +236,14 @@ export function createCreativeDirector(
         if (isCreativeDomainError(e)) {
           return {
             status: "invalid",
-            errors: [{ code: e.code, field: e.field, message: e.publicMessage }],
+            errors: [
+              {
+                code: e.code,
+                field: e.field,
+                message: e.publicMessage,
+                diagnostics: e.diagnostics,
+              },
+            ],
             metering,
           };
         }

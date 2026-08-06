@@ -32,7 +32,10 @@ import {
 } from "../marketing/pricing";
 import { toCreativeAnalyzerError } from "./map-to-creative-failure";
 import { parseCreativeCandidateResponse } from "./parser";
-import { resolveCreativeArcBeatBudget } from "@/domain/creative";
+import {
+  resolveCreativeArcBeatBudget,
+  resolveCreativeRunCapacities,
+} from "@/domain/creative";
 import {
   CREATIVE_ANALYZER_PROMPT_VERSION,
   buildCreativeAnalyzerInstructions,
@@ -40,7 +43,7 @@ import {
 import { mapCreativeAnalysisRequest } from "./mapping";
 import {
   CREATIVE_CANDIDATE_SCHEMA_VERSION,
-  getCreativeCandidateTextFormat,
+  getCreativeCandidateTextFormatForRun,
 } from "./schema";
 
 export type OpenAICreativeAnalyzerDeps = {
@@ -124,11 +127,26 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
         });
       }
 
-      // 8H-B — compute once; same budget for prompt + OpenAI maxItems.
+      // 8H-B / 8I-B — compute once; same capacities for prompt + OpenAI maxItems.
       const arcBudget = resolveCreativeArcBeatBudget(
         request.brief.durationSeconds,
       );
-      const instructions = buildCreativeAnalyzerInstructions(arcBudget);
+      const capacities = resolveCreativeRunCapacities({
+        brief: request.brief,
+        marketingPlan: request.marketingPlan,
+      });
+      if (
+        capacities.assumptions.enrichmentsExceedFinal ||
+        capacities.constraints.enrichmentsExceedFinal
+      ) {
+        throw new OpenAIAiError("invalid_request", {
+          internalCode: "creative_capacity_exceeded",
+        });
+      }
+      const instructions = buildCreativeAnalyzerInstructions(
+        arcBudget,
+        capacities,
+      );
 
       const safetyIdentifier = deriveSafetyIdentifier({
         workspaceId: this.config.workspaceId,
@@ -143,9 +161,7 @@ export class OpenAICreativeAnalyzerAdapter implements CreativeAnalyzerPort {
           store: false,
           maxOutputTokens: this.config.maxOutputTokens,
           reasoningEffort: this.config.reasoningEffort,
-          textFormat: getCreativeCandidateTextFormat({
-            maxBeats: arcBudget.maxBeats,
-          }),
+          textFormat: getCreativeCandidateTextFormatForRun(capacities),
           safetyIdentifier,
         },
         {

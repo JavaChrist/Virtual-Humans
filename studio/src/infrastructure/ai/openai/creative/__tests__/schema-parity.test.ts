@@ -31,16 +31,16 @@ function isNullUnion(schema: Record<string, unknown>): boolean {
   );
 }
 
-test("textFormat — strict true + json_schema name v1_1", () => {
+test("textFormat — strict true + json_schema name v1_2", () => {
   const fmt = getCreativeCandidateTextFormat();
   assert.equal(fmt.type, "json_schema");
   assert.equal(fmt.strict, true);
   assert.equal(fmt.name, CREATIVE_CANDIDATE_SCHEMA_NAME);
-  assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.1.0");
-  assert.equal(fmt.name, "creative-analysis-candidate-v1_1");
+  assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.2.0");
+  assert.equal(fmt.name, "creative-analysis-candidate-v1_2");
 });
 
-test("OpenAI schema 1.1.0 — beats sans propriété order", () => {
+test("OpenAI schema 1.2.0 — beats sans propriété order", () => {
   const c = creativeCandidateSchemaContract();
   assert.equal(c.emotionalArcBeatHasOrder, false);
 });

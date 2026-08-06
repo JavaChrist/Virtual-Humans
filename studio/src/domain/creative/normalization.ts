@@ -102,6 +102,7 @@ export function normalizeCreativeCandidate(candidate: {
     },
     rhythm: candidate.rhythm,
     referenceKeywords: normalizeReferenceKeywords(candidate.referenceKeywords),
+    // 8I-B — never silently truncate arrays; capacity is enforced by schema/finalize.
     constraints: candidate.constraints?.map((c) => ({
       ...c,
       text: cleanBoundedText(c.text, L.constraintText),

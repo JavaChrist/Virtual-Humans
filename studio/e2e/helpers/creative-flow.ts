@@ -67,7 +67,7 @@ export async function openCreativeConfirmModal(page: Page) {
   await expect(dialog.getByText(/Aucun retry automatique/i)).toBeVisible();
   await expect(dialog.getByText(/Brief rev\./i)).toBeVisible();
   await expect(dialog.getByText(/Marketing Plan rev\./i)).toBeVisible();
-  await expect(dialog.getByText(/creative-analyzer-v4/i)).toBeVisible();
+  await expect(dialog.getByText(/creative-analyzer-v5/i)).toBeVisible();
   return dialog;
 }
 

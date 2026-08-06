@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useConfirm } from "@/components/confirm";
 import type {
   MarketingPlanView,
@@ -10,6 +10,8 @@ import {
   messageFromMarketingApiError,
   type MarketingApiErrorBody,
 } from "./marketing-messages";
+import { DirectorProcessingStatus } from "./director-processing-status";
+import { useDirectorProcessing } from "./use-director-processing";
 
 type Props = {
   projectId: string;
@@ -31,15 +33,49 @@ export function MarketingSection({ projectId, initialPlan = null }: Props) {
   const confirm = useConfirm();
   const [dry, setDry] = useState<MarketingProjectDryRunResult | null>(null);
   const [plan, setPlan] = useState<MarketingPlanView | null>(initialPlan);
-  const [busy, setBusy] = useState<"dry-run" | "execute" | "retry" | null>(null);
+  const [dryBusy, setDryBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
   /** Stable for one human confirmation cycle — never regenerated on network re-render. */
   const retryRequestIdRef = useRef<string | null>(null);
+  const confirmingRef = useRef(false);
+
+  const reloadArtifact = useCallback(async () => {
+    const res = await fetch(`/api/director/projects/${projectId}/marketing`);
+    if (!res.ok) return false;
+    const data = (await res.json()) as {
+      dryRun?: MarketingProjectDryRunResult;
+      plan?: MarketingPlanView | null;
+    };
+    if (data.dryRun) {
+      setDry(data.dryRun);
+      if (data.dryRun.existingPlan) setPlan(data.dryRun.existingPlan);
+    }
+    if (data.plan) {
+      setPlan(data.plan);
+      return true;
+    }
+    return Boolean(data.dryRun?.existingPlan);
+  }, [projectId]);
+
+  const processing = useDirectorProcessing({
+    director: "marketing",
+    projectId,
+    reloadArtifact,
+    successMessage: "Stratégie marketing enregistrée.",
+  });
+
+  const locked = dryBusy || processing.busy;
+  const displayError =
+    error ??
+    (processing.phase === "failed" ? processing.statusMessage : null);
+  const displayStatus =
+    statusMsg ??
+    (processing.phase === "completed" ? processing.statusMessage : null);
 
   async function runDryRun() {
-    if (busy) return;
-    setBusy("dry-run");
+    if (locked) return;
+    setDryBusy(true);
     setError(null);
     setStatusMsg("Vérification du brief…");
     retryRequestIdRef.current = null;
@@ -73,69 +109,95 @@ export function MarketingSection({ projectId, initialPlan = null }: Props) {
       setError("Vérification impossible.");
       setStatusMsg(null);
     } finally {
-      setBusy(null);
+      setDryBusy(false);
     }
   }
 
   async function runExecute() {
-    if (busy || !dry?.executionAvailable) return;
+    if (locked || !dry?.executionAvailable || confirmingRef.current) return;
     // Never silently reuse a terminal failed run — force the dedicated retry path.
     if (dry.retryCandidate?.retryAvailable) return;
 
-    const ok = await confirm({
-      title: "Lancer l’analyse marketing ?",
-      message: [
-        "Cet appel est payant.",
-        dry.estimatedCostMinor != null
-          ? `Estimation : ${(dry.estimatedCostMinor / 100).toFixed(2)} ${dry.currency ?? "USD"} (confiance ${dry.confidence ?? "unknown"}).`
-          : "Estimation : indisponible — l’exécution reste bloquée tant que la tarification n’est pas configurée.",
-        "Le brief actif ne sera pas modifié.",
-        "Aucun retry automatique.",
-      ].join("\n"),
-      confirmLabel: "Lancer l’analyse",
-    });
-    if (!ok) return;
-
-    setBusy("execute");
-    setError(null);
-    setStatusMsg("Analyse marketing en cours…");
+    confirmingRef.current = true;
+    processing.beginConfirming();
     try {
-      const res = await fetch(`/api/director/projects/${projectId}/marketing`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          mode: "execute",
-          expectedBriefRevision: dry.briefRevision,
-        }),
+      const ok = await confirm({
+        title: "Lancer l’analyse marketing ?",
+        message: [
+          "Cet appel est payant.",
+          dry.estimatedCostMinor != null
+            ? `Estimation : ${(dry.estimatedCostMinor / 100).toFixed(2)} ${dry.currency ?? "USD"} (confiance ${dry.confidence ?? "unknown"}).`
+            : "Estimation : indisponible — l’exécution reste bloquée tant que la tarification n’est pas configurée.",
+          "Le brief actif ne sera pas modifié.",
+          "Aucun retry automatique.",
+        ].join("\n"),
+        confirmLabel: "Lancer l’analyse",
       });
-      const data = (await res.json()) as MarketingApiErrorBody & {
-        plan?: MarketingPlanView;
-      };
-      if (res.status === 202) {
-        setStatusMsg(
-          messageFromMarketingApiError(data, "Analyse déjà en cours.")
-        );
+      if (!ok) {
+        processing.cancelConfirming();
         return;
       }
-      if (!res.ok) {
-        setError(messageFromMarketingApiError(data));
-        if (data.missingInformation?.length) {
-          setStatusMsg(data.missingInformation.map((m) => m.message).join(" · "));
-        } else {
-          setStatusMsg(null);
+
+      if (!processing.beginSubmit()) return;
+      setError(null);
+      setStatusMsg(null);
+      try {
+        const res = await fetch(`/api/director/projects/${projectId}/marketing`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mode: "execute",
+            expectedBriefRevision: dry.briefRevision,
+          }),
+        });
+        const data = (await res.json()) as MarketingApiErrorBody & {
+          plan?: MarketingPlanView;
+        };
+        if (res.status === 202) {
+          const runId = data.directorRunId;
+          const msg = messageFromMarketingApiError(data, "Analyse déjà en cours.");
+          setError(null);
+          setStatusMsg(msg);
+          if (typeof runId === "string" && runId) {
+            processing.followActiveRun(runId);
+          } else {
+            processing.markFailed(
+              "Un run marketing est déjà en cours. Actualisez la page pour reprendre le suivi.",
+            );
+            setError(
+              "Un run marketing est déjà en cours. Actualisez la page pour reprendre le suivi.",
+            );
+          }
+          return;
         }
-        // Refresh dry-run state so retry CTA can appear after terminal failure.
-        await refreshDryQuiet();
-        return;
+        if (!res.ok) {
+          const msg = messageFromMarketingApiError(data);
+          processing.markFailed(msg);
+          setError(msg);
+          if (data.missingInformation?.length) {
+            setStatusMsg(data.missingInformation.map((m) => m.message).join(" · "));
+          } else {
+            setStatusMsg(null);
+          }
+          // Refresh dry-run state so retry CTA can appear after terminal failure.
+          await refreshDryQuiet();
+          return;
+        }
+        if (data.plan) {
+          setPlan(data.plan);
+          processing.markCompleted("Stratégie marketing enregistrée.");
+          setStatusMsg("Stratégie marketing enregistrée.");
+        } else {
+          processing.markCompleted();
+        }
+      } catch {
+        const msg =
+          "Analyse impossible. Vérifiez la connexion, puis relancez un dry-run avant une nouvelle tentative.";
+        processing.markFailed(msg);
+        setError(msg);
       }
-      if (data.plan) {
-        setPlan(data.plan);
-        setStatusMsg("Stratégie marketing enregistrée.");
-      }
-    } catch {
-      setError("Analyse impossible.");
     } finally {
-      setBusy(null);
+      confirmingRef.current = false;
     }
   }
 
@@ -158,7 +220,7 @@ export function MarketingSection({ projectId, initialPlan = null }: Props) {
   }
 
   async function runRetry() {
-    if (busy || !dry?.retryCandidate?.retryAvailable) return;
+    if (locked || !dry?.retryCandidate?.retryAvailable || confirmingRef.current) return;
     const candidate = dry.retryCandidate;
 
     if (!retryRequestIdRef.current) {
@@ -166,78 +228,102 @@ export function MarketingSection({ projectId, initialPlan = null }: Props) {
     }
     const retryRequestId = retryRequestIdRef.current;
 
-    const ok = await confirm({
-      title: "Réessayer l’analyse ?",
-      message: [
-        `Modèle : ${candidate.model}`,
-        `Tentative précédente : #${candidate.previousAttemptNumber}`,
-        `Nouvelle tentative : #${candidate.nextAttemptNumber}`,
-        dry.estimatedCostMinor != null
-          ? `Estimation : ${(dry.estimatedCostMinor / 100).toFixed(2)} ${dry.currency ?? "USD"}`
-          : "Estimation : indisponible.",
-        "Nouvel appel potentiellement facturé.",
-        "Aucun retry automatique — confirmation humaine obligatoire.",
-        "L’historique de la tentative précédente est conservé.",
-      ].join("\n"),
-      confirmLabel: "Réessayer l’analyse",
-    });
-    if (!ok) {
-      // Keep the same ID if the user cancels then re-opens — still one human intent.
-      return;
-    }
-
-    setBusy("retry");
-    setError(null);
-    setStatusMsg("Nouvelle tentative marketing en cours…");
+    confirmingRef.current = true;
+    processing.beginConfirming();
     try {
-      const res = await fetch(
-        `/api/director/projects/${projectId}/marketing/retry`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            previousRunId: candidate.previousRunId,
-            retryRequestId,
-            expectedBriefRevision: dry.briefRevision,
-          }),
-        }
-      );
-      const data = (await res.json()) as MarketingApiErrorBody & {
-        plan?: MarketingPlanView;
-        directorRunId?: string;
-      };
-      if (res.status === 202) {
-        setStatusMsg(
-          messageFromMarketingApiError(data, "Analyse déjà en cours.")
-        );
+      const ok = await confirm({
+        title: "Réessayer l’analyse ?",
+        message: [
+          `Modèle : ${candidate.model}`,
+          `Tentative précédente : #${candidate.previousAttemptNumber}`,
+          `Nouvelle tentative : #${candidate.nextAttemptNumber}`,
+          dry.estimatedCostMinor != null
+            ? `Estimation : ${(dry.estimatedCostMinor / 100).toFixed(2)} ${dry.currency ?? "USD"}`
+            : "Estimation : indisponible.",
+          "Nouvel appel potentiellement facturé.",
+          "Aucun retry automatique — confirmation humaine obligatoire.",
+          "L’historique de la tentative précédente est conservé.",
+        ].join("\n"),
+        confirmLabel: "Réessayer l’analyse",
+      });
+      if (!ok) {
+        processing.cancelConfirming();
+        // Keep the same ID if the user cancels then re-opens — still one human intent.
         return;
       }
-      if (!res.ok) {
-        setError(messageFromMarketingApiError(data));
-        setStatusMsg(null);
-        // Terminal or conflict → invalidate request id; re-read server before a new human attempt.
+
+      if (!processing.beginSubmit()) return;
+      setError(null);
+      setStatusMsg(null);
+      try {
+        const res = await fetch(
+          `/api/director/projects/${projectId}/marketing/retry`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              previousRunId: candidate.previousRunId,
+              retryRequestId,
+              expectedBriefRevision: dry.briefRevision,
+            }),
+          }
+        );
+        const data = (await res.json()) as MarketingApiErrorBody & {
+          plan?: MarketingPlanView;
+          directorRunId?: string;
+        };
+        if (res.status === 202) {
+          const runId = data.directorRunId;
+          const msg = messageFromMarketingApiError(data, "Analyse déjà en cours.");
+          setError(null);
+          setStatusMsg(msg);
+          if (typeof runId === "string" && runId) {
+            processing.followActiveRun(runId);
+          } else {
+            processing.markFailed(
+              "Un run marketing est déjà en cours. Actualisez la page pour reprendre le suivi.",
+            );
+            setError(
+              "Un run marketing est déjà en cours. Actualisez la page pour reprendre le suivi.",
+            );
+          }
+          return;
+        }
+        if (!res.ok) {
+          const msg = messageFromMarketingApiError(data);
+          processing.markFailed(msg);
+          setError(msg);
+          setStatusMsg(null);
+          // Terminal or conflict → invalidate request id; re-read server before a new human attempt.
+          retryRequestIdRef.current = null;
+          await refreshDryQuiet();
+          return;
+        }
+        if (data.plan) {
+          setPlan(data.plan);
+          processing.markCompleted("Stratégie marketing enregistrée (nouvelle tentative).");
+          setStatusMsg("Stratégie marketing enregistrée (nouvelle tentative).");
+        } else {
+          processing.markCompleted();
+        }
         retryRequestIdRef.current = null;
         await refreshDryQuiet();
-        return;
+      } catch {
+        const msg = "Retry impossible — vérifiez l’état avant une nouvelle tentative.";
+        processing.markFailed(msg);
+        setError(msg);
+        // Ambiguous network → keep ID and refresh server state; do not mint a new ID.
+        await refreshDryQuiet();
       }
-      if (data.plan) {
-        setPlan(data.plan);
-        setStatusMsg("Stratégie marketing enregistrée (nouvelle tentative).");
-      }
-      retryRequestIdRef.current = null;
-      await refreshDryQuiet();
-    } catch {
-      setError("Retry impossible — vérifiez l’état avant une nouvelle tentative.");
-      // Ambiguous network → keep ID and refresh server state; do not mint a new ID.
-      await refreshDryQuiet();
     } finally {
-      setBusy(null);
+      confirmingRef.current = false;
     }
   }
 
   const showLaunch =
     dry?.executionAvailable === true && !dry.retryCandidate?.retryAvailable;
   const showRetry = dry?.retryCandidate?.retryAvailable === true;
+  const executeBusy = processing.busy && processing.phase !== "confirming";
 
   return (
     <section className="mt-10" aria-labelledby="marketing-strategy-heading">
@@ -255,30 +341,30 @@ export function MarketingSection({ projectId, initialPlan = null }: Props) {
           type="button"
           className="btn btn-primary"
           onClick={runDryRun}
-          disabled={busy != null}
-          aria-busy={busy === "dry-run"}
+          disabled={locked}
+          aria-busy={dryBusy}
         >
-          {busy === "dry-run" ? "Vérification…" : "Vérifier le brief"}
+          {dryBusy ? "Vérification…" : "Vérifier le brief"}
         </button>
         {showLaunch ? (
           <button
             type="button"
             className="btn btn-ghost"
             onClick={runExecute}
-            disabled={busy != null}
-            aria-busy={busy === "execute"}
+            disabled={locked}
+            aria-busy={executeBusy}
           >
-            {busy === "execute" ? "Analyse…" : "Lancer l’analyse marketing"}
+            {executeBusy ? "Analyse…" : "Lancer l’analyse marketing"}
           </button>
         ) : showRetry ? (
           <button
             type="button"
             className="btn btn-ghost"
             onClick={runRetry}
-            disabled={busy != null}
-            aria-busy={busy === "retry"}
+            disabled={locked}
+            aria-busy={executeBusy}
           >
-            {busy === "retry" ? "Nouvelle tentative…" : "Réessayer l’analyse"}
+            {executeBusy ? "Nouvelle tentative…" : "Réessayer l’analyse"}
           </button>
         ) : (
           <button
@@ -293,14 +379,22 @@ export function MarketingSection({ projectId, initialPlan = null }: Props) {
         )}
       </div>
 
-      {statusMsg && (
-        <p className="text-sm text-[var(--muted)] mb-2" role="status" aria-live="polite">
-          {statusMsg}
-        </p>
-      )}
-      {error && (
+      <DirectorProcessingStatus
+        director="marketing"
+        phase={processing.phase}
+        message={processing.statusMessage}
+      />
+      {displayStatus &&
+        processing.phase !== "running" &&
+        processing.phase !== "submitting" &&
+        processing.phase !== "persisting" && (
+          <p className="text-sm text-[var(--muted)] mb-2" role="status" aria-live="polite">
+            {displayStatus}
+          </p>
+        )}
+      {displayError && (
         <p className="text-sm text-[var(--danger)] mb-2" role="alert">
-          {error}
+          {displayError}
         </p>
       )}
 

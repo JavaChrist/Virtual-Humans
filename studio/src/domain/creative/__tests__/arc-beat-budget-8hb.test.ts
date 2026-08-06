@@ -8,6 +8,7 @@ import {
   formatCreativeArcBeatRunConstraint,
   maxBeatsForDurationSeconds,
   resolveCreativeArcBeatBudget,
+  resolveCreativeRunCapacities,
 } from "@/domain/creative";
 import {
   buildCreativeAnalyzerInstructions,
@@ -15,6 +16,7 @@ import {
 } from "@/infrastructure/ai/openai/creative";
 import { validateEmotionalArcOrders } from "../validation";
 import type { CreativeAnalysisCandidate } from "../creative-concept";
+import { makeCreativeBrief, makeMarketingPlan } from "./fixtures";
 
 test("resolveCreativeArcBeatBudget — delegates only to maxBeatsForDurationSeconds", () => {
   for (const d of [1, 15, 16, 20, 21, 30, 31, 60]) {
@@ -28,8 +30,11 @@ test("resolveCreativeArcBeatBudget — delegates only to maxBeatsForDurationSeco
 test("8H-B single source — prompt + schema + hard gate share one budget for 30s", () => {
   const budget = resolveCreativeArcBeatBudget(30);
   assert.equal(budget.maxBeats, 5);
+  const brief = makeCreativeBrief({ durationSeconds: 30 });
+  const plan = makeMarketingPlan(brief);
+  const capacities = resolveCreativeRunCapacities({ brief, marketingPlan: plan });
 
-  const instructions = buildCreativeAnalyzerInstructions(budget);
+  const instructions = buildCreativeAnalyzerInstructions(budget, capacities);
   assert.match(instructions, /durationSeconds=30/);
   assert.match(instructions, /Never exceed 5 beats/);
   assert.match(instructions, /between 2 and 5 emotionalArc beats/);
@@ -37,7 +42,7 @@ test("8H-B single source — prompt + schema + hard gate share one budget for 30
   assert.match(describeCreativeArcBeatTiersFromDomain(), /≤30s → at most 5 beats/);
   assert.match(instructions, /≤30s → at most 5 beats/);
 
-  const fmt = getCreativeCandidateTextFormat({ maxBeats: budget.maxBeats });
+  const fmt = getCreativeCandidateTextFormat({ capacities });
   const arc = (fmt.schema as { properties: { emotionalArc: { maxItems: number } } })
     .properties.emotionalArc;
   assert.equal(arc.maxItems, budget.maxBeats);

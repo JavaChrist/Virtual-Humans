@@ -1,4 +1,21 @@
 export {
+  CREATIVE_SYSTEM_ASSUMPTION_IDS,
+  CREATIVE_SYSTEM_CONSTRAINT_IDS,
+  buildSystemCreativeAssumptions,
+  buildSystemCreativeConstraints,
+  dedupeByStableId,
+  formatCreativeCapacityRunConstraint,
+  mergeCreativeAssumptions,
+  mergeCreativeConstraints,
+  resolveCreativeRunCapacities,
+  selectUpstreamCreativeAssumptions,
+  upstreamAssumptionId,
+  type CreativeAssumptionsCapacity,
+  type CreativeConstraintsCapacity,
+  type CreativeRunCapacities,
+} from "./array-capacities";
+
+export {
   describeCreativeArcBeatTiersFromDomain,
   formatCreativeArcBeatRunConstraint,
   resolveCreativeArcBeatBudget,
@@ -57,7 +74,11 @@ export {
   CreativeEvidenceSchema,
   CreativeRationaleSchema,
   EmotionalBeatSchema,
+  candidateCapsFromRun,
+  createCreativeAnalysisCandidateSchema,
+  createCreativeAnalyzerCandidateSchema,
   type CreativeAnalyzerCandidate,
+  type CreativeCandidateArrayCaps,
 } from "./schemas";
 
 export {
@@ -91,7 +112,10 @@ export {
   type CreativeReadinessCheckCode,
 } from "./readiness";
 
-export { finalizeCreativeConcept, type FinalizeCreativeConceptInput } from "./finalize";
+export {
+  finalizeCreativeConcept,
+  type FinalizeCreativeConceptInput,
+} from "./finalize";
 
 export {
   buildCreativeRationale,

@@ -110,9 +110,17 @@ export function rateLimitClientKey(ipHint: string | null | undefined): string {
   return cleaned || "unknown";
 }
 
+const e2eHarness =
+  process.env.DIRECTOR_V2_E2E_HARNESS === "1" ||
+  process.env.DIRECTOR_V2_E2E_HARNESS === "true";
+
 export const RATE_LIMITS = {
-  // 20: proxy + route each increment once per login attempt → ~10 effective
-  login: { limit: 20, windowMs: 15 * 60 * 1000 } satisfies RateLimitPolicy,
+  // 20: proxy + route each increment once per login attempt → ~10 effective.
+  // E2E harness: suite complète dépasse ce plafond (logins UI + API) — fenêtre locale élargie.
+  login: {
+    limit: e2eHarness ? 500 : 20,
+    windowMs: 15 * 60 * 1000,
+  } satisfies RateLimitPolicy,
   generate: { limit: 60, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
   director: { limit: 120, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
   worker: { limit: 30, windowMs: 60 * 1000 } satisfies RateLimitPolicy,

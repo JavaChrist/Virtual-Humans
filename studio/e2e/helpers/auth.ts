@@ -17,12 +17,19 @@ export async function loginViaApi(
   password?: string,
 ): Promise<void> {
   const runtime = loadE2eRuntime();
-  const res = await request.post("/api/login", {
-    data: { password: password ?? runtime.appPassword },
-  });
-  if (!res.ok()) {
-    throw new Error(`loginViaApi failed: ${res.status()}`);
+  const body = { password: password ?? runtime.appPassword };
+  // Suite E2E dense : le rate-limit login local peut renvoyer 429 ; retry borné.
+  let lastStatus = 0;
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const res = await request.post("/api/login", { data: body });
+    lastStatus = res.status();
+    if (res.ok()) return;
+    if (lastStatus !== 429) {
+      throw new Error(`loginViaApi failed: ${lastStatus}`);
+    }
+    await new Promise((r) => setTimeout(r, 800 * (attempt + 1)));
   }
+  throw new Error(`loginViaApi failed: ${lastStatus}`);
 }
 
 export async function logoutViaUi(page: Page): Promise<void> {

@@ -7,6 +7,7 @@ import type { BudgetDecision } from "@/domain/cost";
 import {
   assessCreativeReadiness,
   resolveCreativeArcBeatBudget,
+  resolveCreativeRunCapacities,
 } from "@/domain/creative";
 import type { MarketingPlan } from "@/domain/marketing";
 import {
@@ -171,23 +172,41 @@ export function runOpenAICreativeDryRun(
     });
   }
 
-  // 8H-B — same one-shot budget as adapter (prompt + schema maxItems).
+  // 8H-B / 8I-B — same one-shot capacities as adapter (prompt + schema maxItems).
   const arcBudget = resolveCreativeArcBeatBudget(brief.durationSeconds);
-  const instructions = buildCreativeAnalyzerInstructions(arcBudget);
-  const textFormat = getCreativeCandidateTextFormat({
-    maxBeats: arcBudget.maxBeats,
-  });
-  const schemaMaxItems = (
-    (textFormat.schema as { properties?: { emotionalArc?: { maxItems?: number } } })
-      .properties?.emotionalArc?.maxItems
-  );
+  const capacities = resolveCreativeRunCapacities({ brief, marketingPlan });
+  const instructions = buildCreativeAnalyzerInstructions(arcBudget, capacities);
+  const textFormat = getCreativeCandidateTextFormat({ capacities });
+  const schemaProps = (
+    textFormat.schema as {
+      properties?: {
+        emotionalArc?: { maxItems?: number };
+        assumptions?: { maxItems?: number };
+        constraints?: { maxItems?: number };
+      };
+    }
+  ).properties;
+  const schemaMaxBeats = schemaProps?.emotionalArc?.maxItems;
+  const schemaAssumptionsMax = schemaProps?.assumptions?.maxItems;
+  const schemaConstraintsMax = schemaProps?.constraints?.maxItems;
   validations.push({
     code: "arc_beat_budget",
-    passed: schemaMaxItems === arcBudget.maxBeats,
+    passed: schemaMaxBeats === arcBudget.maxBeats,
     message:
-      schemaMaxItems === arcBudget.maxBeats
+      schemaMaxBeats === arcBudget.maxBeats
         ? `Arc duration=${arcBudget.durationSeconds}s → maxBeats=${arcBudget.maxBeats} (prompt + schema).`
-        : `Incohérence maxBeats (budget=${arcBudget.maxBeats}, schema=${schemaMaxItems}).`,
+        : `Incohérence maxBeats (budget=${arcBudget.maxBeats}, schema=${schemaMaxBeats}).`,
+  });
+  validations.push({
+    code: "array_capacities",
+    passed:
+      !capacities.assumptions.enrichmentsExceedFinal &&
+      !capacities.constraints.enrichmentsExceedFinal &&
+      schemaAssumptionsMax === capacities.assumptions.candidateMax &&
+      schemaConstraintsMax === capacities.constraints.candidateMax,
+    message: capacities.assumptions.enrichmentsExceedFinal
+      ? `Enrichissements assumptions dépassent finalMax (${capacities.assumptions.systemCount}+${capacities.assumptions.upstreamCount}>${capacities.assumptions.finalMax}).`
+      : `Capacités assumptions candidat=${capacities.assumptions.candidateMax} (system=${capacities.assumptions.systemCount}, upstream=${capacities.assumptions.upstreamCount}) · constraints candidat=${capacities.constraints.candidateMax}.`,
   });
 
   const approxIn = approximateCreativeTokenCount(
@@ -223,7 +242,9 @@ export function runOpenAICreativeDryRun(
     mapped.blockingFindings.length === 0 &&
     readiness.executable &&
     (pricingConfigured || !config.requireFirmPricing) &&
-    budgetDecision?.allowed !== false;
+    budgetDecision?.allowed !== false &&
+    !capacities.assumptions.enrichmentsExceedFinal &&
+    !capacities.constraints.enrichmentsExceedFinal;
 
   return {
     executable,

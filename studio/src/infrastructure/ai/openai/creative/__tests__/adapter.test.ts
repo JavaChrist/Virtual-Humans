@@ -82,8 +82,8 @@ test("mapping — déterministe", () => {
   assert.equal(a.userMessage, b.userMessage);
 });
 
-test("prompt — versionné v4, descripteurs génériques, sans seuils hardcodés / provider / Tom / Mei", () => {
-  assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v4");
+test("prompt — versionné v5, descripteurs génériques, sans seuils hardcodés / provider / Tom / Mei", () => {
+  assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v5");
   assertCreativePromptSafeForLogs(CREATIVE_ANALYZER_SYSTEM_PROMPT);
   assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /generic visual descriptors/i);
   assert.match(CREATIVE_ANALYZER_SYSTEM_PROMPT, /Never name living or deceased artists/i);
@@ -95,8 +95,8 @@ test("prompt — versionné v4, descripteurs génériques, sans seuils hardcodé
 
 test("schema contract — strict + enums", () => {
   const c = creativeCandidateSchemaContract();
-  assert.equal(c.name, "creative-analysis-candidate-v1_1");
-  assert.equal(c.version, "1.1.0");
+  assert.equal(c.name, "creative-analysis-candidate-v1_2");
+  assert.equal(c.version, "1.2.0");
   assert.equal(c.additionalPropertiesFalse, true);
   assert.ok(c.required.includes("title"));
   assert.ok(c.required.includes("bigIdea"));
@@ -185,7 +185,7 @@ test("adapter — Responses store false, un outil, un appel, candidat non finali
   assert.equal(last.req.previous_response_id, undefined);
   assert.equal(last.req.textFormat.type, "json_schema");
   assert.equal(last.req.textFormat.strict, true);
-  assert.equal(last.req.textFormat.name, "creative-analysis-candidate-v1_1");
+  assert.equal(last.req.textFormat.name, "creative-analysis-candidate-v1_2");
 });
 
 test("injection — zéro appel, erreur sûre, pas d'echo", async () => {

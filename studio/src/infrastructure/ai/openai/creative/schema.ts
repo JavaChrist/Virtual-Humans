@@ -1,29 +1,21 @@
 /**
- * Strict JSON Schema for Creative analyzer candidate (VHS-118A / 8H-A).
- * Schema 1.1.0: emotionalArc beats omit derived `order`.
+ * Strict JSON Schema for Creative analyzer candidate (8I-B / v1.2.0).
+ * Schema 1.2.0: no beat.order; dynamic array maxItems from run capacities.
  */
 
 import { z } from "zod";
 import {
   CREATIVE_FIELD_LIMITS,
-  CreativeAnalyzerCandidateSchema,
+  candidateCapsFromRun,
+  createCreativeAnalyzerCandidateSchema,
   resolveCreativeArcBeatBudget,
+  resolveCreativeRunCapacities,
+  type CreativeRunCapacities,
 } from "@/domain/creative";
 import { toOpenAIStrictJsonSchema } from "../structured-output";
 
-export const CREATIVE_CANDIDATE_SCHEMA_NAME = "creative-analysis-candidate-v1_1";
-export const CREATIVE_CANDIDATE_SCHEMA_VERSION = "1.1.0";
-
-let cached: Record<string, unknown> | null = null;
-
-export function getCreativeCandidateJsonSchema(): Record<string, unknown> {
-  if (cached) return cached;
-  const zodJson = z.toJSONSchema(CreativeAnalyzerCandidateSchema, {
-    target: "draft-7",
-  }) as Record<string, unknown>;
-  cached = toOpenAIStrictJsonSchema(zodJson);
-  return cached;
-}
+export const CREATIVE_CANDIDATE_SCHEMA_NAME = "creative-analysis-candidate-v1_2";
+export const CREATIVE_CANDIDATE_SCHEMA_VERSION = "1.2.0";
 
 function cloneJson<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T;
@@ -31,7 +23,7 @@ function cloneJson<T>(value: T): T {
 
 /**
  * Cap emotionalArc.maxItems for the brief duration (still ≥ beatsMin).
- * Does not mutate the cached base schema.
+ * Does not mutate the input schema.
  */
 export function applyEmotionalArcMaxBeats(
   schema: Record<string, unknown>,
@@ -51,26 +43,72 @@ export function applyEmotionalArcMaxBeats(
   return next;
 }
 
+function applyArrayMaxItems(
+  schema: Record<string, unknown>,
+  caps: CreativeRunCapacities,
+): Record<string, unknown> {
+  const next = cloneJson(schema);
+  const props = next.properties as Record<string, unknown> | undefined;
+  if (!props) return next;
+  const set = (key: string, maxItems: number) => {
+    const node = props[key] as Record<string, unknown> | undefined;
+    if (node && typeof node === "object") {
+      node.maxItems = maxItems;
+    }
+  };
+  set("assumptions", caps.assumptions.candidateMax);
+  set("constraints", caps.constraints.candidateMax);
+  set("referenceKeywords", caps.referenceKeywords.candidateMax);
+  set("claimedEvidence", caps.evidence.candidateMax);
+  set("emotionalArc", caps.emotionalArc.maxBeats);
+  return next;
+}
+
+/** Base JSON schema from Zod factory at ceiling maxima (structure only). */
+export function getCreativeCandidateJsonSchema(): Record<string, unknown> {
+  const zodJson = z.toJSONSchema(
+    createCreativeAnalyzerCandidateSchema({
+      assumptionsMax: CREATIVE_FIELD_LIMITS.assumptionsMax,
+      constraintsMax: CREATIVE_FIELD_LIMITS.constraintsMax,
+      beatsMax: CREATIVE_FIELD_LIMITS.beatsMax,
+    }),
+    { target: "draft-7" },
+  ) as Record<string, unknown>;
+  return toOpenAIStrictJsonSchema(zodJson);
+}
+
 export function getCreativeCandidateTextFormat(opts?: {
-  /** Prefer passing the one-shot budget.maxBeats from resolveCreativeArcBeatBudget. */
   maxBeats?: number;
-  /** Convenience: derives maxBeats via the same domain resolver (tests / callers). */
   durationSeconds?: number;
+  capacities?: CreativeRunCapacities;
 }) {
   const base = getCreativeCandidateJsonSchema();
-  const maxBeats =
-    opts?.maxBeats ??
-    (opts?.durationSeconds != null
-      ? resolveCreativeArcBeatBudget(opts.durationSeconds).maxBeats
-      : undefined);
-  const schema =
-    maxBeats != null ? applyEmotionalArcMaxBeats(base, maxBeats) : base;
+  let schema = base;
+  if (opts?.capacities) {
+    schema = applyArrayMaxItems(base, opts.capacities);
+  } else {
+    const maxBeats =
+      opts?.maxBeats ??
+      (opts?.durationSeconds != null
+        ? resolveCreativeArcBeatBudget(opts.durationSeconds).maxBeats
+        : undefined);
+    if (maxBeats != null) {
+      schema = applyEmotionalArcMaxBeats(base, maxBeats);
+    }
+  }
   return {
     type: "json_schema" as const,
     name: CREATIVE_CANDIDATE_SCHEMA_NAME,
     strict: true as const,
     schema,
   };
+}
+
+/** Preferred entry: capacities from brief+plan (single source). */
+export function getCreativeCandidateTextFormatForRun(
+  capacities: CreativeRunCapacities,
+) {
+  return getCreativeCandidateTextFormat({ capacities });
 }
 
 export function creativeCandidateSchemaContract() {
@@ -91,3 +129,9 @@ export function creativeCandidateSchemaContract() {
     ),
   };
 }
+
+export function zodAnalyzerSchemaForCapacities(capacities: CreativeRunCapacities) {
+  return createCreativeAnalyzerCandidateSchema(candidateCapsFromRun(capacities));
+}
+
+export { resolveCreativeRunCapacities };

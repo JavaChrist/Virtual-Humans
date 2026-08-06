@@ -7,6 +7,7 @@ import { publicMessageForMarketingFailureCode } from "@/application/directors/ma
 
 export type MarketingApiErrorBody = {
   status?: string;
+  directorRunId?: string;
   error?:
     | string
     | {

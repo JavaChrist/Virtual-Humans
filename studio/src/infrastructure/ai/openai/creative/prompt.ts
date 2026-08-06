@@ -1,20 +1,14 @@
 /**
- * Versioned system prompt for Creative analyzer (VHS-118A / VHS-8F-A / 8G-B / 8H-A/B).
- * Compact — no provider names, no character fixtures, no secrets.
+ * Versioned system prompt for Creative analyzer.
  *
  * ## Version contract (orchestration / idempotence)
  *
- * - `creative-analyzer-v1` — first paid path (terminal in Production for prior runs).
- * - `creative-analyzer-v2` — security prompt hardening (forbidden-ref detector);
- *   Production key terminal after 8F-B failure.
- * - `creative-analyzer-v3` — same security prompt text as v2 + candidate schema
- *   `1.0.0`; orchestration/taxonomy/metering contract. Terminal after 8G-C
- *   `invalid_candidate` (emotionalArc too long for 30s).
- * - `creative-analyzer-v4` — duration-aware emotionalArc via domain
- *   `maxBeatsForDurationSeconds` / `resolveCreativeArcBeatBudget` (single source);
- *   candidate JSON schema `1.1.0` drops derived `order`; array position canonical;
- *   run constraint injected from the computed budget (prompt + maxItems + hard gate).
- *   Distinct idempotency key from v1/v2/v3. Auto-retry still false.
+ * - v1…v3 — terminal in Production (prior gates).
+ * - `creative-analyzer-v4` — duration-aware emotionalArc + schema `1.1.0` (no beat.order).
+ *   Terminal after 8H execute `invalid_concept` (assumptions overflow).
+ * - `creative-analyzer-v5` — dynamic array capacities (system + upstream reserved);
+ *   candidate schema `1.2.0`; no silent truncation; same IP/security + metering.
+ *   Distinct idempotency key. Auto-retry still false.
  */
 
 import {
@@ -22,13 +16,17 @@ import {
   formatCreativeArcBeatRunConstraint,
   type CreativeArcBeatBudget,
 } from "@/domain/creative/arc-beat-budget";
+import {
+  formatCreativeCapacityRunConstraint,
+  type CreativeRunCapacities,
+} from "@/domain/creative/array-capacities";
 
 /** Canonical analyzer/orchestration contract version (included in idempotency key). */
-export const CREATIVE_ANALYZER_PROMPT_VERSION = "creative-analyzer-v4";
+export const CREATIVE_ANALYZER_PROMPT_VERSION = "creative-analyzer-v5";
 
 /**
- * Static security / craft rules — no duration numeric thresholds here (8H-B).
- * Run-applied beat caps come from {@link buildCreativeAnalyzerInstructions}.
+ * Static security / craft rules — no duration/capacity numeric thresholds here.
+ * Run-applied caps come from {@link buildCreativeAnalyzerInstructions}.
  */
 export const CREATIVE_ANALYZER_SYSTEM_PROMPT = [
   "You are a creative concept analyzer for short-form video.",
@@ -51,17 +49,17 @@ export const CREATIVE_ANALYZER_SYSTEM_PROMPT = [
 ].join(" ");
 
 /**
- * Full instructions for one run: static craft rules + domain-computed beat budget.
- * Educational tiers are derived via {@link describeCreativeArcBeatTiersFromDomain}
- * (calls `maxBeatsForDurationSeconds`); the binding constraint is `budget.maxBeats`.
+ * Full instructions for one run: craft rules + domain-computed beat + array capacities.
  */
 export function buildCreativeAnalyzerInstructions(
   budget: CreativeArcBeatBudget,
+  capacities: CreativeRunCapacities,
 ): string {
   return [
     CREATIVE_ANALYZER_SYSTEM_PROMPT,
     `Duration tiers (domain rule): ${describeCreativeArcBeatTiersFromDomain()}.`,
     formatCreativeArcBeatRunConstraint(budget),
+    formatCreativeCapacityRunConstraint(capacities),
   ].join(" ");
 }
 

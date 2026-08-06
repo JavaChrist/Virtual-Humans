@@ -2,12 +2,14 @@ import { createArtifactMetadata } from "@/domain/shared";
 import type { VideoProjectBrief } from "@/domain/brief";
 import type { MarketingPlan } from "@/domain/marketing";
 import {
+  mergeCreativeAssumptions,
+  mergeCreativeConstraints,
+  resolveCreativeRunCapacities,
+} from "./array-capacities";
+import {
   CREATIVE_CONCEPT_SCHEMA_VERSION,
-  CREATIVE_FIELD_LIMITS,
   type CreativeAnalysisCandidate,
-  type CreativeAssumption,
   type CreativeConcept,
-  type CreativeConstraint,
 } from "./creative-concept";
 import { CreativeDomainError } from "./errors";
 import { buildCreativeRationale } from "./explanation";
@@ -34,7 +36,7 @@ export type FinalizeCreativeConceptInput = {
 
 /**
  * Build an immutable CreativeConcept from an untrusted candidate + marketing plan.
- * Does not mutate inputs.
+ * Does not mutate inputs. Never silently truncates arrays (8I-B).
  */
 export function finalizeCreativeConcept(input: FinalizeCreativeConceptInput): CreativeConcept {
   const briefSnapshot: VideoProjectBrief = {
@@ -43,6 +45,74 @@ export function finalizeCreativeConcept(input: FinalizeCreativeConceptInput): Cr
   };
   const planSnapshot = JSON.parse(JSON.stringify(input.marketingPlan)) as MarketingPlan;
   const normalized = normalizeCreativeCandidate(input.candidate);
+  const caps = resolveCreativeRunCapacities({
+    brief: briefSnapshot,
+    marketingPlan: planSnapshot,
+  });
+
+  if (caps.assumptions.enrichmentsExceedFinal) {
+    throw new CreativeDomainError(
+      "invalid_concept",
+      `Enrichissements Creative (system+upstream=${caps.assumptions.systemCount + caps.assumptions.upstreamCount}) dépassent la capacité finale (${caps.assumptions.finalMax}).`,
+      "assumptions",
+      {
+        schemaName: "CreativeConceptSchema",
+        arrayName: "assumptions",
+        arrayMax: caps.assumptions.finalMax,
+        arrayLength:
+          caps.assumptions.systemCount + caps.assumptions.upstreamCount,
+        finalizeStep: "enrichment",
+        sourceType: "marketing_plan",
+      },
+    );
+  }
+  if (caps.constraints.enrichmentsExceedFinal) {
+    throw new CreativeDomainError(
+      "invalid_concept",
+      `Enrichissements Creative (system=${caps.constraints.systemCount}) dépassent la capacité constraints (${caps.constraints.finalMax}).`,
+      "constraints",
+      {
+        schemaName: "CreativeConceptSchema",
+        arrayName: "constraints",
+        arrayMax: caps.constraints.finalMax,
+        arrayLength: caps.constraints.systemCount,
+        finalizeStep: "enrichment",
+        sourceType: "candidate_field",
+      },
+    );
+  }
+
+  // Candidate must already respect candidateMax (schema / pre-call contract).
+  const assumptionsBefore = normalized.assumptions?.length ?? 0;
+  const constraintsBefore = normalized.constraints?.length ?? 0;
+  if (assumptionsBefore > caps.assumptions.candidateMax) {
+    throw new CreativeDomainError(
+      "invalid_candidate",
+      `Trop d'assumptions candidat (${assumptionsBefore}/${caps.assumptions.candidateMax}).`,
+      "assumptions",
+      {
+        arrayName: "assumptions",
+        arrayLength: assumptionsBefore,
+        arrayMax: caps.assumptions.candidateMax,
+        finalizeStep: "candidate",
+        sourceType: "candidate_field",
+      },
+    );
+  }
+  if (constraintsBefore > caps.constraints.candidateMax) {
+    throw new CreativeDomainError(
+      "invalid_candidate",
+      `Trop de constraints candidat (${constraintsBefore}/${caps.constraints.candidateMax}).`,
+      "constraints",
+      {
+        arrayName: "constraints",
+        arrayLength: constraintsBefore,
+        arrayMax: caps.constraints.candidateMax,
+        finalizeStep: "candidate",
+        sourceType: "candidate_field",
+      },
+    );
+  }
 
   const { issues } = validateCandidateAgainstMarketing(
     normalized,
@@ -59,52 +129,27 @@ export function finalizeCreativeConcept(input: FinalizeCreativeConceptInput): Cr
 
   const evidence = rebuildCreativeEvidence(planSnapshot, briefSnapshot);
 
-  const constraints: CreativeConstraint[] = [...(normalized.constraints ?? [])];
-  if (briefSnapshot.brandConstraints?.trim()) {
-    constraints.push({
-      id: "constraint-brand",
-      text: briefSnapshot.brandConstraints.trim().slice(0, 200),
-      source: "user_constraint",
+  let assumptions;
+  let constraints;
+  try {
+    assumptions = mergeCreativeAssumptions({
+      candidate: normalized.assumptions ?? [],
+      marketingPlan: planSnapshot,
+      finalMax: caps.assumptions.finalMax,
     });
-  }
-  constraints.push({
-    id: "constraint-cta",
-    text: `Conserver le CTA marketing: ${planSnapshot.callToAction}`,
-    source: "marketing_plan",
-  });
-
-  const assumptions: CreativeAssumption[] = [...(normalized.assumptions ?? [])];
-  if (assumptions.length === 0) {
-    assumptions.push({
-      id: "assumption-single-idea",
-      statement: "Une seule grande idée porte le film court.",
-      status: "explicit",
-      affectsFields: ["bigIdea"],
+    constraints = mergeCreativeConstraints({
+      candidate: normalized.constraints ?? [],
+      brief: briefSnapshot,
+      marketingPlan: planSnapshot,
+      finalMax: caps.constraints.finalMax,
     });
-  }
-  // 8H-A — technical provenance: order is derived from array index, never reordered.
-  if (
-    assumptions.length < CREATIVE_FIELD_LIMITS.assumptionsMax &&
-    !assumptions.some((a) => a.id === "assumption-emotional-arc-array-order")
-  ) {
-    assumptions.push({
-      id: "assumption-emotional-arc-array-order",
-      statement:
-        "Ordre des beats dérivé de la position du tableau (index+1); la séquence narrative n'est jamais réordonnée.",
-      status: "explicit",
-      affectsFields: ["emotionalArc"],
-    });
-  }
-  for (const a of planSnapshot.assumptions) {
-    if (a.status === "inferred" || a.status === "unverified") {
-      assumptions.push({
-        id: `from-mkt-${a.id}`,
-        statement: `Hypothèse marketing reprise: ${a.statement.slice(0, 200)}`,
-        status: "inferred",
-        justification: "Portée depuis le Marketing Plan sans la transformer en fait.",
-        affectsFields: ["logline", "bigIdea"],
-      });
-    }
+  } catch (e) {
+    throw new CreativeDomainError(
+      "invalid_concept",
+      e instanceof Error ? e.message : "Invariant de capacité Creative violé.",
+      undefined,
+      { finalizeStep: "enrichment", sourceType: "candidate_field" },
+    );
   }
 
   const rationale = buildCreativeRationale(evidence, [
@@ -146,9 +191,48 @@ export function finalizeCreativeConcept(input: FinalizeCreativeConceptInput): Cr
 
   const parsed = CreativeConceptSchema.safeParse(concept);
   if (!parsed.success) {
+    const issue = parsed.error.issues[0]!;
+    const fieldPath = issue.path.map(String).join(".") || undefined;
     throw new CreativeDomainError(
       "invalid_concept",
-      parsed.error.issues[0]?.message ?? "Concept créatif invalide après finalisation.",
+      issue.message ?? "Concept créatif invalide après finalisation.",
+      fieldPath,
+      {
+        schemaName: "CreativeConceptSchema",
+        zodCode: issue.code,
+        arrayName:
+          fieldPath === "assumptions"
+            ? "assumptions"
+            : fieldPath === "constraints"
+              ? "constraints"
+              : undefined,
+        arrayLength:
+          fieldPath === "assumptions"
+            ? assumptions.length
+            : fieldPath === "constraints"
+              ? constraints.length
+              : undefined,
+        arrayMax:
+          fieldPath === "assumptions"
+            ? caps.assumptions.finalMax
+            : fieldPath === "constraints"
+              ? caps.constraints.finalMax
+              : undefined,
+        lengthBeforeEnrichment:
+          fieldPath === "assumptions"
+            ? assumptionsBefore
+            : fieldPath === "constraints"
+              ? constraintsBefore
+              : undefined,
+        lengthAfterEnrichment:
+          fieldPath === "assumptions"
+            ? assumptions.length
+            : fieldPath === "constraints"
+              ? constraints.length
+              : undefined,
+        finalizeStep: "artifact_final",
+        sourceType: "candidate_field",
+      },
     );
   }
 
@@ -163,3 +247,4 @@ export function finalizeCreativeConcept(input: FinalizeCreativeConceptInput): Cr
 
   return Object.freeze(JSON.parse(JSON.stringify(parsed.data)) as CreativeConcept);
 }
+

@@ -155,6 +155,32 @@ body {
   }
 }
 
+/* 8I-B — shared indeterminate Director processing spinner (slow, reduced-motion safe). */
+@keyframes directorProcessingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.director-processing__spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  border-top-color: var(--muted);
+  border-radius: 50%;
+  animation: directorProcessingSpin 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .director-processing__spinner {
+    animation: none;
+    border-top-color: var(--accent-2);
+    opacity: 0.85;
+  }
+}
+
 @keyframes slideInLeft {
   from {
     transform: translateX(-100%);

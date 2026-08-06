@@ -85,23 +85,25 @@ test("8G-B — failed log exposes redacted taxonomy fields, never payload/prompt
 
     const blob = JSON.stringify(infoCalls);
     assert.equal(/sk-test|api[_ ]?key|system prompt|bigIdea|Picasso/i.test(blob), false);
-    assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v4");
-    assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.1.0");
+    assert.equal(CREATIVE_ANALYZER_PROMPT_VERSION, "creative-analyzer-v5");
+    assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.2.0");
   } finally {
     logger.info = origInfo;
   }
 });
 
-test("8H-A — v4 idempotency material distinct from v1/v2/v3", () => {
+test("8H-A — v5 idempotency material distinct from v1/v2/v3/v4", () => {
   const v1 = "creative-analyzer-v1";
   const v2 = "creative-analyzer-v2";
   const v3 = "creative-analyzer-v3";
-  const v4 = CREATIVE_ANALYZER_PROMPT_VERSION;
-  assert.equal(v4, "creative-analyzer-v4");
-  assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.1.0");
-  assert.notEqual(v4, v1);
-  assert.notEqual(v4, v2);
-  assert.notEqual(v4, v3);
+  const v4 = "creative-analyzer-v4";
+  const v5 = CREATIVE_ANALYZER_PROMPT_VERSION;
+  assert.equal(v5, "creative-analyzer-v5");
+  assert.equal(CREATIVE_CANDIDATE_SCHEMA_VERSION, "1.2.0");
+  assert.notEqual(v5, v1);
+  assert.notEqual(v5, v2);
+  assert.notEqual(v5, v3);
+  assert.notEqual(v5, v4);
   const keyFor = (promptVersion: string, schemaVersion: string) =>
     [
       "cre",
@@ -114,7 +116,8 @@ test("8H-A — v4 idempotency material distinct from v1/v2/v3", () => {
       promptVersion,
       schemaVersion,
     ].join(":");
-  assert.notEqual(keyFor(v4, "1.1.0"), keyFor(v1, "1.0.0"));
-  assert.notEqual(keyFor(v4, "1.1.0"), keyFor(v2, "1.0.0"));
-  assert.notEqual(keyFor(v4, "1.1.0"), keyFor(v3, "1.0.0"));
+  assert.notEqual(keyFor(v5, "1.2.0"), keyFor(v1, "1.0.0"));
+  assert.notEqual(keyFor(v5, "1.2.0"), keyFor(v2, "1.0.0"));
+  assert.notEqual(keyFor(v5, "1.2.0"), keyFor(v3, "1.0.0"));
+  assert.notEqual(keyFor(v5, "1.2.0"), keyFor(v4, "1.1.0"));
 });

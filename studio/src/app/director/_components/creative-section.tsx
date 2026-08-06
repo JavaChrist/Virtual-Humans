@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useConfirm } from "@/components/confirm";
 import type {
   CreativeConceptView,
@@ -11,6 +11,8 @@ import {
   messageFromCreativeApiError,
   type CreativeApiErrorBody,
 } from "./creative-messages";
+import { DirectorProcessingStatus } from "./director-processing-status";
+import { useDirectorProcessing } from "./use-director-processing";
 
 export function CreativeSection({
   projectId,
@@ -22,15 +24,47 @@ export function CreativeSection({
   const confirm = useConfirm();
   const [dry, setDry] = useState<CreativeProjectDryRunResult | null>(null);
   const [concept, setConcept] = useState<CreativeConceptView | null>(initialConcept);
-  const [busy, setBusy] = useState<"dry-run" | "execute" | null>(null);
+  const [dryBusy, setDryBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
-  /** Blocks re-entrant confirm cycles (anti double-clic). */
   const confirmingRef = useRef(false);
 
+  const reloadArtifact = useCallback(async () => {
+    const res = await fetch(`/api/director/projects/${projectId}/creative`);
+    if (!res.ok) return false;
+    const data = (await res.json()) as {
+      dryRun?: CreativeProjectDryRunResult;
+      concept?: CreativeConceptView | null;
+    };
+    if (data.dryRun) {
+      setDry(data.dryRun);
+      if (data.dryRun.existingConcept) setConcept(data.dryRun.existingConcept);
+    }
+    if (data.concept) {
+      setConcept(data.concept);
+      return true;
+    }
+    return Boolean(data.dryRun?.existingConcept);
+  }, [projectId]);
+
+  const processing = useDirectorProcessing({
+    director: "creative",
+    projectId,
+    reloadArtifact,
+    successMessage: "Concept créatif enregistré.",
+  });
+
+  const locked = dryBusy || processing.busy;
+  const displayError =
+    error ??
+    (processing.phase === "failed" ? processing.statusMessage : null);
+  const displayStatus =
+    status ??
+    (processing.phase === "completed" ? processing.statusMessage : null);
+
   async function check() {
-    if (busy) return;
-    setBusy("dry-run");
+    if (locked) return;
+    setDryBusy(true);
     setError(null);
     try {
       const r = await fetch(`/api/director/projects/${projectId}/creative`, {
@@ -58,13 +92,14 @@ export function CreativeSection({
     } catch {
       setError("Vérification impossible.");
     } finally {
-      setBusy(null);
+      setDryBusy(false);
     }
   }
 
   async function execute() {
-    if (busy || !dry?.executionAvailable || confirmingRef.current) return;
+    if (locked || !dry?.executionAvailable || confirmingRef.current) return;
     confirmingRef.current = true;
+    processing.beginConfirming();
     try {
       const ok = await confirm({
         title: "Lancer l’analyse créative ?",
@@ -72,10 +107,14 @@ export function CreativeSection({
         confirmLabel: "Lancer l’analyse",
         cancelLabel: "Annuler",
       });
-      if (!ok) return;
+      if (!ok) {
+        processing.cancelConfirming();
+        return;
+      }
 
-      setBusy("execute");
+      if (!processing.beginSubmit()) return;
       setError(null);
+      setStatus(null);
       try {
         const r = await fetch(`/api/director/projects/${projectId}/creative`, {
           method: "POST",
@@ -88,18 +127,42 @@ export function CreativeSection({
         const d = (await r.json()) as CreativeApiErrorBody & {
           concept?: CreativeConceptView;
         };
+        if (r.status === 202) {
+          const runId = d.directorRunId;
+          const msg = messageFromCreativeApiError(
+            d,
+            "Analyse créative déjà en cours.",
+          );
+          setError(null);
+          setStatus(msg);
+          if (typeof runId === "string" && runId) {
+            processing.followActiveRun(runId);
+          } else {
+            const fallback =
+              "Un run créatif est déjà en cours. Actualisez la page pour reprendre le suivi.";
+            processing.markFailed(fallback);
+            setError(fallback);
+          }
+          return;
+        }
         if (!r.ok) {
-          setError(messageFromCreativeApiError(d));
+          const msg = messageFromCreativeApiError(d);
+          processing.markFailed(msg);
+          setError(msg);
           return;
         }
         if (d.concept) {
           setConcept(d.concept);
+          processing.markCompleted("Concept créatif enregistré.");
           setStatus("Concept créatif enregistré.");
+        } else {
+          processing.markCompleted();
         }
       } catch {
-        setError("Analyse créative impossible.");
-      } finally {
-        setBusy(null);
+        const msg =
+          "Analyse créative impossible. Vérifiez la connexion, puis relancez un dry-run avant une nouvelle tentative.";
+        processing.markFailed(msg);
+        setError(msg);
       }
     } finally {
       confirmingRef.current = false;
@@ -119,20 +182,22 @@ export function CreativeSection({
           type="button"
           className="btn btn-primary"
           onClick={check}
-          disabled={busy != null}
-          aria-busy={busy === "dry-run"}
+          disabled={locked}
+          aria-busy={dryBusy}
         >
-          {busy === "dry-run" ? "Vérification…" : "Vérifier les prérequis"}
+          {dryBusy ? "Vérification…" : "Vérifier les prérequis"}
         </button>
         {dry?.executionAvailable ? (
           <button
             type="button"
             className="btn btn-ghost"
             onClick={execute}
-            disabled={busy != null}
-            aria-busy={busy === "execute"}
+            disabled={locked}
+            aria-busy={processing.busy && processing.phase !== "confirming"}
           >
-            {busy === "execute" ? "Analyse…" : "Lancer l’analyse créative"}
+            {processing.busy && processing.phase !== "confirming"
+              ? "Analyse…"
+              : "Lancer l’analyse créative"}
           </button>
         ) : (
           <button type="button" className="btn btn-ghost" disabled aria-disabled="true">
@@ -140,14 +205,22 @@ export function CreativeSection({
           </button>
         )}
       </div>
-      {status && (
+      <DirectorProcessingStatus
+        director="creative"
+        phase={processing.phase}
+        message={processing.statusMessage}
+      />
+      {displayStatus &&
+        processing.phase !== "running" &&
+        processing.phase !== "submitting" &&
+        processing.phase !== "persisting" && (
         <p className="text-sm text-[var(--muted)] mb-2" role="status">
-          {status}
+          {displayStatus}
         </p>
       )}
-      {error && (
+      {displayError && (
         <p className="text-sm text-[var(--danger)] mb-2" role="alert">
-          {error}
+          {displayError}
         </p>
       )}
       {dry && (
