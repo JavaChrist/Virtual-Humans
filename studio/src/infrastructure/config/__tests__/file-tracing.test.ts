@@ -26,9 +26,10 @@ test("file-tracing — includes bornés aux routes character/media", () => {
   assert.ok(includes["/api/v1/characters/**"]?.includes("../characters/**"));
   assert.ok(includes["/api/asset/**"]?.includes("../characters/**"));
   assert.ok(
-    includes["/api/director/projects/[projectId]/art/**"]?.includes("../characters/**"),
+    includes["/api/director/projects/*/art/**"]?.includes("../characters/**"),
     "Art Director must receive characters SDK for capability snapshots",
   );
+  // [projectId] would be a glob character-class — never use unescaped brackets here.
   assert.ok(!("/api/director/**" in includes), "never widen director wildcard");
   assert.ok(!("/api/budget/**" in includes));
 });

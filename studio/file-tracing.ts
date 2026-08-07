@@ -25,7 +25,8 @@ export const CHARACTER_FS_ROUTE_GLOBS = [
   "/api/generate/lipsync/**",
   // Art Director resolves CharacterCapabilities from the Runtime registry (Porte 8O).
   // Keep scoped to Art only — never widen to /api/director/** (ENOSPC risk).
-  "/api/director/projects/[projectId]/art/**",
+  // Use `*` not `[projectId]`: brackets are glob character-classes and would not match.
+  "/api/director/projects/*/art/**",
 ] as const;
 
 /** Paths always included for the character-fs routes (relative to studio cwd). */
