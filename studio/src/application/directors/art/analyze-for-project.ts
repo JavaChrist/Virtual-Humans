@@ -27,9 +27,57 @@ import {
   meteringKnownCostMinor,
   meteringUsageRecord,
 } from "@/application/directors/shared/analyzer-metering";
+import {
+  resolveCharacterCapabilitiesForBrief,
+  type CharacterPackageLookup,
+} from "@/application/runtime/resolve-character-capabilities";
+import type { VideoProjectBrief } from "@/domain/brief";
+import type { CharacterCapabilitiesSnapshot } from "@/domain/art";
 import { createArtDirector } from "./art-director";
 import type { ArtAnalyzerPort } from "./analyzer-port";
 import type { DirectorRunContext } from "./result";
+
+type CharacterResolution =
+  | {
+      status: "ok";
+      brief: VideoProjectBrief;
+      snapshot: CharacterCapabilitiesSnapshot | undefined;
+      identityFingerprint: string | undefined;
+    }
+  | {
+      status: "error";
+      brief: VideoProjectBrief;
+      code: string;
+      message: string;
+      field?: string;
+    };
+
+function resolveArtCharacter(
+  brief: VideoProjectBrief,
+  lookup?: CharacterPackageLookup,
+): CharacterResolution {
+  const resolved = lookup
+    ? resolveCharacterCapabilitiesForBrief(brief, lookup)
+    : resolveCharacterCapabilitiesForBrief(brief);
+  if (resolved.status === "none") {
+    return { status: "ok", brief, snapshot: undefined, identityFingerprint: undefined };
+  }
+  if (resolved.status === "resolved") {
+    return {
+      status: "ok",
+      brief: resolved.value.brief,
+      snapshot: resolved.value.snapshot,
+      identityFingerprint: resolved.value.identityFingerprint,
+    };
+  }
+  return {
+    status: "error",
+    brief,
+    code: resolved.status === "not_found" ? "character_not_found" : "character_package_invalid",
+    message: resolved.publicMessage,
+    field: "characterId",
+  };
+}
 
 type Warning = { code: string; message: string };
 export type VisualDirectionView = {
@@ -104,6 +152,8 @@ export type AnalyzeArtForProjectDeps = {
   workspaceId: string; projects: ProjectRepository; artifacts: ArtifactRepository;
   directorRuns: ArtDirectorRunPort; analyzer: ArtAnalyzerPort;
   pricing?: AiTokenPricingPort; env?: Record<string, string | undefined>; idFactory?: () => string;
+  /** Optional CharacterRegistry override (tests). Default: Runtime characterRegistry. */
+  characterLookup?: CharacterPackageLookup;
 };
 export type AnalyzeArtForProject = { dryRun(input: ArtProjectInput, context: DirectorRunContext): Promise<ArtProjectDryRunResult>; execute(input: ArtProjectInput, context: DirectorRunContext): Promise<ArtProjectResult> };
 
@@ -167,12 +217,35 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
         missingInformation: [{ code: `${missing}_missing`, message: "Pré-requis actif introuvable." }],
       });
     }
-    const ai = runOpenAIArtDryRun(brief.value, plan.value, concept.value, script.value, undefined, { env, pricing: deps.pricing });
+    const character = resolveArtCharacter(brief.value, deps.characterLookup);
+    if (character.status === "error") {
+      return {
+        executable: false, providerCalled: false, executionAvailable: false,
+        briefRevision: brief.revision, briefArtifactId: brief.artifactId,
+        marketingPlanRevision: plan.revision, marketingPlanArtifactId: plan.artifactId,
+        creativeConceptRevision: concept.revision, creativeConceptArtifactId: concept.artifactId,
+        videoScriptRevision: script.revision, videoScriptArtifactId: script.artifactId,
+        model: DEFAULT_OPENAI_ART_MODEL, promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
+        pricingConfigured: false, warnings: [],
+        validations: [{ code: character.code, passed: false, message: character.message }],
+        missingInformation: [{ code: character.code, message: character.message, field: character.field }],
+      };
+    }
+    const ai = runOpenAIArtDryRun(
+      character.brief, plan.value, concept.value, script.value, character.snapshot,
+      { env, pricing: deps.pricing },
+    );
     const existing = await deps.directorRuns.loadActiveVisualDirection(input.projectId);
     const price = deps.pricing?.getPriceBook(ai.model);
     const estimated = price ? Math.floor(((ai.approximateInputTokens ?? 0) * price.inputPerMillionMinor) / 1_000_000) + Math.floor((ai.maxOutputTokens * price.outputPerMillionMinor) / 1_000_000) : undefined;
     const e2e = isDirectorE2eFakeMode(env);
     const domainExecutable = e2e ? true : ai.executable;
+    const missingFromValidations = ai.validations.filter((v) => !v.passed).map((v) => ({ code: v.code, message: v.message }));
+    const missingCodes = new Set(missingFromValidations.map((m) => m.code));
+    const missingInformation = [
+      ...missingFromValidations,
+      ...ai.readinessMissing.filter((m) => !missingCodes.has(m.code)),
+    ];
     return {
       executable: domainExecutable, providerCalled: false, executionAvailable: textDirectorExecutionAvailable({
         env, domainExecutable, paidPathAvailable: canExecuteArtAi(env), pricingConfigured: ai.pricingConfigured,
@@ -184,7 +257,7 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
       model: e2e ? e2eFakeOpenAiConfig().model : ai.model, promptVersion: ai.promptVersion, schemaVersion: ai.schemaVersion,
       pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
       validations: ai.validations, warnings: ai.warnings,
-      missingInformation: ai.validations.filter((v) => !v.passed).map((v) => ({ code: v.code, message: v.message })),
+      missingInformation,
       existingVisualDirection: existing ? stored(existing.value, existing.revision) : undefined,
     };
   }
@@ -210,10 +283,30 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
       if (input.expectedVideoScriptRevision != null && input.expectedVideoScriptRevision !== script.revision) return failed("video_script_revision_conflict", "Le Script a changé depuis la vérification.", 409);
       if (input.expectedCreativeConceptRevision != null && input.expectedCreativeConceptRevision !== concept.revision) return failed("creative_concept_revision_conflict", "Le Creative Concept a changé depuis la vérification.", 409);
       if (input.expectedMarketingPlanRevision != null && input.expectedMarketingPlanRevision !== plan.revision) return failed("marketing_plan_revision_conflict", "Le Marketing Plan a changé depuis la vérification.", 409);
+      // Same Character resolution as dry-run (deterministic for identical Brief + registry).
+      const character = resolveArtCharacter(brief.value, deps.characterLookup);
+      if (character.status === "error") {
+        return {
+          status: "needs_input",
+          missingInformation: [{ code: character.code, message: character.message, field: character.field }],
+          warnings: [],
+        };
+      }
       const check = await dry(input);
       if (!check.executable) return { status: "needs_input", missingInformation: check.missingInformation, warnings: check.warnings };
       const estimated = Math.max(1, check.estimatedCostMinor ?? 1), currency = check.currency ?? "USD";
-      const fields = [input.projectId, brief.artifactId, String(brief.revision), plan.artifactId, String(plan.revision), concept.artifactId, String(concept.revision), script.artifactId, String(script.revision), config.model, ART_ANALYZER_PROMPT_VERSION, ART_CANDIDATE_SCHEMA_VERSION];
+      const fields = [
+        input.projectId, brief.artifactId, String(brief.revision),
+        plan.artifactId, String(plan.revision),
+        concept.artifactId, String(concept.revision),
+        script.artifactId, String(script.revision),
+        config.model, ART_ANALYZER_PROMPT_VERSION, ART_CANDIDATE_SCHEMA_VERSION,
+        // Capability identity: new Art key when character assets/version change without Brief rev bump.
+        // Omitted when Brief has no character — preserves historical keys for character-less runs.
+        ...(character.identityFingerprint && character.snapshot
+          ? [character.snapshot.characterId, character.snapshot.snapshotVersion, character.identityFingerprint]
+          : []),
+      ];
       const raw = ["art", ...fields].join(":");
       const key = raw.length <= 200 ? raw : createHash("sha256").update(raw).digest("hex");
       const fingerprint = createHash("sha256").update(fields.join("|")).digest("hex");
@@ -241,7 +334,13 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
         return failed("budget_exceeded", "Réservation budget impossible.", 402, { directorRunId: runId });
       }
       const run = await createArtDirector({ analyzer: deps.analyzer }).run(
-        { brief: brief.value, marketingPlan: plan.value, creativeConcept: concept.value, videoScript: script.value },
+        {
+          brief: character.brief,
+          marketingPlan: plan.value,
+          creativeConcept: concept.value,
+          videoScript: script.value,
+          characterCapabilities: character.snapshot,
+        },
         { ...context, mode: "execute", planId: id(), createdBy: "shared-password-user" },
       );
       const meteringUsage = meteringUsageRecord(run.metering);
