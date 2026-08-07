@@ -29,6 +29,7 @@ import {
   ART_ANALYZER_SYSTEM_PROMPT,
 } from "./prompt";
 import {
+  artCandidateSchemaContextFromSources,
   getArtCandidateTextFormat,
   ART_CANDIDATE_SCHEMA_VERSION,
 } from "./schema";
@@ -96,6 +97,19 @@ export class OpenAIArtAnalyzerAdapter implements ArtAnalyzerPort {
           internalCode: mapped.blockingFindings[0]?.code,
         });
       }
+      const snap = request.characterCapabilities;
+      const schemaCtx = artCandidateSchemaContextFromSources({
+        scriptSegmentIds: request.videoScript.segments.map((s) => s.id),
+        ...(snap
+          ? {
+              characterId: snap.characterId,
+              outfitIds: snap.availableOutfits.map((o) => o.id),
+              expressionIds: snap.availableExpressions.map((o) => o.id),
+              poseIds: snap.availablePoses.map((o) => o.id),
+              referenceIds: snap.availableReferences.map((o) => o.id),
+            }
+          : {}),
+      });
       const result = await this.client.create(
         {
           model: this.config.model,
@@ -104,7 +118,7 @@ export class OpenAIArtAnalyzerAdapter implements ArtAnalyzerPort {
           store: false,
           maxOutputTokens: this.config.maxOutputTokens,
           reasoningEffort: this.config.reasoningEffort,
-          textFormat: getArtCandidateTextFormat(),
+          textFormat: getArtCandidateTextFormat(schemaCtx),
           safetyIdentifier: deriveSafetyIdentifier({
             workspaceId: this.config.workspaceId,
             secret: this.config.safetyIdentifierSecret,

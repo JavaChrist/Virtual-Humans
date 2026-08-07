@@ -53,7 +53,8 @@ test("IDs dupliqués refusés", () => {
   const chain = makeArtChain();
   const ids = chain.videoScript.segments.map((s) => s.id);
   const candidate = makeValidArtCandidate(ids);
-  candidate.segments[1]!.id = candidate.segments[0]!.id;
+  // Porte 8R — Art id is derived from scriptSegmentId; duplicate script refs fail.
+  candidate.segments[1]!.scriptSegmentId = candidate.segments[0]!.scriptSegmentId;
   assert.equal(ArtAnalysisCandidateSchema.safeParse(candidate).success, true);
   assert.throws(() =>
     finalizeVisualDirection({

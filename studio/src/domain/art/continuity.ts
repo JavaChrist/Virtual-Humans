@@ -1,5 +1,8 @@
 /**
- * Continuity invariants for VisualDirection (VHS-104).
+ * Continuity invariants for VisualDirection (VHS-104 / Porte 8R).
+ *
+ * `appliesToSegmentIds` must reference authoritative VideoScript.segment IDs
+ * (same namespace as `segments[].scriptSegmentId`), never a free-form label.
  */
 
 import type { ContinuityRule, SegmentVisualDirection } from "./visual-direction";
@@ -11,11 +14,12 @@ function issue(code: string, message: string, field?: string): ArtValidationIssu
 
 export function validateContinuityRules(
   rules: ContinuityRule[],
-  segmentIds: string[],
+  /** Authoritative VideoScript.segments[].id values. */
+  scriptSegmentIds: string[],
 ): { issues: ArtValidationIssue[]; warnings: ArtWarning[] } {
   const issues: ArtValidationIssue[] = [];
   const warnings: ArtWarning[] = [];
-  const known = new Set(segmentIds);
+  const known = new Set(scriptSegmentIds);
   const ruleIds = new Set<string>();
 
   for (const rule of rules) {
@@ -86,11 +90,12 @@ export function validateContinuityAgainstSegments(
 ): { issues: ArtValidationIssue[]; warnings: ArtWarning[] } {
   const issues: ArtValidationIssue[] = [];
   const warnings: ArtWarning[] = [];
-  const byId = new Map(segments.map((s) => [s.id, s]));
+  // Lookup by scriptSegmentId (Porte 8R). After normalization, id === scriptSegmentId.
+  const byScriptId = new Map(segments.map((s) => [s.scriptSegmentId, s]));
 
   for (const rule of rules) {
     const applicable = rule.appliesToSegmentIds
-      .map((id) => byId.get(id))
+      .map((id) => byScriptId.get(id))
       .filter((s): s is SegmentVisualDirection => Boolean(s));
     if (applicable.length < 2) continue;
 

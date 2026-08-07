@@ -121,22 +121,21 @@ export function projectContinuity(
   // Soft: required outfit stability across scenes sharing character
   for (const rule of visual.continuityRules) {
     if (rule.severity !== "required" || rule.scope !== "outfit") continue;
-    const applicable = sorted.filter((sc) =>
-      rule.appliesToSegmentIds.includes(
-        visual.segments.find((v) => v.id === sc.visualDirectionSegmentId)?.id ?? "",
-      ),
+    // Porte 8R — appliesToSegmentIds are VideoScript segment IDs.
+    // Legacy VisualDirections may still store VisualDirection segment ids;
+    // accept either namespace fail-closed without fuzzy remapping.
+    const applicable = sorted.filter(
+      (sc) =>
+        rule.appliesToSegmentIds.includes(sc.scriptSegmentId) ||
+        rule.appliesToSegmentIds.includes(sc.visualDirectionSegmentId),
     );
-    // Map rule appliesToSegmentIds which are VisualDirection segment ids
-    const applicable2 = sorted.filter((sc) =>
-      rule.appliesToSegmentIds.includes(sc.visualDirectionSegmentId),
-    );
-    const outfits = applicable2.map(
+    const outfits = applicable.map(
       (sc) => sceneKeys.find((k) => k.sceneId === sc.id)?.keys.find((x) => x.startsWith("outfit:")),
     );
     const unique = new Set(outfits.filter(Boolean));
     if (/\bstable\b|\bmême\b|\bsame\b|\bconserve\b/i.test(rule.description) && unique.size > 1) {
       const justified = intentionalBreaks.some((b) =>
-        applicable2.some((s) => s.id === b.sceneId),
+        applicable.some((s) => s.id === b.sceneId),
       );
       if (!justified) {
         issues.push(
@@ -153,7 +152,6 @@ export function projectContinuity(
         });
       }
     }
-    void applicable;
   }
 
   return {

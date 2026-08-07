@@ -257,7 +257,7 @@ function artCandidate(scriptSegmentIds: string[]): ArtAnalysisCandidate {
         id: "cr-loc",
         scope: "location",
         description: "Lieu stable city-street (E2E).",
-        appliesToSegmentIds: segments.map((s) => s.id),
+        appliesToSegmentIds: segments.map((s) => s.scriptSegmentId),
         severity: "preferred",
       },
     ],

@@ -26,6 +26,7 @@ test("mapping has all delimited sources and excludes URIs and revisions", () => 
   assert.match(mapped.userMessage, /\[DATA:MARKETING_PLAN\]/);
   assert.match(mapped.userMessage, /\[DATA:CREATIVE_CONCEPT\]/);
   assert.match(mapped.userMessage, /\[DATA:VIDEO_SCRIPT\]/);
+  assert.match(mapped.userMessage, /\[DATA:ALLOWED_SCRIPT_SEGMENT_IDS\]/);
   assert.equal(mapped.userMessage.includes('"uri"'), false);
   assert.equal(mapped.userMessage.includes("workspaceId"), false);
 });
@@ -43,7 +44,19 @@ test("adapter makes exactly one strict Responses call", async () => {
   const request = state.request as { store: boolean; textFormat: { strict: boolean; name: string } };
   assert.equal(request.store, false);
   assert.equal(request.textFormat.strict, true);
-  assert.equal(request.textFormat.name, "art-analysis-candidate-v1");
+  assert.equal(request.textFormat.name, "art-analysis-candidate-v1_1");
+  const raw = state.request as {
+    textFormat: { schema: Record<string, unknown> };
+  };
+  const props = raw.textFormat.schema.properties as Record<string, unknown>;
+  const segments = props.segments as Record<string, unknown>;
+  const items = segments.items as Record<string, unknown>;
+  const itemProps = items.properties as Record<string, unknown>;
+  const scriptSeg = itemProps.scriptSegmentId as { enum?: string[] };
+  assert.deepEqual(
+    scriptSeg.enum,
+    chain.videoScript.segments.map((s) => s.id),
+  );
 });
 
 test("provider failure remains provider_failed", async () => {

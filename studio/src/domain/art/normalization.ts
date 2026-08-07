@@ -38,9 +38,13 @@ function dedupePalette(palette: ColorToken[]): ColorToken[] {
 }
 
 function normalizeSegment(seg: SegmentVisualDirection): SegmentVisualDirection {
+  // Porte 8R / option C — Art segment id is derived from the authoritative
+  // VideoScript segment id. Model-invented parallel namespaces (vd-*, etc.)
+  // are discarded; unknown scriptSegmentId values remain fail-closed later.
+  const scriptSegmentId = seg.scriptSegmentId.trim();
   const base: SegmentVisualDirection = {
-    id: seg.id.trim(),
-    scriptSegmentId: seg.scriptSegmentId.trim(),
+    id: scriptSegmentId,
+    scriptSegmentId,
     location: {
       kind: seg.location.kind,
       description: clean(seg.location.description, ART_FIELD_LIMITS.locationDescription),

@@ -8,6 +8,13 @@ export {
 export { parseArtCandidateResponse } from "./parser";
 export { ART_ANALYZER_PROMPT_VERSION, ART_ANALYZER_SYSTEM_PROMPT, assertArtPromptSafeForLogs } from "./prompt";
 export {
-  ART_CANDIDATE_SCHEMA_NAME, ART_CANDIDATE_SCHEMA_VERSION, getArtCandidateJsonSchema,
-  getArtCandidateTextFormat, artCandidateSchemaContract,
+  ART_CANDIDATE_SCHEMA_NAME,
+  ART_CANDIDATE_SCHEMA_VERSION,
+  applyArtCandidateUpstreamEnums,
+  artCandidateSchemaContextFromSources,
+  artCandidateSchemaContract,
+  getArtCandidateJsonSchema,
+  getArtCandidateJsonSchemaForRun,
+  getArtCandidateTextFormat,
+  type ArtCandidateSchemaContext,
 } from "./schema";

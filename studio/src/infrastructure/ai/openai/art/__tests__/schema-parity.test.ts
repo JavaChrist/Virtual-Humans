@@ -25,10 +25,12 @@ function isNullUnion(schema: Record<string, unknown>): boolean {
 }
 
 test("textFormat — strict true + json_schema name", () => {
-  const fmt = getArtCandidateTextFormat();
+  const fmt = getArtCandidateTextFormat({
+    scriptSegmentIds: ["seg-1", "seg-2", "seg-3", "seg-4"],
+  });
   assert.equal(fmt.type, "json_schema");
   assert.equal(fmt.strict, true);
-  assert.equal(fmt.name, "art-analysis-candidate-v1");
+  assert.equal(fmt.name, "art-analysis-candidate-v1_1");
 });
 
 test("OpenAI schema — additionalProperties false + required optionals", () => {

@@ -473,9 +473,10 @@ export function validateCandidateAgainstSources(
   issues.push(...assertNoTechnicalLeak(candidate));
   issues.push(...validateSegmentCoverage(candidate.segments, script));
 
+  // Porte 8R — continuityRules.appliesToSegmentIds reference VideoScript IDs.
   const continuity = validateContinuityRules(
     candidate.continuityRules,
-    candidate.segments.map((s) => s.id),
+    script.segments.map((s) => s.id),
   );
   issues.push(...continuity.issues);
   warnings.push(...continuity.warnings);
