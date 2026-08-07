@@ -351,8 +351,12 @@ export function mapAbortError(e: unknown): OpenAIAiError {
   if (e instanceof OpenAIAiError) return e;
   const name = e instanceof Error ? e.name : "";
   const msg = e instanceof Error ? e.message : "";
+  // Node undici: controller.abort(new Error("timeout")) rejects with Error("timeout")
+  // (name !== "AbortError", message has no "abort") — must still map to timeout.
+  if (/timeout/i.test(msg) || /timeout/i.test(name)) {
+    return new OpenAIAiError("timeout");
+  }
   if (name === "AbortError" || /aborted|abort/i.test(msg)) {
-    if (/timeout/i.test(msg)) return new OpenAIAiError("timeout");
     return new OpenAIAiError("cancelled");
   }
   return new OpenAIAiError("unknown", { internalCode: "transport" });

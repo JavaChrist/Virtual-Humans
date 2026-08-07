@@ -13,7 +13,8 @@ import {
 } from "@/domain/creative";
 import { MarketingPlanSchema, type MarketingPlan } from "@/domain/marketing";
 import { VideoScriptSchema, type VideoScript } from "@/domain/script";
-import { isMarketingAnalyzerError, internalMarketingFailure } from "@/application/directors/marketing/failures";
+import { isMarketingAnalyzerError } from "@/application/directors/marketing/failures";
+import { artFailure, withArtPublicMessage } from "@/application/directors/art/failures";
 import type { ArtAnalyzerPort } from "./analyzer-port";
 import { runArtDryRun } from "./dry-run";
 import type {
@@ -176,13 +177,16 @@ export function createArtDirector(options: CreateArtDirectorOptions): ArtDirecto
         if (isMarketingAnalyzerError(e)) {
           return {
             status: "provider_failed",
-            failure: e.failure,
+            failure: withArtPublicMessage(e.failure),
             metering: e.metering,
           };
         }
         return {
           status: "provider_failed",
-          failure: internalMarketingFailure("analyzer_unexpected"),
+          failure: artFailure("internal_error", {
+            retryable: false,
+            internalCode: "analyzer_unexpected",
+          }),
         };
       }
 

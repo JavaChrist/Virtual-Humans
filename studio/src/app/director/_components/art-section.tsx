@@ -6,22 +6,22 @@ import type {
   ArtProjectDryRunResult,
   VisualDirectionView,
 } from "@/application/directors/art/analyze-for-project";
+import {
+  messageFromArtApiError,
+  type ArtApiErrorBody,
+} from "./art-messages";
 import { DirectorProcessingStatus } from "./director-processing-status";
 import { useDirectorProcessing } from "./use-director-processing";
 
-type ArtApiErrorBody = {
-  error?: { code?: string; message?: string; retryable?: boolean } | string;
-  status?: string;
-  directorRunId?: string;
-};
-
-function messageFromArtApiError(
-  data: ArtApiErrorBody | null | undefined,
-  fallback = "Direction art impossible.",
-): string {
-  if (!data) return fallback;
-  if (typeof data.error === "string") return data.error;
-  return data.error?.message ?? fallback;
+function newRetryRequestId(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
 }
 
 export function ArtSection({
@@ -39,6 +39,7 @@ export function ArtSection({
   const [dryBusy, setDryBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
+  const retryRequestIdRef = useRef<string | null>(null);
   const confirmingRef = useRef(false);
 
   const reloadArtifact = useCallback(async () => {
@@ -77,6 +78,26 @@ export function ArtSection({
     status ??
     (processing.phase === "completed" ? processing.statusMessage : null);
 
+  async function refreshDryQuiet() {
+    try {
+      const res = await fetch(`/api/director/projects/${projectId}/art`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode: "dry_run" }),
+      });
+      if (!res.ok) return;
+      const data = (await res.json()) as { dryRun?: ArtProjectDryRunResult };
+      if (data.dryRun) {
+        setDry(data.dryRun);
+        if (data.dryRun.existingVisualDirection) {
+          setVisualDirection(data.dryRun.existingVisualDirection);
+        }
+      }
+    } catch {
+      // ignore — UI still shows the error from execute/retry
+    }
+  }
+
   async function check() {
     if (locked) return;
     setDryBusy(true);
@@ -99,6 +120,7 @@ export function ArtSection({
         setDry(data.dryRun);
         setVisualDirection(data.dryRun.existingVisualDirection ?? visualDirection);
       }
+      retryRequestIdRef.current = null;
     } catch {
       setError("Vérification impossible.");
     } finally {
@@ -158,6 +180,7 @@ export function ArtSection({
           const msg = messageFromArtApiError(data);
           processing.markFailed(msg);
           setError(msg);
+          await refreshDryQuiet();
           return;
         }
         if (data.visualDirection) {
@@ -167,6 +190,7 @@ export function ArtSection({
         } else {
           processing.markCompleted();
         }
+        await refreshDryQuiet();
       } catch {
         const msg =
           "Direction art impossible. Vérifiez la connexion, puis relancez un dry-run avant une nouvelle tentative.";
@@ -178,6 +202,110 @@ export function ArtSection({
     }
   }
 
+  async function runRetry() {
+    if (locked || !dry?.retryCandidate?.retryAvailable || confirmingRef.current) return;
+    const candidate = dry.retryCandidate;
+
+    if (!retryRequestIdRef.current) {
+      retryRequestIdRef.current = newRetryRequestId();
+    }
+    const retryRequestId = retryRequestIdRef.current;
+
+    confirmingRef.current = true;
+    processing.beginConfirming();
+    try {
+      const ok = await confirm({
+        title: "Réessayer la direction art ?",
+        message: [
+          `Modèle : ${candidate.model}`,
+          `Tentative précédente : #${candidate.previousAttemptNumber}`,
+          `Nouvelle tentative : #${candidate.nextAttemptNumber}`,
+          dry.estimatedCostMinor != null
+            ? `Estimation : ${(dry.estimatedCostMinor / 100).toFixed(2)} ${dry.currency ?? "USD"}`
+            : "Estimation : indisponible.",
+          "Nouvel appel potentiellement facturé.",
+          "Aucun retry automatique — confirmation humaine obligatoire.",
+          "L’historique de la tentative précédente est conservé.",
+        ].join("\n"),
+        confirmLabel: "Réessayer la direction art",
+      });
+      if (!ok) {
+        processing.cancelConfirming();
+        return;
+      }
+
+      if (!processing.beginSubmit()) return;
+      setError(null);
+      setStatus(null);
+      try {
+        const res = await fetch(
+          `/api/director/projects/${projectId}/art/retry`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              previousRunId: candidate.previousRunId,
+              retryRequestId,
+              expectedVideoScriptRevision: dry.videoScriptRevision,
+              expectedCreativeConceptRevision: dry.creativeConceptRevision,
+              expectedMarketingPlanRevision: dry.marketingPlanRevision,
+            }),
+          }
+        );
+        const data = (await res.json()) as ArtApiErrorBody & {
+          visualDirection?: VisualDirectionView;
+          directorRunId?: string;
+        };
+        if (res.status === 202) {
+          const runId = data.directorRunId;
+          const msg = messageFromArtApiError(data, "Direction art déjà en cours.");
+          setError(null);
+          setStatus(msg);
+          if (typeof runId === "string" && runId) {
+            processing.followActiveRun(runId);
+          } else {
+            processing.markFailed(
+              "Un run art est déjà en cours. Actualisez la page pour reprendre le suivi.",
+            );
+            setError(
+              "Un run art est déjà en cours. Actualisez la page pour reprendre le suivi.",
+            );
+          }
+          return;
+        }
+        if (!res.ok) {
+          const msg = messageFromArtApiError(data);
+          processing.markFailed(msg);
+          setError(msg);
+          setStatus(null);
+          retryRequestIdRef.current = null;
+          await refreshDryQuiet();
+          return;
+        }
+        if (data.visualDirection) {
+          setVisualDirection(data.visualDirection);
+          processing.markCompleted("Direction art enregistrée (nouvelle tentative).");
+          setStatus("Direction art enregistrée (nouvelle tentative).");
+        } else {
+          processing.markCompleted();
+        }
+        retryRequestIdRef.current = null;
+        await refreshDryQuiet();
+      } catch {
+        const msg = "Retry impossible — vérifiez l’état avant une nouvelle tentative.";
+        processing.markFailed(msg);
+        setError(msg);
+        await refreshDryQuiet();
+      }
+    } finally {
+      confirmingRef.current = false;
+    }
+  }
+
+  const showLaunch =
+    dry?.executionAvailable === true && !dry.retryCandidate?.retryAvailable;
+  const showRetry = dry?.retryCandidate?.retryAvailable === true;
+
   return (
     <section className="mt-10" aria-labelledby="art-heading">
       <h2 id="art-heading" className="text-base font-semibold mb-2">
@@ -185,7 +313,7 @@ export function ArtSection({
       </h2>
       <p className="text-sm text-[var(--muted)] mb-4">
         La direction visuelle est construite à partir du Brief, du Marketing Plan, du Creative
-        Concept et du Script actifs.
+        Concept et du Script actifs. Aucun retry automatique.
       </p>
       <div className="flex flex-wrap gap-3 mb-4">
         <button
@@ -197,15 +325,42 @@ export function ArtSection({
         >
           {dryBusy ? "Vérification…" : "Vérifier les prérequis"}
         </button>
-        <button
-          type="button"
-          className="btn btn-ghost"
-          onClick={execute}
-          disabled={locked || !dry?.executionAvailable}
-          aria-busy={executeBusy}
-        >
-          {executeBusy ? "Production…" : "Produire la direction art"}
-        </button>
+        {showLaunch ? (
+          <button
+            type="button"
+            className="btn btn-ghost"
+            onClick={execute}
+            disabled={locked}
+            aria-busy={executeBusy}
+          >
+            {executeBusy ? "Production…" : "Produire la direction art"}
+          </button>
+        ) : showRetry ? (
+          <button
+            type="button"
+            className="btn btn-ghost"
+            onClick={runRetry}
+            disabled={locked}
+            aria-busy={executeBusy}
+          >
+            {executeBusy ? "Nouvelle tentative…" : "Réessayer la direction art"}
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-ghost"
+            onClick={execute}
+            disabled={locked || !dry?.executionAvailable}
+            aria-busy={executeBusy}
+            title={
+              dry?.executionAvailable
+                ? undefined
+                : "Exécution indisponible (flags, pricing, budget ou retry non éligible)"
+            }
+          >
+            {executeBusy ? "Production…" : "Produire la direction art"}
+          </button>
+        )}
       </div>
       <DirectorProcessingStatus
         director="art"
@@ -231,6 +386,13 @@ export function ArtSection({
             Dry-run · {dry.executable ? "prêt" : "pré-requis incomplets"} · exécution{" "}
             {dry.executionAvailable ? "disponible" : "indisponible"}
           </p>
+          {dry.retryCandidate && (
+            <p className="text-[var(--muted)]">
+              Retry humain · tentative #{dry.retryCandidate.previousAttemptNumber} → #
+              {dry.retryCandidate.nextAttemptNumber}
+              {dry.retryCandidate.retryAvailable ? " · disponible" : " · indisponible"}
+            </p>
+          )}
           {dry.warnings.map((w) => (
             <p key={w.code} className="text-[var(--muted)]">
               {w.message}

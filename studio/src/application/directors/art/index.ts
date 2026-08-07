@@ -12,8 +12,16 @@ export {
   type ArtProjectDryRunResult,
   type ArtProjectInput,
   type ArtProjectResult,
+  type ArtProjectRetryInput,
+  type ArtRetryCandidate,
   type VisualDirectionView,
 } from "./analyze-for-project";
+export {
+  ART_FAILURE_PUBLIC_MESSAGES,
+  artFailure,
+  publicMessageForArtFailureCode,
+  withArtPublicMessage,
+} from "./failures";
 export { runArtDryRun, type ArtDryRunResult, type ArtDryRunValidation } from "./dry-run";
 export type {
   ArtDirector,

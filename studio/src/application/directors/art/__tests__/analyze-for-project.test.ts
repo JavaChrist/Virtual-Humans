@@ -91,15 +91,56 @@ function artifactsRepo(opts?: { script?: boolean; briefOverride?: VideoProjectBr
   };
 }
 
-function directorPort(): ArtDirectorRunPort & { calls: string[] } {
+function directorPort(opts?: {
+  failedRun?: {
+    directorRunId: string;
+    attemptNumber: number;
+    errorCode: string;
+    legacyRetryReason?: "misclassified_timeout";
+  } | null;
+  retryThrow?: string;
+  legacyRetryReasonOnBegin?: "misclassified_timeout";
+}): ArtDirectorRunPort & { calls: string[]; retryInputs: unknown[] } {
   const calls: string[] = [];
+  const retryInputs: unknown[] = [];
   return {
     calls,
+    retryInputs,
     async beginOrGet() { calls.push("begin"); return { status: "created", directorRunId: "run-art-1", revision: 1 }; },
+    async beginOrRetry(input) {
+      calls.push("beginRetry");
+      retryInputs.push(input);
+      if (opts?.retryThrow) throw new Error(opts.retryThrow);
+      return {
+        status: "created",
+        directorRunId: "run-art-2",
+        revision: 1,
+        attemptNumber: 2,
+        retryOfRunId: input.previousRunId,
+        legacyRetryReason: opts?.legacyRetryReasonOnBegin,
+      };
+    },
     async reserveBudget() { calls.push("reserve"); },
     async persistVisualDirection(input) { calls.push("persist"); return { status: "created", artifactId: input.artifactId, revision: 1 }; },
     async failRun() { calls.push("fail"); },
     async loadActiveVisualDirection() { return null; },
+    async loadRetryableFailedRun() {
+      if (opts?.failedRun === null) return null;
+      if (opts?.failedRun) {
+        return {
+          directorRunId: opts.failedRun.directorRunId,
+          attemptNumber: opts.failedRun.attemptNumber,
+          errorCode: opts.failedRun.errorCode,
+          modelId: "gpt-5.6-terra",
+          promptVersion: "art-analyzer-v1",
+          schemaVersion: "1.0.0",
+          inputArtifactId: SID,
+          inputRevision: 1,
+          legacyRetryReason: opts.failedRun.legacyRetryReason,
+        };
+      }
+      return null;
+    },
   };
 }
 
@@ -310,4 +351,258 @@ test("art execute — même Brief + même snapshot → même idempotencyKey", as
   await makeSvc().execute({ projectId: PID }, { correlationId: "k2", mode: "execute" });
   assert.equal(keys.length, 2);
   assert.equal(keys[0], keys[1]);
+});
+
+test("Porte 8P — timeout → code timeout + message Art (pas marketing)", async () => {
+  const port = directorPort();
+  const svc = createAnalyzeArtForProject({
+    workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
+    artifacts: artifactsRepo(), directorRuns: port,
+    analyzer: { async analyze() { throw new MarketingAnalyzerError(marketingFailure("timeout")); } },
+    pricing, env: enabledEnv,
+    idFactory: () => "00000000-0000-4000-8000-000000000099",
+  });
+  const r = await svc.execute({ projectId: PID, expectedVideoScriptRevision: 1 }, { correlationId: "c-timeout", mode: "execute" });
+  assert.equal(r.status, "failed");
+  if (r.status === "failed") {
+    assert.equal(r.code, "timeout");
+    assert.equal(r.retryable, true);
+    assert.equal(r.httpHint, 504);
+    assert.match(r.publicMessage, /direction art/i);
+    assert.doesNotMatch(r.publicMessage, /analyse marketing/i);
+  }
+  assert.ok(port.calls.includes("fail"));
+  assert.equal(port.calls.includes("persist"), false);
+});
+
+test("Porte 8P — internal_error réel reste internal_error + message Art", async () => {
+  const port = directorPort();
+  const svc = createAnalyzeArtForProject({
+    workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
+    artifacts: artifactsRepo(), directorRuns: port,
+    analyzer: { async analyze() { throw new MarketingAnalyzerError(marketingFailure("internal_error")); } },
+    pricing, env: enabledEnv,
+    idFactory: () => "00000000-0000-4000-8000-000000000098",
+  });
+  const r = await svc.execute({ projectId: PID, expectedVideoScriptRevision: 1 }, { correlationId: "c-ie", mode: "execute" });
+  assert.equal(r.status, "failed");
+  if (r.status === "failed") {
+    assert.equal(r.code, "internal_error");
+    assert.equal(r.retryable, false);
+    assert.match(r.publicMessage, /direction art/i);
+    assert.doesNotMatch(r.publicMessage, /analyse marketing/i);
+  }
+});
+
+test("Porte 8P — dry-run expose retryCandidate timeout attempt 2", async () => {
+  const port = directorPort({
+    failedRun: {
+      directorRunId: "c0119db7-b467-42c0-9eed-52d1c9d550d3",
+      attemptNumber: 1,
+      errorCode: "timeout",
+    },
+  });
+  const svc = createAnalyzeArtForProject({
+    workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
+    artifacts: artifactsRepo(), directorRuns: port, analyzer: { async analyze() { return { candidate: makeValidArtCandidate([]) }; } },
+    pricing, env: enabledEnv,
+  });
+  const dry = await svc.dryRun({ projectId: PID }, { correlationId: "c-retry-dry", mode: "dry-run" });
+  assert.ok(dry.retryCandidate);
+  assert.equal(dry.retryCandidate?.previousRunId, "c0119db7-b467-42c0-9eed-52d1c9d550d3");
+  assert.equal(dry.retryCandidate?.previousAttemptNumber, 1);
+  assert.equal(dry.retryCandidate?.nextAttemptNumber, 2);
+  assert.equal(dry.retryCandidate?.errorCode, "timeout");
+  assert.equal(dry.retryCandidate?.retryAvailable, true);
+});
+
+test("Porte 8P — dry-run omet retryCandidate pour internal_error non-legacy", async () => {
+  const port = directorPort({
+    failedRun: {
+      directorRunId: "c0119db7-b467-42c0-9eed-52d1c9d550d3",
+      attemptNumber: 1,
+      errorCode: "internal_error",
+      // repository already filtered — no legacyRetryReason
+    },
+  });
+  const svc = createAnalyzeArtForProject({
+    workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
+    artifacts: artifactsRepo(), directorRuns: {
+      ...port,
+      async loadRetryableFailedRun() {
+        // Non-legacy internal_error: repository returns null
+        return null;
+      },
+    },
+    analyzer: { async analyze() { return { candidate: makeValidArtCandidate([]) }; } },
+    pricing, env: enabledEnv,
+  });
+  const dry = await svc.dryRun({ projectId: PID }, { correlationId: "c-ie-dry", mode: "dry-run" });
+  assert.equal(dry.retryCandidate, undefined);
+});
+
+test("Porte 8P-B — dry-run expose retryCandidate legacy Art timeout misclassified", async () => {
+  const previousRunId = "c0119db7-b467-42c0-9eed-52d1c9d550d3";
+  const port = directorPort({
+    failedRun: {
+      directorRunId: previousRunId,
+      attemptNumber: 1,
+      errorCode: "internal_error",
+      legacyRetryReason: "misclassified_timeout",
+    },
+  });
+  const svc = createAnalyzeArtForProject({
+    workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
+    artifacts: artifactsRepo(), directorRuns: port,
+    analyzer: { async analyze() { return { candidate: makeValidArtCandidate([]) }; } },
+    pricing, env: enabledEnv,
+  });
+  const dry = await svc.dryRun({ projectId: PID }, { correlationId: "c-legacy-dry", mode: "dry-run" });
+  assert.ok(dry.retryCandidate);
+  assert.equal(dry.retryCandidate?.previousRunId, previousRunId);
+  assert.equal(dry.retryCandidate?.previousAttemptNumber, 1);
+  assert.equal(dry.retryCandidate?.nextAttemptNumber, 2);
+  assert.equal(dry.retryCandidate?.errorCode, "internal_error");
+  assert.equal(dry.retryCandidate?.legacyRetryReason, "misclassified_timeout");
+  assert.equal(dry.retryCandidate?.retryAvailable, true);
+});
+
+test("Porte 8P-B — executeRetry legacy → attempt 2, retry_of, run historique non muté, un seul moteur", async () => {
+  let analyzeCalls = 0;
+  const previousRunId = "c0119db7-b467-42c0-9eed-52d1c9d550d3";
+  const analyzer: ArtAnalyzerPort = {
+    async analyze() {
+      analyzeCalls += 1;
+      return { candidate: makeValidArtCandidate(videoScript.segments.map((s) => s.id)) };
+    },
+  };
+  const port = directorPort({ legacyRetryReasonOnBegin: "misclassified_timeout" });
+  const failInputs: Array<{ directorRunId: string }> = [];
+  const originalFail = port.failRun.bind(port);
+  port.failRun = async (input) => {
+    failInputs.push({ directorRunId: input.directorRunId });
+    return originalFail(input);
+  };
+  const svc = createAnalyzeArtForProject({
+    workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
+    artifacts: artifactsRepo(), directorRuns: port, analyzer, pricing, env: enabledEnv,
+    idFactory: (() => { let n = 0; return () => { n += 1; return `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`; }; })(),
+  });
+  const r = await svc.executeRetry(
+    {
+      projectId: PID,
+      previousRunId,
+      retryRequestId: "33333333-3333-4333-8333-333333333333",
+      expectedVideoScriptRevision: 1,
+      expectedCreativeConceptRevision: 1,
+      expectedMarketingPlanRevision: 1,
+    },
+    { correlationId: "c-legacy-retry", mode: "execute" },
+  );
+  assert.equal(analyzeCalls, 1);
+  assert.equal(port.calls.filter((c) => c === "beginRetry").length, 1, "un seul moteur beginOrRetry");
+  assert.ok(port.calls.includes("reserve"));
+  assert.ok(port.calls.includes("persist"));
+  assert.equal(r.status, "completed");
+  const beginInput = port.retryInputs[0] as { previousRunId: string };
+  assert.equal(beginInput.previousRunId, previousRunId);
+  assert.equal(failInputs.some((f) => f.directorRunId === previousRunId), false);
+});
+
+test("Porte 8P — executeRetry attempt 2, retry_of correct, run failed immuable", async () => {
+  let analyzeCalls = 0;
+  const analyzer: ArtAnalyzerPort = {
+    async analyze() {
+      analyzeCalls += 1;
+      return { candidate: makeValidArtCandidate(videoScript.segments.map((s) => s.id)) };
+    },
+  };
+  const port = directorPort();
+  const failInputs: Array<{ directorRunId: string }> = [];
+  const originalFail = port.failRun.bind(port);
+  port.failRun = async (input) => {
+    failInputs.push({ directorRunId: input.directorRunId });
+    return originalFail(input);
+  };
+  const previousRunId = "c0119db7-b467-42c0-9eed-52d1c9d550d3";
+  const svc = createAnalyzeArtForProject({
+    workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
+    artifacts: artifactsRepo(), directorRuns: port, analyzer, pricing, env: enabledEnv,
+    idFactory: (() => { let n = 0; return () => { n += 1; return `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`; }; })(),
+  });
+  const r = await svc.executeRetry(
+    {
+      projectId: PID,
+      previousRunId,
+      retryRequestId: "11111111-1111-4111-8111-111111111111",
+      expectedVideoScriptRevision: 1,
+      expectedCreativeConceptRevision: 1,
+      expectedMarketingPlanRevision: 1,
+    },
+    { correlationId: "c-art-retry", mode: "execute" },
+  );
+  assert.equal(analyzeCalls, 1);
+  assert.ok(port.calls.includes("beginRetry"));
+  assert.ok(port.calls.includes("reserve"));
+  assert.ok(port.calls.includes("persist"));
+  assert.equal(r.status, "completed");
+  const beginInput = port.retryInputs[0] as {
+    previousRunId: string;
+    inputArtifactId: string;
+  };
+  assert.equal(beginInput.previousRunId, previousRunId);
+  assert.equal(beginInput.inputArtifactId, SID);
+  // Previous failed run must never be mutated via failRun
+  assert.equal(failInputs.some((f) => f.directorRunId === previousRunId), false);
+});
+
+test("Porte 8P — executeRetry refuse retry_not_allowed (pas de provider)", async () => {
+  let analyzeCalls = 0;
+  const port = directorPort({ retryThrow: "retry_not_allowed" });
+  const svc = createAnalyzeArtForProject({
+    workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
+    artifacts: artifactsRepo(), directorRuns: port,
+    analyzer: { async analyze() { analyzeCalls += 1; return { candidate: makeValidArtCandidate([]) }; } },
+    pricing, env: enabledEnv,
+  });
+  const r = await svc.executeRetry(
+    {
+      projectId: PID,
+      previousRunId: "c0119db7-b467-42c0-9eed-52d1c9d550d3",
+      retryRequestId: "22222222-2222-4222-8222-222222222222",
+      expectedVideoScriptRevision: 1,
+    },
+    { correlationId: "c-art-deny", mode: "execute" },
+  );
+  assert.equal(r.status, "failed");
+  if (r.status === "failed") {
+    assert.equal(r.code, "retry_not_allowed");
+    assert.equal(r.httpHint, 422);
+  }
+  assert.equal(analyzeCalls, 0);
+  assert.equal(port.calls.includes("reserve"), false);
+});
+
+test("Porte 8P — budget release path: timeout failRun sans inventer actual_cost", async () => {
+  const port = directorPort();
+  const failArgs: Array<{ actualCostMinor?: number; costStatus?: string; usage?: Record<string, unknown> }> = [];
+  port.failRun = async (input) => {
+    port.calls.push("fail");
+    failArgs.push({
+      actualCostMinor: input.actualCostMinor,
+      costStatus: input.costStatus,
+      usage: input.usage,
+    });
+  };
+  const svc = createAnalyzeArtForProject({
+    workspaceId: WS, projects: { create: async () => undefined, load: async (id) => id === PID ? project : null, saveStatus: async () => project },
+    artifacts: artifactsRepo(), directorRuns: port,
+    analyzer: { async analyze() { throw new MarketingAnalyzerError(marketingFailure("timeout")); } },
+    pricing, env: enabledEnv,
+    idFactory: () => "00000000-0000-4000-8000-000000000097",
+  });
+  await svc.execute({ projectId: PID, expectedVideoScriptRevision: 1 }, { correlationId: "c-budget", mode: "execute" });
+  assert.equal(failArgs.length, 1);
+  assert.equal(failArgs[0]!.actualCostMinor, undefined);
+  assert.equal(failArgs[0]!.usage, undefined);
 });

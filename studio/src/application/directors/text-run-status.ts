@@ -3,6 +3,7 @@
  * Source of truth: public.director_runs — no new run engine.
  */
 
+import { publicMessageForArtFailureCode } from "@/application/directors/art/failures";
 import { publicMessageForCreativeFailureCode } from "@/application/directors/creative/failures";
 import { publicMessageForMarketingFailureCode } from "@/application/directors/marketing/failures";
 
@@ -70,7 +71,10 @@ export function publicMessageForTextDirectorRun(
   if (directorType === "creative") {
     return publicMessageForCreativeFailureCode(errorCode);
   }
-  // Script / Art / Storyboard: no shared code table — keep generic + code-safe.
+  if (directorType === "art") {
+    return publicMessageForArtFailureCode(errorCode);
+  }
+  // Script / Storyboard: no shared code table — keep generic + code-safe.
   return defaultTerminalFailureMessage(directorType);
 }
 

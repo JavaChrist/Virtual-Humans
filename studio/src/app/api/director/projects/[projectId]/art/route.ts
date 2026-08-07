@@ -4,6 +4,7 @@ import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-fla
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
 import { generateCorrelationId, logger, resolveCorrelationId, startObservedRoute } from "@/infrastructure/observability";
+import { ART_FAILURE_PUBLIC_MESSAGES } from "@/application/directors/art/failures";
 
 export const dynamic = "force-dynamic";
 type RouteParams = { params: Promise<{ projectId: string }> };
@@ -63,6 +64,13 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   } catch (error) {
     if (error instanceof V2SupabaseConfigError) return obs.json({ error: error.message }, { status: 503 });
     logger.error("route.failure", obs.context, error);
-    return obs.json({ status: "failed", error: { code: "internal_error", retryable: false, message: "Échec de la direction art." } }, { status: 500 });
+    return obs.json({
+      status: "failed",
+      error: {
+        code: "internal_error",
+        retryable: false,
+        message: ART_FAILURE_PUBLIC_MESSAGES.internal_error,
+      },
+    }, { status: 500 });
   }
 }

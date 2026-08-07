@@ -61,6 +61,24 @@ test("timeout → timeout retryable", () => {
   assert.equal(mapOpenAIAiErrorToMarketingFailure(timeout).code, "timeout");
 });
 
+test("Node undici abort(Error('timeout')) → timeout (not internal_error)", () => {
+  // Real Node fetch rejection shape after controller.abort(new Error("timeout")).
+  const nodeTimeout = mapAbortError(new Error("timeout"));
+  assert.equal(nodeTimeout.code, "timeout");
+  assert.equal(nodeTimeout.retryable, true);
+  assert.equal(mapOpenAIAiErrorToMarketingFailure(nodeTimeout).code, "timeout");
+  assert.notEqual(
+    mapOpenAIAiErrorToMarketingFailure(nodeTimeout).code,
+    "internal_error"
+  );
+});
+
+test("unknown transport stays internal_error", () => {
+  const unknown = mapAbortError(new Error("ECONNRESET"));
+  assert.equal(unknown.code, "unknown");
+  assert.equal(mapOpenAIAiErrorToMarketingFailure(unknown).code, "internal_error");
+});
+
 test("401 → unauthorized non retryable ; 403 → forbidden", () => {
   const u = mapOpenAIHttpError(401);
   assert.equal(u.code, "unauthorized");

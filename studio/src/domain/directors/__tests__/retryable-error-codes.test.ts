@@ -39,3 +39,13 @@ test("provider auto-retry codes remain retryable=true in taxonomy", () => {
   assert.equal(marketingFailure("timeout").retryable, true);
   assert.equal(marketingFailure("provider_unavailable").retryable, true);
 });
+
+test("8P-B — internal_error never enters global human-retry allowlist", () => {
+  assert.equal(isDirectorHumanRetryableErrorCode("internal_error"), false);
+  assert.equal(
+    (DIRECTOR_HUMAN_RETRYABLE_ERROR_CODES as readonly string[]).includes(
+      "internal_error"
+    ),
+    false
+  );
+});

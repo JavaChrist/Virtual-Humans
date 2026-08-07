@@ -14,7 +14,7 @@ import type { OpenAIResponsesClientPort } from "../contracts";
 import { parseOpenAIArtConfig, type OpenAIArtConfig } from "../config";
 import { OpenAIAiError } from "../errors";
 import { buildAnalyzerMetering } from "../build-analyzer-metering";
-import { toAnalyzerError } from "../map-to-analyzer-failure";
+import { toArtAnalyzerError } from "./map-to-art-failure";
 import {
   createEnvAiTokenPricing,
   createUnknownAiTokenPricing,
@@ -129,7 +129,7 @@ export class OpenAIArtAnalyzerAdapter implements ArtAnalyzerPort {
       try {
         candidate = parseArtCandidateResponse(result);
       } catch (parseErr) {
-        throw toAnalyzerError(parseErr, { metering });
+        throw toArtAnalyzerError(parseErr, { metering });
       }
 
       logger.info("art.ai.request.completed", logCtx, {
@@ -152,7 +152,7 @@ export class OpenAIArtAnalyzerAdapter implements ArtAnalyzerPort {
         e instanceof OpenAIAiError
           ? e
           : new OpenAIAiError("unknown", { internalCode: "adapter" });
-      const analyzerErr = toAnalyzerError(openaiErr);
+      const analyzerErr = toArtAnalyzerError(openaiErr);
       logger.info("art.ai.request.failed", logCtx, {
         model: this.config.model,
         promptVersion: ART_ANALYZER_PROMPT_VERSION,

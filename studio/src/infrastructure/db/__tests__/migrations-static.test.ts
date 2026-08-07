@@ -43,6 +43,8 @@ const EXPECTED_FILES = [
   "20260805140000_vhs_130_fail_director_run_metering.sql",
   "20260805143000_vhs_131_harden_reschedule_grants.sql",
   "20260806120000_vhs_132_director_success_commit_remainder.sql",
+  "20260807120000_vhs_133_art_human_retry_input_artifact.sql",
+  "20260807133000_vhs_134_legacy_art_timeout_retry.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -68,15 +70,15 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 27 versions (23 Production-aligned + VHS-129/130/131/132 local)", () => {
+test("migrations — 29 versions (23 Production-aligned + VHS-129…134 local)", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
-  assert.equal(files.length, 27);
+  assert.equal(files.length, 29);
   assert.deepEqual(
     files.filter((f) => f.startsWith("202607")),
     [...LEGACY_FILES],
   );
-  assert.equal(v2Files().length, 25);
+  assert.equal(v2Files().length, 27);
 });
 
 test("migrations V2 — VHS-129 human-retry allowlist (not auto-retry)", () => {
@@ -92,6 +94,40 @@ test("migrations V2 — VHS-129 human-retry allowlist (not auto-retry)", () => {
   assert.match(sql, /director_error_code_is_human_retryable\(v_prev\.error_code\)/);
   assert.match(sql, /delegates to director_error_code_is_human_retryable/i);
   assert.ok(!/DELETE FROM|UPDATE\s+public\.director_runs/i.test(sql));
+});
+
+test("migrations V2 — VHS-133 art human retry uses previous input artifact type", () => {
+  const sql = readFileSync(
+    join(
+      MIGRATIONS_DIR,
+      "20260807120000_vhs_133_art_human_retry_input_artifact.sql"
+    ),
+    "utf8"
+  );
+  assert.match(sql, /begin_or_retry_director_run/i);
+  assert.match(sql, /v_prev\.input_artifact_type/);
+  assert.ok(!/artifact_type = 'video_project_brief'/i.test(sql));
+  assert.ok(!/DELETE FROM|UPDATE\s+public\.director_runs/i.test(sql));
+});
+
+test("migrations V2 — VHS-134 legacy Art timeout retry without widening allowlist", () => {
+  const sql = readFileSync(
+    join(
+      MIGRATIONS_DIR,
+      "20260807133000_vhs_134_legacy_art_timeout_retry.sql"
+    ),
+    "utf8"
+  );
+  assert.match(sql, /director_run_is_legacy_art_timeout_misclassified/i);
+  assert.match(sql, /misclassified_timeout/);
+  assert.match(sql, /55000/);
+  assert.match(sql, /75000/);
+  assert.ok(!/p_code IN \([\s\S]*'internal_error'/i.test(sql));
+  assert.ok(!/DELETE FROM|UPDATE\s+public\.director_runs/i.test(sql));
+  assert.match(
+    sql,
+    /director_error_code_is_human_retryable\(v_prev\.error_code\)\s*OR\s*v_legacy_art_timeout/i
+  );
 });
 
 test("migrations V2 — VHS-130 fail_director_run metering", () => {
