@@ -25,7 +25,11 @@ test("file-tracing — includes bornés aux routes character/media", () => {
   assert.equal(includes["/api/**"], undefined);
   assert.ok(includes["/api/v1/characters/**"]?.includes("../characters/**"));
   assert.ok(includes["/api/asset/**"]?.includes("../characters/**"));
-  assert.ok(!("/api/director/**" in includes));
+  assert.ok(
+    includes["/api/director/projects/[projectId]/art/**"]?.includes("../characters/**"),
+    "Art Director must receive characters SDK for capability snapshots",
+  );
+  assert.ok(!("/api/director/**" in includes), "never widen director wildcard");
   assert.ok(!("/api/budget/**" in includes));
 });
 
