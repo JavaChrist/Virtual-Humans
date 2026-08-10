@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.54] — 2026-08-10
+
+### Validation provider réelle (Phase 10D) — BLOCKED
+
+- Tentative smoke Script texte réel après autorisation humaine : flags ouverts puis redeploy ON.
+- Dry-run Production divergent du PREP : estimate **12¢** / modèle `gpt-5.6` vs **7¢** / `gpt-5.6-terra` attendus.
+- **0** appel provider Script ; **0** VideoScript ; Marketing/Creative non rejoués.
+- Fermeture immédiate flags OFF + redeploy ; `CURRENT_RUNTIME_REAL_AI=OFF` prouvé.
+- Rapport : `31_PHASE_10D_FIRST_REAL_SCRIPT_SMOKE.md`. Checkpoint local — **aucun push**.
+
 ## [2.0.53] — 2026-08-10
 
 ### Added (Phase 10D-PREP)
