@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — autorisation humaine)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C), Script (10D) et Art texte (10E-V3) validés ; Storyboard V3-RETRY-PREP **READY_FOR_BUDGET_AND_PUSH_AUTH** (`49_…`, salt v3, estimate 13¢) ; budget 113/101/12 (shortfall 1¢) ; média restent à autoriser ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C), Script (10D) et Art texte (10E-V3) validés ; Storyboard V3 budget+push **PASS** (`50_…`, hard 115 / available 14) ; execute provider encore requis ; média restent à autoriser ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité (locale — Phase 9)
@@ -34,7 +34,7 @@
 - [ ] migrations additives appliquées **distantes** ;
 - [ ] app et workers compatibles déployés ;
 - [x] flags désactivés par défaut (code) ;
-- [ ] smoke tests providers bornés — Marketing / Creative / Script / Art texte : **PASS** ; Storyboard : PREP v3 OK → Auth Budget C + push + provider ; budget 113/101/12 ; média : à faire ;
+- [ ] smoke tests providers bornés — Marketing / Creative / Script / Art texte : **PASS** ; Storyboard : budget+push OK → deploy-preflight + Auth provider v3 ; budget 115/101/14 ; média : à faire ;
 - [ ] canary puis montée progressive ;
 - [ ] métriques et logs surveillés.
 
