@@ -28,9 +28,9 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10C-PREP** ✅ Préparation Creative sans provider : MarketingPlan 10B réutilisable, dry-run estimate 12¢ / plafond 100¢.
 - **VHS-118C / Phase 10C** ✅ Smoke Creative OpenAI réel : 1 appel `gpt-5.6`, concept Zod valide, ledger 12¢/5¢/7¢, replay idempotent, flags OFF.
 - **Phase 10D-PREP** ✅ Préparation Script sans provider : Marketing+Creative réutilisés, dry-run estimate 7¢ / plafond 100¢ ; **aucune** exécution Script réelle.
-- **Phase 10D** ⛔ BLOCKED avant appel provider : dry-run Production Script = 12¢ / `gpt-5.6` ≠ PREP 7¢ / `gpt-5.6-terra` ; 0 appel ; flags OFF prouvés (`31_PHASE_10D_FIRST_REAL_SCRIPT_SMOKE.md`).
-- **Phase 10D-RECONCILE** ✅ Canon Script = Production : `gpt-5.6` / `medium` / `4096` / **12¢** ; PREP corrigé ; 0 Vercel write ; runtime OFF (`32_PHASE_10D_SCRIPT_CONFIG_RECONCILIATION.md`).
-- **Prochaine porte** : Phase 10D execute Script (réauth) — 1 appel max, estimate 12¢, plafond 100¢ — uniquement après autorisation humaine explicite ; aucun push sans décision séparée.
+- **Phase 10D** ✅ Smoke Script OpenAI réel (réauth) : 1 appel `gpt-5.6`, VideoScript Zod valide, ledger 12¢/3¢/9¢, replay idempotent, flags OFF (`31_PHASE_10D_FIRST_REAL_SCRIPT_SMOKE.md`).
+- **Phase 10D-RECONCILE** ✅ Canon Script = Production : `gpt-5.6` / `medium` / `4096` / **12¢** ; PREP corrigé (`32_PHASE_10D_SCRIPT_CONFIG_RECONCILIATION.md`).
+- **Prochaine porte** : suite Directors/providers (Art/Storyboard/média) uniquement après autorisation humaine explicite ; aucun push sans décision séparée.
 
 ## P2 — durcissement
 

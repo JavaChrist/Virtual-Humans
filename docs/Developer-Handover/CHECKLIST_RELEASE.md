@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — autorisation humaine)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing (10B) et Creative (10C) texte validés ; Script 10D-RECONCILE **READY_FOR_REAUTH** (canon `gpt-5.6`/12¢) ; execute Script après réautorisation ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C) et Script (10D) texte validés ; Art/Storyboard/média restent à autoriser ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité (locale — Phase 9)
@@ -34,7 +34,7 @@
 - [ ] migrations additives appliquées **distantes** ;
 - [ ] app et workers compatibles déployés ;
 - [x] flags désactivés par défaut (code) ;
-- [ ] smoke tests providers bornés — Marketing texte : **PASS** ; Creative texte : **PASS** ; Script texte : **BLOCKED** (10D, 0 appel) ; suite Directors/providers : à faire ;
+- [ ] smoke tests providers bornés — Marketing / Creative / Script texte : **PASS** ; suite Directors/providers : à faire ;
 - [ ] canary puis montée progressive ;
 - [ ] métriques et logs surveillés.
 

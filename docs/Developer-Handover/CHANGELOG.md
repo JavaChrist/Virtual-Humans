@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.56] — 2026-08-10
+
+### Validation provider réelle (Phase 10D REAUTH)
+
+- Premier smoke Script texte réel : **1** appel OpenAI `gpt-5.6`, `VideoScript` Zod valide, persisté avec provenance.
+- Budget : **12¢** estimés/réservés, **3¢** commités, **9¢** libérés ; ledger réconcilié.
+- Replay idempotent : `status=existing`, **0** second appel provider.
+- MarketingPlan 10B + CreativeConcept 10C réutilisés sans rejoue ; **0** média / **0** worker ; flags refermés OFF.
+- Rapport : `31_PHASE_10D_FIRST_REAL_SCRIPT_SMOKE.md` (PASS). Checkpoint local — **aucun push**.
+
 ## [2.0.55] — 2026-08-10
 
 ### Fixed (Phase 10D-RECONCILE)
