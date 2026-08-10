@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — autorisation humaine)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing texte validé en Phase 10B ; Creative préparé (10C-PREP, 0 appel) ; execute Creative et suite restent à autoriser ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing (10B) et Creative (10C) texte validés ; Script et suite restent à autoriser ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité (locale — Phase 9)

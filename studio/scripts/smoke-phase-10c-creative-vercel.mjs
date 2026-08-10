@@ -169,10 +169,12 @@ async function main() {
       body: JSON.stringify({ mode: "dry-run" }),
     }
   );
-  const dryBody = await dryRes.json().catch(() => ({}));
+  const dryRaw = await dryRes.json().catch(() => ({}));
   if (!dryRes.ok) {
-    fail(`dry-run HTTP ${dryRes.status}: ${dryBody.error || "unknown"}`);
+    fail(`dry-run HTTP ${dryRes.status}: ${dryRaw.error || "unknown"}`);
   }
+  // API wraps payload as { dryRun: {...} } (same family as Marketing).
+  const dryBody = dryRaw.dryRun && typeof dryRaw.dryRun === "object" ? dryRaw.dryRun : dryRaw;
 
   const estimate = dryBody.estimatedCostMinor;
   if (typeof estimate !== "number" || !Number.isInteger(estimate)) {
@@ -183,6 +185,12 @@ async function main() {
   }
   if (dryBody.providerCalled !== false) {
     fail("dry-run must report providerCalled=false");
+  }
+  if (dryBody.executable !== true || dryBody.executionAvailable !== true) {
+    fail("dry-run not executable / executionAvailable=false");
+  }
+  if (dryBody.pricingConfigured !== true) {
+    fail("BUDGET_GUARD_NOT_PROVEN — pricingConfigured=false");
   }
 
   const evidenceDir = resolve(studioRoot, ".tmp");
@@ -204,6 +212,8 @@ async function main() {
       marketingPlanRevision: dryBody.marketingPlanRevision ?? null,
       marketingPlanArtifactId: dryBody.marketingPlanArtifactId ?? null,
       providerCalled: dryBody.providerCalled,
+      promptVersion: dryBody.promptVersion ?? null,
+      schemaVersion: dryBody.schemaVersion ?? null,
     },
     guards: {
       maxCreativeCalls: 1,
@@ -256,16 +266,24 @@ async function main() {
     }
   );
   const execBody = await execRes.json().catch(() => ({}));
+  const concept = execBody.concept ?? execBody.creativeConcept ?? null;
+  evidence.mode = "execute";
   evidence.execute = {
     http: execRes.status,
     status: execBody.status ?? null,
     directorRunId: execBody.directorRunId ?? null,
+    artifactId: execBody.artifactId ?? concept?.id ?? null,
+    revision: execBody.revision ?? concept?.revision ?? null,
+    estimatedCostMinor: execBody.estimatedCostMinor ?? null,
+    actualCostMinor: execBody.actualCostMinor ?? null,
+    reservedCostMinor: execBody.reservedCostMinor ?? null,
+    costStatus: execBody.costStatus ?? null,
     error: execBody.error ?? null,
+    code: execBody.code ?? null,
+    topKeys: Object.keys(execBody),
+    hasConcept: Boolean(concept),
   };
-  const path = resolve(
-    evidenceDir,
-    `phase-10c-smoke-exec-${Date.now()}.json`
-  );
+  const path = resolve(evidenceDir, "phase-10c-smoke-exec.json");
   writeFileSync(path, JSON.stringify(evidence, null, 2), "utf8");
   console.log(JSON.stringify({ ...evidence, evidencePath: path }, null, 2));
   if (!execRes.ok || execBody.status === "failed") {

@@ -25,8 +25,9 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 9** ✅ Audit final + gate fake-delivery + docs + 2 cycles complets locaux — **pas** production distante.
 - **Phases 10A–10B** ✅ Préflight distant, isolation environnement, validation DB locale et premier smoke Marketing réel terminés ; migrations **29/29**, pgTAP **378**, intégration **33**, unitaires **1016** ; **0 média**.
 - **P1 opérations distantes** ⚠️ `BACKUP_PRESENT_RESTORE_UNPROVEN` — ne bloquait pas le smoke texte borné ; reste bloquant avant opération distante invasive.
-- **Phase 10C-PREP** ✅ Préparation Creative sans provider : MarketingPlan 10B réutilisable, dry-run estimate 12¢ / plafond 100¢, scripts + garde-fous ; **aucune** exécution Creative réelle.
-- **Prochaine porte** : Phase 10C execute Creative (1 appel max) uniquement après autorisation humaine `ONE_CREATIVE_CALL_MAX_100_CENTS` ; aucun push sans décision séparée.
+- **Phase 10C-PREP** ✅ Préparation Creative sans provider : MarketingPlan 10B réutilisable, dry-run estimate 12¢ / plafond 100¢.
+- **VHS-118C / Phase 10C** ✅ Smoke Creative OpenAI réel : 1 appel `gpt-5.6`, concept Zod valide, ledger 12¢/5¢/7¢, replay idempotent, flags OFF.
+- **Prochaine porte** : préparation smoke Script (10D-PREP) sans rejoue Marketing/Creative ; aucun push sans décision séparée.
 
 ## P2 — durcissement
 

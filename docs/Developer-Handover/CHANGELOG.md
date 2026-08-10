@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.52] — 2026-08-10
+
+### Validation provider réelle (Phase 10C)
+
+- Premier smoke Creative texte réel : **1** appel OpenAI `gpt-5.6`, `CreativeConcept` Zod valide, persisté avec provenance.
+- Budget : **12¢** estimés/réservés, **5¢** commités, **7¢** libérés ; ledger réconcilié.
+- Replay idempotent : `status=existing`, **0** second appel provider.
+- MarketingPlan 10B réutilisé sans rejoue ; **0** média / **0** worker ; flags refermés OFF.
+- Rapport : `29_PHASE_10C_FIRST_REAL_CREATIVE_SMOKE.md`. Checkpoint local — **aucun push**.
+
 ## [2.0.51] — 2026-08-10
 
 ### Added (Phase 10C-PREP)
