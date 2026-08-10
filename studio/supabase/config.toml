@@ -7,18 +7,18 @@ project_id = "virtual-humans-studio-local"
 
 [api]
 enabled = true
-# 54921 — avoids Windows Hyper-V excluded ranges around 54315–54914
-port = 54921
+# Phase 10A-D: Hyper-V exclusion moved to 54852–55557; previous 54921–54923 blocked.
+# Use classic local defaults 54321/54322/54323 (verified free on this host).
+port = 54321
 
 [db]
-port = 54922
+port = 54322
 major_version = 15
 
 [studio]
 enabled = true
-port = 54923
+port = 54323
 
-# Disable optional services whose default ports collide with Windows Hyper-V
-# excluded ranges (≈54315–54914) on this machine.
+# Analytics disabled — optional services / port collisions on Windows.
 [analytics]
 enabled = false

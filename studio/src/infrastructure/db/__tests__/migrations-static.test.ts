@@ -43,8 +43,8 @@ const EXPECTED_FILES = [
   "20260805140000_vhs_130_fail_director_run_metering.sql",
   "20260805143000_vhs_131_harden_reschedule_grants.sql",
   "20260806120000_vhs_132_director_success_commit_remainder.sql",
-  "20260807120000_vhs_133_art_human_retry_input_artifact.sql",
-  "20260807133000_vhs_134_legacy_art_timeout_retry.sql",
+  "20260807213624_vhs_133_art_human_retry_input_artifact.sql",
+  "20260807213803_vhs_134_legacy_art_timeout_retry.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -70,7 +70,7 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 29 versions (23 Production-aligned + VHS-129…134 local)", () => {
+test("migrations — 29 versions aligned Production (incl. VHS-133/134 MCP timestamps)", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
   assert.equal(files.length, 29);
@@ -100,7 +100,7 @@ test("migrations V2 — VHS-133 art human retry uses previous input artifact typ
   const sql = readFileSync(
     join(
       MIGRATIONS_DIR,
-      "20260807120000_vhs_133_art_human_retry_input_artifact.sql"
+      "20260807213624_vhs_133_art_human_retry_input_artifact.sql"
     ),
     "utf8"
   );
@@ -114,7 +114,7 @@ test("migrations V2 — VHS-134 legacy Art timeout retry without widening allowl
   const sql = readFileSync(
     join(
       MIGRATIONS_DIR,
-      "20260807133000_vhs_134_legacy_art_timeout_retry.sql"
+      "20260807213803_vhs_134_legacy_art_timeout_retry.sql"
     ),
     "utf8"
   );

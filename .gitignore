@@ -16,3 +16,4 @@ generated/manifests/*
 !generated/reports/.gitkeep
 !generated/indexes/.gitkeep
 !generated/manifests/.gitkeep
+.vercel

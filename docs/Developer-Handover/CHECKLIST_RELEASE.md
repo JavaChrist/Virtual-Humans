@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — autorisation humaine)** ;
-- [ ] quotas/providers confirmés **(distant)** ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing texte validé en Phase 10B ; Creative et suite restent à valider ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité (locale — Phase 9)
@@ -34,7 +34,7 @@
 - [ ] migrations additives appliquées **distantes** ;
 - [ ] app et workers compatibles déployés ;
 - [x] flags désactivés par défaut (code) ;
-- [ ] smoke tests providers bornés ;
+- [ ] smoke tests providers bornés — Marketing texte : **PASS** (1 appel, 4¢, replay idempotent) ; autres Directors/providers : à faire ;
 - [ ] canary puis montée progressive ;
 - [ ] métriques et logs surveillés.
 

@@ -2,6 +2,25 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.49] — 2026-08-10
+
+### Security / Operations (Phases 10A–10B)
+
+- Environnement local Supabase isolé de Production par un guard fail-closed ; cible distante refusée hors Vercel sans `VH_ALLOW_REMOTE_SUPABASE=1` explicite.
+- Historique local réconcilié avec Production : **29/29** migrations, dont VHS-133/134 renommées avec les timestamps MCP sans changement de SQL.
+- Validation locale : `db reset` PASS, pgTAP **378/378**, intégration DB **33/33**, unitaires **1016/1016**.
+- Kill switches Vercel remis à zéro et runtime redéployé en position sûre après contrôle.
+
+### Validation provider réelle (Phase 10B)
+
+- Premier smoke Marketing texte réel : **1** appel OpenAI `gpt-5.6`, `MarketingPlan` valide Zod et persisté avec provenance complète.
+- Budget : **24¢** estimés/réservés, **4¢** consommés, **20¢** libérés ; ledger réconcilié.
+- Replay idempotent : même run, **0** second appel provider.
+- **0** appel provider média, **0** job média ; flags réels refermés et runtime AI confirmé OFF.
+- P0 : aucun ; P1 conservé : `BACKUP_PRESENT_RESTORE_UNPROVEN`.
+- Rapports : `23_PHASE_10A_REMOTE_PREFLIGHT.md` à `27_PHASE_10B_FIRST_REAL_TEXT_SMOKE.md`.
+- Checkpoint local uniquement — **aucun push**.
+
 ## [2.0.48] — 2026-08-04
 
 ### Added (Porte 7D-A — retry humain Director)

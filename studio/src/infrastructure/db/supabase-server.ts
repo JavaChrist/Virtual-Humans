@@ -8,6 +8,7 @@
  */
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { requireDevSupabaseTargetAllowed } from "@/infrastructure/config/supabase-target-guard";
 
 export type V2SupabaseConfig = {
   url: string;
@@ -27,6 +28,9 @@ export class V2SupabaseConfigError extends Error {
 
 /** Validate config without echoing secret values. */
 export function parseV2SupabaseConfig(env: Record<string, string | undefined>): V2SupabaseConfig {
+  // Fail-closed: local/dev must not silently use Production (Phase 10A-B).
+  requireDevSupabaseTargetAllowed(env);
+
   const url = env.SUPABASE_URL ?? env.NEXT_PUBLIC_SUPABASE_URL;
   const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY;
   const workspaceId = env.DIRECTOR_V2_WORKSPACE_ID?.trim();

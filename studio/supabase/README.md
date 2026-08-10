@@ -1,5 +1,11 @@
 # Supabase — Virtual Humans Studio V2
 
+## Ports locaux (Phase 10A-D)
+
+API / DB / Studio : **54321 / 54322 / 54323** (`supabase/config.toml`).
+Les ports 54921–54923 peuvent être exclus par Hyper-V sur Windows — vérifier
+`netsh interface ipv4 show excludedportrange protocol=tcp` si `supabase start` échoue.
+
 ## Auth fail-closed (VHS-002 / Phase 7) — hors migrations
 
 Les migrations DB ne gèrent pas l’auth applicative. Pour faire tourner `/director` en local après Phase 7 :
@@ -57,15 +63,21 @@ Conservation : pas de suppression automatique dans cette porte ; nettoyage futur
 | Typecheck / lint / build | verts |
 | Providers / distant / deploy | **0** |
 
-## Historique Production (Porte 3) — versions MCP
+## Historique Production (Porte 3 + 10A-B) — versions MCP
 
 Les préfixes de fichiers sous `migrations/` portent les **versions numériques
-Production** (`ejdbksxaswhdtsudnmvi`) après apply MCP. Total attendu : **22**.
+Production** (`ejdbksxaswhdtsudnmvi`) après apply MCP.
+
+Total attendu (10A-B) : **29** (2 legacy + 17 V2 core/delivery + 3 remainder 125 + VHS-128…134).
 
 VHS-125 : SQL canonique complet dans `20260804135742_vhs_125_postproduction_delivery.sql`.
 Les fichiers `20260804140056` / `20260804140143` / `20260804140225`
 (`vhs_125_remainder_part{1,2,3}`) sont des **marqueurs no-op** d’alignement
 d’historique — voir `docs/Developer-Handover/21_VHS_125_REMOTE_MIGRATION_INCIDENT.md`.
+
+VHS-133 / VHS-134 (Phase 10A-B) : timestamps locaux réconciliés avec Production
+`20260807213624` / `20260807213803` (corps de fonctions équivalents — voir
+`docs/Developer-Handover/24_PHASE_10AB_ENVIRONMENT_SAFETY.md`). Aucune écriture distante.
 
 ## Statut VHS-126 — Brief revisions + stale cascade (Phase 6)
 

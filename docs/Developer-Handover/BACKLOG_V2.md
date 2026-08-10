@@ -21,9 +21,11 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **VHS-115** ✅ Validation locale migrations — Porte 1 : 17 mig. ; pgTAP 286 ; intégration 31 ; **2 cycles** verts.
 - **VHS-116…VHS-126** ✅ Brief → Marketing → … → stale cascade — livrés localement ; flags off.
 - **VHS-127** ✅ Stockage durable médias finaux — bucket privé `director-final-assets` + `AssetContentPort` Supabase Storage ; mémoire impossible en Production ; **apply distant non effectué**.
-- **VHS-117C** ⚠️ Smoke Marketing OpenAI — échoué (`rate_limited`) ; **nouvelle autorisation** pour rejouer.
+- **VHS-117C** ✅ Smoke Marketing OpenAI réel — Phase 10B PASS : 1 appel `gpt-5.6`, plan Zod valide, ledger 24¢ réservés / 4¢ consommés / 20¢ libérés, replay idempotent sans second appel ; runtime AI refermé OFF.
 - **Phase 9** ✅ Audit final + gate fake-delivery + docs + 2 cycles complets locaux — **pas** production distante.
-- **Préprod Porte 1** ✅ Stockage durable local validé + commit local (unitaires 802) — **aucun push** ; prochaine porte : backup + migrations distantes (autorisation séparée).
+- **Phases 10A–10B** ✅ Préflight distant, isolation environnement, validation DB locale et premier smoke Marketing réel terminés ; migrations **29/29**, pgTAP **378**, intégration **33**, unitaires **1016** ; **0 média**.
+- **P1 opérations distantes** ⚠️ `BACKUP_PRESENT_RESTORE_UNPROVEN` — ne bloquait pas le smoke texte borné ; reste bloquant avant opération distante invasive.
+- **Prochaine porte** : checkpoint Git 10B-CLOSE, puis préparation Creative 10C sans repayer Marketing ; aucun push sans décision séparée.
 
 ## P2 — durcissement
 

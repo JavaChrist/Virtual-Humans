@@ -22,7 +22,7 @@ test("parseV2SupabaseConfig — exige URL, service role, workspace UUID", () => 
   assert.throws(
     () =>
       parseV2SupabaseConfig({
-        SUPABASE_URL: "https://example.supabase.co",
+        SUPABASE_URL: "http://127.0.0.1:54921",
         SUPABASE_SERVICE_ROLE_KEY: "role-key",
         DIRECTOR_V2_WORKSPACE_ID: "not-a-uuid",
       }),
@@ -32,13 +32,35 @@ test("parseV2SupabaseConfig — exige URL, service role, workspace UUID", () => 
   );
 
   const cfg = parseV2SupabaseConfig({
-    SUPABASE_URL: "https://example.supabase.co",
+    SUPABASE_URL: "http://127.0.0.1:54921",
     SUPABASE_SERVICE_ROLE_KEY: "role-key",
     DIRECTOR_V2_WORKSPACE_ID: WS,
   });
   assert.equal(cfg.workspaceId, WS);
-  assert.equal(cfg.url, "https://example.supabase.co");
+  assert.equal(cfg.url, "http://127.0.0.1:54921");
   assert.equal(cfg.serviceRoleKey, "role-key");
+});
+
+test("parseV2SupabaseConfig — refuse remote hors Vercel sans VH_ALLOW_REMOTE_SUPABASE", () => {
+  resetV2SupabaseCacheForTests();
+  assert.throws(
+    () =>
+      parseV2SupabaseConfig({
+        SUPABASE_URL: "https://example.supabase.co",
+        SUPABASE_SERVICE_ROLE_KEY: "role-key",
+        DIRECTOR_V2_WORKSPACE_ID: WS,
+      }),
+    (e: unknown) =>
+      e instanceof Error && String(e.message).includes("VH_ALLOW_REMOTE_SUPABASE"),
+  );
+
+  const cfg = parseV2SupabaseConfig({
+    SUPABASE_URL: "https://example.supabase.co",
+    SUPABASE_SERVICE_ROLE_KEY: "role-key",
+    DIRECTOR_V2_WORKSPACE_ID: WS,
+    VH_ALLOW_REMOTE_SUPABASE: "1",
+  });
+  assert.equal(cfg.url, "https://example.supabase.co");
 });
 
 test("ProjectRepository — insert/load mapping + workspace guard", async () => {
