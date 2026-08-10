@@ -10,6 +10,7 @@ export type {
 } from "./analyzer-port";
 export {
   createAnalyzeStoryboardForProject,
+  storyboardIdempotencyFields,
   type AnalyzeStoryboardForProject,
   type StoryboardDirectorRunPort,
   type StoryboardProjectDryRunResult,

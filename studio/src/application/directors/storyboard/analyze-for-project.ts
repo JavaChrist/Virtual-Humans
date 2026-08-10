@@ -71,6 +71,8 @@ export type StoryboardProjectDryRunResult = {
   schemaVersion: string;
   /** `promptVersion:schemaVersion` embedded in Storyboard idempotency identity. */
   idempotencyKeyVersion: string;
+  /** True when `DIRECTOR_STORYBOARD_IDEMPOTENCY_SALT` is set (budget reauth identity). */
+  idempotencySaltPresent: boolean;
   pricingConfigured: boolean;
   estimatedCostMinor?: number;
   currency?: string;
@@ -156,8 +158,54 @@ function empty(partial: Partial<StoryboardProjectDryRunResult> & Pick<Storyboard
     promptVersion: STORYBOARD_ANALYZER_PROMPT_VERSION,
     schemaVersion: STORYBOARD_CANDIDATE_SCHEMA_VERSION,
     idempotencyKeyVersion: `${STORYBOARD_ANALYZER_PROMPT_VERSION}:${STORYBOARD_CANDIDATE_SCHEMA_VERSION}`,
+    idempotencySaltPresent: false,
     pricingConfigured: false, warnings: [], ...partial,
   };
+}
+
+/** Build Storyboard idempotency key fields; optional salt enables reauth without prompt bump. */
+export function storyboardIdempotencyFields(input: {
+  projectId: string;
+  briefArtifactId: string;
+  briefRevision: number;
+  marketingPlanArtifactId: string;
+  marketingPlanRevision: number;
+  creativeConceptArtifactId: string;
+  creativeConceptRevision: number;
+  videoScriptArtifactId: string;
+  videoScriptRevision: number;
+  visualDirectionArtifactId: string;
+  visualDirectionRevision: number;
+  model: string;
+  promptVersion: string;
+  schemaVersion: string;
+  idempotencySalt?: string;
+}): { fields: string[]; keyRaw: string; key: string; fingerprint: string } {
+  const fields = [
+    input.projectId,
+    input.briefArtifactId,
+    String(input.briefRevision),
+    input.marketingPlanArtifactId,
+    String(input.marketingPlanRevision),
+    input.creativeConceptArtifactId,
+    String(input.creativeConceptRevision),
+    input.videoScriptArtifactId,
+    String(input.videoScriptRevision),
+    input.visualDirectionArtifactId,
+    String(input.visualDirectionRevision),
+    input.model,
+    input.promptVersion,
+    input.schemaVersion,
+  ];
+  const salt = input.idempotencySalt?.trim() ?? "";
+  const keyFields = salt ? [...fields, `reauth:${salt}`] : fields;
+  const keyRaw = ["stb", ...keyFields].join(":");
+  const key =
+    keyRaw.length <= 200
+      ? keyRaw
+      : createHash("sha256").update(keyRaw).digest("hex");
+  const fingerprint = createHash("sha256").update(fields.join("|")).digest("hex");
+  return { fields: keyFields, keyRaw, key, fingerprint };
 }
 
 export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProjectDeps): AnalyzeStoryboardForProject {
@@ -217,6 +265,7 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
       promptVersion: ai.promptVersion,
       schemaVersion: ai.schemaVersion,
       idempotencyKeyVersion: `${ai.promptVersion}:${ai.schemaVersion}`,
+      idempotencySaltPresent: Boolean((env.DIRECTOR_STORYBOARD_IDEMPOTENCY_SALT ?? "").trim()),
       pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
       validations, warnings: ai.warnings,
       missingInformation: validations.filter((v) => !v.passed).map((v) => ({ code: v.code, message: v.message })),
@@ -250,10 +299,23 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
       const check = await dry(input);
       if (!check.executable) return { status: "needs_input", missingInformation: check.missingInformation, warnings: check.warnings };
       const estimated = Math.max(1, check.estimatedCostMinor ?? 1), currency = check.currency ?? "USD";
-      const fields = [input.projectId, brief.artifactId, String(brief.revision), plan.artifactId, String(plan.revision), concept.artifactId, String(concept.revision), script.artifactId, String(script.revision), visual.artifactId, String(visual.revision), config.model, STORYBOARD_ANALYZER_PROMPT_VERSION, STORYBOARD_CANDIDATE_SCHEMA_VERSION];
-      const raw = ["stb", ...fields].join(":");
-      const key = raw.length <= 200 ? raw : createHash("sha256").update(raw).digest("hex");
-      const fingerprint = createHash("sha256").update(fields.join("|")).digest("hex");
+      const { key, fingerprint } = storyboardIdempotencyFields({
+        projectId: input.projectId,
+        briefArtifactId: brief.artifactId,
+        briefRevision: brief.revision,
+        marketingPlanArtifactId: plan.artifactId,
+        marketingPlanRevision: plan.revision,
+        creativeConceptArtifactId: concept.artifactId,
+        creativeConceptRevision: concept.revision,
+        videoScriptArtifactId: script.artifactId,
+        videoScriptRevision: script.revision,
+        visualDirectionArtifactId: visual.artifactId,
+        visualDirectionRevision: visual.revision,
+        model: config.model,
+        promptVersion: STORYBOARD_ANALYZER_PROMPT_VERSION,
+        schemaVersion: STORYBOARD_CANDIDATE_SCHEMA_VERSION,
+        idempotencySalt: env.DIRECTOR_STORYBOARD_IDEMPOTENCY_SALT,
+      });
       const begin = await deps.directorRuns.beginOrGet({
         id: id(), workspaceId: deps.workspaceId, projectId: input.projectId,
         visualDirectionArtifactId: visual.artifactId, visualDirectionRevision: visual.revision,

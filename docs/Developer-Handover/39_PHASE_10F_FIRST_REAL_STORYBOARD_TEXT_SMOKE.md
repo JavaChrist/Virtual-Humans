@@ -156,9 +156,11 @@ Aucun upstream replay. Aucun média / job / worker.
 
 ## Suite recommandée (hors scope)
 
-1. Relever `workspace_budget_policies.hard_limit_minor` (ex. ≥ 120) sous autorisation séparée.  
-2. Préparer réauth 10F : traiter le run terminal `budget_exceeded` (identité / procédure) **sans** second appel non autorisé.  
-3. Relancer dry-run live exact puis **un** appel Storyboard.
+Voir audit non payant : `40_PHASE_10F_WORKSPACE_BUDGET_AUDIT.md` (`READY_FOR_BUDGET_AUTH`).
+
+1. **Auth A** : relever `hard_limit_minor` 100 → **113** (+13) — script préparé, non exécuté.
+2. **Auth B** : dry-run live + salt d’idempotence (contrat v2 inchangé) + **un** appel Storyboard.
+3. Ne pas réutiliser la clé du run `b446a0ed` (`director_run_terminal_reuse`).
 
 ---
 

@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — autorisation humaine)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C), Script (10D) et Art texte (10E-V3) validés ; Storyboard 10F **BLOCKED** (budget workspace) ; média restent à autoriser ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C), Script (10D) et Art texte (10E-V3) validés ; Storyboard 10F **BLOCKED** ; budget audit prêt (Auth A 113¢) ; média restent à autoriser ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité (locale — Phase 9)

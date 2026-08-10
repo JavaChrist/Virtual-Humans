@@ -111,6 +111,29 @@ async function main() {
     );
   }
 
+  /** Auth B must not run before verified Budget Auth A. */
+  if (!DRY_ONLY) {
+    if (process.env.PHASE_10F_BUDGET_AUTH_DONE !== "1") {
+      fail(
+        "Auth B blocked: PHASE_10F_BUDGET_AUTH_DONE=1 required (run phase-10f-verify-budget-ready.mjs after Auth A)."
+      );
+    }
+    const readyPath = resolve(studioRoot, ".tmp/phase-10f-budget-ready.json");
+    if (!existsSync(readyPath)) {
+      fail("Auth B blocked: missing .tmp/phase-10f-budget-ready.json");
+    }
+    const ready = JSON.parse(readFileSync(readyPath, "utf8"));
+    if (ready.readyForStoryboardAuthB !== true) {
+      fail("Auth B blocked: budget-ready evidence not green.");
+    }
+    const salt = (process.env.DIRECTOR_STORYBOARD_IDEMPOTENCY_SALT || "").trim();
+    if (!salt) {
+      fail(
+        "Auth B blocked: DIRECTOR_STORYBOARD_IDEMPOTENCY_SALT required to avoid terminal key reuse (do not bump prompt)."
+      );
+    }
+  }
+
   const vercel = pullProductionEnv();
   if (!isOff(vercel.DIRECTOR_V2_PAID_GENERATION_ENABLED)) {
     fail("PAID_GENERATION must be OFF — refuse Storyboard smoke.");

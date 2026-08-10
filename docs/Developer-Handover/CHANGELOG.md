@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.64] — 2026-08-10
+
+### Added (Phase 10F-BUDGET-AUDIT)
+
+- Audit non payant : exposure commits **93¢**, hard limit **100¢**, disponible **7¢** ; formule `reserve_director_budget` documentée (releases ≠ free exposure).
+- Aucune réservation orpheline ; tentative 10F **non facturée** ; run `b446a0ed` terminal immuable.
+- Préparation Auth A (raise → **113¢**) + Auth B (gate smoke + salt idempotence sans bump prompt).
+- Rapport : `40_PHASE_10F_WORKSPACE_BUDGET_AUDIT.md` (`READY_FOR_BUDGET_AUTH`). **0** write budget/ledger. Aucun push.
+
 ## [2.0.63] — 2026-08-10
 
 ### Validation provider réelle (Phase 10F) — BLOCKED
