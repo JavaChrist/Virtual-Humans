@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.71] — 2026-08-10
+
+### Validation provider (Phase 10F-RETRY2-EXECUTE) — BLOCKED
+
+- 1 appel Storyboard `gpt-5.6` : run `4914c203` `failed`/`invalid_candidate` (continuité `location:espace-numerique-principal`).
+- Ledger 13¢ reserve / 8¢ commit / 5¢ release ; available **20→12** ; **0** storyboard ; salt `10f-auth-b-retry2-20260810` brûlé.
+- Fermeture OFF `gb5fi4973` ; runtime OFF. Rapport : `47_PHASE_10F_STORYBOARD_RETRY2_EXECUTE.md`. Aucun push.
+
 ## [2.0.70] — 2026-08-10
 
 ### Deployed (Phase 10F-RETRY2-DEPLOY-PREFLIGHT)

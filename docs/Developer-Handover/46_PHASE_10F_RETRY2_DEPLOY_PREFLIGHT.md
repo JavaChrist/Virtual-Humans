@@ -115,5 +115,5 @@ Evidence : `studio/.tmp/phase-10f-retry2-deploy-dry.json`
 
 ## Suite autorisée
 
-Nouvelle autorisation provider exacte (1 appel Storyboard max) **après** re-ouverture contrôlée des flags + dry-run live reconfirmé.  
-Ne pas execute sans autorisation humaine séparée.
+Execute RETRY2 : **faite** → `47_PHASE_10F_STORYBOARD_RETRY2_EXECUTE.md` (**BLOCKED** `invalid_candidate`).  
+Autorisation provider **consommée**. Suite = DIAG continuité + nouveau salt + éventuelle Auth budget.
