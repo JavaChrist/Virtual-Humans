@@ -124,4 +124,7 @@ node scripts/phase-10d-verify-flags-off.mjs
 
 ## Suite
 
-Aucun execute Script tant que l’estimate/modèle Production ne sont pas alignés avec l’état d’entrée autorisé (ou qu’une nouvelle autorisation humaine explicite n’accepte pas la matrice live). **Pas de Phase 10E.**
+Réconciliation configuration : `32_PHASE_10D_SCRIPT_CONFIG_RECONCILIATION.md` (`READY_FOR_REAUTH`).
+
+Canon Production confirmé : `gpt-5.6` / `medium` / `4096` / estimate **12¢** (le PREP 7¢/`gpt-5.6-terra` était un fallback code erroné).  
+Nouvel execute Script uniquement après réautorisation humaine explicite. **Pas de Phase 10E.**

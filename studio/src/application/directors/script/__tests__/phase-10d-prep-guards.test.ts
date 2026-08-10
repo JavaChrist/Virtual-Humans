@@ -56,7 +56,10 @@ const smokeMatrix = {
   DIRECTOR_V2_WORKER_ENABLED: "0",
   DIRECTOR_V2_PAID_GENERATION_ENABLED: "0",
   OPENAI_API_KEY: "sk-test-not-used",
-  OPENAI_SCRIPT_MODEL: "gpt-5.6-terra",
+  /** Canonical Production Script knobs (10D-RECONCILE) — not code defaults. */
+  OPENAI_SCRIPT_MODEL: "gpt-5.6",
+  OPENAI_SCRIPT_REASONING_EFFORT: "medium",
+  OPENAI_SCRIPT_MAX_OUTPUT_TOKENS: "4096",
   OPENAI_MARKETING_PRICE_VERSION: "prep-test",
   OPENAI_MARKETING_PRICE_INPUT_PER_MILLION_MINOR: "500",
   OPENAI_MARKETING_PRICE_OUTPUT_PER_MILLION_MINOR: "3000",
@@ -93,6 +96,47 @@ test("Script dry-run never calls provider (PREP invariant)", () => {
   assert.equal(dry.pricingConfigured, true);
   assert.ok((dry.approximateInputTokens ?? 0) > 0);
   assert.ok(dry.maxOutputTokens > 0);
+});
+
+test("10D-RECONCILE — Production-documented knobs yield model gpt-5.6 / medium / 4096", () => {
+  const dry = runOpenAIScriptDryRun(brief, plan, concept, {
+    env: smokeMatrix,
+    pricing: createEnvAiTokenPricing(smokeMatrix),
+  });
+  assert.equal(dry.model, "gpt-5.6");
+  assert.equal(dry.reasoningEffort, "medium");
+  assert.equal(dry.maxOutputTokens, 4096);
+  const book = createEnvAiTokenPricing(smokeMatrix).getPriceBook(dry.model)!;
+  const outShare = Math.floor(
+    (dry.maxOutputTokens * book.outputPerMillionMinor) / 1_000_000
+  );
+  const estimate =
+    Math.floor(
+      ((dry.approximateInputTokens ?? 0) * book.inputPerMillionMinor) / 1_000_000
+    ) + outShare;
+  assert.equal(outShare, 12);
+  assert.equal(estimate, outShare); // fixtures stay under 2000 input tokens → 12¢ total
+  assert.equal(dry.providerCalled, false);
+});
+
+test("code-default Script knobs (terra/2400) produce the PREP-misread 7¢ output share", () => {
+  const codeDefaultEnv = {
+    ...smokeMatrix,
+    OPENAI_SCRIPT_MODEL: "gpt-5.6-terra",
+    OPENAI_SCRIPT_REASONING_EFFORT: "low",
+    OPENAI_SCRIPT_MAX_OUTPUT_TOKENS: "2400",
+  };
+  const dry = runOpenAIScriptDryRun(brief, plan, concept, {
+    env: codeDefaultEnv,
+    pricing: createEnvAiTokenPricing(codeDefaultEnv),
+  });
+  const book = createEnvAiTokenPricing(codeDefaultEnv).getPriceBook(dry.model)!;
+  const outShare = Math.floor(
+    (dry.maxOutputTokens * book.outputPerMillionMinor) / 1_000_000
+  );
+  assert.equal(dry.model, "gpt-5.6-terra");
+  assert.equal(dry.maxOutputTokens, 2400);
+  assert.equal(outShare, 7);
 });
 
 test("Script dry-run does not mutate MarketingPlan or CreativeConcept", () => {

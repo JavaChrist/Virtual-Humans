@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.55] — 2026-08-10
+
+### Fixed (Phase 10D-RECONCILE)
+
+- Cause racine du BLOCKED 10D : PREP Script tombait sur défauts code (`gpt-5.6-terra` / 2400 → 7¢) faute de fallback Production documenté.
+- Canon aligné sur Production live : `gpt-5.6` / `medium` / `4096` → estimate/réservation **12¢** ; **0** écriture Vercel.
+- Dry-run Script expose `reasoningEffort` + `maxOutputTokens` ; guards et PREP mis à jour.
+- Rapport : `32_PHASE_10D_SCRIPT_CONFIG_RECONCILIATION.md` (`READY_FOR_REAUTH`). Aucun push.
+
 ## [2.0.54] — 2026-08-10
 
 ### Validation provider réelle (Phase 10D) — BLOCKED

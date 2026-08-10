@@ -193,6 +193,8 @@ async function main() {
       executable: dryBody.executable ?? null,
       executionAvailable: dryBody.executionAvailable ?? null,
       model: dryBody.model ?? null,
+      reasoningEffort: dryBody.reasoningEffort ?? null,
+      maxOutputTokens: dryBody.maxOutputTokens ?? null,
       marketingPlanRevision: dryBody.marketingPlanRevision ?? null,
       marketingPlanArtifactId: dryBody.marketingPlanArtifactId ?? null,
       creativeConceptRevision: dryBody.creativeConceptRevision ?? null,

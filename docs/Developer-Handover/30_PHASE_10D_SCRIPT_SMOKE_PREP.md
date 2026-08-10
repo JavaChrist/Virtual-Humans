@@ -36,8 +36,8 @@ Marketing / Creative : **jamais régénérés** dans la fenêtre 10D.
 |---|---|
 | providerCalled | **false** |
 | executable | true |
-| model | `gpt-5.6-terra` (défauts code ; knobs Sensitive redacted via CLI) |
-| maxOutputTokens | 2400 |
+| model | ~~`gpt-5.6-terra`~~ → canon réconcilié `gpt-5.6` (voir `32_…`) |
+| maxOutputTokens | ~~2400~~ → **4096** |
 | promptVersion | `script-analyzer-v1` |
 | schemaVersion | `1.0.0` |
 | timingEngineVersion | `1.0.0` |
@@ -45,11 +45,11 @@ Marketing / Creative : **jamais régénérés** dans la fenêtre 10D.
 | pricingConfigured | true |
 | priceVersion | `manual-2026-08-porte7-sol` |
 | input / output per 1M | 500 / 3000 minor USD |
-| estimatedCostMinor | **7** |
-| reservationPlanned | **7** |
+| estimatedCostMinor | ~~**7**~~ → **12** |
+| reservationPlanned | ~~**7**~~ → **12** |
 | proposedCeilingMinor | **100** |
 
-Note : le dry-run Production live (après ouverture des flags) confirmera le modèle/estimate exacts avant l’unique appel.
+Note (historique PREP) : le premier PREP a utilisé les **défauts code** car le pull Sensitive était vide — corrigé en 10D-RECONCILE (`PRODUCTION_DOCUMENTED_SCRIPT`).
 
 ---
 

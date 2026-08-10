@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — autorisation humaine)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing (10B) et Creative (10C) texte validés ; Script 10D **BLOCKED** (divergence estimate/modèle Production vs PREP, 0 appel, flags OFF) ; nouvel execute Script après réconciliation + autorisation ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing (10B) et Creative (10C) texte validés ; Script 10D-RECONCILE **READY_FOR_REAUTH** (canon `gpt-5.6`/12¢) ; execute Script après réautorisation ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité (locale — Phase 9)

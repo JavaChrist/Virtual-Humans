@@ -57,6 +57,19 @@ const PRODUCTION_CANONICAL_PRICE = {
   source: "porte-7hb-canonical+10b-10c-crosscheck",
 };
 
+/**
+ * Production Script knobs when `vercel env pull` redacts Sensitive values.
+ * model: observed live dry-run 10D (gpt-5.6).
+ * maxOutputTokens: inferred — estimate 12¢ = floor(4096×3000/1e6) at price book 500/3000.
+ * reasoningEffort: aligned with Production Creative (Porte 8E / 10C); confirm on next live dry-run.
+ */
+const PRODUCTION_DOCUMENTED_SCRIPT = {
+  model: "gpt-5.6",
+  reasoningEffort: "medium",
+  maxOutputTokens: "4096",
+  source: "10d-live-dry-run+estimate-reconcile+creative-porte-8e-align",
+};
+
 function fail(msg, code = 1) {
   console.error(`PREP_10D FAIL: ${msg}`);
   process.exit(code);
@@ -250,16 +263,19 @@ const scriptFromPull = {
 const scriptKnobSource =
   scriptFromPull.model || scriptFromPull.effort || scriptFromPull.maxOut
     ? "vercel-env-pull-partial-or-full"
-    : "code-defaults";
+    : "production-documented-10d-reconcile";
 
 const pricingEnv = {
   OPENAI_API_KEY:
     envOrUndef(vercel.OPENAI_API_KEY) ||
     envOrUndef(process.env.OPENAI_API_KEY) ||
     "sk-present-production-encrypted",
-  OPENAI_SCRIPT_MODEL: scriptFromPull.model,
-  OPENAI_SCRIPT_REASONING_EFFORT: scriptFromPull.effort,
-  OPENAI_SCRIPT_MAX_OUTPUT_TOKENS: scriptFromPull.maxOut,
+  OPENAI_SCRIPT_MODEL:
+    scriptFromPull.model || PRODUCTION_DOCUMENTED_SCRIPT.model,
+  OPENAI_SCRIPT_REASONING_EFFORT:
+    scriptFromPull.effort || PRODUCTION_DOCUMENTED_SCRIPT.reasoningEffort,
+  OPENAI_SCRIPT_MAX_OUTPUT_TOKENS:
+    scriptFromPull.maxOut || PRODUCTION_DOCUMENTED_SCRIPT.maxOutputTokens,
   OPENAI_SCRIPT_REQUIRE_PRICING:
     envOrUndef(vercel.OPENAI_SCRIPT_REQUIRE_PRICING) || "1",
   OPENAI_MARKETING_PRICE_VERSION: resolvedPrice.version,
@@ -343,6 +359,7 @@ const report = {
   existingVideoScript: null,
   scriptConfig: {
     model: dry.model,
+    reasoningEffort: dry.reasoningEffort,
     maxOutputTokens: dry.maxOutputTokens,
     promptVersion: dry.promptVersion,
     schemaVersion: dry.schemaVersion,
@@ -350,6 +367,7 @@ const report = {
     pricingConfigured: dry.pricingConfigured,
     priceSource,
     scriptKnobSource,
+    productionDocumentedSource: PRODUCTION_DOCUMENTED_SCRIPT.source,
     priceVersion: resolvedPrice.version,
     inputPerMillionMinor: book?.inputPerMillionMinor ?? null,
     outputPerMillionMinor: book?.outputPerMillionMinor ?? null,

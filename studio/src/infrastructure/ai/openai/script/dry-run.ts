@@ -10,7 +10,7 @@ import { SCRIPT_ANALYZER_SYSTEM_PROMPT, SCRIPT_ANALYZER_PROMPT_VERSION } from ".
 import { getScriptCandidateJsonSchema, SCRIPT_CANDIDATE_SCHEMA_VERSION } from "./schema";
 
 export type OpenAIScriptDryRunResult = {
-  executable: boolean; providerCalled: false; model: string; promptVersion: string; schemaVersion: string;
+  executable: boolean; providerCalled: false; model: string; reasoningEffort: string; promptVersion: string; schemaVersion: string;
   pricingConfigured: boolean; validations: Array<{ code: string; passed: boolean; message: string }>;
   warnings: Array<{ code: string; message: string }>; approximateInputTokens?: number; maxOutputTokens: number;
 };
@@ -25,8 +25,8 @@ export function runOpenAIScriptDryRun(
   const env = deps.env ?? (process.env as Record<string, string | undefined>);
   let config: OpenAIScriptConfig;
   try { config = deps.config ?? parseOpenAIScriptConfig(env); } catch (e) {
-    return { executable: false, providerCalled: false, model: "unknown", promptVersion: SCRIPT_ANALYZER_PROMPT_VERSION,
-      schemaVersion: SCRIPT_CANDIDATE_SCHEMA_VERSION, pricingConfigured: false,
+    return { executable: false, providerCalled: false, model: "unknown", reasoningEffort: "unknown",
+      promptVersion: SCRIPT_ANALYZER_PROMPT_VERSION, schemaVersion: SCRIPT_CANDIDATE_SCHEMA_VERSION, pricingConfigured: false,
       validations: [{ code: "config", passed: false, message: e instanceof Error ? e.message : "Configuration invalide." }],
       warnings: [], maxOutputTokens: 0 };
   }
@@ -52,6 +52,7 @@ export function runOpenAIScriptDryRun(
   ];
   return { executable: canExecuteScriptAi(env) && snap.apiKeyPresent && !mapped.blockingFindings.length &&
       readiness.executable && (pricingConfigured || !config.requireFirmPricing), providerCalled: false,
-    model: config.model, promptVersion: SCRIPT_ANALYZER_PROMPT_VERSION, schemaVersion: SCRIPT_CANDIDATE_SCHEMA_VERSION,
+    model: config.model, reasoningEffort: config.reasoningEffort,
+    promptVersion: SCRIPT_ANALYZER_PROMPT_VERSION, schemaVersion: SCRIPT_CANDIDATE_SCHEMA_VERSION,
     pricingConfigured, validations, warnings, approximateInputTokens, maxOutputTokens: config.maxOutputTokens };
 }
