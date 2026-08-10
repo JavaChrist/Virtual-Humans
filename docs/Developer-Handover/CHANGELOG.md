@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.67] — 2026-08-10
+
+### Validation provider (Phase 10F-AUTH-B RESUME) — BLOCKED
+
+- Runtime salt-ready : lignée `d2mth5hp7` → `im5dy49ry` ; Root Directory `studio` ; dry-run `idempotencySaltPresent=true` ; empreinte clé `3f39…`.
+- Execute unique : run `f5b75018` `failed`/`request_failed` ; ledger 13 reserve / 13 release / 0 commit ; **1** appel provider ; **0** storyboard.
+- Run `b446a0ed` immuable ; flags OFF + redeploy `ox4qwh5wf` ; runtime OFF prouvé.
+- Rapport : `43_PHASE_10F_STORYBOARD_AUTH_B_RESUME.md`. Autorisation provider consommée. Aucun push.
+
 ## [2.0.66] — 2026-08-10
 
 ### Validation provider (Phase 10F-AUTH-B) — BLOCKED

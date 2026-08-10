@@ -175,9 +175,6 @@ Inchangé vs Auth A.
 
 ---
 
-## Suite (hors scope — autorisation séparée)
+## Suite
 
-1. Ouvrir Auth B **uniquement** depuis un déploiement **HEAD/salt-ready** (ex. lignée `ln0zu25ql` / `d2mth5hp7`), jamais depuis un redeploy d’un vieux OFF pre-salt.  
-2. Avant execute : dry-run live doit exposer `idempotencySaltPresent=true`.  
-3. Conserver le salt `10f-auth-b-20260810` (déjà en Production) pour stabilité execute↔replay.  
-4. Optionnel P1 : mapper `director_run_terminal_reuse` côté Storyboard (comme Marketing) pour éviter un 500 opaque.
+Reprise salt-ready exécutée — voir `43_PHASE_10F_STORYBOARD_AUTH_B_RESUME.md` : dry-run salt OK ; execute `request_failed` (1 appel, 0 commit) ; runtime OFF. Autorisation provider **consommée** ; futur besoin = nouvelle auth + nouveau salt.
