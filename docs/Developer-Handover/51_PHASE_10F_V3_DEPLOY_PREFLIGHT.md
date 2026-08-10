@@ -138,4 +138,6 @@ Autorisation provider Storyboard v3 encore requise :
 - estimate/réservation 13¢ ;
 - fermeture OFF systématique.
 
+Suite : Execute `52_PHASE_10F_STORYBOARD_V3_EXECUTE.md` — **BLOCKED** (`invalid_candidate` lighting).
+
 **Aucun execute dans cette phase.**

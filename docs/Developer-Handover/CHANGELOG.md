@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.76] — 2026-08-10
+
+### Validation provider (Phase 10F-V3-EXECUTE) — BLOCKED
+
+- 1 appel Storyboard `gpt-5.6` / `storyboard-analyzer-v3` : run `60a1d9c6` `failed`/`invalid_candidate` (continuité `lighting:studio|cool`).
+- Ledger 13¢ reserve / 6¢ commit / 7¢ release ; available **14→8** ; **0** storyboard ; salt `10f-storyboard-v3-20260810` brûlé.
+- Fermeture OFF `eq0cql3di` ; runtime OFF. Rapport : `52_PHASE_10F_STORYBOARD_V3_EXECUTE.md`. Aucun push.
+
 ## [2.0.75] — 2026-08-10
 
 ### Deployed (Phase 10F-V3-DEPLOY-PREFLIGHT)

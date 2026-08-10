@@ -48,9 +48,10 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F-V3-RETRY-PREP** ✅ Préparation execute v3 : salt `10f-storyboard-v3-20260810` (clé `1bf9daeb68eb6432`), map 5× `location:espace-numerique-principal`, estimate **13¢**, shortfall **1¢**, oneOf=0 ; **0** provider (`49_…`, `READY_FOR_BUDGET_AND_PUSH_AUTH`).
 - **Phase 10F-V3-BUDGET-AND-PUSH** ✅ Hard limit **113→115** (+2) + audit ; available **14¢** ; push `a849e03..a82b9cf` ; **0** provider (`50_…`, `PASS`).
 - **Phase 10F-V3-DEPLOY-PREFLIGHT** ✅ Salt `10f-storyboard-v3-20260810` ; deploy `a82b9cf` ; dry-run live v3 gates verts ; fermeture OFF ; **0** provider (`51_…`, `READY_FOR_PROVIDER_REAUTH`).
-- **P1 Storyboard** : Auth provider v3 (1 appel) ; runs `b446a0ed`/`f5b75018`/`4914c203` immuables.
-- **P1 budget** : hard **115** ; committed **101** ; available **14**.
-- **Prochaine porte** : Auth provider Storyboard v3 ; média ensuite.
+- **Phase 10F-V3-EXECUTE** ⚠️ **BLOCKED** : 1 appel `gpt-5.6` / v3 → `invalid_candidate` (continuité `lighting:studio|cool`) ; ledger 13/6/7 ; available **8¢** ; **0** storyboard ; flags OFF (`52_…`).
+- **P1 Storyboard** : DIAG lighting continuity + nouveau salt/Auth ; runs `b446a0ed`/`f5b75018`/`4914c203`/`60a1d9c6` immuables.
+- **P1 budget** : hard **115** ; committed **107** ; available **8**.
+- **Prochaine porte** : DIAG continuité lighting Storyboard ; média ensuite.
 
 ## P2 — durcissement
 
