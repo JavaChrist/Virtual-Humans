@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.75] — 2026-08-10
+
+### Deployed (Phase 10F-V3-DEPLOY-PREFLIGHT)
+
+- Salt Production `10f-storyboard-v3-20260810` ; deploy source `a82b9cf` ; dry-run live gates v3 verts (prompt v3, location 5/complete, oneOf=0, clé `1bf9daeb68eb6432`).
+- Fermeture flags + redeploy OFF `iqw0b8di0` ; runtime OFF ; **0** provider / run / ledger. Rapport : `51_PHASE_10F_V3_DEPLOY_PREFLIGHT.md` (`READY_FOR_PROVIDER_REAUTH`). Aucun push.
+
 ## [2.0.74] — 2026-08-10
 
 ### Budget + Push (Phase 10F-V3-BUDGET-AND-PUSH)

@@ -122,4 +122,6 @@ a849e03..a82b9cf  main -> main
 Prochaine porte : **DEPLOY-PREFLIGHT / Auth Provider Storyboard v3**  
 (salt `10f-storyboard-v3-20260810`, empreinte `1bf9daeb68eb6432`, estimate 13¢, available 14¢, 1 appel max, fermeture OFF).
 
+Suite : Deploy-preflight `51_PHASE_10F_V3_DEPLOY_PREFLIGHT.md` — salt v3 posé, dry-run live OK, runtime OFF, `READY_FOR_PROVIDER_REAUTH`.
+
 **Aucun execute Storyboard dans cette phase.**

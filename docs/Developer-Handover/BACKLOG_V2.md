@@ -47,9 +47,10 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F-CONTINUITY-DIAG** ✅ Cause = prompt v2 ; fix `storyboard-analyzer-v3` + map clés location ; validateur fail-closed inchangé ; **0** provider (`48_…`, `READY_FOR_RETRY_PREP`).
 - **Phase 10F-V3-RETRY-PREP** ✅ Préparation execute v3 : salt `10f-storyboard-v3-20260810` (clé `1bf9daeb68eb6432`), map 5× `location:espace-numerique-principal`, estimate **13¢**, shortfall **1¢**, oneOf=0 ; **0** provider (`49_…`, `READY_FOR_BUDGET_AND_PUSH_AUTH`).
 - **Phase 10F-V3-BUDGET-AND-PUSH** ✅ Hard limit **113→115** (+2) + audit ; available **14¢** ; push `a849e03..a82b9cf` ; **0** provider (`50_…`, `PASS`).
-- **P1 Storyboard** : Deploy-preflight → Auth provider v3 (1 appel) ; runs `b446a0ed`/`f5b75018`/`4914c203` immuables.
+- **Phase 10F-V3-DEPLOY-PREFLIGHT** ✅ Salt `10f-storyboard-v3-20260810` ; deploy `a82b9cf` ; dry-run live v3 gates verts ; fermeture OFF ; **0** provider (`51_…`, `READY_FOR_PROVIDER_REAUTH`).
+- **P1 Storyboard** : Auth provider v3 (1 appel) ; runs `b446a0ed`/`f5b75018`/`4914c203` immuables.
 - **P1 budget** : hard **115** ; committed **101** ; available **14**.
-- **Prochaine porte** : deploy-preflight Storyboard v3 puis Auth provider ; média ensuite.
+- **Prochaine porte** : Auth provider Storyboard v3 ; média ensuite.
 
 ## P2 — durcissement
 

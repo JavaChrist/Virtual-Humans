@@ -156,4 +156,6 @@ Dry-run live futur devra confirmer : prompt v3, location 5/complete, oneOf=0, an
 2. **Auth Push** — commit PREP + DIAG vers `origin/main` ; redeploy Storyboard.
 3. **Auth Provider** — 1 appel max, salt `10f-storyboard-v3-20260810`, fermeture OFF systématique.
 
+Suite : Budget+Push `50_…` → Deploy-preflight `51_…` (`READY_FOR_PROVIDER_REAUTH`).
+
 **Aucun execute Storyboard dans cette phase.**
