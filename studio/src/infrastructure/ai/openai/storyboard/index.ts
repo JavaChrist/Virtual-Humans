@@ -7,3 +7,20 @@ export {
   STORYBOARD_CANDIDATE_SCHEMA_NAME, STORYBOARD_CANDIDATE_SCHEMA_VERSION, getStoryboardCandidateJsonSchema,
   getStoryboardCandidateTextFormat, storyboardCandidateSchemaContract,
 } from "./schema";
+export {
+  inspectStoryboardStructuredSchemaProjection,
+  STORYBOARD_PROVIDER_ERROR_METADATA_CAPTURE,
+  type StoryboardSchemaProjectionReport,
+} from "./schema-projection";
+export {
+  buildStoryboardProviderFailureEvidence,
+  assertStoryboardProviderFailureEvidenceSafe,
+  inferStoryboardFailureStage,
+  type StoryboardProviderFailureEvidence,
+  type StoryboardFailureStage,
+} from "./provider-failure-evidence";
+export {
+  validateAgainstLocalJsonSchema,
+  fillOpenAIStrictNullables,
+  type LocalSchemaIssue,
+} from "./local-json-schema";

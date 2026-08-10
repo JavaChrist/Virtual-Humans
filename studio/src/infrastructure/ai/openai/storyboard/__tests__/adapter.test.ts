@@ -125,6 +125,16 @@ test("fake transport 400 invalid_json_schema → request_failed, exactly one net
       assert.equal(e.failure.retryable, false);
       assert.equal(e.failure.httpStatus, 400);
       assert.equal(e.failure.internalCode, "invalid_json_schema");
+      assert.equal(e.failure.providerMetadata?.providerErrorCode, "invalid_json_schema");
+      assert.equal(e.failure.providerMetadata?.providerErrorType, "invalid_request_error");
+      assert.equal(e.failure.providerMetadata?.providerRequestId, "req_fake_oneof");
+      assert.equal(e.failure.providerMetadata?.failureStage, "provider_response");
+      assert.equal(e.failure.providerMetadata?.networkAttempts, 1);
+      assert.equal(e.failure.providerMetadata?.usagePresent, false);
+      assert.ok((e.failure.providerMetadata?.durationMs ?? -1) >= 0);
+      const blob = JSON.stringify(e.failure);
+      assert.equal(/sk-[A-Za-z0-9]{10,}/.test(blob), false);
+      assert.equal(blob.includes(STORYBOARD_ANALYZER_SYSTEM_PROMPT.slice(0, 40)), false);
       return true;
     },
   );
@@ -135,4 +145,21 @@ test("fake transport 400 invalid_json_schema → request_failed, exactly one net
   assert.ok(meta.inputByteSize > 0);
   assert.ok(meta.schemaByteSize > 0);
   assert.ok(meta.timeoutMs >= 1000);
+});
+
+test("dry-run exposes schema projection and metadata capture gates", () => {
+  const chain = makeStoryboardChain();
+  const dry = runOpenAIStoryboardDryRun(
+    chain.brief,
+    chain.marketingPlan,
+    chain.creativeConcept,
+    chain.videoScript,
+    chain.visualDirection,
+    { env },
+  );
+  assert.equal(dry.structuredSchemaOneOfCount, 0);
+  assert.equal(dry.structuredSchemaProjection, "anyOf-compatible");
+  assert.equal(dry.providerErrorMetadataCapture, "ready");
+  assert.ok(dry.validations.some((v) => v.code === "structured_schema_projection" && v.passed));
+  assert.ok(dry.validations.some((v) => v.code === "provider_error_metadata_capture" && v.passed));
 });

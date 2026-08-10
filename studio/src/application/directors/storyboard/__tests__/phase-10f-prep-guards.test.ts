@@ -524,5 +524,8 @@ test("application dry-run exposes provider/knobs/idempotency without provider ca
   assert.equal(dry.schemaVersion, "1.0.0");
   assert.equal(dry.idempotencyKeyVersion, "storyboard-analyzer-v2:1.0.0");
   assert.equal(dry.idempotencySaltPresent, false);
+  assert.equal(dry.structuredSchemaOneOfCount, 0);
+  assert.equal(dry.structuredSchemaProjection, "anyOf-compatible");
+  assert.equal(dry.providerErrorMetadataCapture, "ready");
   assert.equal(dry.existingStoryboard, undefined);
 });

@@ -41,10 +41,11 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F-BUDGET-AUTH-A** ✅ Hard limit **100→113¢** (+13) + audit_log ; available **20¢** ; **0** provider / réservation / Storyboard ; runtime OFF (`41_PHASE_10F_BUDGET_AUTH_A.md`).
 - **Phase 10F-AUTH-B** ⚠️ Storyboard texte **BLOCKED** : stale deploy (`42_…`) puis resume salt-ready (`43_…`) : execute `request_failed` — **1** provider, 0 storyboard ; flags OFF.
 - **Phase 10F-PROVIDER-DIAG** ✅ Cause = schéma `oneOf`/`spokenContent` ; fix `oneOf→anyOf` + mapping/logs ; **0** provider (`44_…`, `READY_FOR_RETRY_PREP`).
-- **P1 Storyboard** : préparer RETRY-PREP (nouveau salt + deploy fix) puis nouvelle autorisation execute ; runs `b446a0ed`/`f5b75018` immuables.
-- **P1 ops Auth B** : deploy salt-ready + `idempotencySaltPresent=true` ; optionnel mapper `terminal_reuse` Storyboard.
+- **Phase 10F-RETRY2-PREP** ✅ Préparation execute post-fix : schéma oneOf=0 / anyOf-compatible, parité Zod, obs provider redacted, salt `10f-auth-b-retry2-20260810` (clé `0b7e8fb44e0acd4d`), dry-run gates ; **0** provider (`45_…`, `READY_FOR_PUSH_AND_REAUTH`).
+- **P1 Storyboard** : push + deploy fix + pose salt RETRY2 + nouvelle autorisation execute ; runs `b446a0ed`/`f5b75018` immuables.
+- **P1 ops Auth B** : deploy post-fix (pas stale) + `idempotencySaltPresent=true` avec salt RETRY2.
 - **P1 budget** : Auth A OK (113/20) ; exposure 93 inchangée.
-- **Prochaine porte** : RETRY-PREP Storyboard puis autorisation execute ; média ensuite ; aucun push sans décision séparée.
+- **Prochaine porte** : autorisation push → deploy → dry-run live → autorisation provider (1 appel) ; média ensuite.
 
 ## P2 — durcissement
 

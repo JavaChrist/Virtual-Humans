@@ -8,19 +8,36 @@ import {
   marketingFailure,
   sanitizeInternalCode,
   type MarketingAnalysisFailure,
+  type MarketingProviderFailureMetadata,
 } from "@/application/directors/marketing/failures";
 import { isOpenAIAiError, type OpenAIAiError } from "./errors";
 
+export type MapOpenAIFailureObs = Pick<
+  MarketingProviderFailureMetadata,
+  "failureStage" | "networkAttempts" | "durationMs" | "usagePresent"
+>;
+
 /** Map OpenAI codes to application codes (canonical table VHS-117D). */
 export function mapOpenAIAiErrorToMarketingFailure(
-  err: OpenAIAiError
+  err: OpenAIAiError,
+  obs?: MapOpenAIFailureObs,
 ): MarketingAnalysisFailure {
   const internalCode = sanitizeInternalCode(err.internalCode);
+  const providerMetadata: MarketingProviderFailureMetadata = {
+    providerErrorCode: err.providerObs?.providerErrorCode,
+    providerErrorType: err.providerObs?.providerErrorType,
+    providerRequestId: err.providerObs?.providerRequestId,
+    failureStage: obs?.failureStage,
+    networkAttempts: obs?.networkAttempts,
+    durationMs: obs?.durationMs,
+    usagePresent: obs?.usagePresent,
+  };
   const base = {
     provider: "openai" as const,
     httpStatus: err.httpStatus,
     retryAfterSeconds: err.retryAfterSeconds,
     internalCode,
+    providerMetadata,
   };
 
   switch (err.code) {
@@ -102,21 +119,51 @@ export const mapOpenAIAiErrorToAnalyzerFailure = mapOpenAIAiErrorToMarketingFail
 
 export function toMarketingAnalyzerError(
   e: unknown,
-  opts?: { metering?: import("@/application/directors/shared/analyzer-metering").AnalyzerMetering }
+  opts?: {
+    metering?: import("@/application/directors/shared/analyzer-metering").AnalyzerMetering;
+  } & MapOpenAIFailureObs,
 ): MarketingAnalyzerError {
+  const obs: MapOpenAIFailureObs | undefined =
+    opts &&
+    (opts.failureStage != null ||
+      opts.networkAttempts != null ||
+      opts.durationMs != null ||
+      opts.usagePresent != null)
+      ? {
+          failureStage: opts.failureStage,
+          networkAttempts: opts.networkAttempts,
+          durationMs: opts.durationMs,
+          usagePresent: opts.usagePresent,
+        }
+      : undefined;
   if (e instanceof MarketingAnalyzerError) {
-    if (opts?.metering && !e.metering) {
-      return new MarketingAnalyzerError(e.failure, { metering: opts.metering });
+    const failure = obs
+      ? marketingFailure(e.failure.code, {
+          ...e.failure,
+          providerMetadata: {
+            ...e.failure.providerMetadata,
+            ...obs,
+          },
+        })
+      : e.failure;
+    if (failure !== e.failure || (opts?.metering && !e.metering)) {
+      return new MarketingAnalyzerError(failure, {
+        metering: e.metering ?? opts?.metering,
+      });
     }
     return e;
   }
   if (isOpenAIAiError(e)) {
-    return new MarketingAnalyzerError(mapOpenAIAiErrorToMarketingFailure(e), opts);
+    return new MarketingAnalyzerError(
+      mapOpenAIAiErrorToMarketingFailure(e, obs),
+      opts,
+    );
   }
   return new MarketingAnalyzerError(
     marketingFailure("internal_error", {
       retryable: false,
       internalCode: "adapter_unexpected",
+      providerMetadata: obs,
     }),
     opts
   );

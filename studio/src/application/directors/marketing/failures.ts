@@ -30,6 +30,21 @@ export const MARKETING_ANALYSIS_FAILURE_CODES = [
 export type MarketingAnalysisFailureCode =
   (typeof MARKETING_ANALYSIS_FAILURE_CODES)[number];
 
+/** Redacted provider transport metadata — never prompts/bodies/secrets. */
+export type MarketingProviderFailureMetadata = {
+  providerErrorCode?: string;
+  providerErrorType?: string;
+  providerRequestId?: string;
+  failureStage?:
+    | "request_build"
+    | "provider_request"
+    | "provider_response"
+    | "candidate_parse";
+  networkAttempts?: number;
+  durationMs?: number;
+  usagePresent?: boolean;
+};
+
 export type MarketingAnalysisFailure = {
   code: MarketingAnalysisFailureCode;
   retryable: boolean;
@@ -39,6 +54,8 @@ export type MarketingAnalysisFailure = {
   retryAfterSeconds?: number;
   /** Bounded, app-controlled — never a free-form provider string. */
   internalCode?: string;
+  /** Optional redacted provider obs for smoke / durable proofs. */
+  providerMetadata?: MarketingProviderFailureMetadata;
 };
 
 /** Safe public copy for UI / JSON — never names OpenAI or models. */
@@ -88,6 +105,25 @@ export function marketingFailure(
     retryable?: boolean;
   }
 ): MarketingAnalysisFailure {
+  const meta = opts?.providerMetadata;
+  const providerMetadata = meta
+    ? {
+        providerErrorCode: sanitizeInternalCode(meta.providerErrorCode),
+        providerErrorType: sanitizeInternalCode(meta.providerErrorType),
+        providerRequestId: sanitizeInternalCode(meta.providerRequestId),
+        failureStage: meta.failureStage,
+        networkAttempts:
+          meta.networkAttempts != null && Number.isFinite(meta.networkAttempts)
+            ? Math.max(0, Math.floor(meta.networkAttempts))
+            : undefined,
+        durationMs:
+          meta.durationMs != null && Number.isFinite(meta.durationMs)
+            ? Math.max(0, Math.floor(meta.durationMs))
+            : undefined,
+        usagePresent:
+          typeof meta.usagePresent === "boolean" ? meta.usagePresent : undefined,
+      }
+    : undefined;
   return {
     code,
     retryable: opts?.retryable ?? RETRYABLE_DEFAULT.has(code),
@@ -97,6 +133,7 @@ export function marketingFailure(
     httpStatus: opts?.httpStatus,
     retryAfterSeconds: opts?.retryAfterSeconds,
     internalCode: opts?.internalCode,
+    providerMetadata,
   };
 }
 

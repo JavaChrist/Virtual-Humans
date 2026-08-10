@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.69] — 2026-08-10
+
+### Prepared (Phase 10F-RETRY2-PREP)
+
+- Préparation Storyboard post-fix structured output **sans** provider : projection `oneOf=0` / `anyOf-compatible`, parité Zod locale, obs provider redacted (HTTP/code/request-id/stage/attempts/usage).
+- Dry-run expose `structuredSchemaOneOfCount`, `structuredSchemaProjection`, `providerErrorMetadataCapture=ready` ; blocage executable si projection invalide.
+- Salt proposé `10f-auth-b-retry2-20260810` (empreinte `0b7e8fb44e0acd4d`) distinct des runs `b446a0ed` / `f5b75018`.
+- Rapport : `45_PHASE_10F_STORYBOARD_RETRY2_PREP.md` (`READY_FOR_PUSH_AND_REAUTH`). **0** provider / ledger / push.
+
 ## [2.0.68] — 2026-08-10
 
 ### Fixed (Phase 10F-PROVIDER-DIAG)

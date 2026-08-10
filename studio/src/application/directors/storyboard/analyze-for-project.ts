@@ -73,6 +73,12 @@ export type StoryboardProjectDryRunResult = {
   idempotencyKeyVersion: string;
   /** True when `DIRECTOR_STORYBOARD_IDEMPOTENCY_SALT` is set (budget reauth identity). */
   idempotencySaltPresent: boolean;
+  /** OpenAI strict projection: must be 0 before provider. */
+  structuredSchemaOneOfCount: number;
+  /** `anyOf-compatible` when spokenContent unions are OpenAI-safe. */
+  structuredSchemaProjection: "anyOf-compatible" | "invalid";
+  /** Smoke gate: redacted provider error metadata capture is wired. */
+  providerErrorMetadataCapture: "ready";
   pricingConfigured: boolean;
   estimatedCostMinor?: number;
   currency?: string;
@@ -85,7 +91,19 @@ export type StoryboardProjectResult =
   | { status: "completed" | "existing"; storyboard: StoryboardProjectView; directorRunId: string }
   | { status: "already_running"; directorRunId: string; publicMessage: string }
   | { status: "needs_input"; missingInformation: Array<{ code: string; message: string; field?: string }>; warnings: Warning[]; directorRunId?: string }
-  | { status: "failed"; code: string; publicMessage: string; retryable: boolean; httpHint: 400 | 402 | 409 | 422 | 429 | 500 | 502 | 503 | 504; retryAfterSeconds?: number; provider?: "openai"; directorRunId?: string };
+  | {
+      status: "failed";
+      code: string;
+      publicMessage: string;
+      retryable: boolean;
+      httpHint: 400 | 402 | 409 | 422 | 429 | 500 | 502 | 503 | 504;
+      retryAfterSeconds?: number;
+      provider?: "openai";
+      /** Provider HTTP status when known (distinct from route httpHint). */
+      httpStatus?: number;
+      directorRunId?: string;
+      providerMetadata?: import("@/application/directors/marketing/failures").MarketingProviderFailureMetadata;
+    };
 
 export type StoryboardDirectorRunPort = {
   beginOrGet(input: {
@@ -159,6 +177,9 @@ function empty(partial: Partial<StoryboardProjectDryRunResult> & Pick<Storyboard
     schemaVersion: STORYBOARD_CANDIDATE_SCHEMA_VERSION,
     idempotencyKeyVersion: `${STORYBOARD_ANALYZER_PROMPT_VERSION}:${STORYBOARD_CANDIDATE_SCHEMA_VERSION}`,
     idempotencySaltPresent: false,
+    structuredSchemaOneOfCount: 0,
+    structuredSchemaProjection: "anyOf-compatible",
+    providerErrorMetadataCapture: "ready",
     pricingConfigured: false, warnings: [], ...partial,
   };
 }
@@ -266,6 +287,9 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
       schemaVersion: ai.schemaVersion,
       idempotencyKeyVersion: `${ai.promptVersion}:${ai.schemaVersion}`,
       idempotencySaltPresent: Boolean((env.DIRECTOR_STORYBOARD_IDEMPOTENCY_SALT ?? "").trim()),
+      structuredSchemaOneOfCount: ai.structuredSchemaOneOfCount,
+      structuredSchemaProjection: ai.structuredSchemaProjection,
+      providerErrorMetadataCapture: ai.providerErrorMetadataCapture,
       pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
       validations, warnings: ai.warnings,
       missingInformation: validations.filter((v) => !v.passed).map((v) => ({ code: v.code, message: v.message })),
@@ -358,7 +382,14 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
       if (run.status === "provider_failed") {
         await deps.directorRuns.failRun({ directorRunId: runId, workspaceId: deps.workspaceId, expectedRevision: begin.revision + 1, errorCode: run.failure.code, status: "failed", reservationId, correlationId: context.correlationId, ...failMetering });
         const mapped = httpStatusForMarketingFailure(run.failure.code);
-        return failed(run.failure.code, run.failure.publicMessage, mapped === 202 ? 500 : mapped, { retryable: run.failure.retryable, retryAfterSeconds: run.failure.retryAfterSeconds, provider: run.failure.provider, directorRunId: runId });
+        return failed(run.failure.code, run.failure.publicMessage, mapped === 202 ? 500 : mapped, {
+          retryable: run.failure.retryable,
+          retryAfterSeconds: run.failure.retryAfterSeconds,
+          provider: run.failure.provider,
+          httpStatus: run.failure.httpStatus,
+          directorRunId: runId,
+          providerMetadata: run.failure.providerMetadata,
+        });
       }
       if (run.status === "invalid") {
         await deps.directorRuns.failRun({ directorRunId: runId, workspaceId: deps.workspaceId, expectedRevision: begin.revision + 1, errorCode: "invalid_candidate", status: "failed", reservationId, correlationId: context.correlationId, ...failMetering });

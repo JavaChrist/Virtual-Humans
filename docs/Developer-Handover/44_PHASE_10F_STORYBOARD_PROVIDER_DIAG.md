@@ -83,12 +83,13 @@ Aucun changement de modèle, budget, prompt métier, ou validations Zod domaine.
 | Champ | Contrat |
 |---|---|
 | Run `f5b75018` | **immuable** |
-| Salt | **nouveau** (≠ `10f-auth-b-20260810`) |
-| Clé | distincte de `budget_exceeded` et `request_failed` |
+| Salt | **`10f-auth-b-retry2-20260810`** (préparé dans `45_…`) |
+| Clé | empreinte `0b7e8fb44e0acd4d` ≠ `abaa…` / `3f39…` |
 | attempt / retry_of | 1 / null |
 | estimate / réservation | recalcul dry-run (attendu **13¢** si knobs inchangés) |
 | Autorisation | **nouvelle** obligatoire |
 | Deploy | salt-ready + schéma post-fix |
+| Observabilité | HTTP/code/request-id/stage/attempts redacted — **ready** (`45_…`) |
 
 ---
 

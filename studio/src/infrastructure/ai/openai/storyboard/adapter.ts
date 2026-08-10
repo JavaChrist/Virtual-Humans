@@ -4,6 +4,7 @@ import type {
   StoryboardAnalyzerPort,
 } from "@/application/directors/storyboard";
 import type { DirectorRunContext } from "@/application/directors/storyboard/result";
+import { MarketingAnalyzerError } from "@/application/directors/marketing/failures";
 import {
   canExecuteStoryboardAi,
   isDirectorV2StoryboardAiEnabled,
@@ -12,7 +13,7 @@ import {
 import { logger } from "@/infrastructure/observability";
 import type { OpenAIResponsesClientPort } from "../contracts";
 import { parseOpenAIStoryboardConfig, type OpenAIStoryboardConfig } from "../config";
-import { OpenAIAiError } from "../errors";
+import { OpenAIAiError, isOpenAIAiError } from "../errors";
 import { buildAnalyzerMetering } from "../build-analyzer-metering";
 import { toAnalyzerError } from "../map-to-analyzer-failure";
 import {
@@ -32,6 +33,10 @@ import {
   getStoryboardCandidateTextFormat,
   STORYBOARD_CANDIDATE_SCHEMA_VERSION,
 } from "./schema";
+import {
+  buildStoryboardProviderFailureEvidence,
+  inferStoryboardFailureStage,
+} from "./provider-failure-evidence";
 
 export type OpenAIStoryboardAnalyzerDeps = {
   client: OpenAIResponsesClientPort;
@@ -79,6 +84,7 @@ export class OpenAIStoryboardAnalyzerAdapter implements StoryboardAnalyzerPort {
       mode: context.mode,
     });
 
+    let networkAttempts = 0;
     try {
       if (!isDirectorV2StoryboardAiEnabled(this.env) || !canExecuteStoryboardAi(this.env)) {
         throw new OpenAIAiError("storyboard_ai_disabled");
@@ -96,6 +102,7 @@ export class OpenAIStoryboardAnalyzerAdapter implements StoryboardAnalyzerPort {
           internalCode: mapped.blockingFindings[0]?.code,
         });
       }
+      networkAttempts = 1;
       const result = await this.client.create(
         {
           model: this.config.model,
@@ -129,7 +136,13 @@ export class OpenAIStoryboardAnalyzerAdapter implements StoryboardAnalyzerPort {
       try {
         candidate = parseStoryboardCandidateResponse(result);
       } catch (parseErr) {
-        throw toAnalyzerError(parseErr, { metering });
+        throw toAnalyzerError(parseErr, {
+          metering,
+          failureStage: "candidate_parse",
+          networkAttempts,
+          durationMs: this.nowMs() - started,
+          usagePresent: Boolean(usage),
+        });
       }
 
       logger.info("storyboard.ai.request.completed", logCtx, {
@@ -148,24 +161,52 @@ export class OpenAIStoryboardAnalyzerAdapter implements StoryboardAnalyzerPort {
 
       return { candidate, metering };
     } catch (e) {
-      const openaiErr =
-        e instanceof OpenAIAiError
-          ? e
-          : new OpenAIAiError("unknown", { internalCode: "adapter" });
-      const analyzerErr = toAnalyzerError(openaiErr);
+      const durationMs = this.nowMs() - started;
+      const openaiErr = isOpenAIAiError(e) ? e : undefined;
+      const stage = openaiErr
+        ? inferStoryboardFailureStage(openaiErr, networkAttempts)
+        : e instanceof MarketingAnalyzerError
+          ? (e.failure.providerMetadata?.failureStage ?? "candidate_parse")
+          : "request_build";
+      const analyzerErr =
+        e instanceof MarketingAnalyzerError
+          ? toAnalyzerError(e, {
+              metering: e.metering,
+              failureStage: stage,
+              networkAttempts,
+              durationMs,
+              usagePresent: Boolean(e.failure.providerMetadata?.usagePresent),
+            })
+          : toAnalyzerError(openaiErr ?? e, {
+              failureStage: stage,
+              networkAttempts,
+              durationMs,
+              usagePresent: false,
+            });
+      const evidence = buildStoryboardProviderFailureEvidence({
+        stage: analyzerErr.failure.providerMetadata?.failureStage ?? stage,
+        vhsFailureCode: analyzerErr.failure.code,
+        openaiErr,
+        durationMs,
+        networkAttempts,
+        usagePresent: analyzerErr.failure.providerMetadata?.usagePresent,
+      });
       logger.info("storyboard.ai.request.failed", logCtx, {
         model: this.config.model,
         promptVersion: STORYBOARD_ANALYZER_PROMPT_VERSION,
         schemaVersion: STORYBOARD_CANDIDATE_SCHEMA_VERSION,
-        durationMs: this.nowMs() - started,
+        durationMs: evidence.durationMs,
         failureCode: analyzerErr.failure.code,
         retryable: analyzerErr.failure.retryable,
         httpStatus: analyzerErr.failure.httpStatus,
         internalCode: analyzerErr.failure.internalCode,
-        openaiCode: openaiErr.code,
-        providerErrorCode: openaiErr.providerObs?.providerErrorCode,
-        providerErrorType: openaiErr.providerObs?.providerErrorType,
-        providerRequestId: openaiErr.providerObs?.providerRequestId,
+        openaiCode: openaiErr?.code,
+        providerErrorCode: evidence.providerErrorCode,
+        providerErrorType: evidence.providerErrorType,
+        providerRequestId: evidence.providerRequestId,
+        failureStage: evidence.stage,
+        networkAttempts: evidence.networkAttempts,
+        usagePresent: evidence.usagePresent,
       });
       throw analyzerErr;
     }

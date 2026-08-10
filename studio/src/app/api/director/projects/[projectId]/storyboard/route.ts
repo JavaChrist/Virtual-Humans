@@ -60,7 +60,25 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     }, { correlationId, mode: "execute" });
     if (result.status === "already_running") return obs.json({ status: result.status, directorRunId: result.directorRunId, error: { code: "run_in_progress", retryable: false, message: result.publicMessage } }, { status: 202 });
     if (result.status === "needs_input") return obs.json(result, { status: 422 });
-    if (result.status === "failed") return obs.json({ status: "failed", error: { code: result.code, retryable: result.retryable, message: result.publicMessage } }, { status: result.httpHint });
+    if (result.status === "failed") {
+      return obs.json(
+        {
+          status: "failed",
+          directorRunId: result.directorRunId,
+          error: {
+            code: result.code,
+            retryable: result.retryable,
+            message: result.publicMessage,
+            httpStatus: result.httpStatus,
+            provider: result.provider,
+            retryAfterSeconds: result.retryAfterSeconds,
+            // Redacted only — never prompts/bodies/schemas/secrets.
+            providerMetadata: result.providerMetadata,
+          },
+        },
+        { status: result.httpHint },
+      );
+    }
     return obs.json(result);
   } catch (error) {
     if (error instanceof V2SupabaseConfigError) return obs.json({ error: error.message }, { status: 503 });
