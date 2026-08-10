@@ -128,4 +128,4 @@ NO PUSH
 
 ## Suite
 
-Auth B Storyboard (execute réel sous flags bornés + salt idempotence) **encore requise** — autorisation séparée. Ne pas lancer Storyboard sans Auth B.
+Auth B Storyboard tentée — **BLOCKED** (redeploy stale sans salt → terminal_reuse, 0 provider). Voir `42_PHASE_10F_STORYBOARD_AUTH_B.md`. Budget Auth A inchangé (113 / available 20). Nouvelle autorisation Auth B encore requise.

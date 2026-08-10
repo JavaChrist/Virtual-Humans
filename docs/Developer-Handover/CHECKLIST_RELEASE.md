@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — autorisation humaine)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C), Script (10D) et Art texte (10E-V3) validés ; Storyboard 10F **BLOCKED** ; Auth A budget **PASS** (hard 113¢ / dispo 20¢) ; Auth B Storyboard encore requise ; média restent à autoriser ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C), Script (10D) et Art texte (10E-V3) validés ; Storyboard Auth B **BLOCKED** (stale deploy/salt) ; Auth A budget **PASS** (113¢ / 20¢) ; média restent à autoriser ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité (locale — Phase 9)
@@ -34,7 +34,7 @@
 - [ ] migrations additives appliquées **distantes** ;
 - [ ] app et workers compatibles déployés ;
 - [x] flags désactivés par défaut (code) ;
-- [ ] smoke tests providers bornés — Marketing / Creative / Script / Art texte : **PASS** ; Storyboard : **BLOCKED** (en attente Auth B) ; budget Auth A **PASS** ; média : à faire ;
+- [ ] smoke tests providers bornés — Marketing / Creative / Script / Art texte : **PASS** ; Storyboard : **BLOCKED** (Auth B à relancer sur deploy salt-ready) ; budget Auth A **PASS** ; média : à faire ;
 - [ ] canary puis montée progressive ;
 - [ ] métriques et logs surveillés.
 

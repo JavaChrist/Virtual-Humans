@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.66] — 2026-08-10
+
+### Validation provider (Phase 10F-AUTH-B) — BLOCKED
+
+- Préconditions + dry-run live OK (13¢ / `gpt-5.6` / `medium` / `4096` / `storyboard-analyzer-v2`).
+- Execute unique → HTTP 500 `internal_error` : redeploy d’ouverture sur déploiement **stale** (sans salt) → clé = run `budget_exceeded` → `director_run_terminal_reuse`.
+- **0** appel OpenAI ; **0** run/ledger/réservation Auth B ; `storyboard_project` absent ; run `b446a0ed` immuable.
+- Salt Production `10f-auth-b-20260810` posé ; fermeture flags + redeploy OFF ; Production alias sur HEAD salt-ready OFF.
+- Rapport : `42_PHASE_10F_STORYBOARD_AUTH_B.md`. Checkpoint local — **aucun push**.
+
 ## [2.0.65] — 2026-08-10
 
 ### Changed (Phase 10F-BUDGET-AUTH-A)

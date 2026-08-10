@@ -191,4 +191,5 @@ avec audit_log, sans ouvrir aucun flag Director, sans provider,
 sans Storyboard, sans média, sans worker.
 ```
 
-**Statut Auth A :** appliquée — voir `41_PHASE_10F_BUDGET_AUTH_A.md` (`PASS`, hard limit **113¢**, available **20¢**). Auth B Storyboard encore requise.
+**Statut Auth A :** appliquée — voir `41_PHASE_10F_BUDGET_AUTH_A.md` (`PASS`, hard limit **113¢**, available **20¢**).  
+**Statut Auth B :** tentée — `42_PHASE_10F_STORYBOARD_AUTH_B.md` (`BLOCKED`, 0 provider ; salt prêt, redéployer depuis HEAD salt-ready).

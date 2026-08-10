@@ -39,8 +39,10 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F** ⚠️ Smoke Storyboard texte **BLOCKED** : dry-run live OK (13¢) ; `budget_exceeded` (hard limit 100 / restant 7) — **0** appel provider ; **0** storyboard_project ; flags OFF (`39_PHASE_10F_FIRST_REAL_STORYBOARD_TEXT_SMOKE.md`).
 - **Phase 10F-BUDGET-AUDIT** ✅ Ledger cohérent (93¢ commits / 7¢ dispo) ; Auth A→113¢ + Auth B (salt) préparés ; **0** write (`40_PHASE_10F_WORKSPACE_BUDGET_AUDIT.md`).
 - **Phase 10F-BUDGET-AUTH-A** ✅ Hard limit **100→113¢** (+13) + audit_log ; available **20¢** ; **0** provider / réservation / Storyboard ; runtime OFF (`41_PHASE_10F_BUDGET_AUTH_A.md`).
-- **P1 budget** : `WORKSPACE_HARD_LIMIT_EXHAUSTED` **levé** (Auth A) ; run terminal `b446a0ed-…` immuable → Auth B via salt (pas de bump prompt).
-- **Prochaine porte** : Auth B Storyboard après autorisation séparée ; média ensuite ; aucun push sans décision séparée.
+- **Phase 10F-AUTH-B** ⚠️ Storyboard texte **BLOCKED** : dry-run OK ; execute 500 (redeploy stale sans salt → terminal_reuse) — **0** provider ; flags OFF (`42_PHASE_10F_STORYBOARD_AUTH_B.md`).
+- **P1 ops Auth B** : toujours ouvrir depuis déploiement **HEAD/salt-ready** ; dry-run doit montrer `idempotencySaltPresent=true` ; optionnel mapper `director_run_terminal_reuse` côté Storyboard.
+- **P1 budget** : Auth A OK ; run `b446a0ed-…` immuable ; salt `10f-auth-b-20260810` prêt pour reauth.
+- **Prochaine porte** : nouvelle autorisation Auth B Storyboard (deploy salt-ready) ; média ensuite ; aucun push sans décision séparée.
 
 ## P2 — durcissement
 

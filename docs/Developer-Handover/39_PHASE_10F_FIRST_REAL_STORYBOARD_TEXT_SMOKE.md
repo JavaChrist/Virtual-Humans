@@ -156,7 +156,7 @@ Aucun upstream replay. Aucun média / job / worker.
 
 ## Suite recommandée (hors scope)
 
-Voir audit non payant : `40_PHASE_10F_WORKSPACE_BUDGET_AUDIT.md` (`READY_FOR_BUDGET_AUTH`).
+Voir audit : `40_PHASE_10F_WORKSPACE_BUDGET_AUDIT.md` · Auth A : `41_…` · Auth B tentée : `42_PHASE_10F_STORYBOARD_AUTH_B.md` (`BLOCKED`).
 
 1. **Auth A** : relever `hard_limit_minor` 100 → **113** (+13) — script préparé, non exécuté.
 2. **Auth B** : dry-run live + salt d’idempotence (contrat v2 inchangé) + **un** appel Storyboard.
