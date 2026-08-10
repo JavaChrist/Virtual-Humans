@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.63] — 2026-08-10
+
+### Validation provider réelle (Phase 10F) — BLOCKED
+
+- Smoke Storyboard texte : dry-run live exact (`gpt-5.6` / `medium` / `4096` / 13¢ / `storyboard-analyzer-v2`).
+- Réservation refusée : hard limit workspace **100¢**, commits **93¢**, reste **7¢** < 13¢ → HTTP 402 `budget_exceeded`.
+- **0** appel OpenAI ; **0** `storyboard_project` ; **0** ledger 10F ; run failed `b446a0ed-…` immuable.
+- Flags refermés OFF + redeploy ; `CURRENT_RUNTIME_REAL_AI=OFF` prouvé.
+- Rapport : `39_PHASE_10F_FIRST_REAL_STORYBOARD_TEXT_SMOKE.md` (BLOCKED). Checkpoint local — **aucun push**.
+
 ## [2.0.62] — 2026-08-10
 
 ### Added (Phase 10F-PREP)
