@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.58] — 2026-08-10
+
+### Validation provider réelle (Phase 10E) — BLOCKED
+
+- Smoke Art texte réel : **1** appel OpenAI `gpt-5.6` après dry-run live exact (13¢ / `medium` / 4096).
+- Candidat rejeté domaine : `invalid_candidate` (« Continuité lieu ») — **0** `visual_direction` actif ; HTTP 422.
+- Ledger réconcilié : **13¢** réservés / **12¢** commités / **1¢** libérés ; **0** retry / **0** Storyboard / **0** média / **0** worker.
+- Flags refermés OFF + redeploy ; `CURRENT_RUNTIME_REAL_AI=OFF` prouvé.
+- Rapport : `34_PHASE_10E_FIRST_REAL_ART_TEXT_SMOKE.md` (BLOCKED). Checkpoint local — **aucun push**.
+
 ## [2.0.57] — 2026-08-10
 
 ### Added (Phase 10E-PREP)
