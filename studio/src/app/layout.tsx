@@ -16,14 +16,14 @@ export const metadata: Metadata = {
     title: "VH Studio",
   },
   icons: {
-    // ?v=8 : casse le cache navigateur/OS pour forcer le rechargement du favicon.
+    // ?v=9 : casse le cache navigateur/OS pour forcer le rechargement du favicon.
     icon: [
-      { url: "/icon.svg?v=8", type: "image/svg+xml" },
-      { url: "/favicon.ico?v=8", sizes: "48x48", type: "image/x-icon" },
-      { url: "/icons/icon-192.png?v=8", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512.png?v=8", sizes: "512x512", type: "image/png" },
+      { url: "/icon.svg?v=9", type: "image/svg+xml" },
+      { url: "/favicon.ico?v=9", sizes: "48x48", type: "image/x-icon" },
+      { url: "/icons/icon-192.png?v=9", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png?v=9", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/icons/apple-touch-icon.png?v=8", sizes: "180x180", type: "image/png" }],
+    apple: [{ url: "/icons/apple-touch-icon.png?v=9", sizes: "180x180", type: "image/png" }],
   },
 };
 

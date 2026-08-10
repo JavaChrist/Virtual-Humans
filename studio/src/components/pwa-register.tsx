@@ -6,10 +6,30 @@ import { useEffect, useState } from "react";
  * Enregistre le service worker (installable + offline) ET propose une mini-modale
  * "Mise à jour disponible" quand un nouveau déploiement est prêt.
  *
+ * Politique locale :
+ * - `next dev` : SW OFF par défaut (évite les caches qui combattent HMR/Turbopack).
+ * - `next start` / Production : SW ON même sur localhost (modale testable).
+ * - Opt-in dev : NEXT_PUBLIC_VH_PWA_LOCAL=1|true pour forcer le SW en `next dev`.
+ *
  * Important : en Next.js le useEffect tourne souvent APRÈS l'événement window "load".
  * Il ne faut donc PAS attendre "load" sinon update() ne part jamais et l'UI reste
  * coincée sur une vieille version en cache.
  */
+function shouldRegisterServiceWorker(): boolean {
+  if (process.env.NODE_ENV === "production") return true;
+  const raw = process.env.NEXT_PUBLIC_VH_PWA_LOCAL?.trim().toLowerCase();
+  return raw === "1" || raw === "true";
+}
+
+async function clearLocalServiceWorkers(): Promise<void> {
+  const regs = await navigator.serviceWorker.getRegistrations?.();
+  regs?.forEach((r) => r.unregister());
+  if ("caches" in window) {
+    const keys = await caches.keys();
+    await Promise.all(keys.map((k) => caches.delete(k)));
+  }
+}
+
 export function PwaRegister() {
   const [waiting, setWaiting] = useState<ServiceWorker | null>(null);
 
@@ -17,20 +37,8 @@ export function PwaRegister() {
     if (typeof window === "undefined") return;
     if (!("serviceWorker" in navigator)) return;
 
-    const host = window.location.hostname;
-    const isLocal =
-      host === "localhost" ||
-      host === "127.0.0.1" ||
-      /^(10|127|192\.168)\./.test(host) ||
-      host.endsWith(".local");
-
-    if (process.env.NODE_ENV !== "production" || isLocal) {
-      navigator.serviceWorker.getRegistrations?.().then((regs) => {
-        regs.forEach((r) => r.unregister());
-      });
-      if ("caches" in window) {
-        caches.keys().then((keys) => keys.forEach((k) => caches.delete(k)));
-      }
+    if (!shouldRegisterServiceWorker()) {
+      void clearLocalServiceWorkers();
       return;
     }
 
@@ -88,7 +96,10 @@ export function PwaRegister() {
       });
 
     return () => {
-      navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+      navigator.serviceWorker.removeEventListener(
+        "controllerchange",
+        onControllerChange,
+      );
       if (updateTimer) clearInterval(updateTimer);
       stopWatch?.();
     };
@@ -124,10 +135,10 @@ export function PwaRegister() {
           </div>
         </div>
         <div className="mt-4 flex justify-end gap-2">
-          <button className="btn btn-ghost" onClick={() => setWaiting(null)}>
+          <button type="button" className="btn btn-ghost" onClick={() => setWaiting(null)}>
             Plus tard
           </button>
-          <button className="btn btn-primary" onClick={applyUpdate}>
+          <button type="button" className="btn btn-primary" onClick={applyUpdate}>
             Mettre à jour
           </button>
         </div>

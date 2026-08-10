@@ -16,6 +16,9 @@ import {
 const isDev = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
+  // Masque le badge Next / React / Vercel (devtools) en bas de page en local.
+  // Les overlays d’erreur restent affichés si une erreur survient.
+  devIndicators: false,
   ...(isDev
     ? {}
     : {
