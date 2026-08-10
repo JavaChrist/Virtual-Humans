@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.57] — 2026-08-10
+
+### Added (Phase 10E-PREP)
+
+- Préparation smoke Art texte sans appel provider ni média : scripts verify / dry-run / flags / smoke dry-only / replay.
+- Réutilisation MarketingPlan + CreativeConcept + VideoScript ; Marketing/Creative/Script/Storyboard/worker/média exclus.
+- Dry-run Art : estimate **13¢**, réservation prévue **13¢**, plafond proposé **100¢** ; knobs Production pattern `gpt-5.6`/`medium`/`4096` (à confirmer live).
+- Dry-run Art expose `reasoningEffort` + `maxOutputTokens`. Rapport : `33_PHASE_10E_ART_TEXT_SMOKE_PREP.md`. Aucune exécution 10E, aucun push.
+
 ## [2.0.56] — 2026-08-10
 
 ### Validation provider réelle (Phase 10D REAUTH)

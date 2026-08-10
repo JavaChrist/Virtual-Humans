@@ -12,7 +12,7 @@ import { ART_ANALYZER_PROMPT_VERSION, ART_ANALYZER_SYSTEM_PROMPT } from "./promp
 import { getArtCandidateJsonSchema, ART_CANDIDATE_SCHEMA_VERSION } from "./schema";
 
 export type OpenAIArtDryRunResult = {
-  executable: boolean; providerCalled: false; model: string; promptVersion: string; schemaVersion: string;
+  executable: boolean; providerCalled: false; model: string; reasoningEffort: string; promptVersion: string; schemaVersion: string;
   pricingConfigured: boolean; validations: Array<{ code: string; passed: boolean; message: string }>;
   warnings: Array<{ code: string; message: string }>;
   /** Domain readiness missing codes (e.g. character_snapshot_missing). */
@@ -31,8 +31,8 @@ export function runOpenAIArtDryRun(
   const env = deps.env ?? (process.env as Record<string, string | undefined>);
   let config: OpenAIArtConfig;
   try { config = deps.config ?? parseOpenAIArtConfig(env); } catch (e) {
-    return { executable: false, providerCalled: false, model: "unknown", promptVersion: ART_ANALYZER_PROMPT_VERSION,
-      schemaVersion: ART_CANDIDATE_SCHEMA_VERSION, pricingConfigured: false,
+    return { executable: false, providerCalled: false, model: "unknown", reasoningEffort: "unknown",
+      promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION, pricingConfigured: false,
       validations: [{ code: "config", passed: false, message: e instanceof Error ? e.message : "Configuration invalide." }],
       warnings: [], readinessMissing: [], maxOutputTokens: 0 };
   }
@@ -62,6 +62,7 @@ export function runOpenAIArtDryRun(
   }));
   return { executable: canExecuteArtAi(env) && snap.apiKeyPresent && !mapped.blockingFindings.length &&
       readiness.executable && (pricingConfigured || !config.requireFirmPricing), providerCalled: false,
-    model: config.model, promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
+    model: config.model, reasoningEffort: config.reasoningEffort,
+    promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
     pricingConfigured, validations, warnings, readinessMissing, approximateInputTokens, maxOutputTokens: config.maxOutputTokens };
 }

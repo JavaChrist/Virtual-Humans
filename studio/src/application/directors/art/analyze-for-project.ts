@@ -138,6 +138,8 @@ export type ArtProjectDryRunResult = {
   videoScriptRevision: number;
   videoScriptArtifactId: string;
   model: string;
+  reasoningEffort: string;
+  maxOutputTokens: number;
   promptVersion: string;
   schemaVersion: string;
   pricingConfigured: boolean;
@@ -287,7 +289,8 @@ function empty(partial: Partial<ArtProjectDryRunResult> & Pick<ArtProjectDryRunR
     executable: false, providerCalled: false, executionAvailable: false,
     briefRevision: 0, briefArtifactId: "", marketingPlanRevision: 0, marketingPlanArtifactId: "",
     creativeConceptRevision: 0, creativeConceptArtifactId: "", videoScriptRevision: 0, videoScriptArtifactId: "",
-    model: DEFAULT_OPENAI_ART_MODEL, promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
+    model: DEFAULT_OPENAI_ART_MODEL, reasoningEffort: "unknown", maxOutputTokens: 0,
+    promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
     pricingConfigured: false, warnings: [], ...partial,
   };
 }
@@ -326,7 +329,8 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
         marketingPlanRevision: plan.revision, marketingPlanArtifactId: plan.artifactId,
         creativeConceptRevision: concept.revision, creativeConceptArtifactId: concept.artifactId,
         videoScriptRevision: script.revision, videoScriptArtifactId: script.artifactId,
-        model: DEFAULT_OPENAI_ART_MODEL, promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
+        model: DEFAULT_OPENAI_ART_MODEL, reasoningEffort: "unknown", maxOutputTokens: 0,
+        promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
         pricingConfigured: false, warnings: [],
         validations: [{ code: character.code, passed: false, message: character.message }],
         missingInformation: [{ code: character.code, message: character.message, field: character.field }],
@@ -381,13 +385,17 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
         };
       }
     }
+    const e2eCfg = e2e ? e2eFakeOpenAiConfig() : null;
     return {
       executable: domainExecutable, providerCalled: false, executionAvailable,
       briefRevision: brief.revision, briefArtifactId: brief.artifactId,
       marketingPlanRevision: plan.revision, marketingPlanArtifactId: plan.artifactId,
       creativeConceptRevision: concept.revision, creativeConceptArtifactId: concept.artifactId,
       videoScriptRevision: script.revision, videoScriptArtifactId: script.artifactId,
-      model: e2e ? e2eFakeOpenAiConfig().model : ai.model, promptVersion: ai.promptVersion, schemaVersion: ai.schemaVersion,
+      model: e2eCfg?.model ?? ai.model,
+      reasoningEffort: e2eCfg?.reasoningEffort ?? ai.reasoningEffort,
+      maxOutputTokens: e2eCfg?.maxOutputTokens ?? ai.maxOutputTokens,
+      promptVersion: ai.promptVersion, schemaVersion: ai.schemaVersion,
       pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
       validations: ai.validations, warnings: ai.warnings,
       missingInformation,
