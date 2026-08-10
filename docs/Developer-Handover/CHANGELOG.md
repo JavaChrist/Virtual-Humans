@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.59] — 2026-08-10
+
+### Fixed (Phase 10E-DIAG)
+
+- Diagnostic `invalid_candidate` / continuité lieu : Zod OK, rejet métier `validateContinuityAgainstSegments` ; candidat brut non persisté ; **0** provider.
+- Prompt Art `art-analyzer-v2` → **`art-analyzer-v3`** (contrat `continuityKey` / required stable) ; validateur inchangé (fail-closed).
+- Tests de reproduction Zod vs métier + non-régression. Rapport : `35_PHASE_10E_ART_INVALID_CANDIDATE_DIAG.md` (`READY_FOR_RETRY_PREP`). Aucun push.
+
 ## [2.0.58] — 2026-08-10
 
 ### Validation provider réelle (Phase 10E) — BLOCKED

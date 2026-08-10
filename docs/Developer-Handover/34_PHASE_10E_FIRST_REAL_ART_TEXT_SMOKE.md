@@ -197,7 +197,13 @@ attempt_number = 1
 ```text
 P0 = none (runtime OFF prouvé)
 P1 = BACKUP_PRESENT_RESTORE_UNPROVEN (conservé)
-P1 = ART_INVALID_CANDIDATE_CONTINUITE_LIEU (smoke Art texte non validé — réauth / correctif domaine requis avant nouvel appel)
+P1 = ART_INVALID_CANDIDATE_CONTINUITE_LIEU — diagnostiqué + prompt v3 (voir 35_PHASE_10E_ART_INVALID_CANDIDATE_DIAG.md)
 ```
 
 Aucun push. **Pas de Storyboard. Pas de média.**
+
+---
+
+## Suite DIAG (post-clôture 10E)
+
+Diagnostic sans provider : rejet métier `validateContinuityAgainstSegments` (lieu required stable vs `continuityKey` divergents). Candidat brut non conservé. Correction locale `art-analyzer-v3`. Prochaine porte = nouvel execute autorisé (pas `/art/retry`).

@@ -63,10 +63,10 @@ test("nouveau contrat → nouvelle clé idempotence vs v1/1.0.0", () => {
     promptVersion: ART_ANALYZER_PROMPT_VERSION,
     schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
   });
-  assert.equal(ART_ANALYZER_PROMPT_VERSION, "art-analyzer-v2");
+  assert.equal(ART_ANALYZER_PROMPT_VERSION, "art-analyzer-v3");
   assert.equal(ART_CANDIDATE_SCHEMA_VERSION, "1.1.0");
   assert.notEqual(legacy, next);
-  assert.match(next, /art-analyzer-v2:1\.1\.0$/);
+  assert.match(next, /art-analyzer-v3:1\.1\.0$/);
   assert.match(legacy, /art-analyzer-v1:1\.0\.0$/);
   // Fingerprint divergence
   const fpLegacy = createHash("sha256").update(legacy).digest("hex");
@@ -77,12 +77,12 @@ test("nouveau contrat → nouvelle clé idempotence vs v1/1.0.0", () => {
 test("futur run nouveau contrat — attempt 1 / retry_of null (contrat)", () => {
   // Documented expectation: changing prompt/schema versions creates a fresh
   // begin_or_get identity, not attempt 3 of the legacy timeout run.
-  assert.equal(ART_ANALYZER_PROMPT_VERSION, "art-analyzer-v2");
+  assert.equal(ART_ANALYZER_PROMPT_VERSION, "art-analyzer-v3");
   assert.equal(ART_CANDIDATE_SCHEMA_VERSION, "1.1.0");
   const expectedIdentity = {
     attempt_number: 1,
     retry_of_run_id: null as string | null,
-    promptVersion: "art-analyzer-v2",
+    promptVersion: "art-analyzer-v3",
     schemaVersion: "1.1.0",
   };
   assert.equal(expectedIdentity.attempt_number, 1);

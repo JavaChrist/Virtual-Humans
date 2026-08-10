@@ -132,7 +132,7 @@ function directorPort(opts?: {
           attemptNumber: opts.failedRun.attemptNumber,
           errorCode: opts.failedRun.errorCode,
           modelId: "gpt-5.6-terra",
-          promptVersion: "art-analyzer-v2",
+          promptVersion: "art-analyzer-v3",
           schemaVersion: "1.1.0",
           inputArtifactId: SID,
           inputRevision: 1,

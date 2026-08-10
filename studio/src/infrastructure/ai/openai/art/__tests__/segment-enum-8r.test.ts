@@ -23,8 +23,8 @@ function dig(schema: Record<string, unknown>, path: string[]): Record<string, un
   return cur && typeof cur === "object" ? (cur as Record<string, unknown>) : undefined;
 }
 
-test("contrat Art v2 / schema 1.1.0", () => {
-  assert.equal(ART_ANALYZER_PROMPT_VERSION, "art-analyzer-v2");
+test("contrat Art v3 / schema 1.1.0", () => {
+  assert.equal(ART_ANALYZER_PROMPT_VERSION, "art-analyzer-v3");
   assert.equal(ART_CANDIDATE_SCHEMA_VERSION, "1.1.0");
   assert.equal(ART_CANDIDATE_SCHEMA_NAME, "art-analysis-candidate-v1_1");
   const fmt = getArtCandidateTextFormat({
@@ -106,7 +106,7 @@ test("character asset enums optionnels lorsque snapshot fourni", () => {
   assert.deepEqual(outfitEnum, ["outfit-casual"]);
 });
 
-test("prompt v2 interdit l'invention d'IDs (garde-fou textuel)", async () => {
+test("prompt v3 interdit l'invention d'IDs (garde-fou textuel)", async () => {
   const { ART_ANALYZER_SYSTEM_PROMPT } = await import("../prompt");
   assert.match(ART_ANALYZER_SYSTEM_PROMPT, /ALLOWED_SCRIPT_SEGMENT_IDS|VIDEO_SCRIPT\.segments/);
   assert.match(ART_ANALYZER_SYSTEM_PROMPT, /Never invent segment identifiers/i);
