@@ -167,16 +167,19 @@ const { error: auditErr } = await db.from("audit_log").insert({
     deltaMinor: NEW_HARD - oldHard,
     exposureCommitted: exposure,
     availableAfter: NEW_HARD - held - exposure,
+    motif: "phase_10f_storyboard_budget_authorization",
     script: "phase-10f-raise-workspace-hard-limit.mjs",
     requestId: randomUUID(),
   },
   created_at: now,
 });
 if (auditErr) {
-  console.error(
-    "WARN: hard limit updated but audit_log insert failed:",
-    auditErr.message
-  );
+  await db
+    .from("workspace_budget_policies")
+    .update({ hard_limit_minor: oldHard, updated_at: new Date().toISOString() })
+    .eq("workspace_id", ws)
+    .eq("hard_limit_minor", NEW_HARD);
+  fail(`audit_log insert failed — hard limit rolled back: ${auditErr.message}`);
 }
 
 const evidence = {

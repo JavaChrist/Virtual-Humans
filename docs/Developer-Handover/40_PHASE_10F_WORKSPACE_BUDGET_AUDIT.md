@@ -182,7 +182,7 @@ Le smoke refuse l’execute sans évidence budget-ready + salt.
 
 ---
 
-## Autorisation Budget A exacte requise
+## Autorisation Budget A
 
 ```text
 J’autorise la Phase 10F-BUDGET-AUTH-A : relever workspace_budget_policies.hard_limit_minor
@@ -190,3 +190,5 @@ de 100¢ à 113¢ (+13¢) sur le workspace du projet 984507af-…,
 avec audit_log, sans ouvrir aucun flag Director, sans provider,
 sans Storyboard, sans média, sans worker.
 ```
+
+**Statut Auth A :** appliquée — voir `41_PHASE_10F_BUDGET_AUTH_A.md` (`PASS`, hard limit **113¢**, available **20¢**). Auth B Storyboard encore requise.

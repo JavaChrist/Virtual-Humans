@@ -38,8 +38,9 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F-PREP** ✅ Préparation Storyboard texte sans provider/média : amont Marketing+Creative+Script+VisualDirection réutilisés, dry-run estimate 13¢ / plafond 100¢, prompt `storyboard-analyzer-v2` ; **aucune** exécution Storyboard réelle (`38_PHASE_10F_STORYBOARD_TEXT_SMOKE_PREP.md`).
 - **Phase 10F** ⚠️ Smoke Storyboard texte **BLOCKED** : dry-run live OK (13¢) ; `budget_exceeded` (hard limit 100 / restant 7) — **0** appel provider ; **0** storyboard_project ; flags OFF (`39_PHASE_10F_FIRST_REAL_STORYBOARD_TEXT_SMOKE.md`).
 - **Phase 10F-BUDGET-AUDIT** ✅ Ledger cohérent (93¢ commits / 7¢ dispo) ; Auth A→113¢ + Auth B (salt) préparés ; **0** write (`40_PHASE_10F_WORKSPACE_BUDGET_AUDIT.md`).
-- **P1 budget** : `WORKSPACE_HARD_LIMIT_EXHAUSTED` — en attente Auth A ; run terminal `b446a0ed-…` → salt reauth (pas de bump prompt).
-- **Prochaine porte** : Auth A budget puis Auth B Storyboard après autorisations séparées ; média ensuite ; aucun push sans décision séparée.
+- **Phase 10F-BUDGET-AUTH-A** ✅ Hard limit **100→113¢** (+13) + audit_log ; available **20¢** ; **0** provider / réservation / Storyboard ; runtime OFF (`41_PHASE_10F_BUDGET_AUTH_A.md`).
+- **P1 budget** : `WORKSPACE_HARD_LIMIT_EXHAUSTED` **levé** (Auth A) ; run terminal `b446a0ed-…` immuable → Auth B via salt (pas de bump prompt).
+- **Prochaine porte** : Auth B Storyboard après autorisation séparée ; média ensuite ; aucun push sans décision séparée.
 
 ## P2 — durcissement
 

@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.65] — 2026-08-10
+
+### Changed (Phase 10F-BUDGET-AUTH-A)
+
+- `workspace_budget_policies.hard_limit_minor` : **100¢ → 113¢** (+13¢) sur le workspace du projet `984507af-…`.
+- `audit_log` : 1 entrée redacted (`corr-10f-budget-auth-a-…`, motif `phase_10f_storyboard_budget_authorization`).
+- Exposure commits **93¢** inchangée ; disponible **7 → 20** ; **0** réservation / ledger / provider / Storyboard / flags.
+- Rapport : `41_PHASE_10F_BUDGET_AUTH_A.md` (`PASS`). `verify-budget-ready` vert (non payant). Aucun push.
+
 ## [2.0.64] — 2026-08-10
 
 ### Added (Phase 10F-BUDGET-AUDIT)
