@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.77] — 2026-08-11
+
+### Fixed (Phase 10F-ALL-CONTINUITY-DIAG)
+
+- Cause `invalid_candidate` v3 : map limitée aux clés `location` alors que le validateur exige tous les tokens projetés (ex. `lighting:studio|cool`, pipe opaque).
+- Prompt **`storyboard-analyzer-v4`** + `REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID` ; inventaire/fingerprint dry-run ; validateur métier inchangé.
+- Tests inventaire / scopes / opaque / required-advisory ; **0** provider. Rapport : `53_PHASE_10F_STORYBOARD_ALL_CONTINUITY_DIAG.md` (`READY_FOR_V4_PREP`). Aucun push.
+
 ## [2.0.76] — 2026-08-10
 
 ### Validation provider (Phase 10F-V3-EXECUTE) — BLOCKED

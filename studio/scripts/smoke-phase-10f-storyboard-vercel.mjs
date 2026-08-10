@@ -29,7 +29,7 @@ const PROJECT_ID =
   process.env.PHASE_10F_PROJECT_ID || "984507af-a89e-4644-8ea3-344797baa974";
 const DRY_ONLY = process.env.PHASE_10F_DRY_ONLY !== "0";
 const ALLOW_EXECUTE = process.env.PHASE_10F_ALLOW_EXECUTE === "1";
-const EXPECTED_PROMPT = "storyboard-analyzer-v3";
+const EXPECTED_PROMPT = "storyboard-analyzer-v4";
 const EXPECTED_SCHEMA = "1.0.0";
 
 function fail(msg, code = 1) {
@@ -226,9 +226,12 @@ async function main() {
   if (dryBody.existingStoryboard) {
     fail("storyboard_project already active — refuse smoke");
   }
-  if (dryBody.promptVersion === "storyboard-analyzer-v2") {
+  if (
+    dryBody.promptVersion === "storyboard-analyzer-v2" ||
+    dryBody.promptVersion === "storyboard-analyzer-v3"
+  ) {
     fail(
-      "BLOCKED: accidental v2 prompt — Phase 10F-V3 refuses storyboard-analyzer-v2 scripts/runtime"
+      `BLOCKED: accidental ${dryBody.promptVersion} — Phase 10F-ALL-CONTINUITY requires storyboard-analyzer-v4`
     );
   }
   if (dryBody.promptVersion !== EXPECTED_PROMPT) {
@@ -236,15 +239,29 @@ async function main() {
       `BLOCKED_CONFIG_DIVERGENCE: promptVersion=${dryBody.promptVersion} expected=${EXPECTED_PROMPT}`
     );
   }
-  if (dryBody.requiredLocationKeyCount !== 5) {
+  if (dryBody.requiredContinuityCoverage !== "complete") {
     fail(
-      `BLOCKED: requiredLocationKeyCount=${dryBody.requiredLocationKeyCount} expected=5`
+      `BLOCKED: requiredContinuityCoverage=${dryBody.requiredContinuityCoverage} expected=complete`
     );
   }
-  if (dryBody.requiredLocationKeyCoverage !== "complete") {
+  if (
+    typeof dryBody.requiredContinuityTokenCount !== "number" ||
+    dryBody.requiredContinuityTokenCount < 1
+  ) {
     fail(
-      `BLOCKED: requiredLocationKeyCoverage=${dryBody.requiredLocationKeyCoverage} expected=complete`
+      `BLOCKED: requiredContinuityTokenCount=${dryBody.requiredContinuityTokenCount}`
     );
+  }
+  if (
+    typeof dryBody.requiredContinuityScopeCount !== "number" ||
+    dryBody.requiredContinuityScopeCount < 1
+  ) {
+    fail(
+      `BLOCKED: requiredContinuityScopeCount=${dryBody.requiredContinuityScopeCount}`
+    );
+  }
+  if (!dryBody.requiredContinuityTokensFingerprint) {
+    fail("BLOCKED: requiredContinuityTokensFingerprint missing");
   }
   if (dryBody.structuredSchemaOneOfCount !== 0) {
     fail(

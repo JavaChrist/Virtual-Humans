@@ -76,16 +76,14 @@ function withProductionLocationKey(
 }
 
 test("V3-RETRY-PREP — prompt/schema contract forbids v2 identity", () => {
-  assert.equal(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v3");
+  assert.equal(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v4");
   assert.notEqual(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v2");
   assert.match(
     STORYBOARD_ANALYZER_SYSTEM_PROMPT,
-    /REQUIRED_LOCATION_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
-  assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /location:<continuityKey>/);
   assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /never|character-for-character/i);
-  assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /never translate|never invent|MUST keep/i);
-});
+  });
 
 test("V3-RETRY-PREP — five segments require location:espace-numerique-principal", () => {
   const chain = withProductionLocationKey(makeStoryboardChain());
@@ -93,16 +91,16 @@ test("V3-RETRY-PREP — five segments require location:espace-numerique-principa
   const mapped = mapStoryboardAnalysisRequest(chain);
   assert.match(
     mapped.userMessage,
-    /REQUIRED_LOCATION_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
   const block = mapped.userMessage.match(
-    /\[DATA:REQUIRED_LOCATION_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID\]\n([\s\S]*?)\n\[\/DATA:REQUIRED_LOCATION_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID\]/,
+    /\[DATA:REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID\]\n([\s\S]*?)\n\[\/DATA:REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID\]/,
   );
   assert.ok(block, "required map delimiters missing");
-  const map = JSON.parse(block![1]!) as Record<string, string>;
+  const map = JSON.parse(block![1]!) as Record<string, string[]>;
   assert.equal(Object.keys(map).length, 5);
   for (const seg of chain.visualDirection.segments) {
-    assert.equal(map[seg.id], "location:espace-numerique-principal");
+    assert.ok(map[seg.id]?.includes("location:espace-numerique-principal"));
   }
 });
 
@@ -393,7 +391,7 @@ test("V3-RETRY-PREP — future attempt/retry_of + max 1 call + runtime fail-clos
   const future = {
     attempt_number: 1,
     retry_of_run_id: null as string | null,
-    prompt: "storyboard-analyzer-v3",
+    prompt: STORYBOARD_ANALYZER_PROMPT_VERSION,
     schemas: "1.0.0 / 1.0.0",
     maximumFutureCalls: 1,
     automaticRetry: "forbidden",
@@ -406,12 +404,12 @@ test("V3-RETRY-PREP — future attempt/retry_of + max 1 call + runtime fail-clos
   };
   assert.equal(future.attempt_number, 1);
   assert.equal(future.retry_of_run_id, null);
-  assert.equal(future.prompt, STORYBOARD_ANALYZER_PROMPT_VERSION);
+  assert.equal(future.prompt, "storyboard-analyzer-v4");
   assert.equal(future.maximumFutureCalls, 1);
   assert.equal(future.refuseV2Scripts, true);
 });
 
-test("V3-RETRY-PREP — schema projection + dry-run location coverage gates", () => {
+test("V3-RETRY-PREP — schema projection + dry-run continuity coverage gates", () => {
   const report = inspectStoryboardStructuredSchemaProjection();
   assert.equal(report.structuredSchemaOneOfCount, 0);
   assert.equal(report.structuredSchemaProjection, "anyOf-compatible");
@@ -433,30 +431,31 @@ test("V3-RETRY-PREP — schema projection + dry-run location coverage gates", ()
       },
     },
   );
-  assert.equal(dry.promptVersion, "storyboard-analyzer-v3");
+  assert.equal(dry.promptVersion, "storyboard-analyzer-v4");
   assert.equal(dry.structuredSchemaOneOfCount, 0);
-  assert.equal(dry.requiredLocationKeyCount, 5);
-  assert.equal(dry.requiredLocationKeyCoverage, "complete");
+  assert.equal(dry.requiredContinuityCoverage, "complete");
+  assert.ok(dry.requiredContinuityTokenCount >= 5);
   assert.ok(
     dry.validations.some(
-      (v) => v.code === "required_location_continuity_map" && v.passed,
+      (v) => v.code === "required_continuity_map" && v.passed,
     ),
   );
 });
 
 test("V3-RETRY-PREP — budget envelope documents shortfall (no write)", () => {
+  // Post V3-EXECUTE: available 8¢ < estimate 13¢ (no budget write in DIAG).
   const envelope = {
-    hardLimitMinor: 113,
-    committedMinor: 101,
+    hardLimitMinor: 115,
+    committedMinor: 107,
     reservedMinor: 0,
-    availableMinor: 12,
+    availableMinor: 8,
     estimateMinor: 13,
     reservationEqualsEstimate: true,
-    shortfallMinor: 1,
-    hardLimitStrictMinimum: 114,
-    hardLimitRecommended: 115,
-    deltaRecommended: 2,
-    availableAfterRecommended: 14,
+    shortfallMinor: 5,
+    hardLimitStrictMinimum: 120,
+    hardLimitRecommended: 122,
+    deltaRecommended: 7,
+    availableAfterRecommended: 15,
     budgetWrite: false,
     maximumFutureCalls: 1,
   };

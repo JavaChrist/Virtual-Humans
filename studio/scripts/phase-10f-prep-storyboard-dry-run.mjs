@@ -55,7 +55,7 @@ const VISUAL_ARTIFACT_ID =
   "49481462-6444-41f9-8c48-7e7d32c09f1b";
 
 const DEFAULT_CEILING_MINOR = 100;
-const EXPECTED_PROMPT = "storyboard-analyzer-v3";
+const EXPECTED_PROMPT = "storyboard-analyzer-v4";
 
 /** Canonical Production price book (Porte 7H-B / 10B–10E). */
 const PRODUCTION_CANONICAL_PRICE = {

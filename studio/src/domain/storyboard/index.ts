@@ -55,6 +55,9 @@ export {
 export {
   defaultContinuityKeys,
   projectContinuity,
+  requiredContinuityKeysByVisualSegmentId,
+  inventoryRequiredContinuity,
+  type RequiredContinuityInventory,
 } from "./continuity";
 
 export {

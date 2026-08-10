@@ -162,7 +162,9 @@ Artifacts amont inchangés (rev.1). **0** média / worker / job.
 
 ## Suite
 
-Diagnostic continuité **éclairage** (`lighting:studio|cool`) — pattern voisin de DIAG location (`48_…`).  
-Validateur fail-closed correct. **Aucune relance** sans nouvelle Auth (nouveau salt + éventuel prompt/mapping lighting).
+Diagnostic générique **toutes** les clés projetées — `53_PHASE_10F_STORYBOARD_ALL_CONTINUITY_DIAG.md`
+(`READY_FOR_V4_PREP` : prompt `storyboard-analyzer-v4` + map `REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID`).
+
+Validateur fail-closed correct. **Aucune relance** sans Auth V4 (nouveau salt + budget + push/deploy/provider).
 
 **Aucune relance** dans cette phase.

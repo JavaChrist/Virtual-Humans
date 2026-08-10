@@ -79,9 +79,14 @@ export type StoryboardProjectDryRunResult = {
   structuredSchemaProjection: "anyOf-compatible" | "invalid";
   /** Smoke gate: redacted provider error metadata capture is wired. */
   providerErrorMetadataCapture: "ready";
-  /** VisualDirection segments with required location: tokens. */
+  requiredContinuityRuleCount: number;
+  requiredContinuityTokenCount: number;
+  requiredContinuityScopeCount: number;
+  requiredContinuityCoverage: "complete" | "incomplete";
+  requiredContinuityTokensFingerprint: string;
+  /** @deprecated transitional — prefer requiredContinuity* */
   requiredLocationKeyCount: number;
-  /** complete when every VD segment maps to a valid location:<key>. */
+  /** @deprecated transitional */
   requiredLocationKeyCoverage: "complete" | "incomplete";
   pricingConfigured: boolean;
   estimatedCostMinor?: number;
@@ -184,6 +189,11 @@ function empty(partial: Partial<StoryboardProjectDryRunResult> & Pick<Storyboard
     structuredSchemaOneOfCount: 0,
     structuredSchemaProjection: "anyOf-compatible",
     providerErrorMetadataCapture: "ready",
+    requiredContinuityRuleCount: 0,
+    requiredContinuityTokenCount: 0,
+    requiredContinuityScopeCount: 0,
+    requiredContinuityCoverage: "incomplete",
+    requiredContinuityTokensFingerprint: "",
     requiredLocationKeyCount: 0,
     requiredLocationKeyCoverage: "incomplete",
     pricingConfigured: false, warnings: [], ...partial,
@@ -296,6 +306,11 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
       structuredSchemaOneOfCount: ai.structuredSchemaOneOfCount,
       structuredSchemaProjection: ai.structuredSchemaProjection,
       providerErrorMetadataCapture: ai.providerErrorMetadataCapture,
+      requiredContinuityRuleCount: ai.requiredContinuityRuleCount,
+      requiredContinuityTokenCount: ai.requiredContinuityTokenCount,
+      requiredContinuityScopeCount: ai.requiredContinuityScopeCount,
+      requiredContinuityCoverage: ai.requiredContinuityCoverage,
+      requiredContinuityTokensFingerprint: ai.requiredContinuityTokensFingerprint,
       requiredLocationKeyCount: ai.requiredLocationKeyCount,
       requiredLocationKeyCoverage: ai.requiredLocationKeyCoverage,
       pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,

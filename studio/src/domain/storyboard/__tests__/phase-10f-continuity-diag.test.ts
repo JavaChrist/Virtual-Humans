@@ -194,19 +194,18 @@ test("10F-CONTINUITY-DIAG — invented location key alone fails (missing require
   assert.ok(issues.some((i) => i.message === MISSING));
 });
 
-test("10F-CONTINUITY-DIAG — prompt v3 + mapping expose required location keys", () => {
-  assert.equal(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v3");
-  assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /location:<continuityKey>/);
+test("10F-CONTINUITY-DIAG — prompt v4 still requires exact location token among all keys", () => {
+  assert.equal(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v4");
   assert.match(
     STORYBOARD_ANALYZER_SYSTEM_PROMPT,
-    /REQUIRED_LOCATION_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
-  assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /character-for-character/);
+  assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /character-for-character|opaque/i);
   const chain = withProductionLocationKey(makeStoryboardChain());
   const mapped = mapStoryboardAnalysisRequest(chain);
   assert.match(
     mapped.userMessage,
-    /REQUIRED_LOCATION_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
   assert.match(mapped.userMessage, /location:espace-numerique-principal/);
 });

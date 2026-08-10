@@ -32,9 +32,14 @@ export type OpenAIStoryboardDryRunResult = {
   structuredSchemaAnyOfCount: number;
   structuredSchemaProjection: StoryboardSchemaProjectionReport["structuredSchemaProjection"];
   providerErrorMetadataCapture: typeof STORYBOARD_PROVIDER_ERROR_METADATA_CAPTURE;
-  /** Count of VisualDirection segments with a required location: key token. */
+  requiredContinuityRuleCount: number;
+  requiredContinuityTokenCount: number;
+  requiredContinuityScopeCount: number;
+  requiredContinuityCoverage: "complete" | "incomplete";
+  requiredContinuityTokensFingerprint: string;
+  /** @deprecated use requiredContinuity* — kept for transitional smoke readers */
   requiredLocationKeyCount: number;
-  /** True when every VD segment maps to a non-empty location:<continuityKey>. */
+  /** @deprecated use requiredContinuityCoverage */
   requiredLocationKeyCoverage: "complete" | "incomplete";
 };
 export type OpenAIStoryboardDryRunDeps = {
@@ -47,6 +52,11 @@ function emptySchemaFields(): Pick<
   | "structuredSchemaAnyOfCount"
   | "structuredSchemaProjection"
   | "providerErrorMetadataCapture"
+  | "requiredContinuityRuleCount"
+  | "requiredContinuityTokenCount"
+  | "requiredContinuityScopeCount"
+  | "requiredContinuityCoverage"
+  | "requiredContinuityTokensFingerprint"
   | "requiredLocationKeyCount"
   | "requiredLocationKeyCoverage"
 > {
@@ -56,27 +66,18 @@ function emptySchemaFields(): Pick<
     structuredSchemaAnyOfCount: projection.structuredSchemaAnyOfCount,
     structuredSchemaProjection: projection.structuredSchemaProjection,
     providerErrorMetadataCapture: STORYBOARD_PROVIDER_ERROR_METADATA_CAPTURE,
+    requiredContinuityRuleCount: 0,
+    requiredContinuityTokenCount: 0,
+    requiredContinuityScopeCount: 0,
+    requiredContinuityCoverage: "incomplete",
+    requiredContinuityTokensFingerprint: "",
     requiredLocationKeyCount: 0,
     requiredLocationKeyCoverage: "incomplete",
   };
 }
 
-function locationKeyCoverage(visual: VisualDirection): {
-  requiredLocationKeyCount: number;
-  requiredLocationKeyCoverage: "complete" | "incomplete";
-  requiredLocationKeys: string[];
-} {
-  const keys = visual.segments.map(
-    (seg) => `location:${seg.location.continuityKey}`,
-  );
-  const complete =
-    keys.length > 0 &&
-    keys.every((k) => /^location:[A-Za-z0-9][A-Za-z0-9_-]*$/.test(k));
-  return {
-    requiredLocationKeyCount: keys.length,
-    requiredLocationKeyCoverage: complete ? "complete" : "incomplete",
-    requiredLocationKeys: keys,
-  };
+function locationLegacyCount(visual: VisualDirection): number {
+  return visual.segments.filter((s) => Boolean(s.location.continuityKey)).length;
 }
 
 export function runOpenAIStoryboardDryRun(
@@ -86,7 +87,19 @@ export function runOpenAIStoryboardDryRun(
 ): OpenAIStoryboardDryRunResult {
   const env = deps.env ?? (process.env as Record<string, string | undefined>);
   const schemaFields = emptySchemaFields();
-  const loc = locationKeyCoverage(visualDirection);
+  const mappedEarly = mapStoryboardAnalysisRequest({
+    brief, marketingPlan, creativeConcept, videoScript, visualDirection,
+  });
+  const inv = mappedEarly.requiredContinuity;
+  const continuityFields = {
+    requiredContinuityRuleCount: inv.requiredContinuityRuleCount,
+    requiredContinuityTokenCount: inv.requiredContinuityTokenCount,
+    requiredContinuityScopeCount: inv.requiredContinuityScopeCount,
+    requiredContinuityCoverage: inv.requiredContinuityCoverage,
+    requiredContinuityTokensFingerprint: inv.requiredContinuityTokensFingerprint,
+    requiredLocationKeyCount: locationLegacyCount(visualDirection),
+    requiredLocationKeyCoverage: inv.requiredContinuityCoverage,
+  };
   let config: OpenAIStoryboardConfig;
   try { config = deps.config ?? parseOpenAIStoryboardConfig(env); } catch (e) {
     return {
@@ -101,20 +114,23 @@ export function runOpenAIStoryboardDryRun(
       warnings: [],
       maxOutputTokens: 0,
       ...schemaFields,
-      requiredLocationKeyCount: loc.requiredLocationKeyCount,
-      requiredLocationKeyCoverage: loc.requiredLocationKeyCoverage,
+      ...continuityFields,
     };
   }
-  const mapped = mapStoryboardAnalysisRequest({ brief, marketingPlan, creativeConcept, videoScript, visualDirection });
+  const mapped = mappedEarly;
   const readiness = assessStoryboardReadiness(brief, marketingPlan, creativeConcept, videoScript, visualDirection);
   const pricing = deps.pricing ?? createUnknownAiTokenPricing();
   const pricingConfigured = pricing.getPriceBook(config.model) != null;
   const snap = openAIStoryboardConfigSnapshot(config);
   const schemaProjectionOk = schemaFields.structuredSchemaProjection === "anyOf-compatible";
   const mapPresent = mapped.userMessage.includes(
-    "REQUIRED_LOCATION_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID",
+    "REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID",
   );
-  const locationCoverageOk = loc.requiredLocationKeyCoverage === "complete";
+  const continuityOk =
+    mapPresent &&
+    inv.requiredContinuityCoverage === "complete" &&
+    inv.requiredContinuityTokenCount > 0 &&
+    !mapped.blockingFindings.some((f) => f.code.startsWith("continuity_map"));
   const validations = [
     { code: "storyboard_ai_flag", passed: isDirectorV2StoryboardAiEnabled(env), message: "Flag Storyboard AI vérifié." },
     { code: "paid_ai_flag", passed: isDirectorV2PaidAiEnabled(env), message: "Flag Paid AI vérifié." },
@@ -133,11 +149,11 @@ export function runOpenAIStoryboardDryRun(
       message: "Capture métadonnées provider redacted prête.",
     },
     {
-      code: "required_location_continuity_map",
-      passed: mapPresent && locationCoverageOk,
-      message: mapPresent && locationCoverageOk
-        ? `Map location continue (${loc.requiredLocationKeyCount} segments).`
-        : "Map location continue absente ou incomplète.",
+      code: "required_continuity_map",
+      passed: continuityOk,
+      message: continuityOk
+        ? `Map continuité (${inv.requiredContinuityTokenCount} tokens, ${inv.requiredContinuityScopeCount} scopes).`
+        : "Map continuité absente, incomplète ou tronquée.",
     },
     { code: "injection", passed: !mapped.blockingFindings.length, message: "Entrées vérifiées." },
     { code: "storyboard_readiness", passed: readiness.executable, message: "Chaîne complète vérifiée." },
@@ -158,8 +174,7 @@ export function runOpenAIStoryboardDryRun(
       (pricingConfigured || !config.requireFirmPricing) &&
       schemaProjectionOk &&
       schemaFields.structuredSchemaOneOfCount === 0 &&
-      mapPresent &&
-      locationCoverageOk,
+      continuityOk,
     providerCalled: false,
     model: config.model,
     reasoningEffort: config.reasoningEffort,
@@ -171,7 +186,6 @@ export function runOpenAIStoryboardDryRun(
     approximateInputTokens,
     maxOutputTokens: config.maxOutputTokens,
     ...schemaFields,
-    requiredLocationKeyCount: loc.requiredLocationKeyCount,
-    requiredLocationKeyCoverage: loc.requiredLocationKeyCoverage,
+    ...continuityFields,
   };
 }

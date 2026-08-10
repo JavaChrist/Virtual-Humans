@@ -145,8 +145,8 @@ test("Storyboard dry-run never calls provider (PREP invariant)", () => {
   assert.equal(dry.model, "gpt-5.6");
   assert.equal(dry.reasoningEffort, "medium");
   assert.equal(dry.maxOutputTokens, 4096);
-  assert.equal(dry.promptVersion, "storyboard-analyzer-v3");
-  assert.equal(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v3");
+  assert.equal(dry.promptVersion, "storyboard-analyzer-v4");
+  assert.equal(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v4");
 });
 
 test("Storyboard dry-run exposes knobs and does not mutate upstream artifacts", () => {
@@ -520,14 +520,15 @@ test("application dry-run exposes provider/knobs/idempotency without provider ca
   assert.equal(dry.model, "gpt-5.6");
   assert.equal(dry.reasoningEffort, "medium");
   assert.equal(dry.maxOutputTokens, 4096);
-  assert.equal(dry.promptVersion, "storyboard-analyzer-v3");
+  assert.equal(dry.promptVersion, "storyboard-analyzer-v4");
   assert.equal(dry.schemaVersion, "1.0.0");
-  assert.equal(dry.idempotencyKeyVersion, "storyboard-analyzer-v3:1.0.0");
+  assert.equal(dry.idempotencyKeyVersion, "storyboard-analyzer-v4:1.0.0");
   assert.equal(dry.idempotencySaltPresent, false);
   assert.equal(dry.structuredSchemaOneOfCount, 0);
   assert.equal(dry.structuredSchemaProjection, "anyOf-compatible");
   assert.equal(dry.providerErrorMetadataCapture, "ready");
-  assert.ok(dry.requiredLocationKeyCount >= 1);
-  assert.equal(dry.requiredLocationKeyCoverage, "complete");
+  assert.equal(dry.requiredContinuityCoverage, "complete");
+  assert.ok(dry.requiredContinuityTokenCount >= 1);
+  assert.ok(dry.requiredContinuityTokensFingerprint);
   assert.equal(dry.existingStoryboard, undefined);
 });

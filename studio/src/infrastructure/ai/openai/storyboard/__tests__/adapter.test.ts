@@ -160,9 +160,10 @@ test("dry-run exposes schema projection and metadata capture gates", () => {
   assert.equal(dry.structuredSchemaOneOfCount, 0);
   assert.equal(dry.structuredSchemaProjection, "anyOf-compatible");
   assert.equal(dry.providerErrorMetadataCapture, "ready");
-  assert.ok(dry.requiredLocationKeyCount >= 1);
-  assert.equal(dry.requiredLocationKeyCoverage, "complete");
+  assert.equal(dry.requiredContinuityCoverage, "complete");
+  assert.ok(dry.requiredContinuityTokenCount >= 1);
+  assert.ok(dry.requiredContinuityTokensFingerprint);
   assert.ok(dry.validations.some((v) => v.code === "structured_schema_projection" && v.passed));
   assert.ok(dry.validations.some((v) => v.code === "provider_error_metadata_capture" && v.passed));
-  assert.ok(dry.validations.some((v) => v.code === "required_location_continuity_map" && v.passed));
+  assert.ok(dry.validations.some((v) => v.code === "required_continuity_map" && v.passed));
 });

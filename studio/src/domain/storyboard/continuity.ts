@@ -2,6 +2,7 @@
  * Project VisualDirection continuity rules onto storyboard scenes (VHS-105).
  */
 
+import { createHash } from "node:crypto";
 import type { ContinuityRule, VisualDirection } from "@/domain/art";
 import type { StoryboardValidationIssue, StoryboardWarning } from "./errors";
 import type { StoryboardScene } from "./scene";
@@ -172,4 +173,68 @@ export function defaultContinuityKeys(
   visualDirectionSegmentId: string,
 ): string[] {
   return keysFromVisualSegment(visual, visualDirectionSegmentId);
+}
+
+/**
+ * Authoritative map used by Storyboard prompt + dry-run gates.
+ * Tokens are opaque identifiers projected by `keysFromVisualSegment`
+ * (same contract as `projectContinuity` — fail-closed).
+ */
+export function requiredContinuityKeysByVisualSegmentId(
+  visual: VisualDirection,
+): Record<string, string[]> {
+  return Object.fromEntries(
+    visual.segments.map((seg) => [seg.id, defaultContinuityKeys(visual, seg.id)]),
+  );
+}
+
+export type RequiredContinuityInventory = {
+  /** VisualDirection continuityRules with severity=required. */
+  requiredContinuityRuleCount: number;
+  /** Preferred/advisory rules (do not relax projected keys). */
+  preferredContinuityRuleCount: number;
+  /** Total projected token slots across all segments (validator contract). */
+  requiredContinuityTokenCount: number;
+  /** Unique opaque tokens across the project. */
+  requiredContinuityUniqueTokenCount: number;
+  /** Distinct scopes among projected tokens. */
+  requiredContinuityScopeCount: number;
+  requiredContinuityCoverage: "complete" | "incomplete";
+  /** Stable redacted proof of the segment→tokens matrix. */
+  requiredContinuityTokensFingerprint: string;
+  scopes: string[];
+  map: Record<string, string[]>;
+};
+
+/** Inventory of projected continuity tokens (validator contract) + rule severities. */
+export function inventoryRequiredContinuity(
+  visual: VisualDirection,
+): RequiredContinuityInventory {
+  const map = requiredContinuityKeysByVisualSegmentId(visual);
+  const allTokens = Object.values(map).flat();
+  const unique = [...new Set(allTokens)];
+  const scopes = [...new Set(allTokens.map((t) => t.split(":")[0] ?? ""))].filter(Boolean).sort();
+  const complete =
+    visual.segments.length > 0 &&
+    visual.segments.every((seg) => (map[seg.id]?.length ?? 0) > 0) &&
+    allTokens.every((t) => t.includes(":"));
+  const fingerprint = createHash("sha256")
+    .update(
+      visual.segments
+        .map((seg) => `${seg.id}=${(map[seg.id] ?? []).join(",")}`)
+        .join("|"),
+    )
+    .digest("hex")
+    .slice(0, 16);
+  return {
+    requiredContinuityRuleCount: visual.continuityRules.filter((r) => r.severity === "required").length,
+    preferredContinuityRuleCount: visual.continuityRules.filter((r) => r.severity === "preferred").length,
+    requiredContinuityTokenCount: allTokens.length,
+    requiredContinuityUniqueTokenCount: unique.length,
+    requiredContinuityScopeCount: scopes.length,
+    requiredContinuityCoverage: complete ? "complete" : "incomplete",
+    requiredContinuityTokensFingerprint: fingerprint,
+    scopes,
+    map,
+  };
 }
