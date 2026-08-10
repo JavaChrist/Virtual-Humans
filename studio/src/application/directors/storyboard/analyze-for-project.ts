@@ -63,9 +63,14 @@ export type StoryboardProjectDryRunResult = {
   videoScriptArtifactId: string;
   visualDirectionRevision: number;
   visualDirectionArtifactId: string;
+  provider: "openai";
   model: string;
+  reasoningEffort: string;
+  maxOutputTokens: number;
   promptVersion: string;
   schemaVersion: string;
+  /** `promptVersion:schemaVersion` embedded in Storyboard idempotency identity. */
+  idempotencyKeyVersion: string;
   pricingConfigured: boolean;
   estimatedCostMinor?: number;
   currency?: string;
@@ -144,7 +149,13 @@ function empty(partial: Partial<StoryboardProjectDryRunResult> & Pick<Storyboard
     briefRevision: 0, briefArtifactId: "", marketingPlanRevision: 0, marketingPlanArtifactId: "",
     creativeConceptRevision: 0, creativeConceptArtifactId: "", videoScriptRevision: 0, videoScriptArtifactId: "",
     visualDirectionRevision: 0, visualDirectionArtifactId: "",
-    model: DEFAULT_OPENAI_STORYBOARD_MODEL, promptVersion: STORYBOARD_ANALYZER_PROMPT_VERSION, schemaVersion: STORYBOARD_CANDIDATE_SCHEMA_VERSION,
+    provider: "openai",
+    model: DEFAULT_OPENAI_STORYBOARD_MODEL,
+    reasoningEffort: "unknown",
+    maxOutputTokens: 0,
+    promptVersion: STORYBOARD_ANALYZER_PROMPT_VERSION,
+    schemaVersion: STORYBOARD_CANDIDATE_SCHEMA_VERSION,
+    idempotencyKeyVersion: `${STORYBOARD_ANALYZER_PROMPT_VERSION}:${STORYBOARD_CANDIDATE_SCHEMA_VERSION}`,
     pricingConfigured: false, warnings: [], ...partial,
   };
 }
@@ -189,6 +200,7 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
             !/clé|api.?key|openai|price book|flag/i.test(`${v.code} ${v.message}`),
         )
       : ai.validations;
+    const e2eCfg = e2e ? e2eFakeOpenAiConfig() : null;
     return {
       executable: domainExecutable, providerCalled: false, executionAvailable: textDirectorExecutionAvailable({
         env, domainExecutable, paidPathAvailable: canExecuteStoryboardAi(env), pricingConfigured: ai.pricingConfigured,
@@ -198,7 +210,13 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
       creativeConceptRevision: concept.revision, creativeConceptArtifactId: concept.artifactId,
       videoScriptRevision: script.revision, videoScriptArtifactId: script.artifactId,
       visualDirectionRevision: visual.revision, visualDirectionArtifactId: visual.artifactId,
-      model: e2e ? e2eFakeOpenAiConfig().model : ai.model, promptVersion: ai.promptVersion, schemaVersion: ai.schemaVersion,
+      provider: "openai",
+      model: e2eCfg?.model ?? ai.model,
+      reasoningEffort: e2eCfg?.reasoningEffort ?? ai.reasoningEffort,
+      maxOutputTokens: e2eCfg?.maxOutputTokens ?? ai.maxOutputTokens,
+      promptVersion: ai.promptVersion,
+      schemaVersion: ai.schemaVersion,
+      idempotencyKeyVersion: `${ai.promptVersion}:${ai.schemaVersion}`,
       pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
       validations, warnings: ai.warnings,
       missingInformation: validations.filter((v) => !v.passed).map((v) => ({ code: v.code, message: v.message })),

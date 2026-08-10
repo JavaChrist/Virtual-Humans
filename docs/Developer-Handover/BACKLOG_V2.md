@@ -35,7 +35,8 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10E-DIAG** ✅ Cause = prompt v2 insuffisant + candidat Zod-valide incohérent métier ; prompt **`art-analyzer-v3`** ; `/art/retry` incompatible (`invalid_candidate` non allowlisté + mismatch v2→v3) (`35_PHASE_10E_ART_INVALID_CANDIDATE_DIAG.md`).
 - **Phase 10E-RETRY-PREP** ✅ Nouvel execute v3 préparé (clé ≠ v2, attempt 1, estimate 13¢, guards) ; **0** provider (`36_PHASE_10E_ART_V3_NEW_EXECUTE_PREP.md`).
 - **Phase 10E-V3** ✅ Smoke Art texte réel PASS : 1 appel `gpt-5.6` / `art-analyzer-v3`, VisualDirection rev.1, ledger 13/12/1¢, replay idempotent, run v2 immuable, flags OFF (`37_PHASE_10E_ART_V3_NEW_EXECUTE.md`).
-- **Prochaine porte** : Storyboard / média uniquement après autorisation séparée ; aucun push sans décision séparée.
+- **Phase 10F-PREP** ✅ Préparation Storyboard texte sans provider/média : amont Marketing+Creative+Script+VisualDirection réutilisés, dry-run estimate 13¢ / plafond 100¢, prompt `storyboard-analyzer-v2` ; **aucune** exécution Storyboard réelle (`38_PHASE_10F_STORYBOARD_TEXT_SMOKE_PREP.md`).
+- **Prochaine porte** : Storyboard texte réel (10F) uniquement après autorisation séparée ; média ensuite ; aucun push sans décision séparée.
 
 ## P2 — durcissement
 

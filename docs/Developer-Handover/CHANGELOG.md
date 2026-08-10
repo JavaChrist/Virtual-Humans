@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.62] — 2026-08-10
+
+### Added (Phase 10F-PREP)
+
+- Préparation smoke Storyboard texte sans appel provider ni média : scripts verify / dry-run / flags / smoke dry-only / replay.
+- Réutilisation MarketingPlan + CreativeConcept + VideoScript + VisualDirection ; Marketing/Creative/Script/Art/worker/média exclus.
+- Prompt Storyboard `storyboard-analyzer-v1` → **`storyboard-analyzer-v2`** (segments / spoken / continuity / assets) ; validateurs métier inchangés.
+- Dry-run Storyboard : estimate **13¢**, réservation prévue **13¢**, plafond proposé **100¢** ; knobs Production pattern `gpt-5.6`/`medium`/`4096` (à confirmer live).
+- Dry-run Storyboard expose `provider` / `reasoningEffort` / `maxOutputTokens` / `idempotencyKeyVersion`. Rapport : `38_PHASE_10F_STORYBOARD_TEXT_SMOKE_PREP.md`. Aucune exécution 10F, aucun push.
+
 ## [2.0.61] — 2026-08-10
 
 ### Validation provider réelle (Phase 10E-V3) — PASS
