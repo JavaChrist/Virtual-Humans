@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.60] — 2026-08-10
+
+### Added (Phase 10E-RETRY-PREP)
+
+- Préparation nouvel execute Art texte sous **`art-analyzer-v3`** (pas `/art/retry`) : dry-run expose `provider` / `idempotencyKeyVersion` / `previousFailedRunIgnoredForNewContract`.
+- Scripts smoke/replay/prep v3 + guards confirmation `ONE_NEW_ART_V3_CALL_MAX_*` ; clé v3 ≠ v2 prouvée ; estimate local **13¢**.
+- Rapport : `36_PHASE_10E_ART_V3_NEW_EXECUTE_PREP.md` (`READY_FOR_HUMAN_AUTH`). **0** provider. Aucun push.
+
 ## [2.0.59] — 2026-08-10
 
 ### Fixed (Phase 10E-DIAG)

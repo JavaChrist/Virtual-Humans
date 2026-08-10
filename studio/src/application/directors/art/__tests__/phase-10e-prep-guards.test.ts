@@ -304,6 +304,9 @@ test("Art execute with PREP-off flags fails before analyzer", async () => {
     async loadRetryableFailedRun() {
       return null;
     },
+    async loadLatestFailedArtRun() {
+      return null;
+    },
   };
   const svc = createAnalyzeArtForProject({
     workspaceId: WS,

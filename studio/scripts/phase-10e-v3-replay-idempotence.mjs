@@ -1,22 +1,20 @@
 /**
- * Phase 10E — idempotent replay of Art execute (must not call provider).
- * Refused during PREP.
+ * Phase 10E-V3 — idempotent replay of Art execute (must not call provider).
+ * Refused during V3 PREP. Post-success only; never uses /art/retry.
  */
 import { spawnSync } from "node:child_process";
 import { readFileSync, unlinkSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-if (process.env.CONFIRM_PHASE_10E_PREP === "1") {
+if (process.env.CONFIRM_PHASE_10E_V3_PREP === "1") {
   console.error(
-    "Refused during PREP: replay script is for post-execute idempotence only."
+    "Refused during V3 PREP: replay is for post-execute idempotence only."
   );
   process.exit(2);
 }
-if (process.env.CONFIRM_PHASE_10E_V3_PREP === "1") {
-  console.error(
-    "Refused during V3 PREP: replay script is for post-execute idempotence only."
-  );
+if (process.env.CONFIRM_PHASE_10E_PREP === "1") {
+  console.error("Refused during legacy PREP.");
   process.exit(2);
 }
 
@@ -28,9 +26,6 @@ const projectId =
   process.argv[2] ||
   process.env.PHASE_10E_PROJECT_ID ||
   "984507af-a89e-4644-8ea3-344797baa974";
-const expectedVideoScriptRevision = Number(
-  process.env.PHASE_10E_EXPECTED_SCRIPT_REVISION || "1"
-);
 
 function loadEnv(path) {
   const map = {};
@@ -50,7 +45,7 @@ function loadEnv(path) {
   return map;
 }
 
-const tmp = resolve(studioRoot, ".env.vercel.10e.replay.tmp");
+const tmp = resolve(studioRoot, ".env.vercel.10e.v3.replay.tmp");
 const pull = spawnSync(
   "npx",
   ["vercel", "env", "pull", tmp, "--environment", "production", "--yes"],
@@ -90,29 +85,39 @@ const res = await fetch(`${BASE}/api/director/projects/${projectId}/art`, {
     cookie,
     origin: BASE,
     referer: `${BASE}/director`,
-    "x-correlation-id": "corr-10e-replay-idem",
+    "x-correlation-id": `corr-10e-v3-replay-${Date.now()}`,
   },
   body: JSON.stringify({
     mode: "execute",
-    expectedVideoScriptRevision,
+    expectedVideoScriptRevision: Number(
+      process.env.PHASE_10E_EXPECTED_SCRIPT_REVISION || "1"
+    ),
+    expectedCreativeConceptRevision: Number(
+      process.env.PHASE_10E_EXPECTED_CREATIVE_REVISION || "1"
+    ),
+    expectedMarketingPlanRevision: Number(
+      process.env.PHASE_10E_EXPECTED_MARKETING_REVISION || "1"
+    ),
   }),
 });
-const body = await res.json();
-const durationMs = Date.now() - t0;
+const body = await res.json().catch(() => ({}));
+const ms = Date.now() - t0;
 console.log(
   JSON.stringify(
     {
+      phase: "10E-V3-REPLAY",
       http: res.status,
       status: body.status ?? null,
       directorRunId: body.directorRunId ?? null,
-      durationMs,
-      expect: "existing|completed without new provider call",
-      note: "Must not hit /art/retry; must not start media/worker",
+      path: "/art",
+      artRetryRoute: false,
+      elapsedMs: ms,
+      topKeys: Object.keys(body),
     },
     null,
     2
   )
 );
-process.exit(
-  res.ok && (body.status === "existing" || body.status === "completed") ? 0 : 2
-);
+if (!res.ok || body.status !== "existing") {
+  process.exit(1);
+}

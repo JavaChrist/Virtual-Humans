@@ -141,6 +141,21 @@ function directorPort(opts?: {
       }
       return null;
     },
+    async loadLatestFailedArtRun() {
+      if (opts?.failedRun === null) return null;
+      if (opts?.failedRun) {
+        return {
+          directorRunId: opts.failedRun.directorRunId,
+          attemptNumber: opts.failedRun.attemptNumber,
+          errorCode: opts.failedRun.errorCode,
+          modelId: "gpt-5.6-terra",
+          promptVersion: "art-analyzer-v3",
+          schemaVersion: "1.1.0",
+          retryOfRunId: null,
+        };
+      }
+      return null;
+    },
   };
 }
 

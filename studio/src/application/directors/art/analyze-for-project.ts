@@ -137,11 +137,20 @@ export type ArtProjectDryRunResult = {
   creativeConceptArtifactId: string;
   videoScriptRevision: number;
   videoScriptArtifactId: string;
+  /** Provider identity for Art text (always openai when configured). */
+  provider: "openai";
   model: string;
   reasoningEffort: string;
   maxOutputTokens: number;
   promptVersion: string;
   schemaVersion: string;
+  /** `promptVersion:schemaVersion` embedded in the Art idempotency identity. */
+  idempotencyKeyVersion: string;
+  /**
+   * True when a prior failed Art run exists but cannot gate a new-contract execute
+   * (non-retryable and/or prompt/schema mismatch). New beginOrGet uses a distinct key.
+   */
+  previousFailedRunIgnoredForNewContract: boolean;
   pricingConfigured: boolean;
   estimatedCostMinor?: number;
   currency?: string;
@@ -246,6 +255,16 @@ export type ArtDirectorRunPort = {
     inputRevision: number;
     legacyRetryReason?: typeof LEGACY_ART_TIMEOUT_RETRY_REASON;
   } | null>;
+  /** Latest failed Art run (any error), for new-contract ignore signalling. */
+  loadLatestFailedArtRun(projectId: string): Promise<{
+    directorRunId: string;
+    attemptNumber: number;
+    errorCode: string;
+    modelId: string;
+    promptVersion: string;
+    schemaVersion: string;
+    retryOfRunId: string | null;
+  } | null>;
 };
 export type AnalyzeArtForProjectDeps = {
   workspaceId: string; projects: ProjectRepository; artifacts: ArtifactRepository;
@@ -289,8 +308,11 @@ function empty(partial: Partial<ArtProjectDryRunResult> & Pick<ArtProjectDryRunR
     executable: false, providerCalled: false, executionAvailable: false,
     briefRevision: 0, briefArtifactId: "", marketingPlanRevision: 0, marketingPlanArtifactId: "",
     creativeConceptRevision: 0, creativeConceptArtifactId: "", videoScriptRevision: 0, videoScriptArtifactId: "",
+    provider: "openai",
     model: DEFAULT_OPENAI_ART_MODEL, reasoningEffort: "unknown", maxOutputTokens: 0,
     promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
+    idempotencyKeyVersion: `${ART_ANALYZER_PROMPT_VERSION}:${ART_CANDIDATE_SCHEMA_VERSION}`,
+    previousFailedRunIgnoredForNewContract: false,
     pricingConfigured: false, warnings: [], ...partial,
   };
 }
@@ -329,8 +351,11 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
         marketingPlanRevision: plan.revision, marketingPlanArtifactId: plan.artifactId,
         creativeConceptRevision: concept.revision, creativeConceptArtifactId: concept.artifactId,
         videoScriptRevision: script.revision, videoScriptArtifactId: script.artifactId,
+        provider: "openai",
         model: DEFAULT_OPENAI_ART_MODEL, reasoningEffort: "unknown", maxOutputTokens: 0,
         promptVersion: ART_ANALYZER_PROMPT_VERSION, schemaVersion: ART_CANDIDATE_SCHEMA_VERSION,
+        idempotencyKeyVersion: `${ART_ANALYZER_PROMPT_VERSION}:${ART_CANDIDATE_SCHEMA_VERSION}`,
+        previousFailedRunIgnoredForNewContract: false,
         pricingConfigured: false, warnings: [],
         validations: [{ code: character.code, passed: false, message: character.message }],
         missingInformation: [{ code: character.code, message: character.message, field: character.field }],
@@ -385,6 +410,17 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
         };
       }
     }
+    const latestFailed = await deps.directorRuns.loadLatestFailedArtRun(input.projectId);
+    const contractVersion = `${ai.promptVersion}:${ai.schemaVersion}`;
+    const previousFailedRunIgnoredForNewContract = Boolean(
+      latestFailed &&
+        !existingVisualDirection &&
+        (
+          latestFailed.promptVersion !== ai.promptVersion ||
+          latestFailed.schemaVersion !== ai.schemaVersion ||
+          !isArtHumanRetryEligible({ errorCode: latestFailed.errorCode })
+        ),
+    );
     const e2eCfg = e2e ? e2eFakeOpenAiConfig() : null;
     return {
       executable: domainExecutable, providerCalled: false, executionAvailable,
@@ -392,10 +428,13 @@ export function createAnalyzeArtForProject(deps: AnalyzeArtForProjectDeps): Anal
       marketingPlanRevision: plan.revision, marketingPlanArtifactId: plan.artifactId,
       creativeConceptRevision: concept.revision, creativeConceptArtifactId: concept.artifactId,
       videoScriptRevision: script.revision, videoScriptArtifactId: script.artifactId,
+      provider: "openai",
       model: e2eCfg?.model ?? ai.model,
       reasoningEffort: e2eCfg?.reasoningEffort ?? ai.reasoningEffort,
       maxOutputTokens: e2eCfg?.maxOutputTokens ?? ai.maxOutputTokens,
       promptVersion: ai.promptVersion, schemaVersion: ai.schemaVersion,
+      idempotencyKeyVersion: contractVersion,
+      previousFailedRunIgnoredForNewContract,
       pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
       validations: ai.validations, warnings: ai.warnings,
       missingInformation,

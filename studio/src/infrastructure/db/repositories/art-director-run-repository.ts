@@ -178,6 +178,44 @@ export function createSupabaseArtDirectorRunPort(deps: {
       return artifact ? { revision: artifact.revision as number, value: artifact.value } : null;
     },
 
+    async loadLatestFailedArtRun(projectId) {
+      const { data, error } = await client
+        .from("director_runs" as never)
+        .select(
+          "id, status, error_code, attempt_number, model_id, prompt_version, schema_version, output_artifact_id, retry_of_run_id"
+        )
+        .eq("workspace_id", workspaceId)
+        .eq("project_id", projectId)
+        .eq("director_type", "art")
+        .eq("status", "failed")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw mapSupabaseError(error);
+      if (!data) return null;
+      const row = data as {
+        id: string;
+        status: string;
+        error_code: string | null;
+        attempt_number: number;
+        model_id: string;
+        prompt_version: string;
+        schema_version: string;
+        output_artifact_id: string | null;
+        retry_of_run_id: string | null;
+      };
+      if (!row.error_code) return null;
+      return {
+        directorRunId: row.id,
+        attemptNumber: row.attempt_number ?? 1,
+        errorCode: row.error_code,
+        modelId: row.model_id,
+        promptVersion: row.prompt_version,
+        schemaVersion: row.schema_version,
+        retryOfRunId: row.retry_of_run_id ?? null,
+      };
+    },
+
     async loadRetryableFailedRun(projectId) {
       const { data: activeVd } = await client
         .from("active_artifact_revisions")

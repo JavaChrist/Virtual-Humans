@@ -22,6 +22,12 @@ if (process.env.CONFIRM_PHASE_10E_PREP === "1" && process.argv[2] === "on") {
   );
   process.exit(2);
 }
+if (process.env.CONFIRM_PHASE_10E_V3_PREP === "1" && process.argv[2] === "on") {
+  console.error(
+    "Refused: cannot enable Art flags while CONFIRM_PHASE_10E_V3_PREP=1 (V3 PREP is dry-only)."
+  );
+  process.exit(2);
+}
 
 const mode = process.argv[2];
 if (mode !== "on" && mode !== "off") {

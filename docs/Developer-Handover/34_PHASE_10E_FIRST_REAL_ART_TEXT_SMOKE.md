@@ -206,4 +206,4 @@ Aucun push. **Pas de Storyboard. Pas de média.**
 
 ## Suite DIAG (post-clôture 10E)
 
-Diagnostic sans provider : rejet métier `validateContinuityAgainstSegments` (lieu required stable vs `continuityKey` divergents). Candidat brut non conservé. Correction locale `art-analyzer-v3`. Prochaine porte = nouvel execute autorisé (pas `/art/retry`).
+Diagnostic sans provider : rejet métier `validateContinuityAgainstSegments` (lieu required stable vs `continuityKey` divergents). Candidat brut non conservé. Correction locale `art-analyzer-v3`. PREP nouvel execute : `36_PHASE_10E_ART_V3_NEW_EXECUTE_PREP.md` (pas `/art/retry`).

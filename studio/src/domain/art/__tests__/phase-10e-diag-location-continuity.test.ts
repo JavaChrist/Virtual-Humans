@@ -121,4 +121,5 @@ test("10E-DIAG — prompt v3 explicite continuityKey / required", () => {
   assert.match(ART_ANALYZER_SYSTEM_PROMPT, /required/);
   assert.match(ART_ANALYZER_SYSTEM_PROMPT, /stable|même|same|conserve/i);
   assert.match(ART_ANALYZER_SYSTEM_PROMPT, /rupture|change|break/i);
+  assert.match(ART_ANALYZER_SYSTEM_PROMPT, /Visual variation of the same place/i);
 });
