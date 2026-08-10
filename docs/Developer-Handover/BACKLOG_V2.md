@@ -34,7 +34,8 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10E** ⚠️ Smoke Art texte réel **BLOCKED** : 1 appel `gpt-5.6`, dry-run live OK (13¢), candidat `invalid_candidate` (continuité lieu) — **0** VisualDirection ; ledger 13/12/1¢ ; flags OFF (`34_PHASE_10E_FIRST_REAL_ART_TEXT_SMOKE.md`).
 - **Phase 10E-DIAG** ✅ Cause = prompt v2 insuffisant + candidat Zod-valide incohérent métier ; prompt **`art-analyzer-v3`** ; `/art/retry` incompatible (`invalid_candidate` non allowlisté + mismatch v2→v3) (`35_PHASE_10E_ART_INVALID_CANDIDATE_DIAG.md`).
 - **Phase 10E-RETRY-PREP** ✅ Nouvel execute v3 préparé (clé ≠ v2, attempt 1, estimate 13¢, guards) ; **0** provider (`36_PHASE_10E_ART_V3_NEW_EXECUTE_PREP.md`).
-- **Prochaine porte** : execute Art texte v3 (1 appel max) après `ONE_NEW_ART_V3_CALL_MAX_100_CENTS` + dry-run live ; **pas** `/art/retry` ; pas de Storyboard/média ; aucun push sans décision séparée.
+- **Phase 10E-V3** ✅ Smoke Art texte réel PASS : 1 appel `gpt-5.6` / `art-analyzer-v3`, VisualDirection rev.1, ledger 13/12/1¢, replay idempotent, run v2 immuable, flags OFF (`37_PHASE_10E_ART_V3_NEW_EXECUTE.md`).
+- **Prochaine porte** : Storyboard / média uniquement après autorisation séparée ; aucun push sans décision séparée.
 
 ## P2 — durcissement
 

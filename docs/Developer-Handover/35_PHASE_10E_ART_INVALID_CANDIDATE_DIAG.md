@@ -14,7 +14,7 @@ READY_FOR_RETRY_PREP
 ```
 
 Correction locale du prompt Art livrée (`art-analyzer-v3`). Aucun retry payant. Runtime OFF.  
-Suite PREP : `36_PHASE_10E_ART_V3_NEW_EXECUTE_PREP.md` (`READY_FOR_HUMAN_AUTH`) — **nouvel execute** (pas `/art/retry`).
+Suite : PREP `36_…` puis execute v3 **PASS** (`37_PHASE_10E_ART_V3_NEW_EXECUTE.md`).
 
 ---
 

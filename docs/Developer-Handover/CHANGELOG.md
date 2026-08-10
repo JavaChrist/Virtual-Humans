@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.61] — 2026-08-10
+
+### Validation provider réelle (Phase 10E-V3) — PASS
+
+- Nouvel execute Art texte sous **`art-analyzer-v3`** : **1** appel OpenAI `gpt-5.6`, VisualDirection rev.1 persistée (5 segments).
+- Budget : **13¢** estimés/réservés, **12¢** commités, **1¢** libérés ; run v2 failed + ledger v2 immuables.
+- Replay idempotent `existing` ; **0** `/art/retry` / Storyboard / média / worker ; runtime OFF prouvé.
+- Rapport : `37_PHASE_10E_ART_V3_NEW_EXECUTE.md` (PASS). Checkpoint local — **aucun push**.
+
 ## [2.0.60] — 2026-08-10
 
 ### Added (Phase 10E-RETRY-PREP)
