@@ -527,5 +527,7 @@ test("application dry-run exposes provider/knobs/idempotency without provider ca
   assert.equal(dry.structuredSchemaOneOfCount, 0);
   assert.equal(dry.structuredSchemaProjection, "anyOf-compatible");
   assert.equal(dry.providerErrorMetadataCapture, "ready");
+  assert.ok(dry.requiredLocationKeyCount >= 1);
+  assert.equal(dry.requiredLocationKeyCoverage, "complete");
   assert.equal(dry.existingStoryboard, undefined);
 });

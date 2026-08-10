@@ -226,9 +226,34 @@ async function main() {
   if (dryBody.existingStoryboard) {
     fail("storyboard_project already active — refuse smoke");
   }
+  if (dryBody.promptVersion === "storyboard-analyzer-v2") {
+    fail(
+      "BLOCKED: accidental v2 prompt — Phase 10F-V3 refuses storyboard-analyzer-v2 scripts/runtime"
+    );
+  }
   if (dryBody.promptVersion !== EXPECTED_PROMPT) {
     fail(
       `BLOCKED_CONFIG_DIVERGENCE: promptVersion=${dryBody.promptVersion} expected=${EXPECTED_PROMPT}`
+    );
+  }
+  if (dryBody.requiredLocationKeyCount !== 5) {
+    fail(
+      `BLOCKED: requiredLocationKeyCount=${dryBody.requiredLocationKeyCount} expected=5`
+    );
+  }
+  if (dryBody.requiredLocationKeyCoverage !== "complete") {
+    fail(
+      `BLOCKED: requiredLocationKeyCoverage=${dryBody.requiredLocationKeyCoverage} expected=complete`
+    );
+  }
+  if (dryBody.structuredSchemaOneOfCount !== 0) {
+    fail(
+      `BLOCKED: structuredSchemaOneOfCount=${dryBody.structuredSchemaOneOfCount} expected=0`
+    );
+  }
+  if (dryBody.structuredSchemaProjection !== "anyOf-compatible") {
+    fail(
+      `BLOCKED: structuredSchemaProjection=${dryBody.structuredSchemaProjection}`
     );
   }
   if (dryBody.schemaVersion !== EXPECTED_SCHEMA) {

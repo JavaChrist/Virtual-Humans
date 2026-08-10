@@ -128,6 +128,8 @@ Pas de réduction qualité pour économiser 1¢.
 | Appels max | 1 |
 | Autorisations | budget (si besoin) + provider **nouvelles** |
 
+Suite PREP : `49_PHASE_10F_STORYBOARD_V3_RETRY_PREP.md` — salt `10f-storyboard-v3-20260810`, empreinte `1bf9daeb68eb6432`, estimate 13¢, shortfall 1¢, verdict `READY_FOR_BUDGET_AND_PUSH_AUTH`.
+
 ---
 
 ## Validations DIAG

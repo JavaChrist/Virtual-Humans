@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.73] — 2026-08-10
+
+### Prepared (Phase 10F-V3-RETRY-PREP)
+
+- Préparation Storyboard v3 **sans** provider : map 5× `location:espace-numerique-principal`, oneOf=0 / anyOf-compatible, dry-run expose `requiredLocationKeyCount` / `Coverage`.
+- Salt `10f-storyboard-v3-20260810` (empreinte `1bf9daeb68eb6432`) ≠ 3 runs failed ; estimate **13¢** ; shortfall **1¢** (Auth Budget C proposée 114/115).
+- Rapport : `49_PHASE_10F_STORYBOARD_V3_RETRY_PREP.md` (`READY_FOR_BUDGET_AND_PUSH_AUTH`). **0** provider / budget write / push.
+
 ## [2.0.72] — 2026-08-10
 
 ### Fixed (Phase 10F-CONTINUITY-DIAG)

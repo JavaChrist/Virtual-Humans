@@ -45,9 +45,10 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F-RETRY2-DEPLOY-PREFLIGHT** ✅ Salt RETRY2 posé ; deploy `a849e03` ; dry-run live gates verts ; fermeture OFF ; **0** provider (`46_…`).
 - **Phase 10F-RETRY2-EXECUTE** ⚠️ **BLOCKED** : 1 appel `gpt-5.6` → `invalid_candidate` (continuité `location:espace-numerique-principal`) ; ledger 13/8/5 ; available **12¢** ; **0** storyboard ; flags OFF (`47_…`).
 - **Phase 10F-CONTINUITY-DIAG** ✅ Cause = prompt v2 ; fix `storyboard-analyzer-v3` + map clés location ; validateur fail-closed inchangé ; **0** provider (`48_…`, `READY_FOR_RETRY_PREP`).
-- **P1 Storyboard** : RETRY-PREP (nouveau salt, prompt v3) + Auth budget si estimate > 12 + execute ; runs `b446a0ed`/`f5b75018`/`4914c203` immuables.
-- **P1 budget** : hard 113 ; committed **101** ; available **12**.
-- **Prochaine porte** : RETRY-PREP Storyboard v3 ; média ensuite.
+- **Phase 10F-V3-RETRY-PREP** ✅ Préparation execute v3 : salt `10f-storyboard-v3-20260810` (clé `1bf9daeb68eb6432`), map 5× `location:espace-numerique-principal`, estimate **13¢**, shortfall **1¢**, oneOf=0 ; **0** provider (`49_…`, `READY_FOR_BUDGET_AND_PUSH_AUTH`).
+- **P1 Storyboard** : Auth Budget C (+1/+2) → Push → Deploy → Auth provider (1 appel) ; runs `b446a0ed`/`f5b75018`/`4914c203` immuables.
+- **P1 budget** : hard 113 ; committed **101** ; available **12** ; shortfall Storyboard **1¢**.
+- **Prochaine porte** : Auth Budget C puis push/deploy Storyboard v3 ; média ensuite.
 
 ## P2 — durcissement
 

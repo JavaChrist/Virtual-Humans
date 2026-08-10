@@ -79,6 +79,10 @@ export type StoryboardProjectDryRunResult = {
   structuredSchemaProjection: "anyOf-compatible" | "invalid";
   /** Smoke gate: redacted provider error metadata capture is wired. */
   providerErrorMetadataCapture: "ready";
+  /** VisualDirection segments with required location: tokens. */
+  requiredLocationKeyCount: number;
+  /** complete when every VD segment maps to a valid location:<key>. */
+  requiredLocationKeyCoverage: "complete" | "incomplete";
   pricingConfigured: boolean;
   estimatedCostMinor?: number;
   currency?: string;
@@ -180,6 +184,8 @@ function empty(partial: Partial<StoryboardProjectDryRunResult> & Pick<Storyboard
     structuredSchemaOneOfCount: 0,
     structuredSchemaProjection: "anyOf-compatible",
     providerErrorMetadataCapture: "ready",
+    requiredLocationKeyCount: 0,
+    requiredLocationKeyCoverage: "incomplete",
     pricingConfigured: false, warnings: [], ...partial,
   };
 }
@@ -290,6 +296,8 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
       structuredSchemaOneOfCount: ai.structuredSchemaOneOfCount,
       structuredSchemaProjection: ai.structuredSchemaProjection,
       providerErrorMetadataCapture: ai.providerErrorMetadataCapture,
+      requiredLocationKeyCount: ai.requiredLocationKeyCount,
+      requiredLocationKeyCoverage: ai.requiredLocationKeyCoverage,
       pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,
       validations, warnings: ai.warnings,
       missingInformation: validations.filter((v) => !v.passed).map((v) => ({ code: v.code, message: v.message })),

@@ -172,4 +172,6 @@ Avant nouvelle autorisation :
 2. budget disponible **12¢** — Auth A si estimate ≥ 13 ;
 3. **nouvelle** autorisation provider (1 appel max).
 
+Suite : DIAG `48_…` → PREP v3 `49_…` (`READY_FOR_BUDGET_AND_PUSH_AUTH` ; salt `10f-storyboard-v3-20260810`).
+
 **Aucune relance** dans cette phase.
