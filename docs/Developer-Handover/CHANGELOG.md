@@ -2,6 +2,19 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.51] — 2026-08-10
+
+### Added (Phase 10C-PREP)
+
+- Préparation smoke Creative sans appel provider : scripts verify / dry-run / flags / smoke dry-only / replay.
+- Réutilisation du MarketingPlan 10B actif ; Marketing / Script / Art / Storyboard / worker / média explicitement exclus.
+- Dry-run Creative : estimate **12¢**, réservation prévue **12¢**, plafond proposé **100¢** ; preuves sous `studio/.tmp/`.
+- Rapport : `28_PHASE_10C_CREATIVE_SMOKE_PREP.md`. Aucune exécution 10C, aucun push.
+
+### Fixed (UI)
+
+- Indicateurs Next.js de développement masqués ; politique PWA locale (`next dev` OFF par défaut) ; cache favicon `?v=9`.
+
 ## [2.0.50] — 2026-08-10
 
 ### Fixed (post-10B-CLOSE audit)
