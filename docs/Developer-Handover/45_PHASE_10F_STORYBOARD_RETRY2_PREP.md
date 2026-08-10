@@ -144,8 +144,8 @@ NO UPSTREAM REPLAY · NO MEDIA · NO WORKER · NO PUSH
 
 ## Suite autorisée
 
-1. Autorisation de **push** (commits locaux dont PREP).
-2. Deploy lignée post-fix (pas stale `ra6ulinwn` / `45tyuovgx`).
-3. Pose salt `10f-auth-b-retry2-20260810` en Production.
-4. Dry-run live gates (`oneOf=0`, `anyOf-compatible`, `metadata=ready`, salt present, estimate 13).
-5. **Nouvelle** autorisation provider exacte (1 appel max) avant execute.
+1. Autorisation de **push** (commits locaux dont PREP). → **faite**
+2. Deploy lignée post-fix (pas stale `ra6ulinwn` / `45tyuovgx`). → **faite** (`46_…`)
+3. Pose salt `10f-auth-b-retry2-20260810` en Production. → **faite**
+4. Dry-run live gates (`oneOf=0`, `anyOf-compatible`, `metadata=ready`, salt present, estimate 13). → **PASS**
+5. **Nouvelle** autorisation provider exacte (1 appel max) avant execute. → **encore requise**

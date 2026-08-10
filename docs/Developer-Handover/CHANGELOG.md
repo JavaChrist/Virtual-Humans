@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.70] — 2026-08-10
+
+### Deployed (Phase 10F-RETRY2-DEPLOY-PREFLIGHT)
+
+- Salt Production `10f-auth-b-retry2-20260810` ; deploy source `a849e03` ; dry-run live gates verts (oneOf=0, anyOf-compatible, metadata ready, clé `0b7e8fb44e0acd4d`).
+- Fermeture flags + redeploy OFF `oa57qfz26` ; runtime OFF ; **0** provider / run / ledger. Rapport : `46_PHASE_10F_RETRY2_DEPLOY_PREFLIGHT.md` (`READY_FOR_PROVIDER_REAUTH`). Aucun push doc.
+
 ## [2.0.69] — 2026-08-10
 
 ### Prepared (Phase 10F-RETRY2-PREP)
