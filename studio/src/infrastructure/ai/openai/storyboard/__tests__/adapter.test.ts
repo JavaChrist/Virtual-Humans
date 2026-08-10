@@ -70,3 +70,69 @@ test("injection blocks before provider call", async () => {
 test("parser rejects invalid JSON", () => {
   assert.throws(() => parseStoryboardCandidateResponse({ status: "completed", outputText: "{" }), OpenAIAiError);
 });
+
+test("fake transport 400 invalid_json_schema → request_failed, exactly one network attempt", async () => {
+  const meta = {
+    calls: 0,
+    endpoint: "https://api.openai.com/v1/responses",
+    model: "",
+    inputByteSize: 0,
+    schemaByteSize: 0,
+    reasoning: "",
+    maxOutput: 0,
+    timeoutMs: 0,
+  };
+  const client: OpenAIResponsesClientPort = {
+    async create(request, context) {
+      meta.calls += 1;
+      meta.model = request.model;
+      meta.inputByteSize = Buffer.byteLength(request.input, "utf8");
+      meta.schemaByteSize = Buffer.byteLength(
+        JSON.stringify(request.textFormat.schema),
+        "utf8",
+      );
+      meta.reasoning = request.reasoningEffort ?? "";
+      meta.maxOutput = request.maxOutputTokens;
+      meta.timeoutMs = context.timeoutMs;
+      // Reproduce OpenAI strict rejection of Zod oneOf (pre-fix).
+      throw new OpenAIAiError("structured_output_unsupported", {
+        internalCode: "invalid_json_schema",
+        httpStatus: 400,
+        providerObs: {
+          providerErrorCode: "invalid_json_schema",
+          providerErrorType: "invalid_request_error",
+          providerRequestId: "req_fake_oneof",
+        },
+      });
+    },
+  };
+  const chain = makeStoryboardChain();
+  const adapter = createOpenAIStoryboardAnalyzerAdapter({
+    client,
+    env,
+    config: parseOpenAIStoryboardConfig({
+      ...env,
+      OPENAI_STORYBOARD_MODEL: "gpt-5.6",
+      OPENAI_STORYBOARD_REASONING_EFFORT: "medium",
+      OPENAI_STORYBOARD_MAX_OUTPUT_TOKENS: "4096",
+    }),
+  });
+  await assert.rejects(
+    () => adapter.analyze(chain, { correlationId: "corr-diag", mode: "execute" }),
+    (e: unknown) => {
+      assert.ok(e instanceof MarketingAnalyzerError);
+      assert.equal(e.failure.code, "request_failed");
+      assert.equal(e.failure.retryable, false);
+      assert.equal(e.failure.httpStatus, 400);
+      assert.equal(e.failure.internalCode, "invalid_json_schema");
+      return true;
+    },
+  );
+  assert.equal(meta.calls, 1);
+  assert.equal(meta.model, "gpt-5.6");
+  assert.equal(meta.reasoning, "medium");
+  assert.equal(meta.maxOutput, 4096);
+  assert.ok(meta.inputByteSize > 0);
+  assert.ok(meta.schemaByteSize > 0);
+  assert.ok(meta.timeoutMs >= 1000);
+});

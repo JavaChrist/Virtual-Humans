@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.68] — 2026-08-10
+
+### Fixed (Phase 10F-PROVIDER-DIAG)
+
+- Cause `request_failed` Storyboard : JSON Schema `oneOf` (Zod `discriminatedUnion` sur `spokenContent`) interdit en OpenAI strict.
+- `toOpenAIStrictJsonSchema` convertit `oneOf` → `anyOf` ; mapping HTTP 400 schéma/invalid_request clarifié ; logs failed redacted enrichis.
+- Tests fake transport + schema-parity ; **0** provider. Rapport : `44_PHASE_10F_STORYBOARD_PROVIDER_DIAG.md` (`READY_FOR_RETRY_PREP`). Aucun push.
+
 ## [2.0.67] — 2026-08-10
 
 ### Validation provider (Phase 10F-AUTH-B RESUME) — BLOCKED

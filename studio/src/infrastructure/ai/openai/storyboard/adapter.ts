@@ -160,6 +160,12 @@ export class OpenAIStoryboardAnalyzerAdapter implements StoryboardAnalyzerPort {
         durationMs: this.nowMs() - started,
         failureCode: analyzerErr.failure.code,
         retryable: analyzerErr.failure.retryable,
+        httpStatus: analyzerErr.failure.httpStatus,
+        internalCode: analyzerErr.failure.internalCode,
+        openaiCode: openaiErr.code,
+        providerErrorCode: openaiErr.providerObs?.providerErrorCode,
+        providerErrorType: openaiErr.providerObs?.providerErrorType,
+        providerRequestId: openaiErr.providerObs?.providerRequestId,
       });
       throw analyzerErr;
     }

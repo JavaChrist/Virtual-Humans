@@ -34,6 +34,13 @@ test("textFormat — strict true + json_schema name", () => {
   assert.equal(fmt.name, "storyboard-analysis-candidate-v1");
 });
 
+test("OpenAI schema — no oneOf (OpenAI strict rejects Zod discriminatedUnion)", () => {
+  const schema = getStoryboardCandidateJsonSchema();
+  const raw = JSON.stringify(schema);
+  assert.equal(raw.includes('"oneOf"'), false);
+  assert.equal(raw.includes('"spokenContent"'), true);
+});
+
 test("OpenAI schema — additionalProperties false + required optionals", () => {
   const c = storyboardCandidateSchemaContract();
   assert.equal(c.additionalPropertiesFalse, true);

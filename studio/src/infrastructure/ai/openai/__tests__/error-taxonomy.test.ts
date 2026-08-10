@@ -101,6 +101,28 @@ test("5xx → provider_unavailable retryable", () => {
   );
 });
 
+test("400 invalid_json_schema → structured_output_unsupported → request_failed", () => {
+  const err = mapOpenAIHttpError(400, "invalid_json_schema", {
+    providerErrorType: "invalid_request_error",
+    providerRequestId: "req_diag_schema",
+  });
+  assert.equal(err.code, "structured_output_unsupported");
+  assert.equal(err.httpStatus, 400);
+  assert.equal(err.providerObs?.providerRequestId, "req_diag_schema");
+  const mapped = mapOpenAIAiErrorToMarketingFailure(err);
+  assert.equal(mapped.code, "request_failed");
+  assert.equal(mapped.retryable, false);
+  assert.equal(mapped.httpStatus, 400);
+});
+
+test("400 invalid_request_error (generic) → invalid_request → request_failed", () => {
+  const err = mapOpenAIHttpError(400, "invalid_request_error", {
+    providerErrorType: "invalid_request_error",
+  });
+  assert.equal(err.code, "invalid_request");
+  assert.equal(mapOpenAIAiErrorToMarketingFailure(err).code, "request_failed");
+});
+
 test("refused / incomplete / empty / invalid_structured_output mapping", () => {
   assert.equal(
     mapOpenAIAiErrorToMarketingFailure(new OpenAIAiError("refused")).code,

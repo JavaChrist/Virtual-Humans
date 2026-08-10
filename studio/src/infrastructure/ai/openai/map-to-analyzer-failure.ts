@@ -66,6 +66,12 @@ export function mapOpenAIAiErrorToMarketingFailure(
     case "structured_output_unsupported":
     case "unsupported_model":
     case "invalid_request":
+      return marketingFailure("request_failed", {
+        ...base,
+        retryable: false,
+        // Keep provider/app detail (invalid_json_schema, http_400) instead of collapsing to the coarse code.
+        internalCode: internalCode ?? sanitizeInternalCode(err.code),
+      });
     case "cancelled":
     case "openai_not_configured":
     case "marketing_ai_disabled":

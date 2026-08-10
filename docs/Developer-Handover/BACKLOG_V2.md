@@ -39,11 +39,12 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F** ⚠️ Smoke Storyboard texte **BLOCKED** : dry-run live OK (13¢) ; `budget_exceeded` (hard limit 100 / restant 7) — **0** appel provider ; **0** storyboard_project ; flags OFF (`39_PHASE_10F_FIRST_REAL_STORYBOARD_TEXT_SMOKE.md`).
 - **Phase 10F-BUDGET-AUDIT** ✅ Ledger cohérent (93¢ commits / 7¢ dispo) ; Auth A→113¢ + Auth B (salt) préparés ; **0** write (`40_PHASE_10F_WORKSPACE_BUDGET_AUDIT.md`).
 - **Phase 10F-BUDGET-AUTH-A** ✅ Hard limit **100→113¢** (+13) + audit_log ; available **20¢** ; **0** provider / réservation / Storyboard ; runtime OFF (`41_PHASE_10F_BUDGET_AUTH_A.md`).
-- **Phase 10F-AUTH-B** ⚠️ Storyboard texte **BLOCKED** : stale deploy (`42_…`) puis resume salt-ready (`43_…`) : dry-run salt OK ; execute `request_failed` — **1** provider, 0 storyboard, ledger released ; flags OFF.
-- **P1 Storyboard** : diagnostiquer `request_failed` OpenAI Storyboard ; future reauth = **nouvelle autorisation** + **nouveau salt** (run `f5b75018` terminal).
-- **P1 ops Auth B** : toujours deploy salt-ready + `idempotencySaltPresent=true` ; optionnel mapper `terminal_reuse` Storyboard.
+- **Phase 10F-AUTH-B** ⚠️ Storyboard texte **BLOCKED** : stale deploy (`42_…`) puis resume salt-ready (`43_…`) : execute `request_failed` — **1** provider, 0 storyboard ; flags OFF.
+- **Phase 10F-PROVIDER-DIAG** ✅ Cause = schéma `oneOf`/`spokenContent` ; fix `oneOf→anyOf` + mapping/logs ; **0** provider (`44_…`, `READY_FOR_RETRY_PREP`).
+- **P1 Storyboard** : préparer RETRY-PREP (nouveau salt + deploy fix) puis nouvelle autorisation execute ; runs `b446a0ed`/`f5b75018` immuables.
+- **P1 ops Auth B** : deploy salt-ready + `idempotencySaltPresent=true` ; optionnel mapper `terminal_reuse` Storyboard.
 - **P1 budget** : Auth A OK (113/20) ; exposure 93 inchangée.
-- **Prochaine porte** : nouvelle autorisation Storyboard (salt neuf) après diag provider ; média ensuite ; aucun push sans décision séparée.
+- **Prochaine porte** : RETRY-PREP Storyboard puis autorisation execute ; média ensuite ; aucun push sans décision séparée.
 
 ## P2 — durcissement
 

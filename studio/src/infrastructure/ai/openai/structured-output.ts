@@ -1,6 +1,9 @@
 /**
  * Convert Zod JSON Schema → OpenAI strict Structured Outputs shape (VHS-117A).
  * Optional fields become required + nullable (OpenAI strict requirement).
+ *
+ * OpenAI strict Structured Outputs rejects `oneOf` (Zod discriminatedUnion).
+ * Convert nested `oneOf` → `anyOf` (supported); root must remain a plain object.
  */
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
@@ -27,6 +30,7 @@ function makeNullable(schema: Record<string, unknown>): Record<string, unknown> 
  * - additionalProperties: false on objects
  * - all properties listed in required
  * - optional props → nullable + required
+ * - oneOf → anyOf (OpenAI strict)
  */
 export function toOpenAIStrictJsonSchema(
   schema: Record<string, unknown>
@@ -42,6 +46,17 @@ export function toOpenAIStrictJsonSchema(
 
     if (node.$ref) {
       throw new Error("JSON Schema $ref is not supported for OpenAI strict mode");
+    }
+
+    // OpenAI strict: oneOf not permitted — anyOf is the supported union form.
+    if (Array.isArray(node.oneOf)) {
+      const rest = { ...node };
+      delete rest.oneOf;
+      const existingAnyOf = Array.isArray(rest.anyOf) ? rest.anyOf : [];
+      return walk({
+        ...rest,
+        anyOf: [...existingAnyOf, ...node.oneOf],
+      });
     }
 
     if (node.type === "object" || node.properties) {
@@ -78,9 +93,6 @@ export function toOpenAIStrictJsonSchema(
     if (Array.isArray(node.anyOf)) {
       return { ...node, anyOf: node.anyOf.map(walk) };
     }
-    if (Array.isArray(node.oneOf)) {
-      return { ...node, oneOf: node.oneOf.map(walk) };
-    }
 
     return node;
   }
@@ -88,6 +100,9 @@ export function toOpenAIStrictJsonSchema(
   const out = walk(clone);
   if (!isPlainObject(out)) {
     throw new Error("Root JSON Schema must be an object");
+  }
+  if (Array.isArray(out.anyOf) || Array.isArray(out.oneOf)) {
+    throw new Error("Root JSON Schema must be an object (not a union)");
   }
   return out;
 }

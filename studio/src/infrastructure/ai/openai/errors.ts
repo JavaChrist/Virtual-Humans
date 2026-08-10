@@ -319,16 +319,29 @@ export function mapOpenAIHttpError(
       providerObs,
     });
   }
-  if (status === 400 && /structured|json_schema|response_format/i.test(codeHint)) {
+  if (
+    status === 400 &&
+    /structured|json_schema|response_format|invalid_json_schema|one_?of/i.test(
+      codeHint
+    )
+  ) {
     return new OpenAIAiError("structured_output_unsupported", {
-      internalCode: providerCode ?? "http_400",
+      internalCode: sanitizeObsToken(providerCode) ?? "http_400",
       httpStatus: status,
       providerObs,
     });
   }
-  if (status === 400 && /model_not_found|invalid_model|model/i.test(codeHint)) {
+  if (status === 400 && /model_not_found|invalid_model|unsupported_model/i.test(codeHint)) {
     return new OpenAIAiError("unsupported_model", {
-      internalCode: providerCode ?? "http_400",
+      internalCode: sanitizeObsToken(providerCode) ?? "http_400",
+      httpStatus: status,
+      providerObs,
+    });
+  }
+  if (status === 400) {
+    // Generic OpenAI invalid_request_error (incl. schema/param) — not internal_error.
+    return new OpenAIAiError("invalid_request", {
+      internalCode: sanitizeObsToken(providerCode) ?? "http_400",
       httpStatus: status,
       providerObs,
     });

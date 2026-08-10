@@ -121,4 +121,6 @@ Non exécutées (échec provider avant candidat). Idempotence N/A. **Aucune** se
 
 ## Suite
 
-L’autorisation provider **est consommée**. Le salt `10f-auth-b-20260810` est lié au run terminal `f5b75018` (`request_failed`) : une future reauth exige **nouvelle autorisation humaine** + **nouveau salt** (pas de bump prompt), toujours depuis un deploy salt-ready.
+L’autorisation provider **est consommée**. Le salt `10f-auth-b-20260810` est lié au run terminal `f5b75018` (`request_failed`).
+
+Diagnostic : `44_PHASE_10F_STORYBOARD_PROVIDER_DIAG.md` — cause = schéma Storyboard `oneOf` (`spokenContent`) rejeté par OpenAI strict ; fix local `oneOf→anyOf`. Future reauth = **nouvelle autorisation** + **nouveau salt** + deploy incluant le fix.
