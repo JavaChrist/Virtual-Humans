@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.53] — 2026-08-10
+
+### Added (Phase 10D-PREP)
+
+- Préparation smoke Script sans appel provider : scripts verify / dry-run / flags / smoke dry-only / replay.
+- Réutilisation MarketingPlan 10B + CreativeConcept 10C ; Marketing/Creative/Art/Storyboard/worker/média exclus.
+- Dry-run Script : estimate **7¢**, réservation prévue **7¢**, plafond proposé **100¢** ; preuves sous `studio/.tmp/`.
+- Rapport : `30_PHASE_10D_SCRIPT_SMOKE_PREP.md`. Aucune exécution 10D, aucun push.
+
 ## [2.0.52] — 2026-08-10
 
 ### Validation provider réelle (Phase 10C)
