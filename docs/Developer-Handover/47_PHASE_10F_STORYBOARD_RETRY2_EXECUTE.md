@@ -164,11 +164,12 @@ Artifacts amont inchangés (rev.1). **0** média / worker / job.
 
 ## Suite
 
-Diagnostic / PREP suivants obligatoires avant nouvelle autorisation :
+Diagnostic : `48_PHASE_10F_STORYBOARD_CONTINUITY_DIAG.md` — cause = prompt v2 insuffisant ; fix local **`storyboard-analyzer-v3`** + map `REQUIRED_LOCATION_CONTINUITY_KEYS_…` ; validateur inchangé.
 
-1. cause continuité `location:espace-numerique-principal` (prompt / mapping / validation) ;
-2. **nouveau salt** (≠ `10f-auth-b-retry2-20260810`) ;
-3. budget disponible **12¢** — Auth A éventuelle si estimate > 12 ;
-4. **nouvelle** autorisation provider (1 appel max).
+Avant nouvelle autorisation :
+
+1. RETRY-PREP (nouveau salt, clé ≠ 3 failed, prompt v3) ;
+2. budget disponible **12¢** — Auth A si estimate ≥ 13 ;
+3. **nouvelle** autorisation provider (1 appel max).
 
 **Aucune relance** dans cette phase.

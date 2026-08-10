@@ -44,9 +44,10 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F-RETRY2-PREP** ✅ Préparation execute post-fix : schéma oneOf=0 / anyOf-compatible, parité Zod, obs provider redacted, salt `10f-auth-b-retry2-20260810` (clé `0b7e8fb44e0acd4d`), dry-run gates ; **0** provider (`45_…`, `READY_FOR_PUSH_AND_REAUTH`).
 - **Phase 10F-RETRY2-DEPLOY-PREFLIGHT** ✅ Salt RETRY2 posé ; deploy `a849e03` ; dry-run live gates verts ; fermeture OFF ; **0** provider (`46_…`).
 - **Phase 10F-RETRY2-EXECUTE** ⚠️ **BLOCKED** : 1 appel `gpt-5.6` → `invalid_candidate` (continuité `location:espace-numerique-principal`) ; ledger 13/8/5 ; available **12¢** ; **0** storyboard ; flags OFF (`47_…`).
-- **P1 Storyboard** : DIAG continuité + PREP (nouveau salt) + éventuelle Auth budget si estimate > 12 ; runs `b446a0ed`/`f5b75018`/`4914c203` immuables.
+- **Phase 10F-CONTINUITY-DIAG** ✅ Cause = prompt v2 ; fix `storyboard-analyzer-v3` + map clés location ; validateur fail-closed inchangé ; **0** provider (`48_…`, `READY_FOR_RETRY_PREP`).
+- **P1 Storyboard** : RETRY-PREP (nouveau salt, prompt v3) + Auth budget si estimate > 12 + execute ; runs `b446a0ed`/`f5b75018`/`4914c203` immuables.
 - **P1 budget** : hard 113 ; committed **101** ; available **12**.
-- **Prochaine porte** : DIAG invalid_candidate Storyboard ; média ensuite.
+- **Prochaine porte** : RETRY-PREP Storyboard v3 ; média ensuite.
 
 ## P2 — durcissement
 

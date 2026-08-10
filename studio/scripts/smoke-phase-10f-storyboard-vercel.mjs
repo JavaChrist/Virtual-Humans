@@ -29,7 +29,7 @@ const PROJECT_ID =
   process.env.PHASE_10F_PROJECT_ID || "984507af-a89e-4644-8ea3-344797baa974";
 const DRY_ONLY = process.env.PHASE_10F_DRY_ONLY !== "0";
 const ALLOW_EXECUTE = process.env.PHASE_10F_ALLOW_EXECUTE === "1";
-const EXPECTED_PROMPT = "storyboard-analyzer-v2";
+const EXPECTED_PROMPT = "storyboard-analyzer-v3";
 const EXPECTED_SCHEMA = "1.0.0";
 
 function fail(msg, code = 1) {

@@ -118,6 +118,13 @@ export function mapStoryboardAnalysisRequest(input: {
   };
   const videoScriptPayload = mapVideoScript(input.videoScript);
   const visualDirectionPayload = mapVisualDirection(input.visualDirection);
+  /** Compact authoritative map: VisualDirection segment id → exact location: key token. */
+  const requiredLocationContinuityKeysByVisualSegmentId = Object.fromEntries(
+    input.visualDirection.segments.map((seg) => [
+      seg.id,
+      `location:${seg.location.continuityKey}`,
+    ]),
+  );
   const findings: InjectionFinding[] = [];
   collectStrings(briefPayload, "brief", findings);
   collectStrings(marketingPayload, "marketingPlan", findings);
@@ -132,6 +139,10 @@ export function mapStoryboardAnalysisRequest(input: {
     delimitUntrustedData("CREATIVE_CONCEPT", JSON.stringify(creativePayload, null, 2)),
     delimitUntrustedData("VIDEO_SCRIPT", JSON.stringify(videoScriptPayload, null, 2)),
     delimitUntrustedData("VISUAL_DIRECTION", JSON.stringify(visualDirectionPayload, null, 2)),
+    delimitUntrustedData(
+      "REQUIRED_LOCATION_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID",
+      JSON.stringify(requiredLocationContinuityKeysByVisualSegmentId, null, 2),
+    ),
   ].join("\n");
   return {
     briefPayload, marketingPayload, creativePayload, videoScriptPayload,

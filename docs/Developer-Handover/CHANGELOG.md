@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.72] — 2026-08-10
+
+### Fixed (Phase 10F-CONTINUITY-DIAG)
+
+- Cause `invalid_candidate` : prompt Storyboard v2 ne forçait pas `location:<continuityKey>` exact depuis VisualDirection.
+- Prompt **`storyboard-analyzer-v3`** + map `REQUIRED_LOCATION_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID` ; validateur métier inchangé.
+- Tests continuity FAIL/PASS ; **0** provider. Rapport : `48_PHASE_10F_STORYBOARD_CONTINUITY_DIAG.md` (`READY_FOR_RETRY_PREP`). Aucun push.
+
 ## [2.0.71] — 2026-08-10
 
 ### Validation provider (Phase 10F-RETRY2-EXECUTE) — BLOCKED
