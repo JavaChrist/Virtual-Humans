@@ -17,3 +17,6 @@ generated/manifests/*
 !generated/indexes/.gitkeep
 !generated/manifests/.gitkeep
 .vercel
+# Local smoke / diagnostic scratch (never commit)
+studio/.tmp/
+docs/Developer-Handover/_phase_*_evidence.json

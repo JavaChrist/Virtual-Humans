@@ -7,7 +7,7 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

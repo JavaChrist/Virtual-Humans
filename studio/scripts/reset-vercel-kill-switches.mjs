@@ -1,8 +1,17 @@
 /**
  * Phase 10A-C — explicitly set Director kill switches to 0 on Production + Preview.
  * Does not print previous values. Does not touch secrets / Supabase / deploy.
+ *
+ * Requires: CONFIRM_VERCEL_KILL_SWITCH_RESET=SET_TO_0
  */
 import { spawnSync } from "node:child_process";
+
+if (process.env.CONFIRM_VERCEL_KILL_SWITCH_RESET !== "SET_TO_0") {
+  console.error(
+    "Refused: set CONFIRM_VERCEL_KILL_SWITCH_RESET=SET_TO_0 to run (writes Vercel Production+Preview)."
+  );
+  process.exit(2);
+}
 
 const KEYS = [
   "DIRECTOR_V2_ENABLED",

@@ -2,8 +2,17 @@
  * Phase 10B — temporarily set minimal Marketing smoke flags on Vercel Production.
  * Does not touch secrets, provider keys, or Supabase vars.
  * Usage: node scripts/phase-10b-set-marketing-flags.mjs on|off
+ *
+ * Requires: CONFIRM_PHASE_10B_VERCEL_FLAGS=1
  */
 import { spawnSync } from "node:child_process";
+
+if (process.env.CONFIRM_PHASE_10B_VERCEL_FLAGS !== "1") {
+  console.error(
+    "Refused: set CONFIRM_PHASE_10B_VERCEL_FLAGS=1 to run (writes Vercel Production flags)."
+  );
+  process.exit(2);
+}
 
 const mode = process.argv[2];
 if (mode !== "on" && mode !== "off") {

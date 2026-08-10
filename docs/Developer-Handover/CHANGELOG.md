@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.50] — 2026-08-10
+
+### Fixed (post-10B-CLOSE audit)
+
+- `fix-env-local-docker.mjs` résout la clé service_role via `supabase status` (fallback JWT demo local seulement).
+- Scripts Vercel / lecture Production 10B : confirmations env explicites avant écriture ou lecture distante.
+- Preuves smoke 10B écrites sous `studio/.tmp/` (gitignoré), plus sous `docs/`.
+
 ## [2.0.49] — 2026-08-10
 
 ### Security / Operations (Phases 10A–10B)

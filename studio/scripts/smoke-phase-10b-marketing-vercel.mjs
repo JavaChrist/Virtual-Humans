@@ -12,7 +12,13 @@
  */
 
 import { randomUUID } from "node:crypto";
-import { readFileSync, existsSync, unlinkSync, writeFileSync } from "node:fs";
+import {
+  readFileSync,
+  existsSync,
+  unlinkSync,
+  writeFileSync,
+  mkdirSync,
+} from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
@@ -222,13 +228,10 @@ async function main() {
     fail("BUDGET_GUARD_NOT_PROVEN — pricingConfigured=false");
   }
 
-  const evidencePath = resolve(
-    studioRoot,
-    "..",
-    "docs",
-    "Developer-Handover",
-    "_phase_10b_evidence.json"
-  );
+  // Gitignored local evidence only — never write under docs/
+  const evidenceDir = resolve(studioRoot, ".tmp");
+  mkdirSync(evidenceDir, { recursive: true });
+  const evidencePath = resolve(evidenceDir, "phase-10b-evidence.json");
 
   if (DRY_ONLY) {
     writeFileSync(

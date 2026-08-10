@@ -1,11 +1,20 @@
 /**
  * Phase 10B — Zod-validate persisted MarketingPlan from Production (read-only).
  * Loads SUPABASE_* from .env.remote.local. Never prints secrets or full plan text.
+ *
+ * Requires: CONFIRM_PHASE_10B_REMOTE_READ=1
  */
 import { createClient } from "@supabase/supabase-js";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+
+if (process.env.CONFIRM_PHASE_10B_REMOTE_READ !== "1") {
+  console.error(
+    "Refused: set CONFIRM_PHASE_10B_REMOTE_READ=1 (reads Production via .env.remote.local)."
+  );
+  process.exit(2);
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const studioRoot = resolve(__dirname, "..");
