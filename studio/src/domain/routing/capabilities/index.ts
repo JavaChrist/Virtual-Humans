@@ -7,6 +7,7 @@ export * from "./provider";
 export * from "./pricing";
 export * from "./availability";
 export * from "./model";
+export * from "./motion-transfer";
 export * from "./requirements";
 export * from "./eligibility";
 export * from "./registry";

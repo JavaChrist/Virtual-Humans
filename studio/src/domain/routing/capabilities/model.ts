@@ -8,6 +8,7 @@ import type { BriefAspectRatio } from "@/domain/brief";
 import { CapabilityDomainError } from "./errors";
 import type { ProviderId, RegionCode } from "./provider";
 import type { PricingDefinition } from "./pricing";
+import type { MotionTransferModelCapabilities } from "./motion-transfer";
 
 export type ModelId = string;
 export type CanonicalModelKey = string;
@@ -28,6 +29,7 @@ export const MediaInputTypeValues = [
   "reference_image",
   "start_frame",
   "end_frame",
+  "source_video",
 ] as const;
 export type MediaInputType = (typeof MediaInputTypeValues)[number];
 
@@ -140,6 +142,12 @@ export type ModelCapabilities = {
   regions: RegionCode[];
   evidence: CapabilityEvidence[];
   verifiedAt?: string;
+  /**
+   * Motion-transfer discriminant block (MT-002).
+   * Required when supportedProfiles includes video.motion_transfer.
+   * Absence ⇒ model is NOT motion-transfer capable (I2V/T2V alone never suffice).
+   */
+  motionTransfer?: MotionTransferModelCapabilities;
 };
 
 export const MODEL_ID_MAX = 160;

@@ -10,6 +10,7 @@ export const CapabilityProfileValues = [
   "image.reference_identity",
   "video.text_to_video",
   "video.image_to_video",
+  "video.motion_transfer",
   "video.dialogue",
   "video.multi_character",
   "audio.voice",

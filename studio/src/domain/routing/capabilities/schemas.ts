@@ -15,11 +15,16 @@ import {
   ModelStatusValues,
 } from "./model";
 import {
+  MotionTransferModelCapabilitiesSchema,
+  MOTION_TRANSFER_MODEL_CAPABILITIES_SCHEMA_VERSION,
+} from "./motion-transfer";
+import {
   PricingConfidenceValues,
   PricingSourceValues,
   PricingUnitValues,
 } from "./pricing";
 import { ProviderStatusValues, RegionCodeValues } from "./provider";
+import { MOTION_TRANSFER_CAPABILITY } from "@/domain/motion/capability";
 
 const IdProvider = z
   .string()
@@ -184,7 +189,9 @@ export const ModelCapabilitiesSchema = z
     regions: z.array(z.enum(RegionCodeValues)).max(8),
     evidence: z.array(CapabilityEvidenceSchema).max(48),
     verifiedAt: IsoDateTimeSchema.optional(),
+    motionTransfer: MotionTransferModelCapabilitiesSchema.optional(),
   })
+  .strict()
   .superRefine((m, ctx) => {
     const scores = m.quality;
     const scoreFields = [
@@ -204,6 +211,53 @@ export const ModelCapabilitiesSchema = z
             path: ["quality", f],
           });
         }
+      }
+    }
+
+    const declaresMt = m.supportedProfiles.includes(MOTION_TRANSFER_CAPABILITY);
+    if (declaresMt && !m.motionTransfer) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "supportedProfiles includes video.motion_transfer but motionTransfer block is missing",
+        path: ["motionTransfer"],
+      });
+    }
+    if (m.motionTransfer && !declaresMt) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "motionTransfer block present without video.motion_transfer in supportedProfiles",
+        path: ["supportedProfiles"],
+      });
+    }
+    if (m.motionTransfer) {
+      if (
+        m.motionTransfer.schemaVersion !==
+        MOTION_TRANSFER_MODEL_CAPABILITIES_SCHEMA_VERSION
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "unknown motionTransfer schemaVersion",
+          path: ["motionTransfer", "schemaVersion"],
+        });
+      }
+      const hasVideoInput =
+        m.mediaInputs.includes("video") || m.mediaInputs.includes("source_video");
+      if (!hasVideoInput) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message:
+            "motion-transfer models require mediaInputs video or source_video",
+          path: ["mediaInputs"],
+        });
+      }
+      if (!m.mediaOutputs.includes("video")) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "motion-transfer models require mediaOutputs video",
+          path: ["mediaOutputs"],
+        });
       }
     }
   });

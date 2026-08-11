@@ -7,7 +7,7 @@
 ```text
 MT-001 = IMPLEMENTED
 Gate MT-1 = PASS
-MT-002+ = NOT STARTED
+MT-002 = IMPLEMENTED (voir 61_)
 runtime capability = still OFF / unavailable
 PROVIDER_NOT_SELECTED_YET
 NO PAID BENCHMARK_YET
@@ -49,7 +49,7 @@ video.motion_transfer
 ```
 
 Constante `MOTION_TRANSFER_CAPABILITY` — **distincte** de I2V/T2V.
-Wiring `CapabilityProfileValues` / Registry = **MT-002** (non démarré).
+Wiring `CapabilityProfileValues` / Registry = **MT-002 IMPLEMENTED** (`61_`).
 
 ## Versions
 

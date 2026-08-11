@@ -106,6 +106,7 @@ function blocksForProfile(profile: CapabilityProfile): PromptBlockName[] {
     case "video.image_to_video":
     case "video.text_to_video":
     case "video.multi_character":
+    case "video.motion_transfer":
       return [
         "subject",
         "action",

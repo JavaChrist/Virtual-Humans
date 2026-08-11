@@ -1,7 +1,7 @@
 /**
  * Canonical Motion / Performance Transfer capability (MT-001).
  * Distinct from I2V / T2V — no implicit conversion.
- * Registry wiring of CapabilityProfileValues is MT-002.
+ * Registry profile `video.motion_transfer` is wired in CapabilityProfileValues (MT-002).
  */
 
 export const MOTION_TRANSFER_CAPABILITY = "video.motion_transfer" as const;

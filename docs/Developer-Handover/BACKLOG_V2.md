@@ -7,13 +7,14 @@ Protocole d’audit initial : `03_CURRENT_AUDIT.md` (**historique**) — audit r
 ```text
 Checkpoint : 10F-V4 Storyboard PASS · 11A media PREP DECISION_REQUIRED
 Motion     : ARCHITECTURE_READY · MT-001 IMPLEMENTED · Gate MT-1 PASS
-             MT-002+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
+             MT-002 IMPLEMENTED · Gate MT-2 Registry PASS · 0 Production MT models
+             MT-003+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
              PROVIDER_NOT_SELECTED_YET · NO PAID BENCHMARK_YET
 Budget     : 122 / 112 / 0 / 10
 Runtime AI : OFF
 Media jobs : 0
 P1         : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Next major : MT-002 Capability Registry
+Next major : MT-003 Router strategy (motion_transfer)
 ```
 
 ## P0 — fondations
@@ -70,10 +71,10 @@ Next major : MT-002 Capability Registry
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001 IMPLEMENTED** (domain contracts, Gate MT-1 PASS, `60_`) · MT-002+ **NOT STARTED** · runtime **OFF/unavailable** · **PROVIDER_NOT_SELECTED_YET** · **NO PAID BENCHMARK_YET**.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001 IMPLEMENTED** (`60_`) · **MT-002 IMPLEMENTED** (Registry, Gate MT-2 Registry PASS, `61_`, **0** modèle Production) · MT-003+ **NOT STARTED** · runtime **OFF/unavailable** · **PROVIDER_NOT_SELECTED_YET** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **122** ; committed **112** ; available **10**.
-- **Prochaine porte majeure** : **MT-002** Capability Registry ; backup restore reste P1 ouvert.
+- **Prochaine porte majeure** : **MT-003** Router strategy ; backup restore reste P1 ouvert.
 
 ## P2 — durcissement
 

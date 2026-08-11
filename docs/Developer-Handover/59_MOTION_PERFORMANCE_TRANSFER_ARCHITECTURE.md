@@ -8,11 +8,14 @@
 ARCHITECTURE_READY_FOR_IMPLEMENTATION
 MT-001 = IMPLEMENTED
 Gate MT-1 = PASS
-MT-002+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-002 Capability Registry
+MT-002 = IMPLEMENTED
+Gate MT-2 Registry portion = PASS
+MT-003+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-003 Router
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_NOT_SELECTED_YET
 NO PAID BENCHMARK_YET
+eligible Production motion-transfer models = 0
 ```
 
 > Ce document est une **spécification d’architecture prête à implémenter**.
@@ -27,11 +30,12 @@ NO PAID BENCHMARK_YET
 |---|---|
 | Architecture | `ARCHITECTURE_READY_FOR_IMPLEMENTATION` |
 | Domain contracts | **MT-001 IMPLEMENTED** — `studio/src/domain/motion/` · Gate MT-1 **PASS** |
-| Registry / Router / Engine | MT-002+ **NOT STARTED** |
+| Capability Registry | **MT-002 IMPLEMENTED** — `capabilities/motion-transfer.ts` · Gate MT-2 Registry **PASS** · **0** modèle Production éligible |
+| Router / Engine | MT-003+ **NOT STARTED** |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | `PROVIDER_NOT_SELECTED_YET` |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-002** Capability Registry |
+| Prochaine action | **MT-003** Router strategy |
 
 **Ordre obligatoire :**
 
@@ -122,10 +126,10 @@ Aucun fallback silencieux I2V / T2V / downgrade modèle / relaxation identité.
 
 ### 2.2 Gaps critiques aujourd’hui (code)
 
-- `CapabilityProfileValues` : **pas** de `video.motion_transfer` (`capability-profiles.ts`).
-- `VideoGenerationInput` : `startFrame?` seulement — **pas** de `sourceVideo` (`domain/generation/input.ts`).
-- Router : résultat `no_eligible_strategy` (pas de code `capability_unavailable` — à ajouter ou mapper).
-- Adapters : aucun modèle motion-control enregistré.
+- ~~`CapabilityProfileValues` : pas de `video.motion_transfer`~~ → **fermé MT-002** (profil + bloc `motionTransfer` + helpers).
+- `VideoGenerationInput` : `startFrame?` seulement — **pas** de `sourceVideo` (`domain/generation/input.ts`) — MT-004.
+- Router : stratégie `motion_transfer` absente — MT-003 ; résultat `no_eligible_strategy` / mapper `capability_unavailable`.
+- Adapters : aucun modèle motion-control enregistré ; **0** entrée Production enabled.
 - Human review : statuses `approved|rejected` seulement — **étendre** pour retry/constraints.
 
 ---
@@ -335,6 +339,8 @@ key = projectId
 
 ## 4. Capability Registry — extension exacte
 
+**Statut MT-002 :** **IMPLEMENTED** — rapport `61_MT002_MOTION_TRANSFER_CAPABILITY_REGISTRY.md`.
+
 ### 4.1 Nouveau profil
 
 ```ts
@@ -344,48 +350,54 @@ key = projectId
 
 **Interdit :** enregistrer un modèle I2V avec `supportedProfiles` incluant `video.motion_transfer` sans champs motion vérifiés.
 
-### 4.2 Champs obligatoires (extension `ModelCapabilities` ou sous-objet `motionTransfer`)
+### 4.2 Champs obligatoires (sous-objet versionné `motionTransfer`)
 
-Proposition : sous-objet versionné pour ne pas polluer I2V :
+Implémenté (`studio/src/domain/routing/capabilities/motion-transfer.ts`) :
 
 ```ts
+type SupportLevel = "SUPPORTED" | "PARTIAL" | "UNVERIFIED" | "NOT_SUPPORTED";
+
 type MotionTransferModelCapabilities = {
-  sourceVideo: true;                 // obligatoire
-  characterReference: boolean;
-  outfitReference: boolean;
+  schemaVersion: "1.0.0";
   motionTransfer: true;              // discriminant
+  sourceVideo: SupportLevel;
+  characterReference: SupportLevel;
+  outfitReference: SupportLevel;
   poseControl: PoseControlMode[];
-  motionFidelityLevels: MotionFidelity[];
-  timingPreservation: boolean;
-  cameraPreservation: boolean | "unknown";
-  identityControl: boolean;
-  outfitControl: boolean;
-  fullBodySupport: boolean | "unknown";
-  handFootQuality: Score | "unknown"; // 0–100
+  motionFidelityLevels: {
+    standard: SupportLevel;
+    high: SupportLevel;
+    critical: SupportLevel;
+  };
+  timingPreservation: SupportLevel;
+  cameraPreservation: SupportLevel;
+  identityControl: SupportLevel;
+  outfitControl: SupportLevel;
+  fullBodySupport: SupportLevel;
+  handFootQuality: SupportLevel;
+  minDurationSeconds?: number;
   maxDurationSeconds: number;
   aspectRatios: AspectRatio[];
   resolutions: string[];
-  fps?: number[];
-  syncOrAsync: "async";              // V1 async only expected
-  estimatedCost: PricingDefinition[];
-  providerId: ProviderId;
-  modelId: ModelId;
-  evidence: CapabilityEvidence[];    // required for each critical field
+  fps: number[];
+  syncOrAsync: "sync" | "async";
+  pollingRequired: boolean;
+  cancellationSupported: boolean;
+  estimateStrategy: "per_second" | "per_job" | "minimum_then_per_second";
 };
 ```
 
-Aussi étendre `MediaInputTypeValues` si besoin :
-
-```ts
-"source_video" // discriminant registry (video existe déjà — préférer rôle + evidence)
-```
+Coûts : `ModelCapabilities.pricing` (`PricingDefinition` / Money) — **pas** de prix non vérifié ajouté en Production.
+Media input : `source_video` ajouté à `MediaInputTypeValues`.
 
 ### 4.3 Validation
 
-- `motionTransfer !== true` → ineligible pour stratégie `motion_transfer`.
-- `sourceVideo` absent → invalid registry entry.
-- Evidence `confidence` ∈ {verified, high} pour `motionTransfer` avant enable Production.
-- I2V modèle avec seulement `startFrame` : **incompatible**.
+- `motionTransfer !== true` / bloc absent → ineligible.
+- Profil `video.motion_transfer` sans bloc → schema invalid.
+- `sourceVideo` ≠ `SUPPORTED` → hard-ineligible.
+- `UNVERIFIED` / `PARTIAL` ne satisfont jamais les hard constraints payantes ; `critical` exige `SUPPORTED`.
+- I2V / T2V / reference-images seuls : **incompatibles**.
+- Production : **0** modèle motion-transfer enabled.
 
 ### 4.4 Exemple compatible (candidat — NON sélectionné)
 
@@ -1007,14 +1019,14 @@ flowchart LR
 - **Interdit :** provider, DB, flags ON.
 - **DoD :** unitaires verts ; doc §3 respectée.
 
-### MT-002 — Capability Registry
+### MT-002 — Capability Registry — **IMPLEMENTED**
 
 - **Objectif :** profil `video.motion_transfer` + `MotionTransferModelCapabilities` + validation anti-I2V.
-- **Fichiers :** `capability-profiles.ts`, `model.ts`, registry validation, fixtures.
+- **Fichiers :** `capability-profiles.ts`, `capabilities/motion-transfer.ts`, `model.ts`, `schemas.ts`, fixtures SYNTHETIC.
 - **Dépendances :** MT-001.
-- **Acceptation :** I2V model ineligible ; snapshot version bump.
-- **Interdit :** enable Production models.
-- **DoD :** tests registry + evidence required.
+- **Acceptation :** I2V/T2V ineligible ; helpers purs ; **0** Production enabled — **PASS** (`61_`).
+- **Interdit :** enable Production models — respecté.
+- **DoD :** tests registry + eligibility — **PASS**.
 
 ### MT-003 — Router strategy
 

@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.86] — 2026-08-11
+
+### Added (MT-002 Motion Transfer Capability Registry)
+
+- Extension Registry VHS-107 : profil `video.motion_transfer`, `MediaInputType` `source_video`, bloc versionné `MotionTransferModelCapabilities` (`SupportLevel`, fidélité, contrôles, limites, `estimateStrategy`).
+- Helpers purs : `supportsMotionTransfer`, `satisfiesMotionTransferHardConstraints`, `explainMotionTransferIneligibility`.
+- Tests **30** ciblés SYNTHETIC ; unitaires **1179** ; **0** entrée Production enabled ; runtime unavailable.
+- Rapport : `61_MT002_MOTION_TRANSFER_CAPABILITY_REGISTRY.md`. Gate MT-2 Registry **PASS**. MT-003 **NOT STARTED**.
+
 ## [2.0.85] — 2026-08-11
 
 ### Added (MT-001 Motion Transfer domain contracts)
