@@ -47,7 +47,8 @@ Aucune table `motion_*`. Aucun bucket nouveau. Aucun apply Production.
 ## Migration locale
 
 ```text
-studio/supabase/migrations/20260811180000_vhs_mt005_human_review_decision_extend.sql
+studio/supabase/migrations/20260811211757_vhs_mt005_human_review_decision_extend.sql  
+(applied Production 2026-08-11 — see `82_`)
 ```
 
 - DROP/ADD CHECK sur `human_review_decisions.decision`

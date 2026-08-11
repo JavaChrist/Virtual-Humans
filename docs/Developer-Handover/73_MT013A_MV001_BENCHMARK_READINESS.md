@@ -388,7 +388,8 @@ livrable     = rapport restore PASS/FAIL + cleanup plan
 
 ## 8. Migration MT-005
 
-**Fichier :** `studio/supabase/migrations/20260811180000_vhs_mt005_human_review_decision_extend.sql`  
+**Fichier :** `studio/supabase/migrations/20260811211757_vhs_mt005_human_review_decision_extend.sql`  
+**(Post-`82_`) APPLIED Production** — version distante MCP `20260811211757` (ex-local `20260811180000`).  
 **Test :** `studio/supabase/tests/vhs_mt005_human_review_decision.sql` (pgTAP plan 8)
 
 | Check | Résultat |

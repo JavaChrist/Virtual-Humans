@@ -67,7 +67,7 @@ Auth : proxy Director fail-closed. Scope workspace/project. Capability Motioff /
 ## 7. Migration
 
 ```text
-20260811180000_vhs_mt005_human_review_decision_extend.sql
+20260811211757_vhs_mt005_human_review_decision_extend.sql
 status = LOCAL_ONLY
 Production apply = NO
 ```

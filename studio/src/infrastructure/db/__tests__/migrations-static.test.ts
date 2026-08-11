@@ -45,7 +45,7 @@ const EXPECTED_FILES = [
   "20260806120000_vhs_132_director_success_commit_remainder.sql",
   "20260807213624_vhs_133_art_human_retry_input_artifact.sql",
   "20260807213803_vhs_134_legacy_art_timeout_retry.sql",
-  "20260811180000_vhs_mt005_human_review_decision_extend.sql",
+  "20260811211757_vhs_mt005_human_review_decision_extend.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -71,7 +71,7 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 30 versions (29 Production + MT-005 local-only)", () => {
+test("migrations — 30 versions (aligned Production including MT-005)", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
   assert.equal(files.length, 30);
@@ -329,9 +329,9 @@ test("migrations V2 — VHS-125 postproduction delivery RPCs et table présents"
   );
 });
 
-test("migrations V2 — MT-005 human_review decision extend (local-only)", () => {
+test("migrations V2 — MT-005 human_review decision extend (applied Production)", () => {
   const sql = readFileSync(
-    join(MIGRATIONS_DIR, "20260811180000_vhs_mt005_human_review_decision_extend.sql"),
+    join(MIGRATIONS_DIR, "20260811211757_vhs_mt005_human_review_decision_extend.sql"),
     "utf8",
   );
   assert.match(sql, /DROP CONSTRAINT IF EXISTS human_review_decisions_decision_check/i);

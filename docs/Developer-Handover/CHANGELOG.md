@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.108] — 2026-08-11
+
+### Changed (MT-005 Remote Apply — PASS)
+
+- Auth `AUTH_MT005_REMOTE_APPLY_ONLY` : migration MT-005 appliquée Production (`ejdb…nmvi`) via MCP.
+- Version distante `20260811211757` ; local renommé pour alignement 30/30. CHECK 5 décisions · RPC service_role · RLS on.
+- Tests : migrations-static 14/14 · integration:db 33/33. Runtime Motion UNAVAILABLE. Rapport `82_`.
+
 ## [2.0.107] — 2026-08-11
 
 ### Added (MT-013D Privacy Decision Pack — ACCEPTED)

@@ -457,7 +457,7 @@ Voir [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER
 | Élément | Décision MT-005 |
 |---|---|
 | Tables `production_*` / `assets` / ledger / idempotency / audit | **REUSE_AS_IS** — pas de tables `motion_*` V1 |
-| `human_review_decisions.decision` | **LOCAL_MIGRATION** `20260811180000_vhs_mt005_human_review_decision_extend.sql` — allowlist + retry intents — **NOT APPLIED** Production |
+| `human_review_decisions.decision` | **APPLIED** Production `20260811211757_vhs_mt005_human_review_decision_extend.sql` — allowlist + retry intents (`82_`) |
 | Nouvel `ArtifactType` | **non** requis V1 |
 | Storage bucket | **REUSE** `director-final-assets` (privé) |
 | Storage paths | `{workspace}/{project}/motion/{role}/{assetId}.{ext}` |
