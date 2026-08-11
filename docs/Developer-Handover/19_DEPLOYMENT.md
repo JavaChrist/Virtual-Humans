@@ -8,7 +8,7 @@
 |---|---|
 | Runtime AI Production | **OFF** (prouvée après chaque smoke texte) |
 | Budget workspace | hard **122¢** / committed **112** / available **10** |
-| Backup / restore | **PASS** (`78_`) · `RESTORE_DRILL = PASS` · P1 restore **fermé** · cible `qmsh…qlnq` (ne pas delete sans Auth) |
+| Backup / restore | **PASS** (`78_`) · P1 restore **fermé** · cible drill **supprimée** (`80_`) |
 | Média `/director` | **0** job ; 11A `DECISION_REQUIRED` |
 | Motion Transfer | flags `MOTION_TRANSFER_*` OFF (`67_`…`73_`) — worker/review refuse tant que OFF ; synthetic E2E only (`72_`) ; MV-001 readiness (`73_`) ; privacy **PENDING** ; migration MT-005 **NOT APPLIED** Production ; **ne pas** activer sur Vercel ni benchmark sans Auth |
 | Kill switches | voir Phases `25_`, fermetures `57_` ; motion : §15 de `59_` |

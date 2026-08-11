@@ -15,7 +15,7 @@ Runtime AI : OFF
 Media jobs : 0
 P1         : décision média image VHS-124
 P1 fermé   : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS · cible qmsh…qlnq)
-Next major : delete Dashboard `qmsh…` (`79_` STOP) ; Privacy ; Auth MT-005 ; puis paid
+Next major : signatures Privacy (`74_`) ; Auth MT-005 remote ; puis paid — ne pas fusionner
 ```
 
 ## P0 — fondations
@@ -75,7 +75,8 @@ Next major : delete Dashboard `qmsh…` (`79_` STOP) ; Privacy ; Auth MT-005 ; p
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A** readiness `73_` · fal adapter + worker **disabled** · synthetic E2E ready · privacy **PENDING** · Production → unavailable · **MV001_NOT_EXECUTED** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **122** ; committed **112** ; available **10** ; MV-001 3s shortfall **52¢** vs réserve 62¢.
-- **Prochaine porte majeure** : delete humain cible restore (`79_` · préflight OK · MCP sans delete) puis signatures Privacy + Auth MT-005 — ne pas fusionner.
+- **Prochaine porte majeure** : signatures Privacy (`74_`) puis Auth **MT-005 remote apply** — ne pas fusionner avec paid/benchmark.  
+- Cible restore `qmsh…qlnq` : **supprimée** et vérifiée (`80_`).
 
 ## P2 — durcissement
 

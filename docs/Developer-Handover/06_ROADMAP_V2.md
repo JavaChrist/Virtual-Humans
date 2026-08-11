@@ -49,7 +49,8 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | MT-013C | Isolated restore target | **STOP** (`75_`) · coût ≠ 0 · pas de restore backup via MCP |
 | MT-013C-PAID | Paid isolated project restore | **STOP** (`76_`) · restore backup non dispo via MCP · clone Dashboard requis |
 | MT-013C-QUOTE | Dashboard quote preflight | **QUOTE_CAPTURED** (`77_`) · $10.18/mois |
-| MT-013C-PASS | Restore drill verification | **PASS** (`78_`) · cible `qmsh…qlnq` · P1 restore fermé |
+| MT-013C-PASS | Restore drill verification | **PASS** (`78_`) · P1 restore fermé |
+| MT-013C-DEL | Delete isolated target | **VERIFIED** (`80_`) · `qmsh…` absent · Production healthy |
 | MT-013D… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · MT-005 **NOT APPLIED** · **PAID NOT AUTHORIZED** |
 
 **Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` exécutable ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.

@@ -5,8 +5,9 @@
 **Opération :** **NON EXÉCUTÉE** — suppression définitive indisponible via MCP
 
 ```text
-DELETE_ATTEMPT                = STOPPED_NO_MCP_DELETE_PROJECT
-TARGET_STILL_PRESENT          = true
+DELETE_ATTEMPT                = STOPPED_NO_MCP_DELETE_PROJECT  (agent)
+# Suite humaine + vérif : voir 80_ DELETE_VERIFIED
+TARGET_STILL_PRESENT          = false  (post-humain — 80_)
 PRODUCTION_MUTATIONS          = 0
 OTHER_PROJECTS_TOUCHED        = 0
 PAUSE_USED_AS_SUBSTITUTE      = false
@@ -83,6 +84,6 @@ L’agent vérifiera ensuite :
 
 ## 5. Suite
 
-1. Humain : delete Dashboard cible uniquement.  
-2. Agent : post-vérif + rapport `79_` → `DELETE_VERIFIED` (amendement ou `80_`).  
+1. Humain : delete Dashboard **fait**.  
+2. Agent : post-vérif **PASS** → [`80_MT013C_DELETE_TARGET_VERIFIED.md`](./80_MT013C_DELETE_TARGET_VERIFIED.md).  
 3. Ne pas démarrer MT-005 / paid sans Auth.

@@ -35,7 +35,7 @@ production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : décision média image VHS-124
 P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
-Prochaine porte majeure  : delete Dashboard cible `qmsh…` (`79_` STOP outil) ; Privacy ; Auth MT-005 — pas de paid
+Prochaine porte majeure  : signatures Privacy (`74_`) puis Auth MT-005 remote — pas de paid/benchmark
 ```
 
 ### Portes Directors texte
@@ -193,6 +193,7 @@ Utilisateur → AI Video Director (/director)
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
 | [`78_MT013C_RESTORE_DRILL_PASS.md`](./78_MT013C_RESTORE_DRILL_PASS.md) | **MT-013C Restore drill PASS — cible `qmsh…qlnq` · P1 restore fermé** |
 | [`79_MT013C_DELETE_TARGET_STOP.md`](./79_MT013C_DELETE_TARGET_STOP.md) | **MT-013C Delete STOP — préflight OK · pas de `delete_project` MCP** |
+| [`80_MT013C_DELETE_TARGET_VERIFIED.md`](./80_MT013C_DELETE_TARGET_VERIFIED.md) | **MT-013C Delete VERIFIED — `qmsh…` absent · Production healthy** |
 
 ### Pilotage (hors numérotation)
 

@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.106] — 2026-08-11
+
+### Added (MT-013C Delete Target — VERIFIED)
+
+- Delete Dashboard humain de `VHS Restore Drill 2026-08-09` (`qmsh…qlnq`) vérifié : cible **absente**.
+- Production `ejdb…nmvi` **ACTIVE_HEALTHY** ; aucune autre ressource manquante. Rapport `80_`.
+
 ## [2.0.105] — 2026-08-11
 
 ### Added (MT-013C Delete Target — STOP)
