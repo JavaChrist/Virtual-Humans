@@ -1,5 +1,11 @@
 # 04 — Vision cible
 
+**Classe :** `FUTURE_DESIGN`
+
+> Vision produit / UX / NFR — **pas** un snapshot d’état livré.
+> État validé : cinq Directeurs texte PASS ; export/média réel `/director` non prouvés.
+> Voir `00_README.md` et `BACKLOG_V2.md` pour le checkpoint ops.
+
 ## Expérience standard
 
 1. L'utilisateur crée un projet et remplit un brief minimal.

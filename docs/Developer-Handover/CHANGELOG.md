@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.83] — 2026-08-11
+
+### Documentation (Developer-Handover refresh)
+
+- Réécrit `17_SUPABASE_PROJECTS.md` sur le schéma réel (29 migrations, tables/RPCs, RLS service_role, rétention).
+- `00_README.md` : index 00–58, autorité docs, checkpoint ops, portes Directors.
+- Bandeaux CURRENT / HISTORICAL / FUTURE sur 01–20 ; Ops sur 07–16 ; baselines 18/CHECKLIST ; plan Supabase + audit.
+- **0** code applicatif · **0** provider · **0** push. Totaux documentés : mig. 29 / pgTAP 378 / intégration 33 / unitaires 1122.
+
 ## [2.0.82] — 2026-08-11
 
 ### Prepared (Phase 11A MEDIA PREP)

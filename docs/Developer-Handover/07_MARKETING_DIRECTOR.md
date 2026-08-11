@@ -1,5 +1,17 @@
 # 07 — Marketing Director
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Smoke réel | **PASS** Phase 10B (`27_PHASE_10B_FIRST_REAL_TEXT_SMOKE.md`) |
+| Prompt canon | `marketing-analyzer-v2` |
+| Modèle smoke | `gpt-5.6` |
+| Artifact Production | `marketing_plan` rev.1 |
+| Runtime après smoke | OFF |
+
 ## Mission
 
 Transformer un `VideoProjectBrief` validé en une stratégie de message unique. Il répond à « quoi dire, à qui et pour quel résultat ? » sans écrire le script ni choisir un moteur.

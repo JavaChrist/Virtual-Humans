@@ -1,5 +1,18 @@
 # 11 — Storyboard Director
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Smoke réel | **PASS** Phase 10F-V4 (`57_PHASE_10F_STORYBOARD_V4_EXECUTE.md`) |
+| Prompt canon | `storyboard-analyzer-v4` (après BLOCKED v2/v3) |
+| Modèle smoke | `gpt-5.6` |
+| Artifact Production | `storyboard_project` rev.1 |
+| Continuité | matrice mandatory 24/9/5 |
+| Runtime après smoke | OFF |
+
 ## Mission
 
 Transformer script et direction visuelle en plan de tournage composé de scènes indépendantes. Le storyboard devient le contrat de production et ne sera pas modifié par les couches suivantes.

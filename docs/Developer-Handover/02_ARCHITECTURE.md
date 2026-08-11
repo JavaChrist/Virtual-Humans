@@ -1,5 +1,11 @@
 # 02 — Architecture V2 figée
 
+**Classe :** `CURRENT`
+
+> Contrats et frontières toujours normatifs. Chemins applicatifs sous `studio/src/…`.
+> Maturité ops : texte Marketing→Storyboard prouvé réel ; Prompt→média = fakes / 11A.
+> État courant : `00_README.md`, `BACKLOG_V2.md`.
+
 ## Vue d'ensemble
 
 ```text

@@ -1,8 +1,16 @@
 # 20 — Audit final V2 (Phase 9)
 
-**Date :** 3 août 2026  
-**Périmètre :** `studio/` — pipeline `/director` V2 local  
-**Décision locale :** `GO WITH EXCEPTIONS` — implémentation locale terminée et validée avec providers fakes ; **pas** production distante validée.
+**Classe :** `HISTORICAL_SNAPSHOT` — figé au **3 août 2026** (Phase 9 / fakes locaux)
+
+> **Ne pas utiliser comme vérité ops au 11 août 2026.**
+> Depuis : migrations **29**, pgTAP **378**, intégration **33**, unitaires **1122** ;
+> smokes texte Marketing→Storyboard **PASS** (`27`–`57`) ; média **0** (`58_`).
+> État courant : `00_README.md`, `BACKLOG_V2.md`, `17_SUPABASE_PROJECTS.md`.
+> Conserver ce fichier pour l’historique Phase 9 — ne pas réécrire les tableaux ci-dessous.
+
+**Date :** 3 août 2026
+**Périmètre :** `studio/` — pipeline `/director` V2 local
+**Décision locale (à la date) :** `GO WITH EXCEPTIONS` — implémentation locale terminée et validée avec providers fakes ; **pas** production distante validée.
 
 ## Décision
 

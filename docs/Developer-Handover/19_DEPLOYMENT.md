@@ -1,5 +1,18 @@
 # 19 — Déploiement et exploitation
 
+**Classe :** `CURRENT`
+
+### Checkpoint ops (11 août 2026)
+
+| | |
+|---|---|
+| Runtime AI Production | **OFF** (prouvée après chaque smoke texte) |
+| Budget workspace | hard **122¢** / committed **112** / available **10** |
+| Backup / restore | P1 `BACKUP_PRESENT_RESTORE_UNPROVEN` — ouvert |
+| Média `/director` | **0** job ; 11A `DECISION_REQUIRED` |
+| Kill switches | voir Phases `25_`, fermetures `57_` |
+| Target guard Supabase | fail-closed (`supabase-target-guard.ts`) |
+
 ## Environnements
 
 Local, preview par changement, staging isolé, production. Bases, buckets, clés, webhooks et quotas séparés. Aucune donnée de production dans preview.
@@ -89,4 +102,7 @@ Runbooks : fuite de secret, dépenses anormales, provider indisponible, queue bl
 ## Sauvegarde
 
 Sauvegardes de base et restauration testée, versioning/rétention des assets critiques, export des manifests. La présence d'une sauvegarde n'est pas considérée comme preuve tant qu'une restauration n'a pas réussi.
+
+**Statut P1 ouvert :** `BACKUP_PRESENT_RESTORE_UNPROVEN` (`24_PHASE_10AB_ENVIRONMENT_SAFETY.md`).
+Ne bloque pas un smoke média **additif borné** (décision `58_`) ; reste bloquant avant opération distante invasive.
 

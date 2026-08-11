@@ -1,5 +1,15 @@
 # 16 — Interface AI Video Director
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Live sous flags | Brief → Storyboard (texte réel validé) ; suite Production/Export = fakes locaux |
+| E2E | Playwright fake mode Phase 8–9 |
+| Aspirational | revue production média réelle, export réel multi-provider |
+
 ## Rôle
 
 `/director` est le parcours visible qui pilote le workflow applicatif. Il présente et fait approuver les objets métier ; il ne contient aucune logique des Directeurs et n'expose pas les providers dans le parcours standard.

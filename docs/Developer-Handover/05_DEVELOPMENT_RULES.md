@@ -1,4 +1,9 @@
-# 05 — Règles de développement obligatoires
+# 05 — Règles de développement
+
+**Classe :** `CURRENT`
+
+> Toujours applicables (flags, dry-run, migrations immuables, secrets serveur).
+> Kill switches et checklist ops : `19_DEPLOYMENT.md`, `CHECKLIST_RELEASE.md`.
 
 ## Avant de coder
 

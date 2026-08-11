@@ -1,8 +1,14 @@
 # 03 — Audit de l'existant
 
-## Statut
+**Classe :** `HISTORICAL_SNAPSHOT` (protocole d’entrée pack V2)
 
-Le dépôt applicatif n'a pas été fourni avec ce pack. Aucun constat de code ne doit donc être présenté comme vérifié. Ce document est le protocole d'audit obligatoire avant la première modification.
+> **Supersédé pour l’état du code** par `CURRENT_CODEBASE_AUDIT.md` (Phase 0→Porte 1),
+> `20_FINAL_AUDIT.md` (Phase 9 fakes), puis rapports `23`–`58` (Phases 10–11A).
+> Conserver ce fichier comme **protocole** de matrice reuse/wrap/refactor — ne pas le lire comme état 2026-08-11.
+
+## Statut (historique)
+
+À la rédaction du pack, le dépôt n’était pas joint. Le protocole ci-dessous a été exécuté ensuite (VHS-001). **Ne pas** présenter ce document comme inventaire courant.
 
 ## Inventaire
 

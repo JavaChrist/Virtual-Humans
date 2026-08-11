@@ -1,5 +1,17 @@
 # 10 — Art Director
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Smoke réel | **PASS** Phase 10E-V3 (`37_PHASE_10E_ART_V3_NEW_EXECUTE.md`) |
+| Prompt canon | `art-analyzer-v3` (v2 → `invalid_candidate`, voir `34_`–`35_`) |
+| Modèle smoke | `gpt-5.6` |
+| Artifact Production | `visual_direction` rev.1 |
+| Runtime après smoke | OFF |
+
 ## Mission
 
 Transformer le script en mise en scène cohérente. Il décide ce que le spectateur voit : univers, palette, lieux, vêtements, expressions, poses, caméra, lumière, composition et continuité.

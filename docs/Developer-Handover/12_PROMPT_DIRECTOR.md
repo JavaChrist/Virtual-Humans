@@ -1,5 +1,16 @@
 # 12 — Prompt Director
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Implémentation | Déterministe — livrée localement (VHS-122) |
+| Production | **0** artifact `scene_package_set` actif post-Storyboard |
+| Provider | aucun (pas d’appel AI) |
+| Suite | prérequis dry-run Phase 11A ; pas de smoke média lancé |
+
 ## Mission
 
 Transformer chaque scène approuvée en représentation structurée complète. Il produit des `ScenePackage` et des rendus de prompts par capacité. Il ne choisit ni provider ni stratégie d'exécution.

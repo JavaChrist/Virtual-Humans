@@ -1,5 +1,17 @@
 # 08 — Creative Director
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Smoke réel | **PASS** Phase 10C (`29_PHASE_10C_FIRST_REAL_CREATIVE_SMOKE.md`) |
+| Prompt canon | `creative-analyzer-v5` |
+| Modèle smoke | `gpt-5.6` |
+| Artifact Production | `creative_concept` rev.1 |
+| Runtime après smoke | OFF |
+
 ## Mission
 
 Transformer un `MarketingPlan` en concept narratif. Il répond à « quelle idée créative rend ce message mémorable ? » sans écrire les répliques, la direction de caméra ni les prompts.

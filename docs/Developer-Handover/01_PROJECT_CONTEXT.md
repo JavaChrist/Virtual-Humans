@@ -1,5 +1,12 @@
 # 01 — Contexte du projet
 
+**Classe :** `CURRENT` (rafraîchi 11 août 2026)
+
+> Le dépôt `studio/` est fourni et audité (`CURRENT_CODEBASE_AUDIT.md`, Phases 1–11A).
+> Ce document décrit le **produit** ; l’état ops vit dans `BACKLOG_V2.md` + rapports `27`–`58`.
+> Validé en Production : cinq Directeurs **texte** (Marketing→Storyboard).
+> Non validé : média réel sur `/director` (Phase 11A `DECISION_REQUIRED`).
+
 ## Problème
 
 Les outils de génération demandent à l'utilisateur de comprendre les modèles, les prompts, les paramètres, les formats et les compromis coût/qualité. Virtual Humans Studio transforme cette complexité en décisions assistées et traçables.
@@ -36,7 +43,7 @@ Le produit part d'une intention : produit ou service, objectif, plateforme, pers
 
 ## Contraintes héritées
 
-Le dépôt attendu utilise Next.js, React, TypeScript strict, Tailwind CSS, App Router/API Routes et Supabase. Les intégrations incluent notamment OpenAI, ElevenLabs et des modèles servis directement ou via fal.ai. Le code réel doit être audité avant toute implémentation : ce pack définit la cible, pas l'état exact d'un dépôt non fourni.
+Stack réelle (`studio/`) : Next.js App Router, React, TypeScript strict, Tailwind CSS, Supabase. Intégrations : OpenAI, ElevenLabs, fal.ai (et chemins legacy). L’audit Phase 0 et les Phases 1–10 ont confirmé structure, schéma V2 (29 migrations) et smokes texte ; ce pack n’est plus « dépôt absent ».
 
 ## Actifs existants à préserver
 

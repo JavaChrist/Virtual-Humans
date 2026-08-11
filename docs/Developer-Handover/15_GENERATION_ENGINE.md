@@ -1,5 +1,16 @@
 # 15 — Generation Engine
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Ports / adapters | Code réel OpenAI image, fal, ElevenLabs **présent** |
+| Wiring `/director` | **fakes only** (VHS-124) |
+| Legacy | `/api/generate/*` hors pipeline Director (ne prouve pas `production_jobs`) |
+| Kill switches | `PAID_GENERATION` ∧ `WORKER` requis pour exécution payante |
+
 ## Mission
 
 Exécuter une `GenerationStep` technique via un adaptateur et retourner un résultat normalisé. Le moteur ne choisit ni provider, ni fallback, ni contenu.

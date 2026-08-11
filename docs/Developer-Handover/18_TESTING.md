@@ -1,5 +1,18 @@
 # 18 — Stratégie de tests
 
+**Classe :** `CURRENT` (stratégie + baselines chronologiques)
+
+## Baselines vérifiées (ne pas confondre)
+
+| Moment | Migrations | pgTAP | Intégration DB | Unitaires | E2E |
+|---|---|---|---|---|---|
+| Phase 9 / audit `20_` | 16–17 | 276–286 | 30–31 | 785–802 | 15×2 |
+| Post 10A–10B | **29** | **378** | **33** | **1016** | — |
+| Phase 11A PREP (`58_`) | 29 | 378 | 33 | **1122** | — |
+
+Smokes provider texte (10B–10F) = hors CI ; preuves dans rapports `27`–`57`.
+Média réel : **0** (11A prep seulement).
+
 ## Pyramide
 
 - nombreux tests unitaires du domaine et des schemas ;
@@ -33,11 +46,11 @@ Application mobile, restaurant, photographe, service B2B, commerce et associatio
 
 ## Tests par couche
 
-Directeurs : invariants, traçabilité aux entrées, validation et absence de responsabilité interdite.  
-Router : matrice de capacités figée, scoring, budget, explication et déterminisme.  
-Production : machine d'état, idempotence, concurrence, retry/fallback, reprise et annulation.  
-Engine : contrats, webhooks, erreurs, timeout et redaction.  
-UI : accessibilité, autosave, conflits, erreurs et reprise.  
+Directeurs : invariants, traçabilité aux entrées, validation et absence de responsabilité interdite.
+Router : matrice de capacités figée, scoring, budget, explication et déterminisme.
+Production : machine d'état, idempotence, concurrence, retry/fallback, reprise et annulation.
+Engine : contrats, webhooks, erreurs, timeout et redaction.
+UI : accessibilité, autosave, conflits, erreurs et reprise.
 Data : RLS, migrations, contraintes, purge et URLs signées.
 
 ## IA non déterministe

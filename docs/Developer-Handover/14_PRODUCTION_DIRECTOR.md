@@ -1,5 +1,16 @@
 # 14 — Production Director
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Local fakes | Pipeline queue / QC / merge fake / export validés (Phases 4–9) |
+| Production réelle | `production_runs` = **0** · `production_jobs` = **0** · assets = **0** |
+| Média | Phase 11A prep `DECISION_REQUIRED` (`58_`) — aucun job lancé |
+| Adapters | réels non branchés sur `/director` (`assertDirectorProductionUsesFakes`) |
+
 ## Mission
 
 Orchestrer l'exécution d'un `GenerationPlan` approuvé. Il gère jobs, dépendances, budget, états, fallbacks, contrôle qualité, merge et export. Il n'invente ni contenu ni stratégie.

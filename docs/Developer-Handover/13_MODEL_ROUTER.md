@@ -1,5 +1,16 @@
 # 13 — Model Router
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Implémentation | Pure fonction + persist `generation_plan` (VHS-123) |
+| Production | **0** `generation_plan` actif |
+| Dry-run 11A | plan complet → `no_eligible_strategy` (registre legacy partiel ; fallbacks=0) |
+| Contrainte | `/director` force fakes adapters (VHS-124) — média réel non branché |
+
 ## Mission
 
 Construire la meilleure stratégie de production réalisable pour chaque `ScenePackage`, sous contraintes de qualité, identité, délai, budget et disponibilité. Il choisit et explique ; il n'exécute pas.

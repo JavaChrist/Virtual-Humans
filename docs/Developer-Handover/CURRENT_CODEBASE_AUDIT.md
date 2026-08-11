@@ -1,9 +1,17 @@
 # CURRENT_CODEBASE_AUDIT — Phase 0
 
-**Date :** 2 août 2026  
-**Périmètre :** dépôt `virtual-humans` (application `studio/` + packages `characters/` + Supabase projet `ejdbksxaswhdtsudnmvi`)  
-**Protocole :** `03_CURRENT_AUDIT.md` + Phase 0 de `06_ROADMAP_V2.md` (VHS-001)  
-**Statut :** audit terminé — aucune modification d’architecture applicative pendant cet audit
+**Classe :** `HISTORICAL_SNAPSHOT` (Phase 0 → Porte 1) + bandeau courant
+
+**Date :** 2 août 2026 (corps) · **bandeau ops :** 11 août 2026
+**Périmètre :** dépôt `virtual-humans` (application `studio/` + packages `characters/` + Supabase)
+**Protocole :** `03_CURRENT_AUDIT.md` + Phase 0 de `06_ROADMAP_V2.md` (VHS-001)
+**Statut corps :** audit terminé — aucune modification d’architecture applicative pendant cet audit
+
+> **État courant (ne pas lire les baselines Phase 9 ci-dessous comme totaux 2026-08-11) :**
+> migrations **29** · pgTAP **378** · intégration DB **33** · unitaires **1122** ;
+> Directors texte Marketing→Storyboard **PASS** (prompts `marketing-analyzer-v2`, `creative-analyzer-v5`, `script-analyzer-v1`, `art-analyzer-v3`, `storyboard-analyzer-v4`) ;
+> budget **122 / 112 / 10** · runtime AI **OFF** · media jobs **0** · P1 backup ouvert · Phase 11A `DECISION_REQUIRED`.
+> Autorité ops : `BACKLOG_V2.md`, `17_SUPABASE_PROJECTS.md`, `00_README.md`, rapports `57_`/`58_`.
 
 > Mise à jour lot VHS-118B + VHS-119A + VHS-119B : pipeline persistant étendu jusqu’au `VideoScript` (Brief → Marketing → Creative → Script) sous flags AI off ; timing VHS-103 autoritaire ; **0** OpenAI / smoke / apply distant.
 >
@@ -23,8 +31,8 @@
 >
 > **Préprod Porte 1 (4 août 2026) :** stockage durable `director-final-assets` (VHS-127) + adapter Supabase Storage ; merge → Storage → download multi-instance validé localement (17 mig. / pgTAP 286 / intégration 31 / unitaires 802 / E2E 15×2). **Apply distant / deploy : non effectués.** Commit local uniquement.
 
-> Légende : **[Fait]** = vérifié dans le dépôt / par exécution / via Supabase MCP.  
-> **[Hypothèse]** = non confirmé ou dépendant d’un environnement externe.  
+> Légende : **[Fait]** = vérifié dans le dépôt / par exécution / via Supabase MCP.
+> **[Hypothèse]** = non confirmé ou dépendant d’un environnement externe.
 > Aucun appel payant provider n’a été effectué.
 
 ---
@@ -117,10 +125,10 @@ Layout : `CharacterProvider` → `ConfirmProvider` → `Nav` + `main` + `PwaRegi
 
 ### 2.2 Routes API (27)
 
-**Auth / config :** `login`, `settings`, `budget`, `estimate`  
-**SDK lecture :** `characters`, `character`, `v1/characters`, `v1/characters/[id]`, `assets`, `asset`, `outfits`, `template`  
-**Génération payante :** `generate/image`, `voice`, `video`, `lipsync`, `status`, `scene-image`, `duo-frame`, `merge`, `merge-audio`, `carousel`  
-**Données :** `products`, `product-screen`, `scenes`  
+**Auth / config :** `login`, `settings`, `budget`, `estimate`
+**SDK lecture :** `characters`, `character`, `v1/characters`, `v1/characters/[id]`, `assets`, `asset`, `outfits`, `template`
+**Génération payante :** `generate/image`, `voice`, `video`, `lipsync`, `status`, `scene-image`, `duo-frame`, `merge`, `merge-audio`, `carousel`
+**Données :** `products`, `product-screen`, `scenes`
 **Utilitaires :** `video-models`, `aiccos/send`
 
 Protection : globale via `proxy.ts` **uniquement si** `APP_PASSWORD` est défini. Les handlers generate appellent `capReached()` puis `addSpend()` après succès.
@@ -891,12 +899,12 @@ npm run build        # build production Next 16
 
 **VHS-002 / Phase 7 :** livré — auth fail-closed. Variables : `APP_PASSWORD` (≥12) + `APP_SESSION_SECRET` (≥32) dans `.env.local` (jamais committer). Cookie `vh_auth` signé TTL 12 h. Matrice publics = `/login`, `POST /api/login`, `/offline`, assets matcher, et **uniquement** `POST /api/internal/director-worker/run-once` (secret worker — **pas** de wildcard `/api/internal/**` ; cookie utilisateur insuffisant pour le worker). Login : champ mot de passe masqué par défaut + bouton œil accessible. Rate-limit mémoire = best-effort multi-instance. Checkpoint : `CHANGELOG` 2.0.43.
 
-**Phase 8 E2E :** Playwright local (`npm run test:e2e`) — `DIRECTOR_V2_E2E_FAKE_MODE` fail-closed, barrière réseau, workspace `e2e-*`, Chromium/Chrome ; **15/15 ×2**. Checkpoint : `CHANGELOG` 2.0.44 (unitaires 776). Phase 9 non commencée.  
-**Ne pas** appliquer les migrations distantes sans autorisation écrite.  
-**Ne pas** activer worker + paid generation sans store durable et plafond V2.  
-**Ne pas** publier AICCOS depuis le PD sans critères d’activation.  
-**Ne pas** implémenter auth fail-closed (VHS-002) sans réponse à Q1.  
-**Ne pas** créer un second moteur Storyboard UI.  
-**Ne pas** déclencher de fallback depuis le Generation Engine.  
-**Ne pas** relancer le smoke Marketing sans nouvelle autorisation (1 appel / ≤0,10 USD).  
+**Phase 8 E2E :** Playwright local (`npm run test:e2e`) — `DIRECTOR_V2_E2E_FAKE_MODE` fail-closed, barrière réseau, workspace `e2e-*`, Chromium/Chrome ; **15/15 ×2**. Checkpoint : `CHANGELOG` 2.0.44 (unitaires 776). Phase 9 non commencée.
+**Ne pas** appliquer les migrations distantes sans autorisation écrite.
+**Ne pas** activer worker + paid generation sans store durable et plafond V2.
+**Ne pas** publier AICCOS depuis le PD sans critères d’activation.
+**Ne pas** implémenter auth fail-closed (VHS-002) sans réponse à Q1.
+**Ne pas** créer un second moteur Storyboard UI.
+**Ne pas** déclencher de fallback depuis le Generation Engine.
+**Ne pas** relancer le smoke Marketing sans nouvelle autorisation (1 appel / ≤0,10 USD).
 **Ne pas** activer `DIRECTOR_V2_*_AI_ENABLED` en permanence.

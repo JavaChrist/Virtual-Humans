@@ -1,13 +1,21 @@
 # Plan d’application Supabase V2 (VHS-113)
 
-> **Phase 9 (3 août 2026) :** validation **locale** complète (16 migrations, pgTAP 276, intégration 30, 2 cycles verts).  
-> **Aucune** application distante effectuée. Apply distant = autorisation humaine séparée + backup préalable.
+**Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
+
+> **Baseline locale courante (post-10A / 11 août 2026) :**
+> migrations **29/29** · `db reset` PASS · pgTAP **378** · intégration DB **33/33** · target guard fail-closed.
+> Schéma détaillé : **`17_SUPABASE_PROJECTS.md`**.
+> Smokes texte Production validés ; **0** media job. P1 backup restore ouvert.
+>
+> **Phase 9 (3 août 2026) — snapshot :** validation locale alors à 16–17 mig. / pgTAP 276–286 / intégration 30–31.
+> Apply distant supplémentaire = **autorisation humaine** + backup ; ne pas relancer l’historique VHS-125 sans runbook `21_`.
 
 ## Décisions pilote
 
-Migrations locales : versions numériques alignées Production après Porte 3
-(`20260804134311` … `20260804140422`, **22** fichiers incl. 3 marqueurs remainder VHS-125).
-Voir `21_VHS_125_REMOTE_MIGRATION_INCIDENT.md`. Ne pas confondre avec les anciens préfixes locaux `20260802*` / `20260803*`.
+Migrations locales : **29** fichiers sous `studio/supabase/migrations/`
+(legacy `vh_*` + VHS-113…134, incl. 3 marqueurs no-op `vhs_125_remainder_part{1,2,3}`).
+Versions numériques alignées Production après Porte 3 (`20260804134311` … `20260807213803`).
+Voir `21_VHS_125_REMOTE_MIGRATION_INCIDENT.md`. Ne pas confondre avec d’anciens préfixes locaux `20260802*` / `20260803*` (obsolètes dans le dépôt).
 
 | Décision | Choix |
 |---|---|
@@ -28,32 +36,39 @@ Voir `21_VHS_125_REMOTE_MIGRATION_INCIDENT.md`. Ne pas confondre avec les ancien
 
 ## Migrations du dépôt
 
-Dossier : `studio/supabase/migrations/`
+Dossier : `studio/supabase/migrations/` — liste **canonique à jour** dans `17_SUPABASE_PROJECTS.md` §7 (29 fichiers).
+
+Extrait cœur VHS-113 (noms **réels** post-alignement) :
 
 | Fichier | Contenu |
 |---|---|
-| `20260802180000_vhs_113_v2_core.sql` | workspaces, projects, artifacts, active revisions, approvals, storyboard projection, generation_plans |
-| `20260802180100_vhs_113_v2_production_queue.sql` | production_runs, production_jobs, generation_attempts, claim/heartbeat/complete/fail/release |
-| `20260802180200_vhs_113_v2_ledger_events_assets.sql` | cost_ledger, budget_reservations, idempotency, domain_events, assets, audit_log, budget RPCs |
-| `20260802180300_vhs_113_v2_rls_grants.sql` | RLS, REVOKE public, GRANT service_role |
+| `20260804134311_vhs_113_v2_core.sql` | workspaces, budget policies, video_projects, artifacts, active revisions, approvals, storyboard_scenes, generation_plans |
+| `20260804134410_vhs_113_v2_production_queue.sql` | production_runs, production_jobs, generation_attempts, claim/heartbeat/complete/fail/release |
+| `20260804134443_vhs_113_v2_ledger_events_assets.sql` | cost_ledger, budget_reservations, idempotency, domain_events, assets, audit_log, budget RPCs |
+| `20260804134500_vhs_113_v2_rls_grants.sql` | RLS, REVOKE public, GRANT service_role |
+
+> Les anciens noms `20260802180*` dans les brouillons pré-alignement sont **obsolètes** — ne plus les utiliser.
 
 ## Alignement historique distant
 
-Les migrations `vh_*` **ne sont pas** dans le dépôt (éviter une réapplication destructive).
+Les migrations legacy `vh_*` **sont** dans le dépôt (`20260723203021`, `20260728210808`) et déjà appliquées en Production.
+Ne **pas** les réappliquer destructivement. Voir incident `21_` pour remainder VHS-125.
 
-Procédure recommandée avec le CLI :
+Procédure CLI (si nouvel environnement) :
 
 1. `npx supabase link --project-ref <ref>`
 2. `npx supabase migration list`
-3. Si le CLI exige un baseline des versions distantes, utiliser `supabase migration repair --status applied` pour `20260723203021` et `20260728210808` **sans** rejouer leur SQL.
-4. Appliquer uniquement les `20260802*`.
+3. Si baseline requis : `migration repair --status applied` pour les versions déjà distantes **sans** rejouer leur SQL.
+4. Appliquer uniquement les versions manquantes dans l’ordre timestamp (liste § `17_`).
 
 ## Ordre d’application (distant — après autorisation)
 
-1. Backup / snapshot projet.
-2. Vérifier absence des tables V2 (`workspaces`, `video_projects`, …).
-3. Appliquer les 4 migrations dans l’ordre timestamp.
-4. Créer le workspace pilote :
+> Historique : le schéma V2 Production est déjà aligné (29 versions). Ce runbook sert aux **nouveaux** environnements ou deltas futurs — pas à rejouer VHS-113 depuis zéro sur Production.
+
+1. Backup / snapshot projet + preuve de restore (ferme P1 si invasif).
+2. Vérifier tables V2 présentes / absentes selon la cible.
+3. Appliquer les migrations manquantes dans l’ordre timestamp.
+4. Créer le workspace pilote (si absent) :
 
 ```sql
 INSERT INTO public.workspaces (id, slug, name, mode)
@@ -85,15 +100,22 @@ SELECT proname FROM pg_proc WHERE pronamespace = 'public'::regnamespace
 4. **Ne pas** dropper automatiquement les tables V2 en production.
 5. Rollback SQL destructif réservé aux environnements locaux vides uniquement.
 
-## Complément VHS-114 (locale, non appliquée distant)
+## Notes de livraison historiques (VHS-114…126)
+
+> Les tableaux ci-dessous décrivent le **contenu** livré.
+> Noms de fichiers = versions **actuelles** du dépôt (post-alignement Porte 3).
+> « Apply distant » à la date de rédaction = contrainte d’alors ; le schéma Production est **aujourd’hui aligné 29/29** (ne pas rejouer).
+> Inventaire tables/RPCs : `17_SUPABASE_PROJECTS.md`.
+
+## Complément VHS-114
 
 | Élément | Détail |
 |---|---|
-| Migration | `20260802180400_vhs_114_reschedule_payload.sql` |
+| Migration | `20260804134537_vhs_114_reschedule_payload.sql` |
 | RPC | `reschedule_production_job(job_id, lease_token, worker_id, available_at, payload)` |
 | Motif | `release_production_job` ne met pas à jour `payload.mode` → `poll` ; nécessaire pour reprise async sans nouvel attempt |
 | Grants | `REVOKE PUBLIC` + `GRANT EXECUTE … TO service_role` |
-| Apply distant | **Non** — même discipline que VHS-113 |
+| Apply distant | historique : contrainte d’alors ; schéma courant aligné — voir `17_` |
 
 ### Écarts d’atomicité documentés
 
@@ -113,7 +135,7 @@ SELECT proname FROM pg_proc WHERE pronamespace = 'public'::regnamespace
 
 | Élément | Détail |
 |---|---|
-| Migration | `20260802180500_vhs_116_create_project_with_brief.sql` |
+| Migration | `20260804134814_vhs_116_create_project_with_brief.sql` |
 | RPC | `create_director_project_with_brief` — `SECURITY DEFINER`, `search_path=public`, `GRANT` **service_role** uniquement |
 | Effets | `video_projects` + `project_artifacts` (rev 1) + `active_artifact_revisions` + `audit_log` + `domain_events` |
 | Idempotence | même `project_id` + même payload métier brief → `existing` ; brief différent → `project_brief_conflict` |
@@ -124,79 +146,79 @@ SELECT proname FROM pg_proc WHERE pronamespace = 'public'::regnamespace
 
 | Élément | Détail |
 |---|---|
-| Migration | `20260802180600_vhs_117b_director_runs.sql` |
-| Table | `director_runs` (marketing only for now) |
+| Migration | `20260804135019_vhs_117b_director_runs.sql` |
+| Table | `director_runs` (étendue ensuite marketing…export) |
 | Budget | `budget_reservations.scope_type` ∈ `production_attempt\|director_run` ; `run_id` nullable pour director |
 | RPC | `begin_or_get_marketing_director_run`, `reserve_director_budget`, `persist_marketing_plan`, `fail_director_run` |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) |
 
 ## VHS-118B — creative director runs + creative_concept
 
 | Élément | Détail |
 |---|---|
-| Migration | `20260803120000_vhs_118b_creative_director_runs.sql` |
+| Migration | `20260804135045_vhs_118b_creative_director_runs.sql` |
 | CHECK | `director_type` ∈ `marketing\|creative` ; `input_artifact_type` ∈ `video_project_brief\|marketing_plan` |
 | RPC | `begin_or_get_creative_director_run`, `persist_creative_concept` (+ réutilise `reserve_director_budget` / `fail_director_run`) |
 | Input run | `marketing_plan` actif ; brief actif vérifié |
 | Output | `creative_concept` + révision active + audit/outbox |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) |
 
 ## VHS-119B — script director runs + video_script
 
 | Élément | Détail |
 |---|---|
-| Migration | `20260803130000_vhs_119b_script_director_runs.sql` |
+| Migration | `20260804135120_vhs_119b_script_director_runs.sql` |
 | CHECK | `director_type` ∈ `marketing\|creative\|script` ; `input_artifact_type` ∈ `…\|creative_concept` |
 | RPC | `begin_or_get_script_director_run`, `persist_video_script` |
 | Input run | `creative_concept` actif ; brief + marketing_plan vérifiés |
 | Output | `video_script` + révision active + audit/outbox |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) |
 
 ## VHS-120B — art director runs + visual_direction
 
 | Élément | Détail |
 |---|---|
-| Migration | `20260803140000_vhs_120b_art_director_runs.sql` |
+| Migration | `20260804135149_vhs_120b_art_director_runs.sql` |
 | CHECK | `director_type` ∈ `…\|art` ; `input_artifact_type` ∈ `…\|video_script` |
 | RPC | `begin_or_get_art_director_run`, `persist_visual_direction` |
 | Input run | `video_script` actif ; brief + marketing_plan + creative_concept vérifiés |
 | Output | `visual_direction` + révision active + audit/outbox |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) |
 
 ## VHS-121B — storyboard director runs + storyboard_project
 
 | Élément | Détail |
 |---|---|
-| Migration | `20260803150000_vhs_121b_storyboard_director_runs.sql` |
+| Migration | `20260804135227_vhs_121b_storyboard_director_runs.sql` |
 | CHECK | `director_type` ∈ `…\|storyboard` ; `input_artifact_type` ∈ `…\|visual_direction` |
 | RPC | `begin_or_get_storyboard_director_run`, `persist_storyboard_project` |
 | Input run | `visual_direction` actif ; chaîne amont vérifiée |
 | Output | `storyboard_project` + projection `storyboard_scenes` + audit/outbox |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) |
 
 ## VHS-122 — prompt director runs + scene_package_set
 
 | Élément | Détail |
 |---|---|
-| Migration | `20260803160000_vhs_122_prompt_director_runs.sql` |
+| Migration | `20260804135342_vhs_122_prompt_director_runs.sql` |
 | CHECK | `director_type` ∈ `…\|prompt` ; `input_artifact_type` ∈ `…\|storyboard_project` ; artifact `scene_package_set` |
 | RPC | `begin_or_get_prompt_director_run`, `persist_scene_package_set` |
 | Input run | `storyboard_project` actif ; chaîne amont vérifiée |
 | Output | lot atomique `scene_package_set` (packages[] cohérents) + audit/outbox |
 | Budget | **aucun** (`cost_status=none`, provider `deterministic`) |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) |
 
 ## VHS-123 — routing director runs + GenerationPlan approvals
 
 | | |
 |---|---|
-| Migration | `20260803170000_vhs_123_routing_director_runs.sql` |
+| Migration | `20260804135608_vhs_123_routing_director_runs.sql` |
 | CHECK | `director_type` ∈ `…\|routing` ; `input_artifact_type` ∈ `…\|scene_package_set` |
 | RPC | `begin_or_get_routing_director_run`, `persist_generation_plan`, `persist_artifact_approval` |
 | Input run | `scene_package_set` + storyboard + brief actifs |
@@ -204,68 +226,65 @@ SELECT proname FROM pg_proc WHERE pronamespace = 'public'::regnamespace
 | Approvals | append-only `artifact_approvals` ; bump `video_projects.active_revision` ; stale via révision active |
 | Budget | **aucune** réservation (`cost_status=none`, provider `deterministic`) |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) |
 
 ## VHS-124 — production director runs
 
 | | |
 |---|---|
-| Migration | `20260803180000_vhs_124_production_director.sql` |
+| Migration | `20260804135702_vhs_124_production_director.sql` |
 | CHECK | `director_type` ∈ `…\|production` ; `input_artifact_type` ∈ `…\|generation_plan` |
 | RPC | `begin_or_get_production_director_run`, `complete_production_director_run` |
 | Input run | `generation_plan` actif (révision vérifiée) |
 | Output | `production_run_id` dans audit/outbox + `director_runs.usage` ; `output_artifact_id` NULL |
 | Budget | **aucune** réservation au begin/complete (`cost_status=none`, provider `deterministic`) |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) |
 
 ## VHS-125 — postproduction delivery (QC / revue / merge / export)
 
 | | |
 |---|---|
-| Migration | `20260803190000_vhs_125_postproduction_delivery.sql` |
+| Migration | `20260804135742_vhs_125_postproduction_delivery.sql` (+ remainder markers part1–3) |
 | CHECK artifacts | `+ quality_report`, `merge_plan`, `export_package` (conserve `scene_package_set`) |
 | CHECK director | `+ quality`, `merge`, `export` ; inputs `production_result` / `quality_report` / `merge_plan` |
 | Table | `human_review_decisions` append-only (trigger interdit UPDATE/DELETE) |
 | RPC | `persist_production_result`, `begin_or_get_quality_director_run`, `persist_quality_report`, `persist_human_review_decision`, `begin_or_get_merge_director_run`, `persist_merge_outcome`, `begin_or_get_export_director_run`, `persist_export_package` |
 | Budget | **aucune** réservation (`cost_status=none`, provider `deterministic`) |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) ; incident `21_` |
 
 ## VHS-126 — brief revisions + persistent stale cascade
 
 | | |
 |---|---|
-| Migration | `20260803200000_vhs_126_brief_revisions_stale.sql` |
+| Migration | `20260804140309_vhs_126_brief_revisions_stale.sql` |
 | Colonnes | `active_artifact_revisions.stale` (+ reason / since / caused_by / source_revision) |
 | RPC | `revise_project_brief`, `list_project_stale_artifacts`, `clear_active_artifact_stale` |
 | Atomicité | nouvelle révision + activation + cascade provenance + audit + outbox |
 | Refuse | production run non-terminal active ; optimistic conflict ; anon/authenticated |
 | Grants | `service_role` only |
-| Apply distant | **non autorisé** sans décision écrite |
+| Apply distant | schéma Production aligné (ne pas rejouer) |
 
-## Tests / VHS-115 ✅ … + VHS-123 + VHS-124 + VHS-125 + VHS-126
+## Tests — baselines
 
-| Suite | Statut |
-|---|---|
-| `npm test` | unitaires **727** (incl. dependency-graph / brief-diff / revise) |
-| `npx supabase db reset` | **16** migrations (jusqu’à `vhs_126`) |
-| `npx supabase test db` | pgTAP **276** (incl. `vhs_126`) |
-| `npm run test:integration:db` | **30** (incl. brief rev2 → stale → production refusée) |
-| Opérations distantes | **Aucune** |
+| Moment | Migrations | pgTAP | Intégration | Unitaires |
+|---|---|---|---|---|
+| Snapshot VHS-126 (historique) | 16 | 276 | 30 | ~727 |
+| Courant (post-10A / 11A) | **29** | **378** | **33** | **1122** |
 
-### Défaut corrigé avant déploiement
+### Défaut corrigé (historique)
 
 | Problème | Cause | Correction |
 |---|---|---|
-| `42501 permission denied for table workspaces` avec service_role | RLS on sans `GRANT` table à `service_role` | `GRANT SELECT/INSERT/UPDATE/DELETE` + `REVOKE` anon/authenticated dans `20260802180300` |
+| `42501 permission denied for table workspaces` avec service_role | RLS on sans `GRANT` table à `service_role` | `GRANT` + `REVOKE` dans `20260804134500_vhs_113_v2_rls_grants.sql` |
 
-### Baseline historique (validation locale)
+### Baseline fichiers
 
-Les migrations `20260802*` / `20260803*` sont **indépendantes** de `vh_*`.  
-Ne pas ajouter de fausses migrations `20260723*` / `20260728*` dans `migrations/`.
+Les versions canoniques sont `20260804*`…`20260807*` (+ legacy `vh_*` 202607*).
+Anciens préfixes locaux `20260802*` / `20260803*` : **retirés** du dépôt après alignement Porte 3.
 
 ### Autorisation apply distant
 
-VHS-115 technique ✅.  
+VHS-115 technique ✅.
 **Apply distant toujours non autorisé** sans décision écrite séparée (backup, repair historique, fenêtre de maintenance).

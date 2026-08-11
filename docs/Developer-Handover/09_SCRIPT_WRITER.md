@@ -1,5 +1,17 @@
 # 09 — Script Writer
 
+**Classe :** `CURRENT`
+
+### État opérationnel (11 août 2026)
+
+| | |
+|---|---|
+| Smoke réel | **PASS** Phase 10D (`31_PHASE_10D_FIRST_REAL_SCRIPT_SMOKE.md`) |
+| Prompt canon | `script-analyzer-v1` |
+| Knobs Production | `gpt-5.6` / `medium` / `4096` / estimate **12¢** (`32_`) |
+| Artifact Production | `video_script` rev.1 |
+| Runtime après smoke | OFF |
+
 ## Mission
 
 Transformer le concept en narration prononcée ou affichée. Il est propriétaire des dialogues, voix off, textes écran, rythme verbal et CTA final ; il ne décide ni décor, ni caméra, ni provider.
