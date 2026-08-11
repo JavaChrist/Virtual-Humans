@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.104] — 2026-08-11
+
+### Added (MT-013C Restore Drill — PASS)
+
+- Clone Dashboard humain : `VHS Restore Drill 2026-08-09` (`qmsh…qlnq`) · backup 09 Aug 2026 05:24:51 UTC · $10.18/mois · `eu-west-3`.
+- Vérif redacted : migrations **29** identiques, 22 tables, RLS on, fonctions 52, counts data non vides (≤ Production).
+- `RESTORE_DRILL = PASS` · P1 `BACKUP_PRESENT_RESTORE_UNPROVEN` **fermé**. Production inchangée · MT-005 non appliqué. Rapport `78_`.
+
 ## [2.0.103] — 2026-08-11
 
 ### Changed (MT-013C-DASHBOARD-QUOTE — devis capturé)

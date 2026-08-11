@@ -5,17 +5,15 @@
 **Exécutant :** **humain** (Dashboard) — l’agent **ne clique pas** et **ne confirme pas**
 
 ```text
-RESTORE_DRILL                 = BLOCKED_TARGET_REQUIRED  (inchangé)
+RESTORE_DRILL                 = PASS  (voir 78_)
 MT013C_DASHBOARD_QUOTE        = QUOTE_CAPTURED
-CLONE_CONFIRMED               = false
-PROJECT_CREATED               = false
-BACKUP_RESTORED               = false
+CLONE_CONFIRMED               = true   (humain — post-quote)
+PROJECT_CREATED               = true   (qmsh…qlnq)
+BACKUP_RESTORED               = true   (09 Aug 2026 05:24:51 UTC)
 PRODUCTION_MUTATIONS          = 0
 NEW_CREDENTIALS               = NOT_EXTRACTED
-COST_SPENT_USD                = 0
 QUOTE_TOTAL_MONTHLY_USD       = 10.18
 WITHIN_PRIOR_10_USD_CAP       = no
-READY_FOR_CLONE_AUTH          = yes  (Auth distincte requise — plafond ≥ 10.18)
 ```
 
 ---
@@ -133,6 +131,6 @@ delete cible     = Auth destructive séparée uniquement (pas d’auto-delete)
 
 ## 7. Suite
 
-1. Si la modale est encore ouverte → **Cancel**.  
-2. Attendre Auth clone au plafond **$10.18/mois** (texte §5).  
-3. Ne pas démarrer MT-005 / deploy / provider / benchmark.
+1. Clone exécuté par l’humain ; vérif PASS dans `78_`.  
+2. Ne pas démarrer MT-005 / deploy / provider / benchmark sans Auth.  
+3. Delete cible : Auth destructive séparée uniquement.

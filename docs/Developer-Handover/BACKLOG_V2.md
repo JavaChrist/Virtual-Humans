@@ -13,8 +13,9 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A readiness
 Budget     : 122 / 112 / 0 / 10  (MV-001 3s shortfall vs réserve 62¢)
 Runtime AI : OFF
 Media jobs : 0
-P1         : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Next major : Auth clone Dashboard $10.18/mois (`77_` QUOTE_CAPTURED) ; Privacy ; puis MT-005 / paid
+P1         : décision média image VHS-124
+P1 fermé   : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS · cible qmsh…qlnq)
+Next major : signatures Privacy (`74_`) ; Auth MT-005 remote ; puis paid — ne pas fusionner
 ```
 
 ## P0 — fondations
@@ -39,7 +40,7 @@ Next major : Auth clone Dashboard $10.18/mois (`77_` QUOTE_CAPTURED) ; Privacy ;
 - **VHS-117C** ✅ Smoke Marketing OpenAI réel — Phase 10B PASS : 1 appel `gpt-5.6`, plan Zod valide, ledger 24¢ réservés / 4¢ consommés / 20¢ libérés, replay idempotent sans second appel ; runtime AI refermé OFF.
 - **Phase 9** ✅ Audit final + gate fake-delivery + docs + 2 cycles complets locaux — **pas** production distante.
 - **Phases 10A–10B** ✅ Préflight distant, isolation environnement, validation DB locale et premier smoke Marketing réel terminés ; migrations **29/29**, pgTAP **378**, intégration **33**, unitaires **1016** ; **0 média**.
-- **P1 opérations distantes** ⚠️ `BACKUP_PRESENT_RESTORE_UNPROVEN` — ne bloquait pas le smoke texte borné ; reste bloquant avant opération distante invasive.
+- **P1 backup/restore** ✅ **FERMÉ** (`78_`) — `RESTORE_DRILL = PASS` · cible isolée `qmsh…qlnq` · Production non mutée.
 - **Phase 10C-PREP** ✅ Préparation Creative sans provider : MarketingPlan 10B réutilisable, dry-run estimate 12¢ / plafond 100¢.
 - **VHS-118C / Phase 10C** ✅ Smoke Creative OpenAI réel : 1 appel `gpt-5.6`, concept Zod valide, ledger 12¢/5¢/7¢, replay idempotent, flags OFF.
 - **Phase 10D-PREP** ✅ Préparation Script sans provider : Marketing+Creative réutilisés, dry-run estimate 7¢ / plafond 100¢ ; **aucune** exécution Script réelle.
@@ -74,7 +75,7 @@ Next major : Auth clone Dashboard $10.18/mois (`77_` QUOTE_CAPTURED) ; Privacy ;
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A** readiness `73_` · fal adapter + worker **disabled** · synthetic E2E ready · privacy **PENDING** · Production → unavailable · **MV001_NOT_EXECUTED** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **122** ; committed **112** ; available **10** ; MV-001 3s shortfall **52¢** vs réserve 62¢.
-- **Prochaine porte majeure** : Auth clone Dashboard (`77_` · devis **$10.18/mois** capturé · STOP avant Continue) + signatures Privacy — puis MT-005 / paid — ne pas fusionner.
+- **Prochaine porte majeure** : signatures Privacy (`74_` READY_FOR_HUMAN_DECISION) puis Auth **MT-005 remote apply** — ne pas fusionner avec paid/benchmark.
 
 ## P2 — durcissement
 

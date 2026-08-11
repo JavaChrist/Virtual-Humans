@@ -8,7 +8,7 @@
 |---|---|
 | Runtime AI Production | **OFF** (prouvée après chaque smoke texte) |
 | Budget workspace | hard **122¢** / committed **112** / available **10** |
-| Backup / restore | P1 `BACKUP_PRESENT_RESTORE_UNPROVEN` — ouvert · `RESTORE_DRILL = BLOCKED_TARGET_REQUIRED` (`74_`/`75_`/`76_` STOP) |
+| Backup / restore | **PASS** (`78_`) · `RESTORE_DRILL = PASS` · P1 restore **fermé** · cible `qmsh…qlnq` (ne pas delete sans Auth) |
 | Média `/director` | **0** job ; 11A `DECISION_REQUIRED` |
 | Motion Transfer | flags `MOTION_TRANSFER_*` OFF (`67_`…`73_`) — worker/review refuse tant que OFF ; synthetic E2E only (`72_`) ; MV-001 readiness (`73_`) ; privacy **PENDING** ; migration MT-005 **NOT APPLIED** Production ; **ne pas** activer sur Vercel ni benchmark sans Auth |
 | Kill switches | voir Phases `25_`, fermetures `57_` ; motion : §15 de `59_` |
@@ -107,6 +107,6 @@ Runbooks : fuite de secret, dépenses anormales, provider indisponible, queue bl
 
 Sauvegardes de base et restauration testée, versioning/rétention des assets critiques, export des manifests. La présence d'une sauvegarde n'est pas considérée comme preuve tant qu'une restauration n'a pas réussi.
 
-**Statut P1 ouvert :** `BACKUP_PRESENT_RESTORE_UNPROVEN` (`24_PHASE_10AB_ENVIRONMENT_SAFETY.md`).
+**Statut P1 backup/restore :** **FERMÉ** — `RESTORE_PROVEN` (`78_MT013C_RESTORE_DRILL_PASS.md`) ; historique ouverture dans `24_PHASE_10AB_ENVIRONMENT_SAFETY.md`.
 Ne bloque pas un smoke média **additif borné** (décision `58_`) ; reste bloquant avant opération distante invasive.
 

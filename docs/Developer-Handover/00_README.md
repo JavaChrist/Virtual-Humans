@@ -33,8 +33,9 @@ Runtime AI               : OFF
 Budget                   : hard 122 / committed 112 / reserved 0 / available 10
 production_jobs média    : 0
 P0                       : aucun
-P1 ouverts               : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Prochaine porte majeure  : Auth clone Dashboard ≤ $10.18/mois (`77_` QUOTE_CAPTURED) + Privacy — pas de MT-005/paid
+P1 ouverts               : décision média image VHS-124
+P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
+Prochaine porte majeure  : signatures Privacy (`74_`) puis Auth MT-005 remote — pas de paid/benchmark
 ```
 
 ### Portes Directors texte
@@ -190,6 +191,7 @@ Utilisateur → AI Video Director (/director)
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
+| [`78_MT013C_RESTORE_DRILL_PASS.md`](./78_MT013C_RESTORE_DRILL_PASS.md) | **MT-013C Restore drill PASS — cible `qmsh…qlnq` · P1 restore fermé** |
 
 ### Pilotage (hors numérotation)
 

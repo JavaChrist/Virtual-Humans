@@ -5,7 +5,7 @@
 **Périmètre :** preuves + verdicts séparés — **aucun** apply MT-005 distant · **aucun** benchmark · **0** appel fal
 
 ```text
-RESTORE_DRILL            = BLOCKED_TARGET_REQUIRED
+RESTORE_DRILL            = PASS  (levé — voir 78_ ; historique ci-dessous = état MT-013B)
 PRIVACY_DUE_DILIGENCE    = READY_FOR_HUMAN_DECISION
 MV001_NOT_EXECUTED
 REAL_PROVIDER_CALLS      = 0
@@ -14,13 +14,15 @@ PAID_BENCHMARK           = NOT_AUTHORIZED
 Production mutations     = 0
 ```
 
+> **Mise à jour 11 août 2026 :** restore drill exécuté + vérifié → **`RESTORE_DRILL = PASS`** dans [`78_MT013C_RESTORE_DRILL_PASS.md`](./78_MT013C_RESTORE_DRILL_PASS.md). Les sections §2 ci-dessous restent le **journal** de l’évaluation MT-013B (blocage initial).
+
 ---
 
 ## 1. Verdicts séparés (obligatoires)
 
 | Domaine | Verdict |
 |---|---|
-| **RESTORE_DRILL** | `BLOCKED_TARGET_REQUIRED` |
+| **RESTORE_DRILL** | `PASS` (voir `78_`) — était `BLOCKED_TARGET_REQUIRED` en MT-013B |
 | **PRIVACY_DUE_DILIGENCE** | `READY_FOR_HUMAN_DECISION` |
 
 Ces verdicts **ne sont pas fusionnés**. Un PASS privacy n’autorise pas le restore ; un restore futur PASS n’autorise pas MT-005 ni le paid call.
