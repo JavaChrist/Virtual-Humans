@@ -2,13 +2,21 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.80] — 2026-08-11
+
+### Deployed (Phase 10F-V4-DEPLOY-PREFLIGHT)
+
+- Salt `10f-storyboard-v4-20260811` (salt fp `05be5ef9a08d005f`, clé `801c34a1080bbcf0`) ; deploy runtime `90fb6fb` (`osaz404ey` → OFF `eeczhjco7`).
+- Dry-run live PASS : prompt v4, 24/9/5, tokensFp `9d34b42ddc3bb85c`, estimate 13¢, oneOf=0 ; **0** provider / réservation / run / artifact.
+- Rapport : `56_PHASE_10F_V4_DEPLOY_PREFLIGHT.md` (`READY_FOR_PROVIDER_REAUTH`).
+
 ## [2.0.79] — 2026-08-11
 
 ### Budget + Push (Phase 10F-V4-BUDGET-AND-PUSH)
 
 - Hard limit workspace **115→122¢** (+7) + audit `phase_10f_storyboard_v4_budget_authorization` ; available **15¢**.
 - Push `main` `a82b9cf..90fb6fb` (5 commits) ; **0** provider / réservation / deploy manuel.
-- Rapport : `55_PHASE_10F_V4_BUDGET_AND_PUSH.md` (`PASS`). Doc locale post-push non commitée.
+- Rapport : `55_PHASE_10F_V4_BUDGET_AND_PUSH.md` (`PASS`). Commit docs local `ad168f6` (non poussé).
 
 ## [2.0.78] — 2026-08-11
 
