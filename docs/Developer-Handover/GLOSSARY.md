@@ -27,9 +27,10 @@
 **Storyboard Project** — contrat de tournage approuvé et immuable pour une révision.
 **Video Project Brief** — intention utilisateur normalisée et validée.
 **Visual Direction** — style global et décisions visuelles par scène.
-**Motion / Performance Transfer** — capability `video.motion_transfer` : transfert de mouvement depuis une vidéo source vers un personnage (identité/tenue), distinct de I2V/T2V ; architecture `59_` ; runtime non implémenté.
-**MotionReferenceSpec** — contrat opaque fourni par un projet appelant (ex. Tai-Chi MV-001) : phases, checkpoints, contraintes ; VHS n’en interprète pas le métier.
-**Motion QC** — contrôles technique / identité / tenue / fidélité motion / intégrité / temporalité / caméra + revue humaine.
+**Motion / Performance Transfer** — capability `video.motion_transfer` : transfert de mouvement depuis une vidéo source vers un personnage (identité/tenue), distinct de I2V/T2V ; architecture `59_` ; contrats domaine MT-001 (`domain/motion`) ; runtime non branché.
+**MotionReferenceSpec** — contrat opaque fourni par un projet appelant (ex. Tai-Chi MV-001) : phases, checkpoints, contraintes ; VHS n’en interprète pas le métier ; schema `1.0.0`.
+**MotionMediaReference** — référence média motion basée sur `AssetInputRef` + rôle (source_video/identity/outfit/…).
+**Motion QC** — contrôles technique / identité / tenue / fidélité motion / intégrité / temporalité / caméra + revue humaine ; contrat `MotionQcResult` v1.
 **Motion Director** — Directeur éventuel **post-V1** ; traduit des contraintes, n’invente pas le mouvement, n’appelle pas de provider.
 
 ## Termes proscrits

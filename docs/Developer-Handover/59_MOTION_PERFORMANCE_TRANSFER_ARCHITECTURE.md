@@ -6,7 +6,10 @@
 
 ```text
 ARCHITECTURE_READY_FOR_IMPLEMENTATION
-IMPLEMENTATION_NEXT
+MT-001 = IMPLEMENTED
+Gate MT-1 = PASS
+MT-002+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-002 Capability Registry
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_NOT_SELECTED_YET
 NO PAID BENCHMARK_YET
@@ -23,10 +26,12 @@ NO PAID BENCHMARK_YET
 | Couche | Statut |
 |---|---|
 | Architecture | `ARCHITECTURE_READY_FOR_IMPLEMENTATION` |
-| Code runtime | `RUNTIME_NOT_IMPLEMENTED_YET` |
+| Domain contracts | **MT-001 IMPLEMENTED** — `studio/src/domain/motion/` · Gate MT-1 **PASS** |
+| Registry / Router / Engine | MT-002+ **NOT STARTED** |
+| Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | `PROVIDER_NOT_SELECTED_YET` |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | `IMPLEMENTATION_NEXT` via tickets **MT-001…MT-014** |
+| Prochaine action | **MT-002** Capability Registry |
 
 **Ordre obligatoire :**
 

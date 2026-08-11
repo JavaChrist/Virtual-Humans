@@ -22,12 +22,12 @@ Infrastructure        Providers + Supabase + storage + queue + telemetry
 
 Les dépendances pointent vers le domaine. Le domaine ne dépend ni de React, ni de Supabase, ni d'un SDK fournisseur.
 
-### Extension Motion / Performance Transfer (non runtime)
+### Extension Motion / Performance Transfer
 
-Capability Registry + Model Router + Generation Engine + Production Director accueilleront
-`video.motion_transfer` (stratégie dédiée, **≠** I2V). Spec complète, tickets MT-* et gates :
-[`59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md`](./59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md).
-Aucun adapter motion n’est branché à ce jour.
+- Architecture : [`59_…`](./59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md)
+- **MT-001 IMPLEMENTED** — contrats domaine `studio/src/domain/motion/` ([`60_…`](./60_MT001_MOTION_TRANSFER_DOMAIN_CONTRACTS.md)) · Gate MT-1 **PASS**
+- MT-002+ (Registry/Router/Engine/adapter) : **NOT STARTED**
+- Runtime capability : **still OFF / unavailable** · `PROVIDER_NOT_SELECTED_YET`
 
 ## Chaîne contractuelle
 

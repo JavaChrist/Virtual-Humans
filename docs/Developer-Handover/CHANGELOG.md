@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.85] — 2026-08-11
+
+### Added (MT-001 Motion Transfer domain contracts)
+
+- Module `studio/src/domain/motion/` : capability `video.motion_transfer`, MediaReference (AssetInputRef), Input/Spec/QC/Result, Zod, invariants, fingerprint, redaction.
+- Tests **27** ciblés ; unitaires **1149** ; Gate MT-1 **PASS**. Rapport : `60_MT001_MOTION_TRANSFER_DOMAIN_CONTRACTS.md`.
+- **0** adapter/router/engine/API/migration/provider/push. Runtime capability toujours unavailable.
+
 ## [2.0.84] — 2026-08-11
 
 ### Architecture (Motion / Performance Transfer)

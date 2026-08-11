@@ -26,15 +26,15 @@ En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → d
 ```text
 Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
-Motion / Performance     : ARCHITECTURE_READY_FOR_IMPLEMENTATION (rapport 59)
-                           IMPLEMENTATION_NEXT · RUNTIME_NOT_IMPLEMENTED_YET
+Motion / Performance     : ARCHITECTURE_READY · MT-001 IMPLEMENTED · Gate MT-1 PASS (60_)
+                           MT-002+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
                            PROVIDER_NOT_SELECTED_YET · NO PAID BENCHMARK_YET
 Runtime AI               : OFF
 Budget                   : hard 122 / committed 112 / reserved 0 / available 10
 production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Prochaine porte majeure  : implémentation bornée Motion Transfer (MT-001…) — avant clôture app
+Prochaine porte majeure  : MT-002 Capability Registry
 ```
 
 ### Portes Directors texte
@@ -172,6 +172,7 @@ Utilisateur → AI Video Director (/director)
 | [`57_PHASE_10F_STORYBOARD_V4_EXECUTE.md`](./57_PHASE_10F_STORYBOARD_V4_EXECUTE.md) | **Storyboard PASS** |
 | [`58_PHASE_11A_FIRST_REAL_MEDIA_SMOKE_PREP.md`](./58_PHASE_11A_FIRST_REAL_MEDIA_SMOKE_PREP.md) | **Media PREP / DECISION_REQUIRED** |
 | [`59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md`](./59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md) | **Motion Transfer — ARCHITECTURE_READY_FOR_IMPLEMENTATION** |
+| [`60_MT001_MOTION_TRANSFER_DOMAIN_CONTRACTS.md`](./60_MT001_MOTION_TRANSFER_DOMAIN_CONTRACTS.md) | **MT-001 domain contracts — Gate MT-1 PASS** |
 
 ### Pilotage (hors numérotation)
 
