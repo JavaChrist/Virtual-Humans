@@ -7,7 +7,7 @@
 ```text
 MT-002 = IMPLEMENTED
 Gate MT-2 Registry portion = PASS
-MT-003 Router = NOT STARTED
+MT-003 Router = IMPLEMENTED (voir 62_)
 provider entries enabled = 0
 eligible Production motion-transfer models = 0
 runtime capability = unavailable
@@ -109,5 +109,5 @@ NO PUSH
 
 ## Suite
 
-**MT-003** Router strategy `motion_transfer` — hard constraints, `maximumFallbacksPerStep=0`, map `capability_unavailable`.  
-Utilise les helpers purs MT-002 ; ne commence pas sans Auth.
+**MT-003** Router strategy `motion_transfer` — **IMPLEMENTED** (`62_`).
+**MT-004** Generation Engine — NOT STARTED.

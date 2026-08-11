@@ -43,8 +43,8 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | 10F-V4 | Storyboard texte PASS (`storyboard-analyzer-v4`) | `57_` |
 | 11A | Prep smoke média image — **DECISION_REQUIRED** | `58_` |
 | MT-Arch | Architecture Motion / Performance Transfer | `59_` · `ARCHITECTURE_READY_FOR_IMPLEMENTATION` |
-| MT-001 | Domain contracts | **IMPLEMENTED** · Gate MT-1 **PASS** (`60_`) |
-| MT-002… | Registry → … → benchmark | **NOT STARTED** · next = MT-002 |
+| MT-001…003 | Domain → Registry → Router | **IMPLEMENTED** (`60_`/`61_`/`62_`) · Gate MT-1/MT-2 **PASS** · next = **MT-004** Engine |
+| MT-004… | Engine → … → benchmark | **NOT STARTED** · Production MT candidates = 0 |
 
 **Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` ; provider motion sélectionné ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.
 

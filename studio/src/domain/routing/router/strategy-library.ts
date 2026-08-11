@@ -236,6 +236,37 @@ const LIBRARY: StrategyDefinition[] = [
     ],
     version: "1.0.0",
   },
+  /**
+   * Motion transfer (MT-003).
+   * Not bound to a ProductionIntent yet — invoked via routeMotionTransfer only.
+   * maximumFallbacksPerStep must remain 0 (enforced by the MT router).
+   */
+  {
+    id: "motion_transfer",
+    supportedProductionIntents: [],
+    requiredProfiles: ["video.motion_transfer"],
+    steps: [
+      {
+        order: 1,
+        action: "video",
+        capabilityProfile: "video.motion_transfer",
+        expectedOutput: "video",
+        dependsOnOrders: [],
+        defaultTimeoutSeconds: 600,
+      },
+    ],
+    constraints: [
+      {
+        code: "no_fallback",
+        description: "maximumFallbacksPerStep=0 — no I2V/T2V silent fallback.",
+      },
+      {
+        code: "source_video_required",
+        description: "Real source video + verified motion-transfer capability required.",
+      },
+    ],
+    version: "1.0.0",
+  },
 ];
 Object.freeze(LIBRARY);
 

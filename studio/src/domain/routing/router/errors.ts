@@ -16,7 +16,9 @@ export type RoutingErrorCode =
   | "unknown_dimension_required"
   | "cycle_detected"
   | "incoherent_cost"
-  | "non_serializable";
+  | "non_serializable"
+  /** Motion-transfer routing (MT-003) — no eligible verified model. */
+  | "motion_capability_unavailable";
 
 export class RoutingDomainError extends Error {
   readonly code: RoutingErrorCode;

@@ -16,6 +16,7 @@ export const GenerationStrategyIdValues = [
   "product_demo",
   "tutorial",
   "multi_character",
+  "motion_transfer",
 ] as const;
 export type GenerationStrategyId = (typeof GenerationStrategyIdValues)[number];
 

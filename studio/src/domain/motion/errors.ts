@@ -25,11 +25,19 @@ export const MotionTransferValidationErrorCodeValues = [
 export type MotionTransferValidationErrorCode =
   (typeof MotionTransferValidationErrorCodeValues)[number];
 
-/** Routing errors — reserved for MT-003 (declared for taxonomy completeness). */
+/** Routing errors (MT-003). */
 export const MotionTransferRoutingErrorCodeValues = [
   "motion_capability_unavailable",
   "no_eligible_motion_strategy",
   "budget_exceeded",
+  "budget_limit_exceeded",
+  "pricing_unconfigured",
+  "estimate_unavailable",
+  "provider_not_allowlisted",
+  "model_not_allowlisted",
+  "invalid_routing_request",
+  "fallback_forbidden",
+  "fidelity_relaxation_forbidden",
 ] as const;
 export type MotionTransferRoutingErrorCode =
   (typeof MotionTransferRoutingErrorCodeValues)[number];

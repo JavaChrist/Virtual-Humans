@@ -10,8 +10,10 @@ MT-001 = IMPLEMENTED
 Gate MT-1 = PASS
 MT-002 = IMPLEMENTED
 Gate MT-2 Registry portion = PASS
-MT-003+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-003 Router
+MT-003 = IMPLEMENTED
+Gate MT-2 Router portion = PASS
+MT-004+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-004 Generation Engine
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_NOT_SELECTED_YET
 NO PAID BENCHMARK_YET
@@ -31,11 +33,12 @@ eligible Production motion-transfer models = 0
 | Architecture | `ARCHITECTURE_READY_FOR_IMPLEMENTATION` |
 | Domain contracts | **MT-001 IMPLEMENTED** — `studio/src/domain/motion/` · Gate MT-1 **PASS** |
 | Capability Registry | **MT-002 IMPLEMENTED** — `capabilities/motion-transfer.ts` · Gate MT-2 Registry **PASS** · **0** modèle Production éligible |
-| Router / Engine | MT-003+ **NOT STARTED** |
+| Model Router | **MT-003 IMPLEMENTED** — `routeMotionTransfer` · Gate MT-2 Router **PASS** · Production → `motion_capability_unavailable` |
+| Engine | MT-004+ **NOT STARTED** |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | `PROVIDER_NOT_SELECTED_YET` |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-003** Router strategy |
+| Prochaine action | **MT-004** Generation Engine |
 
 **Ordre obligatoire :**
 
@@ -128,7 +131,7 @@ Aucun fallback silencieux I2V / T2V / downgrade modèle / relaxation identité.
 
 - ~~`CapabilityProfileValues` : pas de `video.motion_transfer`~~ → **fermé MT-002** (profil + bloc `motionTransfer` + helpers).
 - `VideoGenerationInput` : `startFrame?` seulement — **pas** de `sourceVideo` (`domain/generation/input.ts`) — MT-004.
-- Router : stratégie `motion_transfer` absente — MT-003 ; résultat `no_eligible_strategy` / mapper `capability_unavailable`.
+- ~~Router : stratégie `motion_transfer` absente~~ → **fermé MT-003** (`routeMotionTransfer`, `maximumFallbacksPerStep=0`).
 - Adapters : aucun modèle motion-control enregistré ; **0** entrée Production enabled.
 - Human review : statuses `approved|rejected` seulement — **étendre** pour retry/constraints.
 
@@ -432,6 +435,8 @@ motionTransfer: ABSENT
 
 ## 5. Model Router — stratégie `motion_transfer`
 
+**Statut MT-003 :** **IMPLEMENTED** — rapport `62_MT003_MOTION_TRANSFER_ROUTER.md`.
+
 ### 5.1 Strategy id
 
 ```ts
@@ -440,6 +445,7 @@ motionTransfer: ABSENT
 ```
 
 Template : **1 step** unique `video.motion_transfer` — pas de chaîne I2V+T2V.
+Entrée pure : `routeMotionTransfer(request)` (intents scène non branchés — `supportedProductionIntents: []`).
 
 ### 5.2 Hard constraints (eligibility)
 
@@ -478,9 +484,10 @@ maximumFallbacksPerStep must be 0 for motion_transfer V1
 ### 5.5 Absence de modèle
 
 ```text
-Router result → no_eligible_strategy
-API/domain mapping → capability_unavailable
-Director status → needs_input | failed (policy)
+routeMotionTransfer → status=failed
+failure.code → motion_capability_unavailable
+selected candidate → none
+Director/API mapping (futur) → needs_input | failed (policy)
 ```
 
 ---
@@ -1028,14 +1035,14 @@ flowchart LR
 - **Interdit :** enable Production models — respecté.
 - **DoD :** tests registry + eligibility — **PASS**.
 
-### MT-003 — Router strategy
+### MT-003 — Router strategy — **IMPLEMENTED**
 
 - **Objectif :** stratégie `motion_transfer`, hard constraints, `maximumFallbacksPerStep=0`, map `capability_unavailable`.
-- **Fichiers :** `strategies.ts`, `strategy-library.ts`, `route-engine.ts`, errors.
+- **Fichiers :** `strategies.ts`, `strategy-library.ts`, `motion-transfer-routing.ts`, errors.
 - **Dépendances :** MT-002.
-- **Acceptation :** no silent I2V/T2V ; dry-run `no_eligible_strategy` si registry vide.
-- **Interdit :** fallback auto.
-- **DoD :** tests stratégie + scoring.
+- **Acceptation :** no silent I2V/T2V ; Production → `motion_capability_unavailable` — **PASS** (`62_`).
+- **Interdit :** fallback auto — respecté.
+- **DoD :** tests stratégie + scoring — **PASS**.
 
 ### MT-004 — Generation Engine
 

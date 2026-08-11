@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.87] — 2026-08-11
+
+### Added (MT-003 Motion Transfer Router strategy)
+
+- Stratégie `motion_transfer` (library VHS-108) + `routeMotionTransfer` pur : hard constraints MT-002, scoring, allowlist, budget compare-only, `maximumFallbacksPerStep=0`.
+- Échec Production : `motion_capability_unavailable` ; **0** candidat ; **0** fallback I2V/T2V.
+- Tests **20** ciblés ; unitaires **1199** ; rapport `62_MT003_MOTION_TRANSFER_ROUTER.md`. Gate MT-2 Router **PASS**. MT-004 **NOT STARTED**.
+
 ## [2.0.86] — 2026-08-11
 
 ### Added (MT-002 Motion Transfer Capability Registry)
