@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.82] — 2026-08-11
+
+### Prepared (Phase 11A MEDIA PREP)
+
+- Audit chaîne post-Storyboard ; dry-run local Prompt+Router sans provider ; comparaison 4 options smoke.
+- Reco : 1 image OpenAI `gpt-image-1` 1024 low (~1¢ / réserve 2¢) sur scene-2 `text_motion` ; budget 122/112/10 inchangé.
+- Verdict `DECISION_REQUIRED` (VHS-124) ; guards + script prep ; **0** provider. Rapport : `58_PHASE_11A_FIRST_REAL_MEDIA_SMOKE_PREP.md`.
+
 ## [2.0.81] — 2026-08-11
 
 ### Validation provider (Phase 10F-V4-EXECUTE)

@@ -54,9 +54,10 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F-V4-BUDGET-AND-PUSH** ✅ Hard limit **115→122** (+7) + audit ; available **15¢** ; push `a82b9cf..90fb6fb` (5 commits) ; **0** provider (`55_…`, `PASS`).
 - **Phase 10F-V4-DEPLOY-PREFLIGHT** ✅ Salt `10f-storyboard-v4-20260811` ; deploy `90fb6fb` ; dry-run live v4 gates verts (24/9/5 fp `9d34b42ddc3bb85c`) ; fermeture OFF ; **0** provider (`56_…`).
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
-- **P1 Storyboard** : texte Storyboard validé ; runs failed antérieurs immuables ; média ensuite.
-- **P1 budget** : hard **122** ; committed **112** ; available **10**.
-- **Prochaine porte** : média / génération payante (autorisation séparée).
+- **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`).
+- **P1 média** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) puis wiring/smoke borné.
+- **P1 budget** : hard **122** ; committed **112** ; available **10** (shortfall smoke image = 0).
+- **Prochaine porte** : décision + autorisation media exacte ; backup restore reste P1 ouvert.
 
 ## P2 — durcissement
 

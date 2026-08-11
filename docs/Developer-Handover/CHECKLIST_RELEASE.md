@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — autorisation humaine)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C), Script (10D), Art texte (10E-V3) et Storyboard texte (10F-V4) validés ; budget 122/112/10 ; média restent à autoriser ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C), Script (10D), Art texte (10E-V3) et Storyboard texte (10F-V4) validés ; média : Phase 11A prep `DECISION_REQUIRED` (`58_…`) ; budget 122/112/10 ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité (locale — Phase 9)
@@ -34,7 +34,7 @@
 - [ ] migrations additives appliquées **distantes** ;
 - [ ] app et workers compatibles déployés ;
 - [x] flags désactivés par défaut (code) ;
-- [ ] smoke tests providers bornés — Marketing / Creative / Script / Art texte / Storyboard texte : **PASS** ; budget 122/112/10 ; média : à faire ;
+- [ ] smoke tests providers bornés — Marketing / Creative / Script / Art texte / Storyboard texte : **PASS** ; média : 11A prep → décision VHS-124 / legacy puis Auth ; budget 122/112/10 ;
 - [ ] canary puis montée progressive ;
 - [ ] métriques et logs surveillés.
 
