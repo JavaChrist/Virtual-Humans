@@ -149,5 +149,6 @@ NO VERCEL ENV WRITE / DEPLOY / DB / BUDGET / PRODUCTION ENABLE
 
 ## 11. Suite
 
-**MT-008** — **IMPLEMENTED** (`68_`) worker polling fake E2E · Gate MT-6 PASS.
+**MT-008…012** — worker → synthetic E2E **IMPLEMENTED**.  
+**MT-013A** — readiness MV-001 **DONE** (`73_`) · estimate 3 s = 51¢ confirmé formule adapter · **0** call.
 **MT-009** — Motion QC. Benchmark payant **interdit** sans Auth gates + privacy accepted + Registry enable.

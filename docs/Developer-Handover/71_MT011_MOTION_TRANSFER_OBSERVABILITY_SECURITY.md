@@ -78,4 +78,5 @@ Clé fal absente du domaine ; sanitizer hostile sur erreurs imbriquées ; `netwo
 
 ## 10. Suite
 
-**MT-012** — Dry-run / suite fake E2E complète — **IMPLEMENTED** (`72_`). Aucun benchmark.
+**MT-012** — Dry-run / suite fake E2E complète — **IMPLEMENTED** (`72_`).  
+**MT-013A** — MV-001 readiness — **DONE** (`73_`). Aucun benchmark exécuté.

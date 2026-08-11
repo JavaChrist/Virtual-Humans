@@ -50,6 +50,8 @@
 **Privacy Decision Contract** — décisions obligatoires avant benchmark réel (`providerRetentionAccepted`, CDN, biométrie, droits commerciaux, geo) ; default blocked ; expiration honorée.
 **Motion Transfer E2E harness** — harness synthétique MT-012 (`runMotionTransferE2E`) composant Registry→Review sans provider réel ni écriture Production ; dry-run public `runMotionTransferPublicDryRun`.
 **MOTION_SYNTHETIC_E2E_READY** — statut MT-012 : contrats/transitions prouvés en fake ; runtime Production toujours `UNAVAILABLE` ; benchmark payant non autorisé.
+**MV-001** — premier benchmark Motion Transfer réel (coaching/Tai-Chi opaque) ; durée min fal 3 s ; 1 call max ; hors Git pour médias ; exécution = MT-013B après Auth.
+**READY_FOR_HUMAN_GOVERNANCE_DECISIONS** — verdict MT-013A : pack privacy + gates A–J prêts pour décisions humaines ; aucun provider call.
 **Motion Director** — Directeur éventuel **post-V1** ; traduit des contraintes, n’invente pas le mouvement, n’appelle pas de provider.
 
 ## Termes proscrits

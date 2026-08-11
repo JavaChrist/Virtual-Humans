@@ -26,16 +26,15 @@ En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → d
 ```text
 Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
-Motion / Performance     : ARCHITECTURE_READY · MT-001…007A (60_…66_) · Gates MT-1…MT-4 + Provider Decision PASS
-                           0 Production MT models · selected fal Kling v3 Pro MC for disabled adapter only
-                           MT-007B+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
-                           NO PAID BENCHMARK_YET
+Motion / Performance     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A readiness DONE (73_)
+                           MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
+                           privacy PENDING · remote MT-005 NOT APPLIED · NO PAID BENCHMARK_YET
 Runtime AI               : OFF
 Budget                   : hard 122 / committed 112 / reserved 0 / available 10
 production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Prochaine porte majeure  : MT-007B fal Kling adapter (disabled)
+Prochaine porte majeure  : Auth Privacy pack + Restore drill isolé (73_) — pas de paid call
 ```
 
 ### Portes Directors texte
@@ -186,6 +185,7 @@ Utilisateur → AI Video Director (/director)
 | [`70_MT010_MOTION_TRANSFER_HUMAN_REVIEW.md`](./70_MT010_MOTION_TRANSFER_HUMAN_REVIEW.md) | **MT-010 Human Review API/UI — Gate MT-8 PASS** |
 | [`71_MT011_MOTION_TRANSFER_OBSERVABILITY_SECURITY.md`](./71_MT011_MOTION_TRANSFER_OBSERVABILITY_SECURITY.md) | **MT-011 Observability & Security — Gate MT-9 PASS** |
 | [`72_MT012_MOTION_TRANSFER_FULL_DRY_RUN.md`](./72_MT012_MOTION_TRANSFER_FULL_DRY_RUN.md) | **MT-012 Full dry-run & synthetic E2E — Gate MT-012 PASS** |
+| [`73_MT013A_MV001_BENCHMARK_READINESS.md`](./73_MT013A_MV001_BENCHMARK_READINESS.md) | **MT-013A MV-001 governance readiness — READY_FOR_HUMAN_GOVERNANCE_DECISIONS** |
 
 ### Pilotage (hors numérotation)
 

@@ -32,8 +32,10 @@ MT-011 = IMPLEMENTED
 Gate MT-9 Observability/Security = PASS
 MT-012 = IMPLEMENTED
 Gate MT-012 Synthetic E2E = PASS
-MT-013+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-013 Controlled benchmark (Auth — NOT AUTHORIZED)
+MT-013A = DONE (governance readiness)
+Verdict = READY_FOR_HUMAN_GOVERNANCE_DECISIONS
+MT-013B+ = NOT STARTED
+IMPLEMENTATION_NEXT = Human Auth (privacy pack + restore drill) then MT-013B
 remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_ADAPTER_CODE = fal / fal-ai/kling-video/v3/pro/motion-control (disabled)
@@ -67,10 +69,11 @@ real measurement adapters = 0
 | Human review | **MT-010 IMPLEMENTED** — `70_` · `/motion/review` + UI Director · retry intent only · Gate MT-8 **PASS** |
 | Observability / Security | **MT-011 IMPLEMENTED** — `71_` · catalog + sanitizer + privacy contract + gates · Gate MT-9 **PASS** |
 | Full synthetic E2E / dry-run | **MT-012 IMPLEMENTED** — `72_` · harness + dry-run public · Gate MT-012 **PASS** · **NOT Production-ready** |
+| MV-001 readiness | **MT-013A DONE** — `73_` · gates A–J · privacy pack PENDING · restore UNPROVEN |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | adapter code present — **not** Production-enabled / UNVERIFIED |
-| Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-013** Controlled benchmark Auth (**NOT AUTHORIZED**) |
+| Benchmark payant | `NO PAID BENCHMARK_YET` · `MV001_NOT_EXECUTED` |
+| Prochaine action | Auth humaine privacy + restore drill isolé (`73_`) — **pas** de paid call |
 
 **Ordre obligatoire :**
 
@@ -1156,10 +1159,17 @@ flowchart LR
 - **Interdit respecté :** no fal / media / remote migration / deploy / paid.
 - **DoD :** tests ciblés **31** PASS. Gate MT-012 **PASS**. `MOTION_SYNTHETIC_E2E_READY`.
 
-### MT-013 — Controlled benchmark MV-001
+### MT-013A — MV-001 governance readiness *(DONE 2026-08-11)*
+
+- **Objectif :** preuves/décisions avant premier call — **PASS audit**.
+- **Artefacts :** `73_` · matrice gates A–J · Privacy Decision Pack · restore drill préparé non exécuté.
+- **Acceptation :** 0 provider ; verdict `READY_FOR_HUMAN_GOVERNANCE_DECISIONS`.
+- **Interdit respecté :** no fal / upload / deploy / migration / restore / budget write.
+
+### MT-013B — Controlled benchmark MV-001 *(NOT STARTED)*
 
 - **Objectif :** 1 call max Auth ; Tai-Chi MV-001 ; human approve.
-- **Dépendances :** Gates MT-5…MT-10, budget Auth.
+- **Dépendances :** Auth privacy + restore PASS + MT-005 + budget + flags.
 - **Acceptation :** preuve bornée ; flags OFF après.
 - **Interdit :** chaîne marketing ; fallback ; multi-movement.
 - **DoD :** rapport smoke + ledger reconcile.

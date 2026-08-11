@@ -17,6 +17,7 @@ Motion QC (MT-009) : `src/application/motion/__tests__/mt009-motion-qc.test.ts` 
 Motion Review (MT-010) : `src/application/motion/__tests__/mt010-motion-review.test.ts` — décisions append-only ; retry = **0** job/ledger/provider.
 Motion Observability/Security (MT-011) : `src/application/motion/__tests__/mt011-motion-observability.test.ts` — sanitizer hostile + gates + privacy ; **0** clé fal réelle.
 Motion Full Dry-Run (MT-012) : `src/application/motion/__tests__/mt012-motion-e2e.test.ts` — harness A–L · dry-run public · **0** provider réel / Production writes.
+Motion MV-001 readiness (MT-013A) : audit documentaire `73_` — **aucun** test provider ; validations non payantes seulement ; `MV001_NOT_EXECUTED`.
 `NO PAID BENCHMARK_YET`.
 
 ## Pyramide

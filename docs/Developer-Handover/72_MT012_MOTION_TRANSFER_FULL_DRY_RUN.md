@@ -99,4 +99,5 @@ Local migrations = 30 · Production = 29 · Drift = MT-005 uniquement
 
 ## 9. Suite
 
-**MT-013** — Controlled benchmark MV-001 (Auth, 1 call max) — **NOT STARTED** · nécessite autorisation payante explicite.
+**MT-013A** — MV-001 governance readiness — **DONE** (`73_`) · verdict `READY_FOR_HUMAN_GOVERNANCE_DECISIONS`.  
+**MT-013B** — Controlled benchmark (1 call max) — **NOT STARTED** · Auth privacy + restore + paid requises.

@@ -43,8 +43,9 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | 10F-V4 | Storyboard texte PASS (`storyboard-analyzer-v4`) | `57_` |
 | 11A | Prep smoke média image — **DECISION_REQUIRED** | `58_` |
 | MT-Arch | Architecture Motion / Performance Transfer | `59_` · `ARCHITECTURE_READY_FOR_IMPLEMENTATION` |
-| MT-001…012 | Domain → … → Observability → Full synthetic E2E | **IMPLEMENTED** (`60_`…`72_`) · Gates MT-1…MT-012 **PASS** · next = **MT-013** |
-| MT-013… | Benchmark Auth contrôlé | **NOT STARTED** · Production MT candidates = 0 · remote migration MT-005 **NOT APPLIED** · privacy decisions **NOT AUTHORIZED** · **0** provider calls · **PAID NOT AUTHORIZED** |
+| MT-001…012 | Domain → … → Observability → Full synthetic E2E | **IMPLEMENTED** (`60_`…`72_`) · Gates MT-1…MT-012 **PASS** |
+| MT-013A | MV-001 governance & readiness audit | **DONE** (`73_`) · verdict `READY_FOR_HUMAN_GOVERNANCE_DECISIONS` · **0** provider calls |
+| MT-013B… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · privacy **PENDING** · restore **UNPROVEN** · MT-005 **NOT APPLIED** · **PAID NOT AUTHORIZED** |
 
 **Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` exécutable ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.
 

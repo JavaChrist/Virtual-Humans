@@ -241,4 +241,5 @@ NO FEATURE ENABLE / DEPLOY / DB WRITE
 
 ## 15. Suite
 
-**MT-007B** — **IMPLEMENTED** (`67_`) : adapter fal Kling v3 Pro disabled-by-default + contract suite PASS ; **0** appel provider ; privacy gate blocked ; next = **MT-008**.
+**MT-007B…012** — adapter → synthetic E2E **IMPLEMENTED**.  
+**MT-013A** — MV-001 readiness audit **DONE** (`73_`) ; pricing/retention re-vérifiés ; **0** appel provider.

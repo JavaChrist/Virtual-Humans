@@ -6,15 +6,15 @@ Protocole d’audit initial : `03_CURRENT_AUDIT.md` (**historique**) — audit r
 
 ```text
 Checkpoint : 10F-V4 Storyboard PASS · 11A media PREP DECISION_REQUIRED
-Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · Gates MT-1…MT-012 PASS
+Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A readiness AUDIT PASS
              0 Production MT models · adapter+worker+review harness · privacy gate blocked
-             MOTION_SYNTHETIC_E2E_READY · MT-013+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
-             NO PAID BENCHMARK_YET · provider calls = 0 · PRIVACY_DECISIONS_NOT_YET_AUTHORIZED
-Budget     : 122 / 112 / 0 / 10
+             MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_NOT_IMPLEMENTED_YET
+             NO PAID BENCHMARK_YET · provider calls = 0 · PRIVACY_DECISIONS = PENDING
+Budget     : 122 / 112 / 0 / 10  (MV-001 3s shortfall vs réserve 62¢)
 Runtime AI : OFF
 Media jobs : 0
 P1         : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Next major : MT-013 Controlled benchmark MV-001 (Auth — NOT AUTHORIZED)
+Next major : Auth humaine — Privacy pack + Restore drill isolé (`73_`) ; puis MT-013B paid
 ```
 
 ## P0 — fondations
@@ -71,10 +71,10 @@ Next major : MT-013 Controlled benchmark MV-001 (Auth — NOT AUTHORIZED)
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · fal adapter + worker **disabled** · synthetic E2E ready · privacy decisions **NOT AUTHORIZED** · Production → unavailable · MT-013+ **NOT STARTED** · **NO PAID BENCHMARK_YET**.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A** readiness `73_` · fal adapter + worker **disabled** · synthetic E2E ready · privacy **PENDING** · Production → unavailable · **MV001_NOT_EXECUTED** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
-- **P1 budget** : hard **122** ; committed **112** ; available **10**.
-- **Prochaine porte majeure** : **MT-013** benchmark Auth contrôlé (autorisation payante) ; backup restore reste P1 ouvert ; migration MT-005 **locale only** (NOT APPLIED Production).
+- **P1 budget** : hard **122** ; committed **112** ; available **10** ; MV-001 3s shortfall **52¢** vs réserve 62¢.
+- **Prochaine porte majeure** : Auth **Privacy Decision Pack** + **Restore drill isolé** (`73_`) ; puis migration MT-005 / budget / paid MT-013B — ne pas fusionner.
 
 ## P2 — durcissement
 

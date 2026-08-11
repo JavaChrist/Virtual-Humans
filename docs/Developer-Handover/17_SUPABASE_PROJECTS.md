@@ -467,6 +467,7 @@ Voir [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER
 | MT-009 Motion QC | **pas** de migration — `MotionQcResult` mappé dans `quality_report` value (mémoire/tests) ; phases `qc_passed`/`qc_rejected`/`retry_recommended` dans payload JSONB (`69_`) |
 | MT-010 Human Review | **pas** de nouvelle migration — réutilise `human_review_decisions` + MT-005 LOCAL_ONLY ; API `/motion/review` (`70_`) ; Production apply = **NO** |
 | MT-012 Synthetic E2E | **pas** de migration — harness mémoire uniquement (`72_`) ; remote MT-005 reste **NOT APPLIED** |
+| MT-013A MV-001 readiness | **pas** d’apply — audit restore/migration (`73_`) ; restore drill isolé **NON EXÉCUTÉ** ; Auth requise avant Gate E/F |
 
 ## 14. Liens
 

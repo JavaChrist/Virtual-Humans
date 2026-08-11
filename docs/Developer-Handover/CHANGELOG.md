@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.98] — 2026-08-11
+
+### Added (MT-013A MV-001 Benchmark Governance & Readiness)
+
+- Audit gates A–J + Privacy Decision Pack (5 décisions PENDING) + plan restore drill isolé (non exécuté).
+- Définition MV-001 (3 s, fal Kling v3 Pro MC, estimate 51¢ / réserve 62¢) ; shortfall budget documenté.
+- Audit fal re-vérifié (retention/CDN/pricing) sans API payante ; MT-005 auditée ; Registry reste UNVERIFIED.
+- Rapport `73_`. Verdict `READY_FOR_HUMAN_GOVERNANCE_DECISIONS`. `MV001_NOT_EXECUTED` · `REAL_PROVIDER_CALLS = 0`.
+
 ## [2.0.97] — 2026-08-11
 
 ### Added (MT-012 Motion Transfer Full Dry-Run & Synthetic E2E)
