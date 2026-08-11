@@ -48,6 +48,8 @@
 **Motion observability catalog** — catalogue versionné `mt011-events-1.0.0` (`motion.route|plan|job|submit|poll|output|qc|review|ledger|security.*`) ; façade `emitMotionObservabilityEvent`.
 **Motion sanitizer** — sanitiseur central `sanitizeMotionValue` / `assertMotionSurfaceRedacted` (MT-011) ; masque secrets, URLs signées, data URLs, prompts, payloads bruts.
 **Privacy Decision Contract** — décisions obligatoires avant benchmark réel (`providerRetentionAccepted`, CDN, biométrie, droits commerciaux, geo) ; default blocked ; expiration honorée.
+**Motion Transfer E2E harness** — harness synthétique MT-012 (`runMotionTransferE2E`) composant Registry→Review sans provider réel ni écriture Production ; dry-run public `runMotionTransferPublicDryRun`.
+**MOTION_SYNTHETIC_E2E_READY** — statut MT-012 : contrats/transitions prouvés en fake ; runtime Production toujours `UNAVAILABLE` ; benchmark payant non autorisé.
 **Motion Director** — Directeur éventuel **post-V1** ; traduit des contraintes, n’invente pas le mouvement, n’appelle pas de provider.
 
 ## Termes proscrits

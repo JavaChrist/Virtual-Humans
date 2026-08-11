@@ -30,8 +30,10 @@ MT-010 = IMPLEMENTED
 Gate MT-8 Human Review = PASS
 MT-011 = IMPLEMENTED
 Gate MT-9 Observability/Security = PASS
-MT-012+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-012 Dry-run suite
+MT-012 = IMPLEMENTED
+Gate MT-012 Synthetic E2E = PASS
+MT-013+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-013 Controlled benchmark (Auth — NOT AUTHORIZED)
 remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_ADAPTER_CODE = fal / fal-ai/kling-video/v3/pro/motion-control (disabled)
@@ -43,7 +45,7 @@ real provider calls = 0
 real measurement adapters = 0
 ```
 
-> Ce document est la **spécification d’architecture**. Les tickets MT-001…011 livrent contrats/code locaux ; worker motion + adapter fal **disabled-by-default** — aucun appel payant ; obs/security ready ; privacy decisions not authorized.
+> Ce document est la **spécification d’architecture**. Les tickets MT-001…012 livrent contrats/code locaux + suite E2E synthétique ; worker motion + adapter fal **disabled-by-default** — aucun appel payant ; privacy decisions not authorized ; **pas** Production-ready.
 
 ---
 
@@ -64,10 +66,11 @@ real measurement adapters = 0
 | Motion QC | **MT-009 IMPLEMENTED** — `69_` · policy/measurements/aggregate/report · fake port only · Gate MT-7 **PASS** |
 | Human review | **MT-010 IMPLEMENTED** — `70_` · `/motion/review` + UI Director · retry intent only · Gate MT-8 **PASS** |
 | Observability / Security | **MT-011 IMPLEMENTED** — `71_` · catalog + sanitizer + privacy contract + gates · Gate MT-9 **PASS** |
+| Full synthetic E2E / dry-run | **MT-012 IMPLEMENTED** — `72_` · harness + dry-run public · Gate MT-012 **PASS** · **NOT Production-ready** |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | adapter code present — **not** Production-enabled / UNVERIFIED |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-012** Dry-run suite |
+| Prochaine action | **MT-013** Controlled benchmark Auth (**NOT AUTHORIZED**) |
 
 **Ordre obligatoire :**
 
@@ -1145,13 +1148,13 @@ flowchart LR
 - **Interdit respecté :** no fal call ; no remote migration ; no Production writes.
 - **DoD :** tests hostiles **29** PASS. Gate MT-9 **PASS**.
 
-### MT-012 — Dry-run and tests
+### MT-012 — Dry-run and tests *(DONE 2026-08-11)*
 
-- **Objectif :** suite complète fake : registry→router→engine→worker→QC→review.
-- **Dépendances :** MT-001…011.
-- **Acceptation :** 0 provider ; unit+integration verts.
-- **Interdit :** paid.
-- **DoD :** checklist qualité locale.
+- **Objectif :** suite complète fake : registry→router→engine→worker→QC→review — **PASS**.
+- **Artefacts :** `72_` · `runMotionTransferE2E` · `runMotionTransferPublicDryRun` · fixture MV-001 opaque.
+- **Acceptation :** 0 provider ; scénarios A–L ; invariants quantifiés ; dry-run Production = unavailable.
+- **Interdit respecté :** no fal / media / remote migration / deploy / paid.
+- **DoD :** tests ciblés **31** PASS. Gate MT-012 **PASS**. `MOTION_SYNTHETIC_E2E_READY`.
 
 ### MT-013 — Controlled benchmark MV-001
 

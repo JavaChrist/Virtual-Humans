@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.97] — 2026-08-11
+
+### Added (MT-012 Motion Transfer Full Dry-Run & Synthetic E2E)
+
+- Harness E2E canonique `runMotionTransferE2E` (compose Registry→Router→Engine→Worker→QC→Review, stores mémoire).
+- Dry-run public `runMotionTransferPublicDryRun` (Production = unavailable ; synthétique redacted).
+- Fixture opaque MV-001-like + suite scénarios A–L (31 tests) ; invariants quantifiés ; `REAL_PROVIDER_CALLS = 0`.
+- Rapport `72_`. Gate MT-012 **PASS**. Runtime Production toujours unavailable · privacy NOT AUTHORIZED · remote migration NOT APPLIED · **PAS** Production-ready.
+
 ## [2.0.96] — 2026-08-11
 
 ### Added (MT-011 Motion Transfer Observability & Security)

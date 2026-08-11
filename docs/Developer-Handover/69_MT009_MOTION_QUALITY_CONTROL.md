@@ -146,4 +146,4 @@ studio/src/application/motion/__tests__/mt009-motion-qc.test.ts
 
 ## 16. Suite
 
-**MT-010** — Human review UI/API **IMPLEMENTED** (`70_`) · Gate MT-8 **PASS**. Aucun appel provider / benchmark.
+**MT-010…012** — Review / Obs / Full synthetic E2E **IMPLEMENTED** (`70_`…`72_`). Aucun appel provider / benchmark.

@@ -87,4 +87,5 @@ studio/src/application/motion/__tests__/mt010-motion-review.test.ts
 
 ## 9. Suite
 
-**MT-011** Observability/security **IMPLEMENTED** (`71_`) · Gate MT-9 **PASS**. Suite : **MT-012** dry-run.
+**MT-011** Observability/security **IMPLEMENTED** (`71_`) · Gate MT-9 **PASS**.  
+**MT-012** Full dry-run / synthetic E2E **IMPLEMENTED** (`72_`) · Gate MT-012 **PASS**. Suite : **MT-013** benchmark Auth (NOT AUTHORIZED).
