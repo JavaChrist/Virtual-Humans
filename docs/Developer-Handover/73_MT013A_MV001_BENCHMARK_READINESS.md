@@ -495,5 +495,5 @@ Exécutées (non payantes) — voir STOP.
 
 ## 13. Suite
 
-- **MT-013B** (futur) : exécution benchmark après Auth complète — **NOT STARTED**.  
-- Ne pas démarrer restore / migration / deploy / paid call depuis ce ticket.
+- **MT-013B** restore/privacy diligence — **DONE** (`74_`) : restore `BLOCKED_TARGET_REQUIRED` · privacy `READY_FOR_HUMAN_DECISION`.  
+- Benchmark exécution / MT-005 apply — **NOT STARTED**.

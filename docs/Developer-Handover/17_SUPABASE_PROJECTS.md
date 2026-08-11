@@ -468,6 +468,7 @@ Voir [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER
 | MT-010 Human Review | **pas** de nouvelle migration — réutilise `human_review_decisions` + MT-005 LOCAL_ONLY ; API `/motion/review` (`70_`) ; Production apply = **NO** |
 | MT-012 Synthetic E2E | **pas** de migration — harness mémoire uniquement (`72_`) ; remote MT-005 reste **NOT APPLIED** |
 | MT-013A MV-001 readiness | **pas** d’apply — audit restore/migration (`73_`) ; restore drill isolé **NON EXÉCUTÉ** ; Auth requise avant Gate E/F |
+| MT-013B Restore drill | `RESTORE_DRILL = BLOCKED_TARGET_REQUIRED` (`74_`) — 0 branches isolées ; Production migrations **29** (lecture) ; **pas** d’apply MT-005 |
 
 ## 14. Liens
 

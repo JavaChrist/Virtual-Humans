@@ -45,7 +45,8 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | MT-Arch | Architecture Motion / Performance Transfer | `59_` · `ARCHITECTURE_READY_FOR_IMPLEMENTATION` |
 | MT-001…012 | Domain → … → Observability → Full synthetic E2E | **IMPLEMENTED** (`60_`…`72_`) · Gates MT-1…MT-012 **PASS** |
 | MT-013A | MV-001 governance & readiness audit | **DONE** (`73_`) · verdict `READY_FOR_HUMAN_GOVERNANCE_DECISIONS` · **0** provider calls |
-| MT-013B… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · privacy **PENDING** · restore **UNPROVEN** · MT-005 **NOT APPLIED** · **PAID NOT AUTHORIZED** |
+| MT-013B | Restore drill + privacy due diligence | **DONE** (`74_`) · restore `BLOCKED_TARGET_REQUIRED` · privacy `READY_FOR_HUMAN_DECISION` |
+| MT-013C… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · MT-005 **NOT APPLIED** · **PAID NOT AUTHORIZED** |
 
 **Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` exécutable ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.
 

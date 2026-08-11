@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.99] — 2026-08-11
+
+### Added (MT-013B Restore Drill & Privacy Due Diligence)
+
+- Verdicts séparés : `RESTORE_DRILL = BLOCKED_TARGET_REQUIRED` · `PRIVACY_DUE_DILIGENCE = READY_FOR_HUMAN_DECISION`.
+- Preuve MCP : Production 29 migrations, 0 branches isolées, 0 mutation ; due diligence 5 décisions (LIMIT_TO_MV001 / UNRESOLVED) sans flip `true`.
+- Rapport `74_`. Pas d’apply MT-005 · pas de benchmark · `REAL_PROVIDER_CALLS = 0`.
+
 ## [2.0.98] — 2026-08-11
 
 ### Added (MT-013A MV-001 Benchmark Governance & Readiness)

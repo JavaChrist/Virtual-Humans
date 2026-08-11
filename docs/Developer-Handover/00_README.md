@@ -34,7 +34,7 @@ Budget                   : hard 122 / committed 112 / reserved 0 / available 10
 production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Prochaine porte majeure  : Auth Privacy pack + Restore drill isolé (73_) — pas de paid call
+Prochaine porte majeure  : AUTH_RESTORE_DRILL_ISOLATED_TARGET + signatures Privacy (74_) — pas de MT-005/paid
 ```
 
 ### Portes Directors texte
@@ -186,6 +186,7 @@ Utilisateur → AI Video Director (/director)
 | [`71_MT011_MOTION_TRANSFER_OBSERVABILITY_SECURITY.md`](./71_MT011_MOTION_TRANSFER_OBSERVABILITY_SECURITY.md) | **MT-011 Observability & Security — Gate MT-9 PASS** |
 | [`72_MT012_MOTION_TRANSFER_FULL_DRY_RUN.md`](./72_MT012_MOTION_TRANSFER_FULL_DRY_RUN.md) | **MT-012 Full dry-run & synthetic E2E — Gate MT-012 PASS** |
 | [`73_MT013A_MV001_BENCHMARK_READINESS.md`](./73_MT013A_MV001_BENCHMARK_READINESS.md) | **MT-013A MV-001 governance readiness — READY_FOR_HUMAN_GOVERNANCE_DECISIONS** |
+| [`74_MT013B_RESTORE_DRILL_PRIVACY_DUE_DILIGENCE.md`](./74_MT013B_RESTORE_DRILL_PRIVACY_DUE_DILIGENCE.md) | **MT-013B Restore drill BLOCKED_TARGET · Privacy due diligence READY_FOR_HUMAN_DECISION** |
 
 ### Pilotage (hors numérotation)
 
