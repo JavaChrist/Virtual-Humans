@@ -18,17 +18,19 @@ MT-005 = IMPLEMENTED
 Gate MT-3 Persistence/Storage = PASS
 MT-006 = IMPLEMENTED
 Gate MT-4 Provider Port = PASS
-MT-007+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-007 First provider adapter
+MT-007A = IMPLEMENTED
+Gate Provider Decision = PROVIDER_SELECTED_FOR_ADAPTER_IMPLEMENTATION
+MT-007B+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-007B fal Kling v3 Pro adapter (disabled)
 remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
-PROVIDER_NOT_SELECTED_YET
+PROVIDER_SELECTED_FOR_ADAPTER_ONLY = fal / fal-ai/kling-video/v3/pro/motion-control
 NO PAID BENCHMARK_YET
 eligible Production motion-transfer models = 0
 real provider adapters = 0
 ```
 
-> Ce document est la **spécification d’architecture**. Les tickets MT-001…006 livrent contrats/code locaux ; le runtime capability et tout adapter réel restent non branchés.
+> Ce document est la **spécification d’architecture**. Les tickets MT-001…007A livrent contrats/code locaux ; aucun adapter réel ni appel payant n’est branché.
 
 ---
 
@@ -43,10 +45,11 @@ real provider adapters = 0
 | Generation Engine | **MT-004 IMPLEMENTED** — dry-run prepare · Gate MT-3 **PASS** · `providerCalled=false` · paid execution unavailable |
 | Persistence / Storage | **MT-005 IMPLEMENTED** — `64_` · REUSE tables V2 · bucket `director-final-assets` · migration locale human_review **NOT APPLIED** Production |
 | Provider port | **MT-006 IMPLEMENTED** — `65_` · `MotionTransferProviderPort` + fake TEST_ONLY · real adapters = 0 |
+| Provider spike | **MT-007A IMPLEMENTED** — `66_` · selected fal Kling v3 Pro MC for **disabled** adapter only |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
-| Provider | `PROVIDER_NOT_SELECTED_YET` |
+| Provider | selected for adapter impl only — **not** Production-enabled |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-007** First provider adapter (disabled) |
+| Prochaine action | **MT-007B** fal Kling adapter disabled-by-default |
 
 **Ordre obligatoire :**
 
@@ -607,16 +610,15 @@ Légende : `SUPPORTED` · `PARTIAL` · `UNVERIFIED` · `NOT_SUPPORTED`
 ### 8.3 Verdict évaluation
 
 ```text
-PROVIDER_CANDIDATES:
-  - fal / kling-v3-*-motion-control (primary candidate)
-  - fal / kling-v2.6-*-motion-control (cost candidate)
-PROVIDER_SPIKE_REQUIRED: YES (Gate MT-5 — unpaid capability probe + schema bind; paid only after Auth)
-PROVIDER_DECISION_GATE: Gate MT-5 → MT-7 → MT-8
-PROVIDER_NOT_SELECTED_YET
+PROVIDER_SELECTED_FOR_ADAPTER_IMPLEMENTATION (MT-007A — 2026-08-11)
+  primary = fal / fal-ai/kling-video/v3/pro/motion-control
+  cost alternate = fal / fal-ai/kling-video/v2.6/standard/motion-control
+PROVIDER_SPIKE = DONE (documentary + static mapping; 0 provider calls)
 NO PAID BENCHMARK_YET
+enabled Production = false
 ```
 
-Aucun provider choisi sur promesse marketing seule.
+Preuves : docs officielles fal llms.txt/API — détail `66_`. Aucun appel provider.
 
 ---
 
@@ -1077,12 +1079,20 @@ flowchart LR
 - **Interdit :** clé provider réelle / réseau — respecté.
 - **DoD :** tests fake + contract suite — **PASS**.
 
-### MT-007 — First provider adapter
+### MT-007A — Provider capability spike *(DONE 2026-08-11)*
 
-- **Objectif :** adapter candidat (probablement fal Kling motion-control) **disabled** by default.
-- **Dépendances :** MT-006, Gate MT-5.
-- **Acceptation :** bind schema ; enabled=false ; kill switch.
-- **Interdit :** paid call sans Auth Gate MT-7/8.
+- **Objectif :** sélection documentaire du premier provider Motion Transfer — **PASS**.
+- **Verdict :** `PROVIDER_SELECTED_FOR_ADAPTER_IMPLEMENTATION`.
+- **Sélection :** `fal` / `fal-ai/kling-video/v3/pro/motion-control` (cost alternate v2.6 standard).
+- **Artefacts :** `66_`, mapping plan + tests spike — **aucun appel provider**.
+- **Interdit respecté :** NO PROVIDER CALL / NO SECRET / NO GENERATION.
+
+### MT-007B — First provider adapter (disabled)
+
+- **Objectif :** adapter fal Kling motion-control **disabled** by default (`enabled=false`, unpaid).
+- **Dépendances :** MT-006, MT-007A, Gate Provider Decision.
+- **Acceptation :** bind schema ; enabled=false ; kill switch ; contract-suite feasibility.
+- **Interdit :** paid call / submit réel sans Auth Gate MT-7/8.
 - **DoD :** characterization tests sans réseau.
 
 ### MT-008 — Worker / polling

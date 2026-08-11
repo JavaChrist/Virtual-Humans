@@ -26,16 +26,16 @@ En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → d
 ```text
 Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
-Motion / Performance     : ARCHITECTURE_READY · MT-001…006 (60_…65_) · Gates MT-1…MT-4 PASS
-                           0 Production MT models · Engine dry-run · Persistence local · Port+fake
-                           MT-007+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
-                           PROVIDER_NOT_SELECTED_YET · NO PAID BENCHMARK_YET
+Motion / Performance     : ARCHITECTURE_READY · MT-001…007A (60_…66_) · Gates MT-1…MT-4 + Provider Decision PASS
+                           0 Production MT models · selected fal Kling v3 Pro MC for disabled adapter only
+                           MT-007B+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
+                           NO PAID BENCHMARK_YET
 Runtime AI               : OFF
 Budget                   : hard 122 / committed 112 / reserved 0 / available 10
 production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Prochaine porte majeure  : MT-007 First provider adapter (disabled)
+Prochaine porte majeure  : MT-007B fal Kling adapter (disabled)
 ```
 
 ### Portes Directors texte
@@ -179,6 +179,7 @@ Utilisateur → AI Video Director (/director)
 | [`63_MT004_MOTION_TRANSFER_GENERATION_ENGINE.md`](./63_MT004_MOTION_TRANSFER_GENERATION_ENGINE.md) | **MT-004 Engine dry-run — Gate MT-3 PASS** |
 | [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md) | **MT-005 Persistence/Storage — Gate MT-3 PASS** |
 | [`65_MT006_MOTION_TRANSFER_PROVIDER_PORT.md`](./65_MT006_MOTION_TRANSFER_PROVIDER_PORT.md) | **MT-006 Provider Port + fake — Gate MT-4 PASS** |
+| [`66_MT007A_MOTION_TRANSFER_PROVIDER_SPIKE.md`](./66_MT007A_MOTION_TRANSFER_PROVIDER_SPIKE.md) | **MT-007A Provider spike — fal Kling v3 Pro selected (disabled)** |
 
 ### Pilotage (hors numérotation)
 
@@ -203,7 +204,7 @@ Utilisateur → AI Video Director (/director)
 6. `18_TESTING.md` / `19_DEPLOYMENT.md` pour qualité et ops.
 7. Rapports `27`–`58` pour preuves smokes ; `20` / `03` seulement comme historique.
 8. Avant média image borné : `58_` puis décision humaine — **ne pas** relancer sans Auth.
-9. Chantier majeur Motion Transfer : `59_` → `60_`…`65_` (MT-001…006) → MT-007+ — **pas** de provider/benchmark payant sans gates.
+9. Chantier majeur Motion Transfer : `59_` → `60_`…`66_` (MT-001…007A) → MT-007B+ — **pas** de benchmark payant sans gates.
 
 ---
 

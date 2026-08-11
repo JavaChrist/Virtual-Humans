@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.91] — 2026-08-11
+
+### Added (MT-007A Motion Transfer Provider Capability Spike)
+
+- Spike documentaire officiel fal Kling motion-control (v3/v2.6) + comparaison Runway Act-Two ; **0** appel provider.
+- Décision : `PROVIDER_SELECTED_FOR_ADAPTER_IMPLEMENTATION` → `fal-ai/kling-video/v3/pro/motion-control` (disabled adapter only).
+- Mapping statique + anti-I2V + profil Registry design `enabled=false` ; tests **8** ciblés. Rapport `66_MT007A_MOTION_TRANSFER_PROVIDER_SPIKE.md`.
+
 ## [2.0.90] — 2026-08-11
 
 ### Added (MT-006 Motion Transfer Provider Port & Fake Adapter)

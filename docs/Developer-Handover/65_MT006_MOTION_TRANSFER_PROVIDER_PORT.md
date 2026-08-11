@@ -9,7 +9,8 @@ MT-006 = IMPLEMENTED
 provider port = PASS
 fake adapter = TEST_ONLY
 real provider adapters = 0
-MT-007 = NOT STARTED
+MT-007A = IMPLEMENTED (spike — voir `66_`)
+MT-007B = NOT STARTED (real adapter)
 runtime = unavailable
 network calls = 0
 ```
@@ -73,4 +74,5 @@ NO RUN/JOB / LEDGER / STORAGE / API / MIGRATION / DEPLOY
 
 ## Suite
 
-**MT-007** — First provider adapter (disabled by default) — **NOT STARTED**.
+**MT-007A** — Provider spike **PASS** (`66_`) → selected `fal-ai/kling-video/v3/pro/motion-control` (disabled adapter next).
+**MT-007B** — Real adapter disabled-by-default — **NOT STARTED**.
