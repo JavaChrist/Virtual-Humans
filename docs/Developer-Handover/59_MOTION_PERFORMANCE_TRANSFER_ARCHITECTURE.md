@@ -28,19 +28,22 @@ MT-009 = IMPLEMENTED
 Gate MT-7 Motion QC = PASS
 MT-010 = IMPLEMENTED
 Gate MT-8 Human Review = PASS
-MT-011+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-011 / MT-012
+MT-011 = IMPLEMENTED
+Gate MT-9 Observability/Security = PASS
+MT-012+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-012 Dry-run suite
 remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_ADAPTER_CODE = fal / fal-ai/kling-video/v3/pro/motion-control (disabled)
 privacy gate = blocked
+PRIVACY_DECISIONS_NOT_YET_AUTHORIZED
 NO PAID BENCHMARK_YET
 eligible Production motion-transfer models = 0
 real provider calls = 0
 real measurement adapters = 0
 ```
 
-> Ce document est la **spécification d’architecture**. Les tickets MT-001…010 livrent contrats/code locaux ; worker motion + adapter fal **disabled-by-default** — aucun appel payant ; Motion QC/review fake-only.
+> Ce document est la **spécification d’architecture**. Les tickets MT-001…011 livrent contrats/code locaux ; worker motion + adapter fal **disabled-by-default** — aucun appel payant ; obs/security ready ; privacy decisions not authorized.
 
 ---
 
@@ -60,10 +63,11 @@ real measurement adapters = 0
 | Worker / polling | **MT-008 IMPLEMENTED** — `68_` · canonical run-once branch · fake E2E PASS · **0** fal calls |
 | Motion QC | **MT-009 IMPLEMENTED** — `69_` · policy/measurements/aggregate/report · fake port only · Gate MT-7 **PASS** |
 | Human review | **MT-010 IMPLEMENTED** — `70_` · `/motion/review` + UI Director · retry intent only · Gate MT-8 **PASS** |
+| Observability / Security | **MT-011 IMPLEMENTED** — `71_` · catalog + sanitizer + privacy contract + gates · Gate MT-9 **PASS** |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | adapter code present — **not** Production-enabled / UNVERIFIED |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-011 / MT-012** |
+| Prochaine action | **MT-012** Dry-run suite |
 
 **Ordre obligatoire :**
 
@@ -1133,13 +1137,13 @@ flowchart LR
 - **Interdit respecté :** no provider / merge / export / remote migration.
 - **DoD :** tests ciblés **25** PASS. Gate MT-8 Human Review **PASS**.
 
-### MT-011 — Observability / security
+### MT-011 — Observability / security *(DONE 2026-08-11)*
 
-- **Objectif :** events, redaction, consent metadata, target guard.
-- **Dépendances :** MT-008.
-- **Acceptation :** secret scan ; no signed URL in logs.
-- **Interdit :** raw provider payloads in logs.
-- **DoD :** tests redaction.
+- **Objectif :** events, redaction, consent metadata, target guard — **PASS**.
+- **Artefacts :** `71_` · catalog `mt011-events-1.0.0` · sanitizer · privacy contract · security gates.
+- **Acceptation :** secret scan ; no signed URL / prompt / média in events ; privacy default blocked.
+- **Interdit respecté :** no fal call ; no remote migration ; no Production writes.
+- **DoD :** tests hostiles **29** PASS. Gate MT-9 **PASS**.
 
 ### MT-012 — Dry-run and tests
 

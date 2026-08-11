@@ -15,6 +15,7 @@ Média réel : **0** (11A prep seulement).
 Motion Transfer : tests cibles MT-001…010 (domain/…/worker/QC/review fake) ; suite E2E fake MT-012 puis benchmark Auth MT-013 — voir `59_` / `69_` / `70_`.
 Motion QC (MT-009) : `src/application/motion/__tests__/mt009-motion-qc.test.ts` — fake measurement only ; pas d’appel CV/provider.
 Motion Review (MT-010) : `src/application/motion/__tests__/mt010-motion-review.test.ts` — décisions append-only ; retry = **0** job/ledger/provider.
+Motion Observability/Security (MT-011) : `src/application/motion/__tests__/mt011-motion-observability.test.ts` — sanitizer hostile + gates + privacy ; **0** clé fal réelle.
 `NO PAID BENCHMARK_YET`.
 
 ## Pyramide

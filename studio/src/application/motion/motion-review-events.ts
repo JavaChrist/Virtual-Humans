@@ -1,6 +1,9 @@
 /**
  * Redacted Motion human-review observability (MT-010).
+ * MT-011 — assert delegates to central Motion sanitizer.
  */
+
+import { assertMotionSurfaceRedacted } from "@/domain/motion/security";
 
 export type MotionReviewEventType =
   | "motion.review.opened"
@@ -31,11 +34,5 @@ export type MotionReviewEventSink = {
 };
 
 export function assertMotionReviewEventRedacted(event: MotionReviewEvent): void {
-  const blob = JSON.stringify(event);
-  if (/https?:\/\//i.test(blob) || /data:[^;]+;base64,/i.test(blob)) {
-    throw new Error("motion_review_event_media_leak");
-  }
-  if (/\bsk-[A-Za-z0-9]{10,}/i.test(blob)) {
-    throw new Error("motion_review_event_secret_leak");
-  }
+  assertMotionSurfaceRedacted(event, "motion_review_event");
 }

@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.96] — 2026-08-11
+
+### Added (MT-011 Motion Transfer Observability & Security)
+
+- Catalogue événements `mt011-events-1.0.0` + façade `emitMotionObservabilityEvent` (sanitize/assert/freeze).
+- Sanitizer central Motion + classification données + contrat privacy `mt011-privacy-1.0.0` + gates fail-closed consolidées.
+- Compat privacy gate MT-007B ; asserts worker/QC/review délégués au sanitizer. Tests hostiles **29**. Rapport `71_`. Gate MT-9 **PASS**.
+- `REAL_PROVIDER_CALLS = 0` · runtime unavailable · remote migration NOT APPLIED · privacy decisions NOT YET AUTHORIZED.
+
 ## [2.0.95] — 2026-08-11
 
 ### Added (MT-010 Motion Transfer Human Review)

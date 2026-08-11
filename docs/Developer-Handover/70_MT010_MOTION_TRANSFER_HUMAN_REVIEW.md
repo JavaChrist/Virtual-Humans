@@ -87,4 +87,4 @@ studio/src/application/motion/__tests__/mt010-motion-review.test.ts
 
 ## 9. Suite
 
-**MT-011** Observability/security ou dry-run MT-012 — pas de benchmark payant.
+**MT-011** Observability/security **IMPLEMENTED** (`71_`) · Gate MT-9 **PASS**. Suite : **MT-012** dry-run.

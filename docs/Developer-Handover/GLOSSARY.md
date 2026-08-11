@@ -45,6 +45,9 @@
 **motion_qc_evidence** — descriptor d’evidence privée QC Motion (asset/fingerprint, role, MIME, ranges, provenance) — jamais média inline ni URL signée.
 **Motion human review** — validation humaine append-only (`human_review_decisions`) pour Motion Transfer ; intents `approved|rejected|retry_*|request_new_reference` ; API `/motion/review` (`70_`) ; retry = intention seulement (pas de job).
 **reviewRequestId** — clé d’idempotence client pour une décision de revue (double-clic → `existing` ; payload différent → conflit).
+**Motion observability catalog** — catalogue versionné `mt011-events-1.0.0` (`motion.route|plan|job|submit|poll|output|qc|review|ledger|security.*`) ; façade `emitMotionObservabilityEvent`.
+**Motion sanitizer** — sanitiseur central `sanitizeMotionValue` / `assertMotionSurfaceRedacted` (MT-011) ; masque secrets, URLs signées, data URLs, prompts, payloads bruts.
+**Privacy Decision Contract** — décisions obligatoires avant benchmark réel (`providerRetentionAccepted`, CDN, biométrie, droits commerciaux, geo) ; default blocked ; expiration honorée.
 **Motion Director** — Directeur éventuel **post-V1** ; traduit des contraintes, n’invente pas le mouvement, n’appelle pas de provider.
 
 ## Termes proscrits
