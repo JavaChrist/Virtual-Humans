@@ -8,13 +8,13 @@ Protocole d’audit initial : `03_CURRENT_AUDIT.md` (**historique**) — audit r
 Checkpoint : 10F-V4 Storyboard PASS · 11A media PREP DECISION_REQUIRED
 Motion     : ARCHITECTURE_READY · MT-001…004 IMPLEMENTED · Gates MT-1…MT-3 PASS
              0 Production MT models · dry-run Engine only · paid execution unavailable
-             MT-005+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
+             MT-006+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
              PROVIDER_NOT_SELECTED_YET · NO PAID BENCHMARK_YET
 Budget     : 122 / 112 / 0 / 10
 Runtime AI : OFF
 Media jobs : 0
 P1         : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Next major : MT-005 Storage / optional migration
+Next major : MT-006 Provider Port
 ```
 
 ## P0 — fondations
@@ -71,10 +71,10 @@ Next major : MT-005 Storage / optional migration
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…004 IMPLEMENTED** (`60_`…`63_`, Gates MT-1…MT-3 PASS) · Engine dry-run only · Production → unavailable · MT-005+ **NOT STARTED** · **PROVIDER_NOT_SELECTED_YET** · **NO PAID BENCHMARK_YET**.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…005 IMPLEMENTED** (`60_`…`64_`, Gates MT-1…MT-3 PASS) · Engine dry-run + persistence/storage local · Production → unavailable · MT-006+ **NOT STARTED** · **PROVIDER_NOT_SELECTED_YET** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **122** ; committed **112** ; available **10**.
-- **Prochaine porte majeure** : **MT-005** Storage / optional migration ; backup restore reste P1 ouvert.
+- **Prochaine porte majeure** : **MT-006** Provider Port ; backup restore reste P1 ouvert ; migration MT-005 **locale only** (NOT APPLIED Production).
 
 ## P2 — durcissement
 

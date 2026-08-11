@@ -450,17 +450,19 @@ Fichier : `studio/src/infrastructure/config/supabase-target-guard.ts`.
 
 ---
 
-## 13. Extension future — Motion Transfer (design only)
+## 13. Motion Transfer — Persistence / Storage (MT-005)
 
-Voir [`59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md`](./59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md).
+Voir [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md) et [`59_…`](./59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md).
 
-| Élément | Décision design |
+| Élément | Décision MT-005 |
 |---|---|
-| Tables `production_*` / `assets` / ledger | **REUSE** — pas de tables `motion_*` obligatoires en V1 |
-| `human_review_decisions.status` | **EXTEND** possible (retry/constraints) — migration ticket MT-005 |
+| Tables `production_*` / `assets` / ledger / idempotency / audit | **REUSE_AS_IS** — pas de tables `motion_*` V1 |
+| `human_review_decisions.decision` | **LOCAL_MIGRATION** `20260811180000_vhs_mt005_human_review_decision_extend.sql` — allowlist + retry intents — **NOT APPLIED** Production |
 | Nouvel `ArtifactType` | **non** requis V1 |
-| Storage paths | préfixe `{workspace}/{project}/motion/…` |
-| Statut | `RUNTIME_NOT_IMPLEMENTED_YET` — **aucune** migration créée dans la mission architecture |
+| Storage bucket | **REUSE** `director-final-assets` (privé) |
+| Storage paths | `{workspace}/{project}/motion/{role}/{assetId}.{ext}` |
+| Asset roles | provenance `motionRole` (pas de CHECK `assets.kind`) |
+| Statut | Gate MT-3 Persistence/Storage **PASS** · runtime unavailable · remote migration **NOT APPLIED** |
 
 ## 14. Liens
 

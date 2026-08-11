@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.89] — 2026-08-11
+
+### Added (MT-005 Motion Transfer Supabase & Storage)
+
+- Contrats persistence/storage Motion : réutilise tables V2 (`production_*`, `assets`, `generation_plan`, `quality_report`, ledger/idempotency/audit) — **aucune** table `motion_*`.
+- Bucket privé réutilisé `director-final-assets` ; path builder `{ws}/{proj}/motion/{role}/{assetId}.{ext}`.
+- Migration locale additive `20260811180000_vhs_mt005_human_review_decision_extend.sql` : CHECK/RPC `decision` + intents retry Motion — **NOT APPLIED** Production.
+- Port mémoire + tests hostiles (MIME, isolation, redaction signed URL). Tests ciblés **10** ; unitaires **1229** ; pgTAP **386** ; DB integration **33**. Rapport `64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`. Gate MT-3 Persistence/Storage **PASS**. MT-006 **NOT STARTED**. Migration history : LOCAL_ONLY drift=1 (attendu).
+
 ## [2.0.88] — 2026-08-11
 
 ### Added (MT-004 Motion Transfer Generation Engine dry-run)

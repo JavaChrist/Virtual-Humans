@@ -45,6 +45,7 @@ const EXPECTED_FILES = [
   "20260806120000_vhs_132_director_success_commit_remainder.sql",
   "20260807213624_vhs_133_art_human_retry_input_artifact.sql",
   "20260807213803_vhs_134_legacy_art_timeout_retry.sql",
+  "20260811180000_vhs_mt005_human_review_decision_extend.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -70,15 +71,15 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 29 versions aligned Production (incl. VHS-133/134 MCP timestamps)", () => {
+test("migrations — 30 versions (29 Production + MT-005 local-only)", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
-  assert.equal(files.length, 29);
+  assert.equal(files.length, 30);
   assert.deepEqual(
     files.filter((f) => f.startsWith("202607")),
     [...LEGACY_FILES],
   );
-  assert.equal(v2Files().length, 27);
+  assert.equal(v2Files().length, 28);
 });
 
 test("migrations V2 — VHS-129 human-retry allowlist (not auto-retry)", () => {
@@ -320,7 +321,28 @@ test("migrations V2 — VHS-125 postproduction delivery RPCs et table présents"
   assert.match(sql, /artifact_type IN \([\s\S]*'quality_report'[\s\S]*'merge_plan'[\s\S]*'export_package'/i);
   assert.match(sql, /input_artifact_type IN \([\s\S]*'production_result'[\s\S]*'quality_report'[\s\S]*'merge_plan'/i);
   assert.match(sql, /decision text NOT NULL/i);
+  // Historical VHS-125 CHECK + MT-005 extended allowlist (local migration).
   assert.match(sql, /CHECK \(decision IN \('approved', 'rejected'\)\)/i);
+  assert.match(
+    sql,
+    /decision IN \(\s*'approved',\s*'rejected',\s*'retry_same_reference',\s*'retry_updated_constraints',\s*'request_new_reference'\s*\)/i,
+  );
+});
+
+test("migrations V2 — MT-005 human_review decision extend (local-only)", () => {
+  const sql = readFileSync(
+    join(MIGRATIONS_DIR, "20260811180000_vhs_mt005_human_review_decision_extend.sql"),
+    "utf8",
+  );
+  assert.match(sql, /DROP CONSTRAINT IF EXISTS human_review_decisions_decision_check/i);
+  assert.match(sql, /retry_same_reference/);
+  assert.match(sql, /retry_updated_constraints/);
+  assert.match(sql, /request_new_reference/);
+  assert.match(sql, /CREATE OR REPLACE FUNCTION public\.persist_human_review_decision/i);
+  assert.match(sql, /GRANT EXECUTE ON FUNCTION public\.persist_human_review_decision/i);
+  assert.match(sql, /REVOKE ALL ON FUNCTION public\.persist_human_review_decision/i);
+  assert.ok(!/DROP TABLE/i.test(sql));
+  assert.ok(!/CREATE TABLE/i.test(sql));
 });
 
 test("migrations V2 — VHS-126 brief revisions + stale columns/RPCs", () => {

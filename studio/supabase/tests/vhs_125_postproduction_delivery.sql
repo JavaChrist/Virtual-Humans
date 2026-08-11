@@ -274,7 +274,7 @@ SELECT throws_ok(
     'c1250099-0099-4125-8125-c12500990099', 1
   )$$,
   'P0001', 'invalid_review_decision',
-  'persist_human_review_decision rejects non approved|rejected status'
+  'persist_human_review_decision rejects unknown decision values'
 );
 
 -- ---------------------------------------------------------------------------

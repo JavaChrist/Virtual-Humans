@@ -4,7 +4,10 @@
  * go through the generic ArtifactRepository (VHS-113) — these ports cover writes only.
  */
 
-import type { HumanReviewDecision } from "@/domain/postproduction";
+import type {
+  HumanReviewDecision,
+  HumanReviewDecisionStatus,
+} from "@/domain/postproduction";
 
 export type BeginDeliveryRunResult =
   | { status: "created"; directorRunId: string; revision: number }
@@ -82,7 +85,7 @@ export type PersistHumanReviewDecisionInput = {
   qualityReportRevision: number;
   productionResultArtifactId: string;
   productionResultRevision: number;
-  decision: "approved" | "rejected";
+  decision: HumanReviewDecisionStatus;
   comment?: string;
   reviewedIssueCodes: string[];
   idempotencyKey?: string;

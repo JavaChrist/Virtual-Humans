@@ -212,7 +212,11 @@ function seedReadyExport(input: {
         validatorVersion: quality.validatorVersion,
         blockingCount: 0,
         warningCount: 0,
-        humanReviewStatus: input.humanReview?.status,
+        humanReviewStatus:
+          input.humanReview?.status === "approved" ||
+          input.humanReview?.status === "rejected"
+            ? input.humanReview.status
+            : undefined,
       },
       generatedAt: AT,
     },

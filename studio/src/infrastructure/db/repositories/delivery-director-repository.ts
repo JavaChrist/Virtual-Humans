@@ -134,7 +134,7 @@ export function createSupabaseDeliveryDirectorRunPort(deps: {
         productionRunId: "",
         productionResultRevisionId: data.production_result_artifact_id as string,
         productionResultRevision: data.production_result_revision as number,
-        status: data.decision as "approved" | "rejected",
+        status: data.decision as HumanReviewDecision["status"],
         decidedAt: data.created_at as string,
         decidedBy: data.actor_id as string,
         reviewedIssueCodes: (data.reviewed_issue_codes as string[] | null) ?? [],

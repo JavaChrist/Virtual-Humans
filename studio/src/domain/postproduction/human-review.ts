@@ -1,10 +1,22 @@
 /**
- * Human review decisions — append-only, no UI (VHS-111).
+ * Human review decisions — append-only, no UI (VHS-111 / MT-005).
  */
 
 import { PostProductionDomainError } from "./errors";
 
 export const MAX_HUMAN_REVIEW_COMMENT_LENGTH = 2000;
+
+/** SQL + domain decision values (column human_review_decisions.decision). */
+export const HumanReviewDecisionStatusValues = [
+  "approved",
+  "rejected",
+  "retry_same_reference",
+  "retry_updated_constraints",
+  "request_new_reference",
+] as const;
+
+export type HumanReviewDecisionStatus =
+  (typeof HumanReviewDecisionStatusValues)[number];
 
 export type HumanReviewDecision = {
   id: string;
@@ -12,7 +24,7 @@ export type HumanReviewDecision = {
   /** ProductionResult revision id this decision targets. */
   productionResultRevisionId: string;
   productionResultRevision: number;
-  status: "approved" | "rejected";
+  status: HumanReviewDecisionStatus;
   decidedAt: string;
   decidedBy: string;
   reviewedIssueCodes: string[];
@@ -29,12 +41,18 @@ export const NON_WAIVABLE_TECHNICAL_CODES = new Set([
   "expired_asset",
 ]);
 
+function isKnownDecisionStatus(
+  status: string,
+): status is HumanReviewDecisionStatus {
+  return (HumanReviewDecisionStatusValues as readonly string[]).includes(status);
+}
+
 export function createHumanReviewDecision(input: {
   id: string;
   productionRunId: string;
   productionResultRevisionId: string;
   productionResultRevision: number;
-  status: "approved" | "rejected";
+  status: HumanReviewDecisionStatus;
   decidedAt: string;
   decidedBy: string;
   reviewedIssueCodes: string[];
@@ -45,7 +63,7 @@ export function createHumanReviewDecision(input: {
   if (!input.id?.trim() || !input.decidedBy?.trim()) {
     throw new PostProductionDomainError("human_review_invalid", "id et decidedBy requis.");
   }
-  if (input.status !== "approved" && input.status !== "rejected") {
+  if (!isKnownDecisionStatus(input.status)) {
     throw new PostProductionDomainError("human_review_invalid", "Statut de revue invalide.");
   }
   if (input.comment != null && input.comment.length > MAX_HUMAN_REVIEW_COMMENT_LENGTH) {
@@ -94,4 +112,21 @@ export function assertReviewTargetsRevision(
       "La revue cible une révision obsolète."
     );
   }
+}
+
+/** Final delivery/export may proceed only after APPROVE. */
+export function isFinalizableHumanReview(
+  status: HumanReviewDecisionStatus,
+): boolean {
+  return status === "approved";
+}
+
+export function isRetryHumanReview(
+  status: HumanReviewDecisionStatus,
+): boolean {
+  return (
+    status === "retry_same_reference" ||
+    status === "retry_updated_constraints" ||
+    status === "request_new_reference"
+  );
 }

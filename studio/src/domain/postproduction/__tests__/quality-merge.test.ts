@@ -211,6 +211,18 @@ test("revue humaine — append-only / non waivable / commentaire", () => {
       comment: "x".repeat(MAX_HUMAN_REVIEW_COMMENT_LENGTH + 1),
     })
   );
+
+  const retry = createHumanReviewDecision({
+    id: "hr-4",
+    productionRunId: "run-1",
+    productionResultRevisionId: "pr-1",
+    productionResultRevision: 1,
+    status: "retry_same_reference",
+    decidedAt: AT,
+    decidedBy: "u1",
+    reviewedIssueCodes: ["identity_drift"],
+  });
+  assert.equal(retry.status, "retry_same_reference");
 });
 
 test("MergePlan — timeline déterministe / transition unsupported", () => {

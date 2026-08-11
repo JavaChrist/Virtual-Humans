@@ -137,7 +137,11 @@ export function buildExportManifest(input: {
       validatorVersion: input.quality.validatorVersion,
       blockingCount: input.quality.blockingIssues.filter((i) => i.blocking).length,
       warningCount: input.quality.warnings.length,
-      humanReviewStatus: input.humanReview?.status,
+      humanReviewStatus:
+        input.humanReview?.status === "approved" ||
+        input.humanReview?.status === "rejected"
+          ? input.humanReview.status
+          : undefined,
     },
     generatedAt: input.generatedAt,
   });

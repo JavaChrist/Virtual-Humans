@@ -26,16 +26,16 @@ En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → d
 ```text
 Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
-Motion / Performance     : ARCHITECTURE_READY · MT-001…004 (60_…63_) · Gates MT-1…MT-3 PASS
-                           0 Production MT models · Engine dry-run only
-                           MT-005+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
+Motion / Performance     : ARCHITECTURE_READY · MT-001…005 (60_…64_) · Gates MT-1…MT-3 PASS
+                           0 Production MT models · Engine dry-run · Persistence/Storage local
+                           MT-006+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
                            PROVIDER_NOT_SELECTED_YET · NO PAID BENCHMARK_YET
 Runtime AI               : OFF
 Budget                   : hard 122 / committed 112 / reserved 0 / available 10
 production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Prochaine porte majeure  : MT-005 Storage / optional migration
+Prochaine porte majeure  : MT-006 Provider Port
 ```
 
 ### Portes Directors texte
@@ -177,6 +177,7 @@ Utilisateur → AI Video Director (/director)
 | [`61_MT002_MOTION_TRANSFER_CAPABILITY_REGISTRY.md`](./61_MT002_MOTION_TRANSFER_CAPABILITY_REGISTRY.md) | **MT-002 Capability Registry — Gate MT-2 Registry PASS** |
 | [`62_MT003_MOTION_TRANSFER_ROUTER.md`](./62_MT003_MOTION_TRANSFER_ROUTER.md) | **MT-003 Router strategy — Gate MT-2 Router PASS** |
 | [`63_MT004_MOTION_TRANSFER_GENERATION_ENGINE.md`](./63_MT004_MOTION_TRANSFER_GENERATION_ENGINE.md) | **MT-004 Engine dry-run — Gate MT-3 PASS** |
+| [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md) | **MT-005 Persistence/Storage — Gate MT-3 PASS** |
 
 ### Pilotage (hors numérotation)
 
@@ -201,7 +202,7 @@ Utilisateur → AI Video Director (/director)
 6. `18_TESTING.md` / `19_DEPLOYMENT.md` pour qualité et ops.
 7. Rapports `27`–`58` pour preuves smokes ; `20` / `03` seulement comme historique.
 8. Avant média image borné : `58_` puis décision humaine — **ne pas** relancer sans Auth.
-9. Chantier majeur Motion Transfer : `59_` → `60_`…`63_` (MT-001…004) → MT-005+ — **pas** de provider/benchmark payant sans gates.
+9. Chantier majeur Motion Transfer : `59_` → `60_`…`64_` (MT-001…005) → MT-006+ — **pas** de provider/benchmark payant sans gates.
 
 ---
 

@@ -14,17 +14,18 @@ MT-003 = IMPLEMENTED
 Gate MT-2 Router portion = PASS
 MT-004 = IMPLEMENTED
 Gate MT-3 Engine preparation = PASS
-MT-005+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-005 Storage / optional migration
+MT-005 = IMPLEMENTED
+Gate MT-3 Persistence/Storage = PASS
+MT-006+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-006 Provider Port
+remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_NOT_SELECTED_YET
 NO PAID BENCHMARK_YET
 eligible Production motion-transfer models = 0
 ```
 
-> Ce document est une **spécification d’architecture prête à implémenter**.
-> Ce n’est **pas** une idée future, **pas** un runtime livré, **pas** un provider sélectionné.
-> Aucune migration, aucun code, aucun appel provider n’a été effectué dans cette mission.
+> Ce document est la **spécification d’architecture**. Les tickets MT-001…005 livrent contrats/code locaux ; le runtime capability et le provider restent non branchés.
 
 ---
 
@@ -37,11 +38,12 @@ eligible Production motion-transfer models = 0
 | Capability Registry | **MT-002 IMPLEMENTED** — `capabilities/motion-transfer.ts` · Gate MT-2 Registry **PASS** · **0** modèle Production éligible |
 | Model Router | **MT-003 IMPLEMENTED** — `routeMotionTransfer` · Gate MT-2 Router **PASS** · Production → `motion_capability_unavailable` |
 | Generation Engine | **MT-004 IMPLEMENTED** — dry-run prepare · Gate MT-3 **PASS** · `providerCalled=false` · paid execution unavailable |
-| Storage / Provider port | MT-005+ **NOT STARTED** |
+| Persistence / Storage | **MT-005 IMPLEMENTED** — `64_` · REUSE tables V2 · bucket `director-final-assets` · migration locale human_review **NOT APPLIED** Production |
+| Provider port | MT-006 **NOT STARTED** |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | `PROVIDER_NOT_SELECTED_YET` |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-005** Storage conventions / optional migration |
+| Prochaine action | **MT-006** Provider Port |
 
 **Ordre obligatoire :**
 
@@ -664,7 +666,7 @@ Contraintes V1 motion :
 | Ticket | Changement |
 |---|---|
 | MT-005a | Aucune table obligatoire V1 |
-| MT-005b | Éventuel CHECK élargi sur `human_review_decisions.status` : + `retry_same_reference` / `retry_updated_constraints` / `request_new_reference` |
+| MT-005b | **DONE local** — CHECK élargi sur `human_review_decisions.decision` (+ retry intents) — remote **NOT APPLIED** |
 | MT-005c | Index optionnel `(external_job_id)` partial unique where not null sur `generation_attempts` ou `assets` |
 | MT-005d | Storage paths convention (pas de SQL) |
 | MT-005e | RPC : **aucune** nouvelle RPC obligatoire V1 |
@@ -1054,14 +1056,14 @@ flowchart LR
 - **Interdit :** submit réel — respecté (`providerCalled=false`).
 - **DoD :** unitaires + dry-run — **PASS**.
 
-### MT-005 — Supabase / storage
+### MT-005 — Supabase / storage — **IMPLEMENTED**
 
-- **Objectif :** conventions paths ; migration **optionnelle** human_review statuses ; indexes.
-- **Fichiers :** migrations (quand Auth), storage port, asset provenance.
-- **Dépendances :** MT-001.
-- **Acceptation :** design appliqué ; RLS inchangé ; pas de bucket public.
-- **Interdit :** apply distant sans Auth ; purge destructive.
-- **DoD :** pgTAP si migration ; docs 17_ mis à jour.
+- **Objectif :** conventions paths ; migration locale human_review **decision** intents ; provenance roles.
+- **Fichiers :** `domain/motion/persistence.ts`, `application/motion/*`, migration `vhs_mt005_*`, rapport `64_`.
+- **Dépendances :** MT-001…004.
+- **Acceptation :** REUSE tables V2 ; bucket privé réutilisé ; Gate MT-3 Persistence/Storage **PASS**.
+- **Interdit :** apply distant / purge destructive — respecté (`remote migration = NOT APPLIED`).
+- **DoD :** pgTAP + unitaires + docs 17_ — voir `64_`.
 
 ### MT-006 — Provider port
 

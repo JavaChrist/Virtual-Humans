@@ -68,7 +68,7 @@ Conservation : pas de suppression automatique dans cette porte ; nettoyage futur
 Les préfixes de fichiers sous `migrations/` portent les **versions numériques
 Production** (`ejdbksxaswhdtsudnmvi`) après apply MCP.
 
-Total attendu (10A-B) : **29** (2 legacy + 17 V2 core/delivery + 3 remainder 125 + VHS-128…134).
+Total local : **30** (29 Production alignées + MT-005 `vhs_mt005_human_review_decision_extend` **local-only / NOT APPLIED** Production).
 
 VHS-125 : SQL canonique complet dans `20260804135742_vhs_125_postproduction_delivery.sql`.
 Les fichiers `20260804140056` / `20260804140143` / `20260804140225`

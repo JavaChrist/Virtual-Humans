@@ -125,3 +125,24 @@ export {
 } from "./redact";
 
 export { deepFreeze } from "./freeze";
+
+export {
+  MOTION_ASSET_ROLE_POLICIES,
+  MOTION_ASSET_ROLE_TO_MEDIA_ROLE,
+  MOTION_HUMAN_REVIEW_INTENT,
+  MOTION_PERSISTENCE_CONTRACT_VERSION,
+  MOTION_PERSISTENCE_MATRIX,
+  MOTION_STORAGE_PATH_SEGMENT,
+  MotionAssetRoleValues,
+  MotionHumanReviewDecisionValues,
+  assertMotionAssetMimeAllowed,
+  isFinalizableMotionReview,
+  isRetryMotionReview,
+  type MotionAssetProvenance,
+  type MotionAssetRole,
+  type MotionAssetRolePolicy,
+  type MotionHumanReviewDecision,
+  type MotionPersistenceMapping,
+  type MotionProviderOutputLifecycleStatus,
+  type MotionSourceLifecycleStatus,
+} from "./persistence";

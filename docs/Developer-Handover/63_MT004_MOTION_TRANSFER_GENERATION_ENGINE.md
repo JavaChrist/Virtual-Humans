@@ -7,7 +7,7 @@
 ```text
 MT-004 = IMPLEMENTED
 Gate MT-3 Engine preparation = PASS
-MT-005 = NOT STARTED
+MT-005 = IMPLEMENTED (voir `64_`)
 provider calls = impossible
 runtime execution = unavailable
 Production candidates = 0
@@ -71,4 +71,5 @@ NO API/UI / FLAGS / DEPLOY / PUSH
 
 ## Suite
 
-**MT-005** — conventions storage / migration optionnelle human_review (Auth requise pour apply distant).
+**MT-005** — **IMPLEMENTED** (`64_`) · Gate MT-3 Persistence/Storage **PASS** · remote migration **NOT APPLIED**.
+**MT-006** — Provider Port — **NOT STARTED**.
