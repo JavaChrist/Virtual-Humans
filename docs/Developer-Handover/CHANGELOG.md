@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.84] — 2026-08-11
+
+### Architecture (Motion / Performance Transfer)
+
+- Spec complète `59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md` : `video.motion_transfer`.
+- Statut : `ARCHITECTURE_READY_FOR_IMPLEMENTATION` · `IMPLEMENTATION_NEXT` · `RUNTIME_NOT_IMPLEMENTED_YET` · `PROVIDER_NOT_SELECTED_YET` · `NO PAID BENCHMARK_YET`.
+- Contrats domaine, Registry/Router, Engine, port provider, QC, human review, tickets MT-001…014, gates MT-0…11.
+- Canon 00/02/04/06/13–15/17–19 + BACKLOG + GLOSSARY mis à jour. **0** code · **0** migration · **0** provider · **0** push.
+
 ## [2.0.83] — 2026-08-11
 
 ### Documentation (Developer-Handover refresh)

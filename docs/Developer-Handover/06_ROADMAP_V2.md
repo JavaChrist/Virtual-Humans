@@ -41,11 +41,14 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | 10D | Script texte réel PASS | `31_`–`32_` · `script-analyzer-v1` |
 | 10E | Art texte PASS (`art-analyzer-v3`) | `37_` |
 | 10F-V4 | Storyboard texte PASS (`storyboard-analyzer-v4`) | `57_` |
-| 11A | Prep smoke média — **DECISION_REQUIRED** | `58_` |
+| 11A | Prep smoke média image — **DECISION_REQUIRED** | `58_` |
+| MT-Arch | Architecture Motion / Performance Transfer | `59_` · `ARCHITECTURE_READY_FOR_IMPLEMENTATION` |
+| MT-001… | Implémentation bornée motion_transfer | `IMPLEMENTATION_NEXT` (pas démarrée) |
 
-**Pas encore :** media jobs Production réels ; restore backup prouvé ; tout delta migration distant futur sans Auth.
+**Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` ; provider motion sélectionné ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.
 
 Pilotage courant : **`BACKLOG_V2.md`**.
+Chantier majeur avant clôture app : **Motion Transfer** (`59_`) — distinct du smoke image 11A.
 
 ## Priorités
 

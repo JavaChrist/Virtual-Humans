@@ -10,6 +10,7 @@
 | Wiring `/director` | **fakes only** (VHS-124) |
 | Legacy | `/api/generate/*` hors pipeline Director (ne prouve pas `production_jobs`) |
 | Kill switches | `PAID_GENERATION` ∧ `WORKER` requis pour exécution payante |
+| Motion Transfer | port + input `sourceVideo` spécifiés (`59_`) — `RUNTIME_NOT_IMPLEMENTED_YET` ; `PROVIDER_NOT_SELECTED_YET` |
 
 ## Mission
 

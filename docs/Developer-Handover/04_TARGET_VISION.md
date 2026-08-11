@@ -4,6 +4,8 @@
 
 > Vision produit / UX / NFR — **pas** un snapshot d’état livré.
 > État validé : cinq Directeurs texte PASS ; export/média réel `/director` non prouvés.
+> Capability cible majeure : Motion / Performance Transfer (`video.motion_transfer`) —
+> architecture prête (`59_`) ; runtime / provider / benchmark : **pas encore**.
 > Voir `00_README.md` et `BACKLOG_V2.md` pour le checkpoint ops.
 
 ## Expérience standard

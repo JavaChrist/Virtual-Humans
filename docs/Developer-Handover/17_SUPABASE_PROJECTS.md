@@ -450,9 +450,22 @@ Fichier : `studio/src/infrastructure/config/supabase-target-guard.ts`.
 
 ---
 
-## 13. Liens
+## 13. Extension future — Motion Transfer (design only)
+
+Voir [`59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md`](./59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md).
+
+| Élément | Décision design |
+|---|---|
+| Tables `production_*` / `assets` / ledger | **REUSE** — pas de tables `motion_*` obligatoires en V1 |
+| `human_review_decisions.status` | **EXTEND** possible (retry/constraints) — migration ticket MT-005 |
+| Nouvel `ArtifactType` | **non** requis V1 |
+| Storage paths | préfixe `{workspace}/{project}/motion/…` |
+| Statut | `RUNTIME_NOT_IMPLEMENTED_YET` — **aucune** migration créée dans la mission architecture |
+
+## 14. Liens
 
 - Incident alignement distant : [`21_VHS_125_REMOTE_MIGRATION_INCIDENT.md`](./21_VHS_125_REMOTE_MIGRATION_INCIDENT.md)
 - Plan apply : [`SUPABASE_V2_MIGRATION_PLAN.md`](./SUPABASE_V2_MIGRATION_PLAN.md)
 - Pilotage ops : [`BACKLOG_V2.md`](./BACKLOG_V2.md), [`57_…`](./57_PHASE_10F_STORYBOARD_V4_EXECUTE.md), [`58_…`](./58_PHASE_11A_FIRST_REAL_MEDIA_SMOKE_PREP.md)
+- Motion Transfer : [`59_…`](./59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md)
 - README migrations : `studio/supabase/README.md`

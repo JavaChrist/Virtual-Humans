@@ -25,14 +25,16 @@ En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → d
 
 ```text
 Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
-Préparation média     : Phase 11A DECISION_REQUIRED (rapport 58)
-Commit docs prep 11A  : ba101e5 (local ; push non requis ici)
-Runtime AI            : OFF
-Budget                : hard 122 / committed 112 / reserved 0 / available 10
-production_jobs média : 0
-P0                    : aucun
-P1 ouverts            : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média VHS-124
-Prochaine porte       : décision humaine chemin smoke média (ne pas relancer 11A sans Auth)
+Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
+Motion / Performance     : ARCHITECTURE_READY_FOR_IMPLEMENTATION (rapport 59)
+                           IMPLEMENTATION_NEXT · RUNTIME_NOT_IMPLEMENTED_YET
+                           PROVIDER_NOT_SELECTED_YET · NO PAID BENCHMARK_YET
+Runtime AI               : OFF
+Budget                   : hard 122 / committed 112 / reserved 0 / available 10
+production_jobs média    : 0
+P0                       : aucun
+P1 ouverts               : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
+Prochaine porte majeure  : implémentation bornée Motion Transfer (MT-001…) — avant clôture app
 ```
 
 ### Portes Directors texte
@@ -169,6 +171,7 @@ Utilisateur → AI Video Director (/director)
 | [`56_PHASE_10F_V4_DEPLOY_PREFLIGHT.md`](./56_PHASE_10F_V4_DEPLOY_PREFLIGHT.md) | V4 deploy |
 | [`57_PHASE_10F_STORYBOARD_V4_EXECUTE.md`](./57_PHASE_10F_STORYBOARD_V4_EXECUTE.md) | **Storyboard PASS** |
 | [`58_PHASE_11A_FIRST_REAL_MEDIA_SMOKE_PREP.md`](./58_PHASE_11A_FIRST_REAL_MEDIA_SMOKE_PREP.md) | **Media PREP / DECISION_REQUIRED** |
+| [`59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md`](./59_MOTION_PERFORMANCE_TRANSFER_ARCHITECTURE.md) | **Motion Transfer — ARCHITECTURE_READY_FOR_IMPLEMENTATION** |
 
 ### Pilotage (hors numérotation)
 
@@ -192,7 +195,8 @@ Utilisateur → AI Video Director (/director)
 5. `17_SUPABASE_PROJECTS.md` pour toute question données.
 6. `18_TESTING.md` / `19_DEPLOYMENT.md` pour qualité et ops.
 7. Rapports `27`–`58` pour preuves smokes ; `20` / `03` seulement comme historique.
-8. Avant média : `58_` puis décision humaine — **ne pas** relancer un smoke sans Auth.
+8. Avant média image borné : `58_` puis décision humaine — **ne pas** relancer sans Auth.
+9. Chantier majeur Motion Transfer : `59_` (architecture) puis tickets MT-001… — **pas** d’implémentation spéculative ni benchmark payant sans gates.
 
 ---
 

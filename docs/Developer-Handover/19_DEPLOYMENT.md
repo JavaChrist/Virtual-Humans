@@ -10,7 +10,8 @@
 | Budget workspace | hard **122¢** / committed **112** / available **10** |
 | Backup / restore | P1 `BACKUP_PRESENT_RESTORE_UNPROVEN` — ouvert |
 | Média `/director` | **0** job ; 11A `DECISION_REQUIRED` |
-| Kill switches | voir Phases `25_`, fermetures `57_` |
+| Motion Transfer | flags futurs `MOTION_TRANSFER_*` OFF by default (`59_`) — non déployés |
+| Kill switches | voir Phases `25_`, fermetures `57_` ; motion : §15 de `59_` |
 | Target guard Supabase | fail-closed (`supabase-target-guard.ts`) |
 
 ## Environnements

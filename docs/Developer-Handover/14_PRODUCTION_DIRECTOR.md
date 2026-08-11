@@ -8,7 +8,8 @@
 |---|---|
 | Local fakes | Pipeline queue / QC / merge fake / export validés (Phases 4–9) |
 | Production réelle | `production_runs` = **0** · `production_jobs` = **0** · assets = **0** |
-| Média | Phase 11A prep `DECISION_REQUIRED` (`58_`) — aucun job lancé |
+| Média image | Phase 11A prep `DECISION_REQUIRED` (`58_`) — aucun job lancé |
+| Motion Transfer | architecture `59_` — jobs/runs **réutilisés** ; runtime non implémenté |
 | Adapters | réels non branchés sur `/director` (`assertDirectorProductionUsesFakes`) |
 
 ## Mission

@@ -10,6 +10,7 @@
 | Production | **0** `generation_plan` actif |
 | Dry-run 11A | plan complet → `no_eligible_strategy` (registre legacy partiel ; fallbacks=0) |
 | Contrainte | `/director` force fakes adapters (VHS-124) — média réel non branché |
+| Motion Transfer | stratégie `motion_transfer` **spécifiée** (`59_`) — `RUNTIME_NOT_IMPLEMENTED_YET` ; interdits fallback I2V/T2V silencieux |
 
 ## Mission
 

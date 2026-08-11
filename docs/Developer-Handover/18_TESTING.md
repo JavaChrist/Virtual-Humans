@@ -12,6 +12,8 @@
 
 Smokes provider texte (10B–10F) = hors CI ; preuves dans rapports `27`–`57`.
 Média réel : **0** (11A prep seulement).
+Motion Transfer : tests cibles tickets MT-012 (fake) puis MT-013 (benchmark Auth) — voir `59_`.
+`NO PAID BENCHMARK_YET`.
 
 ## Pyramide
 
