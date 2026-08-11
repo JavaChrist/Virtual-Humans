@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.111] — 2026-08-12
+
+### Added (MT-013G MV-001 Local Media Validate)
+
+- Auth `AUTH_MV001_LOCAL_MEDIA_VALIDATE_ONLY` : probe piste `vide` + SHA-256 + manifeste redacted.
+- Verdict **`MEDIA_INVALID`** : source 16.04s / 640×360 (fps 25 OK) ; identity PNG 971×1619 OK.
+- 0 upload · 0 fal · 0 chemins absolus dans Git/docs. Rapport `85_`.
+
 ## [2.0.110] — 2026-08-11
 
 ### Added (MT-013F MV-001 Controlled Benchmark Prep)

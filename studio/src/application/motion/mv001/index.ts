@@ -6,6 +6,8 @@ export * from "./mv001-benchmark-profile";
 export * from "./mv001-registry-exception";
 export * from "./mv001-media-manifest";
 export * from "./mv001-media-validator";
+export * from "./mv001-local-media-probe";
+export * from "./mv001-local-media-validate";
 export * from "./mv001-fal-key-presence";
 export * from "./mv001-execution-gates";
 export * from "./mv001-upload-prep";
