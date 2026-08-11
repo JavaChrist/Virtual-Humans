@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.101] — 2026-08-11
+
+### Added (MT-013C-RESTORE-PAID-TARGET — STOP)
+
+- Auth `AUTH_RESTORE_DRILL_PAID_ISOLATED_PROJECT_MAX_10_USD` : coût projet vide **$10/mois** ≤ plafond, mais STOP.
+- Motifs : `create_project` ≠ restore backup ; `restore_project` = unpause ; clone plateforme = Dashboard miroir (coût non prouvé ≤ 10) ; PAT absent.
+- 0 création · 0 dépense · 0 mutation Production. Rapport `76_`. Auth Dashboard clone + plafond miroir requise.
+
 ## [2.0.100] — 2026-08-11
 
 ### Added (MT-013C Isolated Restore Target — STOP)

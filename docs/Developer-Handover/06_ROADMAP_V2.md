@@ -47,6 +47,7 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | MT-013A | MV-001 governance & readiness audit | **DONE** (`73_`) · verdict `READY_FOR_HUMAN_GOVERNANCE_DECISIONS` · **0** provider calls |
 | MT-013B | Restore drill + privacy due diligence | **DONE** (`74_`) · restore `BLOCKED_TARGET_REQUIRED` · privacy `READY_FOR_HUMAN_DECISION` |
 | MT-013C | Isolated restore target | **STOP** (`75_`) · coût ≠ 0 · pas de restore backup via MCP |
+| MT-013C-PAID | Paid isolated project restore | **STOP** (`76_`) · restore backup non dispo via MCP · clone Dashboard requis |
 | MT-013D… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · MT-005 **NOT APPLIED** · **PAID NOT AUTHORIZED** |
 
 **Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` exécutable ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.

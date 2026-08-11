@@ -139,5 +139,5 @@ note             = ce n’est PAS le backup plateforme ; critères PASS à redé
 
 - `RESTORE_DRILL` reste `BLOCKED_TARGET_REQUIRED` (cible absente + STOP coût).  
 - Privacy due diligence (`74_`) inchangée : `READY_FOR_HUMAN_DECISION`.  
-- Ne pas démarrer MT-005 remote apply ni benchmark.  
-- Attendre Auth de dépense / PITR explicite avant toute création de ressource.
+- **MT-013C-PAID** (`76_`) : Auth $10 reçue — **STOP** (restore backup non disponible via MCP ; clone Dashboard requis).  
+- Ne pas démarrer MT-005 remote apply ni benchmark.
