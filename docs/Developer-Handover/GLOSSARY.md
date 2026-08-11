@@ -36,6 +36,8 @@
 **MotionTransferProviderPort** — port provider-agnostic MT-006 (`estimate`/`submit`/`poll`/`cancel?`) ; fake TEST_ONLY ; adapter fal = MT-007B (disabled).
 **fal Kling motion-control** — endpoint MT-007A/B (`fal-ai/kling-video/v3/pro/motion-control`) : `video_url` + `image_url` first-class ; **pas** I2V ; adapter code MT-007B ; enabled Production = false ; privacy gate blocked.
 **Motion Transfer privacy gate** — contrat fail-closed MT-007B (rétention/CDN/biométrie/droits/geo) ; default blocked ; bloque tout submit réel.
+**Motion Transfer worker orchestration** — branche MT-008 du worker `run-once` (`motion_transfer`) : claim→submit once→poll→ledger→qc_pending ; `submission_unknown` = pas de resubmit auto.
+**submission_unknown** — état typé MT-008 : provider peut avoir accepté mais `providerJobId` non persisté ; réconciliation humaine ; interdit de resubmit automatique.
 **MotionReferenceSpec** — contrat opaque fourni par un projet appelant (ex. Tai-Chi MV-001) : phases, checkpoints, contraintes ; VHS n’en interprète pas le métier ; schema `1.0.0`.
 **MotionMediaReference** — référence média motion basée sur `AssetInputRef` + rôle (source_video/identity/outfit/…).
 **Motion QC** — contrôles technique / identité / tenue / fidélité motion / intégrité / temporalité / caméra + revue humaine ; contrat `MotionQcResult` v1.

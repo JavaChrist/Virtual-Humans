@@ -12,6 +12,7 @@ import type {
   ProductionDirector,
   ProductionExecutionContext,
 } from "@/application/production/production-director";
+import type { MotionTransferWorkerProcessor } from "@/application/motion/motion-transfer-worker-orchestrator";
 import { assertLeaseOwnership, buildLeaseContext } from "./lease-guard";
 import { dispatchEnqueueCommands } from "./dispatcher";
 import { LeaseLostError } from "./errors";
@@ -22,6 +23,8 @@ export type ProcessJobDeps = {
   queue: JobQueuePort;
   nowIso: () => string;
   nowMs: () => number;
+  /** MT-008 — optional Motion Transfer orchestrator (canonical worker branch). */
+  motionTransfer?: MotionTransferWorkerProcessor;
 };
 
 export type ProcessJobResult = {
@@ -74,7 +77,26 @@ export async function processClaimedJobForWorker(
 
   let outcome: ProcessClaimedJobOutcome;
   try {
-    outcome = await deps.director.processClaimedJob(job, lease, context);
+    if (job.action === "motion_transfer") {
+      if (!deps.motionTransfer) {
+        outcome = {
+          status: "failed",
+          runId: job.runId,
+          errorCode: "motion_capability_unavailable",
+          publicMessage:
+            "Motion Transfer worker orchestrator absent — runtime unavailable.",
+          enqueueNext: [],
+        };
+      } else {
+        outcome = await deps.motionTransfer.processClaimedJob(
+          job,
+          lease,
+          context,
+        );
+      }
+    } else {
+      outcome = await deps.director.processClaimedJob(job, lease, context);
+    }
   } catch (e) {
     if (e instanceof LeaseLostError) {
       return {

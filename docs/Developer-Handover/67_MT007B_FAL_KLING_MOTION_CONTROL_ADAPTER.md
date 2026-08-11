@@ -149,5 +149,5 @@ NO VERCEL ENV WRITE / DEPLOY / DB / BUDGET / PRODUCTION ENABLE
 
 ## 11. Suite
 
-**MT-008** — Worker / polling orchestration (toujours flags OFF).  
-Benchmark payant **interdit** sans Auth gates + privacy accepted + Registry enable explicite.
+**MT-008** — **IMPLEMENTED** (`68_`) worker polling fake E2E · Gate MT-6 PASS.
+**MT-009** — Motion QC. Benchmark payant **interdit** sans Auth gates + privacy accepted + Registry enable.

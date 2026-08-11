@@ -7,7 +7,7 @@
 ```text
 MT-005 = IMPLEMENTED (local contracts + additive migration)
 Gate MT-3 Persistence/Storage = PASS
-MT-006 Provider Port = IMPLEMENTED (voir `65_`)
+MT-006…008 = IMPLEMENTED (voir `65_`…`68_`) — worker motion **sans** migration SQL additionnelle
 remote migration = NOT APPLIED
 provider calls = 0
 remote writes = 0

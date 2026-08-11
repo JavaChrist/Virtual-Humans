@@ -10,7 +10,7 @@
 | Wiring `/director` | **fakes only** (VHS-124) |
 | Legacy | `/api/generate/*` hors pipeline Director (ne prouve pas `production_jobs`) |
 | Kill switches | `PAID_GENERATION` ∧ `WORKER` requis pour exécution payante |
-| Motion Transfer | Dry-run Engine **MT-004** (`63_`) + Persistence **MT-005** (`64_`) + Provider port **MT-006** (`65_`) + fal adapter **MT-007B** (`67_`, disabled, privacy blocked, **0** calls) — paid execution unavailable |
+| Motion Transfer | Dry-run Engine **MT-004** (`63_`) … fal adapter **MT-007B** (`67_`) + worker polling **MT-008** (`68_`, fake E2E, flags OFF) — paid execution unavailable |
 
 ## Mission
 

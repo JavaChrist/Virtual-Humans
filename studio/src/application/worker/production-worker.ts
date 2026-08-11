@@ -22,6 +22,7 @@ import {
 import { runWorkerDryRun, type WorkerDryRunResult } from "./dry-run";
 import type { GenerationEngine } from "@/application/generation";
 import type { ProductionPorts } from "@/application/production/ports";
+import type { MotionTransferWorkerProcessor } from "@/application/motion/motion-transfer-worker-orchestrator";
 
 export type WorkerExecutionContext = {
   correlationId: string;
@@ -42,6 +43,8 @@ export type ProductionWorkerDependencies = {
   engine: GenerationEngine;
   ports: ProductionPorts;
   events?: WorkerEventSink;
+  /** MT-008 — Motion Transfer branch (absent ⇒ motion jobs fail-closed). */
+  motionTransfer?: MotionTransferWorkerProcessor;
 };
 
 export interface ProductionWorker {
@@ -248,6 +251,7 @@ export function createProductionWorker(
             queue: deps.queue,
             nowIso: context.nowIso,
             nowMs: context.nowMs,
+            motionTransfer: deps.motionTransfer,
           },
           execCtx,
           policy.leaseSeconds
@@ -302,6 +306,11 @@ export function createProductionWorker(
               errorCode: pr.outcome,
             });
             break;
+        }
+
+        // MT-008 — motion jobs do not use ProductionDirector planEnqueue; stop after one.
+        if (job.action === "motion_transfer") {
+          break;
         }
 
         // After progress: enqueue next ready steps (finalize is handled inside PD).

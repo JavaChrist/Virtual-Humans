@@ -10,7 +10,7 @@
 | Budget workspace | hard **122¢** / committed **112** / available **10** |
 | Backup / restore | P1 `BACKUP_PRESENT_RESTORE_UNPROVEN` — ouvert |
 | Média `/director` | **0** job ; 11A `DECISION_REQUIRED` |
-| Motion Transfer | flags `MOTION_TRANSFER_ENABLED` / `_PAID_ENABLED` / `_FAL_ENABLED` / `_WORKER_ENABLED` OFF by default (`67_`) — **ne pas** activer sur Vercel ; privacy gate blocked ; pas de write env |
+| Motion Transfer | flags `MOTION_TRANSFER_*` OFF (`67_`/`68_`) — worker refuse motion tant que OFF ; privacy blocked ; **ne pas** activer sur Vercel ; pas de write env |
 | Kill switches | voir Phases `25_`, fermetures `57_` ; motion : §15 de `59_` |
 | Target guard Supabase | fail-closed (`supabase-target-guard.ts`) |
 

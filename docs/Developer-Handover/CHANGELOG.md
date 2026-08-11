@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.93] — 2026-08-11
+
+### Added (MT-008 Motion Transfer Worker / Polling)
+
+- Branche `motion_transfer` sur worker canonique `run-once` (max 1 job/invocation) + orchestrateur submit/poll/ledger/QC-pending.
+- Exactly-once honnête : `submission_unknown` sans resubmit auto ; cancel unsupported ; late result quarantiné.
+- Gates fail-closed + harness local ; **0** appel fal ; migration = no. Tests ciblés **17**. Rapport `68_`. Gate MT-6 **PASS**.
+
 ## [2.0.92] — 2026-08-11
 
 ### Added (MT-007B fal Kling Motion Control Adapter — Disabled)

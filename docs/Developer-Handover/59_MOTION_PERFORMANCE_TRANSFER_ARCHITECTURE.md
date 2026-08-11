@@ -22,8 +22,10 @@ MT-007A = IMPLEMENTED
 Gate Provider Decision = PROVIDER_SELECTED_FOR_ADAPTER_IMPLEMENTATION
 MT-007B = IMPLEMENTED
 Gate MT-5 Adapter Code = PASS
-MT-008+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-008 worker/polling (flags OFF)
+MT-008 = IMPLEMENTED
+Gate MT-6 Worker = PASS
+MT-009+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-009 Motion QC
 remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_ADAPTER_CODE = fal / fal-ai/kling-video/v3/pro/motion-control (disabled)
@@ -33,7 +35,7 @@ eligible Production motion-transfer models = 0
 real provider calls = 0
 ```
 
-> Ce document est la **spécification d’architecture**. Les tickets MT-001…007B livrent contrats/code locaux ; l’adapter fal est **disabled-by-default** — aucun appel payant.
+> Ce document est la **spécification d’architecture**. Les tickets MT-001…008 livrent contrats/code locaux ; worker motion + adapter fal **disabled-by-default** — aucun appel payant.
 
 ---
 
@@ -50,10 +52,11 @@ real provider calls = 0
 | Provider port | **MT-006 IMPLEMENTED** — `65_` · `MotionTransferProviderPort` + fake TEST_ONLY · real adapters = 0 |
 | Provider spike | **MT-007A IMPLEMENTED** — `66_` · selected fal Kling v3 Pro MC |
 | Provider adapter | **MT-007B IMPLEMENTED** — `67_` · code + contract suite PASS · flags OFF · privacy blocked · **0** calls |
+| Worker / polling | **MT-008 IMPLEMENTED** — `68_` · canonical run-once branch · fake E2E PASS · **0** fal calls |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | adapter code present — **not** Production-enabled / UNVERIFIED |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-008** worker / polling orchestration |
+| Prochaine action | **MT-009** Motion QC |
 
 **Ordre obligatoire :**
 
@@ -1099,13 +1102,13 @@ flowchart LR
 - **Interdit respecté :** NO REAL PROVIDER CALL / NO SECRET USE / NO PRODUCTION ENABLE.
 - **DoD :** tests ciblés + suite unitaire — **PASS**. Gate MT-5 Adapter Code **PASS**.
 
-### MT-008 — Worker / polling
+### MT-008 — Worker / polling *(DONE 2026-08-11)*
 
-- **Objectif :** job payload motion ; poll/timeout/late_result ; flags.
-- **Dépendances :** MT-004, MT-006.
-- **Acceptation :** 1 job ; no resubmit ; orphan recovery.
-- **Interdit :** cron ; multi-job auto.
-- **DoD :** integration fake worker.
+- **Objectif :** orchestration claim→submit→poll sur worker canonique — **PASS**.
+- **Artefacts :** `68_` · branche `motion_transfer` dans `claimed-job-processor` · orchestrateur + gates + events.
+- **Acceptation :** 1 job/invocation ; submitCount=1 ; no resubmit ; `submission_unknown` sans resubmit auto ; QC pending handoff.
+- **Interdit respecté :** no cron ; no fal réel ; migration = no.
+- **DoD :** tests fake worker **17** PASS. Gate MT-6 **PASS**.
 
 ### MT-009 — Motion QC
 

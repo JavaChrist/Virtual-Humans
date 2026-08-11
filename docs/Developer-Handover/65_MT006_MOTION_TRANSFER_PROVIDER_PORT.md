@@ -76,4 +76,4 @@ NO RUN/JOB / LEDGER / STORAGE / API / MIGRATION / DEPLOY
 
 **MT-007A** — Provider spike **PASS** (`66_`) → selected `fal-ai/kling-video/v3/pro/motion-control`.
 **MT-007B** — fal Kling adapter **IMPLEMENTED** disabled-by-default (`67_`) · Gate MT-5 **PASS** · **0** provider calls.
-**MT-008** — Worker / polling — **NOT STARTED**.
+**MT-008** — Worker / polling **IMPLEMENTED** (`68_`) · Gate MT-6 **PASS** · fake E2E · **0** fal calls.

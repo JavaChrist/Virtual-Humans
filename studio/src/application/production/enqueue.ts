@@ -5,6 +5,43 @@
 
 export type ProductionJobMode = "execute" | "poll" | "cancel";
 
+/**
+ * MT-008 — motion lifecycle phases stored in job.payload jsonb (no SQL migration).
+ * Queue status remains queued|leased|completed|failed|…
+ */
+export type MotionTransferWorkerPhase =
+  | "submitting"
+  | "submitted"
+  | "polling"
+  | "submission_unknown"
+  | "provider_completed"
+  | "provider_failed"
+  | "timed_out"
+  | "qc_pending"
+  | "late_quarantined";
+
+/** Redacted motion orchestration metadata — never URLs/secrets/media. */
+export type MotionTransferJobPayloadMeta = {
+  phase: MotionTransferWorkerPhase;
+  reservationId?: string;
+  reservedMinor?: number;
+  currency?: string;
+  estimateMinor?: number;
+  adapterVersion?: string;
+  pricingVersion?: string;
+  pollCount?: number;
+  submitIntentAt?: string;
+  requestFingerprint?: string;
+  /** Fingerprint / truncated id — never raw CDN. */
+  providerJobIdFingerprint?: string;
+  outputRef?: string;
+  lateResult?: boolean;
+  reconciliationRequired?: boolean;
+  usageUnknown?: boolean;
+  terminalSettled?: boolean;
+  humanReviewPolicyPresent?: boolean;
+};
+
 /** Durable payload — references only, never full prompts or signed URLs. */
 export type ProductionPayloadReference = {
   planRevisionId: string;
@@ -13,6 +50,8 @@ export type ProductionPayloadReference = {
   /** Present when mode is poll/cancel. */
   externalJobId?: string;
   pollAfterMs?: number;
+  /** MT-008 motion_transfer structured meta (optional). */
+  motion?: MotionTransferJobPayloadMeta;
 };
 
 export type EnqueueProductionJobCommand = {
