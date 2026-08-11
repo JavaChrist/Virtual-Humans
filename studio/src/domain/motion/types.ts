@@ -153,10 +153,54 @@ export type MotionCheckpointResult = {
   notes?: string;
 };
 
+/** MT-009 — requirement class for QC issues. */
+export const MotionQcRequirementClassValues = [
+  "required",
+  "advisory",
+  "human_only",
+] as const;
+export type MotionQcRequirementClass =
+  (typeof MotionQcRequirementClassValues)[number];
+
+/** MT-009 — retry / disposition classification (no job creation). */
+export const MotionQcRetryClassValues = [
+  "retryable",
+  "requiresNewReference",
+  "requiresUpdatedConstraints",
+  "humanOnly",
+  "providerRelated",
+  "nonRetryable",
+] as const;
+export type MotionQcRetryClass = (typeof MotionQcRetryClassValues)[number];
+
+export const MotionQcLayerValues = [
+  "technical",
+  "motion_fidelity",
+  "identity_fidelity",
+  "outfit_fidelity",
+  "body_integrity",
+  "temporal_consistency",
+  "camera_compliance",
+  "checkpoint",
+  "human_review",
+] as const;
+export type MotionQcLayer = (typeof MotionQcLayerValues)[number];
+
 export type MotionQcIssue = {
   code: string;
   severity: QcSeverity;
   message: string;
+  /** MT-009 optional classification — ignored by pre-MT-009 consumers. */
+  layer?: MotionQcLayer;
+  requirementClass?: MotionQcRequirementClass;
+  retryClass?: MotionQcRetryClass;
+  /** Maps to MOTION_HUMAN_REVIEW_INTENT keys when disposition is known. */
+  reviewIntent?:
+    | "APPROVE"
+    | "REJECT"
+    | "RETRY_WITH_SAME_REFERENCE"
+    | "RETRY_WITH_UPDATED_CONSTRAINTS"
+    | "REQUEST_NEW_REFERENCE";
 };
 
 export type MotionQcResult = {

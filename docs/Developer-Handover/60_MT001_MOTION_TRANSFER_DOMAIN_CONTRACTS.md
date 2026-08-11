@@ -57,7 +57,7 @@ Wiring `CapabilityProfileValues` / Registry = **MT-002 IMPLEMENTED** (`61_`).
 |---|---|
 | MotionTransferInput | `1.0.0` |
 | MotionReferenceSpec | `1.0.0` |
-| MotionQcResult | `1.0.0` |
+| MotionQcResult | `1.0.0` (MT-009 étend issues : layer / requirementClass / retryClass / reviewIntent — schéma additive) |
 | MotionTransferResult | `1.0.0` |
 | Action fingerprint | `motion-transfer-action-v1` |
 

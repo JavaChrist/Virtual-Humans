@@ -10,7 +10,7 @@
 | Budget workspace | hard **122¢** / committed **112** / available **10** |
 | Backup / restore | P1 `BACKUP_PRESENT_RESTORE_UNPROVEN` — ouvert |
 | Média `/director` | **0** job ; 11A `DECISION_REQUIRED` |
-| Motion Transfer | flags `MOTION_TRANSFER_*` OFF (`67_`/`68_`) — worker refuse motion tant que OFF ; privacy blocked ; **ne pas** activer sur Vercel ; pas de write env |
+| Motion Transfer | flags `MOTION_TRANSFER_*` OFF (`67_`/`68_`/`69_`) — worker refuse motion tant que OFF ; Motion QC fake interdit hors harness ; privacy blocked ; **ne pas** activer sur Vercel ; pas de write env |
 | Kill switches | voir Phases `25_`, fermetures `57_` ; motion : §15 de `59_` |
 | Target guard Supabase | fail-closed (`supabase-target-guard.ts`) |
 
@@ -81,6 +81,7 @@ Kill switches : worker + paid generation ; AI text directors séparés. Les flag
 - Bucket privé `director-final-assets` (50 MiB, MIME allowlist) — migration locale `vhs_127` ; réutilisé Motion Transfer MT-005 (`…/motion/{role}/…`).
 - Migration locale MT-005 `vhs_mt005_human_review_decision_extend` — **NOT APPLIED** Production (P1 backup restaure non prouvée bloque apply distant).
 - Motion Transfer fake provider (`createFakeMotionTransferProvider`) — **TEST_ONLY** ; interdit si `VERCEL=1` / Production sans harness.
+- Motion QC fake measurement (`createFakeMotionQcMeasurementPort`) — **TEST_ONLY** (`69_`) ; même garde ; **0** adaptateur de mesure réel.
 - Persistence ON → `AssetContentPort` Supabase Storage (multi-instance).
 - Mémoire process : uniquement E2E local sans `DIRECTOR_V2_E2E_ASSET_STORAGE` ; **impossible** sur Vercel/production.
 - Download : session auth → contrôles QC/revue/merge → octets serveur ; manifeste séparé ; pas d’URL signée persistée.

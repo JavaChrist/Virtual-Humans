@@ -24,8 +24,10 @@ MT-007B = IMPLEMENTED
 Gate MT-5 Adapter Code = PASS
 MT-008 = IMPLEMENTED
 Gate MT-6 Worker = PASS
-MT-009+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-009 Motion QC
+MT-009 = IMPLEMENTED
+Gate MT-7 Motion QC = PASS
+MT-010+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-010 Human Review
 remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_ADAPTER_CODE = fal / fal-ai/kling-video/v3/pro/motion-control (disabled)
@@ -33,9 +35,10 @@ privacy gate = blocked
 NO PAID BENCHMARK_YET
 eligible Production motion-transfer models = 0
 real provider calls = 0
+real measurement adapters = 0
 ```
 
-> Ce document est la **spécification d’architecture**. Les tickets MT-001…008 livrent contrats/code locaux ; worker motion + adapter fal **disabled-by-default** — aucun appel payant.
+> Ce document est la **spécification d’architecture**. Les tickets MT-001…009 livrent contrats/code locaux ; worker motion + adapter fal **disabled-by-default** — aucun appel payant ; Motion QC fake measurements only.
 
 ---
 
@@ -53,10 +56,11 @@ real provider calls = 0
 | Provider spike | **MT-007A IMPLEMENTED** — `66_` · selected fal Kling v3 Pro MC |
 | Provider adapter | **MT-007B IMPLEMENTED** — `67_` · code + contract suite PASS · flags OFF · privacy blocked · **0** calls |
 | Worker / polling | **MT-008 IMPLEMENTED** — `68_` · canonical run-once branch · fake E2E PASS · **0** fal calls |
+| Motion QC | **MT-009 IMPLEMENTED** — `69_` · policy/measurements/aggregate/report · fake port only · Gate MT-7 **PASS** |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | adapter code present — **not** Production-enabled / UNVERIFIED |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-009** Motion QC |
+| Prochaine action | **MT-010** Human Review |
 
 **Ordre obligatoire :**
 
@@ -1110,13 +1114,13 @@ flowchart LR
 - **Interdit respecté :** no cron ; no fal réel ; migration = no.
 - **DoD :** tests fake worker **17** PASS. Gate MT-6 **PASS**.
 
-### MT-009 — Motion QC
+### MT-009 — Motion QC *(DONE 2026-08-11)*
 
-- **Objectif :** `MotionQcResult` pipeline + technical checks + opaque checkpoint pass-through.
-- **Dépendances :** MT-001, MT-008.
-- **Acceptation :** humanValidationRequired honoré.
-- **Interdit :** auto-approve.
-- **DoD :** unitaires QC.
+- **Objectif :** `MotionQcResult` pipeline + technical checks + opaque checkpoint pass-through — **PASS**.
+- **Artefacts :** `69_` · `domain/motion/qc/*` · orchestrateur + fake measurement port + quality_report mémoire.
+- **Acceptation :** humanValidationRequired honoré ; critical → human_review ; missing evidence ≠ PASS ; **0** adapter CV réel.
+- **Interdit respecté :** no OpenPose/DWPose ; no auto-approve ; no retry job ; no fal.
+- **DoD :** tests ciblés **35** PASS. Gate MT-7 Motion QC **PASS**.
 
 ### MT-010 — Human review UI/API
 

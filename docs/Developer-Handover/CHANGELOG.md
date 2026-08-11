@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.94] — 2026-08-11
+
+### Added (MT-009 Motion Quality Control)
+
+- Couches QC Motion (technical → fidelity → checkpoints opaques → human review) + policy versionnée + port de mesure provider-agnostic.
+- Fake measurement port TEST_ONLY (garde Production/Vercel) ; agrégation déterministe ; evidence `motion_qc_evidence` ; mapping `quality_report`.
+- Handoff worker `qc_pending` → `qc_passed` / `needs_review` / `rejected` / `retry_recommended` (tests only) ; **0** adapter CV réel ; **0** appel fal.
+- Tests ciblés **35**. Rapport `69_MT009_MOTION_QUALITY_CONTROL.md`. Gate MT-7 Motion QC **PASS**.
+
 ## [2.0.93] — 2026-08-11
 
 ### Added (MT-008 Motion Transfer Worker / Polling)

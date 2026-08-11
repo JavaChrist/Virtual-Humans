@@ -40,7 +40,9 @@
 **submission_unknown** — état typé MT-008 : provider peut avoir accepté mais `providerJobId` non persisté ; réconciliation humaine ; interdit de resubmit automatique.
 **MotionReferenceSpec** — contrat opaque fourni par un projet appelant (ex. Tai-Chi MV-001) : phases, checkpoints, contraintes ; VHS n’en interprète pas le métier ; schema `1.0.0`.
 **MotionMediaReference** — référence média motion basée sur `AssetInputRef` + rôle (source_video/identity/outfit/…).
-**Motion QC** — contrôles technique / identité / tenue / fidélité motion / intégrité / temporalité / caméra + revue humaine ; contrat `MotionQcResult` v1.
+**Motion QC** — contrôles technique / identité / tenue / fidélité motion / intégrité / temporalité / caméra + checkpoints opaques + revue humaine ; contrat `MotionQcResult` v1 ; orchestrateur MT-009 (`69_`) ; port de mesure provider-agnostic (fake TEST_ONLY) ; mapping artifact `quality_report`.
+**MotionQcMeasurementPort** — port de mesures QC Motion (similarité, timing, checkpoints, relations corporelles, etc.) ; aucun moteur OpenPose/DWPose dans VHS MT-009.
+**motion_qc_evidence** — descriptor d’evidence privée QC Motion (asset/fingerprint, role, MIME, ranges, provenance) — jamais média inline ni URL signée.
 **Motion Director** — Directeur éventuel **post-V1** ; traduit des contraintes, n’invente pas le mouvement, n’appelle pas de provider.
 
 ## Termes proscrits

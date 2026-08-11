@@ -219,6 +219,39 @@ export const MotionQcIssueSchema = z.object({
   code: z.string().min(1).max(160),
   severity: z.enum(QcSeverityValues),
   message: z.string().min(1).max(500),
+  layer: z
+    .enum([
+      "technical",
+      "motion_fidelity",
+      "identity_fidelity",
+      "outfit_fidelity",
+      "body_integrity",
+      "temporal_consistency",
+      "camera_compliance",
+      "checkpoint",
+      "human_review",
+    ])
+    .optional(),
+  requirementClass: z.enum(["required", "advisory", "human_only"]).optional(),
+  retryClass: z
+    .enum([
+      "retryable",
+      "requiresNewReference",
+      "requiresUpdatedConstraints",
+      "humanOnly",
+      "providerRelated",
+      "nonRetryable",
+    ])
+    .optional(),
+  reviewIntent: z
+    .enum([
+      "APPROVE",
+      "REJECT",
+      "RETRY_WITH_SAME_REFERENCE",
+      "RETRY_WITH_UPDATED_CONSTRAINTS",
+      "REQUEST_NEW_REFERENCE",
+    ])
+    .optional(),
 });
 
 export const MotionQcResultSchema = z.object({

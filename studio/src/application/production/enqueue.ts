@@ -18,6 +18,9 @@ export type MotionTransferWorkerPhase =
   | "provider_failed"
   | "timed_out"
   | "qc_pending"
+  | "qc_passed"
+  | "qc_rejected"
+  | "retry_recommended"
   | "late_quarantined";
 
 /** Redacted motion orchestration metadata — never URLs/secrets/media. */

@@ -1,6 +1,7 @@
 /**
- * Motion / Performance Transfer domain public API (MT-001…006).
+ * Motion / Performance Transfer domain public API (MT-001…009).
  * Provider port contract is domain-side; concrete adapters live under infrastructure.
+ * Motion QC pure evaluators live under ./qc.
  */
 
 export {
@@ -68,9 +69,15 @@ export {
   type MotionForbiddenPattern,
   type MotionPhase,
   type MotionQcIssue,
+  type MotionQcLayer,
   type MotionQcOverallStatus,
   type MotionQcRequirement,
+  type MotionQcRequirementClass,
   type MotionQcResult,
+  type MotionQcRetryClass,
+  MotionQcLayerValues,
+  MotionQcRequirementClassValues,
+  MotionQcRetryClassValues,
   type MotionReferenceSpec,
   type MotionTimingConstraint,
   type MotionTransferCancelResult,
@@ -153,6 +160,8 @@ export {
 } from "./redact";
 
 export { deepFreeze } from "./freeze";
+
+export * from "./qc";
 
 export {
   MOTION_ASSET_ROLE_POLICIES,
