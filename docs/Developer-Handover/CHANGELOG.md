@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.109] — 2026-08-11
+
+### Changed (MT-013E MV-001 Budget Hard Limit)
+
+- Auth `AUTH_MV001_RAISE_HARD_LIMIT_122_TO_174` : `hard_limit_minor` **122 → 174** (+52¢).
+- committed 112 / reserved 0 / available **62** · audit `budget.hard_limit_raised` ×1 · pas de ledger/reservation. Rapport `83_`.
+
 ## [2.0.108] — 2026-08-11
 
 ### Changed (MT-005 Remote Apply — PASS)

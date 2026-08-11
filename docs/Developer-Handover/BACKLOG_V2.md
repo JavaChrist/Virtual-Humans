@@ -15,7 +15,7 @@ Runtime AI : OFF
 Media jobs : 0
 P1         : décision média image VHS-124
 P1 fermé   : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS · cible qmsh…qlnq)
-Next major : Auth budget / deploy / paid MV-001 — ne pas fusionner (`82_` MT-005 APPLIED)
+Next major : Auth deploy/flags puis paid MV-001 (available 62¢ · `83_`) — ne pas fusionner
 ```
 
 ## P0 — fondations
@@ -74,10 +74,10 @@ Next major : Auth budget / deploy / paid MV-001 — ne pas fusionner (`82_` MT-0
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A** readiness `73_` · fal adapter + worker **disabled** · synthetic E2E ready · privacy **PENDING** · Production → unavailable · **MV001_NOT_EXECUTED** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
-- **P1 budget** : hard **122** ; committed **112** ; available **10** ; MV-001 3s shortfall **52¢** vs réserve 62¢.
-- **Prochaine porte majeure** : Auth **budget / deploy / paid MV-001** — ne pas fusionner.  
-- MT-005 remote : **APPLIED** (`82_` · Production 30/30).  
-- Privacy MV-001 : **ACCEPTED_LIMITED** (`81_` · exp 2026-09-10) — **n’autorise pas** l’exécution.  
+- **P1 budget** : hard **174** ; committed **112** ; available **62** (`83_`) — shortfall MV-001 **levé** pour réserve max 62¢.
+- **Prochaine porte majeure** : Auth **deploy/flags** puis **paid MV-001** (réserve ≤ 62¢) — ne pas fusionner.  
+- Budget : hard **174** / committed **112** / available **62** (`83_`).  
+- MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).  
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).
 
 ## P2 — durcissement

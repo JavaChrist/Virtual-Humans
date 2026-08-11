@@ -53,7 +53,8 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | MT-013C-DEL | Delete isolated target | **VERIFIED** (`80_`) · `qmsh…` absent · Production healthy |
 | MT-013D | Privacy Decision Pack MV-001 | **ACCEPTED_LIMITED** (`81_`) · exp 2026-09-10 · pas d’exécution |
 | MT-005-APPLY | Remote apply human_review extend | **PASS** (`82_`) · Production 30/30 · Motion runtime UNAVAILABLE |
-| MT-013E… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · **PAID NOT AUTHORIZED** |
+| MT-013E | MV-001 budget hard limit | **DONE** (`83_`) · hard 174 · available 62¢ · pas de réservation |
+| MT-013F… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · **PAID NOT AUTHORIZED** |
 
 **Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` exécutable ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.
 

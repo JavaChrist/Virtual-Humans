@@ -31,12 +31,12 @@ Motion / Performance     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-
                            privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
                            remote MT-005 APPLIED (`82_`) · NO PAID BENCHMARK_YET
 Runtime AI               : OFF
-Budget                   : hard 122 / committed 112 / reserved 0 / available 10
+Budget                   : hard 174 / committed 112 / reserved 0 / available 62 (`83_`)
 production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : décision média image VHS-124
 P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
-Prochaine porte majeure  : Auth budget / deploy / paid MV-001 — ne pas fusionner
+Prochaine porte majeure  : Auth deploy/flags puis paid MV-001 (réserve ≤62¢) — ne pas fusionner
 ```
 
 ### Portes Directors texte
@@ -191,6 +191,7 @@ Utilisateur → AI Video Director (/director)
 | [`74_MT013B_RESTORE_DRILL_PRIVACY_DUE_DILIGENCE.md`](./74_MT013B_RESTORE_DRILL_PRIVACY_DUE_DILIGENCE.md) | **MT-013B journal · restore PASS / privacy ACCEPTED via 78_ + 81_** |
 | [`81_MT013D_MV001_PRIVACY_DECISION_PACK_ACCEPTED.md`](./81_MT013D_MV001_PRIVACY_DECISION_PACK_ACCEPTED.md) | **Privacy Decision Pack MV-001 ACCEPTED_LIMITED · expire 2026-09-10 · pas d’exécution** |
 | [`82_MT005_REMOTE_APPLY_PASS.md`](./82_MT005_REMOTE_APPLY_PASS.md) | **MT-005 remote apply PASS · Production 30/30 · runtime Motion UNAVAILABLE** |
+| [`83_MT013E_MV001_BUDGET_HARD_LIMIT_174.md`](./83_MT013E_MV001_BUDGET_HARD_LIMIT_174.md) | **MT-013E budget hard 122→174 · available 62¢ · pas de réservation** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
