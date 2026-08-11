@@ -51,9 +51,10 @@ Ce backlog est initial et doit être recalibré après `03_CURRENT_AUDIT.md`. Le
 - **Phase 10F-V3-EXECUTE** ⚠️ **BLOCKED** : 1 appel `gpt-5.6` / v3 → `invalid_candidate` (continuité `lighting:studio|cool`) ; ledger 13/6/7 ; available **8¢** ; **0** storyboard ; flags OFF (`52_…`).
 - **Phase 10F-ALL-CONTINUITY-DIAG** ✅ Cause = map v3 limitée à `location` ; fix générique `storyboard-analyzer-v4` ; validateur fail-closed inchangé ; **0** provider (`53_…`, `READY_FOR_V4_PREP`).
 - **Phase 10F-V4-RETRY-PREP** ✅ Préparation execute v4 : map `MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID` (lighting preferred → tokens quand même obligatoires), salt `10f-storyboard-v4-20260811` (clé `801c34a1080bbcf0`), matrice 24/9/5 fp `9d34b42ddc3bb85c`, estimate **13¢**, shortfall **5¢** ; **0** provider (`54_…`, `READY_FOR_BUDGET_AND_PUSH_AUTH`).
-- **P1 Storyboard** : Auth Budget D (+7→122) + Auth push/deploy/provider ; runs `b446a0ed`/`f5b75018`/`4914c203`/`60a1d9c6` immuables.
-- **P1 budget** : hard **115** ; committed **107** ; available **8** ; shortfall estimate **5¢** (reco hard **122**).
-- **Prochaine porte** : Phase 10F-V4-BUDGET-AND-PUSH ; média ensuite.
+- **Phase 10F-V4-BUDGET-AND-PUSH** ✅ Hard limit **115→122** (+7) + audit ; available **15¢** ; push `a82b9cf..90fb6fb` (5 commits) ; **0** provider (`55_…`, `PASS`).
+- **P1 Storyboard** : V4-DEPLOY-PREFLIGHT (salt + dry-run) puis Auth provider ; runs `b446a0ed`/`f5b75018`/`4914c203`/`60a1d9c6` immuables.
+- **P1 budget** : hard **122** ; committed **107** ; available **15**.
+- **Prochaine porte** : Phase 10F-V4-DEPLOY-PREFLIGHT ; média ensuite.
 
 ## P2 — durcissement
 

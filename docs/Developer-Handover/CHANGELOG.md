@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.79] — 2026-08-11
+
+### Budget + Push (Phase 10F-V4-BUDGET-AND-PUSH)
+
+- Hard limit workspace **115→122¢** (+7) + audit `phase_10f_storyboard_v4_budget_authorization` ; available **15¢**.
+- Push `main` `a82b9cf..90fb6fb` (5 commits) ; **0** provider / réservation / deploy manuel.
+- Rapport : `55_PHASE_10F_V4_BUDGET_AND_PUSH.md` (`PASS`). Doc locale post-push non commitée.
+
 ## [2.0.78] — 2026-08-11
 
 ### Prepared (Phase 10F-V4-RETRY-PREP)
