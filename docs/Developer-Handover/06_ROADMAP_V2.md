@@ -48,7 +48,7 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | MT-013B | Restore drill + privacy due diligence | **DONE** (`74_`) · restore `BLOCKED_TARGET_REQUIRED` · privacy `READY_FOR_HUMAN_DECISION` |
 | MT-013C | Isolated restore target | **STOP** (`75_`) · coût ≠ 0 · pas de restore backup via MCP |
 | MT-013C-PAID | Paid isolated project restore | **STOP** (`76_`) · restore backup non dispo via MCP · clone Dashboard requis |
-| MT-013C-QUOTE | Dashboard quote preflight | **AWAITING_HUMAN_CAPTURE** (`77_`) · STOP avant Confirm |
+| MT-013C-QUOTE | Dashboard quote preflight | **QUOTE_CAPTURED** (`77_`) · $10.18/mois · STOP avant Continue |
 | MT-013D… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · MT-005 **NOT APPLIED** · **PAID NOT AUTHORIZED** |
 
 **Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` exécutable ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.

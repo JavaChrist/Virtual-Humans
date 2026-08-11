@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.103] — 2026-08-11
+
+### Changed (MT-013C-DASHBOARD-QUOTE — devis capturé)
+
+- Captures Dashboard : org JavaChrist · région `eu-west-3` · total **$10.18/mois** (compute $9.68 + disk $0.5, disk 1.5×).
+- Backups COMPLETED visibles 04–09 Aug 2026 UTC ; bouton final **Continue** non cliqué.
+- `77_` → `QUOTE_CAPTURED` · plafond prior 10 USD **insuffisant** · Auth clone proposée `…_MAX_10_18_USD`.
+
 ## [2.0.102] — 2026-08-11
 
 ### Added (MT-013C-DASHBOARD-QUOTE — préflight)

@@ -14,7 +14,7 @@ Budget     : 122 / 112 / 0 / 10  (MV-001 3s shortfall vs réserve 62¢)
 Runtime AI : OFF
 Media jobs : 0
 P1         : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Next major : capture devis Dashboard (`77_` AWAITING) → Auth clone ; Privacy ; puis MT-005 / paid
+Next major : Auth clone Dashboard $10.18/mois (`77_` QUOTE_CAPTURED) ; Privacy ; puis MT-005 / paid
 ```
 
 ## P0 — fondations
@@ -74,7 +74,7 @@ Next major : capture devis Dashboard (`77_` AWAITING) → Auth clone ; Privacy ;
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A** readiness `73_` · fal adapter + worker **disabled** · synthetic E2E ready · privacy **PENDING** · Production → unavailable · **MV001_NOT_EXECUTED** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **122** ; committed **112** ; available **10** ; MV-001 3s shortfall **52¢** vs réserve 62¢.
-- **Prochaine porte majeure** : relever devis Dashboard (`77_` · `AUTH_RESTORE_DASHBOARD_QUOTE_ONLY` · STOP avant Confirm) puis Auth clone au plafond affiché + signatures Privacy — puis MT-005 / paid — ne pas fusionner.
+- **Prochaine porte majeure** : Auth clone Dashboard (`77_` · devis **$10.18/mois** capturé · STOP avant Continue) + signatures Privacy — puis MT-005 / paid — ne pas fusionner.
 
 ## P2 — durcissement
 

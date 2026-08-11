@@ -6,13 +6,16 @@
 
 ```text
 RESTORE_DRILL                 = BLOCKED_TARGET_REQUIRED  (inchangé)
-MT013C_DASHBOARD_QUOTE        = AWAITING_HUMAN_CAPTURE
+MT013C_DASHBOARD_QUOTE        = QUOTE_CAPTURED
 CLONE_CONFIRMED               = false
 PROJECT_CREATED               = false
 BACKUP_RESTORED               = false
 PRODUCTION_MUTATIONS          = 0
 NEW_CREDENTIALS               = NOT_EXTRACTED
 COST_SPENT_USD                = 0
+QUOTE_TOTAL_MONTHLY_USD       = 10.18
+WITHIN_PRIOR_10_USD_CAP       = no
+READY_FOR_CLONE_AUTH          = yes  (Auth distincte requise — plafond ≥ 10.18)
 ```
 
 ---
@@ -21,100 +24,97 @@ COST_SPENT_USD                = 0
 
 | Autorisé | Interdit |
 |---|---|
-| Ouvrir Dashboard Production | Cliquer le bouton **final de confirmation** du clone |
+| Ouvrir Dashboard Production | Cliquer **Continue** (confirmation clone) |
 | Naviguer jusqu’à l’écran de **devis / confirmation** | Créer le clone / lancer la restauration |
 | Relever coût, région, backup, frais additionnels | Muter Production (PITR in-place, apply migrations, etc.) |
-| Capturer / noter (redacted) puis **fermer / Cancel** | Saisir ou extraire nouveaux credentials (DB password, API keys, PAT) |
+| Capturer / noter (redacted) puis **Cancel** | Saisir ou extraire nouveaux credentials |
 | Remplir §5 de ce document | Lier Vercel / runtime / webhooks / workers / providers |
 
-**STOP obligatoire** dès que l’écran final de confirmation est visible — **avant** tout bouton du type *Confirm / Restore / Create project / I understand*.
+**STOP obligatoire** devant la modale *Confirm restore to a new project* — cliquer **Cancel**, pas **Continue**.
 
 ---
 
-## 2. Identités (ne pas confondre)
+## 2. Identités
 
 | Rôle | Nom | Ref (redacted) | Région |
 |---|---|---|---|
-| **Source uniquement** | Virtual Humans Studio | `ejdb…nmvi` | `eu-west-3` |
-| **Cible clone** | *ne doit pas exister encore* | — | attendue = même région source |
-
-URL de départ (source) :
-
-```text
-https://supabase.com/dashboard/project/ejdbksxaswhdtsudnmvi/database/backups/restore-to-new-project
-```
-
-Si la navigation par menu est préférée :
-
-1. Org **JavaChrist** → projet **Virtual Humans Studio** (vérifier ref `ejdb…nmvi`).  
-2. **Database** → **Backups**.  
-3. Onglet **Restore to a New Project** (pas *Scheduled*, pas *PITR* « restore this project »).
+| **Source** | Virtual Humans Studio | `ejdb…nmvi` | `eu-west-3` |
+| **Org affichée** | JavaChrist | `narku…flqb` | — |
+| **Cible clone** | *non créée* | — | `eu-west-3` (affichée) |
 
 ---
 
-## 3. Runbook humain (STOP avant Confirm)
+## 3. Preuve listes backups (capture humaine)
 
-1. Se connecter au Dashboard Supabase (compte déjà autorisé — **pas** de nouveau PAT).  
-2. Ouvrir l’URL / navigation §2 — **uniquement** le projet Production ci-dessus.  
-3. Vérifier la liste des backups disponibles (dates / types).  
-4. Sélectionner **un** backup plateforme (noter date/heure UTC + type daily/physical).  
-   - Si PITR proposé : **ne pas** lancer de restore in-place sur Production ; rester sur « Restore to a New Project ».  
-5. Avancer jusqu’à l’écran qui affiche le **récapitulatif de coût** (compute miroir, disque, add-ons éventuels).  
-6. **STOP** — ne pas confirmer.  
-7. Remplir §5 (chiffres exacts affichés).  
-8. **Cancel / fermer** la modale ou quitter la page sans confirmer.  
-9. Coller les valeurs dans ce fichier (ou message agent) — **redacted** si secrets visibles (ne pas copier mots de passe / keys).
+Onglet **Restore to new project (BETA)** — backups **COMPLETED** visibles :
 
-Checklist anti-erreur :
+| Backup (UTC) | Statut |
+|---|---|
+| 09 Aug 2026 05:24:51 (+0000) | COMPLETED |
+| 08 Aug 2026 05:26:09 (+0000) | COMPLETED |
+| 07 Aug 2026 05:28:27 (+0000) | COMPLETED |
+| 06 Aug 2026 05:27:14 (+0000) | COMPLETED |
+| 05 Aug 2026 05:24:30 (+0000) | COMPLETED |
+| 04 Aug 2026 05:26:45 (+0000) | COMPLETED |
 
-- [ ] Projet ouvert = Production `ejdb…nmvi` (pas un autre projet de l’org)  
-- [ ] Onglet = **Restore to a New Project**  
-- [ ] Aucun clic Confirm / Restore  
-- [ ] Aucune page API keys / Database password ouverte pour extraction  
-- [ ] Aucune mutation Production (pas de restore in-place, pas de pause, pas d’add-on)
+La modale de coût **n’imprime pas** l’horodatage du backup choisi. À préciser à la prochaine Auth (recommandé : **09 Aug 2026 05:24:51 UTC** = plus récent).
 
 ---
 
-## 4. Ce que l’agent fera après capture
+## 4. Capture devis (figée depuis captures Dashboard)
 
-Une fois §5 rempli (par vous) :
-
-1. Documenter le devis dans le handover (compléter ce fichier → statut `QUOTE_CAPTURED`).  
-2. Comparer au plafond historique 10 USD (`76_`).  
-3. Proposer le texte d’Auth **suivante** exacte (clone payant ou STOP si coût inacceptable) — **sans** lancer le clone.
-
-L’agent **n’exécutera pas** le clone tant qu’une Auth distincte du type `AUTH_RESTORE_DRILL_DASHBOARD_CLONE_…` n’est pas reçue.
-
----
-
-## 5. Capture devis (à remplir par l’humain)
-
-**Statut capture :** `PENDING`
+**Statut capture :** `QUOTE_CAPTURED`  
+**Relevé :** 11 août 2026 (soir, local)  
+**Action requise si modale encore ouverte :** **Cancel** — ne pas cliquer **Continue**.
 
 | Champ | Valeur relevée | Notes |
 |---|---|---|
-| Date/heure du relevé (local) | _à remplir_ | |
-| Backup sélectionné (date/heure UTC) | _à remplir_ | |
-| Type backup (daily physical / PITR point) | _à remplir_ | |
-| Région cible affichée | _à remplir_ | attendu `eu-west-3` |
-| Compute instance (taille) | _à remplir_ | miroir source |
-| Coût compute / mois (USD) | _à remplir_ | |
-| Disk size / type / IOPS | _à remplir_ | |
-| Coût disque / mois (USD) | _à remplir_ | si séparé |
-| Frais one-shot / restore fee | _à remplir_ | 0 si absent |
-| Add-ons listés (PITR, IPv4, …) | _à remplir_ | |
-| **Total mensuel affiché (USD)** | _à remplir_ | **chiffre clé** |
-| **Total one-shot affiché (USD)** | _à remplir_ | si présent |
-| Bouton final visible (libellé exact) | _à remplir_ | **ne pas cliquer** |
-| Capture écran jointe | non / oui (chemin local privé) | ne pas committer de secrets |
+| Modale | *Confirm restore to a new project* | « create a new project and restore your database » |
+| Org | JavaChrist | inchangée |
+| Région cible | `eu-west-3` | = Production |
+| Transféré | schéma, data+indexes, roles/permissions/users | doc plateforme |
+| Non transféré (manuel) | Storage, Edge Functions, Auth settings & API keys, extensions/settings, read replicas | |
+| Compute | même taille que source | montant $9.68 / mois |
+| Disk | **1.5×** plus grand que source | montant $0.5 / mois |
+| Frais one-shot | **aucun affiché** | — |
+| Add-ons PITR / IPv4 | **aucun listé** dans la modale | — |
+| **Total mensuel** | **$10.18** | compute 9.68 + disk 0.5 |
+| Bouton final | **Continue** (vert) | **NE PAS CLIQUER** — **Cancel** |
+| Captures | fournies en chat (privées) | non commitées dans le repo |
 
-### Verdict préliminaire (après remplissage)
+### Verdict
 
 ```text
-QUOTE_TOTAL_MONTHLY_USD   = ?
-QUOTE_TOTAL_ONESHOT_USD   = ?
-WITHIN_PRIOR_10_USD_CAP   = yes | no | unknown
-READY_FOR_CLONE_AUTH      = no  (tant que Auth clone distincte absente)
+QUOTE_TOTAL_MONTHLY_USD   = 10.18
+QUOTE_TOTAL_ONESHOT_USD   = 0 (non affiché)
+WITHIN_PRIOR_10_USD_CAP   = no   (10.18 > 10.00 de AUTH …_MAX_10_USD)
+READY_FOR_CLONE_AUTH      = yes  (après Auth plafond ≥ 10.18 + backup explicite)
+```
+
+Le plafond précédent **10.00 USD** est **insuffisant** pour ce devis. Une Auth clone doit accepter **au moins 10.18 USD / mois** (ou un plafond supérieur explicite).
+
+---
+
+## 5. Auth suivante proposée (ne pas exécuter sans ce texte)
+
+```text
+AUTH_RESTORE_DRILL_DASHBOARD_CLONE_MAX_10_18_USD
+source           = Virtual Humans Studio (ejdb…nmvi) · eu-west-3 · org JavaChrist
+backup           = 09 Aug 2026 05:24:51 (+0000)   # ou autre COMPLETED listé, explicite
+action           = Dashboard → Restore to new project → Restore sur ce backup
+                   → modale Confirm → Continue  (une seule fois)
+coût accepté     = Additional Monthly Compute $9.68
+                   + Additional Monthly Disk $0.5
+                   = Total $10.18 / mois
+                   (disque 1.5× source ; même compute)
+interdit         = mutation Production hors ce flux clone ;
+                   apply MT-005 Production ; deploy ; provider ; médias ;
+                   lier Vercel/runtime/webhooks/workers à la cible ;
+                   seconde cible ; dépassement au-delà de $10.18/mois affiché
+post-clone       = communiquer project_ref cible (≠ ejdb…nmvi)
+agent autorisé   = lectures + contrôles redacted UNIQUEMENT sur la cible
+                   (schéma, migrations, RLS, fonctions, tables critiques, counts non sensibles)
+delete cible     = Auth destructive séparée uniquement (pas d’auto-delete)
 ```
 
 ---
@@ -126,13 +126,13 @@ READY_FOR_CLONE_AUTH      = no  (tant que Auth clone distincte absente)
 | `confirm_cost` / `create_project` / `restore_project` | **Non appelés** |
 | Mutation Production | **0** |
 | Extraction credentials | **Non** |
-| Clone confirmé | **Non** |
-| Rapport / runbook | **Ce document** |
+| Clone confirmé (Continue) | **Non** (Auth quote only) |
+| Rapport / capture | **Ce document** |
 
 ---
 
 ## 7. Suite
 
-1. **Vous** : exécuter §3 → remplir §5 → Cancel.  
-2. **Agent** : figer `QUOTE_CAPTURED` + Auth clone proposée.  
+1. Si la modale est encore ouverte → **Cancel**.  
+2. Attendre Auth clone au plafond **$10.18/mois** (texte §5).  
 3. Ne pas démarrer MT-005 / deploy / provider / benchmark.

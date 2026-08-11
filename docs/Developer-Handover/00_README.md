@@ -34,7 +34,7 @@ Budget                   : hard 122 / committed 112 / reserved 0 / available 10
 production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Prochaine porte majeure  : devis Dashboard quote (`77_` AWAITING) puis Auth clone + Privacy — pas de MT-005/paid
+Prochaine porte majeure  : Auth clone Dashboard ≤ $10.18/mois (`77_` QUOTE_CAPTURED) + Privacy — pas de MT-005/paid
 ```
 
 ### Portes Directors texte
@@ -189,7 +189,7 @@ Utilisateur → AI Video Director (/director)
 | [`74_MT013B_RESTORE_DRILL_PRIVACY_DUE_DILIGENCE.md`](./74_MT013B_RESTORE_DRILL_PRIVACY_DUE_DILIGENCE.md) | **MT-013B Restore drill BLOCKED_TARGET · Privacy due diligence READY_FOR_HUMAN_DECISION** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
-| [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-DASHBOARD-QUOTE — runbook devis uniquement · STOP avant Confirm** |
+| [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
 
 ### Pilotage (hors numérotation)
 
