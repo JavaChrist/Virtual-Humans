@@ -16,16 +16,19 @@ MT-004 = IMPLEMENTED
 Gate MT-3 Engine preparation = PASS
 MT-005 = IMPLEMENTED
 Gate MT-3 Persistence/Storage = PASS
-MT-006+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-006 Provider Port
+MT-006 = IMPLEMENTED
+Gate MT-4 Provider Port = PASS
+MT-007+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-007 First provider adapter
 remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_NOT_SELECTED_YET
 NO PAID BENCHMARK_YET
 eligible Production motion-transfer models = 0
+real provider adapters = 0
 ```
 
-> Ce document est la **spécification d’architecture**. Les tickets MT-001…005 livrent contrats/code locaux ; le runtime capability et le provider restent non branchés.
+> Ce document est la **spécification d’architecture**. Les tickets MT-001…006 livrent contrats/code locaux ; le runtime capability et tout adapter réel restent non branchés.
 
 ---
 
@@ -39,11 +42,11 @@ eligible Production motion-transfer models = 0
 | Model Router | **MT-003 IMPLEMENTED** — `routeMotionTransfer` · Gate MT-2 Router **PASS** · Production → `motion_capability_unavailable` |
 | Generation Engine | **MT-004 IMPLEMENTED** — dry-run prepare · Gate MT-3 **PASS** · `providerCalled=false` · paid execution unavailable |
 | Persistence / Storage | **MT-005 IMPLEMENTED** — `64_` · REUSE tables V2 · bucket `director-final-assets` · migration locale human_review **NOT APPLIED** Production |
-| Provider port | MT-006 **NOT STARTED** |
+| Provider port | **MT-006 IMPLEMENTED** — `65_` · `MotionTransferProviderPort` + fake TEST_ONLY · real adapters = 0 |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | `PROVIDER_NOT_SELECTED_YET` |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-006** Provider Port |
+| Prochaine action | **MT-007** First provider adapter (disabled) |
 
 **Ordre obligatoire :**
 
@@ -1065,14 +1068,14 @@ flowchart LR
 - **Interdit :** apply distant / purge destructive — respecté (`remote migration = NOT APPLIED`).
 - **DoD :** pgTAP + unitaires + docs 17_ — voir `64_`.
 
-### MT-006 — Provider port
+### MT-006 — Provider port — **IMPLEMENTED**
 
 - **Objectif :** `MotionTransferProviderPort` + fake adapter.
-- **Fichiers :** `infrastructure/providers/motion-transfer/*`.
-- **Dépendances :** MT-004.
-- **Acceptation :** fake submit/poll/cancel/estimate ; idempotence.
-- **Interdit :** clé provider réelle.
-- **DoD :** tests fake.
+- **Fichiers :** `domain/motion/provider-port.ts`, `infrastructure/providers/motion-transfer/*`, rapport `65_`.
+- **Dépendances :** MT-001…005.
+- **Acceptation :** fake submit/poll/cancel/estimate ; idempotence ; contract suite — **PASS**.
+- **Interdit :** clé provider réelle / réseau — respecté.
+- **DoD :** tests fake + contract suite — **PASS**.
 
 ### MT-007 — First provider adapter
 

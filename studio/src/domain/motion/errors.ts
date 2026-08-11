@@ -42,10 +42,23 @@ export const MotionTransferRoutingErrorCodeValues = [
 export type MotionTransferRoutingErrorCode =
   (typeof MotionTransferRoutingErrorCodeValues)[number];
 
-/** Provider errors — reserved for MT-006/007. */
+/** Provider errors — MT-006 port / MT-007 adapters. */
 export const MotionTransferProviderErrorCodeValues = [
+  "provider_not_configured",
+  "provider_auth_failed",
+  "provider_invalid_request",
+  "provider_rate_limited",
+  "provider_quota_exceeded",
+  "provider_timeout",
   "provider_unavailable",
+  "provider_job_not_found",
+  "provider_status_unknown",
+  "provider_output_invalid",
+  "provider_cancel_unsupported",
+  "provider_cancel_failed",
+  "provider_failed",
   "provider_rejected",
+  /** @deprecated prefer provider_timeout — kept for MT-001 compat */
   "timeout",
   "cancelled",
   "late_result_ignored",
@@ -54,6 +67,15 @@ export const MotionTransferProviderErrorCodeValues = [
 ] as const;
 export type MotionTransferProviderErrorCode =
   (typeof MotionTransferProviderErrorCodeValues)[number];
+
+/** Codes that upper layers may treat as human-retry candidates (never auto-retried by the port). */
+export const MOTION_TRANSFER_PROVIDER_HUMAN_RETRYABLE: ReadonlySet<MotionTransferProviderErrorCode> =
+  new Set([
+    "provider_rate_limited",
+    "provider_timeout",
+    "timeout",
+    "provider_unavailable",
+  ]);
 
 /** QC errors — reserved for MT-009. */
 export const MotionTransferQcErrorCodeValues = [

@@ -9,7 +9,7 @@
 | Local fakes | Pipeline queue / QC / merge fake / export validés (Phases 4–9) |
 | Production réelle | `production_runs` = **0** · `production_jobs` = **0** · assets = **0** |
 | Média image | Phase 11A prep `DECISION_REQUIRED` (`58_`) — aucun job lancé |
-| Motion Transfer | Engine dry-run MT-004 prêt (`63_`) ; jobs/runs **réutilisés** plus tard ; **pas** de run/job MT en Production ; runtime paid unavailable |
+| Motion Transfer | Engine dry-run MT-004 + persistence MT-005 + provider port MT-006 (`65_`, fake TEST_ONLY) ; **0** adapter réel ; **pas** de run/job MT en Production ; runtime paid unavailable |
 | Adapters | réels non branchés sur `/director` (`assertDirectorProductionUsesFakes`) |
 
 ## Mission

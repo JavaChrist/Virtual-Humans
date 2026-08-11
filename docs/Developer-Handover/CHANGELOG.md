@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.90] — 2026-08-11
+
+### Added (MT-006 Motion Transfer Provider Port & Fake Adapter)
+
+- Port domaine `MotionTransferProviderPort` (`estimate`/`submit`/`poll`/`cancel?`) + context sans credentials.
+- Fake synthétique TEST_ONLY (garde Vercel/Production) ; suite contractuelle obligatoire pour MT-007.
+- Codes provider étendus ; mapping statuts `running→processing` / `succeeded→completed` / `timed_out` ; descriptors de sortie sans URL signée.
+- Tests ciblés **16** (+ contract suite) ; unitaires **1245** ; Engine/Router/Registry motion inchangés verts. Rapport `65_MT006_MOTION_TRANSFER_PROVIDER_PORT.md`. Gate MT-4 Provider Port **PASS**. MT-007 **NOT STARTED**. Real adapters = **0**.
+
 ## [2.0.89] — 2026-08-11
 
 ### Added (MT-005 Motion Transfer Supabase & Storage)

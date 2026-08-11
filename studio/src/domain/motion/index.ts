@@ -1,6 +1,6 @@
 /**
- * Motion / Performance Transfer domain public API (MT-001).
- * No provider adapters, router wiring, or engine wiring.
+ * Motion / Performance Transfer domain public API (MT-001…006).
+ * Provider port contract is domain-side; concrete adapters live under infrastructure.
  */
 
 export {
@@ -13,6 +13,7 @@ export {
 } from "./capability";
 
 export {
+  MOTION_TRANSFER_PROVIDER_HUMAN_RETRYABLE,
   MotionTransferDomainError,
   MotionTransferProviderErrorCodeValues,
   MotionTransferQcErrorCodeValues,
@@ -51,6 +52,9 @@ export {
   LockLevelValues,
   MotionFidelityValues,
   MotionQcOverallStatusValues,
+  MotionTransferCancelStatusValues,
+  MotionTransferEstimateModeValues,
+  MotionTransferJobStatusValues,
   PoseControlModeValues,
   QcSeverityValues,
   QcStatusValues,
@@ -70,11 +74,15 @@ export {
   type MotionReferenceSpec,
   type MotionTimingConstraint,
   type MotionTransferCancelResult,
+  type MotionTransferCancelStatus,
   type MotionTransferCharacter,
   type MotionTransferEstimate,
+  type MotionTransferEstimateMode,
   type MotionTransferInput,
+  type MotionTransferJobStatus,
   type MotionTransferMotionParams,
   type MotionTransferOutputConstraints,
+  type MotionTransferProviderOutputDescriptor,
   type MotionTransferResult,
   type MotionTransferStatus,
   type MotionTransferSubmission,
@@ -91,10 +99,30 @@ export {
   MotionTransferCancelResultSchema,
   MotionTransferEstimateSchema,
   MotionTransferInputSchema,
+  MotionTransferProviderOutputDescriptorSchema,
   MotionTransferResultSchema,
   MotionTransferStatusSchema,
   MotionTransferSubmissionSchema,
 } from "./schemas";
+
+export {
+  MOTION_TRANSFER_PROVIDER_PORT_VERSION,
+  assertEstimateUsableForPaidReservation,
+  assertProviderOutputDescriptorSafe,
+  createProviderErrorEvidence,
+  isMotionTransferProviderErrorCode,
+  isProviderHumanRetryable,
+  mapProviderLifecycleStatus,
+  type MotionTransferProviderCallCounters,
+  type MotionTransferProviderCancelInput,
+  type MotionTransferProviderContext,
+  type MotionTransferProviderErrorEvidence,
+  type MotionTransferProviderEstimateInput,
+  type MotionTransferProviderMediaBoundary,
+  type MotionTransferProviderPollInput,
+  type MotionTransferProviderPort,
+  type MotionTransferProviderSubmitInput,
+} from "./provider-port";
 
 export {
   assertMotionReferenceSpecInvariants,

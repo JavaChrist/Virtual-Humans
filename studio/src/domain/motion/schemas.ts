@@ -17,6 +17,9 @@ import {
   LockLevelValues,
   MotionFidelityValues,
   MotionQcOverallStatusValues,
+  MotionTransferCancelStatusValues,
+  MotionTransferEstimateModeValues,
+  MotionTransferJobStatusValues,
   PoseControlModeValues,
   QcSeverityValues,
   QcStatusValues,
@@ -239,6 +242,27 @@ export const MotionTransferEstimateSchema = z.object({
   durationSeconds: z.number().positive().optional(),
   pricingUnit: z.enum(["second", "job"]).optional(),
   notes: z.array(z.string().min(1).max(200)).max(16).optional(),
+  mode: z.enum(MotionTransferEstimateModeValues).optional(),
+  pricingStrategy: z.string().min(1).max(80).optional(),
+  pricingVersion: z.string().min(1).max(80).optional(),
+  assumptions: z.array(z.string().min(1).max(200)).max(16).optional(),
+  expiresAt: z.string().min(1).optional(),
+  providerId: z.string().min(1).max(64).optional(),
+  modelId: z.string().min(1).max(160).optional(),
+  capability: z.literal("video.motion_transfer").optional(),
+  capabilityVersion: z.string().min(1).max(64).optional(),
+});
+
+export const MotionTransferProviderOutputDescriptorSchema = z.object({
+  providerOutputRef: z.string().min(1).max(256),
+  mimeType: z.string().min(1).max(128),
+  sizeBytes: z.number().int().nonnegative().optional(),
+  durationSeconds: z.number().positive().optional(),
+  width: z.number().int().positive().optional(),
+  height: z.number().int().positive().optional(),
+  fps: z.number().positive().optional(),
+  providerChecksum: z.string().min(1).max(128).optional(),
+  completedAt: z.string().min(1),
 });
 
 export const MotionTransferSubmissionSchema = z.object({
@@ -246,21 +270,36 @@ export const MotionTransferSubmissionSchema = z.object({
   status: z.literal("submitted"),
   providerJobId: DomainIdSchema,
   submittedAt: z.string().min(1),
+  acceptedAt: z.string().min(1).optional(),
+  syncOrAsync: z.enum(["sync", "async"]).optional(),
+  pollingRequired: z.boolean().optional(),
+  estimatedCompletionAt: z.string().min(1).optional(),
+  requestMetadataRedacted: z.record(z.string(), z.unknown()).optional(),
 });
 
 export const MotionTransferStatusSchema = z.object({
   schemaVersion: z.literal("1.0.0"),
-  status: z.enum(["queued", "processing", "completed", "failed", "cancelled"]),
+  status: z.enum(MotionTransferJobStatusValues),
   providerJobId: DomainIdSchema,
   progressPercent: z.number().min(0).max(100).optional(),
   errorCode: z.string().min(1).max(80).optional(),
   updatedAt: z.string().min(1),
+  output: MotionTransferProviderOutputDescriptorSchema.optional(),
+  usage: z
+    .object({
+      durationSeconds: z.number().positive().optional(),
+      units: z.number().nonnegative().optional(),
+    })
+    .optional(),
+  actualCostMinor: z.number().int().nonnegative().optional(),
+  currency: z.string().length(3).optional(),
 });
 
 export const MotionTransferCancelResultSchema = z.object({
   schemaVersion: z.literal("1.0.0"),
-  status: z.enum(["cancelled", "cancel_unsupported", "already_terminal"]),
+  status: z.enum(MotionTransferCancelStatusValues),
   providerJobId: DomainIdSchema,
+  lateResultExpected: z.boolean().optional(),
 });
 
 export const MotionTransferResultSchema = z.object({

@@ -173,6 +173,11 @@ export type MotionQcResult = {
   humanValidationRequired: boolean;
 };
 
+/** Estimate firmness — non-firm estimates must not drive paid reservations. */
+export const MotionTransferEstimateModeValues = ["firm", "indicative"] as const;
+export type MotionTransferEstimateMode =
+  (typeof MotionTransferEstimateModeValues)[number];
+
 export type MotionTransferEstimate = {
   schemaVersion: "1.0.0";
   currency: string;
@@ -180,6 +185,16 @@ export type MotionTransferEstimate = {
   durationSeconds?: number;
   pricingUnit?: "second" | "job";
   notes?: string[];
+  /** MT-006 — firm | indicative */
+  mode?: MotionTransferEstimateMode;
+  pricingStrategy?: string;
+  pricingVersion?: string;
+  assumptions?: string[];
+  expiresAt?: string;
+  providerId?: string;
+  modelId?: string;
+  capability?: "video.motion_transfer";
+  capabilityVersion?: string;
 };
 
 export type MotionTransferSubmission = {
@@ -187,21 +202,75 @@ export type MotionTransferSubmission = {
   status: "submitted";
   providerJobId: string;
   submittedAt: string;
+  /** Alias acceptedAt — same instant as submittedAt when present. */
+  acceptedAt?: string;
+  syncOrAsync?: "sync" | "async";
+  pollingRequired?: boolean;
+  estimatedCompletionAt?: string;
+  /** Redacted provider request metadata — never URLs, keys, or media. */
+  requestMetadataRedacted?: Record<string, unknown>;
 };
+
+/**
+ * Canonical Motion Transfer job statuses (domain).
+ * Provider vocabulary mapping (MT-006):
+ *   running → processing
+ *   succeeded → completed
+ *   timed_out → timed_out (terminal)
+ */
+export const MotionTransferJobStatusValues = [
+  "queued",
+  "processing",
+  "completed",
+  "failed",
+  "cancelled",
+  "timed_out",
+] as const;
+export type MotionTransferJobStatus =
+  (typeof MotionTransferJobStatusValues)[number];
 
 export type MotionTransferStatus = {
   schemaVersion: "1.0.0";
-  status: "queued" | "processing" | "completed" | "failed" | "cancelled";
+  status: MotionTransferJobStatus;
   providerJobId: string;
   progressPercent?: number;
   errorCode?: string;
   updatedAt: string;
+  /** Present only on terminal success — descriptors only, no signed URLs. */
+  output?: MotionTransferProviderOutputDescriptor;
+  usage?: { durationSeconds?: number; units?: number };
+  actualCostMinor?: number;
+  currency?: string;
 };
+
+export type MotionTransferProviderOutputDescriptor = {
+  /** Opaque provider-side reference — not a signed URL. */
+  providerOutputRef: string;
+  mimeType: string;
+  sizeBytes?: number;
+  durationSeconds?: number;
+  width?: number;
+  height?: number;
+  fps?: number;
+  providerChecksum?: string;
+  completedAt: string;
+};
+
+export const MotionTransferCancelStatusValues = [
+  "cancelled",
+  "cancel_unsupported",
+  "already_terminal",
+  "cancel_failed",
+] as const;
+export type MotionTransferCancelStatus =
+  (typeof MotionTransferCancelStatusValues)[number];
 
 export type MotionTransferCancelResult = {
   schemaVersion: "1.0.0";
-  status: "cancelled" | "cancel_unsupported" | "already_terminal";
+  status: MotionTransferCancelStatus;
   providerJobId: string;
+  /** True when a late provider result must be quarantined (future ingestion). */
+  lateResultExpected?: boolean;
 };
 
 export type MotionTransferResult = {

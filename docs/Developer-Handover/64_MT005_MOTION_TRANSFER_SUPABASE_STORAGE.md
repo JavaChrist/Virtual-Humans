@@ -7,7 +7,7 @@
 ```text
 MT-005 = IMPLEMENTED (local contracts + additive migration)
 Gate MT-3 Persistence/Storage = PASS
-MT-006 Provider Port = NOT STARTED
+MT-006 Provider Port = IMPLEMENTED (voir `65_`)
 remote migration = NOT APPLIED
 provider calls = 0
 remote writes = 0
@@ -114,4 +114,5 @@ NO DESTRUCTIVE CLEANUP
 
 ## Suite
 
-**MT-006** — Provider Port (contrat adapter) — **NOT STARTED**.
+**MT-006** — **IMPLEMENTED** (`65_`) · Gate MT-4 Provider Port **PASS**.
+**MT-007** — First provider adapter — **NOT STARTED**.

@@ -10,7 +10,7 @@
 | Wiring `/director` | **fakes only** (VHS-124) |
 | Legacy | `/api/generate/*` hors pipeline Director (ne prouve pas `production_jobs`) |
 | Kill switches | `PAID_GENERATION` ∧ `WORKER` requis pour exécution payante |
-| Motion Transfer | Dry-run Engine **MT-004** (`63_`) + Persistence/Storage **MT-005** (`64_`, bucket `director-final-assets`, path `/motion/…`) ; provider port = MT-006 **NOT STARTED** — paid execution unavailable |
+| Motion Transfer | Dry-run Engine **MT-004** (`63_`) + Persistence **MT-005** (`64_`) + Provider port **MT-006** (`65_`, fake TEST_ONLY, **0** real adapter) — paid execution unavailable |
 
 ## Mission
 
