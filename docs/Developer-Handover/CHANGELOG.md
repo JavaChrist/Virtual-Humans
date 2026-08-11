@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.110] — 2026-08-11
+
+### Added (MT-013F MV-001 Controlled Benchmark Prep)
+
+- Profil benchmark-only MV-001 + exception Registry scopée/expirante (Production registry reste disabled).
+- Gates, `Mv001MediaManifest`, validateur offline, upload/dry-run/execute/shutdown prep — **0** fal / upload / réserve.
+- Verdict `READY_FOR_MEDIA_AND_DEPLOY_AUTH`. Rapport `84_`.
+
 ## [2.0.109] — 2026-08-11
 
 ### Changed (MT-013E MV-001 Budget Hard Limit)

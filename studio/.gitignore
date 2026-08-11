@@ -53,3 +53,9 @@ next-env.d.ts
 
 # Local Supabase CLI (secrets, edge runtime cache) — never commit
 /supabase/.temp/
+
+# MT-013F / MV-001 private media & local prep artifacts (never commit media/bytes)
+/.tmp/
+/.private-media/
+/private-media/
+**/mv001-media/**

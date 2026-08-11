@@ -26,7 +26,8 @@ En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → d
 ```text
 Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
-Motion / Performance     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A readiness DONE (73_)
+Motion / Performance     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
+                           MT-013F prep READY_FOR_MEDIA_AND_DEPLOY_AUTH (`84_`)
                            MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
                            privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
                            remote MT-005 APPLIED (`82_`) · NO PAID BENCHMARK_YET
@@ -36,7 +37,7 @@ production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : décision média image VHS-124
 P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
-Prochaine porte majeure  : Auth deploy/flags puis paid MV-001 (réserve ≤62¢) — ne pas fusionner
+Prochaine porte majeure  : Auth media validate → upload → deploy/flags → paid MV-001 — ne pas fusionner
 ```
 
 ### Portes Directors texte
@@ -192,6 +193,7 @@ Utilisateur → AI Video Director (/director)
 | [`81_MT013D_MV001_PRIVACY_DECISION_PACK_ACCEPTED.md`](./81_MT013D_MV001_PRIVACY_DECISION_PACK_ACCEPTED.md) | **Privacy Decision Pack MV-001 ACCEPTED_LIMITED · expire 2026-09-10 · pas d’exécution** |
 | [`82_MT005_REMOTE_APPLY_PASS.md`](./82_MT005_REMOTE_APPLY_PASS.md) | **MT-005 remote apply PASS · Production 30/30 · runtime Motion UNAVAILABLE** |
 | [`83_MT013E_MV001_BUDGET_HARD_LIMIT_174.md`](./83_MT013E_MV001_BUDGET_HARD_LIMIT_174.md) | **MT-013E budget hard 122→174 · available 62¢ · pas de réservation** |
+| [`84_MT013F_MV001_CONTROLLED_BENCHMARK_PREP.md`](./84_MT013F_MV001_CONTROLLED_BENCHMARK_PREP.md) | **MT-013F prep · READY_FOR_MEDIA_AND_DEPLOY_AUTH · 0 fal / 0 upload** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
