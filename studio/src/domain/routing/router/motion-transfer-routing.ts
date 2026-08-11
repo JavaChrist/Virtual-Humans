@@ -589,7 +589,7 @@ export function routeMotionTransfer(
         projectId: "motion_transfer",
         sceneId: "motion_transfer",
         stepId: sid,
-        action: "video",
+        action: "motion_transfer",
         durationSeconds: request.constraints.durationSeconds,
         characterCount: 0,
         at: request.at,

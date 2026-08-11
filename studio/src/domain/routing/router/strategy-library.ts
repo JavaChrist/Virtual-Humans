@@ -248,7 +248,7 @@ const LIBRARY: StrategyDefinition[] = [
     steps: [
       {
         order: 1,
-        action: "video",
+        action: "motion_transfer",
         capabilityProfile: "video.motion_transfer",
         expectedOutput: "video",
         dependsOnOrders: [],

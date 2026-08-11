@@ -18,7 +18,7 @@ const SYNTHETIC_PNG_DATA_URL =
 const FAKE_COST_MINOR = 1;
 
 function assetKind(action: MediaAction): "image" | "video" | "audio" | "lipsync" | "carousel" {
-  if (action === "video" || action === "merge") return "video";
+  if (action === "video" || action === "merge" || action === "motion_transfer") return "video";
   if (action === "voice" || action === "merge_audio") return "audio";
   if (action === "lipsync") return "lipsync";
   if (action === "carousel") return "carousel";

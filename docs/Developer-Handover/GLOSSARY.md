@@ -30,6 +30,7 @@
 **Motion / Performance Transfer** — capability `video.motion_transfer` : transfert de mouvement depuis une vidéo source vers un personnage (identité/tenue), distinct de I2V/T2V ; architecture `59_` ; contrats MT-001 ; Registry MT-002 ; Router MT-003 (`routeMotionTransfer`, **0** candidat Production) ; Engine MT-004 non démarré ; runtime non branché.
 **MotionTransferModelCapabilities** — bloc Registry versionné (`schemaVersion` 1.0.0) décrivant support source video / identité / tenue / pose / fidélité / limites ; niveaux `SUPPORTED|PARTIAL|UNVERIFIED|NOT_SUPPORTED`.
 **routeMotionTransfer** — décision Router pure MT-003 ; `maximumFallbacksPerStep=0` ; échec stable `motion_capability_unavailable`.
+**runMotionTransferGenerationDryRun** — préparation Engine MT-004 (validate/resolve/route/plan) ; toujours `providerCalled=false` ; pas de job/ledger/storage.
 **MotionReferenceSpec** — contrat opaque fourni par un projet appelant (ex. Tai-Chi MV-001) : phases, checkpoints, contraintes ; VHS n’en interprète pas le métier ; schema `1.0.0`.
 **MotionMediaReference** — référence média motion basée sur `AssetInputRef` + rôle (source_video/identity/outfit/…).
 **Motion QC** — contrôles technique / identité / tenue / fidélité motion / intégrité / temporalité / caméra + revue humaine ; contrat `MotionQcResult` v1.

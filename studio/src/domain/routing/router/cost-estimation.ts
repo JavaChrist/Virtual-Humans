@@ -93,7 +93,7 @@ function pickPricingLine(
   const preferredUnits: PricingUnit[] =
     action === "image"
       ? ["image", "request"]
-      : action === "video" || action === "carousel"
+      : action === "video" || action === "carousel" || action === "motion_transfer"
         ? ["second", "video", "request", "minute"]
         : action === "voice"
           ? ["thousand_tokens", "character", "token", "minute", "request"]

@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.88] — 2026-08-11
+
+### Added (MT-004 Motion Transfer Generation Engine dry-run)
+
+- Action `motion_transfer` + `runMotionTransferGenerationDryRun` : validate → resolve media → route MT-003 → plan → dry-run (`providerCalled=false`).
+- Fake media resolver strict ; fingerprints stables ; Production → `motion_capability_unavailable` / non-executable.
+- Tests **19** ciblés ; unitaires **1218** ; rapport `63_MT004_MOTION_TRANSFER_GENERATION_ENGINE.md`. Gate MT-3 **PASS**. MT-005 **NOT STARTED**.
+
 ## [2.0.87] — 2026-08-11
 
 ### Added (MT-003 Motion Transfer Router strategy)

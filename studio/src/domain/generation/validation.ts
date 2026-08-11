@@ -200,12 +200,76 @@ export function buildCanonicalInput(input: {
         images,
       };
     }
-    default:
+    case "motion_transfer": {
+      if (step.capabilityProfile !== "video.motion_transfer") {
+        throw new GenerationDomainError(
+          "invalid_input",
+          "motion_transfer action requires video.motion_transfer capability.",
+        );
+      }
+      const source = command.resolvedInputs.find(
+        (r) => r.role === "source_video" || r.asset.kind === "video",
+      );
+      if (!source) {
+        throw new GenerationDomainError(
+          "invalid_input",
+          "motion_transfer requires a resolved source_video input.",
+        );
+      }
+      // Never treat start_frame / I2V image as motion source.
+      const startFrame = command.resolvedInputs.find((r) => r.role === "start_frame");
+      if (startFrame && !source) {
+        throw new GenerationDomainError(
+          "invalid_input",
+          "I2V start_frame cannot satisfy motion_transfer source video.",
+        );
+      }
+      const identityReferences = command.resolvedInputs
+        .filter(
+          (r) =>
+            r.role === "identity" ||
+            r.asset.kind === "character" ||
+            r.role === "reference_image",
+        )
+        .map((r) => r.asset);
+      if (identityReferences.length === 0) {
+        throw new GenerationDomainError(
+          "invalid_input",
+          "motion_transfer requires at least one identity reference.",
+        );
+      }
+      const outfit = command.resolvedInputs.find(
+        (r) => r.role === "outfit" || r.asset.kind === "outfit",
+      );
+      return {
+        ...common,
+        kind: "motion_transfer",
+        action: "motion_transfer",
+        capabilityProfile: "video.motion_transfer",
+        durationSeconds:
+          input.durationSeconds ??
+          step.expectedOutput.durationSeconds ??
+          0,
+        sourceVideo: source.asset,
+        identityReferences,
+        outfitReference: outfit?.asset,
+      };
+    }
+    case "merge":
+    case "merge_audio":
+      throw new GenerationDomainError(
+        "model_not_supported",
+        "Action is not supported as a primary Generation Engine step.",
+        { diagnostic: step.action },
+      );
+    default: {
+      const _e: never = step.action;
       throw new GenerationDomainError(
         "model_not_supported",
         "Action is not supported by the Generation Engine.",
-        { diagnostic: step.action },
+        { diagnostic: String(_e) },
       );
+    }
   }
 }
 

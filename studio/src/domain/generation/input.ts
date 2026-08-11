@@ -91,12 +91,27 @@ export type CarouselGenerationInput = CommonInput & {
   images: AssetInputRef[];
 };
 
+/**
+ * Motion-transfer canonical input (MT-004).
+ * Distinct from VideoGenerationInput (I2V startFrame path).
+ */
+export type MotionTransferCanonicalInput = CommonInput & {
+  kind: "motion_transfer";
+  action: "motion_transfer";
+  capabilityProfile: "video.motion_transfer";
+  durationSeconds: number;
+  sourceVideo: AssetInputRef;
+  identityReferences: AssetInputRef[];
+  outfitReference?: AssetInputRef;
+};
+
 export type CanonicalGenerationInput =
   | ImageGenerationInput
   | VideoGenerationInput
   | VoiceGenerationInput
   | LipsyncGenerationInput
-  | CarouselGenerationInput;
+  | CarouselGenerationInput
+  | MotionTransferCanonicalInput;
 
 /** Validate signed URL access without logging the URL. */
 export function assertAssetAccessUsable(asset: AssetInputRef, at: string): void {

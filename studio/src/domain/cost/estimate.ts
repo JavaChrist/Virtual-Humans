@@ -23,6 +23,7 @@ export const MediaActionSchemaValues = [
   "merge",
   "merge_audio",
   "carousel",
+  "motion_transfer",
 ] as const;
 export type MediaAction = (typeof MediaActionSchemaValues)[number];
 

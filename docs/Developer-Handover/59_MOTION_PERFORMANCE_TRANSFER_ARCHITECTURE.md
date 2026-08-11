@@ -12,8 +12,10 @@ MT-002 = IMPLEMENTED
 Gate MT-2 Registry portion = PASS
 MT-003 = IMPLEMENTED
 Gate MT-2 Router portion = PASS
-MT-004+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-004 Generation Engine
+MT-004 = IMPLEMENTED
+Gate MT-3 Engine preparation = PASS
+MT-005+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-005 Storage / optional migration
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_NOT_SELECTED_YET
 NO PAID BENCHMARK_YET
@@ -34,11 +36,12 @@ eligible Production motion-transfer models = 0
 | Domain contracts | **MT-001 IMPLEMENTED** — `studio/src/domain/motion/` · Gate MT-1 **PASS** |
 | Capability Registry | **MT-002 IMPLEMENTED** — `capabilities/motion-transfer.ts` · Gate MT-2 Registry **PASS** · **0** modèle Production éligible |
 | Model Router | **MT-003 IMPLEMENTED** — `routeMotionTransfer` · Gate MT-2 Router **PASS** · Production → `motion_capability_unavailable` |
-| Engine | MT-004+ **NOT STARTED** |
+| Generation Engine | **MT-004 IMPLEMENTED** — dry-run prepare · Gate MT-3 **PASS** · `providerCalled=false` · paid execution unavailable |
+| Storage / Provider port | MT-005+ **NOT STARTED** |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | `PROVIDER_NOT_SELECTED_YET` |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-004** Generation Engine |
+| Prochaine action | **MT-005** Storage conventions / optional migration |
 
 **Ordre obligatoire :**
 
@@ -130,7 +133,7 @@ Aucun fallback silencieux I2V / T2V / downgrade modèle / relaxation identité.
 ### 2.2 Gaps critiques aujourd’hui (code)
 
 - ~~`CapabilityProfileValues` : pas de `video.motion_transfer`~~ → **fermé MT-002** (profil + bloc `motionTransfer` + helpers).
-- `VideoGenerationInput` : `startFrame?` seulement — **pas** de `sourceVideo` (`domain/generation/input.ts`) — MT-004.
+- ~~`VideoGenerationInput` sans `sourceVideo`~~ → **fermé MT-004** (`MotionTransferCanonicalInput` + dry-run prepare).
 - ~~Router : stratégie `motion_transfer` absente~~ → **fermé MT-003** (`routeMotionTransfer`, `maximumFallbacksPerStep=0`).
 - Adapters : aucun modèle motion-control enregistré ; **0** entrée Production enabled.
 - Human review : statuses `approved|rejected` seulement — **étendre** pour retry/constraints.
@@ -494,24 +497,22 @@ Director/API mapping (futur) → needs_input | failed (policy)
 
 ## 6. Generation Engine
 
+**Statut MT-004 :** **IMPLEMENTED** — rapport `63_MT004_MOTION_TRANSFER_GENERATION_ENGINE.md`.
+Action discriminante : `motion_transfer` (MediaAction + kind). Entrée : `runMotionTransferGenerationDryRun`.
+
 ### 6.1 Extension CanonicalGenerationInput
 
 ```ts
-export type MotionTransferGenerationInput = CommonInput & {
+export type MotionTransferCanonicalInput = CommonInput & {
   kind: "motion_transfer";
-  action: "video"; // or dedicated MediaAction "motion_transfer" (MT-004 decide)
+  action: "motion_transfer";
   capabilityProfile: "video.motion_transfer";
   durationSeconds: number;
   sourceVideo: AssetInputRef;
   identityReferences: AssetInputRef[];
   outfitReference?: AssetInputRef;
-  motion: MotionTransferMotionParams;
-  referenceSpec?: MotionReferenceSpec;
-  negativeConstraints?: string[];
-  output: MotionTransferOutputConstraints;
-  qcPolicy: MotionQcRequirement[];
-  providerParameters?: Record<string, unknown>; // allowlisted keys only
 };
+// Engine request wraps MotionTransferInput (MT-001) + budget/allowlists — see motion-transfer-prepare.ts
 ```
 
 ### 6.2 Pipeline d’exécution
@@ -1044,14 +1045,14 @@ flowchart LR
 - **Interdit :** fallback auto — respecté.
 - **DoD :** tests stratégie + scoring — **PASS**.
 
-### MT-004 — Generation Engine
+### MT-004 — Generation Engine — **IMPLEMENTED**
 
 - **Objectif :** `MotionTransferGenerationInput` + validate/resolve/normalize.
-- **Fichiers :** `domain/generation/input.ts`, validation, engine dry-run.
-- **Dépendances :** MT-001.
-- **Acceptation :** dry-run sans réseau ; sourceVideo obligatoire.
-- **Interdit :** submit réel.
-- **DoD :** unitaires + dry-run script.
+- **Fichiers :** `motion-transfer-prepare.ts`, `motion-transfer-media.ts`, `input.ts`, validation.
+- **Dépendances :** MT-001…003.
+- **Acceptation :** dry-run sans réseau ; sourceVideo obligatoire — **PASS** (`63_`).
+- **Interdit :** submit réel — respecté (`providerCalled=false`).
+- **DoD :** unitaires + dry-run — **PASS**.
 
 ### MT-005 — Supabase / storage
 

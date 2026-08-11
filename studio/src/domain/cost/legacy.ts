@@ -36,6 +36,7 @@ const ACTION_UNIT: Record<MediaAction, EstimationUnit> = {
   merge: "seconds",
   merge_audio: "seconds",
   carousel: "seconds",
+  motion_transfer: "seconds",
 };
 
 export type FromLegacyUsdInput = {

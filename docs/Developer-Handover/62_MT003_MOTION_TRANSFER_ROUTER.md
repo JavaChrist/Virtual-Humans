@@ -7,7 +7,7 @@
 ```text
 MT-003 = IMPLEMENTED
 Gate MT-2 Router portion = PASS
-MT-004 = NOT STARTED
+MT-004 = IMPLEMENTED (voir 63_)
 Production candidates = 0
 runtime execution = unavailable
 PROVIDER_NOT_SELECTED_YET
@@ -95,4 +95,5 @@ route motion_transfer in Production
 
 ## Suite
 
-**MT-004** Generation Engine — input `sourceVideo`, validate/resolve/normalize, dry-run sans réseau.
+**MT-004** Generation Engine dry-run — **IMPLEMENTED** (`63_`).
+**MT-005** — NOT STARTED.
