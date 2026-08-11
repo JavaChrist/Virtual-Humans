@@ -241,4 +241,4 @@ NO FEATURE ENABLE / DEPLOY / DB WRITE
 
 ## 15. Suite
 
-**MT-007B** — implémenter l’adapter fal Kling v3 Pro **disabled-by-default**, passant `runMotionTransferProviderContractSuite` ; **aucun** appel payant sans Auth gates.
+**MT-007B** — **IMPLEMENTED** (`67_`) : adapter fal Kling v3 Pro disabled-by-default + contract suite PASS ; **0** appel provider ; privacy gate blocked ; next = **MT-008**.

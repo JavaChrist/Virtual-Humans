@@ -180,6 +180,7 @@ Utilisateur → AI Video Director (/director)
 | [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md) | **MT-005 Persistence/Storage — Gate MT-3 PASS** |
 | [`65_MT006_MOTION_TRANSFER_PROVIDER_PORT.md`](./65_MT006_MOTION_TRANSFER_PROVIDER_PORT.md) | **MT-006 Provider Port + fake — Gate MT-4 PASS** |
 | [`66_MT007A_MOTION_TRANSFER_PROVIDER_SPIKE.md`](./66_MT007A_MOTION_TRANSFER_PROVIDER_SPIKE.md) | **MT-007A Provider spike — fal Kling v3 Pro selected (disabled)** |
+| [`67_MT007B_FAL_KLING_MOTION_CONTROL_ADAPTER.md`](./67_MT007B_FAL_KLING_MOTION_CONTROL_ADAPTER.md) | **MT-007B fal Kling adapter — disabled / Gate MT-5 PASS** |
 
 ### Pilotage (hors numérotation)
 

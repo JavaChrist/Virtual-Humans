@@ -1,6 +1,6 @@
 /**
  * MT-007A — Static mapping design for fal Kling motion-control → MotionTransferProviderPort.
- * NO network. NO SDK calls. NO credentials. Adapter implementation = MT-007B.
+ * NO network. NO SDK calls. NO credentials. Adapter implementation = MT-007B (`fal-kling-motion-control-adapter.ts`).
  *
  * Evidence date: 2026-08-11
  * Official sources:

@@ -14,8 +14,14 @@ export { createUniversalFakeAdapter } from "./fake-universal-adapter";
 export {
   FAKE_MOTION_TRANSFER_MODEL_ID,
   FAKE_MOTION_TRANSFER_PROVIDER_ID,
+  FAL_KLING_MOTION_CONTROL_ADAPTER_VERSION,
+  FAL_KLING_V3_PRO_MOTION_CONTROL_MODEL_ID,
+  FAL_MOTION_TRANSFER_PROVIDER_ID,
   assertMotionTransferFakeAdapterAllowed,
+  createFakeFalMotionControlTransport,
   createFakeMotionTransferAdapter,
   createFakeMotionTransferProvider,
+  createFalKlingMotionControlAdapter,
+  resolveFalKlingMotionControlAdapter,
   runMotionTransferProviderContractSuite,
 } from "./motion-transfer";

@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.92] — 2026-08-11
+
+### Added (MT-007B fal Kling Motion Control Adapter — Disabled)
+
+- Adapter `MotionTransferProviderPort` pour `fal-ai/kling-video/v3/pro/motion-control` + transport injectable + fake transport.
+- Factory SDK réelle présente mais **unresolvable** tant que flags OFF + privacy gate blocked ; **0** appel fal / **0** lecture `FAL_KEY` en tests.
+- Flags `MOTION_TRANSFER_*` (strict `1|true`) ; privacy gate fail-closed ; Registry profile UNVERIFIED/`enabled=false`.
+- Contract suite PASS ; cancel `cancel_unsupported` ; pricing firm $0.168/s (integer). Rapport `67_MT007B_FAL_KLING_MOTION_CONTROL_ADAPTER.md`. Gate MT-5 **PASS**.
+
 ## [2.0.91] — 2026-08-11
 
 ### Added (MT-007A Motion Transfer Provider Capability Spike)

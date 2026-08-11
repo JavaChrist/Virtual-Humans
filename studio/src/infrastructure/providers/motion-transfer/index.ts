@@ -33,3 +33,66 @@ export {
   type FalKlingCharacterOrientation,
   type FalKlingMotionControlRequestPlan,
 } from "./fal-kling-motion-control-mapping";
+
+export {
+  FAL_KLING_MOTION_CONTROL_ADAPTER_VERSION,
+  FAL_KLING_MOTION_CONTROL_CONTRACT_VERSION,
+  FAL_KLING_MOTION_CONTROL_PRICING_VERSION,
+  FAL_KLING_V3_PRO_DECI_CENTS_PER_SECOND,
+  FAL_KLING_V3_PRO_MAX_DURATION_IMAGE_SECONDS,
+  FAL_KLING_V3_PRO_MAX_DURATION_VIDEO_SECONDS,
+  FAL_KLING_V3_PRO_MIN_DURATION_SECONDS,
+  FAL_KLING_V3_PRO_MOTION_CONTROL_MODEL_ID,
+  FAL_MOTION_TRANSFER_PROVIDER_ID,
+  assertFalKlingDurationAllowed,
+  buildFalKlingV3ProSubmitInput,
+  computeFalKlingV3ProCostMinor,
+  computeFalKlingV3ProCostMinorUnchecked,
+  createFalKlingMotionControlAdapter,
+  mapFalTransportErrorToEvidence,
+  resolveFalKlingCharacterOrientation,
+  type FalKlingMotionControlAdapterOptions,
+} from "./fal-kling-motion-control-adapter";
+
+export {
+  createFakeFalMotionControlTransport,
+  type FalMotionControlStatusResponse,
+  type FalMotionControlSubmitRequest,
+  type FalMotionControlSubmitResponse,
+  type FalMotionControlTransport,
+  type FakeFalMotionControlTransportOptions,
+} from "./fal-motion-control-transport";
+
+export {
+  createFalSdkMotionControlTransport,
+  type CreateFalSdkMotionControlTransportOptions,
+} from "./fal-sdk-motion-control-transport";
+
+export {
+  requireFalKlingMotionControlAdapter,
+  resolveFalKlingMotionControlAdapter,
+  type ResolveFalKlingMotionControlOptions,
+  type ResolveFalKlingMotionControlResult,
+} from "./fal-kling-motion-control-resolver";
+
+export {
+  canResolveFalMotionTransferAdapter,
+  getMotionTransferFlags,
+  isMotionTransferEnabled,
+  isMotionTransferFalEnabled,
+  isMotionTransferPaidEnabled,
+  isMotionTransferWorkerEnabled,
+  type MotionTransferFlagName,
+  type MotionTransferFlagsSnapshot,
+} from "./motion-transfer-flags";
+
+export {
+  DEFAULT_MOTION_TRANSFER_PRIVACY_DECISIONS,
+  MOTION_TRANSFER_PRIVACY_GATE_VERSION,
+  assertMotionTransferPrivacyGateOpen,
+  evaluateMotionTransferPrivacyGate,
+  isMotionTransferPrivacyGateBlocked,
+  type MotionTransferPrivacyDecisions,
+  type MotionTransferPrivacyGateEvaluation,
+  type MotionTransferPrivacyGateStatus,
+} from "./privacy-gate";

@@ -43,10 +43,10 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | 10F-V4 | Storyboard texte PASS (`storyboard-analyzer-v4`) | `57_` |
 | 11A | Prep smoke média image — **DECISION_REQUIRED** | `58_` |
 | MT-Arch | Architecture Motion / Performance Transfer | `59_` · `ARCHITECTURE_READY_FOR_IMPLEMENTATION` |
-| MT-001…007A | Domain → … → Provider port → Provider spike | **IMPLEMENTED** (`60_`…`66_`) · Gates MT-1…MT-4 + Provider Decision **PASS** · next = **MT-007B** |
-| MT-007B… | Real fal Kling adapter (disabled) → worker → benchmark | **NOT STARTED** · real adapters = 0 · remote migration MT-005 **NOT APPLIED** |
+| MT-001…007B | Domain → … → fal Kling adapter (disabled) | **IMPLEMENTED** (`60_`…`67_`) · Gates MT-1…MT-5 + Provider Decision **PASS** · next = **MT-008** |
+| MT-008… | Worker/polling → QC → benchmark | **NOT STARTED** · Production MT candidates = 0 · remote migration MT-005 **NOT APPLIED** · **0** provider calls |
 
-**Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` ; provider motion sélectionné ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.
+**Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` exécutable ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.
 
 Pilotage courant : **`BACKLOG_V2.md`**.
 Chantier majeur avant clôture app : **Motion Transfer** (`59_`) — distinct du smoke image 11A.

@@ -6,15 +6,15 @@ Protocole d’audit initial : `03_CURRENT_AUDIT.md` (**historique**) — audit r
 
 ```text
 Checkpoint : 10F-V4 Storyboard PASS · 11A media PREP DECISION_REQUIRED
-Motion     : ARCHITECTURE_READY · MT-001…004 IMPLEMENTED · Gates MT-1…MT-3 PASS
-             0 Production MT models · dry-run Engine only · paid execution unavailable
-             MT-007B+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
-             PROVIDER_NOT_SELECTED_YET · NO PAID BENCHMARK_YET
+Motion     : ARCHITECTURE_READY · MT-001…007B IMPLEMENTED · Gates MT-1…MT-5 PASS
+             0 Production MT models · adapter fal disabled · privacy gate blocked
+             MT-008+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
+             NO PAID BENCHMARK_YET · provider calls = 0
 Budget     : 122 / 112 / 0 / 10
 Runtime AI : OFF
 Media jobs : 0
 P1         : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Next major : MT-007B fal Kling v3 Pro adapter (disabled)
+Next major : MT-008 worker / polling orchestration (flags OFF)
 ```
 
 ## P0 — fondations
@@ -71,10 +71,10 @@ Next major : MT-007B fal Kling v3 Pro adapter (disabled)
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…007A IMPLEMENTED** (`60_`…`66_`) · Provider Decision = fal Kling v3 Pro MC (adapter disabled next) · Production → unavailable · MT-007B+ **NOT STARTED** · **NO PAID BENCHMARK_YET**.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…007B IMPLEMENTED** (`60_`…`67_`) · fal Kling v3 Pro adapter **code-complete / disabled** · privacy gate blocked · Production → unavailable · MT-008+ **NOT STARTED** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **122** ; committed **112** ; available **10**.
-- **Prochaine porte majeure** : **MT-007B** adapter fal Kling disabled-by-default ; backup restore reste P1 ouvert ; migration MT-005 **locale only** (NOT APPLIED Production).
+- **Prochaine porte majeure** : **MT-008** worker/polling ; backup restore reste P1 ouvert ; migration MT-005 **locale only** (NOT APPLIED Production).
 
 ## P2 — durcissement
 

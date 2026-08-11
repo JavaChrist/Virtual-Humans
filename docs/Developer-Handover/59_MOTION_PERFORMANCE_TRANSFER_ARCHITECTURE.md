@@ -20,17 +20,20 @@ MT-006 = IMPLEMENTED
 Gate MT-4 Provider Port = PASS
 MT-007A = IMPLEMENTED
 Gate Provider Decision = PROVIDER_SELECTED_FOR_ADAPTER_IMPLEMENTATION
-MT-007B+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-007B fal Kling v3 Pro adapter (disabled)
+MT-007B = IMPLEMENTED
+Gate MT-5 Adapter Code = PASS
+MT-008+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-008 worker/polling (flags OFF)
 remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
-PROVIDER_SELECTED_FOR_ADAPTER_ONLY = fal / fal-ai/kling-video/v3/pro/motion-control
+PROVIDER_ADAPTER_CODE = fal / fal-ai/kling-video/v3/pro/motion-control (disabled)
+privacy gate = blocked
 NO PAID BENCHMARK_YET
 eligible Production motion-transfer models = 0
-real provider adapters = 0
+real provider calls = 0
 ```
 
-> Ce document est la **spécification d’architecture**. Les tickets MT-001…007A livrent contrats/code locaux ; aucun adapter réel ni appel payant n’est branché.
+> Ce document est la **spécification d’architecture**. Les tickets MT-001…007B livrent contrats/code locaux ; l’adapter fal est **disabled-by-default** — aucun appel payant.
 
 ---
 
@@ -45,11 +48,12 @@ real provider adapters = 0
 | Generation Engine | **MT-004 IMPLEMENTED** — dry-run prepare · Gate MT-3 **PASS** · `providerCalled=false` · paid execution unavailable |
 | Persistence / Storage | **MT-005 IMPLEMENTED** — `64_` · REUSE tables V2 · bucket `director-final-assets` · migration locale human_review **NOT APPLIED** Production |
 | Provider port | **MT-006 IMPLEMENTED** — `65_` · `MotionTransferProviderPort` + fake TEST_ONLY · real adapters = 0 |
-| Provider spike | **MT-007A IMPLEMENTED** — `66_` · selected fal Kling v3 Pro MC for **disabled** adapter only |
+| Provider spike | **MT-007A IMPLEMENTED** — `66_` · selected fal Kling v3 Pro MC |
+| Provider adapter | **MT-007B IMPLEMENTED** — `67_` · code + contract suite PASS · flags OFF · privacy blocked · **0** calls |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
-| Provider | selected for adapter impl only — **not** Production-enabled |
+| Provider | adapter code present — **not** Production-enabled / UNVERIFIED |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-007B** fal Kling adapter disabled-by-default |
+| Prochaine action | **MT-008** worker / polling orchestration |
 
 **Ordre obligatoire :**
 
@@ -1087,13 +1091,13 @@ flowchart LR
 - **Artefacts :** `66_`, mapping plan + tests spike — **aucun appel provider**.
 - **Interdit respecté :** NO PROVIDER CALL / NO SECRET / NO GENERATION.
 
-### MT-007B — First provider adapter (disabled)
+### MT-007B — First provider adapter (disabled) *(DONE 2026-08-11)*
 
-- **Objectif :** adapter fal Kling motion-control **disabled** by default (`enabled=false`, unpaid).
-- **Dépendances :** MT-006, MT-007A, Gate Provider Decision.
-- **Acceptation :** bind schema ; enabled=false ; kill switch ; contract-suite feasibility.
-- **Interdit :** paid call / submit réel sans Auth Gate MT-7/8.
-- **DoD :** characterization tests sans réseau.
+- **Objectif :** adapter fal Kling motion-control **disabled** by default — **PASS**.
+- **Artefacts :** `67_` · `createFalKlingMotionControlAdapter` + fake transport + resolver fail-closed + privacy gate.
+- **Acceptation :** contract suite PASS ; Registry UNVERIFIED/`enabled=false` ; **0** appel fal.
+- **Interdit respecté :** NO REAL PROVIDER CALL / NO SECRET USE / NO PRODUCTION ENABLE.
+- **DoD :** tests ciblés + suite unitaire — **PASS**. Gate MT-5 Adapter Code **PASS**.
 
 ### MT-008 — Worker / polling
 
