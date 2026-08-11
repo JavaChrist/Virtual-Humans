@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.105] — 2026-08-11
+
+### Added (MT-013C Delete Target — STOP)
+
+- Auth delete `qmsh…qlnq` : préflight **PASS** (identité, ≠ Production, `78_` présent, isolation runtime).
+- STOP : MCP sans `delete_project` ; `pause` non substitué. Cible encore présente. Rapport `79_`.
+
 ## [2.0.104] — 2026-08-11
 
 ### Added (MT-013C Restore Drill — PASS)

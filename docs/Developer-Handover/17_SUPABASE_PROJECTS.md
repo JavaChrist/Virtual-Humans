@@ -472,7 +472,8 @@ Voir [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER
 | MT-013C Isolated target | **STOP** (`75_`) — coût branche $0.01344/h ≠ 0 ; `create_branch` sans data ; aucune ressource créée |
 | MT-013C-PAID restore target | **STOP** (`76_`) — projet vide $10 OK plafond mais restore backup indisponible via MCP ; clone Dashboard requis ; $0 dépensé |
 | MT-013C-QUOTE Dashboard | **QUOTE_CAPTURED** (`77_`) — total **$10.18/mois** (compute 9.68 + disk 0.5) · région `eu-west-3` |
-| MT-013C Restore PASS | Cible **VHS Restore Drill 2026-08-09** · ref `qmsh…qlnq` · backup 09 Aug 2026 05:24:51 UTC · migrations 29 · `RESTORE_DRILL=PASS` (`78_`) · ne pas supprimer sans Auth |
+| MT-013C Restore PASS | Cible **VHS Restore Drill 2026-08-09** · ref `qmsh…qlnq` · backup 09 Aug 2026 05:24:51 UTC · migrations 29 · `RESTORE_DRILL=PASS` (`78_`) |
+| MT-013C Delete Auth | **STOP** (`79_`) — préflight PASS · MCP sans `delete_project` · delete Dashboard humain requis |
 
 ## 14. Liens
 
