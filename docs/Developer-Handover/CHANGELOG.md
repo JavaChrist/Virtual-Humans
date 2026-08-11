@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.81] — 2026-08-11
+
+### Validation provider (Phase 10F-V4-EXECUTE)
+
+- 1 appel Storyboard `gpt-5.6` / `storyboard-analyzer-v4` : run `8ca5dfce` `completed`, artifact `storyboard_project` rev.1.
+- Continuité mandatory 24/9/5 fp `9d34b42ddc3bb85c` ; ledger 13¢ reserve / 5¢ commit / 8¢ release ; available **15→10** ; replay `existing`.
+- Fermeture OFF `3h1fdwxr8` ; runtime OFF. Rapport : `57_PHASE_10F_STORYBOARD_V4_EXECUTE.md` (`PASS`).
+
 ## [2.0.80] — 2026-08-11
 
 ### Deployed (Phase 10F-V4-DEPLOY-PREFLIGHT)
