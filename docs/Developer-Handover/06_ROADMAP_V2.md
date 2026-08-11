@@ -51,7 +51,8 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | MT-013C-QUOTE | Dashboard quote preflight | **QUOTE_CAPTURED** (`77_`) · $10.18/mois |
 | MT-013C-PASS | Restore drill verification | **PASS** (`78_`) · P1 restore fermé |
 | MT-013C-DEL | Delete isolated target | **VERIFIED** (`80_`) · `qmsh…` absent · Production healthy |
-| MT-013D… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · MT-005 **NOT APPLIED** · **PAID NOT AUTHORIZED** |
+| MT-013D | Privacy Decision Pack MV-001 | **ACCEPTED_LIMITED** (`81_`) · exp 2026-09-10 · pas d’exécution |
+| MT-013E… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · MT-005 **NOT APPLIED** · **PAID NOT AUTHORIZED** |
 
 **Pas encore :** media jobs Production réels ; runtime `video.motion_transfer` exécutable ; benchmark MV-001 payant ; restore backup prouvé ; delta migration distant sans Auth.
 

@@ -239,9 +239,10 @@ Merge / export     = interdit
 
 ## 5. Privacy Decision Pack (humain)
 
-Contrat : `mt011-privacy-1.0.0`. **Aucune décision marquée `true` ici.**
-
-Stockage futur proposé (Auth séparée) : enregistrements structurés workspace/projet (pas encore de table dédiée) + audit append-only ; jamais dans logs publics.
+Contrat : `mt011-privacy-1.0.0`.  
+**Statut courant :** **`ACCEPTED_LIMITED_MV001`** — voir [`81_`](./81_MT013D_MV001_PRIVACY_DECISION_PACK_ACCEPTED.md) (Auth 2026-08-11 · expire **2026-09-10** · 5 clés `true` gouvernance).  
+**N’autorise pas** upload / fal / spend / deploy.  
+Sections 5.1–5.5 ci-dessous = pack de formulations **pré-signature** (historique readiness).
 
 ### 5.1 `providerRetentionAccepted`
 

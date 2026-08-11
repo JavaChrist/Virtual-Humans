@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.107] — 2026-08-11
+
+### Added (MT-013D Privacy Decision Pack — ACCEPTED)
+
+- Auth `AUTH_MV001_PRIVACY_DECISION_PACK_LIMITED` : 5 clés gouvernance = **true** · portée MV-001 / fal / Kling MC · expire **2026-09-10**.
+- `PRIVACY_DUE_DILIGENCE = ACCEPTED_LIMITED_MV001`. Aucun upload, fal call, spend, deploy, MT-005. Rapport `81_`.
+
 ## [2.0.106] — 2026-08-11
 
 ### Added (MT-013C Delete Target — VERIFIED)

@@ -6,7 +6,7 @@
 
 ```text
 RESTORE_DRILL            = PASS  (levé — voir 78_ ; historique ci-dessous = état MT-013B)
-PRIVACY_DUE_DILIGENCE    = READY_FOR_HUMAN_DECISION
+PRIVACY_DUE_DILIGENCE    = ACCEPTED_LIMITED_MV001  (levé — voir 81_)
 MV001_NOT_EXECUTED
 REAL_PROVIDER_CALLS      = 0
 REMOTE_MIGRATION         = NOT_APPLIED
@@ -14,7 +14,8 @@ PAID_BENCHMARK           = NOT_AUTHORIZED
 Production mutations     = 0
 ```
 
-> **Mise à jour 11 août 2026 :** restore drill exécuté + vérifié → **`RESTORE_DRILL = PASS`** dans [`78_MT013C_RESTORE_DRILL_PASS.md`](./78_MT013C_RESTORE_DRILL_PASS.md). Les sections §2 ci-dessous restent le **journal** de l’évaluation MT-013B (blocage initial).
+> **Mise à jour 11 août 2026 :** restore drill → **`PASS`** (`78_`).  
+> **Mise à jour 11 août 2026 (soir) :** Privacy Decision Pack → **`ACCEPTED_LIMITED_MV001`** (`81_` · Auth `AUTH_MV001_PRIVACY_DECISION_PACK_LIMITED` · expire **2026-09-10**). Les §3 ci-dessous restent le **journal** due diligence (recommandations pré-signature).
 
 ---
 
@@ -23,7 +24,7 @@ Production mutations     = 0
 | Domaine | Verdict |
 |---|---|
 | **RESTORE_DRILL** | `PASS` (voir `78_`) — était `BLOCKED_TARGET_REQUIRED` en MT-013B |
-| **PRIVACY_DUE_DILIGENCE** | `READY_FOR_HUMAN_DECISION` |
+| **PRIVACY_DUE_DILIGENCE** | `ACCEPTED_LIMITED_MV001` (voir `81_`) — était `READY_FOR_HUMAN_DECISION` |
 
 Ces verdicts **ne sont pas fusionnés**. Un PASS privacy n’autorise pas le restore ; un restore futur PASS n’autorise pas MT-005 ni le paid call.
 
@@ -100,8 +101,8 @@ livrables    =
 ## 3. Privacy due diligence — cinq décisions
 
 **Contrat :** `mt011-privacy-1.0.0`  
-**Aucune décision passée à `true` automatiquement.**  
-**Date de vérification des sources :** 2026-08-11.
+**Post-signature (`81_`) :** les 5 clés = **`true`** en gouvernance MV-001 limitée (expire 2026-09-10) — **sans** activation runtime.  
+**Date de vérification des sources (due diligence) :** 2026-08-11.
 
 Légende recommandations : `ACCEPT` · `REJECT` · `LIMIT_TO_MV001` · `UNRESOLVED`.
 
@@ -116,8 +117,9 @@ Légende recommandations : `ACCEPT` · `REJECT` · `LIMIT_TO_MV001` · `UNRESOLV
 | Portée exacte | Stockage **payloads IO** fal (JSON inputs/outputs dashboard), **pas** les fichiers CDN (séparé) ; pour **un** submit MV-001 |
 | Risque résiduel | Opt-out empêche le stockage payload mais pas forcément toute télémétrie partenaire ; historique dashboard peut être incomplet |
 | Recommandation | **LIMIT_TO_MV001** — accord conditionnel **uniquement** si headers `X-Fal-Store-IO: 0` + suppression post-run documentée |
-| Formulation déclaration humaine future | « Pour le benchmark MV-001 uniquement, j’accepte que fal puisse traiter les payloads de la requête ; j’exige l’opt-out `X-Fal-Store-IO: 0` et la suppression post-completed des IO restants. Cet accord expire 30 jours après le run ou sur révocation. Je n’autorise pas d’autres runs. » |
-| Valeur technique actuelle | `false` / PENDING |
+| Formulation humaine signée (`81_`) | Conservation potentielle jusqu’à 30 j · MV-001 seulement |
+| Valeur gouvernance (`81_`) | **`true`** · LIMIT_TO_MV001 · expire 2026-09-10 |
+| Runtime defaults code | toujours fail-closed jusqu’Auth exécution |
 
 ---
 
@@ -131,7 +133,7 @@ Légende recommandations : `ACCEPT` · `REJECT` · `LIMIT_TO_MV001` · `UNRESOLV
 | Risque résiduel | Inputs uploadés avant inference ne héritent pas automatiquement de l’ACL d’inference ; Partner model peut avoir contraintes additionnelles ; signed URL si mal loguée |
 | Recommandation | **LIMIT_TO_MV001** — **uniquement** avec `initial_acl.default=forbid`, `expiration_duration_seconds` court (ex. 3600), download immédiat, ingest privé VHS, **interdiction** de persister l’URL CDN |
 | Formulation déclaration humaine future | « Pour MV-001 uniquement, j’accepte l’hébergement temporaire sur le CDN fal des médias du run, à condition : ACL forbid par défaut, expiration ≤ 1 h, download immédiat vers Storage VHS privé, aucune URL CDN dans artifacts/logs. Révocation = pas de nouvel upload. » |
-| Valeur technique actuelle | `false` / PENDING |
+| Valeur gouvernance (`81_`) | **`true`** · LIMIT_TO_MV001 · ≠ publication publique volontaire · expire 2026-09-10 |
 
 ---
 
@@ -145,7 +147,7 @@ Légende recommandations : `ACCEPT` · `REJECT` · `LIMIT_TO_MV001` · `UNRESOLV
 | Risque résiduel | Localisation/sous-traitance Partner **non documentée** exhaustivement ; API Services « no training » **non re-fetchée** live ce jour (timeout) — s’appuyer sur `66_` DOCUMENTED antérieur + relecture legal |
 | Recommandation | **UNRESOLVED** côté provider détaillé · **LIMIT_TO_MV001** **seulement après** consentement talent écrit + acceptation résiduelle Partner |
 | Formulation déclaration humaine future | « La personne représentée consent explicitement au traitement de son image et de sa vidéo de mouvement par fal et le partenaire Kling pour le seul benchmark MV-001 et le QC VHS associé. Ce consentement ne couvre aucun autre usage, entraînement, ni diffusion. Expiration = fin du benchmark ou retrait. » |
-| Valeur technique actuelle | `false` / PENDING |
+| Valeur gouvernance (`81_`) | **`true`** · source personne réelle autorisée · cible virtuelle · expire 2026-09-10 |
 
 ---
 
@@ -159,7 +161,7 @@ Légende recommandations : `ACCEPT` · `REJECT` · `LIMIT_TO_MV001` · `UNRESOLV
 | Risque résiduel | ToS fal complets non re-lus live (429/timeout antérieurs) ; droits talent/source restent **hors** badge fal |
 | Recommandation | **LIMIT_TO_MV001** — badge fal OK pour sortie API **et** preuves séparées droits source/identité ; sinon usage strictement interne documenté |
 | Formulation déclaration humaine future | « Pour MV-001, je confirme (1) que le badge Commercial use fal Kling MC couvre l’usage prévu de la sortie API, et (2) que les droits sur la source vidéo et l’identité autorisent cet usage. Périmètre = ce benchmark uniquement. » |
-| Valeur technique actuelle | `false` / PENDING |
+| Valeur gouvernance (`81_`) | **`true`** · droits créations + personnage virtuel + autorisation source · expire 2026-09-10 |
 
 ---
 
@@ -173,7 +175,7 @@ Légende recommandations : `ACCEPT` · `REJECT` · `LIMIT_TO_MV001` · `UNRESOLV
 | Risque résiduel | Localisation GPU Partner **UNKNOWN** ; clauses SCCs / sous-traitants non inventoriées ici |
 | Recommandation | **UNRESOLVED** jusqu’à note legal/ops · sinon **LIMIT_TO_MV001** seulement si legal accepte le risque résiduel Partner |
 | Formulation déclaration humaine future | « Après revue legal/ops, je confirme que les restrictions géographiques applicables au workspace autorisent le traitement MV-001 via fal Kling Partner, malgré l’incertitude de localisation d’inférence. Périmètre = MV-001 ; expiration 90 jours ou changement de politique. » |
-| Valeur technique actuelle | `false` / PENDING |
+| Valeur gouvernance (`81_`) | **`true`** · exécution FR/UE · expire 2026-09-10 |
 
 ---
 
@@ -187,40 +189,36 @@ Légende recommandations : `ACCEPT` · `REJECT` · `LIMIT_TO_MV001` · `UNRESOLV
 | Commercial | LIMIT_TO_MV001 (+ droits source) | Signature |
 | Geo | UNRESOLVED → LIMIT_TO_MV001 si legal OK | Note legal |
 
-**Verdict `READY_FOR_HUMAN_DECISION` :** les preuves officielles et formulations sont suffisantes pour une décision humaine éclairée **avec risques résiduels explicites**. Ce n’est **pas** un PASS technique des décisions (`false` inchangé).
-
-Si legal exige les ToS/API Services re-lus verbatim avant toute signature biométrie/geo → traiter ces deux clés comme encore `MORE_INFORMATION_REQUIRED` **individuellement**, sans changer le verdict pack global (pack prêt ; infos complémentaires optionnelles).
+**Verdict historique MT-013B :** `READY_FOR_HUMAN_DECISION` (pré-signature).  
+**Verdict courant :** `ACCEPTED_LIMITED_MV001` — voir [`81_`](./81_MT013D_MV001_PRIVACY_DECISION_PACK_ACCEPTED.md).
 
 ---
 
-## 4. Interdictions respectées
+## 4. Interdictions respectées (MT-013B + post-signature `81_`)
 
 | Action | Statut |
 |---|---|
-| Restore vers Production | Non tenté |
-| Création branche / projet isolé | Non tenté (Auth requise) |
 | Apply MT-005 distant | Non tenté |
 | Benchmark / fal call | **0** |
 | Upload média | **0** |
 | Lecture `FAL_KEY` | **0** |
-| Décisions privacy → `true` | **0** |
-| Cleanup destructif | Non effectué |
+| Activation runtime / deploy / Vercel | **0** |
+| Décisions privacy gouvernance → `true` | **Oui** (`81_` · limité MV-001) |
+| Defaults code fail-closed modifiés | **Non** |
 
 ---
 
 ## 5. Prochaines Auth (ordre, non fusionnées)
 
-1. **`AUTH_RESTORE_DRILL_ISOLATED_TARGET`** — lever `BLOCKED_TARGET_REQUIRED`.  
-2. Exécuter restore drill → viser `RESTORE_DRILL = PASS`.  
-3. Signatures Privacy Decision Pack (5 formulations §3) — indépendantes du restore.  
-4. **Ensuite seulement** : Auth MT-005 remote apply (hors ce ticket).  
-5. **Ensuite** : Auth budget / deploy / paid MT-013 benchmark (hors ce ticket).
+1. ~~Restore drill~~ → **PASS** (`78_`).  
+2. ~~Privacy Decision Pack~~ → **ACCEPTED_LIMITED_MV001** (`81_`).  
+3. **Ensuite :** Auth MT-005 remote apply.  
+4. **Ensuite :** Auth budget / deploy / paid MV-001 (hors fusion).
 
 ---
 
 ## 6. Suite
 
-- Ne **pas** démarrer MT-005 remote apply.  
-- Ne **pas** démarrer le benchmark MV-001.  
-- **MT-013C** : tentative cible isolée — **STOP** (`75_`) coût ≠ 0 + branche data-less.  
-- P1 conservé : `BACKUP_PRESENT_RESTORE_UNPROVEN` tant que `RESTORE_DRILL ≠ PASS`.
+- Ne **pas** démarrer MT-005 remote apply sans Auth.  
+- Ne **pas** démarrer le benchmark MV-001 (upload/fal) sans Auth paid distincte.  
+- Privacy expire **2026-09-10** ; au-delà → nouvelle confirmation.
