@@ -6,15 +6,15 @@ Protocole d’audit initial : `03_CURRENT_AUDIT.md` (**historique**) — audit r
 
 ```text
 Checkpoint : 10F-V4 Storyboard PASS · 11A media PREP DECISION_REQUIRED
-Motion     : ARCHITECTURE_READY · MT-001…009 IMPLEMENTED · Gates MT-1…MT-7 PASS
-             0 Production MT models · adapter+worker disabled · privacy gate blocked
-             Motion QC fake-only · MT-010+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
+Motion     : ARCHITECTURE_READY · MT-001…010 IMPLEMENTED · Gates MT-1…MT-8 PASS
+             0 Production MT models · adapter+worker+review harness · privacy gate blocked
+             Motion QC/review fake-only · MT-011+ NOT STARTED · RUNTIME_NOT_IMPLEMENTED_YET
              NO PAID BENCHMARK_YET · provider calls = 0 · real QC measurement adapters = 0
 Budget     : 122 / 112 / 0 / 10
 Runtime AI : OFF
 Media jobs : 0
 P1         : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Next major : MT-010 Human Review
+Next major : MT-011 / MT-012 (observability / dry-run suite)
 ```
 
 ## P0 — fondations
@@ -71,10 +71,10 @@ Next major : MT-010 Human Review
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…009 IMPLEMENTED** (`60_`…`69_`) · fal adapter + worker orchestration **disabled** · Motion QC fake-only · privacy gate blocked · Production → unavailable · MT-010+ **NOT STARTED** · **NO PAID BENCHMARK_YET**.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…010 IMPLEMENTED** (`60_`…`70_`) · fal adapter + worker **disabled** · Motion QC/review fake-only · privacy gate blocked · Production → unavailable · MT-011+ **NOT STARTED** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **122** ; committed **112** ; available **10**.
-- **Prochaine porte majeure** : **MT-010** Human Review ; backup restore reste P1 ouvert ; migration MT-005 **locale only** (NOT APPLIED Production).
+- **Prochaine porte majeure** : **MT-011/012** ; backup restore reste P1 ouvert ; migration MT-005 **locale only** (NOT APPLIED Production).
 
 ## P2 — durcissement
 

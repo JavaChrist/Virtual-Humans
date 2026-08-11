@@ -19,6 +19,7 @@ import { PromptSection } from "./prompt-section";
 import { RoutingSection } from "./routing-section";
 import { ProductionSection } from "./production-section";
 import { DeliverySection } from "./delivery-section";
+import { MotionReviewSection } from "./motion-review-section";
 import { StaleBadge } from "./stale-badge";
 
 type Props = {
@@ -226,6 +227,7 @@ export function DirectorProjectClient({
         restartPoint={restartPoint}
       >
         <DeliverySection projectId={projectId} />
+        <MotionReviewSection projectId={projectId} />
       </SectionShell>
     </>
   );

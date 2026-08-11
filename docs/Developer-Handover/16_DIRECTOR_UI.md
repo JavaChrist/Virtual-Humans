@@ -23,6 +23,7 @@
 5. **Production review** — qualité/coût/délai estimés, approbation explicite.
 6. **Production** — progression projet/scènes/étapes, pause et annulation.
 7. **Review & Export** — prévisualisation, régénération locale, export.
+8. **Motion Review** (MT-010) — panneau `MotionReviewSection` sous livraison : QC Motion layers/issues/checkpoints/evidence + décisions append-only (`/api/director/projects/…/motion/review`) ; retry = intention seule ; `useConfirm` uniquement.
 
 ## Architecture UI
 

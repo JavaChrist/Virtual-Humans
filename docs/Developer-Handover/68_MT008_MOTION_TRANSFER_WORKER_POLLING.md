@@ -120,4 +120,5 @@ migration required = no
 
 ## 12. Suite
 
-**MT-009** — Motion QC **IMPLEMENTED** (`69_`) · Gate MT-7 **PASS**. Aucun appel fal / benchmark.
+**MT-009** — Motion QC **IMPLEMENTED** (`69_`) · Gate MT-7 **PASS**.
+**MT-010** — Human Review **IMPLEMENTED** (`70_`) · Gate MT-8 **PASS**. Aucun appel fal / benchmark.

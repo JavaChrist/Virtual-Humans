@@ -66,7 +66,13 @@ export type PrepareExportInput = {
 export type RecordHumanReviewInput = {
   productionResult: ProductionResult;
   quality: FinalQualityReport;
-  status: "approved" | "rejected";
+  /** MT-010 — includes Motion retry intents (SQL human_review_decisions). */
+  status:
+    | "approved"
+    | "rejected"
+    | "retry_same_reference"
+    | "retry_updated_constraints"
+    | "request_new_reference";
   reviewedIssueCodes: string[];
   comment?: string;
 };
@@ -502,8 +508,13 @@ export function createPostProductionDirector(
           humanReviewId: humanReview.id,
         });
       } else {
+        // rejected + retry intents → blocked; no enqueue / merge / export (MT-010)
         productionResult = patchDelivery(productionResult, "blocked", at, {
           humanReviewId: humanReview.id,
+          blockingCodes:
+            input.status === "rejected"
+              ? productionResult.delivery?.blockingCodes
+              : [`review_intent:${input.status}`],
         });
       }
 

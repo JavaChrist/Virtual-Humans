@@ -506,11 +506,19 @@ export type RecordQualityReviewDeps = DeliveryCommonDeps & {
 
 export type RecordQualityReviewInput = {
   projectId: string;
-  decision: "approved" | "rejected";
+  /** MT-010 — Motion retry intents allowed (persist via human_review_decisions). */
+  decision:
+    | "approved"
+    | "rejected"
+    | "retry_same_reference"
+    | "retry_updated_constraints"
+    | "request_new_reference";
   reviewedIssueCodes: string[];
   comment?: string;
   expectedQualityReportRevision: number;
   expectedProductionResultRevision: number;
+  /** Optional client idempotency — when set, included in persist key. */
+  reviewRequestId?: string;
 };
 
 export type RecordQualityReviewExecuteInput = RecordQualityReviewInput & { confirmation: true };
@@ -619,7 +627,13 @@ export function createRecordQualityReviewForProject(
         return failedR("review_failed", "Échec de l'enregistrement de la revue.", 422);
       }
 
-      const fields = [input.projectId, qrActive.artifactId, String(qrActive.revision), input.decision];
+      const fields = [
+        input.projectId,
+        qrActive.artifactId,
+        String(qrActive.revision),
+        input.decision,
+        input.reviewRequestId ?? "",
+      ];
       const key = idempotencyKey("rvw", fields);
 
       const persisted = await deps.deliveryRuns.persistHumanReviewDecision({

@@ -43,6 +43,8 @@
 **Motion QC** — contrôles technique / identité / tenue / fidélité motion / intégrité / temporalité / caméra + checkpoints opaques + revue humaine ; contrat `MotionQcResult` v1 ; orchestrateur MT-009 (`69_`) ; port de mesure provider-agnostic (fake TEST_ONLY) ; mapping artifact `quality_report`.
 **MotionQcMeasurementPort** — port de mesures QC Motion (similarité, timing, checkpoints, relations corporelles, etc.) ; aucun moteur OpenPose/DWPose dans VHS MT-009.
 **motion_qc_evidence** — descriptor d’evidence privée QC Motion (asset/fingerprint, role, MIME, ranges, provenance) — jamais média inline ni URL signée.
+**Motion human review** — validation humaine append-only (`human_review_decisions`) pour Motion Transfer ; intents `approved|rejected|retry_*|request_new_reference` ; API `/motion/review` (`70_`) ; retry = intention seulement (pas de job).
+**reviewRequestId** — clé d’idempotence client pour une décision de revue (double-clic → `existing` ; payload différent → conflit).
 **Motion Director** — Directeur éventuel **post-V1** ; traduit des contraintes, n’invente pas le mouvement, n’appelle pas de provider.
 
 ## Termes proscrits

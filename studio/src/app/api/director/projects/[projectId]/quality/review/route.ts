@@ -15,11 +15,19 @@ type RouteParams = { params: Promise<{ projectId: string }> };
 
 const BodySchema = z.object({
   confirmation: z.literal(true),
-  decision: z.enum(["approved", "rejected"]),
+  decision: z.enum([
+    "approved",
+    "rejected",
+    "retry_same_reference",
+    "retry_updated_constraints",
+    "request_new_reference",
+  ]),
   reviewedIssueCodes: z.array(z.string().min(1).max(120)).max(50),
   comment: z.string().max(2000).optional(),
   expectedQualityReportRevision: z.number().int().positive(),
   expectedProductionResultRevision: z.number().int().positive(),
+  /** MT-010 optional client idempotency key. */
+  reviewRequestId: z.string().min(8).max(120).optional(),
 });
 
 const isUuid = (id: string) =>
@@ -55,6 +63,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         comment: body.data.comment,
         expectedQualityReportRevision: body.data.expectedQualityReportRevision,
         expectedProductionResultRevision: body.data.expectedProductionResultRevision,
+        reviewRequestId: body.data.reviewRequestId,
       },
       { correlationId, mode: "execute" },
     );

@@ -26,8 +26,10 @@ MT-008 = IMPLEMENTED
 Gate MT-6 Worker = PASS
 MT-009 = IMPLEMENTED
 Gate MT-7 Motion QC = PASS
-MT-010+ = NOT STARTED
-IMPLEMENTATION_NEXT = MT-010 Human Review
+MT-010 = IMPLEMENTED
+Gate MT-8 Human Review = PASS
+MT-011+ = NOT STARTED
+IMPLEMENTATION_NEXT = MT-011 / MT-012
 remote migration MT-005 = NOT APPLIED
 RUNTIME_NOT_IMPLEMENTED_YET
 PROVIDER_ADAPTER_CODE = fal / fal-ai/kling-video/v3/pro/motion-control (disabled)
@@ -38,7 +40,7 @@ real provider calls = 0
 real measurement adapters = 0
 ```
 
-> Ce document est la **spécification d’architecture**. Les tickets MT-001…009 livrent contrats/code locaux ; worker motion + adapter fal **disabled-by-default** — aucun appel payant ; Motion QC fake measurements only.
+> Ce document est la **spécification d’architecture**. Les tickets MT-001…010 livrent contrats/code locaux ; worker motion + adapter fal **disabled-by-default** — aucun appel payant ; Motion QC/review fake-only.
 
 ---
 
@@ -57,10 +59,11 @@ real measurement adapters = 0
 | Provider adapter | **MT-007B IMPLEMENTED** — `67_` · code + contract suite PASS · flags OFF · privacy blocked · **0** calls |
 | Worker / polling | **MT-008 IMPLEMENTED** — `68_` · canonical run-once branch · fake E2E PASS · **0** fal calls |
 | Motion QC | **MT-009 IMPLEMENTED** — `69_` · policy/measurements/aggregate/report · fake port only · Gate MT-7 **PASS** |
+| Human review | **MT-010 IMPLEMENTED** — `70_` · `/motion/review` + UI Director · retry intent only · Gate MT-8 **PASS** |
 | Code runtime capability | `RUNTIME_NOT_IMPLEMENTED_YET` (still OFF / unavailable) |
 | Provider | adapter code present — **not** Production-enabled / UNVERIFIED |
 | Benchmark payant | `NO PAID BENCHMARK_YET` |
-| Prochaine action | **MT-010** Human Review |
+| Prochaine action | **MT-011 / MT-012** |
 
 **Ordre obligatoire :**
 
@@ -1122,13 +1125,13 @@ flowchart LR
 - **Interdit respecté :** no OpenPose/DWPose ; no auto-approve ; no retry job ; no fal.
 - **DoD :** tests ciblés **35** PASS. Gate MT-7 Motion QC **PASS**.
 
-### MT-010 — Human review UI/API
+### MT-010 — Human review UI/API *(DONE 2026-08-11)*
 
-- **Objectif :** endpoints + UI décisions étendues.
-- **Dépendances :** MT-009, MT-005b.
-- **Acceptation :** pas de final sans APPROVE si required.
-- **Interdit :** alert/confirm natifs.
-- **DoD :** E2E fake review.
+- **Objectif :** endpoints + UI décisions étendues — **PASS**.
+- **Artefacts :** `70_` · `/motion/review` + `MotionReviewSection` · extension `/quality/review` (5 décisions).
+- **Acceptation :** APPROVE gated ; retry = intent only (**0** job) ; pas d’alert/confirm natifs.
+- **Interdit respecté :** no provider / merge / export / remote migration.
+- **DoD :** tests ciblés **25** PASS. Gate MT-8 Human Review **PASS**.
 
 ### MT-011 — Observability / security
 

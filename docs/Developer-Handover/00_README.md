@@ -183,6 +183,7 @@ Utilisateur → AI Video Director (/director)
 | [`67_MT007B_FAL_KLING_MOTION_CONTROL_ADAPTER.md`](./67_MT007B_FAL_KLING_MOTION_CONTROL_ADAPTER.md) | **MT-007B fal Kling adapter — disabled / Gate MT-5 PASS** |
 | [`68_MT008_MOTION_TRANSFER_WORKER_POLLING.md`](./68_MT008_MOTION_TRANSFER_WORKER_POLLING.md) | **MT-008 Worker polling — Gate MT-6 PASS** |
 | [`69_MT009_MOTION_QUALITY_CONTROL.md`](./69_MT009_MOTION_QUALITY_CONTROL.md) | **MT-009 Motion QC — Gate MT-7 PASS** |
+| [`70_MT010_MOTION_TRANSFER_HUMAN_REVIEW.md`](./70_MT010_MOTION_TRANSFER_HUMAN_REVIEW.md) | **MT-010 Human Review API/UI — Gate MT-8 PASS** |
 
 ### Pilotage (hors numérotation)
 

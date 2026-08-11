@@ -37,6 +37,7 @@ Aucune table `motion_*`. Aucun bucket nouveau. Aucun apply Production.
 | MotionTransferAttempt | REUSE_AS_IS | `generation_attempts` |
 | MotionTransferResult | REUSE_AS_IS | `production_result` + assets |
 | MotionQcResult | EXTEND_CODE_ONLY | `quality_report` value jsonb — mapping MT-009 `kind: motion_qc_result` (`69_`, store mémoire tests ; pas d’écriture DB distante) |
+| Human review Motion | REUSE + LOCAL_MIGRATION | `human_review_decisions` + intents retry — API/UI MT-010 (`70_`) ; migration **NOT APPLIED** Production |
 | HumanReviewDecision (retry intents) | LOCAL_MIGRATION_REQUIRED | `human_review_decisions.decision` |
 | Tables motion_* / bucket dédié | FUTURE_ONLY | non V1 |
 | Ledger / idempotency / audit / outbox | REUSE_AS_IS | inchangé |

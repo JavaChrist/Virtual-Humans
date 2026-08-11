@@ -162,6 +162,7 @@ export {
 export { deepFreeze } from "./freeze";
 
 export * from "./qc";
+export * from "./review";
 
 export {
   MOTION_ASSET_ROLE_POLICIES,

@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.95] — 2026-08-11
+
+### Added (MT-010 Motion Transfer Human Review)
+
+- API `GET/POST …/motion/review` + extension `/quality/review` (5 décisions SQL) + helper `allowedHumanReviewDecisions`.
+- UI Director `MotionReviewSection` (attestation, justification, confirm modale) ; retry = intent only (**0** job/ledger/provider).
+- Orchestrateur append-only + idempotence `reviewRequestId` ; harness fail-closed Production. Tests ciblés **25**. Rapport `70_`. Gate MT-8 **PASS**. Migration MT-005 **LOCAL_ONLY** inchangée.
+
 ## [2.0.94] — 2026-08-11
 
 ### Added (MT-009 Motion Quality Control)

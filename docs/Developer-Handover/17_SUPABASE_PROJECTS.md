@@ -465,6 +465,7 @@ Voir [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER
 | Statut | Gate MT-3 Persistence/Storage **PASS** · runtime unavailable · remote migration **NOT APPLIED** |
 | MT-008 worker | **pas** de migration — phases motion dans `job.payload.motion` JSONB (`68_`) |
 | MT-009 Motion QC | **pas** de migration — `MotionQcResult` mappé dans `quality_report` value (mémoire/tests) ; phases `qc_passed`/`qc_rejected`/`retry_recommended` dans payload JSONB (`69_`) |
+| MT-010 Human Review | **pas** de nouvelle migration — réutilise `human_review_decisions` + MT-005 LOCAL_ONLY ; API `/motion/review` (`70_`) ; Production apply = **NO** |
 
 ## 14. Liens
 
