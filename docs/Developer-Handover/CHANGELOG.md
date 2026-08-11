@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.100] — 2026-08-11
+
+### Added (MT-013C Isolated Restore Target — STOP)
+
+- Préflight Auth `AUTH_RESTORE_DRILL_ISOLATED_TARGET` : Production identifiée ; 0 branches.
+- STOP : coût branche **$0.01344/h** et projet **$10/mois** ≠ 0 ; `create_branch` data-less ≠ restore backup.
+- Aucune ressource créée · 0 mutation Production. Rapport `75_`. Auth dépense/PITR séparée requise.
+
 ## [2.0.99] — 2026-08-11
 
 ### Added (MT-013B Restore Drill & Privacy Due Diligence)

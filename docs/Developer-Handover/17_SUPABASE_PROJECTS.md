@@ -469,6 +469,7 @@ Voir [`64_MT005_MOTION_TRANSFER_SUPABASE_STORAGE.md`](./64_MT005_MOTION_TRANSFER
 | MT-012 Synthetic E2E | **pas** de migration — harness mémoire uniquement (`72_`) ; remote MT-005 reste **NOT APPLIED** |
 | MT-013A MV-001 readiness | **pas** d’apply — audit restore/migration (`73_`) ; restore drill isolé **NON EXÉCUTÉ** ; Auth requise avant Gate E/F |
 | MT-013B Restore drill | `RESTORE_DRILL = BLOCKED_TARGET_REQUIRED` (`74_`) — 0 branches isolées ; Production migrations **29** (lecture) ; **pas** d’apply MT-005 |
+| MT-013C Isolated target | **STOP** (`75_`) — coût branche $0.01344/h ≠ 0 ; `create_branch` sans data ; aucune ressource créée |
 
 ## 14. Liens
 

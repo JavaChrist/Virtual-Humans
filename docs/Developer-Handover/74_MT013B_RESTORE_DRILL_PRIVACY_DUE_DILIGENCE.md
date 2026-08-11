@@ -220,5 +220,5 @@ Si legal exige les ToS/API Services re-lus verbatim avant toute signature biomé
 
 - Ne **pas** démarrer MT-005 remote apply.  
 - Ne **pas** démarrer le benchmark MV-001.  
-- Document de référence readiness : `73_`.  
+- **MT-013C** : tentative cible isolée — **STOP** (`75_`) coût ≠ 0 + branche data-less.  
 - P1 conservé : `BACKUP_PRESENT_RESTORE_UNPROVEN` tant que `RESTORE_DRILL ≠ PASS`.

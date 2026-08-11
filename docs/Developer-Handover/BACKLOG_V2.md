@@ -14,7 +14,7 @@ Budget     : 122 / 112 / 0 / 10  (MV-001 3s shortfall vs réserve 62¢)
 Runtime AI : OFF
 Media jobs : 0
 P1         : BACKUP_PRESENT_RESTORE_UNPROVEN ; décision média image VHS-124
-Next major : AUTH_RESTORE_DRILL_ISOLATED_TARGET + signatures Privacy (`74_`) ; puis MT-005 / paid
+Next major : AUTH dépense restore branche/PITR (`75_` STOP) + signatures Privacy ; puis MT-005 / paid
 ```
 
 ## P0 — fondations
@@ -74,7 +74,7 @@ Next major : AUTH_RESTORE_DRILL_ISOLATED_TARGET + signatures Privacy (`74_`) ; p
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A** readiness `73_` · fal adapter + worker **disabled** · synthetic E2E ready · privacy **PENDING** · Production → unavailable · **MV001_NOT_EXECUTED** · **NO PAID BENCHMARK_YET**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **122** ; committed **112** ; available **10** ; MV-001 3s shortfall **52¢** vs réserve 62¢.
-- **Prochaine porte majeure** : `AUTH_RESTORE_DRILL_ISOLATED_TARGET` (`74_` · restore **BLOCKED_TARGET**) + signatures Privacy (**READY_FOR_HUMAN_DECISION**) — puis MT-005 / budget / paid — ne pas fusionner.
+- **Prochaine porte majeure** : Auth **dépense** restore (`75_` · STOP coût $0.01344/h branche ou $10/mois projet + PITR) + signatures Privacy — puis MT-005 / paid — ne pas fusionner.
 
 ## P2 — durcissement
 
