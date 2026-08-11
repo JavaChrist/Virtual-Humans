@@ -161,5 +161,5 @@ sinon            = même périmètre post-clone que ci-dessus
 - `RESTORE_DRILL` reste `BLOCKED_TARGET_REQUIRED`.  
 - P1 `BACKUP_PRESENT_RESTORE_UNPROVEN` **inchangé**.  
 - Privacy (`74_`) inchangée : `READY_FOR_HUMAN_DECISION`.  
-- Ne pas démarrer MT-005 remote apply ni benchmark.  
-- Attendre Auth Dashboard clone + plafond miroir explicite (ou preuve ≤ 10 USD) avant toute création.
+- **MT-013C-QUOTE** (`77_`) : Auth devis Dashboard reçue — runbook prêt · **AWAITING_HUMAN_CAPTURE** · STOP avant Confirm.  
+- Ne pas démarrer MT-005 remote apply ni benchmark.

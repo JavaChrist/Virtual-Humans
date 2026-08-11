@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.102] — 2026-08-11
+
+### Added (MT-013C-DASHBOARD-QUOTE — préflight)
+
+- Auth `AUTH_RESTORE_DASHBOARD_QUOTE_ONLY` : runbook humain jusqu’à l’écran de devis « Restore to a New Project ».
+- STOP obligatoire avant Confirm ; 0 clone, 0 credentials, 0 mutation Production.
+- Template de capture §5 dans `77_` · statut `AWAITING_HUMAN_CAPTURE`.
+
 ## [2.0.101] — 2026-08-11
 
 ### Added (MT-013C-RESTORE-PAID-TARGET — STOP)
