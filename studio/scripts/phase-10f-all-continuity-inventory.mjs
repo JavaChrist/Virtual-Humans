@@ -3,12 +3,14 @@
  * Requires: CONFIRM_PHASE_10F_REMOTE_READ=1
  */
 import { createClient } from "@supabase/supabase-js";
-import { createHash } from "node:crypto";
-import { readFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { VisualDirectionSchema } from "../src/domain/art/index.ts";
-import { defaultContinuityKeys } from "../src/domain/storyboard/continuity.ts";
+import {
+  defaultContinuityKeys,
+  inventoryRequiredContinuity,
+} from "../src/domain/storyboard/continuity.ts";
 
 if (process.env.CONFIRM_PHASE_10F_REMOTE_READ !== "1") {
   console.error("Refused: CONFIRM_PHASE_10F_REMOTE_READ=1");
@@ -85,14 +87,8 @@ const bySegment = Object.fromEntries(
 const allTokens = Object.values(bySegment).flatMap((s) => s.requiredTokens);
 const uniqueTokens = [...new Set(allTokens)];
 const scopes = [...new Set(allTokens.map((k) => k.split(":")[0]))].sort();
-const fingerprint = createHash("sha256")
-  .update(
-    visual.segments
-      .map((seg) => `${seg.id}|${defaultContinuityKeys(visual, seg.id).join(",")}`)
-      .join(";"),
-  )
-  .digest("hex")
-  .slice(0, 16);
+const inv = inventoryRequiredContinuity(visual);
+const fingerprint = inv.requiredContinuityTokensFingerprint;
 
 const lightingSample = bySegment[visual.segments[0].id]?.lightingToken;
 const pipeIsLiteral =
@@ -137,7 +133,30 @@ const out = {
   ),
 };
 
-mkdirSync(resolve(studioRoot, ".tmp"), { recursive: true });
-const path = resolve(studioRoot, ".tmp/phase-10f-all-continuity-inventory.json");
-writeFileSync(path, JSON.stringify(out, null, 2), "utf8");
-console.log(JSON.stringify({ ...out, evidencePath: path }, null, 2));
+// Read-only: stdout only (no .tmp write in V4-PREP).
+// Continuity tokens are opaque identifiers required for PREP parity — emit exact list.
+const matrix = Object.fromEntries(
+  visual.segments.map((seg) => [
+    seg.id,
+    {
+      mandatory: defaultContinuityKeys(visual, seg.id),
+      advisory: [],
+      mandatoryCount: defaultContinuityKeys(visual, seg.id).length,
+    },
+  ]),
+);
+console.log(
+  JSON.stringify(
+    {
+      ...out,
+      uniqueTokensSorted: [...uniqueTokens].sort(),
+      matrix,
+      mandatorySlots: allTokens.length,
+      advisoryTokenSlots: 0,
+      domainFingerprint: inv.mandatoryContinuityTokensFingerprint,
+      fingerprintAlgo: "segId|token,token;segId|...",
+    },
+    null,
+    2,
+  ),
+);

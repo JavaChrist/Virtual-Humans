@@ -527,7 +527,7 @@ test("application dry-run exposes provider/knobs/idempotency without provider ca
   assert.equal(dry.structuredSchemaOneOfCount, 0);
   assert.equal(dry.structuredSchemaProjection, "anyOf-compatible");
   assert.equal(dry.providerErrorMetadataCapture, "ready");
-  assert.equal(dry.requiredContinuityCoverage, "complete");
+  assert.equal(dry.mandatoryContinuityCoverage, "complete");
   assert.ok(dry.requiredContinuityTokenCount >= 1);
   assert.ok(dry.requiredContinuityTokensFingerprint);
   assert.equal(dry.existingStoryboard, undefined);

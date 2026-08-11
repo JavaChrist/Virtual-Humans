@@ -5,14 +5,15 @@ import type { MarketingPlan } from "@/domain/marketing";
 import type { VideoScript } from "@/domain/script";
 import {
   inventoryRequiredContinuity,
-  requiredContinuityKeysByVisualSegmentId,
-  type RequiredContinuityInventory,
+  mandatoryContinuityKeysByVisualSegmentId,
+  type MandatoryContinuityInventory,
 } from "@/domain/storyboard/continuity";
 import {
   delimitUntrustedData,
   scanUntrustedText,
   type InjectionFinding,
 } from "@/domain/prompt/injection-safety";
+import { MANDATORY_CONTINUITY_KEYS_BLOCK } from "./prompt";
 
 type BriefPayload = Pick<VideoProjectBrief,
   "objective" | "platform" | "durationSeconds" | "aspectRatio" | "language" | "tone" |
@@ -31,7 +32,9 @@ export type MapStoryboardRequestResult = {
   findings: InjectionFinding[];
   blockingFindings: InjectionFinding[];
   /** Projected continuity inventory (same contract as projectContinuity). */
-  requiredContinuity: RequiredContinuityInventory;
+  mandatoryContinuity: MandatoryContinuityInventory;
+  /** @deprecated use mandatoryContinuity */
+  requiredContinuity: MandatoryContinuityInventory;
 };
 
 function collectStrings(value: unknown, field: string, out: InjectionFinding[]): void {
@@ -108,7 +111,7 @@ function mapVisualDirection(visual: VisualDirection) {
 }
 
 /** Compact JSON for continuity map; must not exceed delimitUntrustedData slice (2000). */
-function serializeRequiredContinuityMap(map: Record<string, string[]>): string {
+function serializeMandatoryContinuityMap(map: Record<string, string[]>): string {
   return JSON.stringify(map);
 }
 
@@ -150,9 +153,9 @@ export function mapStoryboardAnalysisRequest(input: {
   };
   const videoScriptPayload = mapVideoScript(input.videoScript);
   const visualDirectionPayload = mapVisualDirection(input.visualDirection);
-  const requiredContinuity = inventoryRequiredContinuity(input.visualDirection);
-  const requiredMap = requiredContinuityKeysByVisualSegmentId(input.visualDirection);
-  const mapJson = serializeRequiredContinuityMap(requiredMap);
+  const mandatoryContinuity = inventoryRequiredContinuity(input.visualDirection);
+  const mandatoryMap = mandatoryContinuityKeysByVisualSegmentId(input.visualDirection);
+  const mapJson = serializeMandatoryContinuityMap(mandatoryMap);
   const findings: InjectionFinding[] = [];
   collectStrings(briefPayload, "brief", findings);
   collectStrings(marketingPayload, "marketingPlan", findings);
@@ -163,23 +166,23 @@ export function mapStoryboardAnalysisRequest(input: {
     findings.push({
       severity: "blocking",
       code: "continuity_map_too_large",
-      field: "REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID",
+      field: MANDATORY_CONTINUITY_KEYS_BLOCK,
       publicMessage: "Matrice de continuité trop grande pour le prompt.",
     });
   }
   const continuityBlock = delimitUntrustedData(
-    "REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID",
+    MANDATORY_CONTINUITY_KEYS_BLOCK,
     mapJson,
   );
-  // Pre-provider deterministic check: every required token must survive serialization.
-  for (const tokens of Object.values(requiredMap)) {
+  // Pre-provider deterministic check: every mandatory token must survive serialization.
+  for (const tokens of Object.values(mandatoryMap)) {
     for (const token of tokens) {
       if (!continuityBlock.includes(token)) {
         findings.push({
           severity: "blocking",
           code: "continuity_map_token_missing",
-          field: "REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID",
-          publicMessage: "Token de continuité requis absent du bloc prompt canonique.",
+          field: MANDATORY_CONTINUITY_KEYS_BLOCK,
+          publicMessage: "Token de continuité obligatoire absent du bloc prompt canonique.",
         });
       }
     }
@@ -197,7 +200,8 @@ export function mapStoryboardAnalysisRequest(input: {
   return {
     briefPayload, marketingPayload, creativePayload, videoScriptPayload,
     visualDirectionPayload, userMessage, findings, blockingFindings,
-    requiredContinuity,
+    mandatoryContinuity,
+    requiredContinuity: mandatoryContinuity,
   };
 }
 

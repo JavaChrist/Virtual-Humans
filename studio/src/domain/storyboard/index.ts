@@ -55,8 +55,11 @@ export {
 export {
   defaultContinuityKeys,
   projectContinuity,
+  mandatoryContinuityKeysByVisualSegmentId,
   requiredContinuityKeysByVisualSegmentId,
+  fingerprintMandatoryContinuityMap,
   inventoryRequiredContinuity,
+  type MandatoryContinuityInventory,
   type RequiredContinuityInventory,
 } from "./continuity";
 

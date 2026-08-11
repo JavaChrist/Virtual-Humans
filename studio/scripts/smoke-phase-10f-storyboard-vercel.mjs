@@ -239,29 +239,31 @@ async function main() {
       `BLOCKED_CONFIG_DIVERGENCE: promptVersion=${dryBody.promptVersion} expected=${EXPECTED_PROMPT}`
     );
   }
-  if (dryBody.requiredContinuityCoverage !== "complete") {
+  if (dryBody.continuitySemantics !== "mandatory-projected-tokens") {
     fail(
-      `BLOCKED: requiredContinuityCoverage=${dryBody.requiredContinuityCoverage} expected=complete`
+      `BLOCKED: continuitySemantics=${dryBody.continuitySemantics} expected=mandatory-projected-tokens`
     );
   }
-  if (
-    typeof dryBody.requiredContinuityTokenCount !== "number" ||
-    dryBody.requiredContinuityTokenCount < 1
-  ) {
-    fail(
-      `BLOCKED: requiredContinuityTokenCount=${dryBody.requiredContinuityTokenCount}`
-    );
+  const coverage =
+    dryBody.mandatoryContinuityCoverage ?? dryBody.requiredContinuityCoverage;
+  if (coverage !== "complete") {
+    fail(`BLOCKED: mandatoryContinuityCoverage=${coverage} expected=complete`);
   }
-  if (
-    typeof dryBody.requiredContinuityScopeCount !== "number" ||
-    dryBody.requiredContinuityScopeCount < 1
-  ) {
-    fail(
-      `BLOCKED: requiredContinuityScopeCount=${dryBody.requiredContinuityScopeCount}`
-    );
+  const tokenCount =
+    dryBody.mandatoryContinuityTokenCount ?? dryBody.requiredContinuityTokenCount;
+  if (typeof tokenCount !== "number" || tokenCount < 1) {
+    fail(`BLOCKED: mandatoryContinuityTokenCount=${tokenCount}`);
   }
-  if (!dryBody.requiredContinuityTokensFingerprint) {
-    fail("BLOCKED: requiredContinuityTokensFingerprint missing");
+  const scopeCount =
+    dryBody.mandatoryContinuityScopeCount ?? dryBody.requiredContinuityScopeCount;
+  if (typeof scopeCount !== "number" || scopeCount < 1) {
+    fail(`BLOCKED: mandatoryContinuityScopeCount=${scopeCount}`);
+  }
+  const fp =
+    dryBody.mandatoryContinuityTokensFingerprint ??
+    dryBody.requiredContinuityTokensFingerprint;
+  if (!fp) {
+    fail("BLOCKED: mandatoryContinuityTokensFingerprint missing");
   }
   if (dryBody.structuredSchemaOneOfCount !== 0) {
     fail(

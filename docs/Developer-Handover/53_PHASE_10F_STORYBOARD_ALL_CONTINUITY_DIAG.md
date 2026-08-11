@@ -12,7 +12,7 @@
 READY_FOR_V4_PREP
 ```
 
-Cause racine démontrée : le prompt **v3** ne projetait que les clés `location:*` alors que le validateur `projectContinuity` exige **tous** les tokens projetés (dont `lighting:studio|cool`). Correction locale générique : prompt **`storyboard-analyzer-v4`** + map `REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID`. Validateur métier **inchangé** (fail-closed). Aucun nouvel execute.
+Cause racine démontrée : le prompt **v3** ne projetait que les clés `location:*` alors que le validateur `projectContinuity` exige **tous** les tokens projetés (dont `lighting:studio|cool`). Correction locale générique : prompt **`storyboard-analyzer-v4`** + map mandatory (finalisé en `MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID` dans `54_…`). Validateur métier **inchangé** (fail-closed). Aucun nouvel execute.
 
 ---
 
@@ -165,6 +165,6 @@ Ne pas réduire les règles pour « faire rentrer » le run.
 
 ## Suite
 
-Prochaine porte : **Phase 10F-V4-RETRY-PREP** (salt + dry-run gates + Auth budget) — puis push/deploy/provider sous autorisations séparées.
+Préparation v4 finalisée : `54_PHASE_10F_STORYBOARD_V4_RETRY_PREP.md` (`READY_FOR_BUDGET_AND_PUSH_AUTH`).
 
 **Aucune relance Storyboard** dans cette phase.

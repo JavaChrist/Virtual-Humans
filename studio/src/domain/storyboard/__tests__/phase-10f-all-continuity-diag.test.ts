@@ -258,7 +258,7 @@ test("ALL-CONTINUITY — prompt v4 map includes all projected tokens", () => {
   assert.equal(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v4");
   assert.match(
     STORYBOARD_ANALYZER_SYSTEM_PROMPT,
-    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
   assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /opaque|character-for-character/i);
   assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /lighting:studio\|cool/);
@@ -266,7 +266,7 @@ test("ALL-CONTINUITY — prompt v4 map includes all projected tokens", () => {
   const mapped = mapStoryboardAnalysisRequest(chain);
   assert.match(
     mapped.userMessage,
-    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
   assert.doesNotMatch(
     mapped.userMessage,
@@ -314,6 +314,6 @@ test("ALL-CONTINUITY — dry-run counters + schema parity", () => {
   assert.ok(dry.requiredContinuityScopeCount >= 4);
   assert.ok(dry.requiredContinuityTokensFingerprint.length === 16);
   assert.ok(
-    dry.validations.some((v) => v.code === "required_continuity_map" && v.passed),
+    dry.validations.some((v) => v.code === "mandatory_continuity_map" && v.passed),
   );
 });

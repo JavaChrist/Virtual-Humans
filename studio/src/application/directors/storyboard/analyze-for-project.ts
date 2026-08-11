@@ -79,12 +79,24 @@ export type StoryboardProjectDryRunResult = {
   structuredSchemaProjection: "anyOf-compatible" | "invalid";
   /** Smoke gate: redacted provider error metadata capture is wired. */
   providerErrorMetadataCapture: "ready";
+  continuitySemantics: "mandatory-projected-tokens";
   requiredContinuityRuleCount: number;
+  preferredContinuityRuleCount: number;
+  advisoryContinuityTokenCount: number;
+  mandatoryContinuityTokenCount: number;
+  mandatoryContinuityUniqueTokenCount: number;
+  mandatoryContinuityScopeCount: number;
+  mandatoryContinuityCoverage: "complete" | "incomplete";
+  mandatoryContinuityTokensFingerprint: string;
+  /** @deprecated use mandatoryContinuity* */
   requiredContinuityTokenCount: number;
+  /** @deprecated use mandatoryContinuityScopeCount */
   requiredContinuityScopeCount: number;
+  /** @deprecated use mandatoryContinuityCoverage */
   requiredContinuityCoverage: "complete" | "incomplete";
+  /** @deprecated use mandatoryContinuityTokensFingerprint */
   requiredContinuityTokensFingerprint: string;
-  /** @deprecated transitional — prefer requiredContinuity* */
+  /** @deprecated transitional — prefer mandatoryContinuity* */
   requiredLocationKeyCount: number;
   /** @deprecated transitional */
   requiredLocationKeyCoverage: "complete" | "incomplete";
@@ -189,7 +201,15 @@ function empty(partial: Partial<StoryboardProjectDryRunResult> & Pick<Storyboard
     structuredSchemaOneOfCount: 0,
     structuredSchemaProjection: "anyOf-compatible",
     providerErrorMetadataCapture: "ready",
+    continuitySemantics: "mandatory-projected-tokens",
     requiredContinuityRuleCount: 0,
+    preferredContinuityRuleCount: 0,
+    advisoryContinuityTokenCount: 0,
+    mandatoryContinuityTokenCount: 0,
+    mandatoryContinuityUniqueTokenCount: 0,
+    mandatoryContinuityScopeCount: 0,
+    mandatoryContinuityCoverage: "incomplete",
+    mandatoryContinuityTokensFingerprint: "",
     requiredContinuityTokenCount: 0,
     requiredContinuityScopeCount: 0,
     requiredContinuityCoverage: "incomplete",
@@ -306,11 +326,19 @@ export function createAnalyzeStoryboardForProject(deps: AnalyzeStoryboardForProj
       structuredSchemaOneOfCount: ai.structuredSchemaOneOfCount,
       structuredSchemaProjection: ai.structuredSchemaProjection,
       providerErrorMetadataCapture: ai.providerErrorMetadataCapture,
+      continuitySemantics: ai.continuitySemantics,
       requiredContinuityRuleCount: ai.requiredContinuityRuleCount,
-      requiredContinuityTokenCount: ai.requiredContinuityTokenCount,
-      requiredContinuityScopeCount: ai.requiredContinuityScopeCount,
-      requiredContinuityCoverage: ai.requiredContinuityCoverage,
-      requiredContinuityTokensFingerprint: ai.requiredContinuityTokensFingerprint,
+      preferredContinuityRuleCount: ai.preferredContinuityRuleCount,
+      advisoryContinuityTokenCount: ai.advisoryContinuityTokenCount,
+      mandatoryContinuityTokenCount: ai.mandatoryContinuityTokenCount,
+      mandatoryContinuityUniqueTokenCount: ai.mandatoryContinuityUniqueTokenCount,
+      mandatoryContinuityScopeCount: ai.mandatoryContinuityScopeCount,
+      mandatoryContinuityCoverage: ai.mandatoryContinuityCoverage,
+      mandatoryContinuityTokensFingerprint: ai.mandatoryContinuityTokensFingerprint,
+      requiredContinuityTokenCount: ai.mandatoryContinuityTokenCount,
+      requiredContinuityScopeCount: ai.mandatoryContinuityScopeCount,
+      requiredContinuityCoverage: ai.mandatoryContinuityCoverage,
+      requiredContinuityTokensFingerprint: ai.mandatoryContinuityTokensFingerprint,
       requiredLocationKeyCount: ai.requiredLocationKeyCount,
       requiredLocationKeyCoverage: ai.requiredLocationKeyCoverage,
       pricingConfigured: e2e ? true : ai.pricingConfigured, estimatedCostMinor: estimated, currency: price?.currency,

@@ -8,7 +8,11 @@ import { canExecuteStoryboardAi, isDirectorV2PaidAiEnabled, isDirectorV2Storyboa
 import { openAIStoryboardConfigSnapshot, parseOpenAIStoryboardConfig, type OpenAIStoryboardConfig } from "../config";
 import { createUnknownAiTokenPricing, type AiTokenPricingPort } from "../marketing/pricing";
 import { approximateStoryboardTokenCount, mapStoryboardAnalysisRequest } from "./mapping";
-import { STORYBOARD_ANALYZER_PROMPT_VERSION, STORYBOARD_ANALYZER_SYSTEM_PROMPT } from "./prompt";
+import {
+  MANDATORY_CONTINUITY_KEYS_BLOCK,
+  STORYBOARD_ANALYZER_PROMPT_VERSION,
+  STORYBOARD_ANALYZER_SYSTEM_PROMPT,
+} from "./prompt";
 import { getStoryboardCandidateJsonSchema, STORYBOARD_CANDIDATE_SCHEMA_VERSION } from "./schema";
 import {
   inspectStoryboardStructuredSchemaProjection,
@@ -32,14 +36,26 @@ export type OpenAIStoryboardDryRunResult = {
   structuredSchemaAnyOfCount: number;
   structuredSchemaProjection: StoryboardSchemaProjectionReport["structuredSchemaProjection"];
   providerErrorMetadataCapture: typeof STORYBOARD_PROVIDER_ERROR_METADATA_CAPTURE;
+  continuitySemantics: "mandatory-projected-tokens";
   requiredContinuityRuleCount: number;
+  preferredContinuityRuleCount: number;
+  advisoryContinuityTokenCount: number;
+  mandatoryContinuityTokenCount: number;
+  mandatoryContinuityUniqueTokenCount: number;
+  mandatoryContinuityScopeCount: number;
+  mandatoryContinuityCoverage: "complete" | "incomplete";
+  mandatoryContinuityTokensFingerprint: string;
+  /** @deprecated use mandatoryContinuity* */
   requiredContinuityTokenCount: number;
+  /** @deprecated use mandatoryContinuityScopeCount */
   requiredContinuityScopeCount: number;
+  /** @deprecated use mandatoryContinuityCoverage */
   requiredContinuityCoverage: "complete" | "incomplete";
+  /** @deprecated use mandatoryContinuityTokensFingerprint */
   requiredContinuityTokensFingerprint: string;
-  /** @deprecated use requiredContinuity* — kept for transitional smoke readers */
+  /** @deprecated use mandatoryContinuity* — kept for transitional smoke readers */
   requiredLocationKeyCount: number;
-  /** @deprecated use requiredContinuityCoverage */
+  /** @deprecated use mandatoryContinuityCoverage */
   requiredLocationKeyCoverage: "complete" | "incomplete";
 };
 export type OpenAIStoryboardDryRunDeps = {
@@ -52,7 +68,15 @@ function emptySchemaFields(): Pick<
   | "structuredSchemaAnyOfCount"
   | "structuredSchemaProjection"
   | "providerErrorMetadataCapture"
+  | "continuitySemantics"
   | "requiredContinuityRuleCount"
+  | "preferredContinuityRuleCount"
+  | "advisoryContinuityTokenCount"
+  | "mandatoryContinuityTokenCount"
+  | "mandatoryContinuityUniqueTokenCount"
+  | "mandatoryContinuityScopeCount"
+  | "mandatoryContinuityCoverage"
+  | "mandatoryContinuityTokensFingerprint"
   | "requiredContinuityTokenCount"
   | "requiredContinuityScopeCount"
   | "requiredContinuityCoverage"
@@ -66,7 +90,15 @@ function emptySchemaFields(): Pick<
     structuredSchemaAnyOfCount: projection.structuredSchemaAnyOfCount,
     structuredSchemaProjection: projection.structuredSchemaProjection,
     providerErrorMetadataCapture: STORYBOARD_PROVIDER_ERROR_METADATA_CAPTURE,
+    continuitySemantics: "mandatory-projected-tokens",
     requiredContinuityRuleCount: 0,
+    preferredContinuityRuleCount: 0,
+    advisoryContinuityTokenCount: 0,
+    mandatoryContinuityTokenCount: 0,
+    mandatoryContinuityUniqueTokenCount: 0,
+    mandatoryContinuityScopeCount: 0,
+    mandatoryContinuityCoverage: "incomplete",
+    mandatoryContinuityTokensFingerprint: "",
     requiredContinuityTokenCount: 0,
     requiredContinuityScopeCount: 0,
     requiredContinuityCoverage: "incomplete",
@@ -90,15 +122,23 @@ export function runOpenAIStoryboardDryRun(
   const mappedEarly = mapStoryboardAnalysisRequest({
     brief, marketingPlan, creativeConcept, videoScript, visualDirection,
   });
-  const inv = mappedEarly.requiredContinuity;
+  const inv = mappedEarly.mandatoryContinuity;
   const continuityFields = {
+    continuitySemantics: "mandatory-projected-tokens" as const,
     requiredContinuityRuleCount: inv.requiredContinuityRuleCount,
-    requiredContinuityTokenCount: inv.requiredContinuityTokenCount,
-    requiredContinuityScopeCount: inv.requiredContinuityScopeCount,
-    requiredContinuityCoverage: inv.requiredContinuityCoverage,
-    requiredContinuityTokensFingerprint: inv.requiredContinuityTokensFingerprint,
+    preferredContinuityRuleCount: inv.preferredContinuityRuleCount,
+    advisoryContinuityTokenCount: inv.advisoryContinuityTokenCount,
+    mandatoryContinuityTokenCount: inv.mandatoryContinuityTokenCount,
+    mandatoryContinuityUniqueTokenCount: inv.mandatoryContinuityUniqueTokenCount,
+    mandatoryContinuityScopeCount: inv.mandatoryContinuityScopeCount,
+    mandatoryContinuityCoverage: inv.mandatoryContinuityCoverage,
+    mandatoryContinuityTokensFingerprint: inv.mandatoryContinuityTokensFingerprint,
+    requiredContinuityTokenCount: inv.mandatoryContinuityTokenCount,
+    requiredContinuityScopeCount: inv.mandatoryContinuityScopeCount,
+    requiredContinuityCoverage: inv.mandatoryContinuityCoverage,
+    requiredContinuityTokensFingerprint: inv.mandatoryContinuityTokensFingerprint,
     requiredLocationKeyCount: locationLegacyCount(visualDirection),
-    requiredLocationKeyCoverage: inv.requiredContinuityCoverage,
+    requiredLocationKeyCoverage: inv.mandatoryContinuityCoverage,
   };
   let config: OpenAIStoryboardConfig;
   try { config = deps.config ?? parseOpenAIStoryboardConfig(env); } catch (e) {
@@ -123,13 +163,11 @@ export function runOpenAIStoryboardDryRun(
   const pricingConfigured = pricing.getPriceBook(config.model) != null;
   const snap = openAIStoryboardConfigSnapshot(config);
   const schemaProjectionOk = schemaFields.structuredSchemaProjection === "anyOf-compatible";
-  const mapPresent = mapped.userMessage.includes(
-    "REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID",
-  );
+  const mapPresent = mapped.userMessage.includes(MANDATORY_CONTINUITY_KEYS_BLOCK);
   const continuityOk =
     mapPresent &&
-    inv.requiredContinuityCoverage === "complete" &&
-    inv.requiredContinuityTokenCount > 0 &&
+    inv.mandatoryContinuityCoverage === "complete" &&
+    inv.mandatoryContinuityTokenCount > 0 &&
     !mapped.blockingFindings.some((f) => f.code.startsWith("continuity_map"));
   const validations = [
     { code: "storyboard_ai_flag", passed: isDirectorV2StoryboardAiEnabled(env), message: "Flag Storyboard AI vérifié." },
@@ -149,11 +187,11 @@ export function runOpenAIStoryboardDryRun(
       message: "Capture métadonnées provider redacted prête.",
     },
     {
-      code: "required_continuity_map",
+      code: "mandatory_continuity_map",
       passed: continuityOk,
       message: continuityOk
-        ? `Map continuité (${inv.requiredContinuityTokenCount} tokens, ${inv.requiredContinuityScopeCount} scopes).`
-        : "Map continuité absente, incomplète ou tronquée.",
+        ? `Map continuité mandatory (${inv.mandatoryContinuityTokenCount} slots, ${inv.mandatoryContinuityUniqueTokenCount} uniques, ${inv.mandatoryContinuityScopeCount} scopes).`
+        : "Map continuité mandatory absente, incomplète ou tronquée.",
     },
     { code: "injection", passed: !mapped.blockingFindings.length, message: "Entrées vérifiées." },
     { code: "storyboard_readiness", passed: readiness.executable, message: "Chaîne complète vérifiée." },

@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.78] — 2026-08-11
+
+### Prepared (Phase 10F-V4-RETRY-PREP)
+
+- Finalise le contrat continuité Storyboard : `MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID` (tokens projetés obligatoires même si rule lighting = preferred).
+- Salt `10f-storyboard-v4-20260811` (empreinte `801c34a1080bbcf0`) ≠ 4 runs failed ; matrice Prod 24/9/5 fp `9d34b42ddc3bb85c` ; estimate **13¢** ; shortfall **5¢** (Auth Budget D → 122).
+- Rapport : `54_PHASE_10F_STORYBOARD_V4_RETRY_PREP.md` (`READY_FOR_BUDGET_AND_PUSH_AUTH`). **0** provider / budget write / push.
+
 ## [2.0.77] — 2026-08-11
 
 ### Fixed (Phase 10F-ALL-CONTINUITY-DIAG)

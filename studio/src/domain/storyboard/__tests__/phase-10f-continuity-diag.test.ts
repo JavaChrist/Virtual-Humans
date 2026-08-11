@@ -198,14 +198,14 @@ test("10F-CONTINUITY-DIAG — prompt v4 still requires exact location token amon
   assert.equal(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v4");
   assert.match(
     STORYBOARD_ANALYZER_SYSTEM_PROMPT,
-    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
   assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /character-for-character|opaque/i);
   const chain = withProductionLocationKey(makeStoryboardChain());
   const mapped = mapStoryboardAnalysisRequest(chain);
   assert.match(
     mapped.userMessage,
-    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
   assert.match(mapped.userMessage, /location:espace-numerique-principal/);
 });

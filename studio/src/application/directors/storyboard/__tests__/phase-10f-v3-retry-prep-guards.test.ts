@@ -80,7 +80,7 @@ test("V3-RETRY-PREP — prompt/schema contract forbids v2 identity", () => {
   assert.notEqual(STORYBOARD_ANALYZER_PROMPT_VERSION, "storyboard-analyzer-v2");
   assert.match(
     STORYBOARD_ANALYZER_SYSTEM_PROMPT,
-    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
   assert.match(STORYBOARD_ANALYZER_SYSTEM_PROMPT, /never|character-for-character/i);
   });
@@ -91,10 +91,10 @@ test("V3-RETRY-PREP — five segments require location:espace-numerique-principa
   const mapped = mapStoryboardAnalysisRequest(chain);
   assert.match(
     mapped.userMessage,
-    /REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
+    /MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID/,
   );
   const block = mapped.userMessage.match(
-    /\[DATA:REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID\]\n([\s\S]*?)\n\[\/DATA:REQUIRED_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID\]/,
+    /\[DATA:MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID\]\n([\s\S]*?)\n\[\/DATA:MANDATORY_CONTINUITY_KEYS_BY_VISUAL_SEGMENT_ID\]/,
   );
   assert.ok(block, "required map delimiters missing");
   const map = JSON.parse(block![1]!) as Record<string, string[]>;
@@ -433,11 +433,11 @@ test("V3-RETRY-PREP — schema projection + dry-run continuity coverage gates", 
   );
   assert.equal(dry.promptVersion, "storyboard-analyzer-v4");
   assert.equal(dry.structuredSchemaOneOfCount, 0);
-  assert.equal(dry.requiredContinuityCoverage, "complete");
-  assert.ok(dry.requiredContinuityTokenCount >= 5);
+  assert.equal(dry.mandatoryContinuityCoverage, "complete");
+  assert.ok(dry.mandatoryContinuityTokenCount >= 5);
   assert.ok(
     dry.validations.some(
-      (v) => v.code === "required_continuity_map" && v.passed,
+      (v) => v.code === "mandatory_continuity_map" && v.passed,
     ),
   );
 });
