@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.116] — 2026-08-12
+
+### Added (MT-013J MV-001 Deploy Preflight No Provider)
+
+- Auth `AUTH_MV001_DEPLOY_PREFLIGHT_NO_PROVIDER` sur `db1d64c` : fenêtre ON → dry-run `READY_FOR_PAID_AUTH` → finally OFF.
+- `providerCalled=false` · worker OFF · runtime Motion UNAVAILABLE · 0 fal/réserve/run. Rapport `89_`.
+
 ## [2.0.115] — 2026-08-12
 
 ### Fixed (MT-013J-HOTFIX typecheck)

@@ -11,6 +11,7 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              MT-013G2 8s PREPARED + MEDIA_VALIDATED (`86_`)
              MT-013H hard 274 / available 162 / shortfall 0 (`87_`)
              MT-013I MEDIA_UPLOADED · 2 private assets (`88_`)
+             MT-013J READY_FOR_PAID_AUTH · flags OFF (`89_`)
              MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
              NO PAID BENCHMARK_YET · provider calls = 0
              privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
@@ -19,7 +20,7 @@ Runtime AI : OFF
 Media jobs : 0
 P1         : décision média image VHS-124
 P1 fermé   : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS · cible qmsh…qlnq)
-Next major : Auth deploy/flags → paid MV-001 (réserve ≤162¢)
+Next major : Auth paid MV-001 (réserve ≤162¢ · max 1 fal)
 ```
 
 ## P0 — fondations
