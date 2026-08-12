@@ -150,12 +150,10 @@ estimate/reservation exposés depuis catalogue réel (pas de forçage artificiel
 ## 9. Prochaine porte exacte
 
 ```text
-NEXT = 11A-PREFLIGHT-LIVE-NO-PROVIDER
-THEN  = 11A-HUMAN-AUTH-OPENAI-IMAGE-SMOKE (appel réel 1× — Auth séparée)
-DO_NOT = OpenAI call · reserve · flags ON · deploy manuel · MV-002 · Motion
+NEXT = 11A-PREFLIGHT-LIVE-NO-PROVIDER — DONE (`103_`) · READY_FOR_11A_PAID_AUTH
+FOLLOW-UP = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE (Auth humaine)
+DO_NOT = OpenAI call sans Auth · MV-002 · Motion · legacy PASS
 ```
-
-Préflight live **sans** provider, puis Auth distincte pour l’appel OpenAI réel.
 
 ---
 

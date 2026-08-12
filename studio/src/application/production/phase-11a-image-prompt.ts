@@ -33,8 +33,9 @@ export type Phase11AImagePromptBuild = {
   };
 };
 
-const LOCAL_PATH_RE = /(?:[A-Za-z]:\\|\/(?:Users|home|var|tmp)\/|file:\/\/)/i;
-const URL_RE = /https?:\/\/|blob:|data:/i;
+/** Hard URL/path schemes only — avoid false positives on ordinary prose. */
+const LOCAL_PATH_RE = /(?:[A-Za-z]:\\(?:Users|home)|\/(?:Users|home)\/|file:\/\/)/i;
+const URL_RE = /https?:\/\/|blob:|data:image\/|data:application\//i;
 const MOTION_MARKERS = /motion[_-]?transfer|kling-video|mv-?001|privacy[_-]?pack/i;
 
 /**

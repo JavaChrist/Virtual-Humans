@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.125] — 2026-08-13
+
+### Added (Phase 11A OpenAI Image Live Preflight)
+
+- Preflight live no-provider `READY_FOR_11A_PAID_AUTH` (`103_`) · source `be415f5`.
+- Fenêtre VHS-124 + Director/Persistence/Paid · worker OFF · fermeture OFF · 0 OpenAI / 0 write métier.
+- Prompt-gate : faux positifs `[DATA:…]` corrigés (commit docs — redéployer avant smoke payant).
+
 ## [2.0.124] — 2026-08-13
 
 ### Added (Phase 11A-WIRE OpenAI Image Allowlist)

@@ -28,15 +28,15 @@ Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58) — supersédé ops par 101_/102_
 Motion / Performance     : MV-001 PASS_WITH_HUMAN_APPROVAL · Registry DISABLED
                            MV-002 DESIGN_READY + DEFERRED (`100_`)
-Phase 11A média          : WIRED_DISABLED (`102_`) · exception VHS-124 bornée OFF
-                           path OpenAI image Production câblé · 0 appel réel
+Phase 11A média          : PREFLIGHT PASS (`103_`) · READY_FOR_11A_PAID_AUTH
+                           path WIRED · runtime OFF · 0 appel réel
 Runtime AI / paid media  : OFF
 Budget                   : hard 274 / committed 247 / available 27 ¢
 production_jobs média    : 0 générique (Motion MV-001 settled à part)
-P0                       : pas d’appel OpenAI · pas de flags · pas de legacy PASS
-P1 ouverts               : 11A-PREFLIGHT-LIVE-NO-PROVIDER puis Auth smoke réel
-P1 fermé                 : BACKUP RESTORE_PROVEN · MV-002 DEFERRED · 11A-WIRE done
-Prochaine porte majeure  : preflight live sans provider (pas d’appel OpenAI)
+P0                       : pas d’appel OpenAI sans Auth · pas de legacy PASS
+P1 ouverts               : Auth `11A-PAID-OPENAI-IMAGE-SMOKE-ONCE`
+P1 fermé                 : BACKUP · MV-002 DEFERRED · 11A-WIRE · 11A-PREFLIGHT
+Prochaine porte majeure  : Auth smoke 1× OpenAI image (réserve ≤2¢)
 ```
 
 ### Portes Directors texte
@@ -206,6 +206,7 @@ Utilisateur → AI Video Director (/director)
 | [`100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md`](./100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md) | **MT-015A MV-002 design · DESIGN_READY · DEFERRED** |
 | [`101_PHASE_11A_MEDIA_PIPELINE_RESUME_AUDIT.md`](./101_PHASE_11A_MEDIA_PIPELINE_RESUME_AUDIT.md) | **11A-RESUME · BLOCKED_MEDIA_PRODUCTION_WIRING** |
 | [`102_PHASE_11A_WIRE_OPENAI_IMAGE_ALLOWLIST.md`](./102_PHASE_11A_WIRE_OPENAI_IMAGE_ALLOWLIST.md) | **11A-WIRE · OPENAI_IMAGE path WIRED_DISABLED** |
+| [`103_PHASE_11A_OPENAI_IMAGE_LIVE_PREFLIGHT.md`](./103_PHASE_11A_OPENAI_IMAGE_LIVE_PREFLIGHT.md) | **11A-PREFLIGHT · READY_FOR_11A_PAID_AUTH** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
