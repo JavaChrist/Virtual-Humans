@@ -930,7 +930,8 @@ async function main() {
       action: "motion_transfer",
       providerId: FAL_MOTION_TRANSFER_PROVIDER_ID,
       modelId: FAL_KLING_V3_PRO_MOTION_CONTROL_MODEL_ID,
-      maxAttempts: 1,
+      // Queue reclaim budget (NOT provider submit). Provider submit max = payload.submitCount=1.
+        maxAttempts: 64,
       payload: {
         planRevisionId: planArtifactId,
         scenePackageSceneId: "motion",

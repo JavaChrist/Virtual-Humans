@@ -77,6 +77,7 @@ export function adaptProductionJobQueue(queue: ProductionJobQueue): JobQueuePort
         providerId: command.providerId,
         modelId: command.modelId,
         priority: command.priority,
+        maxAttempts: command.maxAttempts,
         payload: { ...command.payloadRef, availableAt: command.availableAt },
       });
     },

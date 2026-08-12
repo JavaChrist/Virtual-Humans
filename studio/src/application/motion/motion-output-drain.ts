@@ -12,6 +12,10 @@ import {
   assertProviderOutputDescriptorSafe,
   type MotionTransferProviderOutputDescriptor,
 } from "@/domain/motion";
+import {
+  isDurableResumeMotionInputComplete,
+  isLegacyPollHydrateStubInput,
+} from "./durable-resume-motion-input";
 import type { MotionProviderOutputLifecycleStatus } from "@/domain/motion/persistence";
 import {
   createSyntheticMotionQcPolicy,
@@ -520,6 +524,25 @@ export async function advanceMotionOutputDrain(input: {
 
   record.phase = "qc_pending";
   record.outputLifecycle = "qc_pending";
+
+  // MT-013P — never run QC on stub / incomplete hydrate (prevents false qc_rejected).
+  if (
+    !isDurableResumeMotionInputComplete(record.motionInput) ||
+    isLegacyPollHydrateStubInput(record.motionInput)
+  ) {
+    record.qcStatus = "failed";
+    record.drainErrorCode = "motion_resume_input_missing";
+    record.reconciliationRequired = true;
+    record.terminal = true;
+    record.phase = "qc_pending";
+    return {
+      status: "failed",
+      errorCode: "motion_resume_input_missing",
+      publicMessage:
+        "QC bloqué — MotionTransferInput durable incomplet après cold start (pas un reject métier).",
+      record,
+    };
+  }
 
   const policy =
     deps.policy ??

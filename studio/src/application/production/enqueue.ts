@@ -33,9 +33,17 @@ export type MotionTransferJobPayloadMeta = {
   adapterVersion?: string;
   pricingVersion?: string;
   pollCount?: number;
-  /** Durable submit counter — authority across cold starts. */
+  /**
+   * Durable provider submit counter (max 1 for MV-001 / Motion Transfer paid).
+   * Distinct from production_jobs.attempt_count (= worker lease reclaim count).
+   */
   submitCount?: number;
   resubmitCount?: number;
+  /**
+   * MT-013P — resume-capable MotionTransferInput (internal media refs only).
+   * Required for cold-start QC; never sufficient for a second submit.
+   */
+  resumeInput?: import("@/domain/motion").MotionTransferInput;
   submitIntentAt?: string;
   requestFingerprint?: string;
   /** Fingerprint / truncated id — never raw CDN. */
@@ -100,6 +108,12 @@ export type EnqueueProductionJobCommand = {
   availableAt: string;
   priority?: number;
   payloadRef: ProductionPayloadReference;
+  /**
+   * Queue lease reclaim budget (production_jobs.max_attempts).
+   * For motion_transfer, prefer MOTION_TRANSFER_QUEUE_RECLAIM_MAX_ATTEMPTS —
+   * never set to 1 to "limit provider submits" (use payload.motion.submitCount).
+   */
+  maxAttempts?: number;
 };
 
 export type ClaimedProductionJob = {

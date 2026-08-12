@@ -3,6 +3,7 @@
  * Claim / heartbeat / complete / fail via SECURITY DEFINER RPCs.
  */
 
+import { MOTION_TRANSFER_QUEUE_RECLAIM_MAX_ATTEMPTS } from "@/application/motion/durable-resume-motion-input";
 import type { Json } from "../database.types";
 import { mapSupabaseError, PersistenceError } from "../errors";
 import type { V2DbClient } from "../supabase-server";
@@ -149,7 +150,13 @@ export function createSupabaseProductionJobQueue(deps: {
         status: "queued",
         priority: job.priority ?? 100,
         payload: job.payload as Json,
-        max_attempts: job.maxAttempts ?? 3,
+        // motion_transfer: max_attempts = queue reclaim budget (NOT provider submit).
+        // Provider submit max remains payload.motion.submitCount (=1).
+        max_attempts:
+          job.maxAttempts ??
+          (job.action === "motion_transfer"
+            ? MOTION_TRANSFER_QUEUE_RECLAIM_MAX_ATTEMPTS
+            : 3),
       });
       if (error) throw mapSupabaseError(error);
     },

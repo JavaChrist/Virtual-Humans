@@ -1,9 +1,12 @@
 /**
- * MT-013K-DURABILITY — Serialize / hydrate Motion attempt authority via
+ * MT-013K / MT-013P — Serialize / hydrate Motion attempt authority via
  * production_jobs.payload (no parallel table, no migration).
  *
  * Process-scoped Map is a reconstructible cache only — never sole authority
  * after a providerJobId or submitCount has been durably written.
+ *
+ * MT-013P: resumeInput (redacted MotionTransferInput) is durable authority for
+ * poll/drain/QC after cold start. Production stub pollHydrateMotionInput removed.
  */
 
 import { money } from "@/domain/cost";
@@ -18,74 +21,19 @@ import {
   FAL_KLING_MOTION_CONTROL_PRICING_VERSION,
 } from "@/infrastructure/providers/motion-transfer/fal-kling-motion-control-adapter";
 import type { MotionTransferAttemptRecord } from "./motion-transfer-worker-orchestrator";
-
-/** Poll-only hydrate stub — never used for a real media submit. */
-function pollHydrateMotionInput(durationSeconds: number): MotionTransferInput {
-  return {
-    schemaVersion: "1.0.0",
-    capability: "video.motion_transfer",
-    sourceVideo: {
-      role: "source_video",
-      asset: {
-        assetId: "durable-hydrate-source",
-        kind: "video",
-        mimeType: "video/mp4",
-        checksum: "sha256:durable-hydrate-source",
-        access: {
-          kind: "internal",
-          storagePath: "motion/source/durable-hydrate-source.mp4",
-        },
-      },
-      durationSeconds,
-    },
-    character: {
-      characterId: "durable-hydrate",
-      identityReferences: [
-        {
-          role: "identity",
-          asset: {
-            assetId: "durable-hydrate-identity",
-            kind: "character",
-            mimeType: "image/png",
-            checksum: "sha256:durable-hydrate-identity",
-            access: {
-              kind: "internal",
-              storagePath: "motion/identity/durable-hydrate-identity.png",
-            },
-          },
-        },
-      ],
-      identityLock: "required",
-      outfitLock: "preferred",
-      fullBodyRequired: true,
-    },
-    motion: {
-      preserveMotion: true,
-      preserveTiming: true,
-      preserveCamera: false,
-      fidelity: "critical",
-      poseControl: "provider_native",
-    },
-    output: {
-      durationSeconds,
-      aspectRatio: "9:16",
-      resolution: "1080p",
-      fps: 24,
-    },
-    qcRequirements: [
-      { code: "technical.decode", severity: "blocking" },
-    ],
-    correlationId: "durable-hydrate",
-  };
-}
+import {
+  isDurableResumeMotionInputComplete,
+  toDurableResumeMotionTransferInput,
+} from "./durable-resume-motion-input";
 
 export const MOTION_TRANSFER_ATTEMPT_DURABILITY_VERSION =
-  "mt013k-durability-1.0.0" as const;
+  "mt013p-durability-1.0.0" as const;
 
 /** Redacted durable meta from an attempt record — never signed URLs / media bytes. */
 export function serializeMotionAttemptAuthority(
   record: MotionTransferAttemptRecord,
 ): MotionTransferJobPayloadMeta {
+  const resumeInput = toDurableResumeMotionTransferInput(record.motionInput);
   return {
     phase: record.phase,
     reservationId: record.reservationId,
@@ -130,6 +78,7 @@ export function serializeMotionAttemptAuthority(
     terminal: record.terminal,
     deadlineAt: record.deadlineAt,
     humanReviewPolicyPresent: true,
+    resumeInput,
   };
 }
 
@@ -155,8 +104,11 @@ export function buildDurableMotionPayload(
 
 /**
  * Reconstruct attempt authority from claimed job payload.
- * Sufficient for poll / settle / terminal replay — not for a fresh media submit
- * (signed media refs are never persisted).
+ * Sufficient for poll / drain / QC / settle — not for a fresh media submit
+ * (signed media refs are never persisted; mediaBoundary = durable:omitted).
+ *
+ * Fail-closed when resumeInput is missing after a submit: returns a record
+ * with incomplete motionInput so drain can refuse QC (not invent stub reject).
  */
 export function hydrateMotionTransferAttemptFromJob(
   job: ClaimedProductionJob,
@@ -200,8 +152,11 @@ export function hydrateMotionTransferAttemptFromJob(
     capability: "video.motion_transfer" as const,
   };
 
-  // Poll-only stubs — media URLs are never reconstructed from durable state.
-  const motionInput = pollHydrateMotionInput(durationSeconds);
+  const resumeInput = motion.resumeInput;
+  const motionInput: MotionTransferInput =
+    resumeInput && isDurableResumeMotionInputComplete(resumeInput)
+      ? structuredClone(resumeInput)
+      : incompleteResumePlaceholder(durationSeconds);
 
   const phase = motion.phase ?? (providerJobId ? "polling" : "submitting");
 
@@ -251,7 +206,9 @@ export function hydrateMotionTransferAttemptFromJob(
     lateQuarantined:
       motion.lateQuarantined === true || motion.lateResult === true,
     usageUnknown: motion.usageUnknown === true,
-    reconciliationRequired: motion.reconciliationRequired === true,
+    reconciliationRequired:
+      motion.reconciliationRequired === true ||
+      !isDurableResumeMotionInputComplete(motionInput),
     requestFingerprint: motion.requestFingerprint ?? "hydrated",
     submitIntentAt: motion.submitIntentAt,
     adapterVersion:
@@ -262,6 +219,71 @@ export function hydrateMotionTransferAttemptFromJob(
     },
     motionInput,
     deadlineAt: motion.deadlineAt,
+  };
+}
+
+/**
+ * Placeholder used only when resumeInput is absent — deliberately incomplete
+ * so QC drain fail-closes with motion_resume_input_missing (never stub QC).
+ */
+function incompleteResumePlaceholder(
+  durationSeconds: number,
+  correlationId?: string,
+): MotionTransferInput {
+  return {
+    schemaVersion: "1.0.0",
+    capability: "video.motion_transfer",
+    sourceVideo: {
+      role: "source_video",
+      asset: {
+        assetId: "resume-input-missing",
+        kind: "video",
+        mimeType: "video/mp4",
+        checksum: "sha256:resume-input-missing",
+        access: {
+          kind: "internal",
+          storagePath: "durable:resume-input-missing",
+        },
+      },
+      durationSeconds,
+    },
+    character: {
+      characterId: "resume-input-missing",
+      identityReferences: [
+        {
+          role: "identity",
+          asset: {
+            assetId: "resume-input-missing-identity",
+            kind: "character",
+            mimeType: "image/png",
+            checksum: "sha256:resume-input-missing-identity",
+            access: {
+              kind: "internal",
+              storagePath: "durable:resume-input-missing-identity",
+            },
+          },
+        },
+      ],
+      identityLock: "required",
+      outfitLock: "preferred",
+      fullBodyRequired: true,
+    },
+    motion: {
+      preserveMotion: true,
+      preserveTiming: true,
+      preserveCamera: false,
+      fidelity: "critical",
+      poseControl: "provider_native",
+    },
+    output: {
+      durationSeconds,
+      aspectRatio: "9:16",
+      resolution: "1080p",
+      fps: 24,
+    },
+    // Empty qcRequirements ⇒ isDurableResumeMotionInputComplete = false
+    qcRequirements: [],
+    correlationId: correlationId ?? "resume-input-missing",
   };
 }
 
@@ -290,3 +312,9 @@ export function isMotionSubmissionUnknownFromDurable(
   if (motion?.phase === "submission_unknown") return true;
   return submitCount >= 1;
 }
+
+export {
+  isDurableResumeMotionInputComplete,
+  toDurableResumeMotionTransferInput,
+  MOTION_TRANSFER_QUEUE_RECLAIM_MAX_ATTEMPTS,
+} from "./durable-resume-motion-input";

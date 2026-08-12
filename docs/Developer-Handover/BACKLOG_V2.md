@@ -20,6 +20,7 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              MT-013M FINAL PAID SINGLE CALL CONSUMED (`95_`) · submit=1
              MT-013N REVIEW INTEGRITY PASS + private preview prep (`96_`) · 0 fal
              MT-013O HUMAN REVIEW APPROVE (`97_`) · decision=1 approved
+             MT-013P OPERATIONAL RECOVERY HARDENED (`98_`) · stub REMOVED
              MV001 = PASS_WITH_HUMAN_APPROVAL · capability NOT_YET_ENABLED
              RUNTIME_UNAVAILABLE · privacy ACCEPTED_LIMITED_MV001
              MV001_REQUIRES_NEW_DEPLOY_PREFLIGHT = NO (satisfied on 39a79d2)
@@ -85,7 +86,7 @@ Next major : Auth capability / merge-export Motion (distinct) — pas de resubmi
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…013O** (`60_`…`97_`) · **MT-013O** Human Review **APPROVE** 1× (`97_`) · MV-001 **PASS_WITH_HUMAN_APPROVAL** · output `2d7ffcad-…` lifecycle **approved** / `active=false` · historique `qc_rejected` conservé · flags OFF · Runtime UNAVAILABLE · capability Production **NOT_YET_ENABLED** · **aucun second submit**.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…013P** (`60_`…`98_`) · **MT-013O** Human Review **APPROVE** 1× (`97_`) · **MT-013P** recovery hardened (`98_`) : `resumeInput` durable, stub hydrate **REMOVED**, reclaim ≠ provider attempt, multi-invocation poll/drain **PASS** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · output `2d7ffcad-…` lifecycle **approved** / `active=false` · historique `qc_rejected` conservé · flags OFF · Runtime UNAVAILABLE · capability Production **NOT_YET_ENABLED** · **aucun second submit**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **274** ; committed post-MV001 **≈247** (112+135).
 - **Prochaine porte majeure** : Auth **capability / merge-export Motion** (distinct) — pas de resubmit fal.

@@ -586,6 +586,23 @@ test("MT-013K-DURABILITY deux workers concurrents → un seul submit", async () 
 });
 
 test("MT-013K-DURABILITY hydrate from payload reconstruit poll authority", () => {
+  const resumeInput = makeMinimalInput({
+    motion: {
+      preserveMotion: true,
+      preserveTiming: true,
+      preserveCamera: false,
+      fidelity: "critical",
+      poseControl: "provider_native",
+    },
+    qcRequirements: [
+      { code: "technical.decode", severity: "blocking" },
+      {
+        code: "human.sport_validation",
+        severity: "blocking",
+        humanValidationRequired: true,
+      },
+    ],
+  });
   const hydrated = hydrateMotionTransferAttemptFromJob({
     jobId: "j1",
     projectId: "p",
@@ -612,6 +629,7 @@ test("MT-013K-DURABILITY hydrate from payload reconstruit poll authority", () =>
         pollCount: 3,
         ledgerSettled: false,
         humanReviewPolicyPresent: true,
+        resumeInput,
       },
     },
   });
@@ -620,6 +638,50 @@ test("MT-013K-DURABILITY hydrate from payload reconstruit poll authority", () =>
   assert.equal(hydrated!.submitCount, 1);
   assert.equal(hydrated!.pollCount, 3);
   assert.equal(hydrated!.mediaBoundary.sourceVideoRef, "durable:omitted");
+  assert.equal(hydrated!.motionInput.qcRequirements.length, 2);
+  assert.equal(hydrated!.reconciliationRequired, false);
+  assert.notEqual(
+    hydrated!.motionInput.sourceVideo.asset.assetId.startsWith("durable-hydrate"),
+    true,
+  );
+});
+
+test("MT-013P hydrate sans resumeInput → incomplete, pas stub durable-hydrate", () => {
+  const hydrated = hydrateMotionTransferAttemptFromJob({
+    jobId: "j1",
+    projectId: "p",
+    runId: "r",
+    sceneId: "motion",
+    stepId: "step",
+    attemptId: "a1",
+    action: "motion_transfer",
+    providerId: "fal",
+    modelId: FAL_KLING_V3_PRO_MOTION_CONTROL_MODEL_ID,
+    leaseToken: "t",
+    leasedBy: "w",
+    payload: {
+      planRevisionId: "plan",
+      scenePackageSceneId: "motion",
+      mode: "poll",
+      externalJobId: "fal-req-99",
+      motion: {
+        phase: "polling",
+        reservationId: "res-1",
+        reservedMinor: 162,
+        estimateMinor: 135,
+        submitCount: 1,
+        pollCount: 1,
+        humanReviewPolicyPresent: true,
+      },
+    },
+  });
+  assert.ok(hydrated);
+  assert.equal(hydrated!.reconciliationRequired, true);
+  assert.equal(hydrated!.motionInput.qcRequirements.length, 0);
+  assert.equal(
+    hydrated!.motionInput.sourceVideo.asset.assetId,
+    "resume-input-missing",
+  );
 });
 
 test("MT-013K-DURABILITY parsePayload conserve motion (queue adapter)", async () => {
