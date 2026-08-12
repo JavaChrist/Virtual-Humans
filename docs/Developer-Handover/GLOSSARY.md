@@ -27,7 +27,7 @@
 **Storyboard Project** — contrat de tournage approuvé et immuable pour une révision.
 **Video Project Brief** — intention utilisateur normalisée et validée.
 **Visual Direction** — style global et décisions visuelles par scène.
-**Motion / Performance Transfer** — capability `video.motion_transfer` : transfert de mouvement depuis une vidéo source vers un personnage (identité/tenue), distinct de I2V/T2V ; architecture `59_` ; MT-001…005 (`60_`…`64_`) ; runtime non branché ; provider non sélectionné.
+**Motion / Performance Transfer** — capability `video.motion_transfer` : transfert de mouvement depuis une vidéo source vers un personnage (identité/tenue), distinct de I2V/T2V ; architecture `59_` ; MT-001…014 ; adapter fal Kling MC validé benchmark-only (`99_`) ; Registry Production `enabled=false` ; runtime Motion UNAVAILABLE hors Auth.
 **MotionTransferModelCapabilities** — bloc Registry versionné (`schemaVersion` 1.0.0) décrivant support source video / identité / tenue / pose / fidélité / limites ; niveaux `SUPPORTED|PARTIAL|UNVERIFIED|NOT_SUPPORTED`.
 **routeMotionTransfer** — décision Router pure MT-003 ; `maximumFallbacksPerStep=0` ; échec stable `motion_capability_unavailable`.
 **runMotionTransferGenerationDryRun** — préparation Engine MT-004 (validate/resolve/route/plan) ; toujours `providerCalled=false` ; pas de job/ledger/storage.
@@ -50,7 +50,9 @@
 **Privacy Decision Contract** — décisions obligatoires avant benchmark réel (`providerRetentionAccepted`, CDN, biométrie, droits commerciaux, geo) ; default blocked ; expiration honorée.
 **Motion Transfer E2E harness** — harness synthétique MT-012 (`runMotionTransferE2E`) composant Registry→Review sans provider réel ni écriture Production ; dry-run public `runMotionTransferPublicDryRun`.
 **MOTION_SYNTHETIC_E2E_READY** — statut MT-012 : contrats/transitions prouvés en fake ; runtime Production toujours `UNAVAILABLE` ; benchmark payant non autorisé.
-**MV-001** — premier benchmark Motion Transfer réel (coaching/Tai-Chi opaque) ; durée min fal 3 s ; 1 call max ; hors Git pour médias ; exécution = MT-013B après Auth.
+**MV-001** — premier benchmark Motion Transfer réel (coaching opaque) ; 8s ; submit=1 ; coût 135¢ ; HR APPROVE → `PASS_WITH_HUMAN_APPROVAL` (`97_`) ; output privé `active=false` ; n’établit pas SUPPORTED global ni beta.
+**PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY** — verdict MT-014 : adapter+pipeline prouvés sur un sample ; Registry/Production non activés (`99_`).
+**resumeInput** — `MotionTransferInput` redacté durable (MT-013P) pour cold-start poll/drain/QC ; jamais suffisant pour un second submit.
 **READY_FOR_HUMAN_GOVERNANCE_DECISIONS** — verdict MT-013A : pack privacy + gates A–J prêts pour décisions humaines ; aucun provider call.
 **RESTORE_DRILL** — preuve de restauration vers cible isolée ≠ Production ; verdicts `PASS` \| `BLOCKED_TARGET_REQUIRED` \| `BLOCKED_CREDENTIALS_REQUIRED` \| `BLOCKED_BACKUP_UNAVAILABLE` \| `FAIL` (`74_`).
 **PRIVACY_DUE_DILIGENCE** — revue officielle des 5 décisions Motion ; verdicts `READY_FOR_HUMAN_DECISION` \| `MORE_INFORMATION_REQUIRED` \| `BLOCKED` \| `ACCEPTED_LIMITED_MV001` (`74_` / `81_`).

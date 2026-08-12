@@ -11,8 +11,8 @@ MT-003 Router = IMPLEMENTED (voir 62_)
 provider entries enabled = 0
 eligible Production motion-transfer models = 0
 runtime capability = unavailable
-PROVIDER_NOT_SELECTED_YET
-NO PAID BENCHMARK_YET
+POST-MV001 (MT-014) = PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY (`99_`)
+Registry Production still enabled=false / paidExecution=false
 ```
 
 ## Registry canonique étendu

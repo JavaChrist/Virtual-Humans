@@ -2,6 +2,34 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.121] — 2026-08-13
+
+### Added (MT-014 Motion Transfer Benchmark Evaluation)
+
+- Évaluation post-MV-001 : verdict `PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY` (`99_`).
+- Matrice capacités SUPPORTED/PARTIAL/UNVERIFIED/NOT_SUPPORTED · Registry design-only `enabled=false` / `paidExecution=false`.
+- 0 fal · 0 activation Production · critical fidelity non hard-eligible · limited beta NO.
+
+## [2.0.120] — 2026-08-12
+
+### Fixed (MT-013P Motion Operational Hardening)
+
+- `resumeInput` durable · stub `pollHydrateMotionInput` retiré · reclaim ≠ provider submit (`98_`).
+- Anti faux `qc_rejected` sur hydrate incomplet · tests cold-start/multi-invocation.
+
+## [2.0.119] — 2026-08-12
+
+### Added (MT-013O MV-001 Human Review APPROVE)
+
+- Décision Human Review `approved` 1× · `PASS_WITH_HUMAN_APPROVAL` (`97_`).
+- Output lifecycle approved / `active=false` · historique `qc_rejected` conservé · capability NOT_YET_ENABLED.
+
+## [2.0.118] — 2026-08-12
+
+### Added (MT-013M/N MV-001 paid execution + review integrity)
+
+- Paid single call submit=1 · ledger 162/135/27 (`95_`) · review integrity + private preview (`96_`).
+
 ## [2.0.117] — 2026-08-12
 
 ### Added (MT-013K-WIRE Production Motion Worker Orchestrator)

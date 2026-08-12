@@ -26,24 +26,20 @@ En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → d
 ```text
 Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
-Motion / Performance     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
-                           MT-013F prep READY_FOR_MEDIA_AND_DEPLOY_AUTH (`84_`)
-                           MT-013G2 8s media PREPARED + MEDIA_VALIDATED (`86_`)
-                           MT-013H hard 174→274 · available 162 · shortfall 0 (`87_`)
-                           MT-013I MEDIA_UPLOADED · 2 private assets (`88_`)
-                           MT-013J deploy preflight READY_FOR_PAID_AUTH (`89_`)
-                           MT-013K-WIRE Production orchestrator WIRED (`90_`)
-                           MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
+Motion / Performance     : MT-001…014 · MV-001 PASS_WITH_HUMAN_APPROVAL (`97_`)
+                           MT-013P recovery HARDENED (`98_`) · stub hydrate REMOVED
+                           MT-014 EVAL (`99_`) · PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY
+                           Registry Production disabled · paidExecution=false
+                           limited beta NO · Production NO · RUNTIME_UNAVAILABLE
                            privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
-                           remote MT-005 APPLIED (`82_`) · NO PAID BENCHMARK_YET
-                           MV001_REQUIRES_NEW_DEPLOY_PREFLIGHT = YES
+                           MV001 ledger 162/135/27 · submit=1 · output approved/active=false
 Runtime AI               : OFF
-Budget                   : hard 274 / committed 112 / reserved 0 / available 162 (`87_`)
-production_jobs média    : 0
-P0                       : aucun
-P1 ouverts               : décision média image VHS-124
+Budget                   : hard 274 / committed≈247 (112+135)
+production_jobs média    : 0 (hors MV-001 settled)
+P0                       : ne pas activer Registry Motion Production
+P1 ouverts               : décision média image VHS-124 · prep Auth MV-002 (design)
 P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
-Prochaine porte majeure  : deploy-preflight post-wire, puis Auth paid MV-001 (≤162¢ · max 1 fal)
+Prochaine porte majeure  : Auth prep MV-002 ou capability/merge — pas d’activation Registry
 ```
 
 ### Portes Directors texte
@@ -205,6 +201,11 @@ Utilisateur → AI Video Director (/director)
 | [`87_MT013H_MV001_8S_BUDGET_HARD_LIMIT_274.md`](./87_MT013H_MV001_8S_BUDGET_HARD_LIMIT_274.md) | **MT-013H budget hard 174→274 · available 162¢ · shortfall 0** |
 | [`88_MT013I_MV001_PRIVATE_MEDIA_UPLOAD.md`](./88_MT013I_MV001_PRIVATE_MEDIA_UPLOAD.md) | **MT-013I private upload · 2 assets · project `390c25db-…` · 0 fal** |
 | [`89_MT013J_MV001_DEPLOY_PREFLIGHT_NO_PROVIDER.md`](./89_MT013J_MV001_DEPLOY_PREFLIGHT_NO_PROVIDER.md) | **MT-013J deploy preflight · READY_FOR_PAID_AUTH · flags OFF** |
+| [`95_MT013M_MV001_FINAL_PAID_SINGLE_EXECUTION.md`](./95_MT013M_MV001_FINAL_PAID_SINGLE_EXECUTION.md) | **MT-013M paid single call · submit=1 · 135¢** |
+| [`96_MT013N_MV001_REVIEW_INTEGRITY_AND_PRIVATE_PREVIEW.md`](./96_MT013N_MV001_REVIEW_INTEGRITY_AND_PRIVATE_PREVIEW.md) | **MT-013N review integrity · private preview** |
+| [`97_MT013O_MV001_HUMAN_REVIEW_APPROVE.md`](./97_MT013O_MV001_HUMAN_REVIEW_APPROVE.md) | **MT-013O Human Review APPROVE · PASS_WITH_HUMAN_APPROVAL** |
+| [`98_MT013P_MOTION_OPERATIONAL_HARDENING.md`](./98_MT013P_MOTION_OPERATIONAL_HARDENING.md) | **MT-013P operational recovery hardened · stub REMOVED** |
+| [`99_MT014_MOTION_TRANSFER_BENCHMARK_EVALUATION.md`](./99_MT014_MOTION_TRANSFER_BENCHMARK_EVALUATION.md) | **MT-014 eval · PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

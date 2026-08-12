@@ -1166,21 +1166,26 @@ flowchart LR
 - **Acceptation :** 0 provider ; verdict `READY_FOR_HUMAN_GOVERNANCE_DECISIONS`.
 - **Interdit respecté :** no fal / upload / deploy / migration / restore / budget write.
 
-### MT-013B — Controlled benchmark MV-001 *(NOT STARTED)*
+### MT-013B…O — Controlled benchmark MV-001 *(DONE via MT-013 chain)*
 
-- **Objectif :** 1 call max Auth ; Tai-Chi MV-001 ; human approve.
-- **Dépendances :** Auth privacy + restore PASS + MT-005 + budget + flags.
-- **Acceptation :** preuve bornée ; flags OFF après.
-- **Interdit :** chaîne marketing ; fallback ; multi-movement.
-- **DoD :** rapport smoke + ledger reconcile.
+- **Résultat :** MV-001 `PASS_WITH_HUMAN_APPROVAL` (`97_`) · submit=1 · 135¢ · output privé approved/`active=false`.
+- **Ops :** MT-013P recovery hardened (`98_`) — stub hydrate removed ; reclaim ≠ provider attempt.
+- **Artefacts :** `73_`…`98_`.
 
-### MT-014 — Motion Director evaluation
+### MT-014 — Benchmark evaluation & Registry readiness *(DONE — eval only)*
 
-- **Objectif :** décider si Director dédié nécessaire.
-- **Dépendances :** après MT-013.
-- **Acceptation :** ADR keep/postpone.
+- **Objectif :** matrice de capacités + décision Registry **sans** activation Production.
+- **Verdict :** `PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY` (`99_`).
+- **Registry :** `enabled=false` · `paidExecution=false` · critical fidelity **not** hard-eligible.
+- **Interdit respecté :** 0 fal · 0 deploy · 0 activation · 0 média touch.
+- **DoD :** rapport `99_` + docs sync.
+
+### MT-014-DIR — Motion Director evaluation *(POSTPONE)*
+
+- **Objectif :** décider si Director dédié nécessaire (ADR).
+- **Dépendances :** capability Production encore OFF → **postpone**.
+- **Acceptation :** ADR keep/postpone dans handover.
 - **Interdit :** implémentation spéculative.
-- **DoD :** note ADR dans handover.
 
 ---
 

@@ -1,7 +1,12 @@
 /**
- * MT-007B — fal Kling v3 Pro motion-control Registry profile (disabled).
- * status conceptual = UNVERIFIED; enabled = false; not Production-eligible.
+ * MT-007B / MT-014 — fal Kling v3 Pro motion-control Registry profile (disabled).
+ *
+ * Evaluation (MT-014): PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY after MV-001.
+ * enabled = false; paidExecution = false; status = UNVERIFIED.
+ * critical fidelity remains UNVERIFIED (Motion QC measurements unavailable).
+ * outfitReference / cancellation remain NOT_SUPPORTED.
  * Do NOT insert into Production CapabilityRegistrySnapshot.
+ * Do NOT set enabled/paidExecution from a single benchmark.
  */
 
 import type { MotionTransferModelCapabilities } from "./motion-transfer";
@@ -49,5 +54,7 @@ export const FAL_KLING_V3_PRO_REGISTRY_PROFILE = {
   paidExecution: false as const,
   status: "UNVERIFIED" as const,
   motionTransfer: buildFalKlingV3ProMotionTransferCaps(),
-  note: "MT-007B adapter code present — Registry/Production eligibility remains false until gates",
+  note:
+    "MT-014: adapter+MV-001 benchmark validated only — enabled/paidExecution remain false; " +
+    "critical fidelity not hard-eligible; see docs/Developer-Handover/99_MT014_MOTION_TRANSFER_BENCHMARK_EVALUATION.md",
 } as const;

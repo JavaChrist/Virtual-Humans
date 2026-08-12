@@ -8,7 +8,9 @@
 adapter code = implemented
 contract suite = PASS (fake transport)
 real transport factory = present, unresolved while flags OFF
-Registry profile = UNVERIFIED / enabled=false
+Registry profile = UNVERIFIED / enabled=false / paidExecution=false
+Post-MV-001 eval (MT-014) = PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY (`99_`)
+— no Production activation ; critical fidelity still UNVERIFIED
 privacy gate = blocked (default)
 Production candidates = 0
 provider calls = 0

@@ -267,7 +267,7 @@ async function main() {
   if (actQrErr) fail(`activate_qr_failed:${actQrErr.message}`);
 
   // production_result rev1 (pending human review) if absent
-  let { data: prActive } = await c
+  const { data: prActive } = await c
     .from("active_artifact_revisions")
     .select("artifact_id,revision")
     .eq("project_id", PROJ)
