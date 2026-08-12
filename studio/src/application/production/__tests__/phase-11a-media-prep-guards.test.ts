@@ -55,14 +55,16 @@ test("11A — VHS-124 forbids real providerMode on /director stack", () => {
   );
 });
 
-test("11A — recommended OpenAI still fits available 10¢ with 1¢ estimate", () => {
+test("11A — recommended OpenAI still fits available budget with 1¢ estimate", () => {
   const usd = estimateImage("1024x1024", "low", 1);
   assert.equal(usd, 0.011);
   const minor = Math.round(usd * 100);
   assert.equal(minor, 1);
-  const available = 10;
-  assert.ok(minor <= available);
-  assert.equal(Math.max(0, minor - available), 0);
+  // Historical 58_ available=10 ; post-MV-001 available=27 — both fit 1¢.
+  for (const available of [10, 27]) {
+    assert.ok(minor <= available);
+    assert.equal(Math.max(0, minor - available), 0);
+  }
 });
 
 test("11A — smoke invariants: 1 call / 1 job / 1 asset / no fallback / no retry", () => {

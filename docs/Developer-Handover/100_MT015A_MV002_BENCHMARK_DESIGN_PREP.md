@@ -6,6 +6,7 @@
 
 ```text
 VERDICT = MV002_DESIGN_READY
+OPS_STATUS = DEFERRED   (décision humaine Phase 11A-RESUME — 13 août 2026)
 MV002_PRIVACY = PENDING
 MV002_MEDIA = NOT_SELECTED
 MV002_BUDGET = NOT_AUTHORIZED
@@ -15,6 +16,8 @@ RUNTIME_MOTION = UNAVAILABLE
 REAL_PROVIDER_CALLS = 0
 REMOTE_WRITES = 0
 ```
+
+**Note ops :** aucune Privacy/budget/média Auth MV-002 ; reprise chantier principal → `101_`.
 
 ---
 

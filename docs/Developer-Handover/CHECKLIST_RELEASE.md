@@ -66,9 +66,16 @@
 
 - [x] MV-001 paid + HR APPROVE (`97_`) — capability Production **NOT** enabled ;
 - [x] MT-014 eval `PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY` (`99_`) ;
-- [x] MT-015A MV-002 **DESIGN_READY** (`100_`) — Privacy/Media/Budget **PENDING** ;
-- [ ] MV-002 Privacy Pack humain — **non démarré** ;
-- [ ] MV-002 exécution — **interdite** sans Auth séparées.
+- [x] MT-015A MV-002 **DESIGN_READY** + **DEFERRED** (`100_`) ;
+- [ ] MV-002 — **non repris** (11A prioritaire).
+
+## Phase 11A média `/director`
+
+- [x] Prep historique `58_` · reassessment `101_` ;
+- [x] Verdict ops : **BLOCKED_MEDIA_PRODUCTION_WIRING** (VHS-124 fakes-only) ;
+- [ ] Auth **`11A-WIRE-OPENAI-IMAGE-ALLOWLIST`** — non démarrée ;
+- [ ] Smoke image réel Production — **interdit** tant que wiring absent ;
+- [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
 

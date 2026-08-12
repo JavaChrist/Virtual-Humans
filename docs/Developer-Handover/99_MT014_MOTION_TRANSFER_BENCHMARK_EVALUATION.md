@@ -262,13 +262,13 @@ Durée indicative 8s sauf mention ; coût indicatif ≈ **135¢** @ `$0.168/s` (
 ## 12. Prochaine recommandation
 
 ```text
-NEXT = MV-002 DESIGN PREP (MT-015A) → DONE (`100_`)
-STATUS = MV002_DESIGN_READY · Privacy/Media/Budget PENDING
-ACTION = décision humaine Privacy MV-002 OU retour Phase 11A
-DO_NOT = exécuter MV-002 · activer Registry · réutiliser assets MV-001
+NEXT = MV-002 DESIGN PREP (MT-015A) → DONE (`100_`) · OPS = DEFERRED
+RESUME_MAIN = Phase 11A-RESUME (`101_`) · BLOCKED_MEDIA_PRODUCTION_WIRING
+ACTION = Auth 11A-WIRE-OPENAI-IMAGE-ALLOWLIST (pas de smoke tant que wiring absent)
+DO_NOT = exécuter MV-002 · activer Registry Motion · legacy PASS média
 ```
 
-Voir `100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md`.
+Voir `100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md` · `101_PHASE_11A_MEDIA_PIPELINE_RESUME_AUDIT.md`.
 
 ---
 

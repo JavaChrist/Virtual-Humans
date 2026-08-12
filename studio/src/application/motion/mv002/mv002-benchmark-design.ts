@@ -19,6 +19,8 @@ import {
 
 export const MV002_BENCHMARK_ID = "MV-002" as const;
 export const MV002_DESIGN_SCHEMA_VERSION = "mt015a-mv002-design-1.0.0" as const;
+/** Human decision Phase 11A-RESUME: design kept, execution deferred. */
+export const MV002_OPS_STATUS = "DEFERRED" as const;
 
 /** Controlled variable — only this differs from MV-001 execution intent. */
 export const MV002_CONTROLLED_VARIABLE = "virtual_character_identity_reference" as const;
@@ -96,6 +98,7 @@ export type Mv002DesignProfile = {
   media: "NOT_SELECTED";
   budgetAuth: "NOT_AUTHORIZED";
   providerAuth: "NOT_AUTHORIZED";
+  opsStatus: typeof MV002_OPS_STATUS;
   productionRegistryEnabled: false;
   productionPaidExecution: false;
   reusesMv001PrivacyPack: false;
@@ -132,6 +135,7 @@ export function buildMv002DesignProfile(): Mv002DesignProfile {
     media: "NOT_SELECTED",
     budgetAuth: "NOT_AUTHORIZED",
     providerAuth: "NOT_AUTHORIZED",
+    opsStatus: MV002_OPS_STATUS,
     productionRegistryEnabled: false,
     productionPaidExecution: false,
     reusesMv001PrivacyPack: false,

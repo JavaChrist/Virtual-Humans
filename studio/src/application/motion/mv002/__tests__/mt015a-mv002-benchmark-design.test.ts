@@ -45,6 +45,7 @@ test("MT-015A design profile — constants + budget shortfall", () => {
   assert.equal(p.media, "NOT_SELECTED");
   assert.equal(p.budgetAuth, "NOT_AUTHORIZED");
   assert.equal(p.providerAuth, "NOT_AUTHORIZED");
+  assert.equal(p.opsStatus, "DEFERRED");
   assert.equal(p.reusesMv001PrivacyPack, false);
   assert.equal(p.reusesMv001PrivateAssets, false);
   assert.equal(p.productionRegistryEnabled, false);

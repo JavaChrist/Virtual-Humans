@@ -26,18 +26,17 @@ En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → d
 ```text
 Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
-Motion / Performance     : MT-001…015A · MV-001 PASS_WITH_HUMAN_APPROVAL (`97_`)
-                           MT-014 EVAL (`99_`) · PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY
-                           MT-015A MV-002 DESIGN_READY (`100_`) · Privacy/Media PENDING
-                           Registry disabled · RUNTIME_UNAVAILABLE
-                           privacy MV-001 LIMITED (≠ MV-002) · exp 2026-09-10
-Runtime AI               : OFF
-Budget                   : hard 274 / committed 247 / available 27 · MV-002 shortfall 135
-production_jobs média    : 0 (hors MV-001 settled)
-P0                       : ne pas activer Registry · ne pas réutiliser assets MV-001
-P1 ouverts               : Privacy MV-002 OU retour Phase 11A · décision média image VHS-124
-P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
-Prochaine porte majeure  : décision humaine Privacy MV-002 vs 11A — pas d’exécution MV-002
+Motion / Performance     : MV-001 PASS_WITH_HUMAN_APPROVAL · Registry DISABLED
+                           MV-002 DESIGN_READY + DEFERRED (`100_`)
+Phase 11A média          : REASSESSED (`101_`) · BLOCKED_MEDIA_PRODUCTION_WIRING
+                           VHS-124 fakes-only · reco future Option A gpt-image-1 1¢
+Runtime AI / paid media  : OFF
+Budget                   : hard 274 / committed 247 / available 27 ¢
+production_jobs média    : 0 générique (Motion MV-001 settled à part)
+P0                       : pas de smoke média sans wiring · pas de legacy PASS
+P1 ouverts               : Auth 11A-WIRE-OPENAI-IMAGE-ALLOWLIST
+P1 fermé                 : BACKUP → RESTORE_PROVEN (`78_`) · MV-002 DEFERRED
+Prochaine porte majeure  : Auth wiring OpenAI image borné `/director`
 ```
 
 ### Portes Directors texte
@@ -204,7 +203,8 @@ Utilisateur → AI Video Director (/director)
 | [`97_MT013O_MV001_HUMAN_REVIEW_APPROVE.md`](./97_MT013O_MV001_HUMAN_REVIEW_APPROVE.md) | **MT-013O Human Review APPROVE · PASS_WITH_HUMAN_APPROVAL** |
 | [`98_MT013P_MOTION_OPERATIONAL_HARDENING.md`](./98_MT013P_MOTION_OPERATIONAL_HARDENING.md) | **MT-013P operational recovery hardened · stub REMOVED** |
 | [`99_MT014_MOTION_TRANSFER_BENCHMARK_EVALUATION.md`](./99_MT014_MOTION_TRANSFER_BENCHMARK_EVALUATION.md) | **MT-014 eval · PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY** |
-| [`100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md`](./100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md) | **MT-015A MV-002 design · DESIGN_READY · Privacy PENDING** |
+| [`100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md`](./100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md) | **MT-015A MV-002 design · DESIGN_READY · DEFERRED** |
+| [`101_PHASE_11A_MEDIA_PIPELINE_RESUME_AUDIT.md`](./101_PHASE_11A_MEDIA_PIPELINE_RESUME_AUDIT.md) | **11A-RESUME · BLOCKED_MEDIA_PRODUCTION_WIRING** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

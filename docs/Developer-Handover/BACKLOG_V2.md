@@ -22,17 +22,17 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              MT-013O HUMAN REVIEW APPROVE (`97_`) · decision=1 approved
              MT-013P OPERATIONAL RECOVERY HARDENED (`98_`) · stub REMOVED
              MT-014 BENCHMARK EVAL (`99_`) · PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY
-             MT-015A MV-002 DESIGN READY (`100_`) · Privacy/Media/Budget PENDING
-             MV001 = PASS_WITH_HUMAN_APPROVAL · capability NOT_YET_ENABLED
-             Registry Production disabled · paidExecution=false · critical UNVERIFIED
-             RUNTIME_UNAVAILABLE · privacy ACCEPTED_LIMITED_MV001 (≠ MV-002)
-             available≈27 · MV-002 shortfall 135 si réservation 162
+             MT-015A MV-002 DESIGN READY (`100_`) · OPS = DEFERRED
+             Phase 11A-RESUME (`101_`) · BLOCKED_MEDIA_PRODUCTION_WIRING
+             MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
+             RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed 247 / reserved 0 / available 27
 Runtime AI : OFF
-Media jobs : 0
-P1         : décision média image VHS-124 · Auth Privacy MV-002 OU retour 11A
+Media jobs : 0 (générique) · Motion MV-001 settled à part
+P0         : ne pas smoke média tant que VHS-124 fakes-only
+P1         : Auth 11A-WIRE-OPENAI-IMAGE-ALLOWLIST · image gpt-image-1 scene-2
 P1 fermé   : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS · cible qmsh…qlnq)
-Next major : décision humaine — Privacy MV-002 vs Phase 11A (pas d’exécution MV-002)
+Next major : Auth wiring OpenAI image borné `/director` (pas legacy · pas MV-002)
 ```
 
 ## P0 — fondations
@@ -89,10 +89,10 @@ Next major : décision humaine — Privacy MV-002 vs Phase 11A (pas d’exécuti
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · **MT-015A** MV-002 **DESIGN_READY** (`100_`) · Privacy/Media/Budget/Provider **PENDING/NOT_AUTHORIZED** · **MT-014** `PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY` (`99_`) · Registry **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · flags OFF · Runtime UNAVAILABLE.
-- **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** ; alternative stratégique à MV-002.
-- **P1 budget** : hard **274** ; committed **247** ; available **27** ; shortfall MV-002 réservation 162 = **135¢** (aucun write).
-- **Prochaine porte majeure** : décision humaine **Privacy Pack MV-002** **ou** retour **Phase 11A** — **pas** d’exécution MV-002 ni activation Registry.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
+- **Phase 11A média** 🔴 **BLOCKED_MEDIA_PRODUCTION_WIRING** (`101_`) — VHS-124 fakes-only inchangé ; reco cible Option A OpenAI image 1¢ ; **interdit** legacy PASS ; prochaine Auth = wiring allowlist.
+- **P1 budget** : hard **274** ; committed **247** ; available **27** ; image shortfall **0** ; vidéo Hailuo shortfall **9** (réserve 36).
+- **Prochaine porte majeure** : Auth **`11A-WIRE-OPENAI-IMAGE-ALLOWLIST`** — pas MV-002 · pas activation Registry Motion.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

@@ -10,12 +10,17 @@
 ## Verdict
 
 ```text
-DECISION_REQUIRED
+DECISION_REQUIRED  (historique 11 août)
+→ supersédé ops : BLOCKED_MEDIA_PRODUCTION_WIRING  (voir 101_ Phase 11A-RESUME)
 ```
 
 Audit et préparation verts. Smoke média recommandé **identifié** (1 image OpenAI sync, ~1–2¢).  
 **Blocage architectural :** le chemin `/director` **interdit** les adapters réels (VHS-124 / `assertDirectorProductionUsesFakes`).  
 Une autorisation humaine doit choisir le chemin d’exécution avant tout wiring ou smoke.
+
+**Mise à jour 13 août 2026 (`101_`) :** budget désormais 274/247/27 ; Motion MV-001 done (chemin séparé) ;  
+MV-002 DEFERRED ; **wiring Production média toujours absent** — ne pas Auth smoke tant que  
+`11A-WIRE-OPENAI-IMAGE-ALLOWLIST` n’est pas autorisé. Legacy `/api/generate/image` ≠ PASS Production.
 
 ---
 

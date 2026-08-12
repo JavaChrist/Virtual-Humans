@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.123] — 2026-08-13
+
+### Added (Phase 11A-RESUME Media Pipeline Reassessment)
+
+- Audit post-Motion : verdict `BLOCKED_MEDIA_PRODUCTION_WIRING` (`101_`).
+- MV-002 **DEFERRED** · VHS-124 fakes-only confirmé · reco cible Option A (1¢) après Auth wiring.
+- Guards isolation Motion · 0 provider · 0 budget write.
+
 ## [2.0.122] — 2026-08-13
 
 ### Added (MT-015A MV-002 Benchmark Design Prep)
