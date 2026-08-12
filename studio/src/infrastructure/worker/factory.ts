@@ -27,6 +27,7 @@ export function createProductionWorkerFromDeps(
     engine: dependencies.engine,
     ports: dependencies.ports,
     events: dependencies.events,
+    motionTransfer: dependencies.motionTransfer,
   });
 }
 

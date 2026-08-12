@@ -52,7 +52,8 @@ firm estimate · reservation · media · human review · route
 
 Harness local uniquement : `MOTION_TRANSFER_FAKE_HARNESS=1|true` et **interdit** sur Vercel/Production.
 
-État actuel Production : flags OFF → worker refuse motion (orchestrateur absent ⇒ `motion_capability_unavailable`).
+État actuel Production : flags OFF → submit bloqué par gates.  
+**MT-013K-WIRE (`90_`)** : orchestrateur injecté dans `createWorker` ; absent uniquement si composition throw (fail-closed). Sans orchestrateur ⇒ `motion_capability_unavailable`.
 
 ## 4. Lifecycle (payload.motion.phase)
 

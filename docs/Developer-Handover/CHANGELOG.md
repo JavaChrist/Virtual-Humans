@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.117] — 2026-08-12
+
+### Added (MT-013K-WIRE Production Motion Worker Orchestrator)
+
+- Injecte `createMotionTransferWorkerOrchestrator` dans `createWorker` → factory → claimed-job-processor.
+- Composition lazy fal (pas d’import FAL_KEY) · lifecycle admission/submit/poll · fake Production interdit.
+- Flags OFF · 0 fal · 0 réservation · `MV001_REQUIRES_NEW_DEPLOY_PREFLIGHT=YES`. Rapport `90_`.
+
 ## [2.0.116] — 2026-08-12
 
 ### Added (MT-013J MV-001 Deploy Preflight No Provider)

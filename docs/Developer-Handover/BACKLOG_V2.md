@@ -12,15 +12,17 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              MT-013H hard 274 / available 162 / shortfall 0 (`87_`)
              MT-013I MEDIA_UPLOADED · 2 private assets (`88_`)
              MT-013J READY_FOR_PAID_AUTH · flags OFF (`89_`)
+             MT-013K-WIRE Production orchestrator WIRED (`90_`) · 0 fal
              MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
              NO PAID BENCHMARK_YET · provider calls = 0
              privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
+             MV001_REQUIRES_NEW_DEPLOY_PREFLIGHT = YES
 Budget     : 274 / 112 / 0 / 162 (`87_`) · MV-001 réserve 162 couverte
 Runtime AI : OFF
 Media jobs : 0
 P1         : décision média image VHS-124
 P1 fermé   : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS · cible qmsh…qlnq)
-Next major : Auth paid MV-001 (réserve ≤162¢ · max 1 fal)
+Next major : deploy-preflight post-wire, puis Auth paid MV-001 (≤162¢ · max 1 fal)
 ```
 
 ## P0 — fondations
@@ -77,7 +79,7 @@ Next major : Auth paid MV-001 (réserve ≤162¢ · max 1 fal)
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A…H** (`73_`…`87_`) · média local **8s/720p VALIDATED** · fal adapter + worker **disabled** · privacy **ACCEPTED_LIMITED_MV001** · Production → unavailable · **MV001_NOT_EXECUTED** · **NO PAID BENCHMARK_YET**.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A…J** (`73_`…`89_`) · **MT-013K-WIRE** orchestrateur Production **WIRED** (`90_`) · média **8s/720p UPLOADED** · flags OFF · privacy **ACCEPTED_LIMITED_MV001** · Runtime UNAVAILABLE · **MV001_NOT_EXECUTED** · **REQUIRES_NEW_DEPLOY_PREFLIGHT**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **274** ; committed **112** ; available **162** (`87_`) — réserve MV-001 **162¢** **couverte** (shortfall 0).
 - **Prochaine porte majeure** : Auth **private upload** → **deploy/flags** → **paid MV-001** (réserve ≤162¢) — ne pas fusionner.

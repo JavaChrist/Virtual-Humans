@@ -4,6 +4,7 @@
  */
 
 import type { GenerationEngine } from "@/application/generation";
+import type { MotionTransferWorkerProcessor } from "@/application/motion/motion-transfer-worker-orchestrator";
 import type { ProductionDirector } from "@/application/production/production-director";
 import type { ProductionPorts } from "@/application/production/ports";
 import type { JobQueuePort } from "@/application/production/enqueue";
@@ -19,4 +20,9 @@ export type ProductionWorkerFactoryDeps = {
   engine: GenerationEngine;
   ports: ProductionPorts;
   events?: WorkerEventSink;
+  /**
+   * MT-013K-WIRE — Motion Transfer orchestrator on the canonical worker path.
+   * Absent ⇒ motion_transfer jobs fail-closed (`motion_capability_unavailable`).
+   */
+  motionTransfer?: MotionTransferWorkerProcessor;
 };

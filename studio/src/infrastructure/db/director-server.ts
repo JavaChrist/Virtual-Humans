@@ -81,6 +81,7 @@ import {
 } from "@/infrastructure/config/feature-flags";
 import { createUniversalFakeAdapter } from "@/infrastructure/providers/fake-universal-adapter";
 import { createProductionWorkerFromDeps } from "@/infrastructure/worker/factory";
+import { createProductionMotionTransferComposition } from "@/infrastructure/worker/production-motion-transfer";
 import { adaptProductionJobQueue } from "@/infrastructure/worker/queue-adapter";
 import { DEFAULT_WORKER_POLICY } from "@/application/worker/policy";
 import type { ProductionWorker } from "@/application/worker/production-worker";
@@ -660,6 +661,22 @@ export function createDirectorPersistenceStack(deps?: {
           maximumRunDurationMs: 60_000,
         }
       : {};
+    // MT-013K-WIRE — inject Motion Transfer on the canonical worker path only.
+    // Provider is lazy (no FAL_KEY / network at composition). Flags OFF ⇒ submit blocked.
+    let motionTransfer: ReturnType<
+      typeof createProductionMotionTransferComposition
+    >["motionTransfer"] | undefined;
+    try {
+      const motion = createProductionMotionTransferComposition({
+        budget: productionPorts.budget,
+        env,
+        nowIso: deps?.nowIso ?? (() => new Date().toISOString()),
+      });
+      motionTransfer = motion.motionTransfer;
+    } catch {
+      // Fail-closed: keep worker usable for Director jobs; motion jobs → capability unavailable.
+      motionTransfer = undefined;
+    }
     return createProductionWorkerFromDeps({
       policy: { ...DEFAULT_WORKER_POLICY, ...e2eWorkerPolicy, workerId },
       flags,
@@ -667,6 +684,7 @@ export function createDirectorPersistenceStack(deps?: {
       director: productionDirector,
       engine: generationEngine,
       ports: productionPorts,
+      motionTransfer,
     });
   }
 

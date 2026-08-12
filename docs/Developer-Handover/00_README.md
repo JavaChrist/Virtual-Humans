@@ -32,16 +32,18 @@ Motion / Performance     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-
                            MT-013H hard 174→274 · available 162 · shortfall 0 (`87_`)
                            MT-013I MEDIA_UPLOADED · 2 private assets (`88_`)
                            MT-013J deploy preflight READY_FOR_PAID_AUTH (`89_`)
+                           MT-013K-WIRE Production orchestrator WIRED (`90_`)
                            MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
                            privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
                            remote MT-005 APPLIED (`82_`) · NO PAID BENCHMARK_YET
+                           MV001_REQUIRES_NEW_DEPLOY_PREFLIGHT = YES
 Runtime AI               : OFF
 Budget                   : hard 274 / committed 112 / reserved 0 / available 162 (`87_`)
 production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : décision média image VHS-124
 P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
-Prochaine porte majeure  : Auth paid MV-001 (réserve ≤162¢ · max 1 fal)
+Prochaine porte majeure  : deploy-preflight post-wire, puis Auth paid MV-001 (≤162¢ · max 1 fal)
 ```
 
 ### Portes Directors texte

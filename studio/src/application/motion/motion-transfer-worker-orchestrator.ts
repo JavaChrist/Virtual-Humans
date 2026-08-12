@@ -34,9 +34,12 @@ import type {
 } from "@/application/production/enqueue";
 import type { ProductionExecutionContext } from "@/application/production/production-director";
 import {
-  evaluateMotionTransferWorkerGates,
   type MotionTransferRegistryGateProfile,
 } from "./motion-transfer-worker-gates";
+import {
+  evaluateMotionTransferSubmitPath,
+  type MotionTransferLifecycleController,
+} from "./motion-transfer-lifecycle-gates";
 import {
   assertMotionEventRedacted,
   fingerprintProviderJobId,
@@ -104,6 +107,15 @@ export type MotionTransferWorkerOrchestratorOptions = {
   privacyDecisions?: Partial<MotionTransferPrivacyDecisions>;
   env?: Record<string, string | undefined>;
   events?: MotionTransferWorkerEventSink;
+  /**
+   * MT-013K-WIRE — admission / submit / poll separation.
+   * After providerJobId persist: admission+submit OFF, poll retained.
+   */
+  lifecycle?: MotionTransferLifecycleController;
+  /**
+   * When set, jobs whose projectId is outside this list are refused (MV-001 scope).
+   */
+  allowedProjectIds?: readonly string[];
   /**
    * TEST ONLY — simulate crash after provider accept, before durable providerJobId persist.
    * Leaves submission_unknown; never auto-resubmit.
@@ -316,17 +328,20 @@ export function createMotionTransferWorkerOrchestrator(
       };
     }
 
-    const gates = evaluateMotionTransferWorkerGates({
-      env,
-      privacyDecisions: options.privacyDecisions,
-      registryProfile: options.registryProfile,
-      firmEstimatePresent:
-        typeof estimateMinor === "number" && estimateMinor >= 0,
-      reservationPresent: true,
-      mediaAvailable: true,
-      humanReviewPolicyPresent: motionMeta?.humanReviewPolicyPresent === true,
-      routeSelected: Boolean(job.providerId && job.modelId),
-      versionsSupported: true,
+    const gates = evaluateMotionTransferSubmitPath({
+      lifecycle: options.lifecycle,
+      workerGates: {
+        env,
+        privacyDecisions: options.privacyDecisions,
+        registryProfile: options.registryProfile,
+        firmEstimatePresent:
+          typeof estimateMinor === "number" && estimateMinor >= 0,
+        reservationPresent: true,
+        mediaAvailable: true,
+        humanReviewPolicyPresent: motionMeta?.humanReviewPolicyPresent === true,
+        routeSelected: Boolean(job.providerId && job.modelId),
+        versionsSupported: true,
+      },
     });
 
     if (!gates.ok) {
@@ -491,6 +506,8 @@ export function createMotionTransferWorkerOrchestrator(
     seeded.providerJobId = submission.providerJobId;
     seeded.phase = "submitted";
     options.attempts.save(seeded);
+    // Close admission + new submit; retain poll-only for this providerJobId.
+    options.lifecycle?.onSubmitPersisted(seeded.attemptId);
 
     emit(options.events, {
       type: "motion.submit.accepted",
@@ -605,6 +622,19 @@ export function createMotionTransferWorkerOrchestrator(
         errorCode: "provider_job_not_found",
         publicMessage: "providerJobId requis pour poll — pas de resubmit.",
         enqueueNext: [],
+      };
+    }
+
+    const pollPermission = options.lifecycle?.evaluatePoll({
+      providerJobId,
+      submitCount: record.submitCount,
+      phase: record.phase,
+    });
+    if (pollPermission && !pollPermission.allowed) {
+      return {
+        status: "blocked_by_kill_switch",
+        runId: job.runId,
+        publicMessage: pollPermission.reason,
       };
     }
 
@@ -947,6 +977,20 @@ export function createMotionTransferWorkerOrchestrator(
           runId: job.runId,
           errorCode: "motion_action_mismatch",
           publicMessage: "Orchestrateur Motion appelé hors action motion_transfer.",
+          enqueueNext: [],
+        };
+      }
+
+      if (
+        options.allowedProjectIds &&
+        options.allowedProjectIds.length > 0 &&
+        !options.allowedProjectIds.includes(job.projectId)
+      ) {
+        return {
+          status: "failed",
+          runId: job.runId,
+          errorCode: "motion_scope_forbidden",
+          publicMessage: "Job Motion hors périmètre projet autorisé.",
           enqueueNext: [],
         };
       }
