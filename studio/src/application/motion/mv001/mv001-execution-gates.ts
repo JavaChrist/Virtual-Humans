@@ -18,11 +18,17 @@ import {
   MV001_BENCHMARK_ID,
   MV001_DURATION_SECONDS,
   MV001_ENDPOINT_ID,
+  MV001_OBSERVED_AVAILABLE_MINOR,
+  MV001_OBSERVED_COMMITTED_MINOR,
+  MV001_OBSERVED_HARD_MINOR,
+  MV001_OBSERVED_RESERVED_MINOR,
   MV001_PRIVACY_EXPIRES_AT,
   MV001_PROVIDER_ID,
   MV001_RESERVATION_MINOR,
+  MV001_SHORTFALL_MINOR,
   assertProductionRegistryRemainsDisabled,
   buildMv001BenchmarkProfile,
+  mv001ReservationShortfallMinor,
 } from "./mv001-benchmark-profile";
 import { type FalKeyPresence, falKeyPresentFromFlag } from "./mv001-fal-key-presence";
 import {
@@ -42,7 +48,9 @@ export const MV001_GATE_IDS = [
   "privacy_pack_accepted",
   "privacy_not_expired",
   "migrations_30",
-  "budget_available_ge_62",
+  "budget_observed_unchanged",
+  "shortfall_100",
+  "budget_covers_reservation",
   "registry_exception_active",
   "production_registry_disabled",
   "source_video_validated",
@@ -57,7 +65,7 @@ export const MV001_GATE_IDS = [
   "no_concurrent_run",
   "no_prior_mv001_active",
   "closure_off_prepared",
-  "estimate_51",
+  "estimate_135",
   "reservation_cap",
 ] as const;
 
@@ -125,6 +133,8 @@ const AWAIT_AUTH_GATES: ReadonlySet<Mv001GateId> = new Set([
   "private_references",
   "fal_key_present",
   "motion_flags_four",
+  /** Available 62 < reservation 162 — requires separate budget-raise Auth. */
+  "budget_covers_reservation",
 ]);
 
 export function evaluateMv001ExecutionGates(
@@ -176,7 +186,21 @@ export function evaluateMv001ExecutionGates(
     ),
     gate("migrations_30", ctx.migrationsCount === 30, `count=${ctx.migrationsCount}`),
     gate(
-      "budget_available_ge_62",
+      "budget_observed_unchanged",
+      ctx.budget.hardMinor === MV001_OBSERVED_HARD_MINOR &&
+        ctx.budget.committedMinor === MV001_OBSERVED_COMMITTED_MINOR &&
+        ctx.budget.reservedMinor === MV001_OBSERVED_RESERVED_MINOR &&
+        ctx.budget.availableMinor === MV001_OBSERVED_AVAILABLE_MINOR,
+      `budget=${ctx.budget.hardMinor}/${ctx.budget.committedMinor}/${ctx.budget.reservedMinor}/${ctx.budget.availableMinor}`,
+    ),
+    gate(
+      "shortfall_100",
+      mv001ReservationShortfallMinor(ctx.budget.availableMinor) ===
+        MV001_SHORTFALL_MINOR,
+      `shortfall=${mv001ReservationShortfallMinor(ctx.budget.availableMinor)}`,
+    ),
+    gate(
+      "budget_covers_reservation",
       ctx.budget.availableMinor >= MV001_RESERVATION_MINOR,
       `available=${ctx.budget.availableMinor}`,
     ),
@@ -204,7 +228,10 @@ export function evaluateMv001ExecutionGates(
     gate("no_concurrent_run", ctx.concurrentActiveRuns === 0),
     gate("no_prior_mv001_active", ctx.priorMv001ActiveResults === 0),
     gate("closure_off_prepared", ctx.closureOffPrepared),
-    gate("estimate_51", ctx.estimateMinor === 51 && profile.estimateMinor === 51),
+    gate(
+      "estimate_135",
+      ctx.estimateMinor === 135 && profile.estimateMinor === 135,
+    ),
     gate(
       "reservation_cap",
       ctx.reservationMinor === MV001_RESERVATION_MINOR &&

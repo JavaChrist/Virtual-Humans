@@ -19,7 +19,7 @@ import {
   manifestHasRequiredRoles,
 } from "./mv001-media-manifest";
 
-/** Documented duration tolerance for prep (±0.25s around 3s). */
+/** Documented duration tolerance for prep (±0.25s around target duration). */
 export const MV001_DURATION_TOLERANCE_SECONDS = 0.25 as const;
 
 const VIDEO_MIME = new Set(["video/mp4"]);

@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.112] — 2026-08-12
+
+### Changed (MT-013G2 MV-001 8s Media Preparation)
+
+- Auth `AUTH_MV001_PREPARE_LOCAL_8S_VIDEO_ONLY` : dérivé local 8s 1280×720 H.264 yuv420p @25fps, audio stripped.
+- Profil MV-001 : durée **8s** · estimate **135¢** · reservation **162¢** · cap **200¢** · shortfall **100¢**.
+- Budget inchangé 174/112/0/62 · MEDIA_VALIDATED local · 0 upload/fal. Rapport `86_`.
+
 ## [2.0.111] — 2026-08-12
 
 ### Added (MT-013G MV-001 Local Media Validate)

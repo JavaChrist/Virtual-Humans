@@ -28,17 +28,17 @@ function box(type: string, payload: Buffer): Buffer {
   return Buffer.concat([size, Buffer.from(type, "ascii"), payload]);
 }
 
-/** Minimal MP4: ftyp + moov with mvhd/tkhd/mdhd/stsd/stts for 3s @ 24fps 1280x720. */
+/** Minimal MP4: ftyp + moov with mvhd/tkhd/mdhd/stsd/stts for 8s @ 25fps 1280x720. */
 function buildMinimalMp4(opts?: {
   durationSeconds?: number;
   width?: number;
   height?: number;
   fps?: number;
 }): Buffer {
-  const durationSeconds = opts?.durationSeconds ?? 3;
+  const durationSeconds = opts?.durationSeconds ?? 8;
   const width = opts?.width ?? 1280;
   const height = opts?.height ?? 720;
-  const fps = opts?.fps ?? 24;
+  const fps = opts?.fps ?? 25;
   const timescale = 1000;
   const duration = Math.round(durationSeconds * timescale);
   const mediaTimescale = fps;
@@ -176,8 +176,8 @@ describe("MT-013G local media validate", () => {
     assert.equal(v.mimeType, "video/mp4");
     assert.equal(v.width, 1280);
     assert.equal(v.height, 720);
-    assert.ok(Math.abs(v.durationSeconds - 3) < 0.05);
-    assert.ok(v.fps != null && Math.abs(v.fps - 24) <= 1);
+    assert.ok(Math.abs(v.durationSeconds - 8) < 0.05);
+    assert.ok(v.fps != null && Math.abs(v.fps - 25) <= 1);
     assert.match(v.checksumSha256, /^[a-f0-9]{64}$/);
 
     const img = probeLocalImageFile(imagePath);
@@ -205,7 +205,7 @@ describe("MT-013G local media validate", () => {
   test("duration out of tolerance → MEDIA_INVALID", () => {
     const videoPath = join(tmpRoot, "bad-duration.mp4");
     const imagePath = join(tmpRoot, "identity-ok.png");
-    writeFileSync(videoPath, buildMinimalMp4({ durationSeconds: 8 }));
+    writeFileSync(videoPath, buildMinimalMp4({ durationSeconds: 3 }));
     writeFileSync(imagePath, buildPng(512, 512));
     const r = validateMv001LocalMedia({
       sourceVideoPath: videoPath,

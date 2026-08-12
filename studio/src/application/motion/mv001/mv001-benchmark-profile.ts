@@ -1,6 +1,7 @@
 /**
- * MT-013F — MV-001 controlled benchmark profile (prep only).
+ * MT-013F/G2 — MV-001 controlled benchmark profile (prep only).
  * Production registry remains disabled; eligibility is via scoped exception only.
+ * MT-013G2: duration 8s · estimate 135¢ · reservation 162¢ · cap 200¢ · shortfall 100¢.
  */
 
 import {
@@ -11,7 +12,7 @@ import {
 import { estimateFalKlingIndicativeCostMinor } from "@/infrastructure/providers/motion-transfer/fal-kling-motion-control-mapping";
 
 export const MV001_BENCHMARK_ID = "MV-001" as const;
-export const MV001_PROFILE_SCHEMA_VERSION = "mt013f-mv001-profile-1.0.0" as const;
+export const MV001_PROFILE_SCHEMA_VERSION = "mt013g2-mv001-profile-1.0.0" as const;
 
 /** Privacy / exception expiry from AUTH_MV001_PRIVACY_DECISION_PACK_LIMITED (end of day local FR). */
 export const MV001_PRIVACY_EXPIRES_AT = "2026-09-10T21:59:59.999Z" as const;
@@ -19,13 +20,21 @@ export const MV001_PRIVACY_EXPIRES_AT = "2026-09-10T21:59:59.999Z" as const;
 export const MV001_ENDPOINT_ID = FAL_KLING_V3_PRO_REGISTRY_MODEL_ID;
 export const MV001_PROVIDER_ID = FAL_KLING_V3_PRO_REGISTRY_PROVIDER_ID;
 
-export const MV001_DURATION_SECONDS = 3 as const;
+export const MV001_DURATION_SECONDS = 8 as const;
 export const MV001_FIDELITY = "critical" as const;
 export const MV001_MAX_CALLS = 1 as const;
 export const MV001_MAX_JOBS = 1 as const;
 export const MV001_MAX_OUTPUTS = 1 as const;
-export const MV001_RESERVATION_MINOR = 62 as const;
-export const MV001_ABSOLUTE_CAP_MINOR = 100 as const;
+/** Required reservation for paid Auth — exceeds current available (shortfall). */
+export const MV001_RESERVATION_MINOR = 162 as const;
+export const MV001_ABSOLUTE_CAP_MINOR = 200 as const;
+/** Observed workspace budget (unchanged by G2 Auth). */
+export const MV001_OBSERVED_HARD_MINOR = 174 as const;
+export const MV001_OBSERVED_COMMITTED_MINOR = 112 as const;
+export const MV001_OBSERVED_RESERVED_MINOR = 0 as const;
+export const MV001_OBSERVED_AVAILABLE_MINOR = 62 as const;
+/** reservation 162 − available 62 */
+export const MV001_SHORTFALL_MINOR = 100 as const;
 export const MV001_FALLBACKS = 0 as const;
 export const MV001_AUTO_RETRY = 0 as const;
 
@@ -42,6 +51,7 @@ export type Mv001BenchmarkProfile = {
   estimateMinor: number;
   reservationMinor: typeof MV001_RESERVATION_MINOR;
   absoluteCapMinor: typeof MV001_ABSOLUTE_CAP_MINOR;
+  shortfallMinor: typeof MV001_SHORTFALL_MINOR;
   fallbacks: typeof MV001_FALLBACKS;
   autoRetry: typeof MV001_AUTO_RETRY;
   humanReview: "required";
@@ -68,6 +78,7 @@ export function buildMv001BenchmarkProfile(): Mv001BenchmarkProfile {
     estimateMinor: estimate.estimatedCostMinor,
     reservationMinor: MV001_RESERVATION_MINOR,
     absoluteCapMinor: MV001_ABSOLUTE_CAP_MINOR,
+    shortfallMinor: MV001_SHORTFALL_MINOR,
     fallbacks: MV001_FALLBACKS,
     autoRetry: MV001_AUTO_RETRY,
     humanReview: "required",
@@ -85,4 +96,8 @@ export function assertProductionRegistryRemainsDisabled(): void {
   if (FAL_KLING_V3_PRO_REGISTRY_PROFILE.paidExecution !== false) {
     throw new Error("Production fal Kling paidExecution must remain false.");
   }
+}
+
+export function mv001ReservationShortfallMinor(availableMinor: number): number {
+  return Math.max(0, MV001_RESERVATION_MINOR - availableMinor);
 }

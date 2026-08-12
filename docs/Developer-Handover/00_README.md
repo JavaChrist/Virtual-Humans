@@ -28,17 +28,18 @@ Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
 Motion / Performance     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
                            MT-013F prep READY_FOR_MEDIA_AND_DEPLOY_AUTH (`84_`)
-                           MT-013G local media MEDIA_INVALID (`85_`) — source 16s/360p ; identity OK
+                           MT-013G2 8s media PREPARED + MEDIA_VALIDATED (`86_`) · shortfall 100¢
                            MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
                            privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
                            remote MT-005 APPLIED (`82_`) · NO PAID BENCHMARK_YET
 Runtime AI               : OFF
 Budget                   : hard 174 / committed 112 / reserved 0 / available 62 (`83_`)
+                           MV-001 réserve 162¢ → shortfall **100¢** (hard inchangé)
 production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : décision média image VHS-124
 P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
-Prochaine porte majeure  : source 3s≥720p → re-validate MT-013G → upload → deploy/flags → paid MV-001
+Prochaine porte majeure  : Auth budget raise (+≥100¢) → upload → deploy/flags → paid MV-001
 ```
 
 ### Portes Directors texte
@@ -195,7 +196,8 @@ Utilisateur → AI Video Director (/director)
 | [`82_MT005_REMOTE_APPLY_PASS.md`](./82_MT005_REMOTE_APPLY_PASS.md) | **MT-005 remote apply PASS · Production 30/30 · runtime Motion UNAVAILABLE** |
 | [`83_MT013E_MV001_BUDGET_HARD_LIMIT_174.md`](./83_MT013E_MV001_BUDGET_HARD_LIMIT_174.md) | **MT-013E budget hard 122→174 · available 62¢ · pas de réservation** |
 | [`84_MT013F_MV001_CONTROLLED_BENCHMARK_PREP.md`](./84_MT013F_MV001_CONTROLLED_BENCHMARK_PREP.md) | **MT-013F prep · READY_FOR_MEDIA_AND_DEPLOY_AUTH · 0 fal / 0 upload** |
-| [`85_MT013G_MV001_LOCAL_MEDIA_VALIDATE.md`](./85_MT013G_MV001_LOCAL_MEDIA_VALIDATE.md) | **MT-013G local media · MEDIA_INVALID (source durée/résolution)** |
+| [`85_MT013G_MV001_LOCAL_MEDIA_VALIDATE.md`](./85_MT013G_MV001_LOCAL_MEDIA_VALIDATE.md) | **MT-013G local media · MEDIA_INVALID (source 16s/360p — historique)** |
+| [`86_MT013G2_MV001_8S_MEDIA_PREPARATION.md`](./86_MT013G2_MV001_8S_MEDIA_PREPARATION.md) | **MT-013G2 8s 720p préparé · MEDIA_VALIDATED · shortfall 100¢** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

@@ -1,5 +1,5 @@
 /**
- * MT-013F — Future post-deploy dry-run contract for MV-001.
+ * MT-013F/G2 — Future post-deploy dry-run contract for MV-001.
  * Prep evaluates local expectations; does not call fal, reserve, or write Production.
  */
 
@@ -9,14 +9,20 @@ import {
   MV001_BENCHMARK_ID,
   MV001_DURATION_SECONDS,
   MV001_ENDPOINT_ID,
+  MV001_OBSERVED_AVAILABLE_MINOR,
+  MV001_OBSERVED_COMMITTED_MINOR,
+  MV001_OBSERVED_HARD_MINOR,
+  MV001_OBSERVED_RESERVED_MINOR,
   MV001_PRIVACY_EXPIRES_AT,
   MV001_PROVIDER_ID,
   MV001_RESERVATION_MINOR,
+  MV001_SHORTFALL_MINOR,
   buildMv001BenchmarkProfile,
+  mv001ReservationShortfallMinor,
 } from "./mv001-benchmark-profile";
 import type { Mv001BudgetSnapshot } from "./mv001-execution-gates";
 
-export const MV001_DRY_RUN_LIVE_PREP_VERSION = "mt013f-mv001-dry-run-1.0.0" as const;
+export const MV001_DRY_RUN_LIVE_PREP_VERSION = "mt013g2-mv001-dry-run-1.0.0" as const;
 
 export type Mv001DryRunLivePrepInput = {
   /** Exact source commit SHA expected after deploy Auth. */
@@ -45,12 +51,12 @@ export type Mv001DryRunLivePrepResult = {
   assets: 0;
   workerExecuted: false;
   profile: ReturnType<typeof buildMv001BenchmarkProfile>;
+  shortfallMinor: number;
 };
 
 /**
  * Evaluate dry-run readiness for a future live gate (no network).
- * In MT-013F prep, this documents the contract; a failing commit match is expected
- * until deploy Auth lands the exact SHA.
+ * Note: READY_FOR_PAID_AUTH also requires budget cover (no shortfall) after raise Auth.
  */
 export function evaluateMv001DryRunLivePrep(
   input: Mv001DryRunLivePrepInput,
@@ -58,6 +64,7 @@ export function evaluateMv001DryRunLivePrep(
   const profile = buildMv001BenchmarkProfile();
   const privacyNotExpired =
     Date.parse(input.privacyExpiresAt) > Date.parse(input.nowIso);
+  const shortfall = mv001ReservationShortfallMinor(input.budget.availableMinor);
 
   const checks = [
     {
@@ -98,24 +105,29 @@ export function evaluateMv001DryRunLivePrep(
       pass: profile.durationSeconds === MV001_DURATION_SECONDS,
     },
     {
-      id: "estimate_51",
-      pass: profile.estimateMinor === 51,
+      id: "estimate_135",
+      pass: profile.estimateMinor === 135,
     },
     {
-      id: "reservation_62",
+      id: "reservation_162",
       pass: profile.reservationMinor === MV001_RESERVATION_MINOR,
     },
     {
-      id: "absolute_cap_100",
+      id: "absolute_cap_200",
       pass: profile.absoluteCapMinor === MV001_ABSOLUTE_CAP_MINOR,
     },
     {
       id: "budget_174_112_0_62",
       pass:
-        input.budget.hardMinor === 174 &&
-        input.budget.committedMinor === 112 &&
-        input.budget.reservedMinor === 0 &&
-        input.budget.availableMinor === 62,
+        input.budget.hardMinor === MV001_OBSERVED_HARD_MINOR &&
+        input.budget.committedMinor === MV001_OBSERVED_COMMITTED_MINOR &&
+        input.budget.reservedMinor === MV001_OBSERVED_RESERVED_MINOR &&
+        input.budget.availableMinor === MV001_OBSERVED_AVAILABLE_MINOR,
+    },
+    {
+      id: "shortfall_100",
+      pass: shortfall === MV001_SHORTFALL_MINOR,
+      detail: "expected until budget-raise Auth",
     },
     {
       id: "provider_called_false",
@@ -134,6 +146,11 @@ export function evaluateMv001DryRunLivePrep(
       id: "worker_not_executed",
       pass: input.workerExecuted === false,
     },
+    {
+      id: "budget_covers_reservation",
+      pass: input.budget.availableMinor >= MV001_RESERVATION_MINOR,
+      detail: "blocks READY_FOR_PAID_AUTH while shortfall remains",
+    },
   ] as const;
 
   const allPass = checks.every((c) => c.pass);
@@ -149,18 +166,19 @@ export function evaluateMv001DryRunLivePrep(
     assets: 0,
     workerExecuted: false,
     profile,
+    shortfallMinor: shortfall,
   });
 }
 
 /** Prep scaffold — documents expected dry-run output shape without claiming deploy. */
 export function buildMv001DryRunLivePrepScaffold(sourceCommit: string): {
-  expectedVerdict: "READY_FOR_PAID_AUTH";
+  expectedVerdictAfterBudgetRaise: "READY_FOR_PAID_AUTH";
   expectedSourceCommit: string;
   note: string;
 } {
   return {
-    expectedVerdict: "READY_FOR_PAID_AUTH",
+    expectedVerdictAfterBudgetRaise: "READY_FOR_PAID_AUTH",
     expectedSourceCommit: sourceCommit,
-    note: "Execute only after deploy Auth; MT-013F prepares the script only.",
+    note: "Execute only after deploy + budget-raise Auth; MT-013G2 prepares media/profile only.",
   };
 }
