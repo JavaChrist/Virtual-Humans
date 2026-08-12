@@ -3,10 +3,10 @@
  * Worker never invents these — it only claims/processes.
  */
 
-export type ProductionJobMode = "execute" | "poll" | "cancel";
+export type ProductionJobMode = "execute" | "poll" | "cancel" | "drain";
 
 /**
- * MT-008 — motion lifecycle phases stored in job.payload jsonb (no SQL migration).
+ * MT-008 / MT-013K — motion lifecycle phases stored in job.payload jsonb (no SQL migration).
  * Queue status remains queued|leased|completed|failed|…
  */
 export type MotionTransferWorkerPhase =
@@ -41,6 +41,24 @@ export type MotionTransferJobPayloadMeta = {
   /** Fingerprint / truncated id — never raw CDN. */
   providerJobIdFingerprint?: string;
   outputRef?: string;
+  /** Opaque descriptor fields — never URL. */
+  outputMimeType?: string;
+  outputSizeBytes?: number;
+  outputDurationSeconds?: number;
+  outputWidth?: number;
+  outputHeight?: number;
+  outputFps?: number;
+  outputProviderChecksum?: string;
+  outputCompletedAt?: string;
+  outputLifecycle?: string;
+  downloadStatus?: "none" | "intent" | "completed" | "failed";
+  downloadChecksum?: string;
+  ingestStatus?: "none" | "intent" | "storage_written" | "completed" | "failed";
+  ingestedAssetId?: string;
+  qualityReportId?: string;
+  qcStatus?: "none" | "pending" | "completed" | "failed";
+  humanReviewHandoffStatus?: "none" | "seeded" | "failed";
+  drainErrorCode?: string;
   lateResult?: boolean;
   lateQuarantined?: boolean;
   reconciliationRequired?: boolean;

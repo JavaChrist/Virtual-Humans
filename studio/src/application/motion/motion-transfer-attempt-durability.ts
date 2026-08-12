@@ -104,6 +104,23 @@ export function serializeMotionAttemptAuthority(
     submitIntentAt: record.submitIntentAt,
     requestFingerprint: record.requestFingerprint,
     outputRef: record.outputRef,
+    outputMimeType: record.outputDescriptor?.mimeType,
+    outputSizeBytes: record.outputDescriptor?.sizeBytes,
+    outputDurationSeconds: record.outputDescriptor?.durationSeconds,
+    outputWidth: record.outputDescriptor?.width,
+    outputHeight: record.outputDescriptor?.height,
+    outputFps: record.outputDescriptor?.fps,
+    outputProviderChecksum: record.outputDescriptor?.providerChecksum,
+    outputCompletedAt: record.outputDescriptor?.completedAt,
+    outputLifecycle: record.outputLifecycle,
+    downloadStatus: record.downloadStatus,
+    downloadChecksum: record.downloadChecksum,
+    ingestStatus: record.ingestStatus,
+    ingestedAssetId: record.ingestedAssetId,
+    qualityReportId: record.qualityReportId,
+    qcStatus: record.qcStatus,
+    humanReviewHandoffStatus: record.humanReviewHandoffStatus,
+    drainErrorCode: record.drainErrorCode,
     lateResult: record.lateQuarantined,
     lateQuarantined: record.lateQuarantined,
     reconciliationRequired: record.reconciliationRequired,
@@ -205,6 +222,32 @@ export function hydrateMotionTransferAttemptFromJob(
     ledgerSettled:
       motion.ledgerSettled === true || motion.terminalSettled === true,
     outputRef: motion.outputRef,
+    outputDescriptor:
+      motion.outputRef && motion.outputMimeType
+        ? {
+            providerOutputRef: motion.outputRef,
+            mimeType: motion.outputMimeType,
+            sizeBytes: motion.outputSizeBytes,
+            durationSeconds: motion.outputDurationSeconds,
+            width: motion.outputWidth,
+            height: motion.outputHeight,
+            fps: motion.outputFps,
+            providerChecksum: motion.outputProviderChecksum,
+            completedAt:
+              motion.outputCompletedAt ?? "1970-01-01T00:00:00.000Z",
+          }
+        : undefined,
+    outputLifecycle: motion.outputLifecycle as
+      | import("@/domain/motion/persistence").MotionProviderOutputLifecycleStatus
+      | undefined,
+    downloadStatus: motion.downloadStatus ?? "none",
+    downloadChecksum: motion.downloadChecksum,
+    ingestStatus: motion.ingestStatus ?? "none",
+    ingestedAssetId: motion.ingestedAssetId,
+    qualityReportId: motion.qualityReportId,
+    qcStatus: motion.qcStatus ?? "none",
+    humanReviewHandoffStatus: motion.humanReviewHandoffStatus ?? "none",
+    drainErrorCode: motion.drainErrorCode,
     lateQuarantined:
       motion.lateQuarantined === true || motion.lateResult === true,
     usageUnknown: motion.usageUnknown === true,

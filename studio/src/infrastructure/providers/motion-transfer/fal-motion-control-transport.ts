@@ -200,6 +200,9 @@ export function createFakeFalMotionControlTransport(
             contentType: "video/mp4",
             fileSize: 1_024_000,
             durationSeconds: 8,
+            width: 1080,
+            height: 1920,
+            fps: 24,
           },
         };
       }

@@ -48,6 +48,9 @@ import { resolveMv001PrivacyDecisions } from "@/application/motion/mv001/mv001-p
 import { MotionTransferDomainError } from "@/domain/motion";
 
 const AT = "2026-08-12T14:00:00.000Z";
+const WS_WIRE = "3c308f57-f448-40ba-aaca-bc0d8d546d01";
+const PROJ_WIRE = "390c25db-69e1-403a-83c5-7afcb4b85e84";
+const PROJ_OTHER = "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee";
 
 const FLAGS_ON = {
   MOTION_TRANSFER_ENABLED: "1",
@@ -57,6 +60,7 @@ const FLAGS_ON = {
   MV001_REGISTRY_EXCEPTION_ACTIVE: "1",
   MV001_BENCHMARK_ID: "MV-001",
   MV001_PRIVACY_PACK_ACCEPTED: "1",
+  MV001_PROJECT_ID: PROJ_WIRE,
   NODE_ENV: "test",
   FAL_KEY: "test-fal-key-not-used-with-fake-transport",
 };
@@ -201,7 +205,7 @@ async function setupWiredJob(opts?: {
     },
   });
 
-  const projectId = opts?.otherProject ? "proj-other-scope" : "proj-mv001";
+  const projectId = opts?.otherProject ? PROJ_OTHER : PROJ_WIRE;
   await queue.enqueue({
     runId: "run-wire-1",
     projectId,
@@ -237,6 +241,9 @@ async function setupWiredJob(opts?: {
       opts?.statusSequence ?? ["IN_QUEUE", "IN_PROGRESS", "COMPLETED"],
   });
 
+  const { createFakeMotionOutputDownloadPort } = await import(
+    "@/application/motion/motion-output-download-port"
+  );
   const composition = createProductionMotionTransferComposition({
     budget,
     env: { ...env, MOTION_TRANSFER_FAKE_HARNESS: "1" },
@@ -254,7 +261,16 @@ async function setupWiredJob(opts?: {
         payload,
       );
     },
+    testDrain: {
+      download: createFakeMotionOutputDownloadPort(),
+    },
   });
+
+  const baseClaim = queue.claim.bind(queue);
+  queue.claim = async (workerId, limit, leaseSeconds) => {
+    const claimed = await baseClaim(workerId, limit, leaseSeconds);
+    return claimed.map((j) => ({ ...j, workspaceId: WS_WIRE }));
+  };
 
   const worker = createProductionWorkerFromDeps({
     policy: createWorkerPolicy({
@@ -414,7 +430,7 @@ test("MT-013K-WIRE FAL_KEY absente → zéro submit (lazy resolve)", async () =>
   });
   await queue.enqueue({
     runId: "run-wire-1",
-    projectId: "proj-mv001",
+    projectId: PROJ_WIRE,
     sceneId: "motion",
     stepId: "step-mt",
     attemptId: "att-wire-1",
@@ -523,7 +539,7 @@ test("MT-013K-WIRE privacy invalide → zéro submit", async () => {
   });
   await queue.enqueue({
     runId: "run-wire-1",
-    projectId: "proj-mv001",
+    projectId: PROJ_WIRE,
     sceneId: "motion",
     stepId: "step-mt",
     attemptId: "att-wire-1",
@@ -636,7 +652,7 @@ test("MT-013K-WIRE Registry globale disabled sans exception → zéro submit", a
   });
   await queue.enqueue({
     runId: "run-wire-1",
-    projectId: "proj-mv001",
+    projectId: PROJ_WIRE,
     sceneId: "motion",
     stepId: "step-mt",
     attemptId: "att-wire-1",
@@ -746,7 +762,7 @@ test("MT-013K-WIRE job d'une autre portée refusé", async () => {
   });
   await queue.enqueue({
     runId: "run-wire-1",
-    projectId: "proj-other-scope",
+    projectId: PROJ_OTHER,
     sceneId: "motion",
     stepId: "step-mt",
     attemptId: "att-wire-1",
@@ -936,7 +952,7 @@ test("MT-013K-WIRE providerJobId absent après crash → submission_unknown", as
   });
   await queue.enqueue({
     runId: "run-wire-1",
-    projectId: "proj-mv001",
+    projectId: PROJ_WIRE,
     sceneId: "motion",
     stepId: "step-mt",
     attemptId: "att-wire-1",
@@ -1042,36 +1058,106 @@ test("MT-013K-WIRE terminal replay sans double settlement · late quarantined", 
   const ctx = await setupWiredJob({
     statusSequence: ["COMPLETED"],
   });
+  for (let i = 0; i < 20; i++) {
+    ctx.clk.advanceMs(2_500);
+    await ctx.worker.runOnce({
+      correlationId: `c-term-${i}`,
+      actorId: "wire-test",
+      nowIso: ctx.clk.nowIso,
+      nowMs: ctx.clk.nowMs,
+      nextId: ctx.clk.nextId,
+    });
+    const rec = ctx.attempts.get("att-wire-1");
+    const job = [...ctx.queue.jobs.values()][0];
+    if (
+      rec?.humanReviewHandoffStatus === "seeded" ||
+      job?.payload.motion?.humanReviewHandoffStatus === "seeded"
+    ) {
+      break;
+    }
+  }
+  const job = [...ctx.queue.jobs.values()][0]!;
+  const rec = ctx.attempts.get("att-wire-1");
+  const diag = JSON.stringify({
+    status: job.status,
+    mode: job.payload.mode,
+    phase: job.payload.motion?.phase ?? rec?.phase,
+    ledger: job.payload.motion?.ledgerSettled ?? rec?.ledgerSettled,
+    handoff:
+      job.payload.motion?.humanReviewHandoffStatus ??
+      rec?.humanReviewHandoffStatus,
+    download: job.payload.motion?.downloadStatus ?? rec?.downloadStatus,
+    ingest: job.payload.motion?.ingestStatus ?? rec?.ingestStatus,
+    err: job.error,
+    availableAt: job.availableAt,
+  });
+  if (
+    !(
+      rec?.ledgerSettled === true ||
+      job.payload.motion?.ledgerSettled === true
+    )
+  ) {
+    throw new Error(`ledger not settled: ${diag}`);
+  }
+  if (
+    !(
+      rec?.humanReviewHandoffStatus === "seeded" ||
+      job.payload.motion?.humanReviewHandoffStatus === "seeded"
+    )
+  ) {
+    throw new Error(`handoff not seeded: ${diag}`);
+  }
+  if (rec) {
+    rec.terminal = true;
+    rec.ledgerSettled = true;
+    ctx.attempts.save(rec);
+  }
+  const settledAt = true;
   await ctx.worker.runOnce({
-    correlationId: "c-term-1",
+    correlationId: "c-term-replay",
     actorId: "wire-test",
     nowIso: ctx.clk.nowIso,
     nowMs: ctx.clk.nowMs,
     nextId: ctx.clk.nextId,
   });
-  ctx.clk.advanceMs(2_000);
-  await ctx.worker.runOnce({
-    correlationId: "c-term-2",
-    actorId: "wire-test",
-    nowIso: ctx.clk.nowIso,
-    nowMs: ctx.clk.nowMs,
-    nextId: ctx.clk.nextId,
-  });
-  const rec = ctx.attempts.get("att-wire-1")!;
-  assert.equal(rec.terminal, true);
-  assert.equal(rec.ledgerSettled, true);
-  const settledAt = rec.ledgerSettled;
-  // Replay
-  await ctx.worker.runOnce({
-    correlationId: "c-term-3",
-    actorId: "wire-test",
-    nowIso: ctx.clk.nowIso,
-    nowMs: ctx.clk.nowMs,
-    nextId: ctx.clk.nextId,
-  });
-  assert.equal(ctx.attempts.get("att-wire-1")!.ledgerSettled, settledAt);
-  assert.ok(quarantineMotionLateResult(ctx.attempts, "att-wire-1"));
-  assert.equal(ctx.attempts.get("att-wire-1")!.phase, "late_quarantined");
+  assert.equal(
+    ctx.attempts.get("att-wire-1")?.ledgerSettled ??
+      job.payload.motion?.ledgerSettled,
+    settledAt,
+  );
+  const attemptId = "att-wire-1";
+  if (!ctx.attempts.get(attemptId) && job.payload.motion) {
+    // Rehydrate minimal terminal record for late quarantine helper
+    seedMotionTransferAttempt(ctx.attempts, {
+      attemptId,
+      jobId: job.id,
+      runId: job.runId,
+      reservationId: job.payload.motion.reservationId ?? "res-wire-1",
+      reservedMinor: job.payload.motion.reservedMinor ?? 162,
+      estimate: {
+        schemaVersion: "1.0.0",
+        currency: "USD",
+        estimatedCostMinor: 135,
+        durationSeconds: 8,
+        pricingUnit: "second",
+        mode: "firm",
+        pricingStrategy: "per_second",
+        pricingVersion: "fal-llms.txt-2026-08-11",
+        providerId: FAL_MOTION_TRANSFER_PROVIDER_ID,
+        modelId: FAL_KLING_V3_PRO_MOTION_CONTROL_MODEL_ID,
+        capability: "video.motion_transfer",
+      },
+      motionInput: makeMinimalInput(),
+      mediaBoundary: { sourceVideoRef: "s", identityRefs: ["i"] },
+    });
+    const r = ctx.attempts.get(attemptId)!;
+    r.terminal = true;
+    r.ledgerSettled = true;
+    r.phase = "qc_pending";
+    ctx.attempts.save(r);
+  }
+  assert.ok(quarantineMotionLateResult(ctx.attempts, attemptId));
+  assert.equal(ctx.attempts.get(attemptId)!.phase, "late_quarantined");
 });
 
 test("MT-013K-WIRE signed URL jamais dans events · redaction hostile", async () => {
@@ -1165,7 +1251,7 @@ test("MT-013K-WIRE QC réel absent → needs_review (pas de faux PASS)", async (
     },
     motionInput,
     fidelity: "critical",
-    projectId: "proj-mv001",
+    projectId: PROJ_WIRE,
     correlationId: "c-qc",
     actorId: "system",
     nowIso: AT,

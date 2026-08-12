@@ -51,6 +51,12 @@ import {
   hydrateMotionTransferAttemptFromJob,
   isMotionSubmissionUnknownFromDurable,
 } from "./motion-transfer-attempt-durability";
+import {
+  advanceMotionOutputDrain,
+  createMotionDrainCounters,
+  durableDescriptorFromProvider,
+  type MotionOutputDrainCounters,
+} from "./motion-output-drain";
 import type { MotionTransferPrivacyDecisions } from "@/infrastructure/providers/motion-transfer/privacy-gate";
 import {
   FAL_KLING_MOTION_CONTROL_ADAPTER_VERSION,
@@ -73,6 +79,17 @@ export type MotionTransferAttemptRecord = {
   terminal: boolean;
   ledgerSettled: boolean;
   outputRef?: string;
+  /** Opaque durable descriptor — never URL. */
+  outputDescriptor?: import("./motion-output-drain").MotionDurableOutputDescriptor;
+  outputLifecycle?: import("@/domain/motion/persistence").MotionProviderOutputLifecycleStatus;
+  downloadStatus?: import("./motion-output-drain").MotionDrainDownloadStatus;
+  downloadChecksum?: string;
+  ingestStatus?: import("./motion-output-drain").MotionDrainIngestStatus;
+  ingestedAssetId?: string;
+  qualityReportId?: string;
+  qcStatus?: import("./motion-output-drain").MotionDrainQcStatus;
+  humanReviewHandoffStatus?: import("./motion-output-drain").MotionDrainReviewHandoffStatus;
+  drainErrorCode?: string;
   lateQuarantined: boolean;
   usageUnknown: boolean;
   reconciliationRequired: boolean;
@@ -135,6 +152,13 @@ export type MotionTransferWorkerOrchestratorOptions = {
    * Leaves submission_unknown; never auto-resubmit.
    */
   simulateCrashAfterSubmitBeforePersist?: boolean;
+  /**
+   * MT-013K-QC-CONSUMER — post-provider drain (download/ingest/QC/review).
+   * When absent, provider completed still ends at needs_review without ingest (legacy).
+   */
+  drain?: import("./motion-output-drain").MotionOutputDrainDeps;
+  /** Shared drain counters (tests / observability). */
+  drainCounters?: import("./motion-output-drain").MotionOutputDrainCounters;
   /** Default poll delay when provider omits pollAfterMs. */
   defaultPollAfterMs?: number;
   /** Max polls before timed_out. */
@@ -212,6 +236,8 @@ export function createMotionTransferWorkerOrchestrator(
     options.adapterVersion ?? FAL_KLING_MOTION_CONTROL_ADAPTER_VERSION;
   const env =
     options.env ?? (process.env as Record<string, string | undefined>);
+  const drainCounters: MotionOutputDrainCounters =
+    options.drainCounters ?? createMotionDrainCounters();
 
   async function settleOrRelease(input: {
     record: MotionTransferAttemptRecord;
@@ -674,7 +700,11 @@ export function createMotionTransferWorkerOrchestrator(
       };
     }
 
-    if (record.terminal && record.phase === "qc_pending") {
+    if (
+      record.terminal &&
+      (record.humanReviewHandoffStatus === "seeded" ||
+        (!options.drain && record.phase === "qc_pending"))
+    ) {
       return { status: "already_done", runId: job.runId, enqueueNext: [] };
     }
     if (record.terminal && record.lateQuarantined) {
@@ -965,15 +995,14 @@ export function createMotionTransferWorkerOrchestrator(
           : money(record.estimate.estimatedCostMinor, "USD");
 
       await settleOrRelease({ record, actualCost: actual });
-      record.phase = "qc_pending";
       record.outputRef = status.output.providerOutputRef;
-      record.terminal = true;
-      options.attempts.save(record);
-      try {
-        await persistAuthority(job, lease, record, "poll");
-      } catch {
-        // Settlement already applied; terminal flags best-effort durable.
-      }
+      record.outputDescriptor = durableDescriptorFromProvider(status.output);
+      record.outputLifecycle = "provider_completed";
+      record.downloadStatus = record.downloadStatus ?? "none";
+      record.ingestStatus = record.ingestStatus ?? "none";
+      record.qcStatus = record.qcStatus ?? "none";
+      record.humanReviewHandoffStatus =
+        record.humanReviewHandoffStatus ?? "none";
 
       emit(options.events, {
         type: "motion.provider.completed",
@@ -997,6 +1026,41 @@ export function createMotionTransferWorkerOrchestrator(
         costMinor: actual.amountMinor,
         status: "committed",
       });
+
+      if (options.drain) {
+        // Durable descriptor + reschedule drain — pipeline not terminal yet.
+        record.phase = "provider_completed";
+        record.terminal = false;
+        options.attempts.save(record);
+        try {
+          await persistAuthority(job, lease, record, "drain");
+        } catch {
+          // best-effort; reschedule payload still carries authority
+        }
+        const availableAt = new Date(
+          Date.parse(context.nowIso()) + defaultPollAfterMs,
+        ).toISOString();
+        return {
+          status: "reschedule",
+          runId: job.runId,
+          availableAt,
+          payloadRef: buildDurableMotionPayload(job, record, "drain", {
+            pollAfterMs: defaultPollAfterMs,
+            providerJobIdFingerprint: fingerprintProviderJobId(providerJobId),
+          }),
+          enqueueNext: [],
+        };
+      }
+
+      // Legacy (no drain wiring): stop at qc_pending / needs_review.
+      record.phase = "qc_pending";
+      record.terminal = true;
+      options.attempts.save(record);
+      try {
+        await persistAuthority(job, lease, record, "poll");
+      } catch {
+        // Settlement already applied; terminal flags best-effort durable.
+      }
       emit(options.events, {
         type: "motion.qc.pending",
         correlationId: context.correlationId,
@@ -1007,8 +1071,6 @@ export function createMotionTransferWorkerOrchestrator(
         phase: "qc_pending",
         status: "handoff",
       });
-
-      // Terminal success for queue — handoff QC pending (no final asset / approval / merge)
       return {
         status: "needs_review",
         runId: job.runId,
@@ -1041,6 +1103,126 @@ export function createMotionTransferWorkerOrchestrator(
       errorCode: "provider_status_unknown",
       publicMessage: "Statut poll non géré.",
       enqueueNext: [],
+    };
+  }
+
+  async function handleDrain(
+    job: ClaimedProductionJob,
+    lease: LeaseContext,
+    context: ProductionExecutionContext,
+  ): Promise<ProcessClaimedJobOutcome> {
+    if (!options.drain) {
+      return {
+        status: "failed",
+        runId: job.runId,
+        errorCode: "motion_capability_unavailable",
+        publicMessage: "Drain Motion non câblé.",
+        enqueueNext: [],
+      };
+    }
+
+    const pollPermission = options.lifecycle?.evaluatePoll({
+      providerJobId:
+        job.payload.externalJobId ??
+        options.attempts.get(job.attemptId)?.providerJobId,
+      submitCount:
+        options.attempts.get(job.attemptId)?.submitCount ??
+        job.payload.motion?.submitCount ??
+        1,
+      phase:
+        options.attempts.get(job.attemptId)?.phase ??
+        job.payload.motion?.phase ??
+        "provider_completed",
+    });
+    if (pollPermission && !pollPermission.allowed) {
+      return {
+        status: "blocked_by_kill_switch",
+        runId: job.runId,
+        publicMessage: pollPermission.reason,
+      };
+    }
+
+    const record = loadAttempt(job);
+    if (!record) {
+      return {
+        status: "failed",
+        runId: job.runId,
+        errorCode: "motion_attempt_missing",
+        publicMessage: "Attempt introuvable pour drain.",
+        enqueueNext: [],
+      };
+    }
+
+    if (record.terminal && record.humanReviewHandoffStatus === "seeded") {
+      return { status: "already_done", runId: job.runId, enqueueNext: [] };
+    }
+
+    const step = await advanceMotionOutputDrain({
+      job,
+      record,
+      context,
+      deps: options.drain,
+      counters: drainCounters,
+    });
+    options.attempts.save(step.record);
+    try {
+      await persistAuthority(
+        job,
+        lease,
+        step.record,
+        step.status === "needs_review" || step.status === "already_done"
+          ? "drain"
+          : "drain",
+      );
+    } catch {
+      // reschedule / terminal payload still attempted below
+    }
+
+    if (step.status === "reschedule") {
+      const availableAt = new Date(
+        Date.parse(context.nowIso()) + defaultPollAfterMs,
+      ).toISOString();
+      return {
+        status: "reschedule",
+        runId: job.runId,
+        availableAt,
+        payloadRef: buildDurableMotionPayload(job, step.record, "drain", {
+          pollAfterMs: defaultPollAfterMs,
+          providerJobIdFingerprint: step.record.providerJobId
+            ? fingerprintProviderJobId(step.record.providerJobId)
+            : undefined,
+        }),
+        enqueueNext: [],
+      };
+    }
+    if (step.status === "already_done") {
+      return { status: "already_done", runId: job.runId, enqueueNext: [] };
+    }
+    if (step.status === "failed") {
+      return {
+        status: "failed",
+        runId: job.runId,
+        errorCode: step.errorCode,
+        publicMessage: step.publicMessage,
+        enqueueNext: [],
+      };
+    }
+
+    emit(options.events, {
+      type: "motion.qc.pending",
+      correlationId: context.correlationId,
+      projectId: job.projectId,
+      runId: job.runId,
+      jobId: job.jobId,
+      attemptId: job.attemptId,
+      phase: "qc_pending",
+      status: "handoff",
+    });
+
+    return {
+      status: "needs_review",
+      runId: job.runId,
+      publicMessage: step.publicMessage,
     };
   }
 
@@ -1113,6 +1295,9 @@ export function createMotionTransferWorkerOrchestrator(
       if (mode === "poll") {
         return handlePoll(job, lease, context);
       }
+      if (mode === "drain") {
+        return handleDrain(job, lease, context);
+      }
       return handleExecute(job, lease, context);
     },
   };
@@ -1147,6 +1332,10 @@ export function seedMotionTransferAttempt(
     phase: "submitting",
     terminal: false,
     ledgerSettled: false,
+    downloadStatus: "none",
+    ingestStatus: "none",
+    qcStatus: "none",
+    humanReviewHandoffStatus: "none",
     lateQuarantined: false,
     usageUnknown: false,
     reconciliationRequired: false,

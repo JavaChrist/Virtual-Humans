@@ -22,7 +22,10 @@ function parseMotionMeta(
 function parsePayload(raw: unknown): ProductionPayloadReference {
   const p = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
   const mode =
-    p.mode === "poll" || p.mode === "cancel" || p.mode === "execute"
+    p.mode === "poll" ||
+    p.mode === "cancel" ||
+    p.mode === "execute" ||
+    p.mode === "drain"
       ? p.mode
       : "execute";
   return {

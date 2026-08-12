@@ -13,8 +13,7 @@
 Le store process-scoped n’est plus source d’autorité après submit intent / `providerJobId`.  
 Authority = `production_jobs.payload` (+ colonne `external_job_id` synchronisée sous lease).
 
-**Blocage séparé (avant benchmark payant, pas avant deploy-preflight) :**  
-`POST_QC_CONSUMER = NOT_WIRED` — ingest output → QC → Human Review après `qc_pending` n’est pas câblé en Production (handoff `needs_review` seulement ; aucun faux QC).
+**Suite :** `POST_QC_CONSUMER` câblé dans **MT-013K-QC-CONSUMER** (`92_`) — drain durable download/ingest/QC/review.
 
 ---
 
@@ -72,4 +71,4 @@ Authority = `production_jobs.payload` (+ colonne `external_job_id` synchronisée
 
 1. **New deploy-preflight** sur lignée wire+durability (flags OFF, 0 fal).  
 2. Puis Auth payante contrôlée (si preflight vert).  
-3. **Avant benchmark terminal :** câbler consumer post-`qc_pending` (ingest → QC réel → Human Review) — ticket séparé.
+3. Consumer post-`qc_pending` : voir `92_MT013K_PRODUCTION_MOTION_QC_CONSUMER.md`.

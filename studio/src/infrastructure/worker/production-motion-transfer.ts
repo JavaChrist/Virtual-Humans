@@ -56,9 +56,32 @@ import { resolveFalKlingMotionControlAdapter } from "@/infrastructure/providers/
 import type { FalMotionControlTransport } from "@/infrastructure/providers/motion-transfer/fal-motion-control-transport";
 import type { MotionTransferPrivacyDecisions } from "@/infrastructure/providers/motion-transfer/privacy-gate";
 import type { MotionTransferRegistryGateProfile } from "@/application/motion/motion-transfer-worker-gates";
+import {
+  createMotionDrainCounters,
+  createProductionMotionOutputDrainDeps,
+  type MotionOutputDrainCounters,
+} from "@/application/motion/motion-output-drain";
+import { resolveProductionMotionOutputDownloadPort } from "@/application/motion/gated-motion-output-download";
+import {
+  createMemoryMotionPersistencePort,
+  type MotionPersistencePort,
+} from "@/application/motion/motion-persistence-port";
+import {
+  createMemoryMotionQcReportStore,
+  type MotionQcReportStore,
+} from "@/application/motion/motion-qc-report";
+import {
+  createMemoryMotionReviewSessionStore,
+  type MotionReviewSessionStore,
+} from "@/application/motion/motion-review-orchestrator";
+import {
+  createMemoryAssetContentPort,
+  type AssetContentPort,
+} from "@/application/postproduction/asset-content-port";
+import type { MotionOutputDownloadPort } from "@/application/motion/motion-output-download-port";
 
 export const PRODUCTION_MOTION_TRANSFER_COMPOSITION_VERSION =
-  "mt013k-wire-1.0.0" as const;
+  "mt013k-qc-consumer-1.0.0" as const;
 
 /**
  * Process-scoped attempt cache only (MT-013K-DURABILITY).
@@ -66,6 +89,11 @@ export const PRODUCTION_MOTION_TRANSFER_COMPOSITION_VERSION =
  * Cold start → empty Map → hydrate from claimed job payload.
  */
 let processAttemptStore: MotionTransferAttemptStore | undefined;
+let processDrainPersistence: MotionPersistencePort | undefined;
+let processDrainReports: MotionQcReportStore | undefined;
+let processDrainSessions: MotionReviewSessionStore | undefined;
+let processDrainContent: AssetContentPort | undefined;
+let processDrainCounters: MotionOutputDrainCounters | undefined;
 
 export function getProductionMotionAttemptStore(): MotionTransferAttemptStore {
   if (!processAttemptStore) {
@@ -77,6 +105,11 @@ export function getProductionMotionAttemptStore(): MotionTransferAttemptStore {
 /** Test-only reset between unit cases. */
 export function resetProductionMotionAttemptStoreForTests(): void {
   processAttemptStore = createMemoryMotionTransferAttemptStore();
+  processDrainPersistence = undefined;
+  processDrainReports = undefined;
+  processDrainSessions = undefined;
+  processDrainContent = undefined;
+  processDrainCounters = undefined;
 }
 
 function isVercelOrProduction(
@@ -230,6 +263,15 @@ export type CreateProductionMotionTransferCompositionInput = {
   ) => Promise<void>;
   /** TEST ONLY — never pass a fake transport under Vercel/Production. */
   testTransport?: FalMotionControlTransport;
+  /** TEST ONLY — inject fake download / shared drain stores. */
+  testDrain?: {
+    download?: MotionOutputDownloadPort;
+    content?: AssetContentPort;
+    persistence?: MotionPersistencePort;
+    reports?: MotionQcReportStore;
+    reviewSessions?: MotionReviewSessionStore;
+    simulateCrashAfterIngest?: boolean;
+  };
 };
 
 /**
@@ -274,6 +316,39 @@ export function createProductionMotionTransferComposition(
     ? [env.MV001_PROJECT_ID.trim()]
     : undefined;
 
+  // MT-013K-QC-CONSUMER — drain deps (download gated; QC honest-unavailable).
+  if (!processDrainPersistence) {
+    processDrainPersistence =
+      input.testDrain?.persistence ?? createMemoryMotionPersistencePort();
+  }
+  if (!processDrainReports) {
+    processDrainReports =
+      input.testDrain?.reports ?? createMemoryMotionQcReportStore();
+  }
+  if (!processDrainSessions) {
+    processDrainSessions =
+      input.testDrain?.reviewSessions ?? createMemoryMotionReviewSessionStore();
+  }
+  if (!processDrainContent) {
+    processDrainContent =
+      input.testDrain?.content ?? createMemoryAssetContentPort();
+  }
+  if (!processDrainCounters) {
+    processDrainCounters = createMotionDrainCounters();
+  }
+
+  const drain = createProductionMotionOutputDrainDeps({
+    download: resolveProductionMotionOutputDownloadPort(
+      env,
+      input.testDrain?.download,
+    ),
+    content: processDrainContent,
+    persistence: processDrainPersistence,
+    reports: processDrainReports,
+    reviewSessions: processDrainSessions,
+    simulateCrashAfterIngest: input.testDrain?.simulateCrashAfterIngest,
+  });
+
   const motionTransfer = createMotionTransferWorkerOrchestrator({
     provider,
     budget: input.budget,
@@ -285,6 +360,8 @@ export function createProductionMotionTransferComposition(
     lifecycle,
     allowedProjectIds,
     persistLeasedPayload: input.persistLeasedPayload,
+    drain,
+    drainCounters: processDrainCounters,
   });
 
   return {
