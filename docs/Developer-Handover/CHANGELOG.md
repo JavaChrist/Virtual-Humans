@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.115] — 2026-08-12
+
+### Fixed (MT-013J-HOTFIX typecheck)
+
+- Post-upload verify : `source_kind` inclus au select + rejet si ≠ `internal` (plus de bloc mort).
+- Helper `mv001-post-upload-verify` + tests ciblés · build typecheck débloqué pour deploy auto.
+
 ## [2.0.114] — 2026-08-12
 
 ### Added (MT-013I MV-001 Private Media Upload)

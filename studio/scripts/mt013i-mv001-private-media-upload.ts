@@ -14,6 +14,11 @@ import { fileURLToPath } from "node:url";
 import { createClient } from "@supabase/supabase-js";
 import { buildMotionAssetStoragePath, MOTION_ASSETS_BUCKET } from "../src/application/motion/motion-asset-path";
 import { MV001_PRIVACY_EXPIRES_AT } from "../src/application/motion/mv001/mv001-benchmark-profile";
+import {
+  MV001_POST_UPLOAD_ASSET_SELECT,
+  parseMv001PostUploadAssetRow,
+  verifyMv001PostUploadAssetRow,
+} from "../src/application/motion/mv001/mv001-post-upload-verify";
 import { buildMv001UploadPrepPlan } from "../src/application/motion/mv001/mv001-upload-prep";
 
 const WORKSPACE_ID = "3c308f57-f448-40ba-aaca-bc0d8d546d01";
@@ -382,9 +387,7 @@ async function main(): Promise<void> {
 
   const { data: assets, error: verifyAssetsErr } = await client
     .from("assets")
-    .select(
-      "id,kind,mime_type,storage_bucket,storage_path,checksum,size_bytes,status,provenance",
-    )
+    .select(MV001_POST_UPLOAD_ASSET_SELECT)
     .eq("project_id", PROJECT_ID)
     .eq("workspace_id", WORKSPACE_ID)
     .in("id", [sourceAssetId, identityAssetId]);
@@ -392,30 +395,18 @@ async function main(): Promise<void> {
     stop("post-verify assets count != 2");
   }
 
-  for (const a of assets) {
-    if (a.storage_bucket !== MOTION_ASSETS_BUCKET) stop("bucket mismatch on asset");
-    if (a.status !== "available") stop("unexpected asset status");
-    if (a.source_kind && a.source_kind !== "internal") {
-      /* source_kind may not be in select — ignore */
-    }
-    const role = (a.provenance as { motionRole?: string }).motionRole;
-    if (role === "motion_source_video") {
-      if (a.checksum !== SOURCE_SHA) stop("persisted source checksum mismatch");
-      if (a.mime_type !== "video/mp4") stop("source mime mismatch");
-      if (!String(a.storage_path).endsWith(`/motion/source/${sourceAssetId}.mp4`)) {
-        stop("source path mismatch");
-      }
-    } else if (role === "motion_identity_reference") {
-      if (a.checksum !== IDENTITY_SHA) stop("persisted identity checksum mismatch");
-      if (a.mime_type !== "image/png") stop("identity mime mismatch");
-      if (
-        !String(a.storage_path).endsWith(`/motion/identity/${identityAssetId}.png`)
-      ) {
-        stop("identity path mismatch");
-      }
-    } else {
-      stop("unexpected motionRole");
-    }
+  const verifyExpected = {
+    bucket: MOTION_ASSETS_BUCKET,
+    sourceAssetId,
+    identityAssetId,
+    sourceChecksum: SOURCE_SHA,
+    identityChecksum: IDENTITY_SHA,
+  };
+  for (const raw of assets) {
+    const row = parseMv001PostUploadAssetRow(raw);
+    if (!row) stop("post-verify asset row shape invalid");
+    const verified = verifyMv001PostUploadAssetRow(row, verifyExpected);
+    if (!verified.ok) stop(verified.reason);
   }
 
   const { count: auditCount } = await client
