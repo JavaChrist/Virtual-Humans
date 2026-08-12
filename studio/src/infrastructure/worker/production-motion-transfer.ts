@@ -81,7 +81,7 @@ import {
 import type { MotionOutputDownloadPort } from "@/application/motion/motion-output-download-port";
 
 export const PRODUCTION_MOTION_TRANSFER_COMPOSITION_VERSION =
-  "mt013k-qc-consumer-1.0.0" as const;
+  "mt013k-output-transport-1.0.0" as const;
 
 /**
  * Process-scoped attempt cache only (MT-013K-DURABILITY).
@@ -338,10 +338,15 @@ export function createProductionMotionTransferComposition(
   }
 
   const drain = createProductionMotionOutputDrainDeps({
-    download: resolveProductionMotionOutputDownloadPort(
-      env,
-      input.testDrain?.download,
-    ),
+    download: resolveProductionMotionOutputDownloadPort(env, {
+      testDownload: input.testDrain?.download,
+      // Never wire fake transport into Production download under Vercel.
+      testTransport:
+        input.testTransport?.kind === "fake" && isVercelOrProduction(env)
+          ? undefined
+          : input.testTransport,
+      nowIso,
+    }),
     content: processDrainContent,
     persistence: processDrainPersistence,
     reports: processDrainReports,

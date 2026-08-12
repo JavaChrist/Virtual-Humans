@@ -59,6 +59,7 @@ export {
   type FalMotionControlStatusResponse,
   type FalMotionControlSubmitRequest,
   type FalMotionControlSubmitResponse,
+  type FalMotionControlResultPayload,
   type FalMotionControlTransport,
   type FakeFalMotionControlTransportOptions,
 } from "./fal-motion-control-transport";
@@ -67,6 +68,27 @@ export {
   createFalSdkMotionControlTransport,
   type CreateFalSdkMotionControlTransportOptions,
 } from "./fal-sdk-motion-control-transport";
+
+export {
+  assertValidatedFalTerminalVideo,
+  FAL_TERMINAL_RESULT_VERSION,
+  type ValidatedFalTerminalVideo,
+} from "./fal-terminal-result";
+
+export {
+  SAFE_FAL_MEDIA_FETCH_VERSION,
+  FAL_MEDIA_ALLOWED_HOST_SUFFIXES,
+  FAL_MEDIA_DOWNLOAD_TIMEOUT_MS,
+  FAL_MEDIA_MAX_REDIRECTS,
+  assertSafeFalMediaUrl,
+  falMediaOriginLabel,
+  isBlockedHostnameOrIp,
+  isFalMediaHostAllowed,
+  safeFetchFalMedia,
+  type SafeFetchLike,
+  type SafeFalMediaFetchOptions,
+  type SafeFalMediaFetchResult,
+} from "./safe-fal-media-fetch";
 
 export {
   requireFalKlingMotionControlAdapter,

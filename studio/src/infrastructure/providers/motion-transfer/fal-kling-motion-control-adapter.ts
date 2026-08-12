@@ -592,29 +592,51 @@ export function createFalKlingMotionControlAdapter(
         return deepFreeze(status);
       }
 
-      const videoUrl = raw.result?.videoUrl;
+      // Terminal success — fetch result by providerJobId (never resubmit).
+      // Prefer embedded result from fake getStatus; otherwise dedicated getResult.
+      let terminal = raw;
+      if (!terminal.result?.videoUrl) {
+        try {
+          counters.network += 1;
+          terminal = await transport.getResult({
+            endpointId: FAL_KLING_V3_PRO_MOTION_CONTROL_ENDPOINT,
+            requestId: input.providerJobId,
+          });
+        } catch (err) {
+          throwMapped(err, "poll", counters.network);
+        }
+      }
+
+      if (terminal.status !== "COMPLETED") {
+        throw new MotionTransferDomainError(
+          "provider_output_invalid",
+          "Résultat fal non terminal COMPLETED.",
+        );
+      }
+
+      const videoUrl = terminal.result?.videoUrl;
       if (!videoUrl || /^data:/i.test(videoUrl)) {
         throw new MotionTransferDomainError(
           "provider_output_invalid",
           "Résultat fal mal formé — vidéo absente.",
         );
       }
+      // Memory-only — never persist / never put in opaque descriptor.
+      void videoUrl;
 
       const output = {
         providerOutputRef: opaqueOutputRef(input.providerJobId),
-        mimeType: raw.result?.contentType ?? "video/mp4",
-        sizeBytes: raw.result?.fileSize,
-        durationSeconds: raw.result?.durationSeconds,
-        width: raw.result?.width,
-        height: raw.result?.height,
-        fps: raw.result?.fps,
+        mimeType: terminal.result?.contentType ?? "video/mp4",
+        sizeBytes: terminal.result?.fileSize,
+        durationSeconds: terminal.result?.durationSeconds,
+        width: terminal.result?.width,
+        height: terminal.result?.height,
+        fps: terminal.result?.fps,
         completedAt: now,
       };
       assertProviderOutputDescriptorSafe(output);
 
-      const billable =
-        raw.result?.durationSeconds ??
-        undefined;
+      const billable = terminal.result?.durationSeconds ?? undefined;
       const actualCostMinor =
         billable != null && billable > 0
           ? computeFalKlingV3ProCostMinor(billable)

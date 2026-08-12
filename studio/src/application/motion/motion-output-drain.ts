@@ -333,6 +333,18 @@ export async function advanceMotionOutputDrain(input: {
           attemptId: job.attemptId,
           nowIso: context.nowIso(),
           signal: context.signal,
+          drainAuthorized: job.payload.mode === "drain",
+          terminalProviderSuccess:
+            record.phase === "provider_completed" ||
+            record.outputLifecycle === "provider_completed" ||
+            record.outputLifecycle === "checksum_verified" ||
+            record.downloadStatus === "intent" ||
+            Boolean(record.outputDescriptor),
+          privateStorageValidated: true,
+          admissionOpen: false,
+          submitAllowed: false,
+          benchmarkId: "MV-001",
+          expectedDurationSeconds: descriptor.durationSeconds,
         },
       );
       if (counters.downloadCount < 1) counters.downloadCount = 1;
@@ -442,6 +454,13 @@ export async function advanceMotionOutputDrain(input: {
           attemptId: job.attemptId,
           nowIso: context.nowIso(),
           signal: context.signal,
+          drainAuthorized: job.payload.mode === "drain",
+          terminalProviderSuccess: true,
+          privateStorageValidated: true,
+          admissionOpen: false,
+          submitAllowed: false,
+          benchmarkId: "MV-001",
+          expectedDurationSeconds: descriptor.durationSeconds,
         },
       );
       // Count only first logical download

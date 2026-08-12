@@ -1,7 +1,12 @@
 /**
- * Fal motion-control transport boundary (MT-007B).
+ * Fal motion-control transport boundary (MT-007B / MT-013K-OUTPUT-TRANSPORT).
  * Injectable — Fake for tests; real factory exists but must not run while flags OFF.
  * Module import does NOT read FAL_KEY or initialize @fal-ai/client.
+ *
+ * Provider call counters (distinct):
+ * - submitCount — paid generation only
+ * - pollCount / statusCount — queue status polls
+ * - resultFetchCount — terminal result retrieval (never a new generation)
  */
 
 export type FalMotionControlQueueStatus =
@@ -20,20 +25,25 @@ export type FalMotionControlSubmitResponse = {
   requestId: string;
 };
 
+export type FalMotionControlResultPayload = {
+  videoUrl?: string;
+  contentType?: string;
+  fileSize?: number;
+  fileName?: string;
+  width?: number;
+  height?: number;
+  durationSeconds?: number;
+  fps?: number;
+  /** Hostile / malformed shapes for fail-closed tests. */
+  videos?: unknown;
+  outputCount?: number;
+};
+
 export type FalMotionControlStatusResponse = {
   status: FalMotionControlQueueStatus;
   requestId: string;
   /** Present only when status is COMPLETED — adapter must redact before public surfaces. */
-  result?: {
-    videoUrl?: string;
-    contentType?: string;
-    fileSize?: number;
-    fileName?: string;
-    width?: number;
-    height?: number;
-    durationSeconds?: number;
-    fps?: number;
-  };
+  result?: FalMotionControlResultPayload;
   error?: {
     httpStatus?: number;
     message?: string;
@@ -47,14 +57,27 @@ export type FalMotionControlTransport = {
   submit(
     request: FalMotionControlSubmitRequest,
   ): Promise<FalMotionControlSubmitResponse>;
-  /** Status (+ result fetch when COMPLETED). Never resubmits. */
+  /** Status (+ may include result when COMPLETED). Never resubmits. */
   getStatus(input: {
     endpointId: string;
     requestId: string;
   }): Promise<FalMotionControlStatusResponse>;
-  /** Observable submit count — not a Production exactly-once guarantee. */
+  /**
+   * Terminal result for an existing providerJobId — never submits / never creates
+   * a new generation. Used by drain after fresh process (URL memory-only).
+   */
+  getResult(input: {
+    endpointId: string;
+    requestId: string;
+  }): Promise<FalMotionControlStatusResponse>;
+  /** Observable submit count — paid generation only. */
   readonly submitCount: number;
+  /** Alias historical — same as pollCount. */
   readonly statusCount: number;
+  /** Queue status polls (non-billing). */
+  readonly pollCount: number;
+  /** Terminal result fetches for an existing requestId (non-billing). */
+  readonly resultFetchCount: number;
 };
 
 export type FakeFalMotionControlTransportOptions = {
@@ -75,8 +98,18 @@ export type FakeFalMotionControlTransportOptions = {
     providerErrorCode?: string;
     providerErrorType?: string;
   };
+  failResult?: {
+    httpStatus?: number;
+    message?: string;
+    providerErrorCode?: string;
+    providerErrorType?: string;
+  };
   /** Raw CDN URL returned on COMPLETED — adapter must never expose it publicly. */
   completedVideoUrl?: string;
+  /** Override COMPLETED result payload (multi-output / malformed tests). */
+  completedResult?: FalMotionControlResultPayload;
+  /** Force getResult status (default COMPLETED when job known/seeded). */
+  getResultStatus?: FalMotionControlQueueStatus;
   requestIdFactory?: () => string;
 };
 
@@ -87,6 +120,26 @@ type FakeJob = {
   input: Record<string, unknown>;
 };
 
+function buildCompletedResult(
+  requestId: string,
+  options: FakeFalMotionControlTransportOptions,
+): FalMotionControlResultPayload {
+  if (options.completedResult) {
+    return { ...options.completedResult };
+  }
+  return {
+    videoUrl:
+      options.completedVideoUrl ??
+      `https://v3b.fal.media/files/fake/${requestId}.mp4`,
+    contentType: "video/mp4",
+    fileSize: 1_024_000,
+    durationSeconds: 8,
+    width: 1080,
+    height: 1920,
+    fps: 24,
+  };
+}
+
 /**
  * TEST_ONLY fake transport — zero network.
  */
@@ -95,11 +148,15 @@ export function createFakeFalMotionControlTransport(
 ): FalMotionControlTransport & {
   readonly jobs: ReadonlyMap<string, FakeJob>;
   readonly lastSubmitInput: Record<string, unknown> | undefined;
+  /** Seed a terminal job without submit — simulates fresh-process result fetch. */
+  seedTerminalCompleted(requestId: string, endpointId?: string): void;
 } {
   let submitCount = 0;
-  let statusCount = 0;
+  let pollCount = 0;
+  let resultFetchCount = 0;
   let lastSubmitInput: Record<string, unknown> | undefined;
   const jobs = new Map<string, FakeJob>();
+  const seededTerminal = new Set<string>();
   const sequence = options.statusSequence ?? [
     "IN_QUEUE",
     "IN_PROGRESS",
@@ -110,19 +167,38 @@ export function createFakeFalMotionControlTransport(
   const transport: FalMotionControlTransport & {
     readonly jobs: ReadonlyMap<string, FakeJob>;
     readonly lastSubmitInput: Record<string, unknown> | undefined;
+    seedTerminalCompleted(requestId: string, endpointId?: string): void;
   } = {
     kind: "fake",
     get submitCount() {
       return submitCount;
     },
     get statusCount() {
-      return statusCount;
+      return pollCount;
+    },
+    get pollCount() {
+      return pollCount;
+    },
+    get resultFetchCount() {
+      return resultFetchCount;
     },
     get jobs() {
       return jobs;
     },
     get lastSubmitInput() {
       return lastSubmitInput;
+    },
+
+    seedTerminalCompleted(requestId: string, endpointId = "fal-ai/fake") {
+      seededTerminal.add(requestId);
+      if (!jobs.has(requestId)) {
+        jobs.set(requestId, {
+          endpointId,
+          requestId,
+          statusIndex: sequence.length - 1,
+          input: {},
+        });
+      }
     },
 
     async submit(request) {
@@ -148,7 +224,7 @@ export function createFakeFalMotionControlTransport(
     },
 
     async getStatus(input) {
-      statusCount += 1;
+      pollCount += 1;
       const job = jobs.get(input.requestId);
       if (!job) {
         const err = new Error("fal job not found");
@@ -163,7 +239,7 @@ export function createFakeFalMotionControlTransport(
 
       if (
         options.failStatus &&
-        statusCount >= (options.failStatus.afterCalls ?? 1)
+        pollCount >= (options.failStatus.afterCalls ?? 1)
       ) {
         const err = new Error(options.failStatus.message ?? "fal status failed");
         (err as { falTransportError?: unknown }).falTransportError = {
@@ -175,7 +251,7 @@ export function createFakeFalMotionControlTransport(
 
       if (
         options.unknownStatusAfterCalls != null &&
-        statusCount >= options.unknownStatusAfterCalls
+        pollCount >= options.unknownStatusAfterCalls
       ) {
         return {
           status: "WEIRD_PROVIDER_STATE_XYZ",
@@ -190,20 +266,11 @@ export function createFakeFalMotionControlTransport(
       }
 
       if (status === "COMPLETED") {
+        // Convenience payload for tests/adapter — does not count as getResult.
         return {
           status,
           requestId: input.requestId,
-          result: {
-            videoUrl:
-              options.completedVideoUrl ??
-              `https://v3b.fal.media/files/fake/${input.requestId}.mp4`,
-            contentType: "video/mp4",
-            fileSize: 1_024_000,
-            durationSeconds: 8,
-            width: 1080,
-            height: 1920,
-            fps: 24,
-          },
+          result: buildCompletedResult(input.requestId, options),
         };
       }
       if (status === "FAILED") {
@@ -218,6 +285,41 @@ export function createFakeFalMotionControlTransport(
         };
       }
       return { status, requestId: input.requestId };
+    },
+
+    async getResult(input) {
+      resultFetchCount += 1;
+      if (options.failResult) {
+        const err = new Error(options.failResult.message ?? "fal result failed");
+        (err as { falTransportError?: unknown }).falTransportError = {
+          stage: "result",
+          ...options.failResult,
+        };
+        throw err;
+      }
+
+      const job = jobs.get(input.requestId);
+      const known = Boolean(job) || seededTerminal.has(input.requestId);
+      if (!known) {
+        const err = new Error("fal job not found");
+        (err as { falTransportError?: unknown }).falTransportError = {
+          stage: "result",
+          httpStatus: 404,
+          message: "Request not found",
+          providerErrorCode: "not_found",
+        };
+        throw err;
+      }
+
+      const status = options.getResultStatus ?? "COMPLETED";
+      if (status !== "COMPLETED") {
+        return { status, requestId: input.requestId };
+      }
+      return {
+        status: "COMPLETED",
+        requestId: input.requestId,
+        result: buildCompletedResult(input.requestId, options),
+      };
     },
   };
 

@@ -40,11 +40,27 @@ export type MotionOutputDownloadContext = {
   attemptId: string;
   nowIso: string;
   signal?: AbortSignal;
+  /** Production gate: drain mode authorized for this job only. */
+  drainAuthorized?: boolean;
+  /** Production gate: provider terminal success already durable. */
+  terminalProviderSuccess?: boolean;
+  /** Production gate: private Storage bucket/path contract validated. */
+  privateStorageValidated?: boolean;
+  /** Lifecycle: must be closed for Production fal download. */
+  admissionOpen?: boolean;
+  submitAllowed?: boolean;
+  benchmarkId?: string;
+  /** Optional duration check against terminal fal result. */
+  expectedDurationSeconds?: number;
 };
 
 export type MotionOutputDownloadPort = {
   readonly kind: "fake" | "real";
   readonly downloadCount: number;
+  /** Optional — real fal port media GET count. */
+  readonly mediaDownloadCount?: number;
+  /** Optional — real fal port resultFetch observations. */
+  readonly resultFetchCount?: number;
   download(
     request: MotionOutputDownloadRequest,
     context: MotionOutputDownloadContext,
