@@ -1187,6 +1187,14 @@ flowchart LR
 - **Acceptation :** ADR keep/postpone dans handover.
 - **Interdit :** implémentation spéculative.
 
+### MT-015A — MV-002 design & readiness prep *(DONE — documentary)*
+
+- **Objectif :** *same motion, different virtual character* — design only.
+- **Verdict :** `MV002_DESIGN_READY` (`100_`) · Privacy/Media/Budget/Provider **PENDING/NOT_AUTHORIZED**.
+- **Budget observé :** hard 274 / committed 247 / available 27 · shortfall réservation 162 = **135¢**.
+- **Interdit respecté :** 0 média · 0 fal · 0 budget write · 0 Registry activation.
+- **Next humain :** Privacy Pack MV-002 **ou** retour Phase 11A.
+
 ---
 
 ## 20. Portes de déploiement

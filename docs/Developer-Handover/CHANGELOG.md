@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.122] — 2026-08-13
+
+### Added (MT-015A MV-002 Benchmark Design Prep)
+
+- Design MV-002 *same motion, different character* (`100_`) · `MV002_DESIGN_READY`.
+- Guards isolation Privacy/assets/idempotency · budget shortfall 135¢ (available 27) · 0 média/provider/write.
+
 ## [2.0.121] — 2026-08-13
 
 ### Added (MT-014 Motion Transfer Benchmark Evaluation)

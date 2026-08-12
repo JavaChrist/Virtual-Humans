@@ -62,12 +62,22 @@
 - [ ] décision go/rollback enregistrée ;
 - [ ] exceptions reportées au backlog.
 
+## Motion Transfer (benchmark)
+
+- [x] MV-001 paid + HR APPROVE (`97_`) — capability Production **NOT** enabled ;
+- [x] MT-014 eval `PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY` (`99_`) ;
+- [x] MT-015A MV-002 **DESIGN_READY** (`100_`) — Privacy/Media/Budget **PENDING** ;
+- [ ] MV-002 Privacy Pack humain — **non démarré** ;
+- [ ] MV-002 exécution — **interdite** sans Auth séparées.
+
 ## Verdict
 
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : DECISION_REQUIRED — aucun média lancé
+Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DESIGN_READY only
+Registry Motion Production : DISABLED
 ```
 
-**Pas** : production média distante validée · restore backup prouvé.
+**Pas** : production média distante validée · MV-002 exécuté · Registry Motion activé.

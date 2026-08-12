@@ -262,10 +262,13 @@ Durée indicative 8s sauf mention ; coût indicatif ≈ **135¢** @ `$0.168/s` (
 ## 12. Prochaine recommandation
 
 ```text
-NEXT = MORE_BENCHMARKS_REQUIRED_FOR_BETA
-ACTION = préparer Auth MV-002 (design) — ne pas exécuter
-DO_NOT = activer Registry · deployer flags · merge/export · supprimer médias
+NEXT = MV-002 DESIGN PREP (MT-015A) → DONE (`100_`)
+STATUS = MV002_DESIGN_READY · Privacy/Media/Budget PENDING
+ACTION = décision humaine Privacy MV-002 OU retour Phase 11A
+DO_NOT = exécuter MV-002 · activer Registry · réutiliser assets MV-001
 ```
+
+Voir `100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md`.
 
 ---
 

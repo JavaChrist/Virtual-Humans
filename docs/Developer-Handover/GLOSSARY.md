@@ -53,6 +53,8 @@
 **MV-001** — premier benchmark Motion Transfer réel (coaching opaque) ; 8s ; submit=1 ; coût 135¢ ; HR APPROVE → `PASS_WITH_HUMAN_APPROVAL` (`97_`) ; output privé `active=false` ; n’établit pas SUPPORTED global ni beta.
 **PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY** — verdict MT-014 : adapter+pipeline prouvés sur un sample ; Registry/Production non activés (`99_`).
 **resumeInput** — `MotionTransferInput` redacté durable (MT-013P) pour cold-start poll/drain/QC ; jamais suffisant pour un second submit.
+**MV-002** — second benchmark designé (MT-015A) : même mouvement 8s, **nouvelle identité virtuelle** ; Privacy/Media/Budget **PENDING** ; pas de réutilisation auto des assets ni du Privacy Pack MV-001 (`100_`).
+**MV002_DESIGN_READY** — design/readiness documentaire complète ; exécution non autorisée.
 **READY_FOR_HUMAN_GOVERNANCE_DECISIONS** — verdict MT-013A : pack privacy + gates A–J prêts pour décisions humaines ; aucun provider call.
 **RESTORE_DRILL** — preuve de restauration vers cible isolée ≠ Production ; verdicts `PASS` \| `BLOCKED_TARGET_REQUIRED` \| `BLOCKED_CREDENTIALS_REQUIRED` \| `BLOCKED_BACKUP_UNAVAILABLE` \| `FAIL` (`74_`).
 **PRIVACY_DUE_DILIGENCE** — revue officielle des 5 décisions Motion ; verdicts `READY_FOR_HUMAN_DECISION` \| `MORE_INFORMATION_REQUIRED` \| `BLOCKED` \| `ACCEPTED_LIMITED_MV001` (`74_` / `81_`).

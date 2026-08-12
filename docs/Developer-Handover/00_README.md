@@ -26,20 +26,18 @@ En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → d
 ```text
 Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58)
-Motion / Performance     : MT-001…014 · MV-001 PASS_WITH_HUMAN_APPROVAL (`97_`)
-                           MT-013P recovery HARDENED (`98_`) · stub hydrate REMOVED
+Motion / Performance     : MT-001…015A · MV-001 PASS_WITH_HUMAN_APPROVAL (`97_`)
                            MT-014 EVAL (`99_`) · PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY
-                           Registry Production disabled · paidExecution=false
-                           limited beta NO · Production NO · RUNTIME_UNAVAILABLE
-                           privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
-                           MV001 ledger 162/135/27 · submit=1 · output approved/active=false
+                           MT-015A MV-002 DESIGN_READY (`100_`) · Privacy/Media PENDING
+                           Registry disabled · RUNTIME_UNAVAILABLE
+                           privacy MV-001 LIMITED (≠ MV-002) · exp 2026-09-10
 Runtime AI               : OFF
-Budget                   : hard 274 / committed≈247 (112+135)
+Budget                   : hard 274 / committed 247 / available 27 · MV-002 shortfall 135
 production_jobs média    : 0 (hors MV-001 settled)
-P0                       : ne pas activer Registry Motion Production
-P1 ouverts               : décision média image VHS-124 · prep Auth MV-002 (design)
+P0                       : ne pas activer Registry · ne pas réutiliser assets MV-001
+P1 ouverts               : Privacy MV-002 OU retour Phase 11A · décision média image VHS-124
 P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
-Prochaine porte majeure  : Auth prep MV-002 ou capability/merge — pas d’activation Registry
+Prochaine porte majeure  : décision humaine Privacy MV-002 vs 11A — pas d’exécution MV-002
 ```
 
 ### Portes Directors texte
@@ -206,6 +204,7 @@ Utilisateur → AI Video Director (/director)
 | [`97_MT013O_MV001_HUMAN_REVIEW_APPROVE.md`](./97_MT013O_MV001_HUMAN_REVIEW_APPROVE.md) | **MT-013O Human Review APPROVE · PASS_WITH_HUMAN_APPROVAL** |
 | [`98_MT013P_MOTION_OPERATIONAL_HARDENING.md`](./98_MT013P_MOTION_OPERATIONAL_HARDENING.md) | **MT-013P operational recovery hardened · stub REMOVED** |
 | [`99_MT014_MOTION_TRANSFER_BENCHMARK_EVALUATION.md`](./99_MT014_MOTION_TRANSFER_BENCHMARK_EVALUATION.md) | **MT-014 eval · PROVIDER_ADAPTER_VALIDATED_BENCHMARK_ONLY** |
+| [`100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md`](./100_MT015A_MV002_BENCHMARK_DESIGN_PREP.md) | **MT-015A MV-002 design · DESIGN_READY · Privacy PENDING** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
