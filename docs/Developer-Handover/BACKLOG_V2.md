@@ -13,6 +13,7 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              MT-013I MEDIA_UPLOADED · 2 private assets (`88_`)
              MT-013J READY_FOR_PAID_AUTH · flags OFF (`89_`)
              MT-013K-WIRE Production orchestrator WIRED (`90_`) · 0 fal
+             MT-013K-DURABILITY polling recovery PASS (`91_`) · post-QC NOT_WIRED
              MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
              NO PAID BENCHMARK_YET · provider calls = 0
              privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
@@ -79,7 +80,7 @@ Next major : deploy-preflight post-wire, puis Auth paid MV-001 (≤162¢ · max 
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A…J** (`73_`…`89_`) · **MT-013K-WIRE** orchestrateur Production **WIRED** (`90_`) · média **8s/720p UPLOADED** · flags OFF · privacy **ACCEPTED_LIMITED_MV001** · Runtime UNAVAILABLE · **MV001_NOT_EXECUTED** · **REQUIRES_NEW_DEPLOY_PREFLIGHT**.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A…J** (`73_`…`89_`) · **MT-013K-WIRE** orchestrateur Production **WIRED** (`90_`) · **MT-013K-DURABILITY** `POLLING_RECOVERY_ACROSS_FRESH_PROCESS=PASS` (`91_`) · post-`qc_pending` consumer **NOT_WIRED** (blocage benchmark séparé) · média **8s/720p UPLOADED** · flags OFF · privacy **ACCEPTED_LIMITED_MV001** · Runtime UNAVAILABLE · **MV001_NOT_EXECUTED** · **REQUIRES_NEW_DEPLOY_PREFLIGHT**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
 - **P1 budget** : hard **274** ; committed **112** ; available **162** (`87_`) — réserve MV-001 **162¢** **couverte** (shortfall 0).
 - **Prochaine porte majeure** : Auth **private upload** → **deploy/flags** → **paid MV-001** (réserve ≤162¢) — ne pas fusionner.

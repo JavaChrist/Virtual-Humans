@@ -60,7 +60,11 @@ import type { MotionTransferRegistryGateProfile } from "@/application/motion/mot
 export const PRODUCTION_MOTION_TRANSFER_COMPOSITION_VERSION =
   "mt013k-wire-1.0.0" as const;
 
-/** Process-scoped attempt store — job.payload.externalJobId remains durable across instances. */
+/**
+ * Process-scoped attempt cache only (MT-013K-DURABILITY).
+ * Authority lives in production_jobs.payload (+ external_job_id).
+ * Cold start → empty Map → hydrate from claimed job payload.
+ */
 let processAttemptStore: MotionTransferAttemptStore | undefined;
 
 export function getProductionMotionAttemptStore(): MotionTransferAttemptStore {
@@ -215,6 +219,15 @@ export type CreateProductionMotionTransferCompositionInput = {
   lifecycle?: MotionTransferLifecycleController;
   events?: MotionTransferWorkerEventSink;
   privacyDecisions?: Partial<MotionTransferPrivacyDecisions>;
+  /**
+   * Durable payload sink under lease (required in Production).
+   * Process Map is cache-only once this is wired.
+   */
+  persistLeasedPayload?: (
+    job: import("@/application/production/enqueue").ClaimedProductionJob,
+    lease: import("@/application/production/enqueue").LeaseContext,
+    payload: import("@/application/production/enqueue").ProductionPayloadReference,
+  ) => Promise<void>;
   /** TEST ONLY — never pass a fake transport under Vercel/Production. */
   testTransport?: FalMotionControlTransport;
 };
@@ -271,6 +284,7 @@ export function createProductionMotionTransferComposition(
     events: input.events,
     lifecycle,
     allowedProjectIds,
+    persistLeasedPayload: input.persistLeasedPayload,
   });
 
   return {

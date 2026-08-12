@@ -34,6 +34,7 @@ import type {
 } from "@/application/production/enqueue";
 import type { ProductionExecutionContext } from "@/application/production/production-director";
 import {
+  isMotionTransferFakeHarnessActive,
   type MotionTransferRegistryGateProfile,
 } from "./motion-transfer-worker-gates";
 import {
@@ -45,10 +46,14 @@ import {
   fingerprintProviderJobId,
   type MotionTransferWorkerEventSink,
 } from "./motion-transfer-worker-events";
+import {
+  buildDurableMotionPayload,
+  hydrateMotionTransferAttemptFromJob,
+  isMotionSubmissionUnknownFromDurable,
+} from "./motion-transfer-attempt-durability";
 import type { MotionTransferPrivacyDecisions } from "@/infrastructure/providers/motion-transfer/privacy-gate";
 import {
   FAL_KLING_MOTION_CONTROL_ADAPTER_VERSION,
-  FAL_KLING_MOTION_CONTROL_PRICING_VERSION,
 } from "@/infrastructure/providers/motion-transfer/fal-kling-motion-control-adapter";
 
 export const MOTION_TRANSFER_WORKER_ORCHESTRATOR_VERSION = "mt008-1.0.0" as const;
@@ -116,6 +121,15 @@ export type MotionTransferWorkerOrchestratorOptions = {
    * When set, jobs whose projectId is outside this list are refused (MV-001 scope).
    */
   allowedProjectIds?: readonly string[];
+  /**
+   * MT-013K-DURABILITY — persist payload under lease (intent before submit).
+   * Required for cold-start recovery; fail-closed if missing when needed.
+   */
+  persistLeasedPayload?: (
+    job: ClaimedProductionJob,
+    lease: LeaseContext,
+    payload: ProductionPayloadReference,
+  ) => Promise<void>;
   /**
    * TEST ONLY — simulate crash after provider accept, before durable providerJobId persist.
    * Leaves submission_unknown; never auto-resubmit.
@@ -196,8 +210,6 @@ export function createMotionTransferWorkerOrchestrator(
   const defaultPollAfterMs = options.defaultPollAfterMs ?? 2_000;
   const adapterVersion =
     options.adapterVersion ?? FAL_KLING_MOTION_CONTROL_ADAPTER_VERSION;
-  const pricingVersion =
-    options.pricingVersion ?? FAL_KLING_MOTION_CONTROL_PRICING_VERSION;
   const env =
     options.env ?? (process.env as Record<string, string | undefined>);
 
@@ -244,28 +256,74 @@ export function createMotionTransferWorkerOrchestrator(
     options.attempts.save(input.record);
   }
 
-  function payloadFrom(
+  function loadAttempt(
     job: ClaimedProductionJob,
-    motion: MotionTransferJobPayloadMeta,
+  ): MotionTransferAttemptRecord | undefined {
+    const cached = options.attempts.get(job.attemptId);
+    if (cached) {
+      // Prefer durable providerJobId if cache lags behind payload.
+      if (!cached.providerJobId && job.payload.externalJobId?.trim()) {
+        cached.providerJobId = job.payload.externalJobId.trim();
+        if (cached.submitCount < 1) cached.submitCount = 1;
+        options.attempts.save(cached);
+      }
+      return cached;
+    }
+    const hydrated = hydrateMotionTransferAttemptFromJob(job);
+    if (hydrated) {
+      options.attempts.save(hydrated);
+    }
+    return hydrated;
+  }
+
+  async function persistAuthority(
+    job: ClaimedProductionJob,
+    lease: LeaseContext,
+    record: MotionTransferAttemptRecord,
     mode: ProductionPayloadReference["mode"],
-    externalJobId?: string,
-    pollAfterMs?: number,
-  ): ProductionPayloadReference {
-    return {
-      planRevisionId: job.payload.planRevisionId,
-      scenePackageSceneId: job.payload.scenePackageSceneId,
-      mode,
-      externalJobId,
-      pollAfterMs,
-      motion: { ...motion },
-    };
+  ): Promise<void> {
+    const payload = buildDurableMotionPayload(job, record, mode, {
+      providerJobIdFingerprint: record.providerJobId
+        ? fingerprintProviderJobId(record.providerJobId)
+        : undefined,
+    });
+    if (!options.persistLeasedPayload) {
+      // Harness/tests without queue sink: keep in-process job view only.
+      // Production composition always injects persistLeasedPayload.
+      if (!isMotionTransferFakeHarnessActive(env)) {
+        throw new Error("motion_durable_persist_unavailable");
+      }
+      job.payload = payload;
+      return;
+    }
+    await options.persistLeasedPayload(job, lease, payload);
+    // Keep claimed job view aligned for subsequent hydrate in-process.
+    job.payload = payload;
   }
 
   async function handleExecute(
     job: ClaimedProductionJob,
+    lease: LeaseContext,
     context: ProductionExecutionContext,
   ): Promise<ProcessClaimedJobOutcome> {
-    const existing = options.attempts.get(job.attemptId);
+    if (isMotionSubmissionUnknownFromDurable(job)) {
+      const unknown =
+        loadAttempt(job) ?? hydrateMotionTransferAttemptFromJob(job);
+      if (unknown) {
+        unknown.phase = "submission_unknown";
+        unknown.terminal = true;
+        unknown.reconciliationRequired = true;
+        options.attempts.save(unknown);
+      }
+      return {
+        status: "needs_review",
+        runId: job.runId,
+        publicMessage:
+          "submission_unknown — réconciliation humaine/provider requise (pas de resubmit).",
+      };
+    }
+
+    const existing = loadAttempt(job);
     if (existing?.terminal) {
       return { status: "already_done", runId: job.runId, enqueueNext: [] };
     }
@@ -277,10 +335,16 @@ export function createMotionTransferWorkerOrchestrator(
           "submission_unknown — réconciliation humaine/provider requise (pas de resubmit).",
       };
     }
-    if (existing?.providerJobId) {
-      // Already submitted — resume as poll (no resubmit)
-      existing.phase = "polling";
-      options.attempts.save(existing);
+    if (existing?.providerJobId || job.payload.externalJobId?.trim()) {
+      // Already submitted — resume as poll (no resubmit); durable or cache.
+      const record = existing!;
+      if (!record.providerJobId) {
+        record.providerJobId = job.payload.externalJobId!.trim();
+        if (record.submitCount < 1) record.submitCount = 1;
+      }
+      record.phase = "polling";
+      options.attempts.save(record);
+      options.lifecycle?.onSubmitPersisted(record.attemptId);
       const availableAt = new Date(
         Date.parse(context.nowIso()) + defaultPollAfterMs,
       ).toISOString();
@@ -288,27 +352,12 @@ export function createMotionTransferWorkerOrchestrator(
         status: "reschedule",
         runId: job.runId,
         availableAt,
-        payloadRef: payloadFrom(
-          job,
-          {
-            phase: "polling",
-            reservationId: existing.reservationId,
-            reservedMinor: existing.reserved.amountMinor,
-            currency: existing.reserved.currency,
-            estimateMinor: existing.estimate.estimatedCostMinor,
-            adapterVersion,
-            pricingVersion,
-            pollCount: existing.pollCount,
-            requestFingerprint: existing.requestFingerprint,
-            providerJobIdFingerprint: fingerprintProviderJobId(
-              existing.providerJobId,
-            ),
-            humanReviewPolicyPresent: true,
-          },
-          "poll",
-          existing.providerJobId,
-          defaultPollAfterMs,
-        ),
+        payloadRef: buildDurableMotionPayload(job, record, "poll", {
+          pollAfterMs: defaultPollAfterMs,
+          providerJobIdFingerprint: fingerprintProviderJobId(
+            record.providerJobId!,
+          ),
+        }),
         enqueueNext: [],
       };
     }
@@ -352,14 +401,28 @@ export function createMotionTransferWorkerOrchestrator(
       };
     }
 
-    // Attempt record must be pre-seeded by enqueue harness (immutable input + estimate).
-    const seeded = options.attempts.get(job.attemptId);
+    // Attempt must be pre-seeded (tests/enqueue) or hydrate with media-capable seed.
+    // Hydrate stubs with durable:omitted media cannot submit — only poll.
+    const seeded = loadAttempt(job);
     if (!seeded) {
       return {
         status: "failed",
         runId: job.runId,
         errorCode: "motion_attempt_missing",
         publicMessage: "Attempt Motion Transfer non initialisé.",
+        enqueueNext: [],
+      };
+    }
+    if (
+      seeded.mediaBoundary.sourceVideoRef === "durable:omitted" ||
+      seeded.mediaBoundary.identityRefs.includes("durable:omitted")
+    ) {
+      return {
+        status: "failed",
+        runId: job.runId,
+        errorCode: "motion_attempt_missing",
+        publicMessage:
+          "Attempt hydraté sans media — submit interdit (poll-only).",
         enqueueNext: [],
       };
     }
@@ -391,7 +454,22 @@ export function createMotionTransferWorkerOrchestrator(
 
     seeded.phase = "submitting";
     seeded.submitIntentAt = context.nowIso();
+    seeded.submitCount = 1;
     options.attempts.save(seeded);
+
+    // Durable intent BEFORE provider call — cold start without providerJobId ⇒ submission_unknown.
+    try {
+      await persistAuthority(job, lease, seeded, "execute");
+    } catch {
+      return {
+        status: "failed",
+        runId: job.runId,
+        errorCode: "motion_durable_persist_unavailable",
+        publicMessage:
+          "Persistance durable indisponible — submit Motion interdit.",
+        enqueueNext: [],
+      };
+    }
 
     emit(options.events, {
       type: "motion.submit.intent",
@@ -420,8 +498,6 @@ export function createMotionTransferWorkerOrchestrator(
 
     let submission;
     try {
-      seeded.submitCount += 1;
-      options.attempts.save(seeded);
       submission = await options.provider.submit(submitInput, providerCtx);
     } catch (err) {
       const code = isMotionTransferDomainError(err)
@@ -506,6 +582,25 @@ export function createMotionTransferWorkerOrchestrator(
     seeded.providerJobId = submission.providerJobId;
     seeded.phase = "submitted";
     options.attempts.save(seeded);
+
+    // Persist providerJobId under lease BEFORE reschedule / end of invocation.
+    // Crash after this ⇒ poll recovery; crash before ⇒ submission_unknown.
+    try {
+      await persistAuthority(job, lease, seeded, "poll");
+    } catch {
+      seeded.phase = "submission_unknown";
+      seeded.reconciliationRequired = true;
+      seeded.terminal = true;
+      seeded.providerJobId = undefined;
+      options.attempts.save(seeded);
+      return {
+        status: "needs_review",
+        runId: job.runId,
+        publicMessage:
+          "submission_unknown — accept provider sans persistance durable; pas de resubmit.",
+      };
+    }
+
     // Close admission + new submit; retain poll-only for this providerJobId.
     options.lifecycle?.onSubmitPersisted(seeded.attemptId);
 
@@ -528,6 +623,14 @@ export function createMotionTransferWorkerOrchestrator(
       Date.parse(context.nowIso()) + pollAfter,
     ).toISOString();
 
+    seeded.phase = "polling";
+    options.attempts.save(seeded);
+    try {
+      await persistAuthority(job, lease, seeded, "poll");
+    } catch {
+      // providerJobId already durable — reschedule payload still carries authority.
+    }
+
     emit(options.events, {
       type: "motion.poll.scheduled",
       correlationId: context.correlationId,
@@ -544,37 +647,23 @@ export function createMotionTransferWorkerOrchestrator(
       status: "reschedule",
       runId: job.runId,
       availableAt,
-      payloadRef: payloadFrom(
-        job,
-        {
-          phase: "polling",
-          reservationId: seeded.reservationId,
-          reservedMinor: seeded.reserved.amountMinor,
-          currency: seeded.reserved.currency,
-          estimateMinor: seeded.estimate.estimatedCostMinor,
-          adapterVersion,
-          pricingVersion,
-          pollCount: 0,
-          submitIntentAt: seeded.submitIntentAt,
-          requestFingerprint: seeded.requestFingerprint,
-          providerJobIdFingerprint: fingerprintProviderJobId(
-            submission.providerJobId,
-          ),
-          humanReviewPolicyPresent: true,
-        },
-        "poll",
-        submission.providerJobId,
-        pollAfter,
-      ),
+      // Durable authority: externalJobId + full motion meta (submitCount, ledger flags…).
+      payloadRef: buildDurableMotionPayload(job, seeded, "poll", {
+        pollAfterMs: pollAfter,
+        providerJobIdFingerprint: fingerprintProviderJobId(
+          submission.providerJobId,
+        ),
+      }),
       enqueueNext: [],
     };
   }
 
   async function handlePoll(
     job: ClaimedProductionJob,
+    lease: LeaseContext,
     context: ProductionExecutionContext,
   ): Promise<ProcessClaimedJobOutcome> {
-    const record = options.attempts.get(job.attemptId);
+    const record = loadAttempt(job);
     if (!record) {
       return {
         status: "failed",
@@ -718,30 +807,18 @@ export function createMotionTransferWorkerOrchestrator(
       ) {
         // bounded backoff reschedule — still no resubmit
         const delay = nextPollDelayMs(defaultPollAfterMs, record.pollCount);
+        record.phase = "polling";
+        options.attempts.save(record);
         return {
           status: "reschedule",
           runId: job.runId,
           availableAt: new Date(
             Date.parse(context.nowIso()) + delay,
           ).toISOString(),
-          payloadRef: payloadFrom(
-            job,
-            {
-              phase: "polling",
-              reservationId: record.reservationId,
-              reservedMinor: record.reserved.amountMinor,
-              currency: record.reserved.currency,
-              estimateMinor: record.estimate.estimatedCostMinor,
-              adapterVersion,
-              pollCount: record.pollCount,
-              providerJobIdFingerprint: fingerprintProviderJobId(providerJobId),
-              requestFingerprint: record.requestFingerprint,
-              humanReviewPolicyPresent: true,
-            },
-            "poll",
-            providerJobId,
-            delay,
-          ),
+          payloadRef: buildDurableMotionPayload(job, record, "poll", {
+            pollAfterMs: delay,
+            providerJobIdFingerprint: fingerprintProviderJobId(providerJobId),
+          }),
           enqueueNext: [],
         };
       }
@@ -785,30 +862,23 @@ export function createMotionTransferWorkerOrchestrator(
 
     if (status.status === "queued" || status.status === "processing") {
       const delay = nextPollDelayMs(defaultPollAfterMs, record.pollCount);
+      record.phase = "polling";
+      options.attempts.save(record);
+      try {
+        await persistAuthority(job, lease, record, "poll");
+      } catch {
+        // Reschedule payload remains the durable write path under lease.
+      }
       return {
         status: "reschedule",
         runId: job.runId,
         availableAt: new Date(
           Date.parse(context.nowIso()) + delay,
         ).toISOString(),
-        payloadRef: payloadFrom(
-          job,
-          {
-            phase: "polling",
-            reservationId: record.reservationId,
-            reservedMinor: record.reserved.amountMinor,
-            currency: record.reserved.currency,
-            estimateMinor: record.estimate.estimatedCostMinor,
-            adapterVersion,
-            pollCount: record.pollCount,
-            providerJobIdFingerprint: fingerprintProviderJobId(providerJobId),
-            requestFingerprint: record.requestFingerprint,
-            humanReviewPolicyPresent: true,
-          },
-          "poll",
-          providerJobId,
-          delay,
-        ),
+        payloadRef: buildDurableMotionPayload(job, record, "poll", {
+          pollAfterMs: delay,
+          providerJobIdFingerprint: fingerprintProviderJobId(providerJobId),
+        }),
         enqueueNext: [],
       };
     }
@@ -899,6 +969,11 @@ export function createMotionTransferWorkerOrchestrator(
       record.outputRef = status.output.providerOutputRef;
       record.terminal = true;
       options.attempts.save(record);
+      try {
+        await persistAuthority(job, lease, record, "poll");
+      } catch {
+        // Settlement already applied; terminal flags best-effort durable.
+      }
 
       emit(options.events, {
         type: "motion.provider.completed",
@@ -970,7 +1045,7 @@ export function createMotionTransferWorkerOrchestrator(
   }
 
   return {
-    async processClaimedJob(job, _lease, context) {
+    async processClaimedJob(job, lease, context) {
       if (job.action !== "motion_transfer") {
         return {
           status: "failed",
@@ -1036,9 +1111,9 @@ export function createMotionTransferWorkerOrchestrator(
       }
 
       if (mode === "poll") {
-        return handlePoll(job, context);
+        return handlePoll(job, lease, context);
       }
-      return handleExecute(job, context);
+      return handleExecute(job, lease, context);
     },
   };
 }

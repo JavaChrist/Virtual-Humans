@@ -10,6 +10,15 @@ import type {
 } from "@/application/production/enqueue";
 import type { ProductionJobQueue, ProductionJobRecord } from "@/infrastructure/db/queue/production-job-queue";
 
+function parseMotionMeta(
+  raw: unknown,
+): ProductionPayloadReference["motion"] | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const m = raw as Record<string, unknown>;
+  if (typeof m.phase !== "string") return undefined;
+  return m as NonNullable<ProductionPayloadReference["motion"]>;
+}
+
 function parsePayload(raw: unknown): ProductionPayloadReference {
   const p = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
   const mode =
@@ -23,6 +32,8 @@ function parsePayload(raw: unknown): ProductionPayloadReference {
     externalJobId:
       typeof p.externalJobId === "string" ? p.externalJobId : undefined,
     pollAfterMs: typeof p.pollAfterMs === "number" ? p.pollAfterMs : undefined,
+    // MT-013K-DURABILITY — retain motion authority across claim/cold start.
+    motion: parseMotionMeta(p.motion),
   };
 }
 
@@ -95,6 +106,18 @@ export function adaptProductionJobQueue(queue: ProductionJobQueue): JobQueuePort
         workerId,
         availableAt,
         payload as unknown as Record<string, unknown>
+      );
+    },
+
+    async persistLeasedPayload(jobId, leaseToken, workerId, payload) {
+      if (!queue.persistLeasedPayload) {
+        throw new Error("persistLeasedPayload_unsupported");
+      }
+      await queue.persistLeasedPayload(
+        jobId,
+        leaseToken,
+        workerId,
+        payload as unknown as Record<string, unknown>,
       );
     },
   };

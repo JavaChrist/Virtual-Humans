@@ -115,6 +115,16 @@ export type ProductionJobQueue = {
     availableAt: string,
     payload: Record<string, unknown>
   ): Promise<ProductionJobRecord>;
+  /**
+   * MT-013K-DURABILITY — update payload under active lease (no release).
+   * Uses service_role row update + lease predicates — no new migration.
+   */
+  persistLeasedPayload(
+    jobId: string,
+    leaseToken: string,
+    workerId: string,
+    payload: Record<string, unknown>
+  ): Promise<ProductionJobRecord>;
 };
 
 export function createSupabaseProductionJobQueue(deps: {
@@ -240,6 +250,32 @@ export function createSupabaseProductionJobQueue(deps: {
       });
       if (error) throw mapSupabaseError(error);
       if (!data) throw new PersistenceError("not_found", "Job introuvable.");
+      return rowToJob(data);
+    },
+
+    async persistLeasedPayload(jobId, leaseToken, workerId, payload) {
+      const externalJobId =
+        typeof payload.externalJobId === "string" ? payload.externalJobId : null;
+      const { data, error } = await client
+        .from("production_jobs")
+        .update({
+          payload: payload as Json,
+          ...(externalJobId ? { external_job_id: externalJobId } : {}),
+        })
+        .eq("id", jobId)
+        .eq("workspace_id", workspaceId)
+        .eq("lease_token", leaseToken)
+        .eq("leased_by", workerId)
+        .eq("status", "leased")
+        .select("*")
+        .maybeSingle();
+      if (error) throw mapSupabaseError(error);
+      if (!data) {
+        throw new PersistenceError(
+          "lease_invalid",
+          "persistLeasedPayload — lease invalide ou job introuvable.",
+        );
+      }
       return rowToJob(data);
     },
   };

@@ -152,6 +152,11 @@ export function createMemoryJobQueue(nowIso: () => string): JobQueuePort & {
       j.availableAt = availableAt;
       j.payload = { ...payload };
     },
+
+    async persistLeasedPayload(jobId, leaseToken, workerId, payload) {
+      const j = requireLease(jobId, leaseToken, workerId);
+      j.payload = { ...payload };
+    },
   };
 
   return port;

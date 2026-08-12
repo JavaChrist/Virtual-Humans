@@ -239,13 +239,21 @@ async function setupWiredJob(opts?: {
 
   const composition = createProductionMotionTransferComposition({
     budget,
-    env,
+    env: { ...env, MOTION_TRANSFER_FAKE_HARNESS: "1" },
     nowIso: clk.nowIso,
     attempts,
     lifecycle,
     privacyDecisions: PRIVACY_OK,
     events: { emit: (e) => events.push(e) },
     testTransport: transport,
+    persistLeasedPayload: async (job, lease, payload) => {
+      await queue.persistLeasedPayload!(
+        job.jobId,
+        lease.leaseToken,
+        lease.workerId,
+        payload,
+      );
+    },
   });
 
   const worker = createProductionWorkerFromDeps({
@@ -977,9 +985,17 @@ test("MT-013K-WIRE providerJobId absent après crash → submission_unknown", as
       status: "available",
     },
     privacyDecisions: PRIVACY_OK,
-    env: FLAGS_ON,
+    env: { ...FLAGS_ON, MOTION_TRANSFER_FAKE_HARNESS: "1" },
     lifecycle,
     simulateCrashAfterSubmitBeforePersist: true,
+    persistLeasedPayload: async (job, lease, payload) => {
+      await queue.persistLeasedPayload!(
+        job.jobId,
+        lease.leaseToken,
+        lease.workerId,
+        payload,
+      );
+    },
   });
   const worker = createProductionWorkerFromDeps({
     policy: createWorkerPolicy({
@@ -1004,6 +1020,13 @@ test("MT-013K-WIRE providerJobId absent après crash → submission_unknown", as
   });
   assert.equal(attempts.get("att-wire-1")?.phase, "submission_unknown");
   assert.equal(attempts.get("att-wire-1")?.providerJobId, undefined);
+  assert.equal(
+    [...queue.jobs.values()][0]?.payload.externalJobId,
+    undefined,
+  );
+  assert.ok(
+    (([...queue.jobs.values()][0]?.payload.motion?.submitCount ?? 0) >= 1),
+  );
   // No second submit
   await worker.runOnce({
     correlationId: "c-crash-2",

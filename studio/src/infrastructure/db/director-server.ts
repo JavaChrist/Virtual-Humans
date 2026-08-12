@@ -671,6 +671,17 @@ export function createDirectorPersistenceStack(deps?: {
         budget: productionPorts.budget,
         env,
         nowIso: deps?.nowIso ?? (() => new Date().toISOString()),
+        persistLeasedPayload: async (job, lease, payload) => {
+          if (!jobQueue.persistLeasedPayload) {
+            throw new Error("motion_durable_persist_unavailable");
+          }
+          await jobQueue.persistLeasedPayload(
+            job.jobId,
+            lease.leaseToken,
+            lease.workerId,
+            payload,
+          );
+        },
       });
       motionTransfer = motion.motionTransfer;
     } catch {

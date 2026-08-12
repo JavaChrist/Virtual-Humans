@@ -33,16 +33,29 @@ export type MotionTransferJobPayloadMeta = {
   adapterVersion?: string;
   pricingVersion?: string;
   pollCount?: number;
+  /** Durable submit counter — authority across cold starts. */
+  submitCount?: number;
+  resubmitCount?: number;
   submitIntentAt?: string;
   requestFingerprint?: string;
   /** Fingerprint / truncated id — never raw CDN. */
   providerJobIdFingerprint?: string;
   outputRef?: string;
   lateResult?: boolean;
+  lateQuarantined?: boolean;
   reconciliationRequired?: boolean;
   usageUnknown?: boolean;
+  /** Alias durable of attempt.ledgerSettled. */
   terminalSettled?: boolean;
+  ledgerSettled?: boolean;
+  terminal?: boolean;
+  deadlineAt?: string;
   humanReviewPolicyPresent?: boolean;
+  /** Firm estimate fields for hydrate/settle without memory seed. */
+  estimateDurationSeconds?: number;
+  estimatePricingVersion?: string;
+  estimateModelId?: string;
+  estimateProviderId?: string;
 };
 
 /** Durable payload — references only, never full prompts or signed URLs. */
@@ -179,6 +192,16 @@ export type JobQueuePort = {
     leaseToken: string,
     workerId: string,
     availableAt: string,
+    payload: ProductionPayloadReference
+  ): Promise<void>;
+  /**
+   * MT-013K-DURABILITY — update payload while lease held (intent / mid-flight).
+   * Does not release the lease. Fail-closed if lease invalid.
+   */
+  persistLeasedPayload?(
+    jobId: string,
+    leaseToken: string,
+    workerId: string,
     payload: ProductionPayloadReference
   ): Promise<void>;
 };
