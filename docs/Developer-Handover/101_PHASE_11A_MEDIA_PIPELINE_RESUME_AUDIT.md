@@ -222,10 +222,14 @@ pas de merge/export/publication auto
 ## 12. Prochaine phase exacte
 
 ```text
-NEXT = 11A-WIRE-OPENAI-IMAGE-ALLOWLIST (Auth humaine requise)
-ALTERNATIVE = rester en pause média et poursuivre autres features app
-DO_NOT = provider · legacy PASS · MV-002 · Motion flags · budget write
+NEXT = 11A-WIRE-OPENAI-IMAGE-ALLOWLIST — DONE (`102_`) · WIRED_DISABLED
+FOLLOW-UP = 11A-PREFLIGHT-LIVE-NO-PROVIDER
+DO_NOT = provider call · legacy PASS · MV-002 · Motion flags · budget write
 ```
+
+> **Update 2026-08-13 :** câblage allowlist livré (`102_`). Verdict historique
+> `BLOCKED_MEDIA_PRODUCTION_WIRING` conservé pour l’audit 101_ ; état ops courant =
+> `OPENAI_IMAGE_PRODUCTION_PATH_WIRED_DISABLED`.
 
 ---
 

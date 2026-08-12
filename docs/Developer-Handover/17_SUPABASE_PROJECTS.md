@@ -419,7 +419,7 @@ Fichier : `studio/src/infrastructure/config/supabase-target-guard.ts`.
 |---|---|---|
 | Brief → Storyboard (texte) | ✅ | ✅ smokes 10B–10F |
 | Prompt / Router / Production queue | ✅ | **0** artifacts/jobs média |
-| Adapters média sur `/director` | fakes only (VHS-124) | **jamais** |
+| Adapters média sur `/director` | fakes only (VHS-124) ; exception OpenAI image bornée OFF (`102_`) | **pas encore exécuté** |
 | Merge/export | fake + Storage local | non prouvé média réel |
 | Soft-delete / purge | — | **futur** VHS-206 |
 

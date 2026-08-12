@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — P1 `BACKUP_PRESENT_RESTORE_UNPROVEN`)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing (10B), Creative (10C), Script (10D), Art texte (10E-V3) et Storyboard texte (10F-V4) validés ; média : Phase 11A prep `DECISION_REQUIRED` (`58_…`) ; budget 122/112/10 ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : path OpenAI image **WIRED_DISABLED** (`102_`) · 0 appel réel ; budget 274/247/27 ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité
@@ -25,9 +25,10 @@
 | Migrations | **29/29** |
 | pgTAP | **378** |
 | Intégration DB | **33/33** |
-| Unitaires | **1122/1122** (dont guards 11A) |
+| Unitaires | **1521/1521** (dont 11A-WIRE allowlist) |
 | Runtime AI | **OFF** |
 | Media jobs Production | **0** |
+| OpenAI image Production path | **WIRED_DISABLED** (`102_`) |
 
 - [ ] test staging contrôlé.
 
@@ -49,7 +50,7 @@
 - [x] schéma Production aligné **29** migrations (historique 10A / incident 21 — ne pas rejouer à l’aveugle) ;
 - [ ] app et workers compatibles déployés (smokes texte déjà passés sous flags bornés) ;
 - [x] flags désactivés par défaut (code) — runtime **OFF** hors Auth ;
-- [ ] smoke tests providers bornés — Marketing / Creative / Script / Art texte / Storyboard texte : **PASS** ; média : 11A prep → décision VHS-124 / legacy puis Auth ; budget 122/112/10 ;
+- [ ] smoke tests providers bornés — texte : **PASS** ; média : wiring `102_` done · preflight no-provider puis Auth smoke 1× ; budget 274/247/27 ;
 - [ ] canary puis montée progressive ;
 - [ ] métriques et logs surveillés.
 
@@ -71,10 +72,11 @@
 
 ## Phase 11A média `/director`
 
-- [x] Prep historique `58_` · reassessment `101_` ;
-- [x] Verdict ops : **BLOCKED_MEDIA_PRODUCTION_WIRING** (VHS-124 fakes-only) ;
-- [ ] Auth **`11A-WIRE-OPENAI-IMAGE-ALLOWLIST`** — non démarrée ;
-- [ ] Smoke image réel Production — **interdit** tant que wiring absent ;
+- [x] Prep historique `58_` · reassessment `101_` · wire `102_` ;
+- [x] Verdict ops : **OPENAI_IMAGE_PRODUCTION_PATH_WIRED_DISABLED** ;
+- [x] Auth **`11A-WIRE-OPENAI-IMAGE-ALLOWLIST`** — livrée (exception OFF) ;
+- [ ] Preflight live no-provider — **suivant** ;
+- [ ] Smoke image réel Production — **interdit** sans Auth dédiée ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -82,8 +84,8 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : DECISION_REQUIRED — aucun média lancé
-Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DESIGN_READY only
+Phase 11A média : WIRED_DISABLED (`102_`) — 0 appel OpenAI
+Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```
 

@@ -9,7 +9,7 @@
 | Implémentation | Pure fonction + persist `generation_plan` (VHS-123) |
 | Production | **0** `generation_plan` actif |
 | Dry-run 11A | plan complet → `no_eligible_strategy` (registre legacy partiel ; fallbacks=0) |
-| Contrainte | `/director` force fakes adapters (VHS-124) — média réel non branché |
+| Contrainte | `/director` fakes par défaut (VHS-124) ; exception bornée OpenAI image OFF (`102_`) — pas de wildcard `providerMode=real` |
 | Motion Transfer | Registry MT-002 + Router **MT-003** (`routeMotionTransfer`, `maximumFallbacksPerStep=0`, **0** candidat Production → `motion_capability_unavailable`) ; adapter fal MT-007B **code-only / disabled / UNVERIFIED** (`67_`) ; `RUNTIME_NOT_IMPLEMENTED_YET` ; interdits fallback I2V/T2V silencieux |
 
 ## Mission

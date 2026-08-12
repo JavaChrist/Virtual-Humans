@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.124] — 2026-08-13
+
+### Added (Phase 11A-WIRE OpenAI Image Allowlist)
+
+- Exception VHS-124 bornée `VHS124_OPENAI_IMAGE_DIRECTOR_EXCEPTION` (OFF par défaut) (`102_`).
+- Chemin Production Director OpenAI `gpt-image-1` low 1024 — **WIRED_DISABLED** · 0 appel · 0 write.
+- Plan single-step scene-2 · QC technique · Human Review gate · isolation Motion/legacy.
+
 ## [2.0.123] — 2026-08-13
 
 ### Added (Phase 11A-RESUME Media Pipeline Reassessment)

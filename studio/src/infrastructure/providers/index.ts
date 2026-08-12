@@ -12,6 +12,12 @@ export { createOpenAIImageAdapter } from "./openai-image-adapter";
 export { createElevenLabsVoiceAdapter } from "./elevenlabs-voice-adapter";
 export { createUniversalFakeAdapter } from "./fake-universal-adapter";
 export {
+  createCallTimeOpenAIImageClient,
+  createVhs124AllowlistedOpenAIImageAdapter,
+  createVhs124ScopedGenerationEngine,
+  resolveDirectorProviderAdapters,
+} from "./vhs124-openai-image-exception";
+export {
   FAKE_MOTION_TRANSFER_MODEL_ID,
   FAKE_MOTION_TRANSFER_PROVIDER_ID,
   FAL_KLING_MOTION_CONTROL_ADAPTER_VERSION,

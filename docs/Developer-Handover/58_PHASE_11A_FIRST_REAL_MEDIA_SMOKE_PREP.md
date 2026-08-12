@@ -11,16 +11,17 @@
 
 ```text
 DECISION_REQUIRED  (historique 11 août)
-→ supersédé ops : BLOCKED_MEDIA_PRODUCTION_WIRING  (voir 101_ Phase 11A-RESUME)
+→ BLOCKED_MEDIA_PRODUCTION_WIRING  (`101_`)
+→ OPENAI_IMAGE_PRODUCTION_PATH_WIRED_DISABLED  (`102_` — exception OFF)
 ```
 
 Audit et préparation verts. Smoke média recommandé **identifié** (1 image OpenAI sync, ~1–2¢).  
-**Blocage architectural :** le chemin `/director` **interdit** les adapters réels (VHS-124 / `assertDirectorProductionUsesFakes`).  
-Une autorisation humaine doit choisir le chemin d’exécution avant tout wiring ou smoke.
+**Historique :** VHS-124 interdisait les adapters réels wildcard (`providerMode=real`).
 
-**Mise à jour 13 août 2026 (`101_`) :** budget désormais 274/247/27 ; Motion MV-001 done (chemin séparé) ;  
-MV-002 DEFERRED ; **wiring Production média toujours absent** — ne pas Auth smoke tant que  
-`11A-WIRE-OPENAI-IMAGE-ALLOWLIST` n’est pas autorisé. Legacy `/api/generate/image` ≠ PASS Production.
+**Mise à jour 13 août 2026 (`102_`) :** exception bornée `VHS124_OPENAI_IMAGE_DIRECTOR_EXCEPTION`
+câblée (**OFF** par défaut) ; path OpenAI image Production **WIRED_DISABLED** ; **0** appel.
+Prochaine porte = `11A-PREFLIGHT-LIVE-NO-PROVIDER` — **pas** encore Auth smoke réel.
+Legacy `/api/generate/image` ≠ PASS Production. MV-002 DEFERRED · Motion Registry DISABLED.
 
 ---
 

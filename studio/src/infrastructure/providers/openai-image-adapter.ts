@@ -1,16 +1,20 @@
 /**
  * OpenAI image ProviderAdapter (VHS-109).
  * Synchronous completed result — no async job / poll / cancel.
+ * No internal retry / fallback. Key never stored on the adapter.
  */
 
 import type { MediaAction } from "@/domain/cost";
+import { fromLegacyUsdEstimate } from "@/domain/cost";
 import {
   GenerationDomainError,
   type CanonicalGenerationInput,
   type ProviderAdapter,
+  type ProviderEstimateResult,
   type ProviderExecutionContext,
   type ProviderSubmissionResult,
 } from "@/domain/generation";
+import { estimateImage, type ImageQuality, type ImageSize } from "@/lib/pricing";
 import type { OpenAIImageClientPort } from "./contracts";
 import { mapProviderError } from "./error-mapping";
 import { mapCompletedMedia } from "./output-mapping";
@@ -23,11 +27,50 @@ function sizeFromAspect(
   return "1024x1024";
 }
 
-export function createOpenAIImageAdapter(client: OpenAIImageClientPort): ProviderAdapter {
+export type OpenAIImageAdapterOptions = {
+  /** Default medium (legacy Studio). Phase 11A smoke uses low. */
+  quality?: ImageQuality;
+  /** When set, ignore aspect mapping and force this size. */
+  forceSize?: ImageSize;
+};
+
+export function createOpenAIImageAdapter(
+  client: OpenAIImageClientPort,
+  options: OpenAIImageAdapterOptions = {},
+): ProviderAdapter {
+  const quality = options.quality ?? "medium";
+
   return {
     providerId: "openai",
     supports(modelId: string, action: MediaAction): boolean {
       return modelId === "gpt-image-1" && (action === "image" || action === "scene_image");
+    },
+    async estimate(
+      input: CanonicalGenerationInput,
+      context: ProviderExecutionContext,
+    ): Promise<ProviderEstimateResult> {
+      if (input.kind !== "image") {
+        throw new GenerationDomainError(
+          "model_not_supported",
+          "OpenAI adapter estimate expects image input.",
+        );
+      }
+      const size = options.forceSize ?? sizeFromAspect(input.aspectRatio);
+      const usd = estimateImage(size, quality, 1);
+      return {
+        estimate: fromLegacyUsdEstimate({
+          id: `est-openai-img-${context.idempotencyKey}`.slice(0, 64),
+          projectId: "openai-image-estimate",
+          createdBy: "openai-image-adapter",
+          correlationId: context.correlationId,
+          action: "image",
+          modelId: input.modelId,
+          providerId: "openai",
+          quantity: 1,
+          usd,
+          confidence: "high",
+        }),
+      };
     },
     async submit(
       input: CanonicalGenerationInput,
@@ -46,11 +89,14 @@ export function createOpenAIImageAdapter(client: OpenAIImageClientPort): Provide
       void context.idempotencyKey;
       void context.correlationId;
 
+      const size = options.forceSize ?? sizeFromAspect(input.aspectRatio);
+
       try {
+        // Exactly one client call — no retry loop.
         const result = await client.generateImage({
           prompt: input.promptText,
-          size: sizeFromAspect(input.aspectRatio),
-          quality: "medium",
+          size,
+          quality,
         });
         return {
           status: "completed",

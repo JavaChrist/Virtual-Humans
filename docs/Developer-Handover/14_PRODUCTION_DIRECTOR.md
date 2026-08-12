@@ -8,9 +8,9 @@
 |---|---|
 | Local fakes | Pipeline queue / QC / merge fake / export validés (Phases 4–9) |
 | Production réelle | `production_runs` = **0** · `production_jobs` = **0** · assets = **0** |
-| Média image | Phase 11A prep `DECISION_REQUIRED` (`58_`) — aucun job lancé |
+| Média image | path OpenAI **WIRED_DISABLED** (`102_`) — exception OFF · **0** job |
 | Motion Transfer | Worker MT-008 (`68_`) + fal disabled (`67_`) + QC (`69_`) + Review (`70_`) + Obs/Security (`71_`) ; flags OFF ; privacy blocked ; **0** job Production ; runtime unavailable |
-| Adapters | réels non branchés sur `/director` (`assertDirectorProductionUsesFakes`) |
+| Adapters | fakes par défaut ; allowlist OpenAI image bornée (`VHS124_…`) ≠ `providerMode=real` |
 
 ## Mission
 

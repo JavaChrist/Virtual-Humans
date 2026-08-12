@@ -7,7 +7,7 @@
 | | |
 |---|---|
 | Ports / adapters | Code réel OpenAI image, fal, ElevenLabs **présent** |
-| Wiring `/director` | **fakes only** (VHS-124) |
+| Wiring `/director` | **fakes** par défaut (VHS-124) ; allowlist OpenAI image **WIRED_DISABLED** (`102_`) |
 | Legacy | `/api/generate/*` hors pipeline Director (ne prouve pas `production_jobs`) |
 | Kill switches | `PAID_GENERATION` ∧ `WORKER` requis pour exécution payante |
 | Motion Transfer | Dry-run Engine **MT-004** (`63_`) … fal adapter **MT-007B** (`67_`) + worker polling **MT-008** (`68_`, fake E2E, flags OFF) — paid execution unavailable |

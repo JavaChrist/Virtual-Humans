@@ -60,9 +60,16 @@ import {
   type ProviderAdapterRegistry,
 } from "@/application/generation";
 import type { ProviderAdapter } from "@/domain/generation";
+import type { OpenAIImageClientPort } from "@/infrastructure/providers/contracts";
+import {
+  createVhs124ScopedGenerationEngine,
+  resolveDirectorProviderAdapters,
+} from "@/infrastructure/providers/vhs124-openai-image-exception";
 import { createProductionDirector, type ProductionDirector } from "@/application/production/production-director";
 import type { ProductionPorts } from "@/application/production/ports";
 import { createAcceptingQualityPort } from "@/application/production/accepting-quality";
+import { createPhase11AImageTechnicalQualityPort } from "@/application/production/phase-11a-image-quality-port";
+import { isVhs124OpenAIImageExceptionEnabled } from "@/application/production/phase-11a-openai-image-allowlist";
 import { parseOpenAIArtConfig, parseOpenAICreativeConfig, parseOpenAIMarketingConfig, parseOpenAIScriptConfig, parseOpenAIStoryboardConfig } from "@/infrastructure/ai/openai/config";
 import { createFetchOpenAIResponsesClient } from "@/infrastructure/ai/openai/responses-client";
 import { createOpenAIMarketingAnalyzerAdapter } from "@/infrastructure/ai/openai/marketing/adapter";
@@ -79,7 +86,6 @@ import {
   canExecuteStoryboardAi,
   getFeatureFlags,
 } from "@/infrastructure/config/feature-flags";
-import { createUniversalFakeAdapter } from "@/infrastructure/providers/fake-universal-adapter";
 import { createProductionWorkerFromDeps } from "@/infrastructure/worker/factory";
 import { createProductionMotionTransferComposition } from "@/infrastructure/worker/production-motion-transfer";
 import { adaptProductionJobQueue } from "@/infrastructure/worker/queue-adapter";
@@ -149,18 +155,18 @@ function resolveDefaultAssetContent(
   });
 }
 
-/** Default /director production path — FAKE adapters only (VHS-124). */
+/**
+ * Default /director production path — FAKE adapters only (VHS-124).
+ * Temporary exception VHS124_OPENAI_IMAGE_DIRECTOR_EXCEPTION is resolved via
+ * `resolveDirectorProviderAdapters` (disabled by default; not providerMode=real).
+ */
 export function createDirectorFakeProviderAdapters(): ProviderAdapter[] {
-  return [
-    createUniversalFakeAdapter("fal"),
-    createUniversalFakeAdapter("openai"),
-    createUniversalFakeAdapter("elevenlabs"),
-  ];
+  return resolveDirectorProviderAdapters({ env: {} }).adapters;
 }
 
 /**
- * Real provider adapters are forbidden on the /director production path.
- * Callers that need real adapters must use a different stack explicitly.
+ * Wildcard real providerMode remains forbidden on /director.
+ * The OpenAI image allowlist exception uses a distinct env gate and never sets providerMode=real.
  */
 export function assertDirectorProductionUsesFakes(mode?: "fake" | "real"): void {
   if (mode === "real") {
@@ -250,11 +256,13 @@ export function createDirectorPersistenceStack(deps?: {
     createdAt: string;
     registryVersion: string;
   }) => CapabilityRegistrySnapshot;
-  /** Test injection — override provider adapters (must remain fakes in /director). */
+  /** Test injection — override provider adapters (default: fakes; optional VHS-124 allowlist). */
   providerAdapters?: ProviderAdapter[];
+  /** Test injection — OpenAI image client for VHS-124 allowlist (fake transport in tests). */
+  openaiImageClient?: OpenAIImageClientPort;
   /** Test injection — full generation engine override. */
   generationEngine?: GenerationEngine;
-  /** Forbidden: requesting real adapters on /director path. */
+  /** Forbidden: requesting real adapters on /director path (wildcard). */
   providerMode?: "fake" | "real";
   env?: Record<string, string | undefined>;
   /** Test injection — Phase 5 delivery uses a fake merge engine only (VHS-125). */
@@ -384,10 +392,24 @@ export function createDirectorPersistenceStack(deps?: {
     packageCache.set(planRevisionId, packages);
   }
 
-  const providerAdapters = deps?.providerAdapters ?? createDirectorFakeProviderAdapters();
+  const resolvedProviders =
+    deps?.providerAdapters != null
+      ? {
+          adapters: deps.providerAdapters,
+          mode: "injected" as const,
+        }
+      : resolveDirectorProviderAdapters({
+          env,
+          openaiImageClient: deps?.openaiImageClient,
+        });
+  const providerAdapters = resolvedProviders.adapters;
   const registry: ProviderAdapterRegistry = createProviderAdapterRegistry(providerAdapters);
+  const baseEngine = createGenerationEngine({ registry });
   const generationEngine =
-    deps?.generationEngine ?? createGenerationEngine({ registry });
+    deps?.generationEngine ??
+    (resolvedProviders.mode === "vhs124_openai_image_allowlist"
+      ? createVhs124ScopedGenerationEngine(baseEngine)
+      : baseEngine);
 
   const runStore = createSupabaseProductionRunStore({
     client,
@@ -454,7 +476,11 @@ export function createDirectorPersistenceStack(deps?: {
     runStore,
     budget: budgetReservation,
     idempotency,
-    quality: createAcceptingQualityPort(),
+    quality:
+      resolvedProviders.mode === "vhs124_openai_image_allowlist" ||
+      isVhs124OpenAIImageExceptionEnabled(env)
+        ? createPhase11AImageTechnicalQualityPort()
+        : createAcceptingQualityPort(),
     events,
     eventPublishFailurePolicy: "fail_soft",
   };
