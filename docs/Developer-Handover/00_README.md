@@ -30,6 +30,7 @@ Motion / Performance     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-
                            MT-013F prep READY_FOR_MEDIA_AND_DEPLOY_AUTH (`84_`)
                            MT-013G2 8s media PREPARED + MEDIA_VALIDATED (`86_`)
                            MT-013H hard 174→274 · available 162 · shortfall 0 (`87_`)
+                           MT-013I MEDIA_UPLOADED · 2 private assets (`88_`)
                            MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
                            privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
                            remote MT-005 APPLIED (`82_`) · NO PAID BENCHMARK_YET
@@ -39,7 +40,7 @@ production_jobs média    : 0
 P0                       : aucun
 P1 ouverts               : décision média image VHS-124
 P1 fermé                 : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS)
-Prochaine porte majeure  : Auth private upload → deploy/flags → paid MV-001 (réserve ≤162¢)
+Prochaine porte majeure  : Auth deploy/flags → paid MV-001 (réserve ≤162¢)
 ```
 
 ### Portes Directors texte
@@ -199,6 +200,7 @@ Utilisateur → AI Video Director (/director)
 | [`85_MT013G_MV001_LOCAL_MEDIA_VALIDATE.md`](./85_MT013G_MV001_LOCAL_MEDIA_VALIDATE.md) | **MT-013G local media · MEDIA_INVALID (source 16s/360p — historique)** |
 | [`86_MT013G2_MV001_8S_MEDIA_PREPARATION.md`](./86_MT013G2_MV001_8S_MEDIA_PREPARATION.md) | **MT-013G2 8s 720p préparé · MEDIA_VALIDATED · shortfall 100¢ (pré-H)** |
 | [`87_MT013H_MV001_8S_BUDGET_HARD_LIMIT_274.md`](./87_MT013H_MV001_8S_BUDGET_HARD_LIMIT_274.md) | **MT-013H budget hard 174→274 · available 162¢ · shortfall 0** |
+| [`88_MT013I_MV001_PRIVATE_MEDIA_UPLOAD.md`](./88_MT013I_MV001_PRIVATE_MEDIA_UPLOAD.md) | **MT-013I private upload · 2 assets · project `390c25db-…` · 0 fal** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

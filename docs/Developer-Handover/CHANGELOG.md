@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.114] — 2026-08-12
+
+### Added (MT-013I MV-001 Private Media Upload)
+
+- Auth `AUTH_CREATE_EXACTLY_ONE_MV001_VIDEO_PROJECT` : projet `390c25db-…5e84`.
+- Auth `AUTH_MV001_UPLOAD_EXACTLY_TWO_PRIVATE_MEDIA` : 2 objets privés + 2 assets (source mp4 + identity png).
+- Checksums inchangés · bucket privé · 0 URL persistée · ledger 59 · jobs/runs 0 · Motion UNAVAILABLE. Rapport `88_`.
+
 ## [2.0.113] — 2026-08-12
 
 ### Changed (MT-013H MV-001 8s Budget Hard Limit)
