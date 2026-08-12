@@ -17,16 +17,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              MT-013K-QC-CONSUMER post-qc drain WIRED (`92_`) · 0 fal
              MT-013K-OUTPUT-TRANSPORT fal result+ingest WIRED (`93_`) · 0 fal
              MT-013L FULL PREFLIGHT READY_FOR_FINAL_PAID_AUTH (`94_`) · 0 fal
-             MOTION_SYNTHETIC_E2E_READY · MV001_NOT_EXECUTED · RUNTIME_UNAVAILABLE
-             NO PAID BENCHMARK_YET · provider calls = 0
-             privacy ACCEPTED_LIMITED_MV001 (`81_` · exp 2026-09-10)
+             MT-013M FINAL PAID SINGLE CALL CONSUMED (`95_`) · submit=1
+             MT-013N REVIEW INTEGRITY PASS + private preview prep (`96_`) · 0 fal
+             MT-013O HUMAN REVIEW APPROVE (`97_`) · decision=1 approved
+             MV001 = PASS_WITH_HUMAN_APPROVAL · capability NOT_YET_ENABLED
+             RUNTIME_UNAVAILABLE · privacy ACCEPTED_LIMITED_MV001
              MV001_REQUIRES_NEW_DEPLOY_PREFLIGHT = NO (satisfied on 39a79d2)
-Budget     : 274 / 112 / 0 / 162 (`87_`) · MV-001 réserve 162 couverte
+Budget     : 274 / committed≈247 (112+135) / MV-001 ledger 162/135/27
 Runtime AI : OFF
 Media jobs : 0
 P1         : décision média image VHS-124
 P1 fermé   : BACKUP_PRESENT_RESTORE_UNPROVEN → RESTORE_PROVEN (`78_` PASS · cible qmsh…qlnq)
-Next major : Auth paid MV-001 final single call (≤162¢ · max 1 fal · source 39a79d2)
+Next major : Auth capability / merge-export Motion (distinct) — pas de resubmit fal
 ```
 
 ## P0 — fondations
@@ -83,10 +85,10 @@ Next major : Auth paid MV-001 final single call (≤162¢ · max 1 fal · source
 - **Phase 10F-V4-EXECUTE** ✅ Smoke Storyboard texte PASS : 1 appel `gpt-5.6` / v4, `storyboard_project` rev.1, continuité 24/9/5, ledger 13/5/8, available **10¢**, replay idempotent, flags OFF (`57_…`, `PASS`).
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
-- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…012 IMPLEMENTED** (`60_`…`72_`) · **MT-013A…J** (`73_`…`89_`) · **MT-013K-WIRE** orchestrateur Production **WIRED** (`90_`) · **MT-013K-DURABILITY** `POLLING_RECOVERY_ACROSS_FRESH_PROCESS=PASS` (`91_`) · **MT-013K-QC-CONSUMER** drain ingest/QC/review **WIRED** (`92_`) · **MT-013K-OUTPUT-TRANSPORT** fal result+private ingest **WIRED** (`93_`) · **MT-013L** full Production preflight **`READY_FOR_FINAL_PAID_AUTH`** (`94_`, source `39a79d2`, 0 fal) · média **8s/720p UPLOADED** · flags OFF · privacy **ACCEPTED_LIMITED_MV001** · Runtime UNAVAILABLE · **MV001_NOT_EXECUTED** · prochaine Auth = paid single call.
+- **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…013O** (`60_`…`97_`) · **MT-013O** Human Review **APPROVE** 1× (`97_`) · MV-001 **PASS_WITH_HUMAN_APPROVAL** · output `2d7ffcad-…` lifecycle **approved** / `active=false` · historique `qc_rejected` conservé · flags OFF · Runtime UNAVAILABLE · capability Production **NOT_YET_ENABLED** · **aucun second submit**.
 - **P1 média image** : décision humaine chemin (exception VHS-124 vs legacy `/api/generate/image`) — chantier **distinct** du Motion Transfer.
-- **P1 budget** : hard **274** ; committed **112** ; available **162** (`87_`) — réserve MV-001 **162¢** **couverte** (shortfall 0).
-- **Prochaine porte majeure** : Auth **private upload** → **deploy/flags** → **paid MV-001** (réserve ≤162¢) — ne pas fusionner.
+- **P1 budget** : hard **274** ; committed post-MV001 **≈247** (112+135).
+- **Prochaine porte majeure** : Auth **capability / merge-export Motion** (distinct) — pas de resubmit fal.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).
