@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.113] — 2026-08-12
+
+### Changed (MT-013H MV-001 8s Budget Hard Limit)
+
+- Auth `AUTH_MV001_8S_RAISE_HARD_LIMIT_174_TO_274` : hard **174→274** (+100¢).
+- committed 112 / reserved 0 / available **162** · audit ×1 · shortfall **0** · pas de réservation. Rapport `87_`.
+
 ## [2.0.112] — 2026-08-12
 
 ### Changed (MT-013G2 MV-001 8s Media Preparation)

@@ -117,7 +117,7 @@ export function evaluateMv001DryRunLivePrep(
       pass: profile.absoluteCapMinor === MV001_ABSOLUTE_CAP_MINOR,
     },
     {
-      id: "budget_174_112_0_62",
+      id: "budget_274_112_0_162",
       pass:
         input.budget.hardMinor === MV001_OBSERVED_HARD_MINOR &&
         input.budget.committedMinor === MV001_OBSERVED_COMMITTED_MINOR &&
@@ -125,9 +125,9 @@ export function evaluateMv001DryRunLivePrep(
         input.budget.availableMinor === MV001_OBSERVED_AVAILABLE_MINOR,
     },
     {
-      id: "shortfall_100",
+      id: "shortfall_0",
       pass: shortfall === MV001_SHORTFALL_MINOR,
-      detail: "expected until budget-raise Auth",
+      detail: "post MT-013H raise",
     },
     {
       id: "provider_called_false",
@@ -179,6 +179,6 @@ export function buildMv001DryRunLivePrepScaffold(sourceCommit: string): {
   return {
     expectedVerdictAfterBudgetRaise: "READY_FOR_PAID_AUTH",
     expectedSourceCommit: sourceCommit,
-    note: "Execute only after deploy + budget-raise Auth; MT-013G2 prepares media/profile only.",
+    note: "Execute only after deploy Auth; budget cover already satisfied post MT-013H.",
   };
 }

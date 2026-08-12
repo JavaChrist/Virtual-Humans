@@ -28,13 +28,13 @@ export const MV001_MAX_OUTPUTS = 1 as const;
 /** Required reservation for paid Auth — exceeds current available (shortfall). */
 export const MV001_RESERVATION_MINOR = 162 as const;
 export const MV001_ABSOLUTE_CAP_MINOR = 200 as const;
-/** Observed workspace budget (unchanged by G2 Auth). */
-export const MV001_OBSERVED_HARD_MINOR = 174 as const;
+/** Observed workspace budget after MT-013H raise (174→274). */
+export const MV001_OBSERVED_HARD_MINOR = 274 as const;
 export const MV001_OBSERVED_COMMITTED_MINOR = 112 as const;
 export const MV001_OBSERVED_RESERVED_MINOR = 0 as const;
-export const MV001_OBSERVED_AVAILABLE_MINOR = 62 as const;
-/** reservation 162 − available 62 */
-export const MV001_SHORTFALL_MINOR = 100 as const;
+export const MV001_OBSERVED_AVAILABLE_MINOR = 162 as const;
+/** reservation 162 − available 162 */
+export const MV001_SHORTFALL_MINOR = 0 as const;
 export const MV001_FALLBACKS = 0 as const;
 export const MV001_AUTO_RETRY = 0 as const;
 

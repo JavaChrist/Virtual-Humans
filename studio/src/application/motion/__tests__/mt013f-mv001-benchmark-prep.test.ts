@@ -108,7 +108,7 @@ describe("MT-013F profile & registry exception", () => {
     assert.equal(p.estimateMinor, 135);
     assert.equal(p.reservationMinor, 162);
     assert.equal(p.absoluteCapMinor, 200);
-    assert.equal(p.shortfallMinor, 100);
+    assert.equal(p.shortfallMinor, 0);
     assert.equal(p.fallbacks, 0);
     assert.equal(p.autoRetry, 0);
     assert.equal(p.humanReview, "required");
@@ -245,18 +245,18 @@ describe("MT-013F execution gates", () => {
       registryException: createMv001RegistryException(),
       mediaManifest: buildPendingMv001MediaSkeleton(NOW),
       budget: {
-        hardMinor: 174,
+        hardMinor: 274,
         committedMinor: 112,
         reservedMinor: 0,
-        availableMinor: 61,
+        availableMinor: 161,
       },
     });
     const ev = evaluateMv001ExecutionGates(ctx);
     assert.ok(ev.failed.includes("budget_observed_unchanged"));
-    assert.ok(ev.failed.includes("shortfall_100"));
+    assert.ok(ev.failed.includes("shortfall_0"));
   });
 
-  test("shortfall 100 expected while reservation not covered", () => {
+  test("post-raise budget covers reservation with shortfall 0", () => {
     const ctx = buildDefaultMv001PrepContext({
       nowIso: NOW,
       privacySet: privacyOk(),
@@ -264,8 +264,8 @@ describe("MT-013F execution gates", () => {
       mediaManifest: buildPendingMv001MediaSkeleton(NOW),
     });
     const ev = evaluateMv001ExecutionGates(ctx);
-    assert.ok(ev.gates.find((g) => g.id === "shortfall_100")?.pass);
-    assert.ok(ev.failed.includes("budget_covers_reservation"));
+    assert.ok(ev.gates.find((g) => g.id === "shortfall_0")?.pass);
+    assert.ok(ev.gates.find((g) => g.id === "budget_covers_reservation")?.pass);
     assert.equal(ev.verdict, "READY_FOR_MEDIA_AND_DEPLOY_AUTH");
   });
 
@@ -392,7 +392,7 @@ describe("MT-013F execution gates", () => {
     assert.ok(evaluateMv001ExecutionGates(ctx).failed.includes("no_prior_mv001_active"));
   });
 
-  test("fully green gates except shortfall → executable false", () => {
+  test("fully green gates → executable true", () => {
     const ctx = buildDefaultMv001PrepContext({
       nowIso: NOW,
       privacySet: privacyOk(),
@@ -409,44 +409,8 @@ describe("MT-013F execution gates", () => {
     const ev = evaluateMv001ExecutionGates(ctx);
     assert.equal(ev.mediaValidated, true);
     assert.equal(ev.verdict, "READY_FOR_MEDIA_AND_DEPLOY_AUTH");
-    assert.ok(ev.failed.includes("budget_covers_reservation"));
-    assert.equal(ev.executable, false);
-  });
-
-  test("budget covers reservation → executable true", () => {
-    const ctx = buildDefaultMv001PrepContext({
-      nowIso: NOW,
-      privacySet: privacyOk(),
-      registryException: createMv001RegistryException(),
-      mediaManifest: validatedManifest(),
-      falKeyPresent: true,
-      flags: {
-        motionTransferEnabled: true,
-        motionTransferPaidEnabled: true,
-        motionTransferFalEnabled: true,
-        motionTransferWorkerEnabled: true,
-      },
-      budget: {
-        hardMinor: 274,
-        committedMinor: 112,
-        reservedMinor: 0,
-        availableMinor: 162,
-      },
-    });
-    // Observed-budget gate expects 174/112/0/62 — override only cover check via mutated shortfall gates
-    // For full executable, observed budget must match AND cover reservation — impossible simultaneously
-    // until hard limit raised while keeping the observed gate updated in a future Auth.
-    // Here we only assert cover gate alone by evaluating with matching observed + cover after raise:
-    ctx.budget = {
-      hardMinor: 274,
-      committedMinor: 112,
-      reservedMinor: 0,
-      availableMinor: 162,
-    };
-    const ev = evaluateMv001ExecutionGates(ctx);
-    assert.ok(ev.failed.includes("budget_observed_unchanged"));
-    assert.ok(ev.failed.includes("shortfall_100"));
-    assert.ok(!ev.failed.includes("budget_covers_reservation"));
+    assert.deepEqual(ev.failed, []);
+    assert.equal(ev.executable, true);
   });
 
   test("retry/fallback configured → fail", () => {
@@ -574,29 +538,6 @@ describe("MT-013F redaction / upload / execute / shutdown", () => {
     const scaffold = buildMv001DryRunLivePrepScaffold("abc1234");
     assert.equal(scaffold.expectedVerdictAfterBudgetRaise, "READY_FOR_PAID_AUTH");
 
-    const withShortfall = evaluateMv001DryRunLivePrep({
-      expectedSourceCommit: "abc1234",
-      observedSourceCommit: "abc1234",
-      privacyAccepted5of5: true,
-      privacyExpiresAt: MV001_PRIVACY_EXPIRES_AT,
-      nowIso: NOW,
-      budget: {
-        hardMinor: 174,
-        committedMinor: 112,
-        reservedMinor: 0,
-        availableMinor: 62,
-      },
-      providerCalled: false,
-      reservationCount: 0,
-      runCount: 0,
-      jobCount: 0,
-      assetCount: 0,
-      workerExecuted: false,
-    });
-    assert.equal(withShortfall.verdict, "NOT_READY");
-    assert.equal(withShortfall.shortfallMinor, 100);
-    assert.equal(withShortfall.providerCalled, false);
-
     const ready = evaluateMv001DryRunLivePrep({
       expectedSourceCommit: "abc1234",
       observedSourceCommit: "abc1234",
@@ -616,8 +557,30 @@ describe("MT-013F redaction / upload / execute / shutdown", () => {
       assetCount: 0,
       workerExecuted: false,
     });
-    // observed budget check fails (not 174/62) and shortfall_100 fails — still NOT_READY
-    assert.equal(ready.verdict, "NOT_READY");
+    assert.equal(ready.verdict, "READY_FOR_PAID_AUTH");
+    assert.equal(ready.shortfallMinor, 0);
+    assert.equal(ready.providerCalled, false);
+
+    const notReady = evaluateMv001DryRunLivePrep({
+      expectedSourceCommit: "abc1234",
+      observedSourceCommit: "different",
+      privacyAccepted5of5: true,
+      privacyExpiresAt: MV001_PRIVACY_EXPIRES_AT,
+      nowIso: NOW,
+      budget: {
+        hardMinor: 274,
+        committedMinor: 112,
+        reservedMinor: 0,
+        availableMinor: 162,
+      },
+      providerCalled: false,
+      reservationCount: 0,
+      runCount: 0,
+      jobCount: 0,
+      assetCount: 0,
+      workerExecuted: false,
+    });
+    assert.equal(notReady.verdict, "NOT_READY");
   });
 
   test("constants exported for ops report", () => {

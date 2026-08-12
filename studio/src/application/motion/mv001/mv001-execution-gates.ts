@@ -49,7 +49,7 @@ export const MV001_GATE_IDS = [
   "privacy_not_expired",
   "migrations_30",
   "budget_observed_unchanged",
-  "shortfall_100",
+  "shortfall_0",
   "budget_covers_reservation",
   "registry_exception_active",
   "production_registry_disabled",
@@ -133,7 +133,6 @@ const AWAIT_AUTH_GATES: ReadonlySet<Mv001GateId> = new Set([
   "private_references",
   "fal_key_present",
   "motion_flags_four",
-  /** Available 62 < reservation 162 — requires separate budget-raise Auth. */
   "budget_covers_reservation",
 ]);
 
@@ -194,7 +193,7 @@ export function evaluateMv001ExecutionGates(
       `budget=${ctx.budget.hardMinor}/${ctx.budget.committedMinor}/${ctx.budget.reservedMinor}/${ctx.budget.availableMinor}`,
     ),
     gate(
-      "shortfall_100",
+      "shortfall_0",
       mv001ReservationShortfallMinor(ctx.budget.availableMinor) ===
         MV001_SHORTFALL_MINOR,
       `shortfall=${mv001ReservationShortfallMinor(ctx.budget.availableMinor)}`,
@@ -283,10 +282,10 @@ export function buildDefaultMv001PrepContext(input: {
     privacySet: input.privacySet,
     migrationsCount: input.migrationsCount ?? 30,
     budget: input.budget ?? {
-      hardMinor: 174,
-      committedMinor: 112,
-      reservedMinor: 0,
-      availableMinor: 62,
+      hardMinor: MV001_OBSERVED_HARD_MINOR,
+      committedMinor: MV001_OBSERVED_COMMITTED_MINOR,
+      reservedMinor: MV001_OBSERVED_RESERVED_MINOR,
+      availableMinor: MV001_OBSERVED_AVAILABLE_MINOR,
     },
     registryException: input.registryException,
     mediaManifest: input.mediaManifest,
