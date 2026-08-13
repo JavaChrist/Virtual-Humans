@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.131] — 2026-08-14
+
+### Added (Phase 11A Image Ledger Reconciliation)
+
+- Réservation smoke 1¢ soldée en commit **provisional** (`109_`) · reserved **0** · HR pending.
+- Correctif pipeline : `needs_review` règle le ledger avant Human Review ; compteur worker corrigé.
+- Verdict **`PASS_LEDGER_RECONCILED_HUMAN_REVIEW_PENDING`** · 0 second OpenAI · flags OFF.
+
 ## [2.0.130] — 2026-08-13
 
 ### Added (Phase 11A First Real OpenAI Image Smoke)

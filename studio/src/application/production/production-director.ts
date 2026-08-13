@@ -705,7 +705,39 @@ export function createProductionDirector(
     );
 
     if (quality.status === "needs_review") {
+      // Ledger settlement is independent of Human Review. A valid provider
+      // output that requires visual HR must still commit/release the hold
+      // before the handoff — never wait for APPROVE/REJECT.
+      const settle = await settleAttemptBudget(ports.budget, {
+        reservationId: input.reservationId,
+        runId: current.id,
+        sceneId: input.sceneId,
+        stepId: input.stepId,
+        attemptId: input.attemptId,
+        reserved: input.reserved,
+        actualCost: input.result.status === "completed" ? input.result.actualCost : undefined,
+      });
+      await completeAttemptIdempotency(
+        ports.idempotency,
+        input.idempotencyKey,
+        input.idempotencyKey
+      );
       const prevRev = current.revision;
+      current = updateStepStatus(current, input.stepId, "validating", at, (s) => ({
+        ...s,
+        attempts: s.attempts.map((a) =>
+          a.id === input.attemptId
+            ? {
+                ...a,
+                status: "completed" as const,
+                actualCost: settle.committed,
+                costKind: settle.costKind,
+                output,
+                completedAt: at,
+              }
+            : a
+        ),
+      }));
       current = withRunUpdate(
         current,
         {
@@ -716,6 +748,14 @@ export function createProductionDirector(
             reasons: quality.reasons,
           },
           waitingReason: "needs_review",
+          committedCost: money(
+            current.committedCost.amountMinor + settle.committed.amountMinor,
+            current.currency
+          ),
+          releasedCost: money(
+            current.releasedCost.amountMinor + settle.released.amountMinor,
+            current.currency
+          ),
         },
         at
       );

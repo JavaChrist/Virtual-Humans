@@ -26,9 +26,11 @@ import {
   createMemoryRunStore,
   createAcceptingQualityPort,
   createTestQualityPort,
+  createNeedsReviewQualityPort,
 } from "./fakes";
 import { makePlan, makeStep } from "@/domain/production/__tests__/fixtures";
 import type { ProductionReadinessInput } from "@/domain/project";
+import type { QualityValidatorPort } from "../ports";
 
 const AT = "2026-08-02T12:00:00.000Z";
 
@@ -157,6 +159,7 @@ function harness(opts: {
   fal?: FalClientPort;
   budgetLimit?: number;
   durableIdempotency?: boolean;
+  quality?: QualityValidatorPort;
 } = {}) {
   // sync image step for simpler sync completion path
   const imageStep = makeStep({
@@ -210,7 +213,7 @@ function harness(opts: {
       runStore,
       budget,
       idempotency,
-      quality: createAcceptingQualityPort(),
+      quality: opts.quality ?? createAcceptingQualityPort(),
       events,
       eventPublishFailurePolicy: "fail_soft",
     },
@@ -574,4 +577,52 @@ test("start — store durable requis par défaut", async () => {
   if (started.status === "failed") {
     assert.equal(started.errors[0]!.code, "store_required");
   }
+});
+
+test("needs_review after provider success settles ledger before Human Review", async () => {
+  const h = harness({ quality: createNeedsReviewQualityPort() });
+  const c = clock();
+  const started = await h.director.start(
+    {
+      plan: h.plan,
+      scenePackages: [makeMinimalPackage({ sceneId: "sc-1" })],
+      readiness: readiness(),
+      budgetSnapshot: createBudgetSnapshot({
+        limit: money(10_000, "USD"),
+        reserved: money(0, "USD"),
+        spent: money(0, "USD"),
+      }),
+      requireDurableIdempotency: false,
+      runId: "run-nr",
+    },
+    ctx(c)
+  );
+  assert.equal(started.status, "started");
+
+  let result = await h.director.advance("run-nr", ctx(c));
+  for (let i = 0; i < 5 && result.status !== "needs_review"; i++) {
+    if (result.status === "failed" || result.status === "completed") break;
+    result = await h.director.advance("run-nr", ctx(c));
+  }
+  assert.equal(result.status, "needs_review");
+  assert.equal(h.budget.reserved.size, 0);
+  assert.equal(h.budget.committed.size, 1);
+  const committed = [...h.budget.committed.values()][0]!;
+  assert.equal(committed.amount.amountMinor, 5);
+  assert.equal(committed.costKind, "provisional");
+  const run = await h.runStore.load("run-nr");
+  assert.ok(run);
+  assert.equal(run!.waitingReason, "needs_review");
+  assert.equal(run!.committedCost.amountMinor, 5);
+  assert.equal(run!.releasedCost.amountMinor, 0);
+  const attempt = run!.scenes[0]!.steps[0]!.attempts[0]!;
+  assert.equal(attempt.status, "completed");
+  assert.ok(attempt.output);
+  assert.equal(attempt.costKind, "provisional");
+  assert.equal(attempt.actualCost?.amountMinor, 5);
+  assert.ok(run!.reviewRequest);
+  const replay = await h.director.advance("run-nr", ctx(c));
+  assert.equal(replay.status, "needs_review");
+  assert.equal(h.budget.committed.size, 1);
+  assert.equal((await h.runStore.load("run-nr"))!.committedCost.amountMinor, 5);
 });

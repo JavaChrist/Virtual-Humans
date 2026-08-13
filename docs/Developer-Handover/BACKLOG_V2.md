@@ -31,17 +31,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-STORAGE/PLAN (`106_`) · READY_FOR_NEW_11A_LIVE_PREFLIGHT
              Phase 11A-LIVE-PREFLIGHT (`107_`) · source **7a67c77** · FP c532c400334f5b22
              · READY_FOR_11A_PAID_AUTH · runtime OFF
-             Phase 11A-PAID-SMOKE (`108_`) · **RECONCILIATION_REQUIRED**
-             · Auth provider CONSUMED · image privée needs_review · reserve 1¢ stuck
+             Phase 11A-PAID-SMOKE (`108_`) · Auth provider CONSUMED · image privée needs_review
+             Phase 11A-LEDGER-RECONCILE (`109_`) · **PASS_LEDGER_RECONCILED_HUMAN_REVIEW_PENDING**
+             · reserve 0 · commit smoke 1¢ provisional · HR PENDING
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
-Budget     : 274 / committed 247 / reserved **1** / available **26**
+Budget     : 274 / committed **248** / reserved **0** / available **26**
 Runtime AI : OFF
 Media jobs : 1 run image pending HR · Motion MV-001 settled à part
-P0         : pas de 2e OpenAI · reconcile ledger 1¢ · pas de legacy PASS
-P1         : Auth ledger-reconcile · Auth HR decision (pas regenerate)
-P1 fermé   : PAID-SMOKE-ONCE (consommée) · LIVE-PREFLIGHT · STORAGE/PLAN · MV-002 DEFERRED
-Next major : ledger reconcile + Human Review (pas MV-002)
+P0         : pas de 2e OpenAI · pas d’activation sans HR · pas de legacy PASS
+P1         : Auth HR preview privée APPROVE/REJECT (pas regenerate)
+P1 fermé   : LEDGER-RECONCILE 1¢ · PAID-SMOKE-ONCE (consommée) · LIVE-PREFLIGHT
+Next major : Human Review image 11A (pas MV-002)
 ```
 
 ## P0 — fondations
@@ -99,9 +100,9 @@ Next major : ledger reconcile + Human Review (pas MV-002)
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
-- **Phase 11A média** 🟢 **READY_FOR_NEW_11A_LIVE_PREFLIGHT** (`106_`) — routing single-step + Storage privé + strip base64 · FP `c532c400334f5b22` · runtime OFF · **0** appel ; suite = Auth live preflight.
-- **P1 budget** : hard **274** ; committed **247** ; available **27** ; image shortfall **0** ; vidéo Hailuo shortfall **9** (réserve 36).
-- **Prochaine porte majeure** : Auth **`11A-PAID-OPENAI-IMAGE-SMOKE-ONCE`** — 1 call/job/output · réserve ≤2¢ ; pas MV-002 · pas Registry Motion.
+- **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **PENDING** · runtime OFF.
+- **P1 budget** : hard **274** ; committed **248** ; reserved **0** ; available **26**.
+- **Prochaine porte majeure** : Auth **HUMAN-REVIEW-PRIVATE-PREVIEW-AND-DECISION** — pas de 2e OpenAI.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

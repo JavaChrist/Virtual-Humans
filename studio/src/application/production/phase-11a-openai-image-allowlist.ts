@@ -415,6 +415,12 @@ export type Phase11AWorkerCounters = {
   ledgerSettlementCount: number;
 };
 
+/**
+ * Ledger settlement (reserve/commit/release) is owned by Production Director
+ * and must run on durable provider success including QC `needs_review`.
+ * Human Review APPROVE/REJECT must never be the financial closer.
+ */
+
 export function createPhase11AWorkerCounters(): Phase11AWorkerCounters {
   return {
     providerSubmitCount: 0,

@@ -7,8 +7,8 @@
 | | |
 |---|---|
 | Local fakes | Pipeline queue / QC / merge fake / export validés (Phases 4–9) |
-| Production réelle | `production_runs` = **0** · `production_jobs` = **0** · assets = **0** |
-| Média image | path OpenAI **WIRED_DISABLED** (`102_`) — exception OFF · **0** job |
+| Production réelle | 1 run image `needs_review` (`108_`/`109_`) · HR pending · asset non actif |
+| Média image | smoke 1× OpenAI soldé ledger · path runtime **OFF** · exception OFF |
 | Motion Transfer | Worker MT-008 (`68_`) + fal disabled (`67_`) + QC (`69_`) + Review (`70_`) + Obs/Security (`71_`) ; flags OFF ; privacy blocked ; **0** job Production ; runtime unavailable |
 | Adapters | fakes par défaut ; allowlist OpenAI image bornée (`VHS124_…`) ≠ `providerMode=real` |
 
@@ -39,6 +39,8 @@ Une tentative primaire et les fallbacks prévus seulement. Un timeout ou inciden
 ## Qualité
 
 Contrôles automatiques : fichier lisible, durée/ratio, piste audio, silence, cadrage, présence d'asset, cohérence d'identité mesurable et règles de sécurité. Un score ne modifie pas le storyboard ; il accepte, rejette ou demande revue.
+
+Un output provider durable qui bascule en `needs_review` **règle le ledger avant** le handoff Human Review (`109_`). APPROVE/REJECT ne sont pas responsables du commit/release.
 
 ## Concurrence et budget
 

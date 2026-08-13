@@ -2,7 +2,8 @@
 
 **Date :** 2026-08-13  
 **Auth :** `AUTH_11A_PAID_OPENAI_IMAGE_SMOKE_ONCE`  
-**Nature :** smoke payant unique · pipeline Production Director · **1** image privée
+**Nature :** smoke payant unique · pipeline Production Director · **1** image privée  
+**Ops :** ledger smoke soldé le 2026-08-14 (`109_`) — ce rapport reste la preuve du smoke.
 
 ```text
 VERDICT = RECONCILIATION_REQUIRED
@@ -15,6 +16,7 @@ RUNTIME_PAID_MEDIA = OFF
 OPENAI_IMAGE_REAL_EXECUTION = UNAVAILABLE
 MOTION_RUNTIME = UNAVAILABLE
 HUMAN_REVIEW_DECISION = NONE
+LEDGER_FOLLOW_UP = 109_ PASS_LEDGER_RECONCILED_HUMAN_REVIEW_PENDING
 ```
 
 ---
@@ -232,10 +234,12 @@ Ce rapport + script smoke + index canon. Commit/push documentaires **après** fe
 ## 35. Prochaine décision humaine
 
 ```text
-NEXT_A = Auth LEDGER-RECONCILE-SMOKE-11A (settle/release 1¢ · no provider)
-NEXT_B = Auth HUMAN-REVIEW-DECISION for asset 5d68ef64… (approve/reject · no regenerate)
+NEXT = Auth HUMAN-REVIEW-PRIVATE-PREVIEW-AND-DECISION (109_ a soldé le ledger)
 DO_NOT = second OpenAI call · retry · fal · Motion · legacy · auto-activate
 ```
+
+**Suivi ledger (2026-08-14) :** `109_PHASE_11A_IMAGE_LEDGER_RECONCILIATION.md` —
+`PASS_LEDGER_RECONCILED_HUMAN_REVIEW_PENDING` · reserved 0 · committed smoke 1¢ provisional.
 
 ---
 

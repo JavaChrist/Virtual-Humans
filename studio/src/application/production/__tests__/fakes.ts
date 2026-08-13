@@ -88,6 +88,14 @@ export function createMemoryBudgetPort(limitMinor = 1_000_000): BudgetReservatio
       return { status: "reserved", reservationId: req.reservationId, amount: req.amount };
     },
     async commit(req) {
+      const already = committed.get(req.reservationId);
+      if (already) {
+        return {
+          status: "committed",
+          amount: already.amount,
+          costKind: already.costKind as "actual" | "provisional",
+        };
+      }
       const r = reserved.get(req.reservationId);
       if (!r) return { status: "failed", reason: "unknown_reservation" };
       committed.set(req.reservationId, { amount: req.amount, costKind: req.costKind });
@@ -96,6 +104,10 @@ export function createMemoryBudgetPort(limitMinor = 1_000_000): BudgetReservatio
       return { status: "committed", amount: req.amount, costKind: req.costKind };
     },
     async release(req) {
+      const already = released.get(req.reservationId);
+      if (already && !reserved.has(req.reservationId)) {
+        return { status: "released", amount: already };
+      }
       const r = reserved.get(req.reservationId);
       if (r) {
         openReserved -= Math.min(openReserved, req.amount.amountMinor);
@@ -164,6 +176,27 @@ export function createMemoryEventPort(): ProductionEventPort & {
 
 export function createTestQualityPort(): QualityValidatorPort {
   return createStructuredQualityValidator();
+}
+
+/** Technical-pass / visual-humanOnly — settles ledger, does not auto-approve. */
+export function createNeedsReviewQualityPort(): QualityValidatorPort {
+  return {
+    async validate() {
+      return {
+        status: "needs_review",
+        checks: [
+          { code: "technical", passed: true },
+          { code: "visual_auto", passed: true, detail: "unavailable_humanOnly" },
+        ],
+        reasons: [
+          {
+            code: "human_review_required",
+            message: "Qualité visuelle humanOnly — revue humaine obligatoire.",
+          },
+        ],
+      };
+    },
+  };
 }
 
 export { createAcceptingQualityPort } from "../accepting-quality";

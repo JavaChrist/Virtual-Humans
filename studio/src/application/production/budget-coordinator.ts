@@ -55,6 +55,9 @@ export async function reserveAttemptBudget(
  * Commit actual cost when present; otherwise commit provisional = reserved estimate
  * (explicitly marked — never silent real spend).
  * Release unused difference when actual < reserved.
+ *
+ * Must run after a durable provider success (including QC `needs_review`) and
+ * must not wait for Human Review APPROVE/REJECT.
  */
 export async function settleAttemptBudget(
   port: BudgetReservationPort,

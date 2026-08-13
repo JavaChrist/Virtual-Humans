@@ -104,7 +104,7 @@ Fingerprint stable : hash (project, scene, model, quality, size, promptHash, rev
 | Base64 | décodé mémoire bornée → jamais DB/log/events |
 | Storage path | `{ws}/{project}/media/image/{assetId}.png` bucket privé |
 | Asset lifecycle | non actif jusqu’à HR approve |
-| Ledger | reserve/commit/release contrat existant — **0 write cette phase** |
+| Ledger | reserve/commit/release contrat existant — settlement **indépendant** de HR (`109_`) |
 | QC | technique MIME/dims/size/checksum ; visual = `unavailable_humanOnly` |
 | Human Review | obligatoire ; append-only ; pas d’auto-activation |
 

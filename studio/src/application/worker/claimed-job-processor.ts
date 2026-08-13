@@ -135,10 +135,12 @@ export async function processClaimedJobForWorker(
     };
   }
 
+  // Durable provider work: completed output, async submit, or QC→needs_review.
+  // Failures before the engine (invalid_input, run_not_found, kill switch) must
+  // not increment the HTTP providerCalls counter — needs_review must.
   const providerCalled =
     outcome.status === "completed" ||
     outcome.status === "reschedule" ||
-    outcome.status === "failed" ||
     outcome.status === "needs_review";
 
   // Re-check lease before queue mutation
@@ -266,10 +268,7 @@ export async function processClaimedJobForWorker(
   return {
     outcome: outcome.status,
     providerCalled:
-      context.paidGenerationEnabled !== false &&
-      (outcome.status === "completed" ||
-        outcome.status === "reschedule" ||
-        (outcome.status === "failed" && providerCalled)),
+      context.paidGenerationEnabled !== false && providerCalled,
     issues,
   };
 }

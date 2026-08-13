@@ -24,9 +24,12 @@ import {
   createMemoryIdempotencyPort,
   createMemoryRunStore,
   createAcceptingQualityPort,
+  createNeedsReviewQualityPort,
 } from "@/application/production/__tests__/fakes";
 import { makePlan, makeStep } from "@/domain/production/__tests__/fixtures";
 import type { ProductionReadinessInput } from "@/domain/project";
+import type { QualityValidatorPort } from "@/application/production/ports";
+import { processClaimedJobForWorker } from "../claimed-job-processor";
 import { createProductionWorker } from "../production-worker";
 import { createWorkerPolicy } from "../policy";
 import { createMemoryJobQueue } from "./fakes";
@@ -207,7 +210,11 @@ function imagePlan() {
   });
 }
 
-function harness(opts: { fal?: FalClientPort; durable?: boolean } = {}) {
+function harness(opts: {
+  fal?: FalClientPort;
+  durable?: boolean;
+  quality?: QualityValidatorPort;
+} = {}) {
   const plan = imagePlan();
   const runStore = createMemoryRunStore();
   const budget = createMemoryBudgetPort();
@@ -218,7 +225,7 @@ function harness(opts: { fal?: FalClientPort; durable?: boolean } = {}) {
     runStore,
     budget,
     idempotency,
-    quality: createAcceptingQualityPort(),
+    quality: opts.quality ?? createAcceptingQualityPort(),
     events,
     eventPublishFailurePolicy: "fail_soft" as const,
   };
@@ -818,4 +825,186 @@ test("at-least-once — documenté : replay already_done sans exactly-once claim
   // Guarantee: at-least-once delivery + durable idempotence where possible.
   // This test only asserts the recovery path exists (already covered above).
   assert.ok(true);
+});
+
+test("needs_review after provider success — providerCalls=1 and ledger settled", async () => {
+  const h = harness({
+    durable: true,
+    quality: createNeedsReviewQualityPort(),
+  });
+  const c = clock();
+  const queue = createMemoryJobQueue(c.nowIso);
+  const started = await h.director.start(
+    {
+      plan: h.plan,
+      scenePackages: [makeMinimalPackage({ sceneId: "sc-1" })],
+      readiness: readiness(),
+      budgetSnapshot: createBudgetSnapshot({
+        limit: money(10_000, "USD"),
+        reserved: money(0, "USD"),
+        spent: money(0, "USD"),
+      }),
+      requireDurableIdempotency: false,
+      runId: "run-nr-w",
+    },
+    ctx(c)
+  );
+  assert.equal(started.status, "started");
+  const planned = await h.director.planEnqueueCommands("run-nr-w", ctx(c));
+  assert.ok(planned.commands.length >= 1);
+  for (const cmd of planned.commands) {
+    await queue.enqueue(cmd);
+  }
+  const worker = createProductionWorker({
+    policy: createWorkerPolicy({ workerId: "w-nr" }),
+    flags: {
+      directorV2: true,
+      directorV2Worker: true,
+      directorV2PaidGeneration: true,
+      directorV2Persistence: false,
+      directorV2MarketingAi: false,
+      directorV2CreativeAi: false,
+      directorV2PaidAi: false,
+    },
+    queue,
+    director: h.director,
+    engine: h.engine,
+    ports: h.ports,
+  });
+  const r = await worker.runOnce({
+    correlationId: "corr-nr",
+    actorId: "tester",
+    nowIso: c.nowIso,
+    nowMs: c.nowMs,
+    nextId: c.nextId,
+  });
+  assert.equal(r.claimed, 1);
+  assert.equal(r.completed, 1);
+  assert.equal(r.providerCalls, 1);
+  assert.equal(h.budget.reserved.size, 0);
+  assert.equal(h.budget.committed.size, 1);
+  const run = await h.runStore.load("run-nr-w");
+  assert.equal(run?.waitingReason, "needs_review");
+  assert.equal(run?.committedCost.amountMinor, 5);
+
+  const replay = await worker.runOnce({
+    correlationId: "corr-nr-replay",
+    actorId: "tester",
+    nowIso: c.nowIso,
+    nowMs: c.nowMs,
+    nextId: c.nextId,
+  });
+  assert.equal(replay.claimed, 0);
+  assert.equal(replay.providerCalls, 0);
+  assert.equal(h.budget.committed.size, 1);
+});
+
+test("claimed processor — needs_review counts as providerCalled; pre-provider fail does not", async () => {
+  const c = clock();
+  const queue = createMemoryJobQueue(c.nowIso);
+  const job = {
+    jobId: "job-1",
+    projectId: "proj-1",
+    runId: "run-1",
+    sceneId: "sc-1",
+    stepId: "step:sc-1:img",
+    attemptId: "a1",
+    action: "image",
+    providerId: "openai",
+    modelId: "gpt-image-1",
+    leaseToken: "lease-1",
+    leasedBy: "w-nr",
+    payload: {
+      planRevisionId: "plan-1",
+      scenePackageSceneId: "sc-1",
+      mode: "execute" as const,
+    },
+  };
+  await queue.enqueue({
+    runId: job.runId,
+    projectId: job.projectId,
+    sceneId: job.sceneId,
+    stepId: job.stepId,
+    attemptId: job.attemptId,
+    action: job.action,
+    providerId: job.providerId,
+    modelId: job.modelId,
+    availableAt: AT,
+    payloadRef: job.payload,
+  });
+  const claimed = (await queue.claim("w-nr", 1, 30))[0]!;
+
+  const needsReviewDirector = {
+    async processClaimedJob() {
+      return {
+        status: "needs_review" as const,
+        runId: "run-1",
+        publicMessage: "Revue humaine requise.",
+      };
+    },
+  };
+  const nr = await processClaimedJobForWorker(
+    claimed,
+    {
+      director: needsReviewDirector as never,
+      queue,
+      nowIso: c.nowIso,
+      nowMs: c.nowMs,
+    },
+    {
+      correlationId: "c-nr",
+      actorId: "t",
+      nowIso: c.nowIso,
+      nextId: c.nextId,
+      paidGenerationEnabled: true,
+    },
+    30
+  );
+  assert.equal(nr.outcome, "needs_review");
+  assert.equal(nr.providerCalled, true);
+
+  const failQueue = createMemoryJobQueue(c.nowIso);
+  await failQueue.enqueue({
+    runId: job.runId,
+    projectId: job.projectId,
+    sceneId: job.sceneId,
+    stepId: job.stepId,
+    attemptId: "a-fail",
+    action: job.action,
+    providerId: job.providerId,
+    modelId: job.modelId,
+    availableAt: AT,
+    payloadRef: job.payload,
+  });
+  const failClaimed = (await failQueue.claim("w-nr", 1, 30))[0]!;
+  const preProviderDirector = {
+    async processClaimedJob() {
+      return {
+        status: "failed" as const,
+        runId: "run-1",
+        errorCode: "invalid_input",
+        publicMessage: "Plan introuvable.",
+        enqueueNext: [],
+      };
+    },
+  };
+  const failed = await processClaimedJobForWorker(
+    failClaimed,
+    {
+      director: preProviderDirector as never,
+      queue: failQueue,
+      nowIso: c.nowIso,
+      nowMs: c.nowMs,
+    },
+    {
+      correlationId: "c-fail",
+      actorId: "t",
+      nowIso: c.nowIso,
+      nextId: c.nextId,
+      paidGenerationEnabled: true,
+    },
+    30
+  );
+  assert.equal(failed.outcome, "failed");
+  assert.equal(failed.providerCalled, false);
 });
