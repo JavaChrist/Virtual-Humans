@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.126] — 2026-08-13
+
+### Added (Phase 11A Final Preflight on 9952380)
+
+- Preflight final no-provider sur commit exact `9952380` (`104_`) · `READY_FOR_11A_PAID_AUTH`.
+- Correctif `[DATA:…]` validé live · hostiles URL/Motion toujours rejetés · runtime OFF.
+
 ## [2.0.125] — 2026-08-13
 
 ### Added (Phase 11A OpenAI Image Live Preflight)

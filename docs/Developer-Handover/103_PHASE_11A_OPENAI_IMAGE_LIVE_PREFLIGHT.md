@@ -149,9 +149,9 @@ Pour le smoke payant : déployer HEAD contenant le correctif **ou** revalider le
 ## 9. Prochaine autorisation exacte
 
 ```text
-NEXT = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE
-SCOPE = 1 call · 1 job · 1 output · gpt-image-1 low 1024 · scene-2
-RESERVE_MAX = 2¢ · estimate = 1¢
-REQUIRES = Auth humaine dédiée + deploy source avec prompt-gate corrigé
+NEXT = 11A-FINAL-PREFLIGHT sur 9952380 — DONE (`104_`)
+FOLLOW-UP = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE
 DO_NOT = fal · Motion · legacy · multi-call · auto-activate
 ```
+
+> **Update :** preflight final `104_` a validé `9952380` (prompt-gate) · runtime OFF.
