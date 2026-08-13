@@ -80,6 +80,7 @@
 - [x] Smoke image réel (`108_`) · Auth consommée · **`RECONCILIATION_REQUIRED`** (reserve 1¢) ;
 - [x] Ledger reconcile smoke 1¢ (`109_`) · **PASS** · reserved 0 · committed 248 ;
 - [x] Human Review REJECT image (`110_`) · **PASS_TECHNICAL_ASSET_HUMAN_REJECTED** · pas de regenerate ;
+- [x] Harden typographie déterministe / provider no-text (`111_`) · **WIRED_DISABLED** · 0 OpenAI ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -87,7 +88,7 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : TECHNICAL PASS / ASSET HUMAN_REJECTED (`110_`) — runtime OFF
+Phase 11A média : TECHNICAL PASS / ASSET HUMAN_REJECTED (`110_`) · overlay WIRED_DISABLED (`111_`) — runtime OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```

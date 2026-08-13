@@ -2,7 +2,8 @@
 
 **Date :** 2026-08-13  
 **Auth :** `AUTH_11A_LIVE_PREFLIGHT_7A67C77_NO_PROVIDER`  
-**Nature :** preflight live Production · **0** appel OpenAI · **0** réservation · **0** write métier
+**Nature :** preflight live Production · **0** appel OpenAI · **0** réservation · **0** write métier  
+**Ops 14 août 2026 :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) — ce rapport historique n’est pas réécrit.
 
 ```text
 VERDICT = READY_FOR_11A_PAID_AUTH

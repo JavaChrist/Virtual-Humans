@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.133] — 2026-08-14
+
+### Added (Phase 11A deterministic typography hardening)
+
+- Contrat `ImageTextOverlaySpec` + prompt OpenAI Image **no-text** v2 + composeur bitmap déterministe (`111_`).
+- OCR gate fake / `unavailable_humanOnly` · assets parent/enfant · QC typographique · HR comparative.
+- Runtime overlay **WIRED_DISABLED** · 0 OpenAI · 0 génération · REJECT historique inchangé.
+- Verdict **`READY_FOR_TEXT_FREE_IMAGE_RETRY_PREFLIGHT`**.
+
 ## [2.0.132] — 2026-08-14
 
 ### Added (Phase 11A Human Review REJECT)

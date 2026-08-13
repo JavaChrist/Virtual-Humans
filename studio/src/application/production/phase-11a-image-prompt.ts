@@ -1,9 +1,17 @@
 /**
  * Phase 11A — structured image prompt from validated ScenePackage only.
  * Full prompt is never persisted to logs/public surfaces — hash + metadata only.
+ * Marketing copy is never sent to the image provider (no-text policy).
  */
 
 import type { ScenePackage } from "@/domain/prompt";
+import {
+  overlayStrings,
+  PHASE_11A_PROVIDER_TEXT_POLICY,
+  PHASE_11A_PROVIDER_TEXT_POLICY_VERSION,
+  PHASE_11A_TEXT_OVERLAY_MODE,
+  type ImageTextOverlaySpec,
+} from "@/domain/production/image-text-overlay";
 import {
   assertPhase11ADoesNotInvokeMotionEndpoint,
   assertPhase11ADoesNotUseMotionProject,
@@ -14,12 +22,27 @@ import {
   PHASE_11A_SMOKE_SCENE_ID,
 } from "./phase-11a-openai-image-allowlist";
 
+export const PHASE_11A_IMAGE_PROMPT_VERSION = "phase-11a-image-prompt-v2" as const;
+
+export const PHASE_11A_NO_TEXT_POSITIVE_BLOCK = [
+  "Visual composition, mood, palette, subject, framing, and art direction only.",
+  "Reserve empty negative space in the lower third for a later typographic overlay.",
+  "No letters, words, digits, captions, labels, logos, watermarks, or UI glyphs.",
+  "No buttons with text. No fake lettering. No simulated interfaces containing glyphs.",
+].join(" ");
+
+export const PHASE_11A_NO_TEXT_NEGATIVE =
+  "letters, words, numbers, captions, labels, logos, watermarks, UI glyphs, buttons with text, fake lettering, simulated interface text";
+
+const DRAW_TEXT_POSITIVE_RE =
+  /\b(draw|write|paint|render|inscribe|add|include)\b[\s\S]{0,48}\b(text|word|letter|caption|title|subtitle|cta|button label|glyph)\b/i;
+
 export type Phase11AImagePromptBuild = {
   /** Memory-only — caller must not log or persist. */
   promptText: string;
   negativePrompt?: string;
   promptHash: string;
-  promptVersion: "phase-11a-image-prompt-v1";
+  promptVersion: typeof PHASE_11A_IMAGE_PROMPT_VERSION;
   capabilityProfile: typeof PHASE_11A_SMOKE_CAPABILITY;
   sceneId: string;
   variantId: string;
@@ -30,6 +53,10 @@ export type Phase11AImagePromptBuild = {
     constraintRequiredCount: number;
     constraintForbiddenCount: number;
     referenceCount: number;
+    providerTextPolicy: typeof PHASE_11A_PROVIDER_TEXT_POLICY;
+    textOverlayMode: typeof PHASE_11A_TEXT_OVERLAY_MODE;
+    providerTextPolicyVersion: typeof PHASE_11A_PROVIDER_TEXT_POLICY_VERSION;
+    promptHash: string;
   };
 };
 
@@ -38,12 +65,31 @@ const LOCAL_PATH_RE = /(?:[A-Za-z]:\\(?:Users|home)|\/(?:Users|home)\/|file:\/\/
 const URL_RE = /https?:\/\/|blob:|data:image\/|data:application\//i;
 const MOTION_MARKERS = /motion[_-]?transfer|kling-video|mv-?001|privacy[_-]?pack/i;
 
+export function assertOverlayStringsNotInProviderPrompt(
+  promptText: string,
+  spec: ImageTextOverlaySpec,
+): void {
+  const hay = promptText.toLowerCase();
+  for (const s of overlayStrings(spec)) {
+    if (s.length >= 3 && hay.includes(s.toLowerCase())) {
+      throw new Error("Phase 11A prompt: overlay copy must not be sent to the image provider.");
+    }
+  }
+}
+
+export function assertPhase11APromptDoesNotAskToDrawWords(visualSource: string): void {
+  if (DRAW_TEXT_POSITIVE_RE.test(visualSource)) {
+    throw new Error("Phase 11A prompt: must not instruct the model to draw words.");
+  }
+}
+
 /**
  * Build image prompt exclusively from ScenePackage blocks / validated variant.
- * Rejects local paths, signed URLs, Motion private data, raw user dumps.
+ * Rejects local paths, signed URLs, Motion private data, raw user dumps, overlay copy.
  */
 export function buildPhase11AImagePromptFromScenePackage(
   pkg: ScenePackage,
+  options?: { overlay?: ImageTextOverlaySpec },
 ): Phase11AImagePromptBuild {
   assertPhase11ADoesNotUseMotionProject(pkg.projectId);
   if (pkg.sceneId !== PHASE_11A_SMOKE_SCENE_ID && pkg.sceneId !== "sc-2") {
@@ -51,6 +97,10 @@ export function buildPhase11AImagePromptFromScenePackage(
     if (pkg.sceneOrder !== 2) {
       throw new Error("Phase 11A prompt: scene not in allowlist.");
     }
+  }
+
+  if (pkg.screenText?.renderMode === "model_generated") {
+    throw new Error("Phase 11A prompt: screenText.renderMode=model_generated forbidden.");
   }
 
   for (const ref of pkg.references) {
@@ -78,6 +128,13 @@ export function buildPhase11AImagePromptFromScenePackage(
     throw new Error("Phase 11A prompt: Motion content forbidden in variant.");
   }
   assertPhase11ADoesNotInvokeMotionEndpoint(variant.positive);
+  assertPhase11APromptDoesNotAskToDrawWords(variant.positive);
+
+  if (pkg.screenText?.text && pkg.screenText.text.length >= 3) {
+    if (variant.positive.toLowerCase().includes(pkg.screenText.text.toLowerCase())) {
+      throw new Error("Phase 11A prompt: screenText copy must not appear in the image variant.");
+    }
+  }
 
   const brand = [
     pkg.style.brandAlignment,
@@ -110,6 +167,7 @@ export function buildPhase11AImagePromptFromScenePackage(
     `environment:${pkg.environment.description}`,
     `camera:${pkg.camera.shotSize}/${pkg.camera.angle}`,
     `composition:${pkg.composition.subjectPosition}`,
+    `textSafeArea:${pkg.composition.textSafeArea}`,
     continuity ? `continuity:${continuity}` : "",
     brand ? `brand:${brand}` : "",
     safety ? `safety:${safety}` : "",
@@ -117,21 +175,37 @@ export function buildPhase11AImagePromptFromScenePackage(
     .filter(Boolean)
     .join(" | ");
 
-  // Prefer validated renderer variant; append structured continuity constraints only.
-  const promptText = [variant.positive.trim(), compositionBits].join("\n\n");
+  assertPhase11APromptDoesNotAskToDrawWords(compositionBits);
+
+  // Prefer validated renderer variant; append structured continuity + no-text policy.
+  const promptText = [variant.positive.trim(), compositionBits, PHASE_11A_NO_TEXT_POSITIVE_BLOCK].join(
+    "\n\n",
+  );
+  if (options?.overlay) {
+    assertOverlayStringsNotInProviderPrompt(promptText, options.overlay);
+  }
+  if (pkg.screenText?.text && pkg.screenText.text.length >= 3) {
+    if (promptText.toLowerCase().includes(pkg.screenText.text.toLowerCase())) {
+      throw new Error("Phase 11A prompt: screenText copy leaked into provider prompt.");
+    }
+  }
+
   const negativeParts = [
     variant.negative?.trim(),
     forbidden || undefined,
+    PHASE_11A_NO_TEXT_NEGATIVE,
     "local file paths",
     "watermarks",
     "readable private URLs",
   ].filter(Boolean);
 
+  const promptHash = hashPhase11APrompt(promptText);
+
   return {
     promptText,
     negativePrompt: negativeParts.join(", "),
-    promptHash: hashPhase11APrompt(promptText),
-    promptVersion: "phase-11a-image-prompt-v1",
+    promptHash,
+    promptVersion: PHASE_11A_IMAGE_PROMPT_VERSION,
     capabilityProfile: PHASE_11A_SMOKE_CAPABILITY,
     sceneId: pkg.sceneId,
     variantId: variant.id,
@@ -142,6 +216,10 @@ export function buildPhase11AImagePromptFromScenePackage(
       constraintRequiredCount: pkg.constraints.required.length,
       constraintForbiddenCount: pkg.constraints.forbidden.length,
       referenceCount: pkg.references.length,
+      providerTextPolicy: PHASE_11A_PROVIDER_TEXT_POLICY,
+      textOverlayMode: PHASE_11A_TEXT_OVERLAY_MODE,
+      providerTextPolicyVersion: PHASE_11A_PROVIDER_TEXT_POLICY_VERSION,
+      promptHash,
     },
   };
 }

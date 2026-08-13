@@ -2,7 +2,8 @@
 
 **Date :** 2026-08-13  
 **Auth :** `AUTH_11A_PAID_OPENAI_IMAGE_SMOKE_ONCE`  
-**Nature :** gate précondition · **0** appel OpenAI · **0** réservation · **0** job/asset
+**Nature :** gate précondition · **0** appel OpenAI · **0** réservation · **0** job/asset  
+**Ops 14 août 2026 :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) — ce rapport historique n’est pas réécrit.
 
 ```text
 VERDICT = BLOCKED_PRECONDITION

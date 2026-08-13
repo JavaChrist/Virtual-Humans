@@ -7,7 +7,7 @@
 | | |
 |---|---|
 | Ports / adapters | Code réel OpenAI image, fal, ElevenLabs **présent** |
-| Wiring `/director` | **fakes** par défaut (VHS-124) ; allowlist OpenAI image **WIRED_DISABLED** (`102_`) |
+| Wiring `/director` | **fakes** par défaut (VHS-124) ; allowlist OpenAI image **WIRED_DISABLED** (`102_`) ; prompt image **no-text** v2 (`111_`) |
 | Legacy | `/api/generate/*` hors pipeline Director (ne prouve pas `production_jobs`) |
 | Kill switches | `PAID_GENERATION` ∧ `WORKER` requis pour exécution payante |
 | Motion Transfer | Dry-run Engine **MT-004** (`63_`) … fal adapter **MT-007B** (`67_`) + worker polling **MT-008** (`68_`, fake E2E, flags OFF) — paid execution unavailable |
@@ -37,6 +37,8 @@ interface ProviderAdapter {
 ## Responsabilités
 
 Résoudre l'adaptateur autorisé, transformer l'entrée canonique, transférer les assets par URLs signées, appliquer timeout, normaliser erreurs et résultats, persister références externes, émettre métriques et nettoyer les fichiers temporaires.
+
+Le chemin image 11A n’envoie pas les chaînes overlay au provider (`phase-11a-image-prompt-v2`). La typographie est un dérivé déterministe post-ingest, pas une responsabilité du modèle (`111_`).
 
 ## Taxonomie d'erreurs
 

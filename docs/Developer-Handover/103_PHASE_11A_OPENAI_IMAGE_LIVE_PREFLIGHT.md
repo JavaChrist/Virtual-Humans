@@ -2,7 +2,8 @@
 
 **Date :** 2026-08-13  
 **Auth :** `AUTH_PHASE_11A_OPENAI_IMAGE_PREFLIGHT_NO_PROVIDER`  
-**Nature :** preflight live · **0** appel OpenAI · **0** réservation · **0** job/asset
+**Nature :** preflight live · **0** appel OpenAI · **0** réservation · **0** job/asset  
+**Ops 14 août 2026 :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) — ce rapport historique n’est pas réécrit.
 
 ```text
 VERDICT = READY_FOR_11A_PAID_AUTH

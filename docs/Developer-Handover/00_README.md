@@ -28,14 +28,15 @@ Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Motion / Performance     : MV-001 PASS_WITH_HUMAN_APPROVAL · Registry DISABLED
                            MV-002 DESIGN_READY + DEFERRED (`100_`)
 Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`109_`)
-                           HR REJECT (`110_`) · asset rejeté non actif · FP `c532c400334f5b22`
+                           HR REJECT (`110_`) · overlay déterministe WIRED_DISABLED (`111_`)
+                           provider no-text · asset rejeté non actif · FP `c532c400334f5b22`
 Runtime AI / paid media  : OFF
 Budget                   : hard 274 / committed 248 / reserved 0 / available 26 ¢
 production_jobs média    : 1 run image completed · asset HUMAN_REJECTED
 P0                       : pas de 2e OpenAI · pas d’activation de l’asset rejeté · pas de legacy PASS
-P1 ouverts               : nouvelle génération image = Auth distincte (contraintes texte)
-P1 fermé                 : HR REJECT · LEDGER-RECONCILE 1¢ · PAID-SMOKE-ONCE · LIVE-PREFLIGHT
-Prochaine porte majeure  : Auth nouvelle génération (optionnelle) ou clôture 11A
+P1 ouverts               : preflight retry text-free (nouvelle Auth) — 0 génération ici
+P1 fermé                 : HARDEN typo déterministe · HR REJECT · LEDGER-RECONCILE 1¢ · PAID-SMOKE-ONCE
+Prochaine porte majeure  : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT (no provider)
 ```
 
 ### Portes Directors texte
@@ -213,6 +214,7 @@ Utilisateur → AI Video Director (/director)
 | [`108_PHASE_11A_FIRST_REAL_OPENAI_IMAGE_SMOKE.md`](./108_PHASE_11A_FIRST_REAL_OPENAI_IMAGE_SMOKE.md) | **11A-PAID-SMOKE · RECONCILIATION_REQUIRED** (supersédé ops par `109_`) |
 | [`109_PHASE_11A_IMAGE_LEDGER_RECONCILIATION.md`](./109_PHASE_11A_IMAGE_LEDGER_RECONCILIATION.md) | **11A-LEDGER-RECONCILE · PASS_LEDGER_RECONCILED_HUMAN_REVIEW_PENDING** |
 | [`110_PHASE_11A_HUMAN_REVIEW_REJECT.md`](./110_PHASE_11A_HUMAN_REVIEW_REJECT.md) | **11A-HR-REJECT · PASS_TECHNICAL_ASSET_HUMAN_REJECTED** |
+| [`111_PHASE_11A_DETERMINISTIC_TYPOGRAPHY_HARDENING.md`](./111_PHASE_11A_DETERMINISTIC_TYPOGRAPHY_HARDENING.md) | **11A-HARDEN · READY_FOR_TEXT_FREE_IMAGE_RETRY_PREFLIGHT** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

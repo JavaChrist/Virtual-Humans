@@ -36,15 +36,17 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              · reserve 0 · commit smoke 1¢ provisional · HR PENDING
              Phase 11A-HR-REJECT (`110_`) · **PASS_TECHNICAL_ASSET_HUMAN_REJECTED**
              · décision `rejected` ×1 · asset non actif · 0 retry
+             Phase 11A-HARDEN (`111_`) · **READY_FOR_TEXT_FREE_IMAGE_RETRY_PREFLIGHT**
+             · provider no-text · overlay déterministe WIRED_DISABLED · 0 OpenAI
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed **248** / reserved **0** / available **26**
 Runtime AI : OFF
 Media jobs : 1 run image completed · asset HUMAN_REJECTED · Motion MV-001 settled à part
 P0         : pas de 2e OpenAI · pas d’activation de l’asset rejeté · pas de legacy PASS
-P1         : nouvelle génération image = Auth distincte (contraintes texte bouton)
-P1 fermé   : HR REJECT · LEDGER-RECONCILE 1¢ · PAID-SMOKE-ONCE (consommée) · LIVE-PREFLIGHT
-Next major : clôture 11A ou Auth nouvelle génération (pas MV-002)
+P1         : preflight retry text-free = Auth distincte (0 génération ici)
+P1 fermé   : HARDEN typo · HR REJECT · LEDGER-RECONCILE 1¢ · PAID-SMOKE-ONCE (consommée)
+Next major : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT (no provider)
 ```
 
 ## P0 — fondations
@@ -102,9 +104,9 @@ Next major : clôture 11A ou Auth nouvelle génération (pas MV-002)
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
-- **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **PENDING** · runtime OFF.
+- **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay déterministe **WIRED_DISABLED** (`111_`) · runtime OFF.
 - **P1 budget** : hard **274** ; committed **248** ; reserved **0** ; available **26**.
-- **Prochaine porte majeure** : Auth **HUMAN-REVIEW-PRIVATE-PREVIEW-AND-DECISION** — pas de 2e OpenAI.
+- **Prochaine porte majeure** : Auth **TEXT_FREE_IMAGE_RETRY_PREFLIGHT** — pas de 2e OpenAI ici.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

@@ -9,7 +9,7 @@
 | Implémentation | Déterministe — livrée localement (VHS-122) |
 | Production | **0** artifact `scene_package_set` actif post-Storyboard |
 | Provider | aucun (pas d’appel AI) |
-| Suite | prérequis dry-run Phase 11A ; pas de smoke média lancé |
+| Suite | overlay déterministe / no-text WIRED_DISABLED (`111_`) ; pas de nouvelle génération |
 
 ## Mission
 
@@ -47,7 +47,8 @@ Builders purs pour sujet, action, décor, caméra, lumière, personnage, dialogu
 - aucune donnée créative nouvelle qui contredit le storyboard ;
 - références avec rôle, checksum et autorisation ;
 - contraintes positives prioritaires, négatifs concis ;
-- texte écran rendu séparément quand le modèle ne doit pas le générer ;
+- texte écran rendu séparément quand le modèle ne doit pas le générer (`renderMode=post_production`) ;
+- chemin image 11A : copy marketing **hors** prompt provider (`providerTextPolicy=no_text`, `111_`) ;
 - prompt injection contenue comme donnée, jamais propagée en instruction ;
 - version du builder/composer enregistrée.
 

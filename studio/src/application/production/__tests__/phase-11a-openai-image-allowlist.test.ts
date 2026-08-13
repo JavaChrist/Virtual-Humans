@@ -287,6 +287,12 @@ test("11A-WIRE — ScenePackage prompt + single-step plan", () => {
   assert.ok(prompt.promptHash.length === 64);
   assert.ok(prompt.promptText.length > 0);
   assert.equal(prompt.capabilityProfile, "image.text_to_image");
+  assert.equal(prompt.promptVersion, "phase-11a-image-prompt-v2");
+  assert.equal(prompt.redactedMetadata.providerTextPolicy, "no_text");
+  assert.equal(prompt.redactedMetadata.textOverlayMode, "deterministic");
+  assert.match(prompt.promptText, /No letters, words, digits/);
+  assert.match(prompt.negativePrompt ?? "", /buttons with text/);
+  assert.equal("promptText" in prompt.redactedMetadata, false);
 
   const built = buildPhase11ASingleStepGenerationPlan({
     storyboardRevisionId: "sb-1",

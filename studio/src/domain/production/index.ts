@@ -18,3 +18,4 @@ export * from "./cancellation";
 export * from "./events";
 export * from "./validation";
 export * from "./schemas";
+export * from "./image-text-overlay";

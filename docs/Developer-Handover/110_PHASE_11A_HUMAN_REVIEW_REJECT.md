@@ -2,7 +2,8 @@
 
 **Date :** 2026-08-14  
 **Auth :** `AUTH_11A_HUMAN_REVIEW_REJECT_ONCE_NO_REGENERATE`  
-**Nature :** une décision Human Review append-only `rejected` · **0** OpenAI · **0** retry · flags **OFF**
+**Nature :** une décision Human Review append-only `rejected` · **0** OpenAI · **0** retry · flags **OFF**  
+**Ops :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) — REJECT inchangé ; asset conservé comme preuve.
 
 ```text
 VERDICT = PASS_TECHNICAL_ASSET_HUMAN_REJECTED

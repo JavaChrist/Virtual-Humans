@@ -83,6 +83,10 @@ Chaque étape utilise une clé `projectId:revision:sceneId:stepId:attempt`. Rela
 - redaction des prompts, PII et clés dans les logs ;
 - vérification de signature des callbacks.
 
+## Média image 11A (ops)
+
+Le provider image produit un visuel **sans texte**. Le copy marketing (title / subtitle / CTA / legal) est un `ImageTextOverlaySpec` composé déterministement après ingest privé (`111_`). Runtime overlay **WIRED_DISABLED**. Human Review obligatoire. L’asset smoke rejeté n’est pas recyclé comme final.
+
 ## Arborescence cible indicative
 
 ```text

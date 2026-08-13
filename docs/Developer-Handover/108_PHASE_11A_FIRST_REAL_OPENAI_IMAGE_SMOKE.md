@@ -3,7 +3,7 @@
 **Date :** 2026-08-13  
 **Auth :** `AUTH_11A_PAID_OPENAI_IMAGE_SMOKE_ONCE`  
 **Nature :** smoke payant unique · pipeline Production Director · **1** image privée  
-**Ops :** ledger smoke soldé (`109_`) · HR REJECT (`110_`) — ce rapport reste la preuve du smoke.
+**Ops :** ledger smoke soldé (`109_`) · HR REJECT (`110_`) · overlay déterministe WIRED_DISABLED (`111_`) — ce rapport reste la preuve du smoke.
 
 ```text
 VERDICT = RECONCILIATION_REQUIRED
