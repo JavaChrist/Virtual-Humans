@@ -69,7 +69,13 @@ import { createProductionDirector, type ProductionDirector } from "@/application
 import type { ProductionPorts } from "@/application/production/ports";
 import { createAcceptingQualityPort } from "@/application/production/accepting-quality";
 import { createPhase11AImageTechnicalQualityPort } from "@/application/production/phase-11a-image-quality-port";
-import { isVhs124OpenAIImageExceptionEnabled } from "@/application/production/phase-11a-openai-image-allowlist";
+import {
+  isVhs124OpenAIImageExceptionEnabled,
+  PHASE_11A_SMOKE_PROJECT_ID,
+} from "@/application/production/phase-11a-openai-image-allowlist";
+import { ingestPhase11AInlineImageToPrivateStorage } from "@/application/production/phase-11a-image-storage-ingest";
+import { createSupabasePhase11AImageContentPort } from "@/infrastructure/storage/supabase-phase11a-image-content-port";
+import { createSupabaseAssetRepository } from "@/infrastructure/db/repositories/asset-repository";
 import { parseOpenAIArtConfig, parseOpenAICreativeConfig, parseOpenAIMarketingConfig, parseOpenAIScriptConfig, parseOpenAIStoryboardConfig } from "@/infrastructure/ai/openai/config";
 import { createFetchOpenAIResponsesClient } from "@/infrastructure/ai/openai/responses-client";
 import { createOpenAIMarketingAnalyzerAdapter } from "@/infrastructure/ai/openai/marketing/adapter";
@@ -472,17 +478,49 @@ export function createDirectorPersistenceStack(deps?: {
   });
 
   const events = createSupabaseProductionEventPort({ client, workspaceId });
+  const vhs124Active =
+    resolvedProviders.mode === "vhs124_openai_image_allowlist" ||
+    isVhs124OpenAIImageExceptionEnabled(env);
+  const phase11AAssets = vhs124Active
+    ? createSupabaseAssetRepository({ client, workspaceId })
+    : null;
+  const phase11AContent = vhs124Active
+    ? createSupabasePhase11AImageContentPort({ client })
+    : null;
   const productionPorts: ProductionPorts = {
     runStore,
     budget: budgetReservation,
     idempotency,
-    quality:
-      resolvedProviders.mode === "vhs124_openai_image_allowlist" ||
-      isVhs124OpenAIImageExceptionEnabled(env)
-        ? createPhase11AImageTechnicalQualityPort()
-        : createAcceptingQualityPort(),
+    quality: vhs124Active
+      ? createPhase11AImageTechnicalQualityPort()
+      : createAcceptingQualityPort(),
     events,
     eventPublishFailurePolicy: "fail_soft",
+    phase11AImageMaterialize:
+      vhs124Active && phase11AAssets && phase11AContent
+        ? {
+            async materializeCompletedInlineImage(input) {
+              if (input.run.projectId !== PHASE_11A_SMOKE_PROJECT_ID) {
+                throw new Error("Phase 11A materialize: project out of allowlist.");
+              }
+              const result = await ingestPhase11AInlineImageToPrivateStorage({
+                workspaceId,
+                projectId: input.run.projectId,
+                runId: input.run.id,
+                sceneId: input.sceneId,
+                stepId: input.stepId,
+                attemptId: input.attemptId,
+                inlineOutput: input.output,
+                content: phase11AContent,
+                assets: phase11AAssets,
+                nextAssetId: input.nextId,
+                nowIso: input.nowIso,
+                allowReconcileExisting: true,
+              });
+              return { output: result.output, counters: result.counters };
+            },
+          }
+        : undefined,
   };
 
   const baseDirector = createProductionDirector({

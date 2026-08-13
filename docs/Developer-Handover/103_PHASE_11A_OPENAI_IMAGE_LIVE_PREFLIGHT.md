@@ -149,9 +149,9 @@ Pour le smoke payant : déployer HEAD contenant le correctif **ou** revalider le
 ## 9. Prochaine autorisation exacte
 
 ```text
-NEXT = 11A-FINAL-PREFLIGHT sur 9952380 — DONE (`104_`)
-FOLLOW-UP = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE
+NEXT = 11A-FINAL-PREFLIGHT → SMOKE-BLOCKED → STORAGE/PLAN (`106_`) DONE
+FOLLOW-UP = 11A-LIVE-PREFLIGHT-NO-PROVIDER (nouveau SHA applicatif)
 DO_NOT = fal · Motion · legacy · multi-call · auto-activate
 ```
 
-> **Update :** preflight final `104_` a validé `9952380` (prompt-gate) · runtime OFF.
+> **Update :** `106_` a câblé Storage/plan/sanitize · suite = nouveau live preflight.

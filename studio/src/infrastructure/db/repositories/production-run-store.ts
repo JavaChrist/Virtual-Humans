@@ -6,11 +6,17 @@
 import type { ProductionRunStore } from "@/application/production/ports";
 import type { ProductionRun } from "@/domain/production";
 import { ProductionDomainError } from "@/domain/production";
+import { sanitizeProductionRunForPersistence } from "@/application/production/phase-11a-persisted-state-sanitize";
 import type { Json } from "../database.types";
 import { mapSupabaseError, PersistenceError } from "../errors";
 import type { V2DbClient } from "../supabase-server";
 
 const TERMINAL = new Set(["completed", "partial", "failed", "cancelled"]);
+
+function persistableState(run: ProductionRun): ProductionRun {
+  // Fail-closed strip of inline/base64/URL payloads before jsonb write.
+  return sanitizeProductionRunForPersistence(run);
+}
 
 export function createSupabaseProductionRunStore(deps: {
   client: V2DbClient;
@@ -38,6 +44,7 @@ export function createSupabaseProductionRunStore(deps: {
 
     async create(run) {
       const plan = await deps.resolvePlanArtifactId(run.generationPlanRevisionId);
+      const state = persistableState(run);
       const { error } = await client.from("production_runs").insert({
         id: run.id,
         workspace_id: workspaceId,
@@ -54,12 +61,13 @@ export function createSupabaseProductionRunStore(deps: {
         created_at: run.createdAt,
         updated_at: run.updatedAt,
         correlation_id: run.correlationId,
-        state: run as unknown as Json,
+        state: state as unknown as Json,
       });
       if (error) throw mapSupabaseError(error);
     },
 
     async save(run, expectedRevision) {
+      const state = persistableState(run);
       const { data, error } = await client
         .from("production_runs")
         .update({
@@ -70,7 +78,7 @@ export function createSupabaseProductionRunStore(deps: {
           released_cost_minor: run.releasedCost.amountMinor,
           updated_at: run.updatedAt,
           completed_at: TERMINAL.has(run.status) ? run.updatedAt : null,
-          state: run as unknown as Json,
+          state: state as unknown as Json,
         })
         .eq("id", run.id)
         .eq("workspace_id", workspaceId)
@@ -84,7 +92,8 @@ export function createSupabaseProductionRunStore(deps: {
           "Conflit de révision optimiste."
         );
       }
-      return data.state as unknown as ProductionRun;
+      // Return in-memory sanitized run (not re-hydrated redacted placeholders as source of truth for callers).
+      return state;
     },
 
     async findActiveByPlan(planRevisionId) {

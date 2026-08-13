@@ -222,8 +222,8 @@ pas de merge/export/publication auto
 ## 12. Prochaine phase exacte
 
 ```text
-NEXT = 11A-WIRE-OPENAI-IMAGE-ALLOWLIST — DONE (`102_`) · WIRED_DISABLED
-FOLLOW-UP = 11A-PREFLIGHT-LIVE-NO-PROVIDER
+NEXT = 11A-WIRE…STORAGE/PLAN — DONE through `106_` · READY_FOR_NEW_11A_LIVE_PREFLIGHT
+FOLLOW-UP = 11A-LIVE-PREFLIGHT-NO-PROVIDER (nouveau SHA)
 DO_NOT = provider call · legacy PASS · MV-002 · Motion flags · budget write
 ```
 

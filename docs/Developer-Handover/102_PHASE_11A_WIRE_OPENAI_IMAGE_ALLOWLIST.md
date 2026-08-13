@@ -150,7 +150,7 @@ estimate/reservation exposés depuis catalogue réel (pas de forçage artificiel
 ## 9. Prochaine porte exacte
 
 ```text
-NEXT = 11A-PREFLIGHT-LIVE-NO-PROVIDER — DONE (`103_`) · READY_FOR_11A_PAID_AUTH
+NEXT = 11A-PREFLIGHT → FINAL → SMOKE-BLOCKED → STORAGE/PLAN (`106_`) · READY_FOR_NEW_11A_LIVE_PREFLIGHT
 FOLLOW-UP = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE (Auth humaine)
 DO_NOT = OpenAI call sans Auth · MV-002 · Motion · legacy PASS
 ```

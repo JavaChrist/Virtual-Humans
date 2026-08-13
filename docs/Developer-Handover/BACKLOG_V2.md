@@ -27,16 +27,17 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-WIRE (`102_`) · WIRED_DISABLED
              Phase 11A-PREFLIGHT (`103_`) · READY_FOR_11A_PAID_AUTH
              Phase 11A-FINAL-PREFLIGHT (`104_`) · source **9952380** PASS
-             Phase 11A-PAID-SMOKE (`105_`) · **BLOCKED_PRECONDITION** (provider non consommé)
+             Phase 11A-PAID-SMOKE (`105_`) · BLOCKED_PRECONDITION (provider non consommé)
+             Phase 11A-STORAGE/PLAN (`106_`) · READY_FOR_NEW_11A_LIVE_PREFLIGHT
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed 247 / reserved 0 / available 27
 Runtime AI : OFF
 Media jobs : 0 (générique) · Motion MV-001 settled à part
 P0         : pas d’appel OpenAI sans Auth · pas de legacy PASS
-P1         : Auth 11A-WIRE-STORAGE-AND-PLAN-MATERIALIZE → preflight → smoke once
-P1 fermé   : PREFLIGHT · FINAL-PREFLIGHT · SMOKE-BLOCKED · MV-002 DEFERRED
-Next major : wire storage/plan (pas MV-002)
+P1         : Auth 11A-LIVE-PREFLIGHT-NO-PROVIDER (nouveau SHA) → smoke once
+P1 fermé   : STORAGE/PLAN-MATERIALIZE · SMOKE-BLOCKED · MV-002 DEFERRED
+Next major : live preflight no-provider (pas MV-002)
 ```
 
 ## P0 — fondations
@@ -94,7 +95,7 @@ Next major : wire storage/plan (pas MV-002)
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
-- **Phase 11A média** 🔴 **BLOCKED_PRECONDITION** (`105_`) — smoke Auth stoppé avant provider · Storage/plan non câblés · Ready `67187b8` ≠ `9952380` · provider **non consommé** ; suite = Auth wire materialize.
+- **Phase 11A média** 🟢 **READY_FOR_NEW_11A_LIVE_PREFLIGHT** (`106_`) — routing single-step + Storage privé + strip base64 · FP `c532c400334f5b22` · runtime OFF · **0** appel ; suite = Auth live preflight.
 - **P1 budget** : hard **274** ; committed **247** ; available **27** ; image shortfall **0** ; vidéo Hailuo shortfall **9** (réserve 36).
 - **Prochaine porte majeure** : Auth **`11A-PAID-OPENAI-IMAGE-SMOKE-ONCE`** — 1 call/job/output · réserve ≤2¢ ; pas MV-002 · pas Registry Motion.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).

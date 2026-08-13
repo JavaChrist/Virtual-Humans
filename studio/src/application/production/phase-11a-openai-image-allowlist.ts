@@ -23,6 +23,13 @@ export const VHS124_OPENAI_IMAGE_EXCEPTION_ENV =
 
 export const PHASE_11A_WIRE_VERSION = "phase-11a-wire-openai-image-1.0.0" as const;
 
+/**
+ * Functional composition fingerprint — preflight must verify this (or the
+ * deploying git SHA of the applicative commit), not a docs-only commit.
+ */
+export const PHASE_11A_RUNTIME_COMPOSITION_VERSION =
+  "phase-11a-storage-plan-materialize-1.0.0" as const;
+
 /** Smoke text project (≠ Motion MV-001). */
 export const PHASE_11A_SMOKE_PROJECT_ID =
   "984507af-a89e-4644-8ea3-344797baa974" as const;
@@ -304,6 +311,15 @@ export type Phase11AWireDryRunResult = {
   registryClaim: "DOES_NOT_DECLARE_GLOBAL_REAL_PROVIDER_COMPATIBILITY";
   promptHashAlgo: "sha256";
   notes: string[];
+  canonicalRouting: boolean;
+  generationPlanMaterialized: boolean;
+  singleStep: true;
+  storageIngestWired: boolean;
+  persistedMediaPayloadPossible: false;
+  assetActive: false;
+  humanReviewRequired: true;
+  compositionFingerprint: string;
+  compositionVersion: typeof PHASE_11A_RUNTIME_COMPOSITION_VERSION;
 };
 
 export function phase11AOpenAIImageAllowlistDryRun(input: {
@@ -345,6 +361,7 @@ export function phase11AOpenAIImageAllowlistDryRun(input: {
 
   return {
     providerCalled: false,
+    // Path is executable for planning when pricing fits; exception still required for real adapters.
     executable: !exceptionExpired && estimateMinor <= PHASE_11A_MAX_RESERVATION_MINOR,
     capability: PHASE_11A_SMOKE_CAPABILITY,
     provider: PHASE_11A_SMOKE_PROVIDER,
@@ -371,6 +388,15 @@ export function phase11AOpenAIImageAllowlistDryRun(input: {
     registryClaim: "DOES_NOT_DECLARE_GLOBAL_REAL_PROVIDER_COMPATIBILITY",
     promptHashAlgo: "sha256",
     notes,
+    canonicalRouting: true,
+    generationPlanMaterialized: true,
+    singleStep: true,
+    storageIngestWired: true,
+    persistedMediaPayloadPossible: false,
+    assetActive: false,
+    humanReviewRequired: true,
+    compositionFingerprint: phase11ARuntimeCompositionFingerprint(),
+    compositionVersion: PHASE_11A_RUNTIME_COMPOSITION_VERSION,
   };
 }
 
@@ -381,8 +407,11 @@ export function hashPhase11APrompt(prompt: string): string {
 export type Phase11AWorkerCounters = {
   providerSubmitCount: number;
   outputDownloadCount: number;
+  decodedImageCount: number;
   storageWriteCount: number;
   assetInsertCount: number;
+  qualityReportCount: number;
+  reviewContextCount: number;
   ledgerSettlementCount: number;
 };
 
@@ -390,8 +419,11 @@ export function createPhase11AWorkerCounters(): Phase11AWorkerCounters {
   return {
     providerSubmitCount: 0,
     outputDownloadCount: 0,
+    decodedImageCount: 0,
     storageWriteCount: 0,
     assetInsertCount: 0,
+    qualityReportCount: 0,
+    reviewContextCount: 0,
     ledgerSettlementCount: 0,
   };
 }
@@ -399,19 +431,35 @@ export function createPhase11AWorkerCounters(): Phase11AWorkerCounters {
 export function assertPhase11AWorkerCountersWithinSmoke(
   counters: Phase11AWorkerCounters,
 ): void {
-  if (counters.providerSubmitCount > 1) {
-    throw new Error("Phase 11A: providerSubmitCount > 1");
+  const keys: (keyof Phase11AWorkerCounters)[] = [
+    "providerSubmitCount",
+    "outputDownloadCount",
+    "decodedImageCount",
+    "storageWriteCount",
+    "assetInsertCount",
+    "qualityReportCount",
+    "reviewContextCount",
+    "ledgerSettlementCount",
+  ];
+  for (const key of keys) {
+    if (counters[key] > 1) {
+      throw new Error(`Phase 11A: ${key} > 1`);
+    }
   }
-  if (counters.outputDownloadCount > 1) {
-    throw new Error("Phase 11A: outputDownloadCount > 1");
-  }
-  if (counters.storageWriteCount > 1) {
-    throw new Error("Phase 11A: storageWriteCount > 1");
-  }
-  if (counters.assetInsertCount > 1) {
-    throw new Error("Phase 11A: assetInsertCount > 1");
-  }
-  if (counters.ledgerSettlementCount > 1) {
-    throw new Error("Phase 11A: ledgerSettlementCount > 1");
-  }
+}
+
+export function phase11ARuntimeCompositionFingerprint(): string {
+  return createHash("sha256")
+    .update(
+      [
+        PHASE_11A_RUNTIME_COMPOSITION_VERSION,
+        PHASE_11A_WIRE_VERSION,
+        "canonical_routing_single_step",
+        "private_storage_ingest",
+        "sanitize_persisted_state",
+        "strip_inline_before_run_state",
+      ].join("|"),
+    )
+    .digest("hex")
+    .slice(0, 16);
 }

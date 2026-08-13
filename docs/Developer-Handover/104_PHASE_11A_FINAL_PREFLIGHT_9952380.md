@@ -114,9 +114,9 @@ Budget : **274 / 247 / 0 / 27** ¢ · migrations SQL locales **30/30**.
 ## 7. Prochaine autorisation exacte
 
 ```text
-NEXT = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE — ATTEMPTED (`105_`) · BLOCKED_PRECONDITION
-FOLLOW-UP = 11A-WIRE-STORAGE-AND-PLAN-MATERIALIZE
-DO_NOT = fal · Motion · legacy · multi-call · auto-activate · OpenAI sur 67187b8
+NEXT = 11A-PAID-SMOKE BLOCKED (`105_`) → STORAGE/PLAN DONE (`106_`)
+FOLLOW-UP = 11A-LIVE-PREFLIGHT-NO-PROVIDER (nouveau SHA · FP `c532c400334f5b22`)
+DO_NOT = fal · Motion · legacy · multi-call · auto-activate
 ```
 
-> **Update :** smoke payant stoppé avant provider (`105_`) — Storage/plan non câblés · Ready observé `67187b8`.
+> **Update :** `106_` résout Storage/plan/sanitize · provider toujours non consommé.

@@ -117,8 +117,8 @@ Auth de wiring (pas un smoke payant) pour, au minimum :
 ## 6. Prochaine décision humaine
 
 ```text
-NEXT = 11A-WIRE-STORAGE-AND-PLAN-MATERIALIZE (Auth séparée)
-THEN = redeploy runtime exact + preflight no-provider
+NEXT = 11A-WIRE-STORAGE-AND-PLAN-MATERIALIZE — DONE (`106_`)
+FOLLOW-UP = 11A-LIVE-PREFLIGHT-NO-PROVIDER (nouveau SHA applicatif)
 THEN = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE (nouvelle Auth ; provider non consommé)
-DO_NOT = appeler OpenAI sur 67187b8 · persister base64 · legacy · Motion
+DO_NOT = OpenAI avant preflight vert · legacy · Motion
 ```

@@ -4,13 +4,14 @@
  */
 
 import type { Money } from "@/domain/cost";
-import type { IdempotencyStore } from "@/domain/generation";
+import type { GeneratedAsset, IdempotencyStore } from "@/domain/generation";
 import type {
   ProductionEvent,
   ProductionRun,
   QualityValidationRequest,
   QualityValidationResult,
 } from "@/domain/production";
+import type { Phase11AWorkerCounters } from "./phase-11a-openai-image-allowlist";
 
 export type BudgetReservationRequest = {
   reservationId: string;
@@ -87,6 +88,22 @@ export interface ProductionEventPort {
   publish(event: ProductionEvent): Promise<void>;
 }
 
+/** Optional Phase 11A private ingest — wired only when VHS-124 exception path is active. */
+export type Phase11AImageMaterializePort = {
+  materializeCompletedInlineImage(input: {
+    run: ProductionRun;
+    output: GeneratedAsset;
+    sceneId: string;
+    stepId: string;
+    attemptId: string;
+    nextId: () => string;
+    nowIso: string;
+  }): Promise<{
+    output: GeneratedAsset;
+    counters: Phase11AWorkerCounters;
+  }>;
+};
+
 export type ProductionPorts = {
   runStore: ProductionRunStore;
   budget: BudgetReservationPort;
@@ -94,4 +111,6 @@ export type ProductionPorts = {
   quality: QualityValidatorPort;
   events: ProductionEventPort;
   eventPublishFailurePolicy?: EventPublishFailurePolicy;
+  /** When set, inline OpenAI image outputs are ingested privately before run state save. */
+  phase11AImageMaterialize?: Phase11AImageMaterializePort;
 };

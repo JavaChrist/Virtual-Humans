@@ -612,7 +612,75 @@ export function createProductionDirector(
     }
 
     // completed
-    const output = input.result.output;
+    let output = input.result.output;
+    const ps = planStep(plan, input.stepId)!;
+
+    // Phase 11A: ingest private Storage + strip inline BEFORE any run-state persistence.
+    if (
+      ports.phase11AImageMaterialize &&
+      output.source.kind === "inline_data_url"
+    ) {
+      try {
+        const materialized =
+          await ports.phase11AImageMaterialize.materializeCompletedInlineImage({
+            run: current,
+            output,
+            sceneId: input.sceneId,
+            stepId: input.stepId,
+            attemptId: input.attemptId,
+            nextId: ctx.nextId,
+            nowIso: at,
+          });
+        output = materialized.output;
+      } catch (ingestErr) {
+        const message =
+          ingestErr instanceof Error
+            ? ingestErr.message.slice(0, 200)
+            : "provider_result_not_durably_ingested";
+        const err: ProductionAttemptError = {
+          code: "output_invalid",
+          message,
+          retryable: false,
+          category: "invalid_input",
+        };
+        // Persist failure WITHOUT inline payload (sanitize on save strips any residual).
+        const prevFail = current.revision;
+        current = updateStepStatus(current, input.stepId, "failed", at, (s) => ({
+          ...s,
+          attempts: s.attempts.map((a) =>
+            a.id === input.attemptId
+              ? {
+                  ...a,
+                  status: "failed" as const,
+                  error: err,
+                  completedAt: at,
+                  // Explicitly omit output — sync OpenAI buffer is not recoverable.
+                }
+              : a
+          ),
+        }));
+        current = await saveRun(current, prevFail);
+        await failAttemptIdempotency(
+          ports.idempotency,
+          input.idempotencyKey,
+          "provider_result_not_durably_ingested",
+        ).catch(() => undefined);
+        try {
+          await releaseFullReservation(ports.budget, {
+            reservationId: input.reservationId,
+            runId: current.id,
+            sceneId: input.sceneId,
+            stepId: input.stepId,
+            attemptId: input.attemptId,
+            amount: input.reserved,
+          });
+        } catch {
+          /* ledger release best-effort */
+        }
+        return { run: current };
+      }
+    }
+
     const prevRev0 = current.revision;
     current = updateStepStatus(current, input.stepId, "validating", at, (s) => ({
       ...s,
@@ -630,7 +698,6 @@ export function createProductionDirector(
     }));
     current = await saveRun(current, prevRev0);
 
-    const ps = planStep(plan, input.stepId)!;
     const quality = await validateAttemptQuality(
       ports.quality,
       { step: ps.step, asset: output, nowIso: at },

@@ -206,3 +206,5 @@ ONE_MEDIA_IMAGE_CALL_MAX_2_CENTS_OPENAI_GPT_IMAGE_1_SCENE_2_TEXT_MOTION
 
 - `studio/scripts/phase-11a-media-prep-dry-run.mjs`
 - `studio/src/application/production/__tests__/phase-11a-media-prep-guards.test.ts`
+
+> **Update 2026-08-13 :** option VHS-124 choisie et câblée (`102_`…`106_`) — Storage/plan/sanitize prêts ; suite = live preflight sur nouveau SHA (`106_`).

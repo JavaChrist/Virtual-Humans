@@ -28,16 +28,15 @@ Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58) — supersédé ops par 101_/102_
 Motion / Performance     : MV-001 PASS_WITH_HUMAN_APPROVAL · Registry DISABLED
                            MV-002 DESIGN_READY + DEFERRED (`100_`)
-Phase 11A média          : SMOKE ATTEMPT (`105_`) · **BLOCKED_PRECONDITION**
-                           storage/plan non câblés · Ready observé **67187b8** ≠ **9952380**
-                           provider **non consommé** · 0 appel · flags non ouverts
+Phase 11A média          : STORAGE/PLAN WIRED (`106_`) · READY_FOR_NEW_11A_LIVE_PREFLIGHT
+                           path WIRED_DISABLED · FP `c532c400334f5b22` · 0 appel
 Runtime AI / paid media  : OFF
 Budget                   : hard 274 / committed 247 / available 27 ¢
 production_jobs média    : 0 générique (Motion MV-001 settled à part)
 P0                       : pas d’appel OpenAI sans Auth · pas de legacy PASS
-P1 ouverts               : Auth wire storage/plan materialize · puis smoke once
-P1 fermé                 : 11A-WIRE · PREFLIGHT · FINAL-PREFLIGHT · SMOKE-BLOCKED
-Prochaine porte majeure  : Auth `11A-WIRE-STORAGE-AND-PLAN-MATERIALIZE`
+P1 ouverts               : Auth live preflight no-provider (nouveau SHA) · puis smoke once
+P1 fermé                 : WIRE · PREFLIGHT · SMOKE-BLOCKED · STORAGE/PLAN-MATERIALIZE
+Prochaine porte majeure  : Auth `11A-LIVE-PREFLIGHT-NO-PROVIDER`
 ```
 
 ### Portes Directors texte
@@ -210,6 +209,7 @@ Utilisateur → AI Video Director (/director)
 | [`103_PHASE_11A_OPENAI_IMAGE_LIVE_PREFLIGHT.md`](./103_PHASE_11A_OPENAI_IMAGE_LIVE_PREFLIGHT.md) | **11A-PREFLIGHT · READY_FOR_11A_PAID_AUTH** |
 | [`104_PHASE_11A_FINAL_PREFLIGHT_9952380.md`](./104_PHASE_11A_FINAL_PREFLIGHT_9952380.md) | **11A-FINAL-PREFLIGHT · source 9952380** |
 | [`105_PHASE_11A_FIRST_REAL_OPENAI_IMAGE_SMOKE.md`](./105_PHASE_11A_FIRST_REAL_OPENAI_IMAGE_SMOKE.md) | **11A-PAID-SMOKE · BLOCKED_PRECONDITION** |
+| [`106_PHASE_11A_STORAGE_PLAN_AND_PAYLOAD_WIRING.md`](./106_PHASE_11A_STORAGE_PLAN_AND_PAYLOAD_WIRING.md) | **11A-WIRE storage/plan · READY_FOR_NEW_PREFLIGHT** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

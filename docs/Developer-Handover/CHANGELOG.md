@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.128] — 2026-08-13
+
+### Added (Phase 11A Storage / Plan / Payload wiring)
+
+- Canonical `POST /routing` single-step GenerationPlan (VHS-124) (`106_`).
+- Private `director-final-assets` ingest + strip base64 from `production_runs.state`.
+- Composition fingerprint `c532c400334f5b22` · `READY_FOR_NEW_11A_LIVE_PREFLIGHT` · 0 provider.
+
 ## [2.0.127] — 2026-08-13
 
 ### Added (Phase 11A Paid Smoke — blocked)

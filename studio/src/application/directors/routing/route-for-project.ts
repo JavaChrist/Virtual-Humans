@@ -35,6 +35,16 @@ import { createModelRouter } from "@/application/routing/model-router";
 import { runModelRouterDryRun } from "@/application/routing/model-router/dry-run";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
 import type { DirectorRunContext } from "@/application/directors/marketing/result";
+import {
+  isVhs124OpenAIImageExceptionEnabled,
+  isVhs124OpenAIImageExceptionExpired,
+  PHASE_11A_SMOKE_PROJECT_ID,
+  phase11ARuntimeCompositionFingerprint,
+} from "@/application/production/phase-11a-openai-image-allowlist";
+import {
+  buildPhase11ASingleStepGenerationPlan,
+  selectPhase11AScene2Package,
+} from "@/application/production/phase-11a-single-step-plan";
 
 type Warning = { code: string; message: string };
 
@@ -105,6 +115,21 @@ export type RoutingProjectDryRunResult = {
   warnings: Warning[];
   missingInformation: Array<{ code: string; message: string; field?: string }>;
   existingPlan?: GenerationPlanView;
+  /** Present when VHS-124 Phase 11A single-step path is the executable route. */
+  phase11ACanonicalSingleStep?: {
+    enabled: true;
+    compositionFingerprint: string;
+    sceneId: "scene-2";
+    provider: "openai";
+    model: "gpt-image-1";
+    quality: "low";
+    size: "1024x1024";
+    estimateMinor: number;
+    reservationMinor: number;
+    stepCount: 1;
+    fallbackCount: 0;
+    planFingerprint: string;
+  };
 };
 
 export type RoutingProjectResult =
@@ -655,6 +680,75 @@ export function createRouteGenerationPlanForProject(
       },
     ];
 
+    const phase11a = tryPhase11ASingleStep({
+      projectId: input.projectId,
+      packages,
+      storyboardArtifactId: storyboard.artifactId,
+      packageSetArtifactId: packageSet.artifactId,
+      availableMinor: budgetSnapshot.available.amountMinor,
+      env,
+      at,
+      correlationId: "routing-dry-run",
+    });
+
+    if (phase11a) {
+      return {
+        executable: true,
+        providerCalled: false,
+        executionAvailable: true,
+        briefRevision: brief.revision,
+        briefArtifactId: brief.artifactId,
+        storyboardRevision: storyboard.revision,
+        storyboardArtifactId: storyboard.artifactId,
+        scenePackageSetRevision: packageSet.revision,
+        scenePackageSetArtifactId: packageSet.artifactId,
+        registryVersion,
+        registrySchemaVersion: CAPABILITY_REGISTRY_SCHEMA_VERSION,
+        policyVersion: DEFAULT_ROUTING_POLICY_VERSION,
+        schemaVersion: GENERATION_PLAN_SCHEMA_VERSION,
+        budgetAvailableMinor: budgetSnapshot.available.amountMinor,
+        budgetLimitMinor: budgetSnapshot.limit.amountMinor,
+        currency: budgetSnapshot.limit.currency,
+        estimatedCostMinor: phase11a.estimateMinor,
+        validations: [
+          ...validations,
+          {
+            code: "phase11a_single_step",
+            passed: true,
+            message: "GenerationPlan single-step VHS-124 matérialisable.",
+          },
+          {
+            code: "canonical_routing",
+            passed: true,
+            message: "Chemin POST /routing canonique Phase 11A.",
+          },
+        ],
+        warnings: [
+          {
+            code: "vhs124_temporary_exception",
+            message:
+              "Does not declare global Production Registry real-provider compatibility.",
+          },
+        ],
+        missingInformation: [],
+        existingPlan,
+        phase11ACanonicalSingleStep: {
+          enabled: true,
+          compositionFingerprint: phase11ARuntimeCompositionFingerprint(),
+          sceneId: "scene-2",
+          provider: "openai",
+          model: "gpt-image-1",
+          quality: "low",
+          size: "1024x1024",
+          estimateMinor: phase11a.estimateMinor,
+          reservationMinor: phase11a.reservationMinor,
+          stepCount: 1,
+          fallbackCount: 0,
+          planFingerprint: phase11a.fingerprint,
+        },
+      };
+    }
+
     return {
       executable: readiness.executable,
       providerCalled: false,
@@ -737,6 +831,17 @@ export function createRouteGenerationPlanForProject(
       const budgetPolicy = createBudgetPolicy(budgetSnapshot.limit);
       const packages = packagesFromSet(packageSet.value);
 
+      const phase11aPlan = tryPhase11ASingleStep({
+        projectId: input.projectId,
+        packages,
+        storyboardArtifactId: storyboard.artifactId,
+        packageSetArtifactId: packageSet.artifactId,
+        availableMinor: budgetSnapshot.available.amountMinor,
+        env,
+        at,
+        correlationId: context.correlationId,
+      });
+
       const fields = [
         input.projectId,
         packageSet.artifactId,
@@ -748,6 +853,8 @@ export function createRouteGenerationPlanForProject(
         registry.registryVersion,
         DEFAULT_ROUTING_POLICY_VERSION,
         GENERATION_PLAN_SCHEMA_VERSION,
+        phase11aPlan ? "phase11a-single-step" : "full-router",
+        phase11aPlan?.fingerprint ?? "",
       ];
       const raw = ["rtg", ...fields].join(":");
       const key = raw.length <= 200 ? raw : createHash("sha256").update(raw).digest("hex");
@@ -800,6 +907,76 @@ export function createRouteGenerationPlanForProject(
       }
 
       const runId = begin.directorRunId;
+
+      if (phase11aPlan) {
+        const plan = phase11aPlan.plan;
+        const persistable = {
+          ...plan,
+          artifactType: GENERATION_PLAN_ARTIFACT_TYPE,
+          scenePackageRevisionIds: [packageSet.artifactId],
+          phase11A: {
+            compositionFingerprint: phase11ARuntimeCompositionFingerprint(),
+            planFingerprint: phase11aPlan.fingerprint,
+            promptHash: phase11aPlan.promptHash,
+            singleStep: true,
+          },
+        } as unknown as Record<string, unknown>;
+        try {
+          const persisted = await deps.directorRuns.persistGenerationPlan({
+            workspaceId: deps.workspaceId,
+            projectId: input.projectId,
+            directorRunId: runId,
+            artifactId: plan.id,
+            scenePackageSetArtifactId: packageSet.artifactId,
+            scenePackageSetRevision: packageSet.revision,
+            storyboardArtifactId: storyboard.artifactId,
+            storyboardRevision: storyboard.revision,
+            briefArtifactId: brief.artifactId,
+            briefRevision: brief.revision,
+            plan: persistable,
+            schemaVersion: GENERATION_PLAN_SCHEMA_VERSION,
+            registryVersion: registry.registryVersion,
+            policyVersion: DEFAULT_ROUTING_POLICY_VERSION,
+            estimatedCostMinor: plan.estimatedCost.amountMinor,
+            maximumExposureMinor: plan.estimatedCost.amountMinor,
+            currency: plan.currency,
+            correlationId: context.correlationId,
+            expectedRunRevision: begin.revision,
+          });
+          return {
+            status: persisted.status === "existing" ? "existing" : "completed",
+            plan: toSafeView(plan, persisted.revision, {
+              artifactId: persisted.artifactId,
+              scenePackageSetRevision: packageSet.revision,
+              budgetAvailableMinor: budgetSnapshot.available.amountMinor,
+              approval: { status: "none" },
+              warnings: [
+                {
+                  code: "vhs124_temporary_exception",
+                  message:
+                    "Does not declare global Production Registry real-provider compatibility.",
+                },
+              ],
+            }),
+            directorRunId: runId,
+          };
+        } catch {
+          await deps.directorRuns
+            .failRun({
+              directorRunId: runId,
+              workspaceId: deps.workspaceId,
+              expectedRevision: begin.revision,
+              errorCode: "persist_failed",
+              status: "failed",
+              correlationId: context.correlationId,
+            })
+            .catch(() => undefined);
+          return failed("persist_failed", "La persistance du GenerationPlan a échoué.", 503, {
+            directorRunId: runId,
+          });
+        }
+      }
+
       const routed = router.route(
         {
           storyboard: storyboard.value,
@@ -945,6 +1122,37 @@ export function createBudgetSnapshotFromAmounts(input: {
     reserved: money(input.reservedMinor, input.currency),
     spent: money(input.spentMinor, input.currency),
   });
+}
+
+/** Build Phase 11A single-step plan when VHS-124 exception is active for the smoke project. */
+export function tryPhase11ASingleStep(input: {
+  projectId: string;
+  packages: readonly ScenePackage[];
+  storyboardArtifactId: string;
+  packageSetArtifactId: string;
+  availableMinor: number;
+  env: Record<string, string | undefined>;
+  at: string;
+  correlationId: string;
+}): ReturnType<typeof buildPhase11ASingleStepGenerationPlan> | null {
+  if (input.projectId !== PHASE_11A_SMOKE_PROJECT_ID) return null;
+  if (!isVhs124OpenAIImageExceptionEnabled(input.env)) return null;
+  if (isVhs124OpenAIImageExceptionExpired(input.at)) return null;
+  try {
+    const scenePackage = selectPhase11AScene2Package({ packages: input.packages });
+    return buildPhase11ASingleStepGenerationPlan({
+      projectId: input.projectId,
+      storyboardRevisionId: input.storyboardArtifactId,
+      scenePackageRevisionIds: [input.packageSetArtifactId],
+      scenePackage,
+      createdAt: input.at,
+      createdBy: "shared-password-user",
+      correlationId: input.correlationId,
+      availableAfterMinor: input.availableMinor,
+    });
+  } catch {
+    return null;
+  }
 }
 
 void SCENE_PACKAGE_SET_ARTIFACT_TYPE;

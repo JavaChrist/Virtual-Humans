@@ -11,6 +11,8 @@
 **Dry-run** — validation complète sans appel externe payant.
 **VHS124_OPENAI_IMAGE_DIRECTOR_EXCEPTION** — exception temporaire bornée (env homonyme, OFF par défaut) autorisant uniquement `openai` / `gpt-image-1` / `image.text_to_image` / projet+scène smoke 11A sur le chemin Production Director ; n’équivaut pas à `providerMode=real` ; n’active pas vidéo/voice/Motion ; voir `102_`.
 **Phase 11A OpenAI image allowlist** — câblage Production (`WIRED_DISABLED`) pour 1 still scene-2 ; estimate 1¢ / réserve max 2¢ ; QC technique + Human Review obligatoires avant activation.
+**Phase 11A composition fingerprint** — hash fonctionnel `phase11ARuntimeCompositionFingerprint()` (ex. `c532c400334f5b22`) prouvant routing single-step + Storage ingest + sanitize ; un commit docs-only ne suffit pas (`106_`).
+**Phase 11A private image ingest** — path `{ws}/{project}/media/image/{assetId}.png` dans `director-final-assets` ; asset `active=false` ; base64 jamais dans `production_runs.state`.
 **Fallback** — alternative prévue par le Router et déclenchée par le Production Director après un échec admissible.
 **Generation Engine** — exécuteur technique normalisant les adapters providers.
 **Generation Plan** — DAG ordonné des étapes, modèles, coûts, fallbacks et explications.

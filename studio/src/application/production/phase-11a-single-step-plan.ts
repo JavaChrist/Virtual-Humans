@@ -194,20 +194,21 @@ export function buildPhase11ASingleStepGenerationPlan(input: {
     },
   };
 
+  const planIdSeed = createHash("sha256")
+    .update(
+      [
+        projectId,
+        input.storyboardRevisionId,
+        pkg.id,
+        prompt.promptHash,
+        PHASE_11A_WIRE_VERSION,
+      ].join("|"),
+    )
+    .digest("hex");
+  /** Deterministic UUID so persist_generation_plan artifact id is valid. */
   const planId =
     input.planId ??
-    `plan-11a-${createHash("sha256")
-      .update(
-        [
-          projectId,
-          input.storyboardRevisionId,
-          pkg.id,
-          prompt.promptHash,
-          PHASE_11A_WIRE_VERSION,
-        ].join("|"),
-      )
-      .digest("hex")
-      .slice(0, 32)}`;
+    `${planIdSeed.slice(0, 8)}-${planIdSeed.slice(8, 12)}-4${planIdSeed.slice(13, 16)}-8${planIdSeed.slice(17, 20)}-${planIdSeed.slice(20, 32)}`;
 
   // Normalize scene id on package copy for Production matching (memory-only build).
   const scenePackage: ScenePackage = {
