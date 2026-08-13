@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.130] — 2026-08-13
+
+### Added (Phase 11A First Real OpenAI Image Smoke)
+
+- Smoke payant once sur `7a67c77` (`108_`) · image privée PNG 1024 · HR needs_review.
+- Verdict **`RECONCILIATION_REQUIRED`** · réservation 1¢ active non soldée · Auth provider **consommée**.
+- Runtime OFF · 0 HR decision · pas de second appel.
+
 ## [2.0.129] — 2026-08-13
 
 ### Added (Phase 11A Final Live Preflight after Storage wiring)

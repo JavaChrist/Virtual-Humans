@@ -310,13 +310,7 @@ Ce rapport + script preflight + index canon. Commit/push documentaires **après*
 ## 31. Prochaine autorisation exacte
 
 ```text
-NEXT = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE (nouvelle Auth distincte)
-SOURCE = 7a67c77 + COMPOSITION_FINGERPRINT=c532c400334f5b22
-SCOPE = 1 call · 1 job · 1 attempt · 1 output
-MODEL = openai / gpt-image-1 / low / 1024x1024 / PNG
-SCENE = scene-2 · project 984507af-…
-RESERVE_MAX = 2¢ · Human Review · downstream OFF
-DO_NOT = fal · Motion · legacy · multi-call · auto-activate · reuse prior paid Auth
+NEXT = DONE → voir `108_` (RECONCILIATION_REQUIRED · Auth provider CONSUMED)
+FOLLOW-UP = ledger-reconcile 1¢ · Human Review decision (Auth distinctes)
+DO_NOT = second OpenAI · fal · Motion · legacy · auto-activate
 ```
-
-**Ne pas démarrer le smoke payant** sans cette nouvelle Auth.

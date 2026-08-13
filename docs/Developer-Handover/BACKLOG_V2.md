@@ -31,15 +31,17 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-STORAGE/PLAN (`106_`) · READY_FOR_NEW_11A_LIVE_PREFLIGHT
              Phase 11A-LIVE-PREFLIGHT (`107_`) · source **7a67c77** · FP c532c400334f5b22
              · READY_FOR_11A_PAID_AUTH · runtime OFF
+             Phase 11A-PAID-SMOKE (`108_`) · **RECONCILIATION_REQUIRED**
+             · Auth provider CONSUMED · image privée needs_review · reserve 1¢ stuck
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
-Budget     : 274 / committed 247 / reserved 0 / available 27
+Budget     : 274 / committed 247 / reserved **1** / available **26**
 Runtime AI : OFF
-Media jobs : 0 (générique) · Motion MV-001 settled à part
-P0         : pas d’appel OpenAI sans Auth · pas de legacy PASS
-P1         : Auth 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE (nouvelle) · 1¢/2¢
-P1 fermé   : LIVE-PREFLIGHT-7A67C77 · STORAGE/PLAN · SMOKE-BLOCKED · MV-002 DEFERRED
-Next major : paid OpenAI image smoke once (pas MV-002)
+Media jobs : 1 run image pending HR · Motion MV-001 settled à part
+P0         : pas de 2e OpenAI · reconcile ledger 1¢ · pas de legacy PASS
+P1         : Auth ledger-reconcile · Auth HR decision (pas regenerate)
+P1 fermé   : PAID-SMOKE-ONCE (consommée) · LIVE-PREFLIGHT · STORAGE/PLAN · MV-002 DEFERRED
+Next major : ledger reconcile + Human Review (pas MV-002)
 ```
 
 ## P0 — fondations

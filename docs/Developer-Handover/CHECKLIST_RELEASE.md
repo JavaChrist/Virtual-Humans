@@ -77,7 +77,9 @@
 - [x] Auth smoke once tentée (`105_`) → **BLOCKED_PRECONDITION** · provider non consommé ;
 - [x] Wire Storage + strip base64 + plan single-step (`106_`) — **WIRED_DISABLED** ;
 - [x] Live preflight no-provider (`107_`) · source **7a67c77** · FP `c532c400334f5b22` · `READY_FOR_11A_PAID_AUTH` ;
-- [ ] Smoke image réel Production — **interdit** jusqu’à Auth payante distincte ;
+- [x] Smoke image réel (`108_`) · Auth consommée · **`RECONCILIATION_REQUIRED`** (reserve 1¢) ;
+- [ ] Ledger reconcile smoke 1¢ — Auth distincte requise ;
+- [ ] Human Review décision image — Auth distincte · pas de regenerate ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -85,9 +87,9 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : READY_FOR_11A_PAID_AUTH (`107_`) — runtime OFF
+Phase 11A média : RECONCILIATION_REQUIRED (`108_`) — runtime OFF · HR pending
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```
 
-**Pas** : production média distante validée · MV-002 exécuté · Registry Motion activé.
+**Pas** : smoke média soldé ledger · HR décidé · MV-002 exécuté · Registry Motion activé.
