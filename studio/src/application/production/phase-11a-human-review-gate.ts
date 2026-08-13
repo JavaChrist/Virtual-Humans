@@ -65,3 +65,29 @@ export function assertPhase11ARetryIsIntentOnly(decision: Phase11AHumanReviewDec
   if (decision === "retry_intent_only") return;
   throw new Error("Phase 11A: automatic retry creation forbidden — intent-only retry.");
 }
+
+/** REJECT closes Human Review without activation, retry, or downstream. */
+export function assertPhase11ARejectedBlocksActivationAndDownstream(input: {
+  decision: Phase11AHumanReviewDecision;
+  active: boolean;
+  mergeRequested: boolean;
+  exportRequested: boolean;
+  retryJobCreated: boolean;
+  providerCalls: number;
+}): void {
+  if (input.decision !== "rejected") {
+    throw new Error("Phase 11A: expected rejected Human Review decision.");
+  }
+  if (input.active) {
+    throw new Error("Phase 11A: rejected asset must remain active=false.");
+  }
+  if (input.mergeRequested || input.exportRequested) {
+    throw new Error("Phase 11A: rejected asset must not enter merge/export.");
+  }
+  if (input.retryJobCreated) {
+    throw new Error("Phase 11A: REJECT must not create a retry job.");
+  }
+  if (input.providerCalls !== 0) {
+    throw new Error("Phase 11A: REJECT must not call a provider.");
+  }
+}

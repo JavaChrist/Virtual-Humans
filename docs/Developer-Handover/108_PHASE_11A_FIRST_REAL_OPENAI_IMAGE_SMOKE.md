@@ -3,7 +3,7 @@
 **Date :** 2026-08-13  
 **Auth :** `AUTH_11A_PAID_OPENAI_IMAGE_SMOKE_ONCE`  
 **Nature :** smoke payant unique · pipeline Production Director · **1** image privée  
-**Ops :** ledger smoke soldé le 2026-08-14 (`109_`) — ce rapport reste la preuve du smoke.
+**Ops :** ledger smoke soldé (`109_`) · HR REJECT (`110_`) — ce rapport reste la preuve du smoke.
 
 ```text
 VERDICT = RECONCILIATION_REQUIRED
@@ -229,17 +229,20 @@ Ce rapport + script smoke + index canon. Commit/push documentaires **après** fe
 | P1 | Human Review décision (approve/reject) — Auth distincte |
 | P1 | bug worker : `needs_review` ne remonte pas `providerCalled` |
 
+**Suivi Human Review (2026-08-14) :** `110_PHASE_11A_HUMAN_REVIEW_REJECT.md` —
+`PASS_TECHNICAL_ASSET_HUMAN_REJECTED` · décision `rejected` ×1 · asset non actif.
+
 ---
 
 ## 35. Prochaine décision humaine
 
 ```text
-NEXT = Auth HUMAN-REVIEW-PRIVATE-PREVIEW-AND-DECISION (109_ a soldé le ledger)
-DO_NOT = second OpenAI call · retry · fal · Motion · legacy · auto-activate
+NEXT = Auth distincte si nouvelle génération (contraintes anti-texte) OU clôture 11A
+DO_NOT = second OpenAI call · retry auto · APPROVE de cet asset · fal · Motion · legacy · auto-activate
 ```
 
-**Suivi ledger (2026-08-14) :** `109_PHASE_11A_IMAGE_LEDGER_RECONCILIATION.md` —
-`PASS_LEDGER_RECONCILED_HUMAN_REVIEW_PENDING` · reserved 0 · committed smoke 1¢ provisional.
+**Suivi Human Review (2026-08-14) :** `110_PHASE_11A_HUMAN_REVIEW_REJECT.md` —
+`PASS_TECHNICAL_ASSET_HUMAN_REJECTED` · asset `5d68ef64…` rejected · 0 regenerate.
 
 ---
 

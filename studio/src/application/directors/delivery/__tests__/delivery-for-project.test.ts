@@ -760,6 +760,34 @@ test("review: non-waivable technical blocking code cannot be approved (human_rev
   }
 });
 
+test("review: rejected decision is append-only and blocks delivery", async () => {
+  const h = harness();
+  await runQcToReview(h);
+  const qrActive = await h.artifacts.getActive(PROJECT_ID, "quality_report");
+  const prActive = await h.artifacts.getActive(PROJECT_ID, "production_result");
+
+  const result = await h.recordQualityReview.execute(
+    {
+      projectId: PROJECT_ID,
+      decision: "rejected",
+      reviewedIssueCodes: ["human.illegible_invented_button_text"],
+      comment: "Illegible invented button text.",
+      expectedQualityReportRevision: qrActive!.revision,
+      expectedProductionResultRevision: prActive!.revision,
+      confirmation: true,
+    },
+    ctx,
+  );
+  assert.equal(result.status, "recorded", JSON.stringify(result));
+  if (result.status !== "recorded" && result.status !== "existing") return;
+  assert.equal(result.humanReview.status, "rejected");
+  assert.equal(h.deliveryRuns.reviews.length, 1);
+
+  const newPrActive = await h.artifacts.getActive(PROJECT_ID, "production_result");
+  const newPr = (await h.artifacts.load(newPrActive!.artifactId))!.value as ProductionResult;
+  assert.equal(newPr.delivery?.status, "blocked");
+});
+
 test("review: approved decision is append-only and advances delivery to merge_ready", async () => {
   const h = harness();
   await runQcToReview(h);

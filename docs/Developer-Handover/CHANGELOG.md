@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.132] — 2026-08-14
+
+### Added (Phase 11A Human Review REJECT)
+
+- Décision append-only `rejected` sur l’asset smoke `5d68ef64…` (`110_`) · 0 OpenAI · 0 retry.
+- Scaffold delivery minimal `quality_report` + `production_result` · delivery `blocked`.
+- Verdict **`PASS_TECHNICAL_ASSET_HUMAN_REJECTED`** · pipeline technique PASS · asset non actif · flags OFF.
+
 ## [2.0.131] — 2026-08-14
 
 ### Added (Phase 11A Image Ledger Reconciliation)

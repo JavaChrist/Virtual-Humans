@@ -5,7 +5,7 @@
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [ ] sauvegarde récente et restauration testée **(distant — P1 `BACKUP_PRESENT_RESTORE_UNPROVEN`)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : smoke image 1× (`108_`) ledger soldé (`109_`) · HR pending ; budget 274/248/0/26 ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : smoke image 1× (`108_`) ledger soldé (`109_`) · HR REJECT (`110_`) ; budget 274/248/0/26 ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité
@@ -25,9 +25,9 @@
 | Migrations | **29/29** |
 | pgTAP | **378** |
 | Intégration DB | **33/33** |
-| Unitaires | **1536/1536** (dont needs_review ledger + worker counter) |
+| Unitaires | **1548/1548** (dont HR REJECT 11A + delivery blocked) |
 | Runtime AI | **OFF** |
-| Media jobs Production | **1** image `needs_review` (HR pending, `109_`) |
+| Media jobs Production | **1** image `completed` (HR rejected, `110_`) |
 | OpenAI image Production path | **WIRED_DISABLED** runtime OFF · smoke 1× soldé ledger |
 
 - [ ] test staging contrôlé.
@@ -50,7 +50,7 @@
 - [x] schéma Production aligné **29** migrations (historique 10A / incident 21 — ne pas rejouer à l’aveugle) ;
 - [ ] app et workers compatibles déployés (smokes texte déjà passés sous flags bornés) ;
 - [x] flags désactivés par défaut (code) — runtime **OFF** hors Auth ;
-- [ ] smoke tests providers bornés — texte : **PASS** ; média : smoke 1× consommée (`108_`) · ledger soldé (`109_`) · HR pending ; budget 274/248/0/26 ;
+- [ ] smoke tests providers bornés — texte : **PASS** ; média : smoke 1× consommée (`108_`) · ledger soldé (`109_`) · HR REJECT (`110_`) ; budget 274/248/0/26 ;
 - [ ] canary puis montée progressive ;
 - [ ] métriques et logs surveillés.
 
@@ -79,7 +79,7 @@
 - [x] Live preflight no-provider (`107_`) · source **7a67c77** · FP `c532c400334f5b22` · `READY_FOR_11A_PAID_AUTH` ;
 - [x] Smoke image réel (`108_`) · Auth consommée · **`RECONCILIATION_REQUIRED`** (reserve 1¢) ;
 - [x] Ledger reconcile smoke 1¢ (`109_`) · **PASS** · reserved 0 · committed 248 ;
-- [ ] Human Review décision image — Auth distincte · pas de regenerate ;
+- [x] Human Review REJECT image (`110_`) · **PASS_TECHNICAL_ASSET_HUMAN_REJECTED** · pas de regenerate ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -87,9 +87,9 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : LEDGER RECONCILED (`109_`) — runtime OFF · HR pending
+Phase 11A média : TECHNICAL PASS / ASSET HUMAN_REJECTED (`110_`) — runtime OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```
 
-**Pas** : HR décidé · asset activé · MV-002 exécuté · Registry Motion activé.
+**Pas** : asset activé · 2e OpenAI · MV-002 exécuté · Registry Motion activé.

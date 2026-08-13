@@ -34,15 +34,17 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-PAID-SMOKE (`108_`) · Auth provider CONSUMED · image privée needs_review
              Phase 11A-LEDGER-RECONCILE (`109_`) · **PASS_LEDGER_RECONCILED_HUMAN_REVIEW_PENDING**
              · reserve 0 · commit smoke 1¢ provisional · HR PENDING
+             Phase 11A-HR-REJECT (`110_`) · **PASS_TECHNICAL_ASSET_HUMAN_REJECTED**
+             · décision `rejected` ×1 · asset non actif · 0 retry
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed **248** / reserved **0** / available **26**
 Runtime AI : OFF
-Media jobs : 1 run image pending HR · Motion MV-001 settled à part
-P0         : pas de 2e OpenAI · pas d’activation sans HR · pas de legacy PASS
-P1         : Auth HR preview privée APPROVE/REJECT (pas regenerate)
-P1 fermé   : LEDGER-RECONCILE 1¢ · PAID-SMOKE-ONCE (consommée) · LIVE-PREFLIGHT
-Next major : Human Review image 11A (pas MV-002)
+Media jobs : 1 run image completed · asset HUMAN_REJECTED · Motion MV-001 settled à part
+P0         : pas de 2e OpenAI · pas d’activation de l’asset rejeté · pas de legacy PASS
+P1         : nouvelle génération image = Auth distincte (contraintes texte bouton)
+P1 fermé   : HR REJECT · LEDGER-RECONCILE 1¢ · PAID-SMOKE-ONCE (consommée) · LIVE-PREFLIGHT
+Next major : clôture 11A ou Auth nouvelle génération (pas MV-002)
 ```
 
 ## P0 — fondations

@@ -2,7 +2,8 @@
 
 **Date :** 2026-08-14  
 **Auth :** `AUTH_11A_RECONCILE_EXISTING_IMAGE_RESERVATION_1_CENT_NO_PROVIDER`  
-**Nature :** règlement ledger existant · **0** appel OpenAI · **0** Human Review · flags **OFF**
+**Nature :** règlement ledger existant · **0** appel OpenAI · **0** Human Review à ce stade · flags **OFF**  
+**Ops :** Human Review REJECT ensuite (`110_`).
 
 ```text
 VERDICT = PASS_LEDGER_RECONCILED_HUMAN_REVIEW_PENDING
@@ -199,19 +200,18 @@ Pas de force push. `behind=0`.
 | Priorité | Item |
 |---|---|
 | P0 | **ne pas** re-soumettre OpenAI — Auth smoke consommée |
-| P0 | **ne pas** activer l’asset sans HR |
-| P1 | Auth **HUMAN-REVIEW-DECISION** preview privée APPROVE/REJECT · pas regenerate |
-| P1 fermé | ledger 1¢ reconciled |
+| P0 | **ne pas** activer l’asset rejeté |
+| P1 fermé | Human Review REJECT (`110_`) · ledger 1¢ reconciled |
 
 ---
 
 ## 23. Prochaine autorisation exacte
 
 ```text
-NEXT = Auth HUMAN-REVIEW-PRIVATE-PREVIEW-AND-DECISION
-        asset 5d68ef64… · APPROVE ou REJECT · no regenerate · no OpenAI
-DO_NOT = second OpenAI · retry · fal · Motion · legacy · auto-activate
-         · deploy flags ON · hard-limit change
+NEXT = Auth distincte si nouvelle génération image (contraintes anti-texte illisible)
+        OU clôture Phase 11A
+DO_NOT = retry automatique · APPROVE de 5d68ef64… · activation · second OpenAI
+         · fal · Motion · legacy · deploy flags ON · hard-limit change
 ```
 
 ---
