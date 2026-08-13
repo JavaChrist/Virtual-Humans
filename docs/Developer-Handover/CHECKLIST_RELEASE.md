@@ -73,9 +73,10 @@
 ## Phase 11A média `/director`
 
 - [x] Prep `58_` · `101_` · wire `102_` · preflight `103_` · final `104_` (`9952380`) ;
-- [x] Verdict ops : **READY_FOR_11A_PAID_AUTH** (source runtime **9952380**) ;
 - [x] Prompt-gate `[DATA:…]` validé live ; hostiles URL/Motion rejetés ;
-- [ ] Smoke image réel Production — **interdit** sans Auth `11A-PAID-…-ONCE` ;
+- [x] Auth smoke once tentée (`105_`) → **BLOCKED_PRECONDITION** · provider non consommé ;
+- [ ] Wire Storage + strip base64 + plan single-step — **requis** avant re-Auth smoke ;
+- [ ] Smoke image réel Production — **interdit** jusqu’au wire + preflight + Auth ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -83,7 +84,7 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : READY_FOR_11A_PAID_AUTH (`104_` / 9952380) — runtime OFF
+Phase 11A média : BLOCKED_PRECONDITION (`105_`) — provider non consommé · runtime OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```

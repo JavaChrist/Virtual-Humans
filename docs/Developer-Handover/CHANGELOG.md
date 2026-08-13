@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.127] — 2026-08-13
+
+### Added (Phase 11A Paid Smoke — blocked)
+
+- Auth `11A-PAID-OPENAI-IMAGE-SMOKE-ONCE` → **`BLOCKED_PRECONDITION`** (`105_`).
+- STOP avant provider : Ready `67187b8` ≠ `9952380` · ingest Storage / strip base64 / plan single-step non câblés.
+- Provider **non consommé** · 0 OpenAI · flags non ouverts.
+
 ## [2.0.126] — 2026-08-13
 
 ### Added (Phase 11A Final Preflight on 9952380)

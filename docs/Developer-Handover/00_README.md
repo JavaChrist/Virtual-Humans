@@ -28,15 +28,16 @@ Dernier checkpoint texte : Phase 10F-V4-EXECUTE PASS (rapport 57)
 Préparation média image  : Phase 11A DECISION_REQUIRED (rapport 58) — supersédé ops par 101_/102_
 Motion / Performance     : MV-001 PASS_WITH_HUMAN_APPROVAL · Registry DISABLED
                            MV-002 DESIGN_READY + DEFERRED (`100_`)
-Phase 11A média          : FINAL PREFLIGHT PASS (`104_`) · READY_FOR_11A_PAID_AUTH
-                           runtime source **9952380** · OFF · 0 appel réel
+Phase 11A média          : SMOKE ATTEMPT (`105_`) · **BLOCKED_PRECONDITION**
+                           storage/plan non câblés · Ready observé **67187b8** ≠ **9952380**
+                           provider **non consommé** · 0 appel · flags non ouverts
 Runtime AI / paid media  : OFF
 Budget                   : hard 274 / committed 247 / available 27 ¢
 production_jobs média    : 0 générique (Motion MV-001 settled à part)
 P0                       : pas d’appel OpenAI sans Auth · pas de legacy PASS
-P1 ouverts               : Auth `11A-PAID-OPENAI-IMAGE-SMOKE-ONCE`
-P1 fermé                 : 11A-WIRE · 11A-PREFLIGHT · 11A-FINAL-PREFLIGHT-9952380
-Prochaine porte majeure  : Auth smoke 1× OpenAI image (réserve ≤2¢)
+P1 ouverts               : Auth wire storage/plan materialize · puis smoke once
+P1 fermé                 : 11A-WIRE · PREFLIGHT · FINAL-PREFLIGHT · SMOKE-BLOCKED
+Prochaine porte majeure  : Auth `11A-WIRE-STORAGE-AND-PLAN-MATERIALIZE`
 ```
 
 ### Portes Directors texte
@@ -208,6 +209,7 @@ Utilisateur → AI Video Director (/director)
 | [`102_PHASE_11A_WIRE_OPENAI_IMAGE_ALLOWLIST.md`](./102_PHASE_11A_WIRE_OPENAI_IMAGE_ALLOWLIST.md) | **11A-WIRE · OPENAI_IMAGE path WIRED_DISABLED** |
 | [`103_PHASE_11A_OPENAI_IMAGE_LIVE_PREFLIGHT.md`](./103_PHASE_11A_OPENAI_IMAGE_LIVE_PREFLIGHT.md) | **11A-PREFLIGHT · READY_FOR_11A_PAID_AUTH** |
 | [`104_PHASE_11A_FINAL_PREFLIGHT_9952380.md`](./104_PHASE_11A_FINAL_PREFLIGHT_9952380.md) | **11A-FINAL-PREFLIGHT · source 9952380** |
+| [`105_PHASE_11A_FIRST_REAL_OPENAI_IMAGE_SMOKE.md`](./105_PHASE_11A_FIRST_REAL_OPENAI_IMAGE_SMOKE.md) | **11A-PAID-SMOKE · BLOCKED_PRECONDITION** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

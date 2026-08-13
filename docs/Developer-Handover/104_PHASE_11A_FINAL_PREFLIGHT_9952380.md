@@ -114,10 +114,9 @@ Budget : **274 / 247 / 0 / 27** ¢ · migrations SQL locales **30/30**.
 ## 7. Prochaine autorisation exacte
 
 ```text
-NEXT = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE
-SOURCE = 9952380 (ou HEAD = ce commit)
-SCOPE = 1 call · 1 job · 1 output · gpt-image-1 low 1024 · scene-2
-RESERVE_MAX = 2¢ · estimate = 1¢
-REQUIRES = Auth humaine · Human Review obligatoire · downstream OFF
-DO_NOT = fal · Motion · legacy · multi-call · auto-activate
+NEXT = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE — ATTEMPTED (`105_`) · BLOCKED_PRECONDITION
+FOLLOW-UP = 11A-WIRE-STORAGE-AND-PLAN-MATERIALIZE
+DO_NOT = fal · Motion · legacy · multi-call · auto-activate · OpenAI sur 67187b8
 ```
+
+> **Update :** smoke payant stoppé avant provider (`105_`) — Storage/plan non câblés · Ready observé `67187b8`.
