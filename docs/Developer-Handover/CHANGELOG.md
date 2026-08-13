@@ -2,6 +2,13 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.129] — 2026-08-13
+
+### Added (Phase 11A Final Live Preflight after Storage wiring)
+
+- Live preflight no-provider sur `7a67c77` + FP `c532c400334f5b22` (`107_`) · `READY_FOR_11A_PAID_AUTH`.
+- Plan matérialisé · sanitize base64 · Storage ingest wired · Δ compteurs = 0 · runtime OFF.
+
 ## [2.0.128] — 2026-08-13
 
 ### Added (Phase 11A Storage / Plan / Payload wiring)

@@ -125,7 +125,7 @@ reservationMinor=2
 ## 8. Prochaine porte
 
 ```text
-NEXT = 11A-LIVE-PREFLIGHT-NO-PROVIDER (nouveau SHA applicatif)
+NEXT = DONE → voir `107_` (READY_FOR_11A_PAID_AUTH · 7a67c77)
 THEN = 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE (nouvelle Auth)
-DO_NOT = OpenAI avant preflight vert · legacy · Motion
+DO_NOT = OpenAI sans Auth payante · legacy · Motion
 ```

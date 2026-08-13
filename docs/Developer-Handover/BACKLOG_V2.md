@@ -29,15 +29,17 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-FINAL-PREFLIGHT (`104_`) · source **9952380** PASS
              Phase 11A-PAID-SMOKE (`105_`) · BLOCKED_PRECONDITION (provider non consommé)
              Phase 11A-STORAGE/PLAN (`106_`) · READY_FOR_NEW_11A_LIVE_PREFLIGHT
+             Phase 11A-LIVE-PREFLIGHT (`107_`) · source **7a67c77** · FP c532c400334f5b22
+             · READY_FOR_11A_PAID_AUTH · runtime OFF
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed 247 / reserved 0 / available 27
 Runtime AI : OFF
 Media jobs : 0 (générique) · Motion MV-001 settled à part
 P0         : pas d’appel OpenAI sans Auth · pas de legacy PASS
-P1         : Auth 11A-LIVE-PREFLIGHT-NO-PROVIDER (nouveau SHA) → smoke once
-P1 fermé   : STORAGE/PLAN-MATERIALIZE · SMOKE-BLOCKED · MV-002 DEFERRED
-Next major : live preflight no-provider (pas MV-002)
+P1         : Auth 11A-PAID-OPENAI-IMAGE-SMOKE-ONCE (nouvelle) · 1¢/2¢
+P1 fermé   : LIVE-PREFLIGHT-7A67C77 · STORAGE/PLAN · SMOKE-BLOCKED · MV-002 DEFERRED
+Next major : paid OpenAI image smoke once (pas MV-002)
 ```
 
 ## P0 — fondations

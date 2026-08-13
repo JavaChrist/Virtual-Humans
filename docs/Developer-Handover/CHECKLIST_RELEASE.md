@@ -76,8 +76,8 @@
 - [x] Prompt-gate `[DATA:…]` validé live ; hostiles URL/Motion rejetés ;
 - [x] Auth smoke once tentée (`105_`) → **BLOCKED_PRECONDITION** · provider non consommé ;
 - [x] Wire Storage + strip base64 + plan single-step (`106_`) — **WIRED_DISABLED** ;
-- [ ] Live preflight no-provider sur **nouveau SHA applicatif** — requis ;
-- [ ] Smoke image réel Production — **interdit** jusqu’au preflight + Auth ;
+- [x] Live preflight no-provider (`107_`) · source **7a67c77** · FP `c532c400334f5b22` · `READY_FOR_11A_PAID_AUTH` ;
+- [ ] Smoke image réel Production — **interdit** jusqu’à Auth payante distincte ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -85,7 +85,7 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : READY_FOR_NEW_11A_LIVE_PREFLIGHT (`106_`) — runtime OFF
+Phase 11A média : READY_FOR_11A_PAID_AUTH (`107_`) — runtime OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```
