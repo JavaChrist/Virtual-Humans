@@ -85,6 +85,7 @@
 - [x] Harden typographie déterministe / provider no-text (`111_`) · **WIRED_DISABLED** · 0 OpenAI ;
 - [x] Preflight retry text-free (`112_`) · source **20e8783** · **BLOCKED_TEXT_LEAK_TO_PROVIDER_PROMPT** ;
 - [x] Strip overlay copy du variant image (`113_`) · **READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT** · 0 OpenAI ;
+- [x] Preflight live text-free (`114_`) · source **e4c3de3** · **READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH** · 0 OpenAI ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -92,7 +93,7 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : TECHNICAL PASS / ASSET HUMAN_REJECTED (`110_`) · overlay WIRED_DISABLED (`111_`) · strip overlay copy (`113_`) · **READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT** — runtime OFF
+Phase 11A média : TECHNICAL PASS / ASSET HUMAN_REJECTED (`110_`) · overlay WIRED_DISABLED · strip (`113_`) · preflight live (`114_`) · **READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH** — runtime OFF `e4c3de3`
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```

@@ -40,17 +40,19 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              · provider no-text · overlay déterministe WIRED_DISABLED · 0 OpenAI
              Phase 11A-TEXT-FREE-RETRY-PREFLIGHT (`112_`) · **BLOCKED_TEXT_LEAK_TO_PROVIDER_PROMPT**
              · source 20e8783 · dry-run HTTP PASS · copy encore dans le variant image
-             Phase 11A-STRIP-OVERLAY-COPY (`113_`) · **READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT**
-             · screenText/CTA hors variant image · 0 OpenAI · 0 write Production
+             Phase 11A-STRIP-OVERLAY-COPY (`113_`) · screenText/CTA hors variant
+             Phase 11A-TEXT-FREE-RETRY-LIVE-PREFLIGHT (`114_`)
+             · **READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH** · source e4c3de3
+             · 0 OpenAI · flags refermés
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed **248** / reserved **0** / available **26**
 Runtime AI : OFF
 Media jobs : 1 run image completed · asset HUMAN_REJECTED · Motion MV-001 settled à part
-P0         : pas de 2e OpenAI sans nouveau preflight text-free
-P1         : nouveau preflight live text-free
-P1 fermé   : strip overlay copy · preflight 20e8783 · HARDEN typo · HR REJECT · LEDGER-RECONCILE 1¢
-Next major : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT
+P0         : pas de 2e OpenAI sans Auth paid
+P1         : paid retry text-free
+P1 fermé   : preflight live e4c3de3 · strip overlay copy · HARDEN typo · HR REJECT · LEDGER 1¢
+Next major : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PAID_AUTH
 ```
 
 ## P0 — fondations
@@ -108,9 +110,9 @@ Next major : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
-- **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** (`111_`) · preflight retry (`112_`) **BLOCKED_TEXT_LEAK** · strip overlay copy (`113_`) **READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT** · runtime OFF.
+- **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · preflight live (`114_`) **READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH** · runtime OFF `e4c3de3`.
 - **P1 budget** : hard **274** ; committed **248** ; reserved **0** ; available **26**.
-- **Prochaine porte majeure** : Auth **`AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT`** — pas de 2e OpenAI. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Prochaine porte majeure** : Auth **`AUTH_11A_TEXT_FREE_IMAGE_RETRY_PAID_AUTH`** — pas de 2e OpenAI sans Auth. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

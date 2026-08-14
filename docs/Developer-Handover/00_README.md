@@ -33,14 +33,15 @@ Motion / Performance     : MV-001 PASS_WITH_HUMAN_APPROVAL · Registry DISABLED
 Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`109_`)
                            HR REJECT (`110_`) · overlay WIRED_DISABLED (`111_`)
                            preflight retry text-free (`112_`) · **BLOCKED_TEXT_LEAK** (historique)
-                           strip overlay copy (`113_`) · **READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT**
-Runtime AI / paid media  : OFF
+                           strip overlay copy (`113_`) · preflight live (`114_`)
+                           · **READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH**
+Runtime AI / paid media  : OFF · runtime Production **e4c3de3**
 Budget                   : hard 274 / committed 248 / reserved 0 / available 26 ¢
 production_jobs média    : 1 run image completed · asset HUMAN_REJECTED
-P0                       : pas de 2e OpenAI sans nouveau preflight text-free
-P1 ouverts               : nouveau preflight live text-free
-P1 fermé                 : strip overlay copy · preflight 20e8783 · HARDEN typo · HR REJECT · LEDGER 1¢
-Prochaine porte majeure  : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT
+P0                       : pas de 2e OpenAI sans Auth paid
+P1 ouverts               : paid retry text-free
+P1 fermé                 : preflight live e4c3de3 · strip overlay · HARDEN · HR REJECT · LEDGER 1¢
+Prochaine porte majeure  : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PAID_AUTH
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -222,6 +223,7 @@ Utilisateur → AI Video Director (/director)
 | [`111_PHASE_11A_DETERMINISTIC_TYPOGRAPHY_HARDENING.md`](./111_PHASE_11A_DETERMINISTIC_TYPOGRAPHY_HARDENING.md) | **11A-HARDEN · READY_FOR_TEXT_FREE_IMAGE_RETRY_PREFLIGHT** |
 | [`112_PHASE_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT.md`](./112_PHASE_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT.md) | **11A-TEXT-FREE-RETRY-PREFLIGHT · BLOCKED_TEXT_LEAK_TO_PROVIDER_PROMPT** |
 | [`113_PHASE_11A_STRIP_OVERLAY_COPY_FROM_IMAGE_VARIANT.md`](./113_PHASE_11A_STRIP_OVERLAY_COPY_FROM_IMAGE_VARIANT.md) | **11A-STRIP-OVERLAY-COPY · READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT** |
+| [`114_PHASE_11A_TEXT_FREE_IMAGE_RETRY_LIVE_PREFLIGHT.md`](./114_PHASE_11A_TEXT_FREE_IMAGE_RETRY_LIVE_PREFLIGHT.md) | **11A-TEXT-FREE-RETRY-LIVE-PREFLIGHT · READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

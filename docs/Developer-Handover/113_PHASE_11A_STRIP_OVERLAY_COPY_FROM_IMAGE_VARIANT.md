@@ -3,7 +3,7 @@
 **Date :** 2026-08-14  
 **Auth :** `AUTH_11A_STRIP_OVERLAY_COPY_FROM_IMAGE_VARIANT`  
 **Nature :** correctif Prompt Director + contrats visuel/copy · **0** appel OpenAI · **0** génération · flags **OFF**  
-**Ops :** nouveau preflight live **non lancé** — porte suivante `AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT`.
+**Ops :** preflight live **PASS** (`114_`) — porte suivante `AUTH_11A_TEXT_FREE_IMAGE_RETRY_PAID_AUTH`.
 
 ```text
 VERDICT = READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT

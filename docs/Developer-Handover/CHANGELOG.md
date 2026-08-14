@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.137] — 2026-08-14
+
+### Added (Phase 11A text-free retry live preflight)
+
+- Preflight live `e4c3de3` (`114_`) · HTTP dry-run executable · copy overlay absente · 0 OpenAI.
+- Alias OFF refermé sur la même source · asset `5d68ef64…` inchangé · deltas 0.
+- Verdict **`READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH`**.
+
 ## [2.0.136] — 2026-08-14
 
 ### Added (canonical living handover)
