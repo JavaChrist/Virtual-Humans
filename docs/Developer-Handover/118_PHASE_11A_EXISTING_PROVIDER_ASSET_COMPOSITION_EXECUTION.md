@@ -102,4 +102,5 @@ Ce rapport · living handover · `00_README` · BACKLOG · CHANGELOG 2.0.141 · 
 
 ## Prochaine autorisation
 
-Preview privée temporaire de `6a2beca9…`, puis **Human Review distincte** (pas dans cette Auth).
+Preview privée puis HR REJECT : [`119_PHASE_11A_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md`](./119_PHASE_11A_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md) · **PASS_PROVIDER_ASSET_COMPOSED_ASSET_HUMAN_REJECTED**.  
+Prochaine Auth : **`AUTH_11A_DIAGNOSE_BITMAP_GLYPH_RENDERING_NO_PROVIDER_NO_PRODUCTION_MEDIA`**.

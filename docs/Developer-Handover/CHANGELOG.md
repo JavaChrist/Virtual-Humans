@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.142] — 2026-08-14
+
+### Added (Phase 11A composed-asset Human Review REJECT)
+
+- Décision append-only `rejected` sur `6a2beca9…` (`119_`) · motif `human.corrupted_overlay_glyphs`.
+- Parent `7832765d…` inchangé et réutilisable · ledger 274/249/0/25 · 0 OpenAI · 0 Storage write.
+- Verdict **`PASS_PROVIDER_ASSET_COMPOSED_ASSET_HUMAN_REJECTED`**.
+
 ## [2.0.141] — 2026-08-14
 
 ### Added (Phase 11A existing-provider composition execution)

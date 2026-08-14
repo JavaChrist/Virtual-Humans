@@ -42,7 +42,7 @@ Contrôles automatiques : fichier lisible, durée/ratio, piste audio, silence, c
 
 Un output provider durable qui bascule en `needs_review` **règle le ledger avant** le handoff Human Review (`109_`). APPROVE/REJECT ne sont pas responsables du commit/release. REJECT 11A (`110_`) clôt la revue sans retry ni activation ; l’exécution reste `completed` (pas un échec provider).
 
-Le texte marketing n’est plus peint par le modèle. Après ingest provider privé : gate OCR (fake / `unavailable_humanOnly`) → composition déterministe → QC typographique → Human Review comparative (`111_`). Overlay **WIRED_DISABLED**. Retry = intent-only. Le variant image ne transporte plus le copy overlay (`113_`). Paid text-free (`115_`) : provider ingest **PASS** · composeur **FAIL** (filtre PNG ≠ 0) · 0 retry. Décodeur filtres 0–4 livré (`116_`). Preflight compose (`117_`) : filtres **1–4** · QC typo accepted · **0** écriture. Execution (`118_`) : composed `6a2beca9…` privé · QC PASS · HR seedée **sans** décision.
+Le texte marketing n’est plus peint par le modèle. Après ingest provider privé : gate OCR (fake / `unavailable_humanOnly`) → composition déterministe → QC typographique → Human Review comparative (`111_`). Overlay **WIRED_DISABLED**. Retry = intent-only. Execution (`118_`) a écrit le composed privé. Human Review (`119_`) : composé **REJECT** (`human.corrupted_overlay_glyphs`) · parent provider **inchangé** et réutilisable. QC auto typo PASS ≠ validation visuelle humaine.
 
 ## Concurrence et budget
 

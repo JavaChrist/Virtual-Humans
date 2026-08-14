@@ -36,15 +36,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            strip overlay copy (`113_`) · preflight live (`114_`)
                            paid text-free (`115_`) · **COMPOSITOR_FAILED_NO_RETRY**
                            PNG decoder 0–4 (`116_`) · compose preflight (`117_`)
-                           compose execution (`118_`)
-                           · **COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING**
-Runtime AI / paid media  : OFF · applicatif **60cc335** (docs `d5cb4c9` ≠ runtime)
+                           compose execution (`118_`) · composed HR REJECT (`119_`)
+                           · **PASS_PROVIDER_ASSET_COMPOSED_ASSET_HUMAN_REJECTED**
+Runtime AI / paid media  : OFF · applicatif **60cc335**
 Budget                   : hard 274 / committed 249 / reserved 0 / available 25 ¢
-production_jobs média    : 2 jobs image completed · 1 REJECT · 1 provider + 1 composed pending_review
-P0                       : pas de 3e OpenAI · ne pas activer les 3 assets · ne pas décider HR
-P1 ouverts               : preview privée de `6a2beca9…` puis Auth HR
-P1 fermé                 : compose Production + seed HR · preflight mémoire · decode PNG 0–4
-Prochaine porte majeure  : AUTH_11A_COMPOSED_ASSET_PRIVATE_PREVIEW
+production_jobs média    : 2 jobs image completed · 2 REJECT (smoke + composed) · parent pending
+P0                       : pas de 3e OpenAI · ne pas activer les 3 assets · 0 média Production diagnostic
+P1 ouverts               : diagnostic local glyphes/police
+P1 fermé                 : HR composed REJECT · compose Production · preflight mémoire
+Prochaine porte majeure  : AUTH_11A_DIAGNOSE_BITMAP_GLYPH_RENDERING_NO_PROVIDER_NO_PRODUCTION_MEDIA
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -231,6 +231,7 @@ Utilisateur → AI Video Director (/director)
 | [`116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md`](./116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md) | **11A-PNG-FILTER-DECODER · READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT** |
 | [`117_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT.md`](./117_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT.md) | **11A-EXISTING-PROVIDER-COMPOSE-PREFLIGHT · READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION** |
 | [`118_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION.md`](./118_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION.md) | **11A-EXISTING-PROVIDER-COMPOSE-EXECUTION · COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** |
+| [`119_PHASE_11A_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md`](./119_PHASE_11A_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md) | **11A-COMPOSED-HR-REJECT · PASS_PROVIDER_ASSET_COMPOSED_ASSET_HUMAN_REJECTED** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
