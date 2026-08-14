@@ -91,3 +91,5 @@ Unitaires **1609/1609** · typecheck PASS · lint 0 error · build PASS · fresh
 **`AUTH_11A_IMPROVE_OVERLAY_TYPOGRAPHY_LAYOUT_NO_PROVIDER_NO_PRODUCTION_MEDIA`**
 
 Amélioration locale (fixtures synthétiques) : police/rendu, kerning, échelle, bandeaux, hiérarchie titre/CTA, wrap, marges, intégration graphique. **0** OpenAI · **0** lecture média Production · **0** écriture Production.
+
+Suite : [`124_PHASE_11A_OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVEMENT.md`](./124_PHASE_11A_OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVEMENT.md) · **OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT**.

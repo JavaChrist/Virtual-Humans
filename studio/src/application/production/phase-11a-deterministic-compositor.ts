@@ -41,7 +41,7 @@ export type Phase11ACompositorResult = {
   width: 1024;
   height: 1024;
   overlayFingerprint: string;
-  compositorVersion: typeof PHASE_11A_COMPOSITOR_VERSION;
+  compositorVersion: string;
   overlayVersion: typeof PHASE_11A_TEXT_OVERLAY_VERSION;
   renderedStrings: string[];
   lineBoxes: OverlayLineBox[];
@@ -52,7 +52,7 @@ export type Phase11ACompositorResult = {
     providerTextPolicy: "no_text";
     textOverlayMode: "deterministic";
     overlayVersion: typeof PHASE_11A_TEXT_OVERLAY_VERSION;
-    compositorVersion: typeof PHASE_11A_COMPOSITOR_VERSION;
+    compositorVersion: string;
     overlayFingerprint: string;
     checksumSha256: string;
     lineCount: number;

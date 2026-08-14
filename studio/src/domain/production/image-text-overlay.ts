@@ -9,6 +9,11 @@ import { z } from "zod";
 export const IMAGE_TEXT_OVERLAY_SCHEMA_VERSION = "1.0.0" as const;
 export const IMAGE_TEXT_OVERLAY_ARTIFACT_KIND = "image_text_overlay_spec" as const;
 export const PHASE_11A_OVERLAY_FONT_FAMILY = "vhs-overlay-latin-bitmap-v1" as const;
+export const PHASE_11A_VECTOR_OVERLAY_FONT_FAMILY = "vhs-overlay-latin-vector-v1" as const;
+export const PHASE_11A_OVERLAY_FONT_FAMILIES = [
+  PHASE_11A_OVERLAY_FONT_FAMILY,
+  PHASE_11A_VECTOR_OVERLAY_FONT_FAMILY,
+] as const;
 export const PHASE_11A_PROVIDER_TEXT_POLICY = "no_text" as const;
 export const PHASE_11A_TEXT_OVERLAY_MODE = "deterministic" as const;
 export const PHASE_11A_PROVIDER_TEXT_POLICY_VERSION = "no-text-v1" as const;
@@ -34,7 +39,7 @@ export const ImageTextOverlaySpecSchema = z
     subtitle: z.string().min(1).max(120).optional(),
     callToAction: z.string().min(1).max(48).optional(),
     legalLine: z.string().min(1).max(160).optional(),
-    fontFamily: z.literal(PHASE_11A_OVERLAY_FONT_FAMILY),
+    fontFamily: z.enum(PHASE_11A_OVERLAY_FONT_FAMILIES),
     fontWeight: z.enum(["regular", "bold"]),
     fontSize: z.number().int().min(16).max(96),
     lineHeight: z.number().min(1).max(2),
@@ -165,6 +170,32 @@ export function createDefaultPhase11AOverlaySpec(input: {
     backgroundColor: "#1A1F2B",
     safeArea: { top: 720, right: 64, bottom: 48, left: 64 },
     maxLines: 5,
+    overflowPolicy: "reject",
+    contrastRequirement: 4.5,
+    version: PHASE_11A_TEXT_OVERLAY_VERSION,
+  });
+}
+
+export function createPhase11AProfessionalOverlaySpec(input: {
+  locale: string;
+  title: string;
+  callToAction?: string;
+}): ImageTextOverlaySpec {
+  return parseImageTextOverlaySpec({
+    kind: IMAGE_TEXT_OVERLAY_ARTIFACT_KIND,
+    schemaVersion: IMAGE_TEXT_OVERLAY_SCHEMA_VERSION,
+    locale: input.locale,
+    title: input.title,
+    ...(input.callToAction ? { callToAction: input.callToAction } : {}),
+    fontFamily: PHASE_11A_VECTOR_OVERLAY_FONT_FAMILY,
+    fontWeight: "bold",
+    fontSize: 40,
+    lineHeight: 1.12,
+    alignment: "center",
+    textColor: "#F4F0E8",
+    backgroundColor: "#141820",
+    safeArea: { top: 640, right: 72, bottom: 56, left: 72 },
+    maxLines: 4,
     overflowPolicy: "reject",
     contrastRequirement: 4.5,
     version: PHASE_11A_TEXT_OVERLAY_VERSION,

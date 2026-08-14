@@ -3,7 +3,10 @@
  * Shapes come from vhs-overlay-latin-bitmap-shapes-v1. Unknown glyphs fail closed.
  */
 
-import { PHASE_11A_OVERLAY_FONT_FAMILY } from "@/domain/production/image-text-overlay";
+import {
+  PHASE_11A_OVERLAY_FONT_FAMILIES,
+  PHASE_11A_OVERLAY_FONT_FAMILY,
+} from "@/domain/production/image-text-overlay";
 import {
   bitmapGlyphRows,
   hasPhase11ABitmapGlyph,
@@ -19,7 +22,7 @@ export function isPhase11AOverlayCodepointAllowed(cp: number): boolean {
 }
 
 export function assertPhase11AOverlayFontFamily(fontFamily: string): void {
-  if (fontFamily !== PHASE_11A_OVERLAY_FONT_FAMILY) {
+  if (!(PHASE_11A_OVERLAY_FONT_FAMILIES as readonly string[]).includes(fontFamily)) {
     throw new Error(`overlay_font_not_allowlisted:${fontFamily}`);
   }
 }

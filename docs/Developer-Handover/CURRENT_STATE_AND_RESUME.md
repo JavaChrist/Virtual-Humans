@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-14T18:50:00+02:00
-documentedHead=21bc9ef
+verifiedAt=2026-08-14T19:20:00+02:00
+documentedHead=6b9877c
 headStatus=pending commit
-lastPhaseReport=123_PHASE_11A_CORRECTED_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md
-nextPhase=AUTH_11A_IMPROVE_OVERLAY_TYPOGRAPHY_LAYOUT_NO_PROVIDER_NO_PRODUCTION_MEDIA
+lastPhaseReport=124_PHASE_11A_OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVEMENT.md
+nextPhase=AUTH_11A_PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_NO_PROVIDER
 budgetHard=274
 budgetCommitted=249
 budgetReserved=0
 budgetAvailable=25
 runtimePaidMedia=OFF
-unitTests=1609/1609
-globalStatus=PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED
+unitTests=1618/1618
+globalStatus=OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED`  
-**Dernière vérification :** 2026-08-14 18:50 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11A_CORRECTED_COMPOSED_ASSET_HUMAN_REVIEW_REJECT_ONCE`  
+**Statut global :** `OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT`  
+**Dernière vérification :** 2026-08-14 19:20 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11A_IMPROVE_OVERLAY_TYPOGRAPHY_LAYOUT_NO_PROVIDER_NO_PRODUCTION_MEDIA`  
 **Branche :** `main`  
 **HEAD local :** docs+code à venir · runtime **`245bea2`**  
-**origin/main :** `21bc9ef` avant ce commit  
+**origin/main :** `6b9877c` avant ce commit  
 **Working tree à la vérification :** `headStatus=pending commit`  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
-**Commit runtime applicatif :** **`245bea2`** (composeur 1.1.0 · enfant corrigé rejeté pour layout)  
+**Commit runtime applicatif :** **`245bea2`** (composeur 1.1.0 en Production · 1.2.0 local seulement)  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`123_PHASE_11A_CORRECTED_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md`](./123_PHASE_11A_CORRECTED_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md)  
-**Prochaine phase exacte :** `AUTH_11A_IMPROVE_OVERLAY_TYPOGRAPHY_LAYOUT_NO_PROVIDER_NO_PRODUCTION_MEDIA`
+**Dernier rapport de phase :** [`124_PHASE_11A_OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVEMENT.md`](./124_PHASE_11A_OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVEMENT.md)  
+**Prochaine phase exacte :** `AUTH_11A_PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_NO_PROVIDER`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -61,11 +61,11 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Directors texte (Marketing→Storyboard) | **PASS_REAL** | smokes 10B–10F · runtime refermé OFF |
 | Prompt / Router / queue | **PASS_SYNTHETIC** + câblage 11A | fakes Phase 9 ; plan image single-step WIRED |
 | OpenAI Image `/director` | **PASS technique** · 1.0.0 + 1.1.0 **HUMAN_REJECTED** | 2 appels · parent `7832765d…` réutilisable · `6a2beca9…` glyphes · `4429654f…` layout |
-| Overlay typographique | **WIRED_DISABLED** · glyphes 1.1.0 PASS · layout FAIL | checksum `b284e877…` · enfant `4429654f…` REJECT · 0 OpenAI |
+| Overlay typographique | **WIRED_DISABLED** · 1.2.0 local PASS · runtime 1.1.0 | composeur `phase-11a-vector-compositor-1.2.0` · 0 OpenAI · 0 média Production |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · runtime **UNAVAILABLE** |
 | I2V / T2V / voice / lipsync / merge-export réels | **PREPARED** / **NOT_STARTED** | pas de smoke `/director` réel |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / Motion / Director Paid AI |
-| Prochaine étape | **PREPARED** | amélioration locale typo/layout — fixtures synthétiques · **0** OpenAI · **0** média Production |
+| Prochaine étape | **PREPARED** | preflight parent réel 1.2.0 en mémoire — **0** OpenAI · **0** nouvel asset |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -77,7 +77,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 |---|---|---|---|
 | `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | **30/30** alignées · hard **274** / committed **248** / reserved **0** / available **26** | ce fichier prime ; `17_` stale |
 | `19_DEPLOYMENT.md` checkpoint 11 août | 0 job média · MT-005 NOT APPLIED · budget 122 | jobs `1 completed + 1 failed` · MT-005 **appliquée** · budget 274 | ce fichier prime |
-| `BACKLOG_V2.md` §P1 bas de liste | prochaine porte preview privée | portes `113_`–`123_` consommées · next = amélioration typo locale | corrigé dans cette phase |
+| `BACKLOG_V2.md` §P1 bas de liste | prochaine porte preview privée | portes `113_`–`124_` · next = preflight parent réel 1.2.0 | corrigé dans cette phase |
 | Vercel Production SHA | souvent égalé à HEAD | runtime **60cc335** OFF `fs4ephi9l-…` · HEAD Git peut devenir docs | ne pas promouvoir le commit docs |
 | pgTAP 378 / intégration 33 | présentés comme courants dans `17_` | **historiques** post-10A (11 août) · non relancés le 14 août | datés ci-dessous |
 
@@ -97,13 +97,13 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Storyboard Director | PASS_REAL | 10F-V4 | 1 appel v4 | OpenAI texte | 5 | flags OFF | ne pas relancer |
 | Prompt Director | PASS_SYNTHETIC + correctif 11A | `113_`/`115_` | set no-text `2e8e9e6f` persisté | — | 0 | — | ne pas rejouer |
 | Router | PASS_SYNTHETIC | 9 / 11A plan | fakes + plan single-step | — | 0 | text_motion Registry | rester borné 11A |
-| Generation Engine | WIRED_DISABLED | `102_`–`123_` | 2 images + 2 composed REJECT | OpenAI Image | 2 | provider PASS · glyphes PASS · layout FAIL | amélioration typo locale |
+| Generation Engine | WIRED_DISABLED | `102_`–`124_` | 2 images + 2 composed REJECT · 1.2.0 local | OpenAI Image | 2 | 1.2.0 local PASS · runtime 1.1.0 | preflight parent réel |
 | Production queue/worker | PASS_REAL borné | `108_` + `115_` | 2 jobs image completed | — | inclus 2 | worker OFF | ne pas cron |
 | Ledger | PASS_REAL | `109_` + `115_` | 2×1¢ provisional soldés | — | 249 committed | — | pas de 3ᵉ réserve image |
 | Storage / assets | PASS_REAL | `108_`/`110_`/`115_`/`118_`/`122_` | 4 PNG privés inactifs | Supabase Storage | 0 extra | ni réemploi ni activation | conserver |
 | QC | PASS_REAL technique | `110_` | PNG/checksum ; visuel humanOnly | — | 0 | OCR absent | garder humanOnly |
-| Human Review | PASS_REAL | `110_` smoke REJECT · `119_` 1.0.0 REJECT · `123_` 1.1.0 REJECT · `97_` Motion APPROVE | 3 image + 1 Motion | — | 0 | parent sans décision | amélioration typo |
-| OpenAI Image | PASS technique / 1.0.0 + 1.1.0 REJECT | `115_`/`119_`/`123_` | parent conservé · enfant `4429654f…` REJECT layout | `gpt-image-1` | 2 | 0 3ᵉ appel | typo locale Auth |
+| Human Review | PASS_REAL | `110_` smoke REJECT · `119_` 1.0.0 REJECT · `123_` 1.1.0 REJECT · `97_` Motion APPROVE | 3 image + 1 Motion | — | 0 | parent sans décision · 0 nouvelle HR | preflight parent réel |
+| OpenAI Image | PASS technique / 1.0.0 + 1.1.0 REJECT | `115_`/`119_`/`123_`/`124_` | parent conservé · 1.2.0 local seulement | `gpt-image-1` | 2 | 0 3ᵉ appel | preflight parent réel |
 | Vidéo I2V/T2V | PREPARED | 9 / VHS-124 | fakes | fal (préparé) | 0 `/director` | VHS-124 | hors 11A |
 | Voice | PREPARED | legacy route | adapter ElevenLabs | ElevenLabs | 0 `/director` | pas de smoke V2 | DEFERRED |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
@@ -215,7 +215,7 @@ Vérifié live Supabase **2026-08-14** (lecture seule).
 | DB integration | **33/33** historique 11 août — **N/A** le 14 août (Docker absent, `113_`) |
 | Dernier reset local | baseline post-10A (historique) |
 | LOCAL_ONLY | aucune migration locale non appliquée distante à cette vérif |
-| Ops distantes récentes | HR `123_` · 1 REJECT composed 1.1.0 · 0 Storage · 0 OpenAI · flags OFF |
+| Ops distantes récentes | aucune (`124_` locale) · HR `123_` inchangé · 0 Storage · 0 OpenAI · flags OFF |
 
 ---
 
@@ -279,16 +279,16 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1609/1609** | **dernière complète** | 2026-08-14 `123_` |
-| Typecheck / lint / build | PASS (lint 0 error) | dernière complète | `123_` |
+| Unitaires | **1618/1618** | **dernière complète** | 2026-08-14 `124_` |
+| Typecheck / lint / build | PASS (lint 0 error) | dernière complète | `124_` |
 | migrations-static | PASS (14) | dernière complète | `120_` (non touchées) |
-| Secret scan diff `123_` | PASS | cette phase | `123_` |
-| Tests ciblés HR / persist / delivery | PASS | cette phase | `123_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 14 août | `123_` |
+| Secret scan diff `124_` | PASS | cette phase | `124_` |
+| Tests ciblés typo 1.2.0 / 1.1.0 / QC | PASS | cette phase | `124_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 14 août | `124_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
-| Fraîcheur living handover | PASS | tooling | `123_` |
+| Fraîcheur living handover | PASS | tooling | `124_` |
 
 Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
@@ -299,9 +299,9 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | | |
 |---|---|
 | Branche | `main` |
-| HEAD / origin/main | `21bc9ef` avant ce commit |
+| HEAD / origin/main | `6b9877c` avant ce commit |
 | Dernier commit applicatif runtime | **`245bea2`** composeur 1.1.0 + atlas shapes-v1 |
-| Dernier commit documentaire | `21bc9ef` (`122_`) puis ce commit `123_` — **≠** nouvelle preuve applicative image |
+| Dernier commit documentaire / local 1.2.0 | ce commit `124_` — **≠** runtime Production image |
 | Fingerprint composition 11A | `c532c400334f5b22` — **un commit docs ne le change pas** |
 | Runtime applicatif compose | **245bea2** (1.1.0) · enfant `4429654f…` REJECT layout · flags OFF |
 | Auto-deploy | push docs peut redéployer — **ne pas** promouvoir comme preuve 1.1.0 |
@@ -320,7 +320,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### P1 ouverts
 
-- Amélioration locale typo/layout (fixtures synthétiques uniquement).
+- Preflight parent réel 1.2.0 en mémoire (Auth distincte · 0 nouvel asset · 0 OpenAI).
 - Run `39329a01` `completed` · waitingReason HR **clos**.
 - `17_` / `19_` stale (budget, migrations, jobs) — alignement docs ultérieur.
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
@@ -329,7 +329,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### P0/P1 fermés (extraits)
 
-- HR 1.1.0 REJECT (`123_`) · preview privée · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · preview privée · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -338,7 +338,8 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Diagnostic glyphes bitmap | **fait** (`120_`) | 0¢ · 0 média Production | consommée | — |
 | Preflight / execution 1.1.0 | **fait** (`121_`/`122_`) | 0¢ · 1 enfant écrit | consommée | — |
 | Preview + HR 1.1.0 | **fait** (`123_`) | 0¢ · REJECT layout | consommée | — |
-| Amélioration typo/layout | fixtures synthétiques | 0¢ · 0 Production | `AUTH_11A_IMPROVE_OVERLAY_TYPOGRAPHY_LAYOUT_NO_PROVIDER_NO_PRODUCTION_MEDIA` | OpenAI · média Production |
+| Amélioration typo/layout | **fait** (`124_`) | 0¢ · 0 Production | consommée | — |
+| Preflight parent réel 1.2.0 | 1 lecture parent · compose mémoire | 0¢ · 0 nouvel asset | `AUTH_11A_PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_NO_PROVIDER` | OpenAI · write asset |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -348,13 +349,12 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11A_IMPROVE_OVERLAY_TYPOGRAPHY_LAYOUT_NO_PROVIDER_NO_PRODUCTION_MEDIA`** — améliorer localement police, kerning, bandeaux, wrap et hiérarchie, sur fixtures synthétiques. **0** OpenAI · **0** média Production.
+**`AUTH_11A_PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_NO_PROVIDER`** — une lecture parent `7832765d…` · compose 1.2.0 **en mémoire** · preview locale technique · **0** nouvel asset · **0** OpenAI.
 
 ### Court terme
 
-1. Amélioration locale typo/layout.
-2. Nouvelle recomposition locale éventuelle (Auth distincte).
-3. Décider ensuite I2V / suite média — pas Motion.
+1. Preflight parent réel 1.2.0 (Auth ci-dessus).
+2. Décider ensuite I2V / suite média — pas Motion.
 
 ### Avant beta
 
@@ -371,14 +371,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · runtime 245bea2 · composeur 1.1.0 · budget 274/249/0/25 ¢
-Dernier verdict : PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED (123_)
-Preuve : enfant 4429654f… REJECT layout · glyphes PASS · parent réutilisable · 0 OpenAI
-Blocage : 0 3e OpenAI · 0 activation · 0 média Production sans Auth
-Mission : uniquement AUTH_11A_IMPROVE_OVERLAY_TYPOGRAPHY_LAYOUT_NO_PROVIDER_NO_PRODUCTION_MEDIA
-Auth consommées : CORRECTED_COMPOSED_HR_REJECT (123_) · PREVIEW · EXECUTION (122_)
-Interdit : OpenAI sans Auth · fal · Motion · activer les 4 assets · lire Production
-Attendu : amélioration locale typo/layout sur fixtures synthétiques
+Contexte : VHS V2 · runtime 245bea2 · composeur 1.2.0 local · budget 274/249/0/25 ¢
+Dernier verdict : OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT (124_)
+Preuve : 1.2.0 fixtures PASS · 1.1.0 REJECT inchangé · parent réutilisable · 0 OpenAI
+Blocage : 0 3e OpenAI · 0 activation · 0 write asset sans Auth
+Mission : uniquement AUTH_11A_PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_NO_PROVIDER
+Auth consommées : IMPROVE_TYPO_LAYOUT (124_) · HR REJECT (123_) · EXECUTION (122_)
+Interdit : OpenAI sans Auth · fal · Motion · activer les 4 assets · write composed
+Attendu : 1 lecture parent · compose 1.2.0 mémoire · preview locale · 0 nouvel asset
 ```
 
 ---
@@ -387,8 +387,8 @@ Attendu : amélioration locale typo/layout sur fixtures synthétiques
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 123_PHASE_11A_CORRECTED_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md puis 122_ et 119_.
-Vérifie Git. Le runtime Production image est 245bea2 (composeur 1.1.0). Un commit docs n’est pas une nouvelle preuve applicative.
+Lis ensuite 124_PHASE_11A_OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVEMENT.md puis 123_ et 122_.
+Vérifie Git. Le runtime Production image est 245bea2 (composeur 1.1.0). Le 1.2.0 est local. Un commit docs n’est pas une nouvelle preuve applicative.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne lis ni n’écris de média Production sans Auth.
@@ -401,7 +401,8 @@ Ne pas promouvoir un commit docs comme runtime applicatif.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-14 | `123_` composed 1.1.0 HR REJECT | PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED | à venir | 0 | 1 REJECT layout · 0 Storage · 0 OpenAI | amélioration typo locale |
+| 2026-08-14 | `124_` typo/layout 1.2.0 | OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT | à venir | 0 | 0 Production · composeur local 1.2.0 | preflight parent réel |
+| 2026-08-14 | `123_` composed 1.1.0 HR REJECT | PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED | `6b9877c` | 0 | 1 REJECT layout · 0 Storage · 0 OpenAI | amélioration typo locale |
 | 2026-08-14 | `122_` recomposition execution | CORRECTED_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING | `21bc9ef` | 0 | 1 write composed 1.1.0 · HR seed · 0 OpenAI | preview privée |
 | 2026-08-14 | `121_` recomposition preflight | READY_FOR_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION | `a0db8c7` | 0 | 1 read · 0 write · 1.1.0 | execution recomposition |
 | 2026-08-14 | `120_` glyph diagnose | BITMAP_GLYPH_RENDERING_FIXED_READY_FOR_RECOMPOSITION_PREFLIGHT | `245bea2` | 0 | 0 Production · fix local 1.1.0 | recomposition preflight |

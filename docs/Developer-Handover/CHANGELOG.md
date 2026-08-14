@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.147] — 2026-08-14
+
+### Added (Phase 11A overlay typography/layout 1.2.0)
+
+- Composeur local `phase-11a-vector-compositor-1.2.0` + layout `1.2.0` + police `vhs-overlay-latin-vector-v1` (`124_`).
+- Fixtures synthétiques seulement · 1.0.0/1.1.0 inchangés · 0 OpenAI · 0 média Production.
+- Verdict **`OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT`**.
+
 ## [2.0.146] — 2026-08-14
 
 ### Added (Phase 11A corrected composed Human Review REJECT)

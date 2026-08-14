@@ -6,12 +6,14 @@
 import {
   overlayStrings,
   parseImageTextOverlaySpec,
+  PHASE_11A_OVERLAY_FONT_FAMILIES,
   type ImageTextOverlaySpec,
 } from "@/domain/production/image-text-overlay";
-import { PHASE_11A_OVERLAY_FONT_FAMILY } from "./phase-11a-overlay-font";
 import type { Phase11ACompositorResult } from "./phase-11a-deterministic-compositor";
 import { PHASE_11A_COMPOSITOR_CANVAS } from "./phase-11a-deterministic-compositor";
 import { checksumSha256Bytes, readPngDimensions } from "./phase-11a-image-technical-qc";
+import { PHASE_11A_VECTOR_COMPOSITOR_VERSION } from "./phase-11a-vector-compositor";
+import { PHASE_11A_LAYOUT_12_MAX_PANEL_SURFACE } from "./phase-11a-overlay-layout-1-2";
 
 export type Phase11ATypographicQcStatus = "accepted" | "rejected";
 
@@ -52,8 +54,11 @@ export function validatePhase11ATypographicQc(input: {
   if (composed.locale !== spec.locale) {
     reasons.push({ code: "locale", message: "composed locale must match overlay spec" });
   }
-  if (composed.fontFamily !== PHASE_11A_OVERLAY_FONT_FAMILY) {
+  if (!(PHASE_11A_OVERLAY_FONT_FAMILIES as readonly string[]).includes(composed.fontFamily)) {
     reasons.push({ code: "font", message: "composed font is not allowlisted" });
+  }
+  if (composed.fontFamily !== spec.fontFamily) {
+    reasons.push({ code: "font_mismatch", message: "composed font does not match overlay spec" });
   }
   if (composed.contrastRatio + 1e-9 < spec.contrastRequirement) {
     reasons.push({ code: "contrast", message: "composed contrast below requirement" });
@@ -101,6 +106,38 @@ export function validatePhase11ATypographicQc(input: {
       break;
     }
     lastRoleIndex = idx;
+  }
+
+  const joinRole = (role: (typeof ROLE_ORDER)[number]) =>
+    composed.lineBoxes
+      .filter((box) => box.role === role)
+      .map((box) => box.text)
+      .join(" ");
+  if (joinRole("title") !== spec.title) {
+    reasons.push({ code: "line_breaks", message: "title line breaks mutate copy" });
+  }
+  if (spec.callToAction && joinRole("callToAction") !== spec.callToAction) {
+    reasons.push({ code: "line_breaks", message: "CTA line breaks mutate copy" });
+  }
+
+  if (composed.compositorVersion === PHASE_11A_VECTOR_COMPOSITOR_VERSION) {
+    const cta = composed.lineBoxes.filter((box) => box.role === "callToAction");
+    if (cta.length >= 2 && cta[cta.length - 1]?.text === "Studio") {
+      reasons.push({ code: "orphan_word", message: "CTA last line is an orphan Studio" });
+    }
+    const titleBox = composed.lineBoxes.find((box) => box.role === "title");
+    const ctaBox = cta[0];
+    if (titleBox && ctaBox && titleBox.height <= ctaBox.height) {
+      reasons.push({ code: "hierarchy", message: "title must be visually larger than CTA" });
+    }
+    const panelSurface =
+      composed.lineBoxes.reduce((n, box) => n + box.width * box.height, 0) / (1024 * 1024);
+    if (panelSurface > PHASE_11A_LAYOUT_12_MAX_PANEL_SURFACE) {
+      reasons.push({ code: "panel_surface", message: "contrast panel covers too much of the canvas" });
+    }
+    if (composed.redactedMetadata.compositorVersion !== PHASE_11A_VECTOR_COMPOSITOR_VERSION) {
+      reasons.push({ code: "compositor_provenance", message: "compositor provenance mismatch" });
+    }
   }
 
   return {

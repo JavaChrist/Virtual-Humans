@@ -19,6 +19,8 @@
 **Phase 11A PNG filter decoder** — `decodeRgbPng` interne (zlib Node, pas `sharp`) : filtres 0–4 (`116_`). Asset provider réel : filtres **1–4** (`117_`). Composed `6a2beca9…` HUMAN_REJECTED pour glyphes bitmap (`119_`).
 **human.corrupted_overlay_glyphs** — motif Human Review : titre/CTA illisibles car glyphes corrompus du composeur bitmap ; le fond provider peut rester exploitable (`119_`).
 **vhs-overlay-latin-bitmap-shapes-v1** — atlas 8×8 local (ASCII + FR + U+2019) remplaçant le hash LCG du composeur 1.0.0 ; lookup fail-closed ; glyphes 1.1.0 PASS, layout HUMAN_REJECTED (`120_`–`123_`).
+**vhs-overlay-latin-vector-v1** — police vectorielle géométrique originale (`original-work-in-repo`) du composeur `phase-11a-vector-compositor-1.2.0` ; layout `phase-11a-overlay-layout-1.2.0` ; fail-closed ; pas de fonte système (`124_`).
+**human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
 **Overlay leak detector** — comparaison normalisée overlay ↔ variant/prompt ; span significatif ≥ 16 ; mot générique isolé non bloqué (`113_`).
 **Fallback** — alternative prévue par le Router et déclenchée par le Production Director après un échec admissible.
