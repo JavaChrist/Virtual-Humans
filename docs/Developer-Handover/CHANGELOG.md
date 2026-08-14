@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.158] — 2026-08-15
+
+### Added (Phase 11B close and next media gate audit)
+
+- Clôture 11B (`135_`) : **`PHASE_11B_CLOSED_PASS_WITH_NOTES`** · 0 provider · 0 write.
+- Attempt I2V `6be95728…` classée **P1** · resubmit démontré impossible.
+- Pointeurs QR/PR I2V + GenerationPlan 11A rev.2 : **P1** bornée.
+- Prochaine porte **`AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`**.
+
 ## [2.0.157] — 2026-08-15
 
 ### Added (Phase 11B I2V Human Review APPROVE)

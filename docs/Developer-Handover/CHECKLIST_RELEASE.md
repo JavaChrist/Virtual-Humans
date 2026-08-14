@@ -106,6 +106,7 @@
 - [x] Paid smoke final preflight I2V (`132_`) · **I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH** · 0 fal ;
 - [x] First paid I2V (`133_`) · **I2V_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** · 1 fal · HR pending · flags OFF ;
 - [x] HR I2V APPROVE (`134_`) · **I2V_FIRST_PAID_VIDEO_HUMAN_APPROVED_PRIVATE_INACTIVE** · `active=false` · 0 fal ;
+- [x] Clôture 11B (`135_`) · **PHASE_11B_CLOSED_PASS_WITH_NOTES** · attempt P1 · 0 write ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -114,7 +115,7 @@
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
-I2V `/director` : HTTP **WIRED_DISABLED** · smoke réel HUMAN_APPROVED inactif (`134_`) · `1d75541` · 1 fal · flags OFF
+I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt P1 · flags OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

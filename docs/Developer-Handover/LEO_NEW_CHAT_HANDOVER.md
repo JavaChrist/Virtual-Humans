@@ -176,31 +176,31 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-La Human Review I2V est **PASS** (`134_`) : `I2V_FIRST_PAID_VIDEO_HUMAN_APPROVED_PRIVATE_INACTIVE`.
+La Phase 11B est **CLOSED** (`135_`) : `PHASE_11B_CLOSED_PASS_WITH_NOTES`.
 
-Auths consommées (payante + HR). Ledger : **437 / 389 / 0 / 48** ¢. 1 fal. Asset vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF.
+Auths consommées. Ledger : **437 / 389 / 0 / 48** ¢. 1 fal. Asset vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF. Attempt `6be95728…` `started` = **P1** · resubmit impossible.
 
 Phase active suivante :
 
-`AUTH_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`
+`AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`
 
-Objectif : audit de clôture 11B et définition explicite de la prochaine capacité. **Aucun** provider. **Aucune** activation automatique.
+Objectif : corriger le code et les tests de l’état terminal de l’attempt. **Aucun** provider. **Aucune** écriture Production live. **Aucune** activation.
 
-Le wiring `57de914` est présent. L’image `49284892…` et la vidéo `9be6cb0c…` restent inactives. Flags OFF. Attempt `started` toujours ouverte.
+Le wiring `57de914` est présent. L’image `49284892…` et la vidéo `9be6cb0c…` restent inactives. Flags OFF.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si `134_` est PASS HUMAN_APPROVED inactif, la porte suivante probable sera :
+Si `135_` est PASS_WITH_NOTES, la porte suivante probable après hardening sera :
 
-`AUTH_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`
+`AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`
 
-Cette porte ne doit ni resoumettre fal ni activer l’asset automatiquement.
+Cette porte ne doit ni resoumettre fal ni activer l’asset automatiquement. La correction live de l’attempt exigera une Auth distincte.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -224,4 +224,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`. Le smoke `134_` est PASS HUMAN_APPROVED inactif. Auth fal et HR consommées. Aucun second submit. Aucune activation automatique.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`. La Phase 11B est CLOSED PASS_WITH_NOTES. Attempt `started` P1. Aucun second submit. Aucune activation. Aucune écriture live attempt sans Auth distincte.

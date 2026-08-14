@@ -102,15 +102,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11B-I2V-HR-APPROVE (`134_`)
              · **I2V_FIRST_PAID_VIDEO_HUMAN_APPROVED_PRIVATE_INACTIVE**
              · 1 APPROVE · MP4 approved inactif · 0 fal · flags OFF
+             Phase 11B-CLOSE (`135_`)
+             · **PHASE_11B_CLOSED_PASS_WITH_NOTES**
+             · attempt `started` P1 · 0 resubmit · 0 write
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **389** / reserved **0** / available **48**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0         : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit
-P1         : clôture 11B + next media gate audit
-P1 fermé   : HR I2V APPROVE · first paid I2V · paid preflight · hard 437¢ · live preflight · wiring
-Next major : AUTH_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT
+P1         : attempt I2V `started` · pointeurs QR/PR I2V + GP 11A
+P1 fermé   : clôture 11B · HR I2V APPROVE · first paid I2V · paid preflight · hard 437¢
+Next major : AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING
 ```
 
 ## P0 — fondations
@@ -170,7 +173,7 @@ Next major : AUTH_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
 - **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · paid (`115_`) · decode PNG 0–4 (`116_`) · compose (`118_`) · composed HR REJECT (`119_`) · glyphes (`120_`) · preflight 1.1.0 (`121_`) · recomposition 1.1.0 (`122_`) · HR 1.1.0 REJECT (`123_`) **PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED**.
 - **P1 budget** : hard **437** ; committed **389** ; reserved **0** ; available **48**.
-- **Prochaine porte majeure** : Auth **`AUTH_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`** — clôture 11B + next gate · 0 fal · 0 activation. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Prochaine porte majeure** : Auth **`AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`** — code+tests terminal attempt · 0 fal · 0 write live. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

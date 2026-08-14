@@ -33,6 +33,7 @@
 **I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH** — verdict `132_` : budget théoriquement suffisant · 0 réserve · 0 fal · `EXECUTION_AUTHORIZED=false` · prochaine Auth = first paid single execution.
 **I2V_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** — verdict `133_` : 1 fal · 1 MP4 privé inactif · QC humanOnly · HR pending · 0 décision · Auth consommée · 0 second submit.
 **I2V_FIRST_PAID_VIDEO_HUMAN_APPROVED_PRIVATE_INACTIVE** — verdict `134_` : 1 HR APPROVE · MP4 `approved` · `active=false` · 0 fal · 0 Storage · 0 downstream · Auth consommée.
+**PHASE_11B_CLOSED_PASS_WITH_NOTES** — verdict `135_` : chaîne I2V réelle clôturée · vidéo privée inactive · attempt `started` P1 · resubmit impossible · 0 write.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
