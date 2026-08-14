@@ -78,15 +78,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-PROFESSIONAL-RECOMPOSITION-EXECUTION (`126_`)
              · **PROFESSIONAL_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING**
              · enfant `49284892` · HR seedée · 0 décision · 0 OpenAI
+             Phase 11A-PROFESSIONAL-COMPOSED-HR-APPROVE (`127_`)
+             · **PHASE_11A_PASS_WITH_HUMAN_APPROVED_PROFESSIONAL_IMAGE**
+             · enfant `49284892` · `approved` · `active=false` · 0 OpenAI
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed **249** / reserved **0** / available **25**
 Runtime AI : OFF
-Media jobs : 2 jobs image completed · 3 REJECT + 1.2.0 pending · parent pending
+Media jobs : 2 jobs image completed · 3 REJECT + 1.2.0 APPROVE inactif · parent pending
 P0         : pas de 3e OpenAI · ne pas activer les 5 assets
-P1         : preview privée temporaire 1.2.0
-P1 fermé   : execution 1.2.0 · ACCEPT_PREFLIGHT_VISUAL (contexte)
-Next major : AUTH_11A_PROFESSIONAL_COMPOSED_ASSET_PRIVATE_PREVIEW
+P1         : clôture 11A + audit roadmap média
+P1 fermé   : HR 1.2.0 APPROVE · preview 1.2.0 · execution 1.2.0
+Next major : AUTH_11A_CLOSE_AND_NEXT_MEDIA_ROADMAP_AUDIT
 ```
 
 ## P0 — fondations

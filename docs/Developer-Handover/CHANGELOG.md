@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.150] — 2026-08-14
+
+### Added (Phase 11A professional composed Human Review APPROVE)
+
+- HR APPROVE (`127_`) : asset `49284892…` · `approved` · `active=false` · décision `fb2f886c…`.
+- Delivery `merge_ready` sans merge/export/activation · 0 OpenAI · ledger 274/249/0/25.
+- Verdict **`PHASE_11A_PASS_WITH_HUMAN_APPROVED_PROFESSIONAL_IMAGE`**.
+
 ## [2.0.149] — 2026-08-14
 
 ### Added (Phase 11A professional overlay recomposition execution)
