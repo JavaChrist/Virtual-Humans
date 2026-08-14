@@ -30,7 +30,7 @@
 | Living handover | `CURRENT_STATE_AND_RESUME.md` + `check-current-state-freshness.mjs` |
 | Runtime AI | **OFF** |
 | Media jobs Production | **2** image `completed` (2 REJECT · parent pending, `119_`) |
-| OpenAI image Production path | **WIRED_DISABLED** runtime **245bea2** OFF · composed 1.0.0 + 1.1.0 HUMAN_REJECTED · 1.2.0 local (`124_`) · parent réutilisable |
+| OpenAI image Production path | **WIRED_DISABLED** runtime **245bea2** OFF · composed 1.0.0 + 1.1.0 HUMAN_REJECTED · 1.2.0 privé HR pending (`126_`) · parent conservé |
 
 - [ ] test staging contrôlé.
 
@@ -97,6 +97,7 @@
 - [x] HR composé 1.1.0 REJECT (`123_`) · **PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED** · 0 OpenAI ;
 - [x] Amélioration typo/layout 1.2.0 locale (`124_`) · **OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT** · 0 OpenAI · 0 média Production ;
 - [x] Preflight parent réel 1.2.0 (`125_`) · **PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_READY_FOR_HUMAN_VISUAL_DECISION** · 0 write · 0 OpenAI ;
+- [x] Execution 1.2.0 (`126_`) · **PROFESSIONAL_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** · 1 enfant privé · HR seedée · 0 OpenAI ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -104,7 +105,7 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : provider PASS · composed 1.0.0 + 1.1.0 HUMAN_REJECTED · composeur 1.2.0 local (`124_`) — applicatif `245bea2`
+Phase 11A média : provider PASS · composed 1.0.0 + 1.1.0 HUMAN_REJECTED · 1.2.0 privé HR pending (`126_`) — applicatif `d395ec7`
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```

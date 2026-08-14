@@ -9,7 +9,7 @@
 | Implémentation | Déterministe — livrée localement (VHS-122) |
 | Production | **0** artifact `scene_package_set` actif post-Storyboard |
 | Provider | aucun (pas d’appel AI) |
-| Suite | overlay déterministe WIRED_DISABLED ; compose 1.0.0 HUMAN_REJECTED (`119_`) ; composé 1.1.0 `4429654f…` HUMAN_REJECTED layout (`123_`) ; composeur 1.2.0 local (`124_`) ; parent réutilisable ; pas de 3ᵉ génération |
+| Suite | overlay déterministe WIRED_DISABLED ; compose 1.0.0 HUMAN_REJECTED (`119_`) ; composé 1.1.0 `4429654f…` HUMAN_REJECTED layout (`123_`) ; composeur 1.2.0 enfant `49284892…` HR pending (`126_`) ; parent conservé ; pas de 3ᵉ génération |
 
 ## Mission
 

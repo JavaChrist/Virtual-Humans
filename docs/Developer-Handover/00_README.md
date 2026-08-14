@@ -42,14 +42,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            recomposition 1.1.0 (`122_`) · HR 1.1.0 REJECT (`123_`)
                            typo/layout 1.2.0 local (`124_`)
                            preflight parent réel 1.2.0 (`125_`)
-                           · **PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_READY_FOR_HUMAN_VISUAL_DECISION**
+                           execution 1.2.0 (`126_`)
+                           · **PROFESSIONAL_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING**
 Runtime AI / paid media  : OFF · preuve 1.2.0 **d395ec7** · runtime image **245bea2**
 Budget                   : hard 274 / committed 249 / reserved 0 / available 25 ¢
-production_jobs média    : 2 jobs image completed · 3 REJECT (smoke + 1.0.0 + 1.1.0) · parent pending
-P0                       : pas de 3e OpenAI · ne pas activer les 4 assets
-P1 ouverts               : décision visuelle preview 1.2.0 (ACCEPT/REJECT)
-P1 fermé                 : preflight parent réel · typo/layout 1.2.0 · HR 1.1.0 REJECT
-Prochaine porte majeure  : ACCEPT_OR_REJECT_PREFLIGHT_VISUAL
+production_jobs média    : 2 jobs image completed · 3 REJECT + 1.2.0 pending · parent pending
+P0                       : pas de 3e OpenAI · ne pas activer les 5 assets
+P1 ouverts               : preview privée temporaire 1.2.0
+P1 fermé                 : execution 1.2.0 · ACCEPT_PREFLIGHT_VISUAL (contexte)
+Prochaine porte majeure  : AUTH_11A_PROFESSIONAL_COMPOSED_ASSET_PRIVATE_PREVIEW
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -243,6 +244,7 @@ Utilisateur → AI Video Director (/director)
 | [`123_PHASE_11A_CORRECTED_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md`](./123_PHASE_11A_CORRECTED_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md) | **11A-CORRECTED-COMPOSED-HR-REJECT · PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED** |
 | [`124_PHASE_11A_OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVEMENT.md`](./124_PHASE_11A_OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVEMENT.md) | **11A-OVERLAY-TYPO-LAYOUT · OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT** |
 | [`125_PHASE_11A_PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT.md`](./125_PHASE_11A_PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT.md) | **11A-PROFESSIONAL-PARENT-PREFLIGHT · PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_READY_FOR_HUMAN_VISUAL_DECISION** |
+| [`126_PHASE_11A_PROFESSIONAL_OVERLAY_RECOMPOSITION_EXECUTION.md`](./126_PHASE_11A_PROFESSIONAL_OVERLAY_RECOMPOSITION_EXECUTION.md) | **11A-PROFESSIONAL-RECOMPOSITION-EXECUTION · PROFESSIONAL_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

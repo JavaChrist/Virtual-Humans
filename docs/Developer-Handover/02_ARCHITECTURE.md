@@ -85,7 +85,7 @@ Chaque étape utilise une clé `projectId:revision:sceneId:stepId:attempt`. Rela
 
 ## Média image 11A (ops)
 
-Le provider image produit un visuel **sans texte**. Le copy marketing est un `ImageTextOverlaySpec` composé déterministement après ingest privé (`111_`). Runtime overlay **WIRED_DISABLED**. Human Review obligatoire. Execution (`118_`) a écrit le composed `6a2beca9…` ; HR (`119_`) l’a rejeté (glyphes). Execution (`122_`) : enfant `4429654f…` ; HR (`123_`) : **REJECT** layout malgré glyphes lisibles. Composeur local **1.2.0** (`124_`) : police vectorielle + layout professionnel, non branché sur le runtime Production `245bea2`. Parent réutilisable.
+Le provider image produit un visuel **sans texte**. Le copy marketing est un `ImageTextOverlaySpec` composé déterministement après ingest privé (`111_`). Runtime overlay **WIRED_DISABLED**. Human Review obligatoire. Execution (`118_`) a écrit le composed `6a2beca9…` ; HR (`119_`) l’a rejeté (glyphes). Execution (`122_`) : enfant `4429654f…` ; HR (`123_`) : **REJECT** layout malgré glyphes lisibles. Composeur local **1.2.0** (`124_`/`126_`) : police vectorielle + layout professionnel ; enfant `49284892…` privé inactif HR pending. Runtime Production image reste `245bea2`. Parent conservé.
 
 ## Arborescence cible indicative
 

@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.149] — 2026-08-14
+
+### Added (Phase 11A professional overlay recomposition execution)
+
+- Execution `d395ec7` (`126_`) : enfant privé `49284892…` · checksum `9ac484b7…` · HR seedée sans décision.
+- `ACCEPT_PREFLIGHT_VISUAL` = contexte seulement · 0 OpenAI · ledger 274/249/0/25.
+- Verdict **`PROFESSIONAL_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING`**.
+
 ## [2.0.148] — 2026-08-14
 
 ### Added (Phase 11A professional overlay real-parent preflight)

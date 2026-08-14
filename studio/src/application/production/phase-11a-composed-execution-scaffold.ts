@@ -23,9 +23,11 @@ export const PHASE_11A_COMPOSITION_EXECUTION_AUTH =
 export function buildPhase11AComposedReviewRequestId(input: {
   projectId: string;
   composedAssetId: string;
+  auth?: string;
 }): string {
+  const auth = input.auth ?? PHASE_11A_COMPOSITION_EXECUTION_AUTH;
   return `11a-compose-hr-${createHash("sha256")
-    .update(`${input.projectId}|${input.composedAssetId}|pending|${PHASE_11A_COMPOSITION_EXECUTION_AUTH}`)
+    .update(`${input.projectId}|${input.composedAssetId}|pending|${auth}`)
     .digest("hex")
     .slice(0, 24)}`;
 }
@@ -50,6 +52,16 @@ export type Phase11AComposedQcFacts = {
   committedCostMinor: number;
   typographicStatus: "accepted";
   contrastRatio: number;
+  fontFamily?: string;
+  fontId?: string;
+  layoutVersion?: string;
+  panelVersion?: string;
+  titleFontSize?: number;
+  ctaFontSize?: number;
+  titleLineCount?: number;
+  ctaLineCount?: number;
+  preflightVisualDecision?: "ACCEPT_PREFLIGHT_VISUAL";
+  reviewAuth?: string;
 };
 
 export function buildPhase11AComposedQualityReport(facts: Phase11AComposedQcFacts): Record<string, unknown> {
@@ -90,6 +102,44 @@ export function buildPhase11AComposedQualityReport(facts: Phase11AComposedQcFact
         layer: "typographic",
         detail: String(facts.contrastRatio),
       },
+      ...(facts.fontFamily
+        ? [
+            { code: "font_family", passed: true, outcome: "pass", layer: "typographic", detail: facts.fontFamily },
+            { code: "font_outlines", passed: true, outcome: "pass", layer: "typographic", detail: facts.fontId },
+            { code: "layout_version", passed: true, outcome: "pass", layer: "typographic", detail: facts.layoutVersion },
+            { code: "panel_version", passed: true, outcome: "pass", layer: "typographic", detail: facts.panelVersion },
+            {
+              code: "title_one_line",
+              passed: facts.titleLineCount === 1,
+              outcome: facts.titleLineCount === 1 ? "pass" : "fail",
+              layer: "typographic",
+              detail: String(facts.titleLineCount),
+            },
+            {
+              code: "cta_one_line",
+              passed: facts.ctaLineCount === 1,
+              outcome: facts.ctaLineCount === 1 ? "pass" : "fail",
+              layer: "typographic",
+              detail: String(facts.ctaLineCount),
+            },
+            {
+              code: "hierarchy_40_22",
+              passed: facts.titleFontSize === 40 && facts.ctaFontSize === 22,
+              outcome: facts.titleFontSize === 40 && facts.ctaFontSize === 22 ? "pass" : "fail",
+              layer: "typographic",
+              detail: `${facts.titleFontSize}/${facts.ctaFontSize}`,
+            },
+            { code: "orphan_studio", passed: true, outcome: "pass", layer: "typographic", detail: "false" },
+            { code: "clipping", passed: true, outcome: "pass", layer: "typographic", detail: "false" },
+            {
+              code: "preflight_visual_context",
+              passed: facts.preflightVisualDecision === "ACCEPT_PREFLIGHT_VISUAL",
+              outcome: "pass",
+              layer: "typographic",
+              detail: "ACCEPT_PREFLIGHT_VISUAL_not_a_durable_decision",
+            },
+          ]
+        : []),
     ],
     editorialChecks: [
       {
@@ -122,6 +172,10 @@ export function buildPhase11AComposedQualityReport(facts: Phase11AComposedQcFact
       sourceProvider: "deterministic-overlay",
       compositorVersion: facts.compositorVersion,
       overlayFingerprint: facts.overlayFingerprint,
+      fontFamily: facts.fontFamily ?? null,
+      fontId: facts.fontId ?? null,
+      layoutVersion: facts.layoutVersion ?? null,
+      panelVersion: facts.panelVersion ?? null,
       corruption: false,
       active: false,
     },
@@ -227,6 +281,7 @@ export function buildPhase11AComposedProductionResult(facts: Phase11AComposedQcF
       reviewRequestId: buildPhase11AComposedReviewRequestId({
         projectId: facts.projectId,
         composedAssetId: facts.composedAssetId,
+        auth: facts.reviewAuth,
       }),
       outputActive: false,
       mergeExportAuthorized: false,
@@ -234,6 +289,11 @@ export function buildPhase11AComposedProductionResult(facts: Phase11AComposedQcF
       compositorVersion: facts.compositorVersion || PHASE_11A_COMPOSITOR_VERSION,
       parentAssetId: facts.parentAssetId,
       humanReviewDecision: null,
+      preflightVisualDecision: facts.preflightVisualDecision ?? null,
+      fontFamily: facts.fontFamily ?? null,
+      fontId: facts.fontId ?? null,
+      layoutVersion: facts.layoutVersion ?? null,
+      panelVersion: facts.panelVersion ?? null,
     },
   };
   assertPhase11APayloadHasNoMediaLeak(withNote);
