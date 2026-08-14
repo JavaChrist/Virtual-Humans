@@ -136,6 +136,6 @@ Commit/push du script + docs **après** clôture. **Ne pas** redéployer le comm
 
 ## Prochaine autorisation
 
-**`AUTH_11A_CORRECTED_COMPOSED_ASSET_PRIVATE_PREVIEW`**
+**`AUTH_11A_CORRECTED_COMPOSED_ASSET_PRIVATE_PREVIEW`** — consommée.
 
-Preview privée temporaire du nouvel enfant `4429654f…`, puis décision Human Review distincte.
+Suite : [`123_PHASE_11A_CORRECTED_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md`](./123_PHASE_11A_CORRECTED_COMPOSED_ASSET_HUMAN_REVIEW_REJECT.md) · **PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED**.

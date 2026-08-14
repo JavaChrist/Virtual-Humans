@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.146] — 2026-08-14
+
+### Added (Phase 11A corrected composed Human Review REJECT)
+
+- Décision unique `rejected` sur `4429654f…` (`123_`) : motif `human.overlay_typography_layout_not_production_ready`.
+- Glyphes 1.1.0 PASS · layout FAIL · parent réutilisable · 0 OpenAI · ledger 274/249/0/25.
+- Verdict **`PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED`**.
+
 ## [2.0.145] — 2026-08-14
 
 ### Added (Phase 11A corrected existing provider asset recomposition)
