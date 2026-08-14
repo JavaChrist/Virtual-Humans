@@ -214,7 +214,7 @@ export function runFreshnessCheck(repoRoot = findRepoRoot(process.cwd())) {
     markdown,
     repoRoot,
     gitHead: gitSha(repoRoot, "HEAD"),
-    gitParent: gitSha(repoRoot, "HEAD^"),
+    gitParent: gitSha(repoRoot, "HEAD~1"),
     readme,
   });
 }

@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-14T11:50:00+02:00
-documentedHead=e4c3de3
+documentedHead=8128d9e
 headStatus=pending commit
 lastPhaseReport=113_PHASE_11A_STRIP_OVERLAY_COPY_FROM_IMAGE_VARIANT.md
 nextPhase=AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT
@@ -20,9 +20,9 @@ globalStatus=READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT
 **Dernière vérification :** 2026-08-14 11:50 Europe/Paris  
 **Auteur de la mise à jour :** Cursor · `AUTH_CREATE_CANONICAL_CURRENT_STATE_AND_RESUME`  
 **Branche :** `main`  
-**HEAD local :** `e4c3de3` (`e4c3de3279aaaefc4db46cbfac00ac9e79d298f8`)  
-**origin/main :** `e4c3de3` · ahead **0** · behind **0**  
-**Working tree à la vérification :** propre (avant ce commit docs)  
+**HEAD local :** `8128d9e` (living handover) · applicatif `e4c3de3`  
+**origin/main :** `e4c3de3` au moment de la vérif initiale · ce commit docs est le sync  
+**Working tree à la vérification :** propre après premier commit docs · `headStatus=pending commit`  
 **Environnement Production principal :** Vercel Production (alias non recopié ici) + Supabase `ejdb…nmvi` · région `eu-west-3`  
 **Commit runtime Production :** **UNVERIFIED_THIS_PHASE** (Vercel lecture non authentifiée) — ne pas confondre avec HEAD Git  
 **Index :** [`00_README.md`](./00_README.md)  
@@ -400,7 +400,7 @@ Produis un STOP avant toute nouvelle porte. Zéro OpenAI / fal / flag / deploy m
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-14 | Canon living | (cette phase) | pending | 0 | docs only | text-free preflight |
+| 2026-08-14 | Canon living | CANONICAL_CURRENT_STATE_AND_RESUME_READY | `8128d9e` | 0 | docs only | text-free preflight |
 | 2026-08-14 | `113_` strip overlay | READY_FOR_NEW_TEXT_FREE… | `e4c3de3` | 0 | code only | text-free preflight |
 | 2026-08-14 | `112_` retry preflight | BLOCKED_TEXT_LEAK | `2fb569e` / src `20e8783` | 0 | 0 write | strip overlay |
 | 2026-08-14 | `111_` harden typo | READY_FOR_TEXT_FREE… | `20e8783` | 0 | 0 write | retry preflight |
