@@ -27,7 +27,8 @@
 **existing_asset** — `GenerationInputRef.kind` pour une source hors du même run (≠ `step_output`).
 **VHS11B_FAL_I2V_DIRECTOR_EXCEPTION** — exception temporaire bornée (env homonyme, OFF, expire 2026-09-30) autorisant uniquement fal / Kling v2 Master I2V / `video.image_to_video` / projet+scène 11A ; n’active pas T2V/Motion/voice ; n’est pas `providerMode=real`.
 **Phase 11B I2V allowlist** — câblage Production (`WIRED_DISABLED`) still approuvé inactif → vidéo 5s ; estimate 140¢ / réserve 168¢ / shortfall 143¢ vs 25¢ ; QC visuel `unavailable_humanOnly` ; HR obligatoire.
-**I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT** — verdict `129_` : chemin I2V câblé et prouvé en fakes ; 0 fal ; prochaine porte live preflight sans provider.
+**I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT** — verdict `129_` : chemin I2V câblé et prouvé en fakes ; 0 fal.
+**I2V_LIVE_PREFLIGHT_NO_PROVIDER_READY_FOR_PAID_AUTH** — verdict `130_` : SHA `57de914` déployé · dry-run `insufficient_funds` · 0 fal · `PAID_EXECUTION` bloqué tant que hard < 417¢ et Auth payante manquante.
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
 **Overlay leak detector** — comparaison normalisée overlay ↔ variant/prompt ; span significatif ≥ 16 ; mot générique isolé non bloqué (`113_`).

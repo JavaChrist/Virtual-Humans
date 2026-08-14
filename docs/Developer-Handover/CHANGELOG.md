@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.153] — 2026-08-14
+
+### Added (Phase 11B I2V live preflight no provider)
+
+- Live preflight (`130_`) : SHA Production **`57de914`** · asset `49284892…` metadata only · dry-run `insufficient_funds`.
+- 0 fal · 0 URL signée · 0 média · shortfall 143¢ · `PAID_EXECUTION` bloqué.
+- Verdict **`I2V_LIVE_PREFLIGHT_NO_PROVIDER_READY_FOR_PAID_AUTH`**.
+- Prochaine porte **`AUTH_11B_I2V_BUDGET_PREP_AND_PAID_DECISION`**.
+
 ## [2.0.152] — 2026-08-14
 
 ### Added (Phase 11B I2V Production wiring preflight)

@@ -62,7 +62,7 @@ Motion MV-001 **PASS** benchmark · Registry **DISABLED**. Restore drill **PASS*
 **Pas encore :** I2V/T2V/voice/lipsync/merge-export **réels** sur `/director` ; activation de l’image ; runtime Motion Production.
 
 Pilotage courant : **`CURRENT_STATE_AND_RESUME.md`** puis **`BACKLOG_V2.md`**.  
-Prochaine porte : **`AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER`** — distincte de Motion · 0 fal.
+Prochaine porte : **`AUTH_11B_I2V_BUDGET_PREP_AND_PAID_DECISION`** — distincte de Motion · 0 fal.
 
 ## Priorités
 

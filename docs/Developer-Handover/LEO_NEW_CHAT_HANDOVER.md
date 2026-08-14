@@ -176,57 +176,33 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Le wiring 11B est **PASS** (`129_`) : `I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT`.
+Le live preflight 11B est **PASS** (`130_`) : `I2V_LIVE_PREFLIGHT_NO_PROVIDER_READY_FOR_PAID_AUTH`.
+
+`PAID_EXECUTION = BLOCKED_PENDING_BUDGET_AND_NEW_HUMAN_AUTH`
 
 Phase active suivante :
 
-`AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER`
+`AUTH_11B_I2V_BUDGET_PREP_AND_PAID_DECISION`
 
-Objectif : déployer le wiring exact, vérifier l’asset source, les gates, le pricing, le budget et le dry-run live, puis tout refermer. **0 fal**.
+Objectif : préparer le hard limit (min 417¢, recommandé 437¢) et une décision humaine distincte **avant** tout smoke I2V payant. **0 fal**.
 
-Le prompt exige notamment :
-
-- un contrat générique `ExistingMediaAssetReference` ;
-- une référence explicite à l’asset approuvé `49284892…` ;
-- aucune activation de cet asset ;
-- capability canonique I2V, distincte de Motion/T2V/legacy ;
-- audit des adapters fal/Runway existants ;
-- Registry/Router/GenerationPlan single-step ;
-- worker async durable, polling sans resubmit ;
-- resolver média call-time sans URL persistée ;
-- ingest privé ;
-- QC vidéo honnête ;
-- Human Review obligatoire ;
-- max futur 1 appel / 1 job / 1 output ;
-- fallbacks/retry/downstream OFF ;
-- flags OFF ;
-- 0 fal, 0 provider, 0 lecture média Production, 0 budget write ;
-- rapport `129_PHASE_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT.md` ;
-- mise à jour obligatoire de `CURRENT_STATE_AND_RESUME.md`.
-
-Verdict attendu si le câblage aboutit :
-
-`I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT`
-
-Sinon :
-
-`BLOCKED_I2V_PRODUCTION_WIRING`
+Le wiring `57de914` est déployé. L’asset `49284892…` est `approved` / `active=false` (métadonnées seulement). Shortfall Kling **143¢** vs 25¢. Flags OFF.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_I2V_BUDGET_PREP_AND_PAID_DECISION`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si le wiring 11B est PASS, la porte suivante probable sera :
+Si le live preflight 11B est PASS, la porte suivante probable sera :
 
-`AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER`
+`AUTH_11B_I2V_BUDGET_PREP_AND_PAID_DECISION`
 
-Cette porte devra rester sans provider, vérifier le déploiement exact, l’asset source, les gates, le pricing, le budget et le dry-run live, puis tout refermer.
+Cette porte devra rester sans fal tant que le hard limit n’est pas relevé et qu’une Auth payante distincte n’est pas émise.
 
-Un appel I2V payant ne pourra être autorisé qu’après ce live preflight et une nouvelle autorisation humaine explicite.
+Un appel I2V payant ne pourra être autorisé qu’après cette préparation budgétaire et une nouvelle autorisation humaine explicite.
 
 ## Format obligatoire des futurs prompts Cursor
 
@@ -248,4 +224,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER`. Le wiring 11B est PASS (`129_`). Aucun fal.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_I2V_BUDGET_PREP_AND_PAID_DECISION`. Le live preflight 11B est PASS (`130_`). Shortfall 143¢. Aucun fal.
