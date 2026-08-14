@@ -38,7 +38,7 @@ interface ProviderAdapter {
 
 Résoudre l'adaptateur autorisé, transformer l'entrée canonique, transférer les assets par URLs signées, appliquer timeout, normaliser erreurs et résultats, persister références externes, émettre métriques et nettoyer les fichiers temporaires.
 
-Le chemin image 11A n’envoie pas les chaînes overlay au provider (`phase-11a-image-prompt-v2`). Le variant image est uniquement visuel (`113_`). La typographie est un dérivé déterministe post-ingest, pas une responsabilité du modèle (`111_`). `decodeRgbPng` e4c3de3 n’accepte que le filtre PNG 0 — un PNG OpenAI réel peut échouer (`115_`).
+Le chemin image 11A n’envoie pas les chaînes overlay au provider (`phase-11a-image-prompt-v2`). Le variant image est uniquement visuel (`113_`). La typographie est un dérivé déterministe post-ingest, pas une responsabilité du modèle (`111_`). `decodeRgbPng` supporte les filtres PNG 0–4 (`116_`) ; le runtime Production e4c3de3 n’inclut pas encore ce correctif. L’asset `7832765d…` n’est pas composé.
 
 ## Taxonomie d'erreurs
 

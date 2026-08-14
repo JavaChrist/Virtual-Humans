@@ -35,12 +35,13 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            preflight retry text-free (`112_`) · **BLOCKED_TEXT_LEAK** (historique)
                            strip overlay copy (`113_`) · preflight live (`114_`)
                            paid text-free (`115_`) · **COMPOSITOR_FAILED_NO_RETRY**
-Runtime AI / paid media  : OFF · runtime Production **e4c3de3**
+                           PNG decoder 0–4 (`116_`) · **READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT**
+Runtime AI / paid media  : OFF · runtime Production **e4c3de3** (nouveau SHA Git ≠ runtime tant que non promu)
 Budget                   : hard 274 / committed 249 / reserved 0 / available 25 ¢
-production_jobs média    : 2 jobs image completed · 1 REJECT · 1 pending_review
-P0                       : pas de 3e OpenAI · ne pas activer les 2 assets
-P1 ouverts               : compose-only après filtres PNG
-P1 fermé                 : paid text-free 1 submit · preflight live · strip overlay
+production_jobs média    : 2 jobs image completed · 1 REJECT · 1 pending_review · 0 composed
+P0                       : pas de 3e OpenAI · ne pas activer les 2 assets · ne pas composer sans Auth
+P1 ouverts               : preflight/compose de `7832765d…`
+P1 fermé                 : decode PNG filtres 0–4 · paid text-free 1 submit
 Prochaine porte majeure  : AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
@@ -225,6 +226,7 @@ Utilisateur → AI Video Director (/director)
 | [`113_PHASE_11A_STRIP_OVERLAY_COPY_FROM_IMAGE_VARIANT.md`](./113_PHASE_11A_STRIP_OVERLAY_COPY_FROM_IMAGE_VARIANT.md) | **11A-STRIP-OVERLAY-COPY · READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT** |
 | [`114_PHASE_11A_TEXT_FREE_IMAGE_RETRY_LIVE_PREFLIGHT.md`](./114_PHASE_11A_TEXT_FREE_IMAGE_RETRY_LIVE_PREFLIGHT.md) | **11A-TEXT-FREE-RETRY-LIVE-PREFLIGHT · READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH** |
 | [`115_PHASE_11A_TEXT_FREE_IMAGE_PAID_GENERATION.md`](./115_PHASE_11A_TEXT_FREE_IMAGE_PAID_GENERATION.md) | **11A-TEXT-FREE-PAID · COMPOSITOR_FAILED_NO_RETRY** |
+| [`116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md`](./116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md) | **11A-PNG-FILTER-DECODER · READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

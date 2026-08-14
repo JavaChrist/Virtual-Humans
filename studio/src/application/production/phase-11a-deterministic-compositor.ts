@@ -1,6 +1,7 @@
 /**
  * Phase 11A — deterministic typographic compositor (local bitmap font).
  * Does not call providers, download fonts, or mutate overlay strings.
+ * Provider PNG decode supports filters 0–4; composed output is filter-0 RGB8.
  */
 
 import {

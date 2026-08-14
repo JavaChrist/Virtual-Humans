@@ -149,6 +149,12 @@ Commit documentaire : **ne pas** redéployer.
 
 **P1 :** décoder les filtres PNG standard dans `decodeRgbPng` puis composer **l’asset existant** (Auth dédiée, 0 OpenAI) ; refermer le run `39329a01` `running`→terminal `needs_review` ; chemin Storage 6-seg `provider/` encore non câblé dans le worker e4c3de3.
 
+## 37. Suivi `116_` (ne réécrit pas ce snapshot)
+
+Le décodeur PNG filtres **0–4** est livré dans [`116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md`](./116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md).  
+Ce rapport `115_` reste le snapshot **COMPOSITOR_FAILED_NO_RETRY**.  
+L’asset `7832765d…` n’a **pas** été relu ni composé. Prochaine Auth : `AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS`.
+
 ## 36. Prochaine décision humaine
 
 1. Examiner l’image provider `7832765d…` (privée, inactive) — **sans** overlay déterministe.  

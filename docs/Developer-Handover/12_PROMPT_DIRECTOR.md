@@ -9,7 +9,7 @@
 | Implémentation | Déterministe — livrée localement (VHS-122) |
 | Production | **0** artifact `scene_package_set` actif post-Storyboard |
 | Provider | aucun (pas d’appel AI) |
-| Suite | overlay déterministe WIRED_DISABLED ; set no-text persisté (`115_`) ; compose FAIL filtre PNG ; pas de 3ᵉ génération |
+| Suite | overlay déterministe WIRED_DISABLED ; set no-text persisté (`115_`) ; decode PNG 0–4 (`116_`) ; 0 composed ; pas de 3ᵉ génération |
 
 ## Mission
 

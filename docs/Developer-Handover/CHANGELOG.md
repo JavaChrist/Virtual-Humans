@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.139] — 2026-08-14
+
+### Added (Phase 11A PNG filter decoder hardening)
+
+- `decodeRgbPng` : filtres PNG 0–4 (None/Sub/Up/Average/Paeth) + limites fail-closed (`116_`).
+- Fixtures synthétiques · dry-run local · preflight compose **préparé non exécuté**.
+- 0 provider · 0 lecture/écriture média Production · verdict **`READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT`**.
+
 ## [2.0.138] — 2026-08-14
 
 ### Added (Phase 11A text-free paid generation)
