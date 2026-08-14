@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.157] — 2026-08-15
+
+### Added (Phase 11B I2V Human Review APPROVE)
+
+- Décision Human Review APPROVE unique (`134_`) sur `9be6cb0c…` : `approved` · `active=false`.
+- Replay idempotent · optimistic lock · 0 fal · 0 Storage · budget **437 / 389 / 0 / 48**.
+- Settlement I2V toujours **provisional 140¢**. Attempt `started` documentée, non corrigée.
+- Verdict **`I2V_FIRST_PAID_VIDEO_HUMAN_APPROVED_PRIVATE_INACTIVE`**.
+- Prochaine porte **`AUTH_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`**.
+
 ## [2.0.156] — 2026-08-15
 
 ### Added (Phase 11B I2V first paid single execution)
