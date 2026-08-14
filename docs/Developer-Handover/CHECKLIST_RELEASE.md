@@ -104,6 +104,7 @@
 - [x] Live preflight I2V no provider (`130_`) · **I2V_LIVE_PREFLIGHT_NO_PROVIDER_READY_FOR_PAID_AUTH** · 0 fal ;
 - [x] Hard limit I2V 437¢ (`131_`) · **I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED** · 0 réserve · 0 fal ;
 - [x] Paid smoke final preflight I2V (`132_`) · **I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH** · 0 fal ;
+- [x] First paid I2V (`133_`) · **I2V_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** · 1 fal · HR pending · flags OFF ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -112,7 +113,7 @@
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
-I2V `/director` : **WIRED_DISABLED** · hard **437¢** · preflight READY (`132_`) · `57de914` · 0 fal
+I2V `/director` : HTTP **WIRED_DISABLED** · smoke réel HR pending (`133_`) · `8c50b35` · 1 fal · flags OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

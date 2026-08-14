@@ -54,13 +54,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED**
                            I2V paid smoke final preflight (`132_`)
                            · **I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH**
+                           I2V first paid single execution (`133_`)
+                           · **I2V_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING**
 Runtime AI / paid media  : OFF · wiring I2V **57de914** · preuve 1.2.0 **d395ec7** · runtime image **245bea2**
-Budget                   : hard 437 / committed 249 / reserved 0 / available 188 ¢
-production_jobs média    : 2 jobs image completed · 3 REJECT + 1.2.0 APPROVE inactif · parent pending
-P0                       : pas de 3e OpenAI · ne pas activer les 5 assets · 0 fal
-P1 ouverts               : first paid single execution I2V
-P1 fermé                 : paid preflight · hard 437¢ · live preflight I2V · wiring I2V
-Prochaine porte majeure  : AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION
+Budget                   : hard 437 / committed 389 / reserved 0 / available 48 ¢
+production_jobs média    : 2 image + 1 I2V completed · 1 MP4 pending_review inactif
+P0                       : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit fal
+P1 ouverts               : preview privée + décision humaine I2V
+P1 fermé                 : first paid I2V · paid preflight · hard 437¢ · live preflight · wiring
+Prochaine porte majeure  : AUTH_11B_I2V_PRIVATE_PREVIEW_AND_HUMAN_DECISION
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -261,6 +263,7 @@ Utilisateur → AI Video Director (/director)
 | [`130_PHASE_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER.md`](./130_PHASE_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER.md) | **11B-I2V-LIVE-PREFLIGHT · I2V_LIVE_PREFLIGHT_NO_PROVIDER_READY_FOR_PAID_AUTH** |
 | [`131_PHASE_11B_I2V_BUDGET_HARD_LIMIT_437.md`](./131_PHASE_11B_I2V_BUDGET_HARD_LIMIT_437.md) | **11B-I2V-HARD-437 · I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED** |
 | [`132_PHASE_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT.md`](./132_PHASE_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT.md) | **11B-I2V-PAID-PREFLIGHT · I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH** |
+| [`133_PHASE_11B_I2V_FIRST_PAID_SINGLE_EXECUTION.md`](./133_PHASE_11B_I2V_FIRST_PAID_SINGLE_EXECUTION.md) | **11B-I2V-FIRST-PAID · I2V_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

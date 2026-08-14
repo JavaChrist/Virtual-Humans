@@ -56,13 +56,13 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | MT-013E | MV-001 budget hard limit | **DONE** (`83_`) · hard 174 · available 62¢ · pas de réservation |
 | MT-013F… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · **PAID NOT AUTHORIZED** |
 
-**État 14 août 2026 :** Phase 11A **CLOSED** (`128_`) · I2V **WIRED_DISABLED** (`129_`) · still `49284892…` APPROVE inactif.  
+**État 15 août 2026 :** Phase 11A **CLOSED** (`128_`) · I2V smoke réel **HR pending** (`133_`) · still `49284892…` + vidéo `9be6cb0c…` inactifs.  
 Motion MV-001 **PASS** benchmark · Registry **DISABLED**. Restore drill **PASS** (`78_`).
 
 **Pas encore :** I2V/T2V/voice/lipsync/merge-export **réels** sur `/director` ; activation de l’image ; runtime Motion Production.
 
 Pilotage courant : **`CURRENT_STATE_AND_RESUME.md`** puis **`BACKLOG_V2.md`**.  
-Prochaine porte : **`AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION`** — distincte de Motion · Auth fal obligatoire.
+Prochaine porte : **`AUTH_11B_I2V_PRIVATE_PREVIEW_AND_HUMAN_DECISION`** — preview privée + décision · 0 second submit · 0 activation auto.
 
 ## Priorités
 

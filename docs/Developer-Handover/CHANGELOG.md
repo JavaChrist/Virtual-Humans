@@ -2,6 +2,17 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.156] — 2026-08-15
+
+### Added (Phase 11B I2V first paid single execution)
+
+- Première exécution I2V payante unique (`133_`) : 1 réserve 168¢ · 1 submit fal · 1 MP4 privé.
+- Settlement provisional **140¢** · budget **437 / 389 / 0 / 48**.
+- Asset `9be6cb0c…` `pending_review` · `active=false` · HR pending · 0 décision.
+- Flags ouverts puis refermés dans `finally`. Auth consommée.
+- Verdict **`I2V_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING`**.
+- Prochaine porte **`AUTH_11B_I2V_PRIVATE_PREVIEW_AND_HUMAN_DECISION`**.
+
 ## [2.0.155] — 2026-08-14
 
 ### Added (Phase 11B I2V paid smoke final preflight)

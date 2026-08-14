@@ -31,6 +31,7 @@
 **I2V_LIVE_PREFLIGHT_NO_PROVIDER_READY_FOR_PAID_AUTH** — verdict `130_` : SHA `57de914` déployé · dry-run `insufficient_funds` · 0 fal.
 **I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED** — verdict `131_` : hard **437¢** · committed 249 · reserved 0 · available 188 · 0 réserve I2V · 0 fal · smoke toujours interdit sans Auth distincte.
 **I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH** — verdict `132_` : budget théoriquement suffisant · 0 réserve · 0 fal · `EXECUTION_AUTHORIZED=false` · prochaine Auth = first paid single execution.
+**I2V_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** — verdict `133_` : 1 fal · 1 MP4 privé inactif · QC humanOnly · HR pending · 0 décision · Auth consommée · 0 second submit.
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
 **Overlay leak detector** — comparaison normalisée overlay ↔ variant/prompt ; span significatif ≥ 16 ; mot générique isolé non bloqué (`113_`).
