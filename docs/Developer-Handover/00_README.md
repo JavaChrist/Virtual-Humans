@@ -46,13 +46,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            HR 1.2.0 APPROVE (`127_`)
                            clôture 11A + roadmap (`128_`)
                            · **PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED**
+                           I2V wiring preflight (`129_`)
+                           · **I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT**
 Runtime AI / paid media  : OFF · preuve 1.2.0 **d395ec7** · runtime image **245bea2**
 Budget                   : hard 274 / committed 249 / reserved 0 / available 25 ¢
 production_jobs média    : 2 jobs image completed · 3 REJECT + 1.2.0 APPROVE inactif · parent pending
 P0                       : pas de 3e OpenAI · ne pas activer les 5 assets · 0 fal
-P1 ouverts               : I2V `/director` wiring preflight
-P1 fermé                 : clôture 11A · HR 1.2.0 APPROVE
-Prochaine porte majeure  : AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT
+P1 ouverts               : I2V live preflight no provider
+P1 fermé                 : wiring I2V WIRED_DISABLED · clôture 11A · HR 1.2.0 APPROVE
+Prochaine porte majeure  : AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -249,6 +251,7 @@ Utilisateur → AI Video Director (/director)
 | [`126_PHASE_11A_PROFESSIONAL_OVERLAY_RECOMPOSITION_EXECUTION.md`](./126_PHASE_11A_PROFESSIONAL_OVERLAY_RECOMPOSITION_EXECUTION.md) | **11A-PROFESSIONAL-RECOMPOSITION-EXECUTION · PROFESSIONAL_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** |
 | [`127_PHASE_11A_PROFESSIONAL_COMPOSED_ASSET_HUMAN_REVIEW_APPROVE.md`](./127_PHASE_11A_PROFESSIONAL_COMPOSED_ASSET_HUMAN_REVIEW_APPROVE.md) | **11A-PROFESSIONAL-COMPOSED-HR-APPROVE · PHASE_11A_PASS_WITH_HUMAN_APPROVED_PROFESSIONAL_IMAGE** |
 | [`128_PHASE_11A_CLOSE_AND_NEXT_MEDIA_ROADMAP_AUDIT.md`](./128_PHASE_11A_CLOSE_AND_NEXT_MEDIA_ROADMAP_AUDIT.md) | **11A-CLOSE-ROADMAP · PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED** |
+| [`129_PHASE_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT.md`](./129_PHASE_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT.md) | **11B-I2V-WIRING · I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

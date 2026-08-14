@@ -22,7 +22,12 @@
 **vhs-overlay-latin-vector-v1** — police vectorielle géométrique originale (`original-work-in-repo`) du composeur `phase-11a-vector-compositor-1.2.0` ; layout `phase-11a-overlay-layout-1.2.0` ; fail-closed ; pas de fonte système (`124_`).
 **ACCEPT_PREFLIGHT_VISUAL** — jugement visuel humain du preflight 1.2.0 autorisant l’écriture d’un enfant privé ; **≠** `APPROVE` dans `human_review_decisions` (`125_`/`126_`/`127_`).
 **human.professional_overlay_visual_approved** — motif HR 1.2.0 : rendu professionnel validé (titre/CTA/accents/hiérarchie/contraste) ; asset `approved` mais `active=false` (`127_`).
-**PHASE_11A_CLOSED** — clôture formelle 11A (`128_`) : `PASS_WITH_NOTES` · ≠ enablement Paid Media · prochaine porte I2V wiring preflight.
+**PHASE_11A_CLOSED** — clôture formelle 11A (`128_`) : `PASS_WITH_NOTES` · ≠ enablement Paid Media.
+**ExistingMediaAssetReference** — contrat versionné inter-run (`existing-media-asset-reference-1.0.0`) : asset approuvé privé référencé explicitement (checksum/MIME/dims/HR) sans URL ni base64 ; `active=false` autorisé ; résolution Storage call-time seulement (`129_`).
+**existing_asset** — `GenerationInputRef.kind` pour une source hors du même run (≠ `step_output`).
+**VHS11B_FAL_I2V_DIRECTOR_EXCEPTION** — exception temporaire bornée (env homonyme, OFF, expire 2026-09-30) autorisant uniquement fal / Kling v2 Master I2V / `video.image_to_video` / projet+scène 11A ; n’active pas T2V/Motion/voice ; n’est pas `providerMode=real`.
+**Phase 11B I2V allowlist** — câblage Production (`WIRED_DISABLED`) still approuvé inactif → vidéo 5s ; estimate 140¢ / réserve 168¢ / shortfall 143¢ vs 25¢ ; QC visuel `unavailable_humanOnly` ; HR obligatoire.
+**I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT** — verdict `129_` : chemin I2V câblé et prouvé en fakes ; 0 fal ; prochaine porte live preflight sans provider.
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
 **Overlay leak detector** — comparaison normalisée overlay ↔ variant/prompt ; span significatif ≥ 16 ; mot générique isolé non bloqué (`113_`).

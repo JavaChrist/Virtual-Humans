@@ -14,3 +14,4 @@ export * from "./registry";
 export * from "./schemas";
 export * from "./validation";
 export * from "./dry-run";
+export * from "./fal-kling-i2v-registry-profile";

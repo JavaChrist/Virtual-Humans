@@ -13,3 +13,4 @@ export * from "./validation";
 export * from "./schemas";
 export * from "./motion-transfer-media";
 export * from "./motion-transfer-prepare";
+export * from "./existing-media-asset-reference";

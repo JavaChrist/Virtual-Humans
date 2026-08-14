@@ -84,15 +84,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-CLOSE-ROADMAP (`128_`)
              · **PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED**
              · PHASE_11A = PASS_WITH_NOTES · next = I2V wiring
+             Phase 11B-I2V-WIRING (`129_`)
+             · **I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT**
+             · Kling allowlist OFF · 0 fal · existing_asset
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed **249** / reserved **0** / available **25**
 Runtime AI : OFF
 Media jobs : 2 jobs image completed · 3 REJECT + 1.2.0 APPROVE inactif · parent pending
 P0         : pas de 3e OpenAI · ne pas activer les 5 assets · 0 fal
-P1         : I2V `/director` wiring preflight
-P1 fermé   : clôture 11A · HR 1.2.0 APPROVE
-Next major : AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT
+P1         : I2V live preflight no provider
+P1 fermé   : wiring I2V WIRED_DISABLED · clôture 11A · HR 1.2.0 APPROVE
+Next major : AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER
 ```
 
 ## P0 — fondations
@@ -152,7 +155,7 @@ Next major : AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
 - **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · paid (`115_`) · decode PNG 0–4 (`116_`) · compose (`118_`) · composed HR REJECT (`119_`) · glyphes (`120_`) · preflight 1.1.0 (`121_`) · recomposition 1.1.0 (`122_`) · HR 1.1.0 REJECT (`123_`) **PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED**.
 - **P1 budget** : hard **274** ; committed **249** ; reserved **0** ; available **25**.
-- **Prochaine porte majeure** : Auth **`AUTH_11A_IMPROVE_OVERLAY_TYPOGRAPHY_LAYOUT_NO_PROVIDER_NO_PRODUCTION_MEDIA`** — fixtures synthétiques, 0 Production. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Prochaine porte majeure** : Auth **`AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER`** — dry-run live sans fal. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

@@ -18,6 +18,12 @@ export {
   resolveDirectorProviderAdapters,
 } from "./vhs124-openai-image-exception";
 export {
+  createVhs11BAllowlistedFalI2vAdapter,
+  createVhs11BScopedGenerationEngine,
+  resolveDirectorI2vProviderAdapters,
+  runPhase11BI2vAdapterContractSuite,
+} from "./vhs11b-fal-i2v-exception";
+export {
   FAKE_MOTION_TRANSFER_MODEL_ID,
   FAKE_MOTION_TRANSFER_PROVIDER_ID,
   FAL_KLING_MOTION_CONTROL_ADAPTER_VERSION,

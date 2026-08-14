@@ -138,7 +138,11 @@ export function buildCanonicalInput(input: {
       };
     case "video": {
       const start = command.resolvedInputs.find(
-        (r) => r.role === "start_frame" || r.asset.kind === "image" || r.fromStepId,
+        (r) =>
+          r.role === "start_frame" ||
+          r.role === "i2v_start_frame" ||
+          r.asset.kind === "image" ||
+          r.fromStepId,
       );
       return {
         ...common,

@@ -38,7 +38,7 @@ interface ProviderAdapter {
 
 Résoudre l'adaptateur autorisé, transformer l'entrée canonique, transférer les assets par URLs signées, appliquer timeout, normaliser erreurs et résultats, persister références externes, émettre métriques et nettoyer les fichiers temporaires.
 
-Le chemin image 11A n’envoie pas les chaînes overlay au provider (`phase-11a-image-prompt-v2`). Le variant image est uniquement visuel (`113_`). La typographie est un dérivé déterministe post-ingest (`111_`). Runtime Production **`245bea2`** (1.1.0). Preuve composeur **1.2.0** = `d395ec7`. Execution (`126_`) / HR (`127_`) : composed 1.2.0 `49284892…` **HUMAN_APPROVED** inactif · checksum `9ac484b7…`. Clôture (`128_`) : 11A CLOSED · I2V fal **non branché** sur `/director` (fakes + exception image seulement). Execution (`118_`) : composed `6a2beca9…` REJECT glyphes. Execution (`122_`) / HR (`123_`) : composé 1.1.0 `4429654f…` REJECT layout · parent `7832765d…` conservé.
+Le chemin image 11A n’envoie pas les chaînes overlay au provider (`phase-11a-image-prompt-v2`). Le variant image est uniquement visuel (`113_`). La typographie est un dérivé déterministe post-ingest (`111_`). Runtime Production **`245bea2`** (1.1.0). Preuve composeur **1.2.0** = `d395ec7`. Execution (`126_`) / HR (`127_`) : composed 1.2.0 `49284892…` **HUMAN_APPROVED** inactif · checksum `9ac484b7…`. Clôture (`128_`) : 11A CLOSED. Wiring I2V (`129_`) : wrapper `vhs11b-fal-i2v-exception` autour de `createFalAdapter` · défaut fakes · exception OFF · pas de lecture de clé. Execution (`118_`) : composed `6a2beca9…` REJECT glyphes. Execution (`122_`) / HR (`123_`) : composé 1.1.0 `4429654f…` REJECT layout · parent `7832765d…` conservé.
 
 ## Taxonomie d'erreurs
 

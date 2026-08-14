@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.152] — 2026-08-14
+
+### Added (Phase 11B I2V Production wiring preflight)
+
+- Câblage I2V `/director` (`129_`) : `ExistingMediaAssetReference` · plan Kling 5s · worker/poll/ingest/QC/HR **WIRED_DISABLED**.
+- 0 fal · 0 URL signée · 0 média Production · asset `49284892…` inactif.
+- Verdict **`I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT`**.
+- Prochaine porte **`AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER`**.
+
 ## [2.0.151] — 2026-08-14
 
 ### Added (Phase 11A close and next media roadmap)

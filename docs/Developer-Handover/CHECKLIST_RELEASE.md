@@ -100,6 +100,7 @@
 - [x] Execution 1.2.0 (`126_`) · **PROFESSIONAL_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** · 1 enfant privé · HR seedée · 0 OpenAI ;
 - [x] HR composé 1.2.0 APPROVE (`127_`) · **PHASE_11A_PASS_WITH_HUMAN_APPROVED_PROFESSIONAL_IMAGE** · `active=false` · 0 OpenAI ;
 - [x] Clôture 11A + roadmap (`128_`) · **PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED** · next = I2V wiring preflight ;
+- [x] Wiring I2V `/director` (`129_`) · **I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT** · 0 fal ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -108,8 +109,10 @@
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
+I2V `/director` : **WIRED_DISABLED** (`129_`) · Kling allowlist OFF · 0 fal
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
+Registry I2V Production : DISABLED
 ```
 
 **Pas** : asset activé · 2e OpenAI · MV-002 exécuté · Registry Motion activé.

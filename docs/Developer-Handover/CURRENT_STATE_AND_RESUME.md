@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-14T20:20:00+02:00
-documentedHead=3641c79
+verifiedAt=2026-08-14T20:45:00+02:00
+documentedHead=ca98f29
 headStatus=pending commit
-lastPhaseReport=128_PHASE_11A_CLOSE_AND_NEXT_MEDIA_ROADMAP_AUDIT.md
-nextPhase=AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT
+lastPhaseReport=129_PHASE_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT.md
+nextPhase=AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER
 budgetHard=274
 budgetCommitted=249
 budgetReserved=0
 budgetAvailable=25
 runtimePaidMedia=OFF
-unitTests=1628/1628
-globalStatus=PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED
+unitTests=1650/1650
+globalStatus=I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED`  
-**Dernière vérification :** 2026-08-14 20:20 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11A_CLOSE_AND_NEXT_MEDIA_ROADMAP_AUDIT`  
+**Statut global :** `I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT`  
+**Dernière vérification :** 2026-08-14 20:45 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT`  
 **Branche :** `main`  
-**HEAD local :** docs à venir · source 1.2.0 **`d395ec7`**  
-**origin/main :** `3641c79` avant ce commit  
+**HEAD local :** `ca98f29` avant ce commit · source 1.2.0 **`d395ec7`**  
+**origin/main :** `ca98f29` avant ce commit  
 **Working tree à la vérification :** `headStatus=pending commit`  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** (1.1.0 en Production) · preuve composeur 1.2.0 = **`d395ec7`**  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`128_PHASE_11A_CLOSE_AND_NEXT_MEDIA_ROADMAP_AUDIT.md`](./128_PHASE_11A_CLOSE_AND_NEXT_MEDIA_ROADMAP_AUDIT.md)  
-**Prochaine phase exacte :** `AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT`
+**Dernier rapport de phase :** [`129_PHASE_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT.md`](./129_PHASE_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT.md)  
+**Prochaine phase exacte :** `AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -63,9 +63,10 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | OpenAI Image `/director` | **11A CLOSED** · PASS_WITH_NOTES · 1.2.0 **HUMAN_APPROVED** inactif | 2 appels · enfant `49284892…` privé |
 | Overlay typographique | **WIRED_DISABLED** · 1.2.0 **HUMAN_APPROVED** privé inactif | checksum `9ac484b7…` · décision `fb2f886c…` |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
-| I2V / T2V / voice / lipsync / merge-export réels | **PREPARED** · I2V = prochaine porte wiring | pas de smoke vidéo `/director` |
-| Production runtime flags | **OFF** | Paid Media / VHS-124 / Motion / Director Paid AI |
-| Prochaine étape | **PREPARED** | `AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT` · 0 fal |
+| I2V `/director` | **WIRED_DISABLED** · prêt live preflight | fakes 11B · 0 fal · 0 URL signée |
+| T2V / voice / lipsync / merge-export réels | **PREPARED** · hors 11B | pas de smoke |
+| Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / Motion / Director Paid AI |
+| Prochaine étape | **PREPARED** | `AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER` · 0 fal |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -77,7 +78,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 |---|---|---|---|
 | `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | **30/30** alignées · hard **274** / committed **248** / reserved **0** / available **26** | ce fichier prime ; `17_` stale |
 | `19_DEPLOYMENT.md` checkpoint 11 août | 0 job média · MT-005 NOT APPLIED · budget 122 | jobs `1 completed + 1 failed` · MT-005 **appliquée** · budget 274 | ce fichier prime |
-| `BACKLOG_V2.md` §P1 bas de liste | prochaine porte clôture 11A | portes `113_`–`128_` · next = I2V wiring preflight | corrigé dans cette phase |
+| `BACKLOG_V2.md` §P1 bas de liste | prochaine porte clôture 11A | portes `113_`–`129_` · next = I2V live preflight no provider | corrigé dans cette phase |
 | Vercel Production SHA | souvent égalé à HEAD | runtime **60cc335** OFF `fs4ephi9l-…` · HEAD Git peut devenir docs | ne pas promouvoir le commit docs |
 | pgTAP 378 / intégration 33 | présentés comme courants dans `17_` | **historiques** post-10A (11 août) · non relancés le 14 août | datés ci-dessous |
 
@@ -97,14 +98,14 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Storyboard Director | PASS_REAL | 10F-V4 | 1 appel v4 | OpenAI texte | 5 | flags OFF | ne pas relancer |
 | Prompt Director | PASS_SYNTHETIC + correctif 11A | `113_`/`115_` | set no-text `2e8e9e6f` persisté | — | 0 | — | ne pas rejouer |
 | Router | PASS_SYNTHETIC | 9 / 11A plan | fakes + plan single-step | — | 0 | text_motion Registry | rester borné 11A |
-| Generation Engine | WIRED_DISABLED | `102_`–`128_` | 11A CLOSED · 1.2.0 HUMAN_APPROVED inactif | OpenAI Image | 2 | I2V `/director` non câblé | wiring I2V |
+| Generation Engine | WIRED_DISABLED | `102_`–`129_` | 11A CLOSED · I2V path wired disabled | OpenAI Image + fal Kling (off) | 2 image · 0 I2V | live preflight no provider | ne pas appeler fal |
 | Production queue/worker | PASS_REAL borné | `108_` + `115_` | 2 jobs image completed | — | inclus 2 | worker OFF | ne pas cron |
 | Ledger | PASS_REAL | `109_` + `115_` | 2×1¢ provisional soldés | — | 249 committed | — | pas de 3ᵉ réserve image |
-| Storage / assets | PASS_REAL | `108_`–`127_` | 5 PNG privés inactifs | Supabase Storage | 0 extra | ni réemploi ni activation | I2V ingest vidéo à câbler |
-| QC | PASS_REAL technique image | `110_`/`127_` | PNG/checksum ; visuel humanOnly | — | 0 | OCR / QC vidéo absents | I2V |
-| Human Review | PASS_REAL | `110_`/`119_`/`123_`/`127_` image · `97_` Motion | 4 image + 1 Motion | — | 0 | 1.2.0 APPROVE inactif | HR I2V à définir |
+| Storage / assets | PASS_REAL image · I2V path préparé | `108_`–`129_` | 5 PNG privés inactifs · path vidéo I2V contrat | Supabase Storage | 0 extra | ni réemploi ni activation · 0 write 11B | live preflight |
+| QC | PASS_REAL image · I2V technique câblé | `110_`/`127_`/`129_` | PNG/checksum ; I2V visuel humanOnly | — | 0 | OCR / probe vidéo absents | humanOnly |
+| Human Review | PASS_REAL image · I2V handoff local | `110_`/`119_`/`123_`/`127_`/`129_` | 4 image + 1 Motion · 0 session I2V | — | 0 | 1.2.0 APPROVE inactif | 0 HR Production 11B |
 | OpenAI Image | **11A CLOSED** PASS_WITH_NOTES | `115_`–`128_` | enfant `49284892…` APPROVE inactif | `gpt-image-1` | 2 | 0 3ᵉ appel | pas d’activation |
-| Vidéo I2V/T2V | PREPARED | 9 / VHS-124 | fakes | fal (préparé) | 0 `/director` | VHS-124 | hors 11A |
+| Vidéo I2V | **WIRED_DISABLED** | `129_` | Kling allowlist + fakes | fal Kling I2V | 0 `/director` | flags OFF · shortfall 143¢ | live preflight no provider |
 | Voice | PREPARED | legacy route | adapter ElevenLabs | ElevenLabs | 0 `/director` | pas de smoke V2 | DEFERRED |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
 | Merge / export | PASS_SYNTHETIC | 9 | fake-merge gated | — | 0 | pas de média réel | avant Production |
@@ -148,8 +149,8 @@ Prompt Director ne rejoue **aucun** Director texte pour 11A.
 
 ## 6. Phase 11A OpenAI Image
 
-**Dernier STOP (`128_`) :** `PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED`  
-Phase 11A **CLOSE** · `PHASE_11A = PASS_WITH_NOTES`. Auth `127_` APPROVE **consommée**. Prochaine porte **11B I2V wiring preflight** — **non démarrée**.
+**Dernier STOP (`129_`) :** `I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT`  
+Phase 11A **CLOSE** · `PASS_WITH_NOTES`. Auth 11B wiring **consommée**. Prochaine porte **I2V live preflight no provider** — **non démarrée**. Asset `49284892…` **non lu / non signé / non activé**.
 
 | Fait | Valeur |
 |---|---|
@@ -216,7 +217,7 @@ Vérifié live Supabase **2026-08-14** (lecture seule).
 | DB integration | **33/33** historique 11 août — **N/A** le 14 août (Docker absent, `113_`) |
 | Dernier reset local | baseline post-10A (historique) |
 | LOCAL_ONLY | aucune migration locale non appliquée distante à cette vérif |
-| Ops distantes récentes | `128_` lecture seule · 0 write · 0 OpenAI · flags OFF |
+| Ops distantes récentes | `129_` 0 write · 0 fal · 0 OpenAI · flags OFF |
 
 ---
 
@@ -235,7 +236,7 @@ Montants en **centimes USD**. Hard limit ≠ dépense réelle.
 Coûts réels connus par chantier : texte Directors (voir §4) · Motion **135** · image 11A **2** provisional.  
 Réservations actives : **0**. Reconciliations ouvertes : **0**.  
 Règle : toute dépense provider exige une Auth **dans le chat courant**.  
-Prochain shortfall compose-only : **0¢** provider (local).
+Prochain shortfall I2V Kling (compare-only, non réservé) : estimate **140¢** · réserve **168¢** · shortfall **143¢** vs 25¢. Hard min futur **417¢**. Cette phase **0¢**.
 
 ---
 
@@ -251,6 +252,12 @@ Dernière preuve fermeture : smokes + `113_` (0 flag ouvert). Runtime observable
 | `DIRECTOR_V2_PAID_GENERATION_ENABLED` | idem | OFF | média `/director` | idem |
 | `DIRECTOR_V2_WORKER_ENABLED` | idem | OFF | worker | idem + pas de cron |
 | `VHS124_OPENAI_IMAGE_DIRECTOR_EXCEPTION` | idem | OFF | allowlist image 11A | OFF · n’est pas `providerMode=real` |
+| `VHS11B_FAL_I2V_DIRECTOR_EXCEPTION` | idem | OFF | allowlist I2V Kling | OFF · expire 2026-09-30 |
+| `VHS11B_I2V_CAPABILITY_ENABLED` | idem | OFF | capability I2V | OFF |
+| `VHS11B_I2V_PAID_ENABLED` | idem | OFF | paid I2V | OFF |
+| `VHS11B_I2V_FAL_ENABLED` | idem | OFF | provider fal I2V | OFF |
+| `VHS11B_I2V_WORKER_ENABLED` | idem | OFF | worker I2V | OFF |
+| `VHS11B_I2V_DOWNSTREAM_ENABLED` | idem | OFF | voice/lipsync/merge | OFF |
 | `MOTION_TRANSFER_ENABLED` | idem | OFF | capability Motion | OFF |
 | `MOTION_TRANSFER_PAID_ENABLED` | idem | OFF | paid fal | OFF |
 | `MOTION_TRANSFER_FAL_ENABLED` | idem | OFF | adapter fal | OFF |
@@ -268,7 +275,7 @@ Dernière preuve fermeture : smokes + `113_` (0 flag ouvert). Runtime observable
 | OpenAI | texte Directors | adapters Director | `gpt-5.6` | PASS_REAL puis OFF | réel | 10F-V4 | 1/passage PASS | voir §4 | disabled |
 | OpenAI | `image.text_to_image` | allowlist 11A | `gpt-image-1` low 1024 | HUMAN_APPROVED inactif | réel ×2 | `115_` | 2 | 2 | disabled |
 | fal | `video.motion_transfer` | Kling MC | benchmark | PASS_REAL benchmark | réel ×1 | `95_` | 1 | 135 | disabled |
-| fal | I2V/T2V/image autres | préparés | — | PREPARED | fake `/director` | — | 0 réel `/director` | 0 | disabled |
+| fal | `video.image_to_video` | wrapper 11B + `createFalAdapter` | Kling v2 Master I2V 5s | **WIRED_DISABLED** | fake `/director` | — | 0 réel `/director` | 0 | disabled |
 | ElevenLabs | voice | legacy + port | `eleven_multilingual_v2` | PREPARED | fake V2 | — | 0 `/director` | 0 | disabled |
 | Legacy `/api/generate/image` | image | historique | — | DEPRECATED / ≠ PASS | — | — | — | — | ne pas utiliser |
 
@@ -280,16 +287,16 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1628/1628** | **baseline `127_`** · non relancée (docs) | 2026-08-14 `128_` |
-| Typecheck / lint / build | N/A docs-only | baseline `127_` | `128_` |
+| Unitaires | **1650/1650** | suite complète + 22 tests 11B | 2026-08-14 `129_` |
+| Typecheck / lint / build | PASS | cette phase | `129_` |
 | migrations-static | PASS (14) | dernière complète | `120_` (non touchées) |
-| Secret scan diff `128_` | PASS | cette phase | `128_` |
-| Tests ciblés | fraîcheur only | cette phase | `128_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 14 août | `128_` |
+| Secret scan diff `129_` | PASS | cette phase | `129_` |
+| Tests ciblés | 11B wiring + fraîcheur | cette phase | `129_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 14 août | `129_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
-| Fraîcheur living handover | PASS | tooling | `128_` |
+| Fraîcheur living handover | PASS | tooling | `129_` |
 
 Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
@@ -300,7 +307,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | | |
 |---|---|
 | Branche | `main` |
-| HEAD / origin/main | `3641c79` avant ce commit |
+| HEAD / origin/main | `ca98f29` avant ce commit |
 | Dernier commit applicatif runtime image | **`245bea2`** composeur 1.1.0 |
 | Preuve composeur 1.2.0 | **`d395ec7`** · `127_` = HR APPROVE · ce commit `128_` = clôture docs |
 | Fingerprint composition 11A | `c532c400334f5b22` — **un commit docs ne le change pas** |
@@ -330,7 +337,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### P0/P1 fermés (extraits)
 
-- Clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -346,7 +353,8 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | HR 1.2.0 APPROVE | **fait** (`127_`) | 0¢ · `approved` inactif | consommée | — |
 | Clôture 11A + roadmap | **fait** (`128_`) | 0¢ · 0 Production | consommée | — |
 | Activation 1.2.0 | **reportée** (`128_` F) | inutile au prep I2V | Auth activation distincte | activer / publier / merge |
-| I2V `/director` wiring | à ouvrir | 0¢ | Auth 11B | fal / activation |
+| I2V `/director` wiring | **fait** (`129_`) | 0¢ · WIRED_DISABLED | consommée | fal / activation / flags |
+| I2V live preflight no provider | à ouvrir | 0¢ | Auth suivante | fal / réservation |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -356,13 +364,13 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT`** — préparer le câblage I2V `/director` (référence explicite de `49284892…` inactif) **sans** fal, **sans** activation, **sans** flags.
+**`AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER`** — déployer le wiring exact, vérifier l’asset source, les gates, le pricing, le budget et le dry-run live, puis tout refermer. **0 fal**.
 
 ### Court terme
 
-1. Preflight wiring I2V (contrat `existing_asset`, Storage vidéo, poll, QC, HR, estimate vs 25¢).
+1. Live preflight I2V **sans provider**.
 2. Ne pas activer `49284892…` tant qu’un pointeur publié n’est pas requis.
-3. Smoke I2V payant **interdit** tant que le wiring n’est pas READY.
+3. Smoke I2V payant **interdit** tant que le live preflight n’est pas READY.
 
 ### Avant beta
 
@@ -379,14 +387,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A CLOSED PASS_WITH_NOTES · budget 274/249/0/25 ¢
-Dernier verdict : PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED (128_)
-Preuve : asset 49284892… · approved · active=false · décision fb2f886c…
-Blocage : 0 fal · 0 activation · 0 3e OpenAI · 0 merge
-Mission : uniquement AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT
-Auth consommées : CLOSE_AND_ROADMAP (128_) · HR APPROVE (127_)
+Contexte : VHS V2 · 11A CLOSED · I2V WIRED_DISABLED · budget 274/249/0/25 ¢
+Dernier verdict : I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT (129_)
+Preuve : asset 49284892… · approved · active=false · décision fb2f886c… · non lu
+Blocage : 0 fal · 0 activation · 0 3e OpenAI · 0 merge · shortfall Kling 143¢
+Mission : uniquement AUTH_11B_I2V_LIVE_PREFLIGHT_NO_PROVIDER
+Auth consommées : I2V wiring (129_) · CLOSE_AND_ROADMAP (128_) · HR APPROVE (127_)
 Interdit : fal · OpenAI · ElevenLabs · activer les 5 assets · flags ON
-Attendu : preflight wiring I2V /director · 0 provider
+Attendu : live preflight I2V sans provider · 0 fal
 ```
 
 ---
@@ -395,7 +403,7 @@ Attendu : preflight wiring I2V /director · 0 provider
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 128_PHASE_11A_CLOSE_AND_NEXT_MEDIA_ROADMAP_AUDIT.md puis 127_ et 126_.
+Lis ensuite 129_PHASE_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT.md puis 128_ et 127_.
 Vérifie Git. La preuve composeur 1.2.0 est d395ec7. Le runtime Production image reste 245bea2. Un commit docs n’est pas une nouvelle preuve applicative.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 N’appelle aucun provider sans Auth explicite dans CE chat.
@@ -409,7 +417,8 @@ Ne pas promouvoir un commit docs comme runtime applicatif.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-14 | `128_` clôture 11A + roadmap | PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED | à venir | 0 | 0 write · 0 provider | I2V wiring preflight |
+| 2026-08-14 | `129_` I2V wiring preflight | I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT | à venir | 0 | 0 write · 0 fal · 0 média | live preflight no provider |
+| 2026-08-14 | `128_` clôture 11A + roadmap | PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED | `ca98f29` | 0 | 0 write · 0 provider | I2V wiring preflight |
 | 2026-08-14 | `127_` HR 1.2.0 APPROVE | PHASE_11A_PASS_WITH_HUMAN_APPROVED_PROFESSIONAL_IMAGE | `3641c79` | 0 | 1 APPROVE inactif · 0 Storage · 0 OpenAI | clôture 11A |
 | 2026-08-14 | `126_` execution 1.2.0 | PROFESSIONAL_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING | `46812a6` | 0 | 1 write composed · HR seed · 0 OpenAI | preview privée |
 | 2026-08-14 | `125_` preflight parent 1.2.0 | PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_READY_FOR_HUMAN_VISUAL_DECISION | `e94850c` | 0 | 1 read · 0 write · 0 OpenAI | décision visuelle |

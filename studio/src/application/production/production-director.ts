@@ -45,6 +45,7 @@ import {
   type ArtifactMetadata,
 } from "@/domain/shared";
 import type { GenerationCommand, GenerationError, GenerationResult, ResolvedGenerationInput } from "@/domain/generation";
+import { resolveExistingAssetInputsFromStep } from "./phase-11b-existing-asset";
 import {
   beginAttemptIdempotency,
   completeAttemptIdempotency,
@@ -159,8 +160,11 @@ function resolveInputsFromRun(
   run: ProductionRun,
   step: GenerationStep
 ): ResolvedGenerationInput[] {
-  const resolved: ResolvedGenerationInput[] = [];
+  const resolved: ResolvedGenerationInput[] = [
+    ...resolveExistingAssetInputsFromStep(step),
+  ];
   for (const ref of step.inputRefs) {
+    if (ref.kind === "existing_asset") continue;
     if (ref.kind !== "step_output") continue;
     const from = findStep(run, ref.id);
     const asset = from?.outputAssets[0];

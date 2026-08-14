@@ -14,12 +14,18 @@ import type {
   SceneRoutingRationale,
 } from "./explanation";
 import type { GenerationStrategyId } from "./strategies";
+import type { ExistingMediaAssetReference } from "@/domain/generation/existing-media-asset-reference";
 
 export const GENERATION_PLAN_SCHEMA_VERSION = "1.0.0" as const;
 export const GENERATION_PLAN_ARTIFACT_TYPE = "generation_plan" as const;
 
 export type GenerationInputRef = {
-  kind: "scene_reference" | "step_output" | "prompt_variant" | "package_block";
+  kind:
+    | "scene_reference"
+    | "step_output"
+    | "prompt_variant"
+    | "package_block"
+    | "existing_asset";
   id: string;
   role: string;
 };
@@ -54,6 +60,8 @@ export type GenerationStep = {
   estimate: CostEstimate;
   fallbacks: FallbackStep[];
   selection: ModelSelectionExplanation;
+  /** Inter-run approved source. Never holds a signed URL. */
+  existingMediaAsset?: ExistingMediaAssetReference;
 };
 
 export type SceneGenerationPlan = {
