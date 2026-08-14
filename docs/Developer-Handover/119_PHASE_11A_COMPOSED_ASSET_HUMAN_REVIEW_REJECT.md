@@ -86,7 +86,7 @@ Unitaires **1599/1599** · typecheck PASS · lint 0 error · build PASS · fresh
 
 ## 7. Prochaine autorisation
 
-**`AUTH_11A_DIAGNOSE_BITMAP_GLYPH_RENDERING_NO_PROVIDER_NO_PRODUCTION_MEDIA`**
+**`AUTH_11A_DIAGNOSE_BITMAP_GLYPH_RENDERING_NO_PROVIDER_NO_PRODUCTION_MEDIA`** — **consommée** (`120_`).
 
-Diagnostic local des glyphes / police · correction du composeur · preuve du rendu français exact · préparation d’une recomposition du parent existant.  
-**0** OpenAI · **0** lecture/écriture média Production.
+Suivi : [`120_PHASE_11A_BITMAP_GLYPH_RENDERING_DIAG.md`](./120_PHASE_11A_BITMAP_GLYPH_RENDERING_DIAG.md) · verdict **`BITMAP_GLYPH_RENDERING_FIXED_READY_FOR_RECOMPOSITION_PREFLIGHT`**.  
+Prochaine Auth : **`AUTH_11A_CORRECTED_OVERLAY_RECOMPOSITION_PREFLIGHT_NO_PROVIDER`**.

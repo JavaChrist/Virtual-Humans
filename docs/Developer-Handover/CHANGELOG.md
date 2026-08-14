@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.143] — 2026-08-14
+
+### Fixed (Phase 11A bitmap glyph rendering)
+
+- Cause racine : `glyphRowsForCodepoint` générait un motif LCG, pas une police (`120_`).
+- Atlas local `vhs-overlay-latin-bitmap-shapes-v1` · composeur `1.1.0` · golden `9dec964f…` · 0 OpenAI · 0 média Production.
+- Verdict **`BITMAP_GLYPH_RENDERING_FIXED_READY_FOR_RECOMPOSITION_PREFLIGHT`**. Correction locale non déployée.
+
 ## [2.0.142] — 2026-08-14
 
 ### Added (Phase 11A composed-asset Human Review REJECT)

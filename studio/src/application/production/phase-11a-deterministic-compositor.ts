@@ -17,10 +17,11 @@ import {
   glyphRowsForCodepoint,
   PHASE_11A_OVERLAY_GLYPH_SIZE,
 } from "./phase-11a-overlay-font";
+import { overlayCodepoints } from "./phase-11a-overlay-latin-bitmap";
 import { checksumSha256Bytes } from "./phase-11a-image-technical-qc";
 import { decodeRgbPng, encodeRgbPng } from "./phase-11a-png-rgb";
 
-export const PHASE_11A_COMPOSITOR_VERSION = "phase-11a-bitmap-compositor-1.0.0" as const;
+export const PHASE_11A_COMPOSITOR_VERSION = "phase-11a-bitmap-compositor-1.1.0" as const;
 export const PHASE_11A_DETERMINISTIC_OVERLAY_RUNTIME = "WIRED_DISABLED" as const;
 export const PHASE_11A_COMPOSITOR_CANVAS = 1024 as const;
 
@@ -92,7 +93,7 @@ function wrapExactWords(text: string, maxWidth: number, charWidth: number): stri
 }
 
 function measure(text: string, charWidth: number): number {
-  return text.length * charWidth;
+  return overlayCodepoints(text).length * charWidth;
 }
 
 function paintGlyph(input: {

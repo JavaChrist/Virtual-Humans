@@ -26,11 +26,11 @@
 | Migrations | **30/30** (live 14 août · MT-005 incluse) |
 | pgTAP | **378** |
 | Intégration DB | **33/33** |
-| Unitaires | **1599/1599** (dont HR composed reject `119_`) |
+| Unitaires | **1604/1604** (dont glyphes bitmap `120_`) |
 | Living handover | `CURRENT_STATE_AND_RESUME.md` + `check-current-state-freshness.mjs` |
 | Runtime AI | **OFF** |
 | Media jobs Production | **2** image `completed` (2 REJECT · parent pending, `119_`) |
-| OpenAI image Production path | **WIRED_DISABLED** runtime OFF · 2× soldé ledger · composed `6a2beca9…` HUMAN_REJECTED (`119_`) |
+| OpenAI image Production path | **WIRED_DISABLED** runtime OFF · 2× soldé ledger · composed HUMAN_REJECTED · glyphes fix local `120_` non déployé |
 
 - [ ] test staging contrôlé.
 
@@ -91,6 +91,7 @@
 - [x] Preflight compose asset existant (`117_`) · **READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION** · 0 OpenAI · 0 write ;
 - [x] Compose execution asset existant (`118_`) · **COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** · 0 OpenAI · HR seedée ;
 - [x] Composed HR REJECT (`119_`) · **PASS_PROVIDER_ASSET_COMPOSED_ASSET_HUMAN_REJECTED** · 0 OpenAI · parent inchangé ;
+- [x] Diagnostic glyphes bitmap (`120_`) · **BITMAP_GLYPH_RENDERING_FIXED_READY_FOR_RECOMPOSITION_PREFLIGHT** · 0 OpenAI · fix local non déployé ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -98,7 +99,7 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : provider PASS · composed HUMAN_REJECTED (`119_`) · overlay WIRED_DISABLED · glyphes bitmap FAIL — applicatif `60cc335`
+Phase 11A média : provider PASS · composed HUMAN_REJECTED (`119_`) · glyphes fix local (`120_`) non déployé — applicatif `60cc335`
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```

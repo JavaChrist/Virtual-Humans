@@ -42,7 +42,7 @@ Contrôles automatiques : fichier lisible, durée/ratio, piste audio, silence, c
 
 Un output provider durable qui bascule en `needs_review` **règle le ledger avant** le handoff Human Review (`109_`). APPROVE/REJECT ne sont pas responsables du commit/release. REJECT 11A (`110_`) clôt la revue sans retry ni activation ; l’exécution reste `completed` (pas un échec provider).
 
-Le texte marketing n’est plus peint par le modèle. Après ingest provider privé : gate OCR (fake / `unavailable_humanOnly`) → composition déterministe → QC typographique → Human Review comparative (`111_`). Overlay **WIRED_DISABLED**. Retry = intent-only. Execution (`118_`) a écrit le composed privé. Human Review (`119_`) : composé **REJECT** (`human.corrupted_overlay_glyphs`) · parent provider **inchangé** et réutilisable. QC auto typo PASS ≠ validation visuelle humaine.
+Le texte marketing n’est plus peint par le modèle. Après ingest provider privé : gate OCR (fake / `unavailable_humanOnly`) → composition déterministe → QC typographique → Human Review comparative (`111_`). Overlay **WIRED_DISABLED**. Retry = intent-only. Execution (`118_`) a écrit le composed privé. Human Review (`119_`) : composé **REJECT** (`human.corrupted_overlay_glyphs`) · parent **inchangé**. Diagnostic (`120_`) : hash LCG remplacé par atlas `shapes-v1` · composeur **1.1.0 local non déployé**. QC auto typo PASS ≠ validation visuelle humaine.
 
 ## Concurrence et budget
 
