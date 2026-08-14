@@ -99,6 +99,7 @@
 - [x] Preflight parent réel 1.2.0 (`125_`) · **PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_READY_FOR_HUMAN_VISUAL_DECISION** · 0 write · 0 OpenAI ;
 - [x] Execution 1.2.0 (`126_`) · **PROFESSIONAL_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** · 1 enfant privé · HR seedée · 0 OpenAI ;
 - [x] HR composé 1.2.0 APPROVE (`127_`) · **PHASE_11A_PASS_WITH_HUMAN_APPROVED_PROFESSIONAL_IMAGE** · `active=false` · 0 OpenAI ;
+- [x] Clôture 11A + roadmap (`128_`) · **PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED** · next = I2V wiring preflight ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -106,7 +107,7 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : provider PASS · composed 1.0.0 + 1.1.0 HUMAN_REJECTED · 1.2.0 HUMAN_APPROVED inactif (`127_`) — applicatif `d395ec7`
+Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```

@@ -22,6 +22,7 @@
 **vhs-overlay-latin-vector-v1** — police vectorielle géométrique originale (`original-work-in-repo`) du composeur `phase-11a-vector-compositor-1.2.0` ; layout `phase-11a-overlay-layout-1.2.0` ; fail-closed ; pas de fonte système (`124_`).
 **ACCEPT_PREFLIGHT_VISUAL** — jugement visuel humain du preflight 1.2.0 autorisant l’écriture d’un enfant privé ; **≠** `APPROVE` dans `human_review_decisions` (`125_`/`126_`/`127_`).
 **human.professional_overlay_visual_approved** — motif HR 1.2.0 : rendu professionnel validé (titre/CTA/accents/hiérarchie/contraste) ; asset `approved` mais `active=false` (`127_`).
+**PHASE_11A_CLOSED** — clôture formelle 11A (`128_`) : `PASS_WITH_NOTES` · ≠ enablement Paid Media · prochaine porte I2V wiring preflight.
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
 **Overlay leak detector** — comparaison normalisée overlay ↔ variant/prompt ; span significatif ≥ 16 ; mot générique isolé non bloqué (`113_`).

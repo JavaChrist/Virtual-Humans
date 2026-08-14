@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.151] — 2026-08-14
+
+### Added (Phase 11A close and next media roadmap)
+
+- Clôture 11A (`128_`) : **PASS_WITH_NOTES** · asset `49284892…` APPROVE inactif.
+- Prochaine porte **`AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT`** · 0 fal · 0 activation.
+- Verdict **`PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED`**.
+
 ## [2.0.150] — 2026-08-14
 
 ### Added (Phase 11A professional composed Human Review APPROVE)

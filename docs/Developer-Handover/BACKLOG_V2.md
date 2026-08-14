@@ -81,15 +81,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-PROFESSIONAL-COMPOSED-HR-APPROVE (`127_`)
              · **PHASE_11A_PASS_WITH_HUMAN_APPROVED_PROFESSIONAL_IMAGE**
              · enfant `49284892` · `approved` · `active=false` · 0 OpenAI
+             Phase 11A-CLOSE-ROADMAP (`128_`)
+             · **PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED**
+             · PHASE_11A = PASS_WITH_NOTES · next = I2V wiring
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed **249** / reserved **0** / available **25**
 Runtime AI : OFF
 Media jobs : 2 jobs image completed · 3 REJECT + 1.2.0 APPROVE inactif · parent pending
-P0         : pas de 3e OpenAI · ne pas activer les 5 assets
-P1         : clôture 11A + audit roadmap média
-P1 fermé   : HR 1.2.0 APPROVE · preview 1.2.0 · execution 1.2.0
-Next major : AUTH_11A_CLOSE_AND_NEXT_MEDIA_ROADMAP_AUDIT
+P0         : pas de 3e OpenAI · ne pas activer les 5 assets · 0 fal
+P1         : I2V `/director` wiring preflight
+P1 fermé   : clôture 11A · HR 1.2.0 APPROVE
+Next major : AUTH_11B_IMAGE_TO_VIDEO_PRODUCTION_WIRING_PREFLIGHT
 ```
 
 ## P0 — fondations
