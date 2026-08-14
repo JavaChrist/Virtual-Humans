@@ -38,7 +38,7 @@ interface ProviderAdapter {
 
 Résoudre l'adaptateur autorisé, transformer l'entrée canonique, transférer les assets par URLs signées, appliquer timeout, normaliser erreurs et résultats, persister références externes, émettre métriques et nettoyer les fichiers temporaires.
 
-Le chemin image 11A n’envoie pas les chaînes overlay au provider (`phase-11a-image-prompt-v2`). Le variant image est uniquement visuel (`113_`). La typographie est un dérivé déterministe post-ingest (`111_`). Runtime Production **`245bea2`**. Execution (`118_`) : composed `6a2beca9…` REJECT. Preflight (`121_`) : composeur **1.1.0** mémoire PASS · checksum `b284e877…` · parent `7832765d…` conservé.
+Le chemin image 11A n’envoie pas les chaînes overlay au provider (`phase-11a-image-prompt-v2`). Le variant image est uniquement visuel (`113_`). La typographie est un dérivé déterministe post-ingest (`111_`). Runtime Production **`245bea2`**. Execution (`118_`) : composed `6a2beca9…` REJECT. Execution (`122_`) : composé 1.1.0 `4429654f…` · checksum `b284e877…` · HR pending · parent `7832765d…` conservé.
 
 ## Taxonomie d'erreurs
 

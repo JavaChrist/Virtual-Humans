@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.145] — 2026-08-14
+
+### Added (Phase 11A corrected existing provider asset recomposition)
+
+- Execution locale `245bea2` (`122_`) : 1 lecture parent · 1 enfant `4429654f…` · checksum `b284e877…` · composeur 1.1.0.
+- QC + HR seedée sans décision · parent et rejets historiques inchangés · 0 OpenAI · ledger 274/249/0/25.
+- Verdict **`CORRECTED_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING`**.
+
 ## [2.0.144] — 2026-08-14
 
 ### Added (Phase 11A corrected overlay recomposition preflight)

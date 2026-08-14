@@ -120,3 +120,5 @@ Commit docs+script **après** fermeture. **Ne pas** promouvoir ce commit docs co
 **`AUTH_11A_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION`**
 
 Écrire exactement un nouvel asset enfant corrigé, privé, inactif, avec QC + nouvelle Human Review. **0** OpenAI.
+
+Suite : [`122_PHASE_11A_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION.md`](./122_PHASE_11A_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION.md) · **CORRECTED_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING**.

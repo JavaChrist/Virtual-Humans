@@ -6,7 +6,7 @@
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [x] living handover `CURRENT_STATE_AND_RESUME.md` à jour + script de fraîcheur ;
 - [ ] sauvegarde récente et restauration testée **(distant — P1 `BACKUP_PRESENT_RESTORE_UNPROVEN`)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : 2× image · 2 REJECT (smoke + composed `119_`) · parent pending réutilisable ; budget 274/249/0/25 ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : 2× image · 2 REJECT (smoke + composed 1.0.0) · composé 1.1.0 `4429654f…` pending HR (`122_`) ; parent pending ; budget 274/249/0/25 ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité
@@ -30,7 +30,7 @@
 | Living handover | `CURRENT_STATE_AND_RESUME.md` + `check-current-state-freshness.mjs` |
 | Runtime AI | **OFF** |
 | Media jobs Production | **2** image `completed` (2 REJECT · parent pending, `119_`) |
-| OpenAI image Production path | **WIRED_DISABLED** runtime **245bea2** OFF · composed HUMAN_REJECTED · preflight 1.1.0 PASS (`121_`) |
+| OpenAI image Production path | **WIRED_DISABLED** runtime **245bea2** OFF · composed 1.0.0 HUMAN_REJECTED · composé 1.1.0 HR pending (`122_`) |
 
 - [ ] test staging contrôlé.
 
@@ -93,6 +93,7 @@
 - [x] Composed HR REJECT (`119_`) · **PASS_PROVIDER_ASSET_COMPOSED_ASSET_HUMAN_REJECTED** · 0 OpenAI · parent inchangé ;
 - [x] Diagnostic glyphes bitmap (`120_`) · **BITMAP_GLYPH_RENDERING_FIXED_READY_FOR_RECOMPOSITION_PREFLIGHT** · 0 OpenAI ;
 - [x] Preflight recomposition 1.1.0 (`121_`) · **READY_FOR_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION** · 0 write · 0 OpenAI ;
+- [x] Execution recomposition 1.1.0 (`122_`) · **CORRECTED_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** · 1 enfant privé · 0 OpenAI ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -100,7 +101,7 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : provider PASS · composed HUMAN_REJECTED (`119_`) · preflight 1.1.0 PASS (`121_`) — applicatif `245bea2`
+Phase 11A média : provider PASS · composed 1.0.0 HUMAN_REJECTED (`119_`) · composé 1.1.0 HR pending (`122_`) — applicatif `245bea2`
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```

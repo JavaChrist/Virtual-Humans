@@ -85,7 +85,7 @@ Chaque étape utilise une clé `projectId:revision:sceneId:stepId:attempt`. Rela
 
 ## Média image 11A (ops)
 
-Le provider image produit un visuel **sans texte**. Le copy marketing est un `ImageTextOverlaySpec` composé déterministement après ingest privé (`111_`). Runtime overlay **WIRED_DISABLED**. Human Review obligatoire. Execution (`118_`) a écrit le composed `6a2beca9…` ; HR (`119_`) l’a rejeté. Diagnostic (`120_`) + preflight (`121_`) : atlas `shapes-v1` · composeur **1.1.0** · checksum mémoire `b284e877…` · parent réutilisable.
+Le provider image produit un visuel **sans texte**. Le copy marketing est un `ImageTextOverlaySpec` composé déterministement après ingest privé (`111_`). Runtime overlay **WIRED_DISABLED**. Human Review obligatoire. Execution (`118_`) a écrit le composed `6a2beca9…` ; HR (`119_`) l’a rejeté. Diagnostic (`120_`) + preflight (`121_`) : atlas `shapes-v1` · composeur **1.1.0**. Execution (`122_`) : nouvel enfant `4429654f…` privé inactif · HR pending · parent réutilisable.
 
 ## Arborescence cible indicative
 
