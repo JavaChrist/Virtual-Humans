@@ -72,15 +72,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-OVERLAY-TYPO-LAYOUT (`124_`)
              · **OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT**
              · composeur 1.2.0 local · fixtures synthétiques · 0 OpenAI
+             Phase 11A-PROFESSIONAL-PARENT-PREFLIGHT (`125_`)
+             · **PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_READY_FOR_HUMAN_VISUAL_DECISION**
+             · 1 lecture parent · compose 1.2.0 mémoire · 0 write · 0 OpenAI
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed **249** / reserved **0** / available **25**
 Runtime AI : OFF
 Media jobs : 2 jobs image completed · 3 REJECT (smoke + 1.0.0 + 1.1.0) · parent pending
 P0         : pas de 3e OpenAI · ne pas activer les 4 assets
-P1         : preflight parent réel 1.2.0 (mémoire · 0 nouvel asset)
-P1 fermé   : typo/layout 1.2.0 local · HR 1.1.0 REJECT · execution · preflight · glyphes
-Next major : AUTH_11A_PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_NO_PROVIDER
+P1         : décision visuelle preview 1.2.0 (ACCEPT/REJECT)
+P1 fermé   : preflight parent réel · typo/layout 1.2.0 · HR 1.1.0 REJECT
+Next major : ACCEPT_OR_REJECT_PREFLIGHT_VISUAL
 ```
 
 ## P0 — fondations

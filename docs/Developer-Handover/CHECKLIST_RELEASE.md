@@ -96,6 +96,7 @@
 - [x] Execution recomposition 1.1.0 (`122_`) · **CORRECTED_COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** · 1 enfant privé · 0 OpenAI ;
 - [x] HR composé 1.1.0 REJECT (`123_`) · **PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED** · 0 OpenAI ;
 - [x] Amélioration typo/layout 1.2.0 locale (`124_`) · **OVERLAY_TYPOGRAPHY_LAYOUT_IMPROVED_READY_FOR_REAL_PARENT_PREFLIGHT** · 0 OpenAI · 0 média Production ;
+- [x] Preflight parent réel 1.2.0 (`125_`) · **PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_READY_FOR_HUMAN_VISUAL_DECISION** · 0 write · 0 OpenAI ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict

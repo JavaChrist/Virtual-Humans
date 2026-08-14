@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.148] — 2026-08-14
+
+### Added (Phase 11A professional overlay real-parent preflight)
+
+- Preflight `d395ec7` (`125_`) : 1 lecture parent · composeur 1.2.0 mémoire ×2 · checksum `9ac484b7…`.
+- Preview locale gitignorée · 0 write · 0 OpenAI · ledger 274/249/0/25.
+- Verdict **`PROFESSIONAL_OVERLAY_REAL_PARENT_PREFLIGHT_READY_FOR_HUMAN_VISUAL_DECISION`**.
+
 ## [2.0.147] — 2026-08-14
 
 ### Added (Phase 11A overlay typography/layout 1.2.0)
