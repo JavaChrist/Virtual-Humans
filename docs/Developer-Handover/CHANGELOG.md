@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.154] — 2026-08-14
+
+### Changed (Phase 11B I2V hard limit 437¢)
+
+- Hard limit Production **274→437¢** (`131_`) · committed 249 · reserved 0 · available 188.
+- 0 réserve I2V · 0 fal · paid execution **LOCKED**.
+- Verdict **`I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED`**.
+- Prochaine porte **`AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT`**.
+
 ## [2.0.153] — 2026-08-14
 
 ### Added (Phase 11B I2V live preflight no provider)

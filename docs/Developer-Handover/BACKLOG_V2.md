@@ -89,16 +89,19 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              · Kling allowlist OFF · 0 fal · existing_asset
              Phase 11B-I2V-LIVE-PREFLIGHT (`130_`)
              · **I2V_LIVE_PREFLIGHT_NO_PROVIDER_READY_FOR_PAID_AUTH**
-             · `57de914` déployé · shortfall 143¢ · 0 fal
+             · `57de914` déployé · 0 fal
+             Phase 11B-I2V-HARD-437 (`131_`)
+             · **I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED**
+             · hard 437 · available 188 · 0 réserve · 0 fal
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
-Budget     : 274 / committed **249** / reserved **0** / available **25**
+Budget     : 437 / committed **249** / reserved **0** / available **188**
 Runtime AI : OFF
 Media jobs : 2 jobs image completed · 3 REJECT + 1.2.0 APPROVE inactif · parent pending
 P0         : pas de 3e OpenAI · ne pas activer les 5 assets · 0 fal
-P1         : budget prep I2V + décision payante
-P1 fermé   : live preflight I2V · wiring I2V WIRED_DISABLED · clôture 11A · HR 1.2.0 APPROVE
-Next major : AUTH_11B_I2V_BUDGET_PREP_AND_PAID_DECISION
+P1         : paid smoke final preflight I2V
+P1 fermé   : hard 437¢ · live preflight I2V · wiring I2V · clôture 11A
+Next major : AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT
 ```
 
 ## P0 — fondations
@@ -157,8 +160,8 @@ Next major : AUTH_11B_I2V_BUDGET_PREP_AND_PAID_DECISION
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
 - **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · paid (`115_`) · decode PNG 0–4 (`116_`) · compose (`118_`) · composed HR REJECT (`119_`) · glyphes (`120_`) · preflight 1.1.0 (`121_`) · recomposition 1.1.0 (`122_`) · HR 1.1.0 REJECT (`123_`) **PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED**.
-- **P1 budget** : hard **274** ; committed **249** ; reserved **0** ; available **25**.
-- **Prochaine porte majeure** : Auth **`AUTH_11B_I2V_BUDGET_PREP_AND_PAID_DECISION`** — hard min 417¢ · 0 fal. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **P1 budget** : hard **437** ; committed **249** ; reserved **0** ; available **188**.
+- **Prochaine porte majeure** : Auth **`AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT`** — 0 fal dans la porte. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).
