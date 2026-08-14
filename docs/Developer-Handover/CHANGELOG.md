@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.155] — 2026-08-14
+
+### Added (Phase 11B I2V paid smoke final preflight)
+
+- Preflight final (`132_`) : budget 437/249/0/188 · source `49284892…` metadata · dry-run theoretically sufficient.
+- 0 réserve · 0 fal · `EXECUTION_AUTHORIZED=false`.
+- Verdict **`I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH`**.
+- Prochaine porte **`AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION`**.
+
 ## [2.0.154] — 2026-08-14
 
 ### Changed (Phase 11B I2V hard limit 437¢)

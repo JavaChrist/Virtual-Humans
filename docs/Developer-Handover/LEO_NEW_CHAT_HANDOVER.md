@@ -176,33 +176,33 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Le hard limit 11B est **PASS** (`131_`) : `I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED`.
+Le preflight payant 11B est **PASS** (`132_`) : `I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH`.
 
-`PAID_EXECUTION` reste verrouillé. Ledger : **437 / 249 / 0 / 188** ¢. 0 réserve I2V.
+`EXECUTION_AUTHORIZED=false`. Ledger : **437 / 249 / 0 / 188** ¢. 0 réserve I2V.
 
 Phase active suivante :
 
-`AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT`
+`AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION`
 
-Objectif : préparer le smoke payant (réserve 168¢, 1 fal, 1 job, 1 output) **sans** appeler fal dans cette porte.
+Objectif : exécuter **une seule** fois le smoke I2V (réserve 168¢, 1 fal, 1 job, 1 output) **uniquement** si une Auth payante explicite est émise.
 
-Le wiring `57de914` est déployé. L’asset `49284892…` reste `approved` / `active=false`. Flags OFF.
+Le wiring `57de914` est présent. L’asset `49284892…` reste `approved` / `active=false`. Flags OFF.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si le hard 437¢ est PASS, la porte suivante probable sera :
+Si le preflight `132_` est PASS, la porte suivante probable sera :
 
-`AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT`
+`AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION`
 
-Cette porte devra préparer la réserve et les gates **sans** appeler fal.
+Cette porte devra créer au plus une réserve 168¢ et un seul appel fal, puis fermer les flags.
 
-Un appel I2V payant ne pourra être autorisé qu’après ce preflight final et une nouvelle autorisation humaine explicite.
+Un appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
 ## Format obligatoire des futurs prompts Cursor
 
@@ -224,4 +224,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT`. Le hard 437¢ est PASS (`131_`). Paid execution LOCKED. Aucun fal.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION`. Le preflight `132_` est PASS. Paid execution LOCKED tant qu’une Auth fal n’est pas émise. Aucun fal.

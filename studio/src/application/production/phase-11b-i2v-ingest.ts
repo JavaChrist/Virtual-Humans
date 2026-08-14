@@ -25,12 +25,28 @@ export function assertPhase11BI2vOutputSize(bytes: number): void {
   }
 }
 
+export const PHASE_11B_I2V_RESULT_HOST_ALLOWLIST = ["fal.media"] as const;
+
 export function assertPhase11BI2vFetchHostAllowlist(url: string): void {
   if (/https?:\/\/(localhost|127\.|10\.|192\.168\.|169\.254\.)/i.test(url)) {
     throw new Error("Phase 11B ingest: hostile/private host rejected.");
   }
   if (!/^https:\/\//i.test(url)) {
     throw new Error("Phase 11B ingest: only https result URLs.");
+  }
+}
+
+export function assertPhase11BI2vResultHostAllowlist(url: string): void {
+  assertPhase11BI2vFetchHostAllowlist(url);
+  let host = "";
+  try {
+    host = new URL(url).hostname.toLowerCase();
+  } catch {
+    throw new Error("Phase 11B ingest: result URL is not parseable.");
+  }
+  const allowed = host === "fal.media" || host.endsWith(".fal.media");
+  if (!allowed) {
+    throw new Error("Phase 11B ingest: result host is not allowlisted.");
   }
 }
 

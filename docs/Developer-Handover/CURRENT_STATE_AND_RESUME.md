@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-14T23:50:00+02:00
-documentedHead=89d16e4
+verifiedAt=2026-08-15T00:10:00+02:00
+documentedHead=f06a31f
 headStatus=pending commit
-lastPhaseReport=131_PHASE_11B_I2V_BUDGET_HARD_LIMIT_437.md
-nextPhase=AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT
+lastPhaseReport=132_PHASE_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT.md
+nextPhase=AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION
 budgetHard=437
 budgetCommitted=249
 budgetReserved=0
 budgetAvailable=188
 runtimePaidMedia=OFF
-unitTests=1660/1660
-globalStatus=I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED
+unitTests=1672/1672
+globalStatus=I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED`  
-**Dernière vérification :** 2026-08-14 23:50 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11B_I2V_BUDGET_HARD_LIMIT_437`  
+**Statut global :** `I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH`  
+**Dernière vérification :** 2026-08-15 00:10 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT`  
 **Branche :** `main`  
-**HEAD local :** `89d16e4` avant ce commit · source I2V **`57de914`** déployé · composeur 1.2.0 **`d395ec7`**  
-**origin/main :** `89d16e4` avant ce commit  
+**HEAD local :** `f06a31f` avant ce commit · alias Production **`89d16e4`** · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
+**origin/main :** `f06a31f` avant ce commit  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS hors scope protégés  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** (1.1.0 en Production) · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V Production = **`57de914`**  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`131_PHASE_11B_I2V_BUDGET_HARD_LIMIT_437.md`](./131_PHASE_11B_I2V_BUDGET_HARD_LIMIT_437.md)  
-**Prochaine phase exacte :** `AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT`
+**Dernier rapport de phase :** [`132_PHASE_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT.md`](./132_PHASE_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT.md)  
+**Prochaine phase exacte :** `AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -63,10 +63,10 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | OpenAI Image `/director` | **11A CLOSED** · PASS_WITH_NOTES · 1.2.0 **HUMAN_APPROVED** inactif | 2 appels · enfant `49284892…` privé |
 | Overlay typographique | **WIRED_DISABLED** · 1.2.0 **HUMAN_APPROVED** privé inactif | checksum `9ac484b7…` · décision `fb2f886c…` |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
-| I2V `/director` | **WIRED_DISABLED** · hard 437¢ · paid LOCKED | `57de914` · 0 fal · available 188¢ |
+| I2V `/director` | **WIRED_DISABLED** · hard 437¢ · preflight READY | `57de914` · 0 fal · 0 réserve · available 188¢ |
 | T2V / voice / lipsync / merge-export réels | **PREPARED** · hors 11B | pas de smoke |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / Motion / Director Paid AI |
-| Prochaine étape | **PREPARED** | `AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT` · 0 fal |
+| Prochaine étape | **PREPARED** | `AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION` · 0 fal ici |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -78,7 +78,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 |---|---|---|---|
 | `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | **30/30** alignées · hard **437** / committed **249** / reserved **0** / available **188** | ce fichier prime ; `17_` stale |
 | `19_DEPLOYMENT.md` checkpoint 11 août | 0 job média · MT-005 NOT APPLIED · budget 122 | jobs `1 completed + 1 failed` · MT-005 **appliquée** · budget 437 | ce fichier prime |
-| `BACKLOG_V2.md` §P1 bas de liste | prochaine porte clôture 11A | portes `113_`–`131_` · next = paid smoke final preflight | corrigé dans cette phase |
+| `BACKLOG_V2.md` §P1 bas de liste | prochaine porte clôture 11A | portes `113_`–`132_` · next = first paid single execution | corrigé dans cette phase |
 | Vercel Production SHA | souvent égalé à HEAD | runtime **60cc335** OFF `fs4ephi9l-…` · HEAD Git peut devenir docs | ne pas promouvoir le commit docs |
 | pgTAP 378 / intégration 33 | présentés comme courants dans `17_` | **historiques** post-10A (11 août) · non relancés le 14 août | datés ci-dessous |
 
@@ -98,14 +98,14 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Storyboard Director | PASS_REAL | 10F-V4 | 1 appel v4 | OpenAI texte | 5 | flags OFF | ne pas relancer |
 | Prompt Director | PASS_SYNTHETIC + correctif 11A | `113_`/`115_` | set no-text `2e8e9e6f` persisté | — | 0 | — | ne pas rejouer |
 | Router | PASS_SYNTHETIC | 9 / 11A plan | fakes + plan single-step | — | 0 | text_motion Registry | rester borné 11A |
-| Generation Engine | WIRED_DISABLED | `102_`–`131_` | 11A CLOSED · I2V hard 437¢ · paid LOCKED | OpenAI Image + fal Kling (off) | 2 image · 0 I2V | Auth smoke preflight | ne pas appeler fal |
+| Generation Engine | WIRED_DISABLED | `102_`–`132_` | 11A CLOSED · I2V hard 437¢ · preflight READY | OpenAI Image + fal Kling (off) | 2 image · 0 I2V | Auth paid unique | ne pas appeler fal |
 | Production queue/worker | PASS_REAL borné | `108_` + `115_` | 2 jobs image completed | — | inclus 2 | worker OFF | ne pas cron |
 | Ledger | PASS_REAL | `109_` + `115_` + `131_` | 2×1¢ provisional · hard **437** | — | 249 committed | — | pas de réserve I2V |
 | Storage / assets | PASS_REAL image · I2V path préparé | `108_`–`130_` | 5 PNG privés inactifs · path vidéo I2V contrat | Supabase Storage | 0 extra | ni réemploi ni activation · 0 write 11B | metadata only |
 | QC | PASS_REAL image · I2V technique câblé | `110_`/`127_`/`129_` | PNG/checksum ; I2V visuel humanOnly | — | 0 | OCR / probe vidéo absents | humanOnly |
 | Human Review | PASS_REAL image · I2V handoff local | `110_`/`119_`/`123_`/`127_`/`129_`/`130_` | 4 image + 1 Motion · 0 session I2V | — | 0 | 1.2.0 APPROVE inactif | 0 HR Production 11B |
 | OpenAI Image | **11A CLOSED** PASS_WITH_NOTES | `115_`–`128_` | enfant `49284892…` APPROVE inactif | `gpt-image-1` | 2 | 0 3ᵉ appel | pas d’activation |
-| Vidéo I2V | **WIRED_DISABLED** · hard 437¢ | `131_` | plafond prêt · paid LOCKED | fal Kling I2V | 0 `/director` | flags OFF · 0 réserve | paid smoke final preflight |
+| Vidéo I2V | **WIRED_DISABLED** · hard 437¢ | `132_` | preflight READY · 0 réserve | fal Kling I2V | 0 `/director` | flags OFF · Auth payante manquante | first paid single execution |
 | Voice | PREPARED | legacy route | adapter ElevenLabs | ElevenLabs | 0 `/director` | pas de smoke V2 | DEFERRED |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
 | Merge / export | PASS_SYNTHETIC | 9 | fake-merge gated | — | 0 | pas de média réel | avant Production |
@@ -149,8 +149,8 @@ Prompt Director ne rejoue **aucun** Director texte pour 11A.
 
 ## 6. Phase 11A OpenAI Image
 
-**Dernier STOP (`131_`) :** `I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED`  
-Phase 11A **CLOSE**. Auth hard limit **consommée**. `PAID_EXECUTION` **toujours verrouillé**. Asset `49284892…` **non relu** · `active=false`.
+**Dernier STOP (`132_`) :** `I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH`  
+Phase 11A **CLOSE**. Auth preflight payant **consommée**. `EXECUTION_AUTHORIZED=false`. Asset `49284892…` relu en métadonnées · `active=false`.
 
 | Fait | Valeur |
 |---|---|
@@ -217,7 +217,7 @@ Vérifié live Supabase **2026-08-14** (lecture seule).
 | DB integration | **33/33** historique 11 août — **N/A** le 14 août (Docker absent, `113_`) |
 | Dernier reset local | baseline post-10A (historique) |
 | LOCAL_ONLY | aucune migration locale non appliquée distante à cette vérif |
-| Ops distantes récentes | `131_` 1 hard-limit write 274→437 · 0 fal · 0 réserve · flags OFF |
+| Ops distantes récentes | `131_` 1 hard-limit write 274→437 · `132_` 0 write · 0 fal · 0 réserve · flags OFF |
 
 ---
 
@@ -231,7 +231,7 @@ Montants en **centimes USD**. Hard limit ≠ dépense réelle.
 | Committed | **249** | ledger : 247 `committed` + 2 `provisional` image |
 | Reserved actif | **0** | `budget_reservations` : 0 `active` |
 | Available | **188** | 437 − 249 − 0 |
-| Dernière vérif | 2026-08-14 23:50 | MCP compare-and-swap + relecture |
+| Dernière vérif | 2026-08-15 00:10 | MCP lecture seule `132_` |
 
 Coûts réels connus par chantier : texte Directors (voir §4) · Motion **135** · image 11A **2** provisional.  
 Réservations actives : **0**. Reconciliations ouvertes : **0**.  
@@ -287,12 +287,12 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1660/1660** | suite complète + 5 hard-limit | 2026-08-14 `131_` |
-| Typecheck / lint / build | PASS | cette phase | `131_` |
+| Unitaires | **1672/1672** | suite complète + 12 paid preflight | 2026-08-14 `132_` |
+| Typecheck / lint / build | PASS | cette phase | `132_` |
 | migrations-static | PASS (14) | dernière complète | `120_` (non touchées) |
-| Secret scan diff `131_` | PASS | cette phase | `131_` |
-| Tests ciblés | hard-limit guards + fraîcheur | cette phase | `131_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 14 août | `131_` |
+| Secret scan diff `132_` | PASS | cette phase | `132_` |
+| Tests ciblés | paid preflight + fraîcheur | cette phase | `132_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 14 août | `132_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
@@ -307,7 +307,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | | |
 |---|---|
 | Branche | `main` |
-| HEAD / origin/main | `89d16e4` avant ce commit · Production wiring **`57de914`** |
+| HEAD / origin/main | `f06a31f` avant ce commit · alias Production **`89d16e4`** · wiring **`57de914`** |
 | Dernier commit applicatif runtime image | **`245bea2`** composeur 1.1.0 |
 | Preuve composeur 1.2.0 | **`d395ec7`** · `127_` = HR APPROVE · ce commit `128_` = clôture docs |
 | Fingerprint composition 11A | `c532c400334f5b22` — **un commit docs ne le change pas** |
@@ -328,7 +328,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### P1 ouverts
 
-- Smoke I2V payant **interdit** sans Auth distincte · 0 réserve créée.
+- Smoke I2V payant **interdit** sans Auth `AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION` · 0 réserve créée.
 - Rétention/suppression des REJECT privés — politique future.
 - `17_` / `19_` stale (budget, migrations, jobs) — alignement docs ultérieur.
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
@@ -337,7 +337,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### P0/P1 fermés (extraits)
 
-- Hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -356,7 +356,8 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | I2V `/director` wiring | **fait** (`129_`) | 0¢ · WIRED_DISABLED | consommée | fal / activation / flags |
 | I2V live preflight no provider | **fait** (`130_`) | 0¢ · READY | consommée | fal / réservation |
 | I2V hard limit 437¢ | **fait** (`131_`) | 0¢ · available 188¢ | consommée | fal / réserve |
-| I2V paid smoke final preflight | à ouvrir | 0 fal dans cette porte | Auth suivante | fal / flags ON |
+| I2V paid smoke final preflight | **fait** (`132_`) | 0¢ · READY · 0 fal | consommée | fal / réserve / flags |
+| I2V first paid single execution | à ouvrir | 1 réserve 168¢ · 1 fal | Auth payante distincte | fal / flags ON |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -366,13 +367,13 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT`** — préparer réserve 168¢, 1 fal, 1 job, 1 output, **sans** appeler le provider dans cette porte.
+**`AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION`** — réserve 168¢, 1 fal, 1 job, 1 output Kling 5 s. **Non exécutée ici.**
 
 ### Court terme
 
-1. Preflight final payant I2V (0 fal dans la porte).
+1. Auth payante unique I2V (réserve + 1 fal seulement si Auth explicite).
 2. Ne pas activer `49284892…` tant qu’un pointeur publié n’est pas requis.
-3. Smoke I2V payant **interdit** sans Auth provider distincte.
+3. Smoke I2V payant **interdit** sans cette Auth distincte.
 
 ### Avant beta
 
@@ -389,14 +390,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A CLOSED · I2V hard 437¢ · paid LOCKED · budget 437/249/0/188 ¢
-Dernier verdict : I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED (131_)
-Preuve : 57de914 déployé · hard 437 · 0 réserve I2V · asset 49284892… active=false
-Blocage : PAID_EXECUTION toujours verrouillé · Auth fal manquante
-Mission : uniquement AUTH_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT
-Auth consommées : hard 437 (131_) · live preflight (130_) · wiring (129_)
-Interdit : fal · OpenAI · ElevenLabs · activer les 5 assets · flags ON
-Attendu : preflight final payant sans provider · 0 fal
+Contexte : VHS V2 · 11A CLOSED · I2V hard 437¢ · preflight READY · budget 437/249/0/188 ¢
+Dernier verdict : I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH (132_)
+Preuve : 57de914 wiring · alias 89d16e4 · 0 réserve I2V · asset 49284892… active=false
+Blocage : EXECUTION_AUTHORIZED=false · Auth fal manquante
+Mission : uniquement AUTH_11B_I2V_FIRST_PAID_SINGLE_EXECUTION
+Auth consommées : paid preflight (132_) · hard 437 (131_) · live preflight (130_)
+Interdit : fal · OpenAI · ElevenLabs · activer les 5 assets · flags ON hors Auth
+Attendu : 1 réserve 168¢ · 1 fal · 1 job · 1 output · finally flags OFF
 ```
 
 ---
@@ -405,8 +406,8 @@ Attendu : preflight final payant sans provider · 0 fal
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 131_PHASE_11B_I2V_BUDGET_HARD_LIMIT_437.md puis 130_ et 129_.
-Vérifie Git. Le wiring I2V Production est 57de914. Hard live = 437¢. La preuve composeur 1.2.0 est d395ec7. Le runtime Production image reste 245bea2. Un commit docs n’est pas une nouvelle preuve applicative.
+Lis ensuite 132_PHASE_11B_I2V_PAID_SMOKE_FINAL_PREFLIGHT.md puis 131_ et 130_.
+Vérifie Git. Le wiring I2V Production est 57de914. Alias Production = 89d16e4. Hard live = 437¢. La preuve composeur 1.2.0 est d395ec7. Le runtime Production image reste 245bea2. Un commit docs n’est pas une nouvelle preuve applicative.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne lis ni n’écris de média Production sans Auth.
@@ -419,7 +420,8 @@ Ne pas promouvoir un commit docs comme runtime applicatif.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-14 | `131_` I2V hard limit 437¢ | I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED | à venir | 0 | 1 hard write · 0 réserve · 0 fal | paid smoke final preflight |
+| 2026-08-14 | `132_` I2V paid smoke final preflight | I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH | à venir | 0 | 0 write · 0 fal · 0 réserve | first paid single execution |
+| 2026-08-14 | `131_` I2V hard limit 437¢ | I2V_BUDGET_HARD_LIMIT_437_APPLIED_PAID_EXECUTION_STILL_LOCKED | `f06a31f` | 0 | 1 hard write · 0 réserve · 0 fal | paid smoke final preflight |
 | 2026-08-14 | `130_` I2V live preflight no provider | I2V_LIVE_PREFLIGHT_NO_PROVIDER_READY_FOR_PAID_AUTH | `89d16e4` | 0 | 0 write · 0 fal · metadata only | budget hard 437 |
 | 2026-08-14 | `129_` I2V wiring preflight | I2V_PRODUCTION_PATH_WIRED_DISABLED_READY_FOR_LIVE_PREFLIGHT | `57de914` | 0 | 0 write · 0 fal · 0 média | live preflight no provider |
 | 2026-08-14 | `128_` clôture 11A + roadmap | PHASE_11A_CLOSED_NEXT_MEDIA_GATE_DEFINED | `ca98f29` | 0 | 0 write · 0 provider | I2V wiring preflight |
