@@ -14,7 +14,7 @@
 **Phase 11A composition fingerprint** — hash fonctionnel `phase11ARuntimeCompositionFingerprint()` (ex. `c532c400334f5b22`) prouvant routing single-step + Storage ingest + sanitize ; un commit docs-only ne suffit pas (`106_`).
 **Phase 11A private image ingest** — path historique `{ws}/{project}/media/image/{assetId}.png` dans `director-final-assets` ; rôles nouveaux `…/media/image/provider|composed/{assetId}.png` (`111_`) ; asset `active=false` ; base64 jamais dans `production_runs.state`.
 **ImageTextOverlaySpec** — contrat Zod strict des chaînes marketing (title/subtitle/CTA/legal + typo) composées en code, jamais peintes par le provider image (`111_`).
-**Provider text policy no_text** — le prompt OpenAI Image v2 interdit lettres/mots/chiffres/UI textuelle ; overlay déterministe `WIRED_DISABLED` jusqu’à Auth de retry (`111_`).
+**Provider text policy no_text** — le prompt OpenAI Image v2 interdit lettres/mots/chiffres/UI textuelle ; overlay déterministe `WIRED_DISABLED` ; preflight retry `112_` **BLOCKED** tant que le screenText reste dans le variant image.
 **Fallback** — alternative prévue par le Router et déclenchée par le Production Director après un échec admissible.
 **Generation Engine** — exécuteur technique normalisant les adapters providers.
 **Generation Plan** — DAG ordonné des étapes, modèles, coûts, fallbacks et explications.

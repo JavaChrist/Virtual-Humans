@@ -2,7 +2,8 @@
 
 **Date :** 2026-08-14  
 **Auth :** `AUTH_11A_HARDEN_TEXT_FREE_GENERATION_AND_DETERMINISTIC_OVERLAY`  
-**Nature :** contrat + câblage overlay déterministe · **0** appel OpenAI · **0** nouvelle génération · flags **OFF**
+**Nature :** contrat + câblage overlay déterministe · **0** appel OpenAI · **0** nouvelle génération · flags **OFF**  
+**Ops :** preflight retry live (`112_`) · **BLOCKED_TEXT_LEAK_TO_PROVIDER_PROMPT** — ce rapport n’est pas réécrit.
 
 ```text
 VERDICT = READY_FOR_TEXT_FREE_IMAGE_RETRY_PREFLIGHT

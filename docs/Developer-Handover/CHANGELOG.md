@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.134] — 2026-08-14
+
+### Added (Phase 11A text-free retry live preflight)
+
+- Preflight live `20e8783` (`112_`) · dry-run HTTP executable · **0** OpenAI · flags refermés.
+- Overlay spec revue (`De l’idée à la structure` / `Découvrir Virtual Humans Studio`) · composeur synthétique PASS.
+- Verdict **`BLOCKED_TEXT_LEAK_TO_PROVIDER_PROMPT`** : screenText encore dans le variant image ; builder v2 fail-closed.
+
 ## [2.0.133] — 2026-08-14
 
 ### Added (Phase 11A deterministic typography hardening)
