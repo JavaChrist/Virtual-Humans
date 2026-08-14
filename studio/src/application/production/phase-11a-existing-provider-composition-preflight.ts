@@ -75,3 +75,32 @@ export function assertPhase11AExistingProviderCompositionPreflightNotAuthorized(
     "Phase 11A existing-provider composition preflight is prepared but not authorized in this phase.",
   );
 }
+
+export const PHASE_11A_COMPOSITION_PREFLIGHT_CONFIRM_ENV =
+  "CONFIRM_PHASE_11A_EXISTING_PROVIDER_COMPOSITION_PREFLIGHT" as const;
+
+export const PHASE_11A_COMPOSITION_PREFLIGHT_FORBIDDEN_EXECUTE_ENV =
+  "PHASE_11A_ALLOW_EXECUTE" as const;
+
+export function assertPhase11ACompositionPreflightConfirm(
+  env: NodeJS.ProcessEnv | Record<string, string | undefined>,
+): void {
+  if (env[PHASE_11A_COMPOSITION_PREFLIGHT_CONFIRM_ENV] !== "1") {
+    throw new Error("CONFIRM_PHASE_11A_EXISTING_PROVIDER_COMPOSITION_PREFLIGHT required");
+  }
+  if (env[PHASE_11A_COMPOSITION_PREFLIGHT_FORBIDDEN_EXECUTE_ENV] === "1") {
+    throw new Error("PHASE_11A_ALLOW_EXECUTE is forbidden for this preflight");
+  }
+}
+
+const LEAK_RE = /sk-|data:image\/|base64,|https?:\/\/|token=|sig=/i;
+
+export function assertPhase11ACompositionPreflightReportRedacted(blob: string): void {
+  if (LEAK_RE.test(blob)) {
+    throw new Error("preflight report leak");
+  }
+}
+
+export function redactChecksumPrefix(checksum: string, chars = 16): string {
+  return /^[a-f0-9]{16,64}$/i.test(checksum) ? checksum.slice(0, chars) : "invalid";
+}

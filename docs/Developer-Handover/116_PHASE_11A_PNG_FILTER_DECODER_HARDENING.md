@@ -229,7 +229,8 @@ Ce rapport · living handover · `00_README` · `115_` (pointeur) · `14_` / `15
 
 ## 32. Prochaine autorisation exacte
 
-**`AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS`**
+**`AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS`** — **consommée** (`117_`).
 
-Preflight (puis compose si gates vertes) de l’asset provider existant uniquement.  
+Preflight live : [`117_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT.md`](./117_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT.md) · verdict **`READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`**.  
+Prochaine Auth : **`AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`**.  
 0 troisième appel OpenAI. 0 fallback. 0 Motion.

@@ -42,7 +42,7 @@ test("freshness — living file parses and required markers present", async () =
     "utf8",
   );
   const markers = mod.parseCurrentStateMarkers(markdown);
-  assert.equal(markers.nextPhase, "AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS");
+  assert.equal(markers.nextPhase, "AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION");
   assert.equal(markers.budgetHard, "274");
   assert.equal(markers.runtimePaidMedia, "OFF");
   assert.match(markers.unitTests, /^\d+\/\d+$/);

@@ -3,7 +3,10 @@
  * PREPARED ONLY — future composition preflight for provider asset 7832765d.
  * This phase must not execute the Production read/compose path.
  *
- * Next authorization required: AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS
+ * Authorized live runner (separate confirm env):
+ *   scripts/phase-11a-existing-provider-composition-preflight-60cc335.mjs
+ *
+ * This stub stays plan-only. --execute remains refused here.
  */
 import { pathToFileURL } from "node:url";
 import { join, resolve, dirname } from "node:path";

@@ -85,7 +85,7 @@ Chaque étape utilise une clé `projectId:revision:sceneId:stepId:attempt`. Rela
 
 ## Média image 11A (ops)
 
-Le provider image produit un visuel **sans texte**. Le copy marketing (title / subtitle / CTA / legal) est un `ImageTextOverlaySpec` composé déterministement après ingest privé (`111_`). Le variant image et le prompt provider ne reçoivent aucune chaîne overlay (`113_`). Runtime overlay **WIRED_DISABLED**. Human Review obligatoire. L’asset smoke rejeté n’est pas recyclé comme final. Le décodeur PNG du composeur accepte les filtres 0–4 (`116_`) ; pas de nouvelle dépendance native.
+Le provider image produit un visuel **sans texte**. Le copy marketing (title / subtitle / CTA / legal) est un `ImageTextOverlaySpec` composé déterministement après ingest privé (`111_`). Le variant image et le prompt provider ne reçoivent aucune chaîne overlay (`113_`). Runtime overlay **WIRED_DISABLED**. Human Review obligatoire. L’asset smoke rejeté n’est pas recyclé comme final. Le décodeur PNG du composeur accepte les filtres 0–4 (`116_`) ; preflight live (`117_`) a composé l’asset provider existant **en mémoire seulement**.
 
 ## Arborescence cible indicative
 

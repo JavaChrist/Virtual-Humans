@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.140] — 2026-08-14
+
+### Added (Phase 11A existing-provider composition preflight)
+
+- Preflight live `60cc335` (`117_`) : 1 lecture privée · filtres PNG **1–4** · compose mémoire PASS · 0 write.
+- Asset `7832765d…` inchangé · run/job/ledger inchangés · flags refermés.
+- Verdict **`READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`**.
+
 ## [2.0.139] — 2026-08-14
 
 ### Added (Phase 11A PNG filter decoder hardening)

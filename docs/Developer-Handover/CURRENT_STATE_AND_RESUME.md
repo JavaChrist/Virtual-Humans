@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-14T14:45:00+02:00
-documentedHead=f891d5f
+verifiedAt=2026-08-14T15:15:00+02:00
+documentedHead=60cc335
 headStatus=pending commit
-lastPhaseReport=116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md
-nextPhase=AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS
+lastPhaseReport=117_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT.md
+nextPhase=AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION
 budgetHard=274
 budgetCommitted=249
 budgetReserved=0
 budgetAvailable=25
 runtimePaidMedia=OFF
-unitTests=1590/1590
-globalStatus=READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT
+unitTests=1592/1592
+globalStatus=READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT`  
-**Dernière vérification :** 2026-08-14 14:45 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11A_HARDEN_PNG_FILTERS_NO_PROVIDER_NO_PRODUCTION_MEDIA`  
+**Statut global :** `READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`  
+**Dernière vérification :** 2026-08-14 15:15 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS`  
 **Branche :** `main`  
-**HEAD local :** code+docs à venir · applicatif précédent `e4c3de3` · docs `f891d5f`  
-**origin/main :** `f891d5f` avant ce commit  
+**HEAD local :** code+docs à venir · applicatif runtime `60cc335`  
+**origin/main :** `60cc335` avant ce commit  
 **Working tree à la vérification :** `headStatus=pending commit`  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
-**Commit runtime Production :** **`e4c3de3`** (alias OFF `virtual-humans-oekc522ox-…`) — ce commit **n’est pas** encore le runtime  
+**Commit runtime Production :** **`60cc335`** (alias OFF `virtual-humans-fs4ephi9l-…`)  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md`](./116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md)  
-**Prochaine phase exacte :** `AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS`
+**Dernier rapport de phase :** [`117_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT.md`](./117_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT.md)  
+**Prochaine phase exacte :** `AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -60,14 +60,14 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 |---|---|---|
 | Directors texte (Marketing→Storyboard) | **PASS_REAL** | smokes 10B–10F · runtime refermé OFF |
 | Prompt / Router / queue | **PASS_SYNTHETIC** + câblage 11A | fakes Phase 9 ; plan image single-step WIRED |
-| OpenAI Image `/director` | **HUMAN_REVIEW_REQUIRED** | 2 appels · 1 REJECT · 1 provider text-free `pending_review` · compose **prête localement** (`116_`) |
-| Overlay typographique | **WIRED_DISABLED** · décodeur filtres 0–4 livré | `111_` · `116_` synthétique · asset réel **non composé** |
+| OpenAI Image `/director` | **HUMAN_REVIEW_REQUIRED** | 2 appels · 1 REJECT · 1 provider text-free `pending_review` · compose **mémoire PASS** (`117_`) · **0** écriture |
+| Overlay typographique | **WIRED_DISABLED** · preflight compose PASS | `111_` · `116_` decode 0–4 · `117_` filtres **1–4** sur `7832765d…` · composed **non écrit** |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · runtime **UNAVAILABLE** |
 | I2V / T2V / voice / lipsync / merge-export réels | **PREPARED** / **NOT_STARTED** | pas de smoke `/director` réel |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / Motion / Director Paid AI |
-| Prochaine étape | **PREPARED** | preflight puis compose de `7832765d…` — **0** OpenAI · **ne pas** lancer sans Auth |
+| Prochaine étape | **PREPARED** | exécution compose Production de `7832765d…` — **0** OpenAI · **ne pas** lancer sans Auth |
 
-**Risques principaux :** 3ᵉ appel OpenAI sans Auth ; composer l’asset Production sans Auth compose ; réactiver `5d68ef64…` ou `7832765d…` ; décider HR ici ; promouvoir ce commit comme runtime sans vérif Vercel.
+**Risques principaux :** 3ᵉ appel OpenAI sans Auth ; écrire le composed sans Auth d’exécution ; réactiver `5d68ef64…` ou `7832765d…` ; décider HR ici ; promouvoir le commit docs comme runtime.
 
 ---
 
@@ -77,8 +77,8 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 |---|---|---|---|
 | `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | **30/30** alignées · hard **274** / committed **248** / reserved **0** / available **26** | ce fichier prime ; `17_` stale |
 | `19_DEPLOYMENT.md` checkpoint 11 août | 0 job média · MT-005 NOT APPLIED · budget 122 | jobs `1 completed + 1 failed` · MT-005 **appliquée** · budget 274 | ce fichier prime |
-| `BACKLOG_V2.md` §P1 bas de liste | prochaine porte STRIP_OVERLAY | porte **consommée** (`113_`) · next = text-free preflight | corrigé dans cette phase |
-| Vercel Production SHA | souvent égalé à HEAD | runtime **e4c3de3** (OFF `68lytwxac-…`) · HEAD Git peut être docs | ne pas promouvoir le commit docs |
+| `BACKLOG_V2.md` §P1 bas de liste | prochaine porte STRIP_OVERLAY | portes `113_`–`117_` consommées · next = compose execution | corrigé dans cette phase |
+| Vercel Production SHA | souvent égalé à HEAD | runtime **60cc335** OFF `fs4ephi9l-…` · HEAD Git peut devenir docs | ne pas promouvoir le commit docs |
 | pgTAP 378 / intégration 33 | présentés comme courants dans `17_` | **historiques** post-10A (11 août) · non relancés le 14 août | datés ci-dessous |
 
 ---
@@ -97,13 +97,13 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Storyboard Director | PASS_REAL | 10F-V4 | 1 appel v4 | OpenAI texte | 5 | flags OFF | ne pas relancer |
 | Prompt Director | PASS_SYNTHETIC + correctif 11A | `113_`/`115_` | set no-text `2e8e9e6f` persisté | — | 0 | — | ne pas rejouer |
 | Router | PASS_SYNTHETIC | 9 / 11A plan | fakes + plan single-step | — | 0 | text_motion Registry | rester borné 11A |
-| Generation Engine | WIRED_DISABLED | `102_`–`116_` | 2 images réelles puis OFF | OpenAI Image | 2 | compose Production non faite | Auth compose-only |
+| Generation Engine | WIRED_DISABLED | `102_`–`117_` | 2 images réelles puis OFF | OpenAI Image | 2 | compose mémoire PASS · 0 write | Auth execution |
 | Production queue/worker | PASS_REAL borné | `108_` + `115_` | 2 jobs image completed | — | inclus 2 | worker OFF | ne pas cron |
 | Ledger | PASS_REAL | `109_` + `115_` | 2×1¢ provisional soldés | — | 249 committed | — | pas de 3ᵉ réserve image |
 | Storage / assets | PASS_REAL | `108_`/`110_`/`115_` | 2 PNG privés inactifs | Supabase Storage | 0 extra | ni réemploi ni activation | conserver |
 | QC | PASS_REAL technique | `110_` | PNG/checksum ; visuel humanOnly | — | 0 | OCR absent | garder humanOnly |
 | Human Review | PASS_REAL | `110_` image REJECT · `97_` Motion APPROVE | 1+1 décisions | — | 0 | REJECT non rouvrable | ne pas modifier |
-| OpenAI Image | HUMAN_REVIEW_REQUIRED | `115_`/`116_` | 2ᵉ submit PASS · decode filtres **livré** · 0 composed | `gpt-image-1` | 2 | preflight compose | Auth compose-only |
+| OpenAI Image | HUMAN_REVIEW_REQUIRED | `115_`/`117_` | 2ᵉ submit PASS · compose mémoire **PASS** · 0 composed écrit | `gpt-image-1` | 2 | execution compose | Auth execution |
 | Vidéo I2V/T2V | PREPARED | 9 / VHS-124 | fakes | fal (préparé) | 0 `/director` | VHS-124 | hors 11A |
 | Voice | PREPARED | legacy route | adapter ElevenLabs | ElevenLabs | 0 `/director` | pas de smoke V2 | DEFERRED |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
@@ -148,20 +148,20 @@ Prompt Director ne rejoue **aucun** Director texte pour 11A.
 
 ## 6. Phase 11A OpenAI Image
 
-**Dernier STOP (`116_`) :** `READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT`  
-Auth provider `115_` **consommée** · Auth decoder `116_` **consommée** · Auth compose **non** fournie.
+**Dernier STOP (`117_`) :** `READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`  
+Auth provider `115_` **consommée** · Auth decoder `116_` **consommée** · Auth preflight compose `117_` **consommée** · Auth **exécution** compose **non** fournie.
 
 | Fait | Valeur |
 |---|---|
-| Pipeline technique | **PASS_REAL** provider (`108_`–`115_`) · compose **FAILED** |
+| Pipeline technique | **PASS_REAL** provider (`108_`–`115_`) · compose **mémoire PASS** (`117_`) |
 | Appels OpenAI | **2** · `gpt-image-1` · `low` · `1024×1024` · replay 0 |
 | Coût | **2¢ provisional** · 2ᵉ submit soldé par le worker (`115_`) |
 | Asset rejeté | `5d68ef64-…` · checksum `c508e3e54f2ccac7-…` · `rejected` · **intact** |
 | Nouvel asset provider | `7832765d-…` · checksum `1ac51f484420ef88-…` · `pending_review` · `active=false` |
-| Asset composé | **aucun** · décodeur 0–4 livré (`116_`) · Production **non** composée |
-| Human Review | REJECT ×1 (ancien) · **aucune** décision sur le nouveau |
+| Asset composé | **aucun écrit** · preflight mémoire PASS · filtres PNG **1–4** · checksum composé `d056b85aa4f9452d…` |
+| Human Review | REJECT ×1 (ancien) · **aucune** décision sur le nouveau · future **obligatoire** |
 | Politique provider | `no_text` · prompt `phase-11a-image-prompt-v2` · hash live `d4f69858358805b0…` |
-| Overlay déterministe | **WIRED_DISABLED** · FP `fdfae63fe1c7d003-…` · copy exacte inchangée |
+| Overlay déterministe | **WIRED_DISABLED** · FP `fdfae63fe1c7d003-…` · copy exacte inchangée · QC typo accepted |
 | Package no-text | `2e8e9e6f…` rev.2 · plan `a55bd426…` rev.2 |
 | 3ᵉ appel | **interdit** sans Auth provider distincte |
 
@@ -277,12 +277,12 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1590/1590** | **dernière complète** | 2026-08-14 `116_` |
+| Unitaires | **1592/1592** | **dernière complète** | 2026-08-14 `117_` |
 | Typecheck / lint / build | PASS (lint 0 error) | dernière complète | `116_` |
 | migrations-static | PASS (14) | dernière complète | `116_` |
-| Secret scan diff `116_` | PASS | cette phase | `116_` |
-| Tests ciblés PNG/composeur | PASS (12 + typo + worker) | cette phase | `116_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 14 août | `116_` |
+| Secret scan diff `117_` | PASS | cette phase | `117_` |
+| Tests ciblés PNG/composeur/preflight | PASS | cette phase | `117_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 14 août | `117_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
@@ -297,13 +297,13 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | | |
 |---|---|
 | Branche | `main` |
-| HEAD / origin/main | `f891d5f` avant ce commit · applicatif runtime `e4c3de3` |
-| Dernier commit applicatif runtime | `e4c3de3` feat strip overlay copy |
-| Dernier commit documentaire avant cette phase | `f891d5f` (STOP `115_`) |
+| HEAD / origin/main | `60cc335` avant ce commit |
+| Dernier commit applicatif runtime | `60cc335` harden PNG decoder filtres 0–4 |
+| Dernier commit documentaire avant cette phase | inclus dans `60cc335` (`116_`) |
 | Fingerprint composition 11A | `c532c400334f5b22` — **un commit docs ne le change pas** |
-| Runtime Production | **e4c3de3** OFF `oekc522ox-…` |
+| Runtime Production | **60cc335** OFF `fs4ephi9l-…` |
 | Auto-deploy | push `main` peut déclencher un deploy — **observation lecture seule seulement** |
-| Dernier Ready connu (docs) | smokes texte / preflight `7a67c77` — **ne pas** égaler à `e4c3de3` sans preuve Vercel |
+| Dernier Ready connu (docs) | alias OFF `60cc335` `fs4ephi9l-…` — **ne pas** promouvoir le commit docs |
 
 ---
 
@@ -313,11 +313,11 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 - **Pas de 3ᵉ appel OpenAI Image** sans Auth provider distincte.
 - **Ne pas** réactiver `5d68ef64-…` ni `7832765d-…` · ne pas rouvrir le REJECT.
-- **Ne pas** lire/composer l’asset Production sans `AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS`.
+- **Ne pas** écrire le composed Production sans `AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`.
 
 ### P1 ouverts
 
-- Auth compose-only : preflight puis composer `7832765d…` (0 OpenAI) — décodeur **prêt**.
+- Auth execution : écrire composed + asset enfant + QC + seed HR (0 OpenAI) — preflight **PASS**.
 - Run `39329a01` encore `running` + `waitingReason=needs_review`.
 - `17_` / `19_` stale (budget, migrations, jobs) — alignement docs ultérieur.
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
@@ -326,13 +326,13 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### P0/P1 fermés (extraits)
 
-- Decode PNG filtres 0–4 (`116_`) · paid text-free (`115_`) · preflight live (`114_`) · strip overlay (`113_`) · ledger 1¢ (`109_`) · HR REJECT (`110_`) · HARDEN (`111_`) · restore (`78_`) · MT-005 (`82_`).
+- Preflight compose existant (`117_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · preflight live (`114_`) · strip overlay (`113_`) · ledger 1¢ (`109_`) · HR REJECT (`110_`) · HARDEN (`111_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
 | Sujet | Choix | Impact | Auth requise | Interdit tant que manquante |
 |---|---|---|---|---|
-| Composer `7832765d…` | preflight + compose / abandonner | 0¢ provider · asset composé | `AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS` | 3ᵉ OpenAI · lecture sans Auth |
+| Écrire le composed `7832765d…` | execution / abandonner | 0¢ provider · asset enfant | `AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION` | 3ᵉ OpenAI · write sans Auth |
 | HR nouvel asset provider | APPROVE / REJECT / attendre compose | activation interdite ici | Auth HR dédiée | décision dans ce chat |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
@@ -343,11 +343,11 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS`** — preflight puis composition mémoire/Storage de `7832765d…`. **0** OpenAI. Ne pas lancer sans Auth. Décodeur **prêt** (`116_`).
+**`AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`** — écrire le composed de `7832765d…` + asset enfant + QC + seed HR. **0** OpenAI. Ne pas lancer sans Auth. Preflight **PASS** (`117_`).
 
 ### Court terme
 
-1. Preflight + composer l’asset provider existant (0 OpenAI).
+1. Exécuter la composition Production de l’asset provider existant (0 OpenAI).
 2. Human Review comparative (provider ± composé) — **pas** dans cette phase.
 3. Refermer le run `39329a01` si une Auth ops le permet.
 4. Décider ensuite I2V / suite média — pas Motion.
@@ -367,14 +367,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · runtime e4c3de3 OFF · budget 274/249/0/25 ¢
-Dernier verdict : READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT (116_)
-Preuve : decodeRgbPng filtres 0-4 · 0 provider · 0 lecture 7832765d · 0 composed
-Blocage : 0 3e OpenAI · 0 compose Production sans Auth
-Mission : uniquement AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS quand fournie
-Auth consommées : HARDEN_PNG_FILTERS (116_) · TEXT_FREE_IMAGE_RETRY_PAID (115_)
+Contexte : VHS V2 · runtime 60cc335 OFF · budget 274/249/0/25 ¢
+Dernier verdict : READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION (117_)
+Preuve : lecture 7832765d ×1 · filtres PNG 1-4 · compose mémoire PASS · 0 write
+Blocage : 0 3e OpenAI · 0 write composed sans Auth execution
+Mission : uniquement AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION quand fournie
+Auth consommées : COMPOSE_EXISTING_PROVIDER_PNG_FILTERS (117_) · HARDEN_PNG_FILTERS (116_) · TEXT_FREE_IMAGE_RETRY_PAID (115_)
 Interdit : OpenAI sans Auth · fal · Motion · activer les 2 assets · décider HR
-Attendu : 0 provider · preflight puis compose de 7832765d
+Attendu : 0 provider · write composed + enfant + QC + seed HR
 ```
 
 ---
@@ -383,11 +383,11 @@ Attendu : 0 provider · preflight puis compose de 7832765d
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md puis 115_.
-Vérifie Git et le runtime Production (e4c3de3 OFF tant que non promu) avant toute action.
+Lis ensuite 117_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT.md puis 116_ et 115_.
+Vérifie Git et le runtime Production (60cc335 OFF) avant toute action.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 N’appelle aucun provider sans Auth explicite dans CE chat.
-Ne compose pas 7832765d sans AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS.
+N’écris pas le composed 7832765d sans AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION.
 Ne prends aucune décision Human Review. Ne pas promouvoir un commit docs comme runtime.
 ```
 
@@ -397,7 +397,8 @@ Ne prends aucune décision Human Review. Ne pas promouvoir un commit docs comme 
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-14 | `116_` PNG filter decoder | READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT | à venir | 0 | 0 write · decode 0–4 | compose preflight |
+| 2026-08-14 | `117_` compose preflight | READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION | à venir | 0 | 1 read · 0 write · filtres 1–4 | compose execution |
+| 2026-08-14 | `116_` PNG filter decoder | READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT | `60cc335` | 0 | 0 write · decode 0–4 | compose preflight |
 | 2026-08-14 | `115_` text-free paid | COMPOSITOR_FAILED_NO_RETRY | runtime `e4c3de3` | 1 | 1 submit · 1 asset · 0 composed | harden PNG filters |
 | 2026-08-14 | `114_` text-free live preflight | READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH | runtime `e4c3de3` | 0 | flags ON/OFF · 0 write | paid Auth |
 | 2026-08-14 | Canon living | CANONICAL_CURRENT_STATE_AND_RESUME_READY | `8128d9e` | 0 | docs only | text-free preflight |

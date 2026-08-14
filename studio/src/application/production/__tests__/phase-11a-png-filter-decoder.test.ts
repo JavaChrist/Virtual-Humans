@@ -41,9 +41,13 @@ import { buildPhase11ARoleImageStoragePath } from "../phase-11a-image-role-stora
 import { PHASE_11A_SMOKE_PROJECT_ID, PHASE_11A_SMOKE_SCENE_ID } from "../phase-11a-openai-image-allowlist";
 import { PHASE_11A_OVERLAY_FONT_FAMILY } from "@/domain/production/image-text-overlay";
 import {
+  assertPhase11ACompositionPreflightConfirm,
+  assertPhase11ACompositionPreflightReportRedacted,
   assertPhase11AExistingProviderCompositionPreflightNotAuthorized,
   describePhase11AExistingProviderCompositionPreflight,
+  redactChecksumPrefix,
 } from "../phase-11a-existing-provider-composition-preflight";
+import { inspectPhase11APngScanlineFilters } from "../phase-11a-png-scanline-filter-inspect";
 
 const WS = "3c308f57-f448-40ba-aaca-bc0d8d546d01";
 const PARENT_ID = "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee";
@@ -374,6 +378,48 @@ test("11A-PNG — future composition preflight is prepared and not executable", 
   assert.throws(
     () => assertPhase11AExistingProviderCompositionPreflightNotAuthorized(),
     /not authorized/,
+  );
+});
+
+test("11A-PNG — scanline filter inspect returns unique numeric filters only", () => {
+  const rgb = syntheticPatternRgb(8, 8);
+  const png = encodeRgbPngWithRowFilters({ width: 8, height: 8, rgb }, [0, 1, 2, 3, 4, 0, 1, 2]);
+  assert.deepEqual(inspectPhase11APngScanlineFilters(png), [0, 1, 2, 3, 4]);
+  const decoded = decodeRgbPng(png);
+  assert.equal(decoded.width, 8);
+  assert.equal(JSON.stringify(inspectPhase11APngScanlineFilters(png)).includes("data:image"), false);
+});
+
+test("11A-PNG — composition preflight confirm and redaction guards", () => {
+  assert.throws(
+    () => assertPhase11ACompositionPreflightConfirm({}),
+    /CONFIRM_PHASE_11A_EXISTING_PROVIDER_COMPOSITION_PREFLIGHT required/,
+  );
+  assert.throws(
+    () =>
+      assertPhase11ACompositionPreflightConfirm({
+        CONFIRM_PHASE_11A_EXISTING_PROVIDER_COMPOSITION_PREFLIGHT: "1",
+        PHASE_11A_ALLOW_EXECUTE: "1",
+      }),
+    /PHASE_11A_ALLOW_EXECUTE is forbidden/,
+  );
+  assertPhase11ACompositionPreflightConfirm({
+    CONFIRM_PHASE_11A_EXISTING_PROVIDER_COMPOSITION_PREFLIGHT: "1",
+  });
+  assert.equal(redactChecksumPrefix("1ac51f484420ef88abcdef0123456789"), "1ac51f484420ef88");
+  assert.throws(
+    () =>
+      assertPhase11ACompositionPreflightReportRedacted(
+        JSON.stringify({ url: "https://example.supabase.co/storage/v1/object/sign/x?token=abc" }),
+      ),
+    /preflight report leak/,
+  );
+  assertPhase11ACompositionPreflightReportRedacted(
+    JSON.stringify({
+      verdict: "READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION",
+      composedChecksumPrefix: "abcd1234abcd1234",
+      pngFiltersEncountered: [0, 2],
+    }),
   );
 });
 

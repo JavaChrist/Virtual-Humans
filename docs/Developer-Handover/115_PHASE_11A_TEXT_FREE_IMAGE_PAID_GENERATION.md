@@ -153,7 +153,7 @@ Commit documentaire : **ne pas** redéployer.
 
 Le décodeur PNG filtres **0–4** est livré dans [`116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md`](./116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md).  
 Ce rapport `115_` reste le snapshot **COMPOSITOR_FAILED_NO_RETRY**.  
-L’asset `7832765d…` n’a **pas** été relu ni composé. Prochaine Auth : `AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS`.
+L’asset `7832765d…` n’a **pas** été relu ni composé dans ce snapshot. Suivi : [`116_`](./116_PHASE_11A_PNG_FILTER_DECODER_HARDENING.md) puis preflight compose [`117_`](./117_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT.md) · **READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION**.
 
 ## 36. Prochaine décision humaine
 
