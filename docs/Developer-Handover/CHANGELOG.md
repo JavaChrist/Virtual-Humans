@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.138] — 2026-08-14
+
+### Added (Phase 11A text-free paid generation)
+
+- 1 submit OpenAI Image no-text (`115_`) · asset provider `7832765d…` privé `pending_review`.
+- Composeur local : **échec** `png: unsupported filter` · 0 asset composé · 0 retry.
+- Ledger +1¢ provisional · budget 274/249/0/25 · flags refermés e4c3de3.
+- Verdict **`COMPOSITOR_FAILED_NO_RETRY`**.
+
 ## [2.0.137] — 2026-08-14
 
 ### Added (Phase 11A text-free retry live preflight)

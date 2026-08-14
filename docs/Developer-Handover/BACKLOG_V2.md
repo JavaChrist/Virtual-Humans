@@ -44,15 +44,17 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-TEXT-FREE-RETRY-LIVE-PREFLIGHT (`114_`)
              · **READY_FOR_TEXT_FREE_IMAGE_RETRY_PAID_AUTH** · source e4c3de3
              · 0 OpenAI · flags refermés
+             Phase 11A-TEXT-FREE-PAID (`115_`)
+             · **COMPOSITOR_FAILED_NO_RETRY** · 1 submit · asset `7832765d` · 0 composed
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
-Budget     : 274 / committed **248** / reserved **0** / available **26**
+Budget     : 274 / committed **249** / reserved **0** / available **25**
 Runtime AI : OFF
-Media jobs : 1 run image completed · asset HUMAN_REJECTED · Motion MV-001 settled à part
-P0         : pas de 2e OpenAI sans Auth paid
-P1         : paid retry text-free
-P1 fermé   : preflight live e4c3de3 · strip overlay copy · HARDEN typo · HR REJECT · LEDGER 1¢
-Next major : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PAID_AUTH
+Media jobs : 2 jobs image completed · 1 REJECT · 1 pending_review · Motion MV-001 settled à part
+P0         : pas de 3e OpenAI · ne pas activer les assets image
+P1         : compose-only après filtres PNG (`decodeRgbPng`)
+P1 fermé   : paid text-free 1 submit · preflight live e4c3de3 · strip overlay
+Next major : AUTH_11A_COMPOSE_EXISTING_PROVIDER_PNG_FILTERS
 ```
 
 ## P0 — fondations

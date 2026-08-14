@@ -6,7 +6,7 @@
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [x] living handover `CURRENT_STATE_AND_RESUME.md` à jour + script de fraîcheur ;
 - [ ] sauvegarde récente et restauration testée **(distant — P1 `BACKUP_PRESENT_RESTORE_UNPROVEN`)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : smoke image 1× (`108_`) ledger soldé (`109_`) · HR REJECT (`110_`) ; budget 274/248/0/26 ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : 2× image (`108_`/`115_`) · 1 REJECT · 1 pending_review compose FAIL ; budget 274/249/0/25 ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité
@@ -29,8 +29,8 @@
 | Unitaires | **1572/1572** (dont strip overlay copy 11A) |
 | Living handover | `CURRENT_STATE_AND_RESUME.md` + `check-current-state-freshness.mjs` |
 | Runtime AI | **OFF** |
-| Media jobs Production | **1** image `completed` (HR rejected, `110_`) |
-| OpenAI image Production path | **WIRED_DISABLED** runtime OFF · smoke 1× soldé ledger |
+| Media jobs Production | **2** image `completed` (1 REJECT · 1 pending_review, `115_`) |
+| OpenAI image Production path | **WIRED_DISABLED** runtime OFF · 2× soldé ledger · compose FAIL filtre PNG |
 
 - [ ] test staging contrôlé.
 
