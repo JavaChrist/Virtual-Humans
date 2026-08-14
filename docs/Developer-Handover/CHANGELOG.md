@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.135] — 2026-08-14
+
+### Added (Phase 11A strip overlay copy from image variant)
+
+- Prompt Director : `text_motion` dérive un sujet visuel ; `screenText` / CTA hors variant image (`113_`).
+- Contrat `ImageVisualVariant` + détecteur de fuite overlay-leak-v1 (seuil 16, faux positifs génériques autorisés).
+- Dry-run local no-provider · overlay FP inchangé `fdfae63fe1c7d003…` · 0 OpenAI · 0 write Production.
+- Verdict **`READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT`**.
+
 ## [2.0.134] — 2026-08-14
 
 ### Added (Phase 11A text-free retry live preflight)

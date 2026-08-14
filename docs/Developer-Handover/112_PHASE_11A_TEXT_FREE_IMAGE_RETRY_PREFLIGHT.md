@@ -3,7 +3,8 @@
 **Date :** 2026-08-14  
 **Auth :** `AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT`  
 **Nature :** preflight live Production · **0** appel OpenAI · **0** réservation · **0** write métier  
-**Source :** `20e8783`
+**Source :** `20e8783`  
+**Ops :** copy overlay retiré du variant image (`113_`) — ce rapport historique n’est pas réécrit.
 
 ```text
 VERDICT = BLOCKED_TEXT_LEAK_TO_PROVIDER_PROMPT

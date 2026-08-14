@@ -303,6 +303,7 @@ export function validateCandidateAgainstSources(
       visual,
       storyboard,
       candidate,
+      concept,
     });
     const contradictions = findConstraintContradictions(blocks.constraints);
     for (const c of contradictions) {

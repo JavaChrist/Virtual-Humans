@@ -62,7 +62,7 @@ function evidenceFor(
     {
       field: "callToAction",
       source: "video_script",
-      summary: script.callToAction.text.slice(0, 200),
+      summary: "CTA conserved in ImageTextOverlaySpec only.",
     },
   ];
 }
@@ -132,6 +132,7 @@ export function finalizePromptPackages(
       visual,
       storyboard,
       candidate,
+      concept,
     });
     const profiles = profilesForProductionIntent(scene.productionIntent);
     const variants = renderAllVariants({

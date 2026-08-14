@@ -3,7 +3,7 @@
 **Date :** 2026-08-14  
 **Auth :** `AUTH_11A_RECONCILE_EXISTING_IMAGE_RESERVATION_1_CENT_NO_PROVIDER`  
 **Nature :** règlement ledger existant · **0** appel OpenAI · **0** Human Review à ce stade · flags **OFF**  
-**Ops :** Human Review REJECT ensuite (`110_`). Overlay déterministe / no-text = WIRED_DISABLED (`111_`) — ce rapport n’est pas réécrit.
+**Ops :** Human Review REJECT ensuite (`110_`). Overlay WIRED_DISABLED (`111_`) · copy overlay retiré du variant (`113_`) — ce rapport n’est pas réécrit.
 
 ```text
 VERDICT = PASS_LEDGER_RECONCILED_HUMAN_REVIEW_PENDING

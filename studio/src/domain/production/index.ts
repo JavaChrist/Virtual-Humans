@@ -19,3 +19,5 @@ export * from "./events";
 export * from "./validation";
 export * from "./schemas";
 export * from "./image-text-overlay";
+export * from "./overlay-copy-leak";
+export * from "./image-visual-variant";

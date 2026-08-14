@@ -9,7 +9,7 @@
 | Implémentation | Déterministe — livrée localement (VHS-122) |
 | Production | **0** artifact `scene_package_set` actif post-Storyboard |
 | Provider | aucun (pas d’appel AI) |
-| Suite | overlay déterministe / no-text WIRED_DISABLED (`111_`) ; pas de nouvelle génération |
+| Suite | overlay déterministe / no-text WIRED_DISABLED (`111_`) ; copy overlay retiré du variant image (`113_`) ; pas de nouvelle génération |
 
 ## Mission
 
@@ -49,6 +49,7 @@ Builders purs pour sujet, action, décor, caméra, lumière, personnage, dialogu
 - contraintes positives prioritaires, négatifs concis ;
 - texte écran rendu séparément quand le modèle ne doit pas le générer (`renderMode=post_production`) ;
 - chemin image 11A : copy marketing **hors** prompt provider (`providerTextPolicy=no_text`, `111_`) ;
+- `text_motion` : le sujet visuel est dérivé de la DA / du purpose, **jamais** de `screenText` (`113_`) ;
 - prompt injection contenue comme donnée, jamais propagée en instruction ;
 - version du builder/composer enregistrée.
 

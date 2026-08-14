@@ -153,6 +153,7 @@ export function assessPromptReadiness(
         script,
         visual,
         storyboard,
+        concept,
       });
       if (!blocks.subject.description || !blocks.action.primaryAction) blocksOk = false;
       if (findConstraintContradictions(blocks.constraints).length) {

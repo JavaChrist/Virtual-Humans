@@ -3,7 +3,7 @@
 **Date :** 2026-08-13  
 **Auth :** `AUTH_11A_WIRE_STORAGE_STRIP_BASE64_AND_MATERIALIZE_PLAN`  
 **Nature :** câblage applicatif · **0** appel OpenAI · **0** write Production · flags **OFF**  
-**Ops 14 août 2026 :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) — ce rapport historique n’est pas réécrit.
+**Ops 14 août 2026 :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) · copy overlay retiré du variant (`113_`) — ce rapport historique n’est pas réécrit.
 
 ```text
 VERDICT = READY_FOR_NEW_11A_LIVE_PREFLIGHT

@@ -3,7 +3,7 @@
 **Date :** 2026-08-13  
 **Nature :** audit / documentation — **0** provider · **0** dépense · **0** wiring substantiel  
 **Décision humaine :** MV-002 **DEFERRED** · reprise chantier principal 11A  
-**Ops 14 août 2026 :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) — ce rapport historique n’est pas réécrit.
+**Ops 14 août 2026 :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) · copy overlay retiré du variant (`113_`) — ce rapport historique n’est pas réécrit.
 
 ```text
 VERDICT = BLOCKED_MEDIA_PRODUCTION_WIRING

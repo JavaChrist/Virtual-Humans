@@ -3,7 +3,7 @@
 **Date :** 2026-08-13  
 **Nature :** câblage Production Director · **0** appel OpenAI · **0** dépense · **0** job/asset/ledger write  
 **Auth humaine :** `11A-WIRE-OPENAI-IMAGE-ALLOWLIST`  
-**Ops 14 août 2026 :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) — ce rapport historique n’est pas réécrit.
+**Ops 14 août 2026 :** overlay déterministe / provider no-text = WIRED_DISABLED (`111_`) · copy overlay retiré du variant (`113_`) — ce rapport historique n’est pas réécrit.
 
 ```text
 VERDICT = OPENAI_IMAGE_PRODUCTION_PATH_WIRED_DISABLED

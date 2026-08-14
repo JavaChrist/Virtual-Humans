@@ -5,9 +5,15 @@
 
 import type { VisualDirection } from "@/domain/art";
 import type { VideoProjectBrief } from "@/domain/brief";
+import type { CreativeConcept } from "@/domain/creative";
 import type { MarketingPlan } from "@/domain/marketing";
 import type { VideoScript } from "@/domain/script";
 import type { StoryboardProject, StoryboardScene } from "@/domain/storyboard";
+import {
+  deriveTextMotionVisualAction,
+  deriveTextMotionVisualSubject,
+  overlayForbiddenCopyFromScene,
+} from "./visual-subject";
 import type {
   ActionBlock,
   AudioBlock,
@@ -38,6 +44,8 @@ export function buildSubject(
   scene: StoryboardScene,
   visual: VisualDirection,
   brief: VideoProjectBrief,
+  concept?: CreativeConcept,
+  forbiddenCopy: readonly string[] = overlayForbiddenCopyFromScene({ scene }),
 ): SubjectBlock {
   const vd = visualForScene(visual, scene);
   if (vd?.character) {
@@ -65,14 +73,22 @@ export function buildSubject(
   }
   if (scene.productionIntent === "text_motion") {
     return {
-      kind: "text",
-      description: scene.screenText ?? "On-screen text focus",
+      kind: "environment",
+      description: deriveTextMotionVisualSubject({
+        scene,
+        visual,
+        concept,
+        forbiddenCopy,
+      }),
       identityRequirements: [],
     };
   }
+  const envDesc = vd?.environment.description;
+  const fallback =
+    envDesc && envDesc !== scene.screenText ? envDesc : "Environment matching scene purpose";
   return {
     kind: "environment",
-    description: vd?.environment.description ?? scene.title,
+    description: fallback,
     identityRequirements: [],
   };
 }
@@ -80,17 +96,25 @@ export function buildSubject(
 export function buildAction(
   scene: StoryboardScene,
   hint?: PromptAnalysisCandidate["sceneHints"],
+  forbiddenCopy: readonly string[] = overlayForbiddenCopyFromScene({ scene }),
 ): ActionBlock {
   const h = hint?.find((x) => x.sceneId === scene.id);
+  const hinted = h?.primaryActionHint?.trim();
   const primary =
-    h?.primaryActionHint?.trim() ||
-    (scene.spokenContent.kind !== "none"
-      ? "Deliver spoken content to camera with natural presence"
-      : scene.productionIntent === "b_roll"
-        ? "Establish environment with subtle motion"
-        : scene.productionIntent === "carousel"
-          ? "Sequence product screens"
-          : "Hold visual intent of the scene");
+    scene.productionIntent === "text_motion"
+      ? deriveTextMotionVisualAction({
+          scene,
+          hintedAction: hinted,
+          forbiddenCopy,
+        })
+      : hinted ||
+        (scene.spokenContent.kind !== "none"
+          ? "Deliver spoken content to camera with natural presence"
+          : scene.productionIntent === "b_roll"
+            ? "Establish environment with subtle motion"
+            : scene.productionIntent === "carousel"
+              ? "Sequence product screens"
+              : "Hold visual intent of the scene");
   const motion =
     h?.motionIntensityHint ??
     (scene.productionIntent === "talking_head"
@@ -115,10 +139,15 @@ export function buildBlocksForScene(input: {
   visual: VisualDirection;
   storyboard: StoryboardProject;
   candidate?: PromptAnalysisCandidate;
+  concept?: CreativeConcept;
 }): RenderableBlocks {
-  const { scene, brief, plan, script, visual, storyboard, candidate } = input;
+  const { scene, brief, plan, script, visual, storyboard, candidate, concept } = input;
   const vd = visualForScene(visual, scene)!;
   const seg = scriptSeg(script, scene);
+  const forbiddenCopy = overlayForbiddenCopyFromScene({
+    scene,
+    callToAction: script.callToAction.text,
+  });
 
   const environment: EnvironmentBlock = {
     kind: vd.location.kind,
@@ -198,17 +227,30 @@ export function buildBlocksForScene(input: {
     },
     {
       code: "must_respect_cta",
-      description: `CTA action conserved: ${script.callToAction.text.slice(0, 80)}`,
+      description:
+        "CTA conserved in ImageTextOverlaySpec only; overlay strings stay compositor-only",
       source: "video_script",
       severity: "required",
     },
     {
       code: "must_align_benefit",
-      description: plan.mainBenefit.slice(0, 120),
+      description:
+        scene.productionIntent === "text_motion"
+          ? "Benefit expressed as visual metaphor only; overlay copy stays out of the image"
+          : plan.mainBenefit.slice(0, 120),
       source: "marketing_plan",
       severity: "preferred",
     },
   ];
+  if (scene.productionIntent === "text_motion") {
+    required.push({
+      code: "forbid_painted_text",
+      description:
+        "No letters, words, numbers, captions, written logos, watermarks, textual interfaces, pseudo-glyphs, or text inside buttons",
+      source: "storyboard",
+      severity: "required",
+    });
+  }
 
   const continuity: PromptConstraint[] = scene.continuityKeys.map((k) => ({
     code: `cont_${k.replace(/[^a-z0-9]+/gi, "_").slice(0, 40)}`,
@@ -260,8 +302,8 @@ export function buildBlocksForScene(input: {
   void storyboard;
 
   return {
-    subject: buildSubject(scene, visual, brief),
-    action: buildAction(scene, candidate?.sceneHints),
+    subject: buildSubject(scene, visual, brief, concept, forbiddenCopy),
+    action: buildAction(scene, candidate?.sceneHints, forbiddenCopy),
     environment,
     camera,
     lighting,

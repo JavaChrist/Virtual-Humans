@@ -12,6 +12,7 @@ import {
   PHASE_11A_TEXT_OVERLAY_MODE,
   type ImageTextOverlaySpec,
 } from "@/domain/production/image-text-overlay";
+import { assertNoOverlayCopyLeak } from "@/domain/production/overlay-copy-leak";
 import {
   assertPhase11ADoesNotInvokeMotionEndpoint,
   assertPhase11ADoesNotUseMotionProject,
@@ -25,8 +26,10 @@ import {
 export const PHASE_11A_IMAGE_PROMPT_VERSION = "phase-11a-image-prompt-v2" as const;
 
 export const PHASE_11A_NO_TEXT_POSITIVE_BLOCK = [
-  "Visual composition, mood, palette, subject, framing, and art direction only.",
+  "Visual composition, mood, palette, subject, action, environment, framing, lighting, style, and art direction only.",
   "Reserve empty negative space in the lower third for a later typographic overlay.",
+  "No text. No letters. No words. No numbers. No captions. No written logo. No watermark.",
+  "No textual interface. No pseudo-glyphs. No text inside buttons.",
   "No letters, words, digits, captions, labels, logos, watermarks, or UI glyphs.",
   "No buttons with text. No fake lettering. No simulated interfaces containing glyphs.",
 ].join(" ");
@@ -69,12 +72,7 @@ export function assertOverlayStringsNotInProviderPrompt(
   promptText: string,
   spec: ImageTextOverlaySpec,
 ): void {
-  const hay = promptText.toLowerCase();
-  for (const s of overlayStrings(spec)) {
-    if (s.length >= 3 && hay.includes(s.toLowerCase())) {
-      throw new Error("Phase 11A prompt: overlay copy must not be sent to the image provider.");
-    }
-  }
+  assertNoOverlayCopyLeak(promptText, overlayStrings(spec), "provider_prompt");
 }
 
 export function assertPhase11APromptDoesNotAskToDrawWords(visualSource: string): void {
@@ -134,6 +132,7 @@ export function buildPhase11AImagePromptFromScenePackage(
     if (variant.positive.toLowerCase().includes(pkg.screenText.text.toLowerCase())) {
       throw new Error("Phase 11A prompt: screenText copy must not appear in the image variant.");
     }
+    assertNoOverlayCopyLeak(variant.positive, [pkg.screenText.text], "image_variant");
   }
 
   const brand = [
@@ -182,12 +181,15 @@ export function buildPhase11AImagePromptFromScenePackage(
     "\n\n",
   );
   if (options?.overlay) {
+    assertOverlayStringsNotInProviderPrompt(variant.positive, options.overlay);
+    assertOverlayStringsNotInProviderPrompt(compositionBits, options.overlay);
     assertOverlayStringsNotInProviderPrompt(promptText, options.overlay);
   }
   if (pkg.screenText?.text && pkg.screenText.text.length >= 3) {
     if (promptText.toLowerCase().includes(pkg.screenText.text.toLowerCase())) {
       throw new Error("Phase 11A prompt: screenText copy leaked into provider prompt.");
     }
+    assertNoOverlayCopyLeak(promptText, [pkg.screenText.text], "provider_prompt");
   }
 
   const negativeParts = [

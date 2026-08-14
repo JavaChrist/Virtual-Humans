@@ -30,7 +30,10 @@ import {
   PHASE_11A_SMOKE_SIZE,
   PHASE_11A_WIRE_VERSION,
 } from "./phase-11a-openai-image-allowlist";
+import type { ImageTextOverlaySpec } from "@/domain/production/image-text-overlay";
+import { fingerprintImageTextOverlaySpec } from "@/domain/production/image-text-overlay";
 import { buildPhase11AImagePromptFromScenePackage } from "./phase-11a-image-prompt";
+import { PHASE_11A_DETERMINISTIC_OVERLAY_RUNTIME } from "./phase-11a-deterministic-compositor";
 
 /**
  * Reuses library id `product_demo` (has image.text_to_image) but emits
@@ -44,11 +47,18 @@ export type Phase11ASingleStepPlanBuild = {
   promptHash: string;
   promptVersion: string;
   fingerprint: string;
+  overlayFingerprint?: string;
+  compositorRuntime: typeof PHASE_11A_DETERMINISTIC_OVERLAY_RUNTIME;
+  humanReviewRequired: true;
+  providerOutputs: 1;
+  composedOutputs: 1;
   estimateUsd: number;
   estimateMinor: number;
   reservationMinor: number;
   stepCount: 1;
   fallbackCount: 0;
+  retryCount: 0;
+  downstreamCount: 0;
 };
 
 function selectScene2Package(packages: readonly ScenePackage[]): ScenePackage {
@@ -78,11 +88,18 @@ export function buildPhase11ASingleStepGenerationPlan(input: {
   policyVersion?: string;
   availableAfterMinor?: number;
   estimateUsd?: number;
+  overlay?: ImageTextOverlaySpec;
 }): Phase11ASingleStepPlanBuild {
   const projectId = input.projectId ?? PHASE_11A_SMOKE_PROJECT_ID;
   const pkg = input.scenePackage;
+  const overlayFingerprint = input.overlay
+    ? fingerprintImageTextOverlaySpec(input.overlay)
+    : undefined;
 
-  const prompt = buildPhase11AImagePromptFromScenePackage(pkg);
+  const prompt = buildPhase11AImagePromptFromScenePackage(
+    pkg,
+    input.overlay ? { overlay: input.overlay } : undefined,
+  );
   const estimateUsd =
     input.estimateUsd ?? estimateImage(PHASE_11A_SMOKE_SIZE, PHASE_11A_SMOKE_QUALITY, 1);
   const estimateMinor = Math.round(estimateUsd * 100);
@@ -138,6 +155,15 @@ export function buildPhase11ASingleStepGenerationPlan(input: {
         id: pkg.id,
         role: "scene_package",
       },
+      ...(overlayFingerprint
+        ? [
+            {
+              kind: "package_block" as const,
+              id: overlayFingerprint,
+              role: "deterministic_overlay_fingerprint",
+            },
+          ]
+        : []),
     ],
     dependsOnStepIds: [],
     expectedOutput: {
@@ -230,6 +256,7 @@ export function buildPhase11ASingleStepGenerationPlan(input: {
         promptHash: prompt.promptHash,
         storyboardRevisionId: input.storyboardRevisionId,
         packageId: pkg.id,
+        ...(overlayFingerprint ? { overlayFingerprint } : {}),
       }),
     )
     .digest("hex");
@@ -284,6 +311,18 @@ export function buildPhase11ASingleStepGenerationPlan(input: {
         message:
           "Does not declare global Production Registry real-provider compatibility.",
       },
+      {
+        code: "provider_no_text",
+        message: "Provider payload is visual-only; overlay copy stays in compositor spec.",
+      },
+      {
+        code: "local_compositor",
+        message: "Deterministic overlay is a local derived output, not a second provider.",
+      },
+      {
+        code: "human_review_required",
+        message: "Human Review is mandatory before any activation.",
+      },
     ],
   };
 
@@ -293,10 +332,17 @@ export function buildPhase11ASingleStepGenerationPlan(input: {
     promptHash: prompt.promptHash,
     promptVersion: prompt.promptVersion,
     fingerprint,
+    ...(overlayFingerprint ? { overlayFingerprint } : {}),
+    compositorRuntime: PHASE_11A_DETERMINISTIC_OVERLAY_RUNTIME,
+    humanReviewRequired: true,
+    providerOutputs: 1,
+    composedOutputs: 1,
     estimateUsd,
     estimateMinor,
     reservationMinor,
     stepCount: 1,
     fallbackCount: 0,
+    retryCount: 0,
+    downstreamCount: 0,
   };
 }

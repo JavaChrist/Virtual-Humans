@@ -66,6 +66,13 @@ export {
 } from "./rendering";
 
 export { buildBlocksForScene, buildSubject, buildAction } from "./builders";
+export {
+  deriveTextMotionVisualSubject,
+  deriveTextMotionVisualAction,
+  overlayForbiddenCopyFromScene,
+  PHASE_11A_SCENE2_FUNCTIONAL_VISUAL_SUBJECT,
+  PHASE_11A_SCENE2_FUNCTIONAL_VISUAL_ACTION,
+} from "./visual-subject";
 
 export {
   PromptDomainError,

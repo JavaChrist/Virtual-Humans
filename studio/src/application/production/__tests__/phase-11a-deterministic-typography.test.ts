@@ -175,7 +175,7 @@ test("11A-HARDEN — prompt provider no-text and overlay copy excluded", () => {
   );
   assert.throws(
     () => buildPhase11AImagePromptFromScenePackage(withCopy, { overlay }),
-    /overlay copy|screenText copy/i,
+    /overlay leak|overlay copy|screenText copy/i,
   );
 
   const drawWords = smokePkg();
