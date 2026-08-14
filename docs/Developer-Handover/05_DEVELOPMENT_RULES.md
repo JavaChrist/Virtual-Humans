@@ -54,7 +54,8 @@
 - changements petits et cohérents ;
 - pas de refactor sans rapport dans une feature ;
 - ne jamais modifier une migration déjà déployée ;
-- mise à jour des tests, documentation et changelog dans le même changement ;
+- mise à jour des tests, documentation, changelog **et** `CURRENT_STATE_AND_RESUME.md` dans le même changement si l’état du projet change ;
+- une phase n’est pas clôturée si elle change l’état du projet sans mettre à jour le living handover ;
 - décisions structurantes consignées dans un ADR du dépôt.
 
 ## Definition of Done

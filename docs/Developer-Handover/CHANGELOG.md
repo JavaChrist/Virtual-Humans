@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.136] — 2026-08-14
+
+### Added (canonical living handover)
+
+- `CURRENT_STATE_AND_RESUME.md` : état réel, prochaine porte, restart prompt.
+- Script de fraîcheur `studio/scripts/check-current-state-freshness.mjs`.
+- Règle : une phase n’est pas clôturée sans mise à jour du living handover.
+
 ## [2.0.135] — 2026-08-14
 
 ### Added (Phase 11A strip overlay copy from image variant)

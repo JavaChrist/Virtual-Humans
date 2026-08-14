@@ -1,6 +1,6 @@
 # Backlog V2
 
-**Autorité ops courante** (11 août 2026) : ce fichier + `00_README.md` + derniers rapports (`57_`, `58_`).
+**Autorité ops courante** (14 août 2026) : [`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md) puis ce fichier + `00_README.md` + derniers rapports.
 Les identifiants VHS-* sont stables ; chaque item exige critères d'acceptation, tests et documentation.
 Protocole d’audit initial : `03_CURRENT_AUDIT.md` (**historique**) — audit réel : `CURRENT_CODEBASE_AUDIT.md`.
 
@@ -110,7 +110,7 @@ Next major : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
 - **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** (`111_`) · preflight retry (`112_`) **BLOCKED_TEXT_LEAK** · strip overlay copy (`113_`) **READY_FOR_NEW_TEXT_FREE_IMAGE_RETRY_PREFLIGHT** · runtime OFF.
 - **P1 budget** : hard **274** ; committed **248** ; reserved **0** ; available **26**.
-- **Prochaine porte majeure** : Auth **STRIP_OVERLAY_COPY_FROM_IMAGE_VARIANT** — pas de 2e OpenAI.
+- **Prochaine porte majeure** : Auth **`AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT`** — pas de 2e OpenAI. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

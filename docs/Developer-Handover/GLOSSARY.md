@@ -1,5 +1,6 @@
 # Glossaire normatif
 
+**Living handover** — document vivant `CURRENT_STATE_AND_RESUME.md` : état réel, preuves vs préparations, prochaine porte et restart de chat. Les rapports numérotés restent des snapshots immuables. Autorité : code + état vérifié > living handover > README > rapports.
 **AI Video Director** — nom de l'expérience `/director` et du workflow applicatif ; ce n'est pas un neuvième Directeur métier.
 **Artifact** — sortie immuable, versionnée et persistable d'une étape.
 **Art Director** — produit la mise en scène et `VisualDirection`.

@@ -1,0 +1,16 @@
+---
+description: Mettre à jour le living handover à la clôture de chaque phase
+alwaysApply: true
+---
+
+# Living handover
+
+Toute phase qui change HEAD, architecture, contrats, migrations, tests, artifacts, budget, ledger, provider, runtime, flags, déploiement, Storage, Human Review, verdict, P0/P1 ou prochaine porte **n’est pas clôturée** tant que `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md` n’est pas mis à jour **avant le commit final**.
+
+Une phase docs-only met aussi à jour ce fichier si le statut ou la prochaine action change.
+
+Pendant le commit de clôture : `headStatus=pending commit` et `documentedHead` = HEAD courant (ou HEAD^ juste après commit). Ensuite passer `synced`.
+
+Ne jamais y écrire secret, URL signée, clé, chaîne de connexion, salt brut, média, base64 ou prompt provider complet.
+
+Lire ce fichier en premier pour reprendre le travail. Les rapports numérotés restent des snapshots immuables.

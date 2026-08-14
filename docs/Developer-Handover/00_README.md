@@ -9,15 +9,18 @@
 
 | Besoin | Document |
 |---|---|
-| État opérationnel courant (portes, budget, flags, prochaine phase) | **`BACKLOG_V2.md`** + derniers rapports numérotés |
+| **État vivant + reprise de chat** | **[`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md)** |
+| État opérationnel courant (portes, budget, flags, prochaine phase) | living handover → **`BACKLOG_V2.md`** → derniers rapports numérotés |
 | Contrats d’architecture immuables | `02_ARCHITECTURE.md` + ce README |
 | Schéma Supabase réel | **`17_SUPABASE_PROJECTS.md`** (pas les snapshots Phase 9) |
 | Contrats métier Directors | `07`–`15` (section Ops = état prouvé) |
 | Snapshot Phase 9 local fakes | `20_FINAL_AUDIT.md` (**historique**) |
 | Historique d’incidents / smokes | rapports `21`–`58` (**ne pas réécrire**) |
 
-En cas de contradiction factuelle d’état : **BACKLOG + rapport le plus récent** > snapshot historique.
+En cas de contradiction factuelle d’état : **code + état réel vérifié** > [`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md) > BACKLOG + rapport le plus récent > snapshot historique.
 En cas de contradiction d’architecture : ce README → `02_ARCHITECTURE` → document du composant.
+
+Une phase qui change l’état du projet **n’est pas clôturée** sans mise à jour du living handover.
 
 ---
 
@@ -38,6 +41,7 @@ P0                       : pas de 2e OpenAI sans nouveau preflight text-free
 P1 ouverts               : nouveau preflight live text-free
 P1 fermé                 : strip overlay copy · preflight 20e8783 · HARDEN typo · HR REJECT · LEDGER 1¢
 Prochaine porte majeure  : AUTH_11A_TEXT_FREE_IMAGE_RETRY_PREFLIGHT
+Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
 ### Portes Directors texte
@@ -229,6 +233,7 @@ Utilisateur → AI Video Director (/director)
 
 | Doc | Rôle |
 |---|---|
+| [`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md) | **Living handover — état réel + reprise** |
 | [`BACKLOG_V2.md`](./BACKLOG_V2.md) | **État ops + items** |
 | [`CHANGELOG.md`](./CHANGELOG.md) | Historique documentaire / livraisons |
 | [`CHECKLIST_RELEASE.md`](./CHECKLIST_RELEASE.md) | Checklist release |
@@ -240,15 +245,16 @@ Utilisateur → AI Video Director (/director)
 
 ## Ordre de lecture recommandé
 
-1. Ce README (état + index).
-2. `BACKLOG_V2.md` + `CHANGELOG.md` (où on en est).
-3. `02_ARCHITECTURE.md` + `05_DEVELOPMENT_RULES.md`.
-4. Contrats `07`–`15` selon le module.
-5. `17_SUPABASE_PROJECTS.md` pour toute question données.
-6. `18_TESTING.md` / `19_DEPLOYMENT.md` pour qualité et ops.
-7. Rapports `27`–`58` pour preuves smokes ; `20` / `03` seulement comme historique.
-8. Avant média image borné : `58_` puis décision humaine — **ne pas** relancer sans Auth.
-9. Chantier majeur Motion Transfer : `59_` → `60_`…`66_` (MT-001…007A) → MT-007B+ — **pas** de benchmark payant sans gates.
+1. [`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md) (état réel + prochaine porte).
+2. Ce README (index).
+3. `BACKLOG_V2.md` + `CHANGELOG.md` (items).
+4. `02_ARCHITECTURE.md` + `05_DEVELOPMENT_RULES.md`.
+5. Contrats `07`–`15` selon le module.
+6. `17_SUPABASE_PROJECTS.md` pour toute question données.
+7. `18_TESTING.md` / `19_DEPLOYMENT.md` pour qualité et ops.
+8. Rapports `27`–`58` pour preuves smokes ; `20` / `03` seulement comme historique.
+9. Avant média image borné : `58_` puis décision humaine — **ne pas** relancer sans Auth.
+10. Chantier majeur Motion Transfer : `59_` → `60_`…`66_` (MT-001…007A) → MT-007B+ — **pas** de benchmark payant sans gates.
 
 ---
 
@@ -259,4 +265,4 @@ Utilisateur → AI Video Director (/director)
 - aucun appel fournisseur depuis React ou un Directeur ;
 - observabilité, coûts, erreurs et reprises vérifiés ;
 - migration et rollback documentés ;
-- documentation et changelog mis à jour.
+- documentation, changelog **et living handover** mis à jour.

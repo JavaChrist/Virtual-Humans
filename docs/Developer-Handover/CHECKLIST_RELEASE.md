@@ -4,6 +4,7 @@
 
 - [x] portée locale figée (Phases 1–9) ;
 - [x] changelog, migrations locales, flags et runbooks relus ;
+- [x] living handover `CURRENT_STATE_AND_RESUME.md` à jour + script de fraîcheur ;
 - [ ] sauvegarde récente et restauration testée **(distant — P1 `BACKUP_PRESENT_RESTORE_UNPROVEN`)** ;
 - [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : smoke image 1× (`108_`) ledger soldé (`109_`) · HR REJECT (`110_`) ; budget 274/248/0/26 ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
@@ -22,10 +23,11 @@
 
 | Check | Valeur |
 |---|---|
-| Migrations | **29/29** |
+| Migrations | **30/30** (live 14 août · MT-005 incluse) |
 | pgTAP | **378** |
 | Intégration DB | **33/33** |
 | Unitaires | **1572/1572** (dont strip overlay copy 11A) |
+| Living handover | `CURRENT_STATE_AND_RESUME.md` + `check-current-state-freshness.mjs` |
 | Runtime AI | **OFF** |
 | Media jobs Production | **1** image `completed` (HR rejected, `110_`) |
 | OpenAI image Production path | **WIRED_DISABLED** runtime OFF · smoke 1× soldé ledger |
@@ -47,7 +49,7 @@
 
 ## Déploiement (nécessite autorisation humaine)
 
-- [x] schéma Production aligné **29** migrations (historique 10A / incident 21 — ne pas rejouer à l’aveugle) ;
+- [x] schéma Production aligné **30** migrations (29 historiques 10A + MT-005 · ne pas rejouer à l’aveugle) ;
 - [ ] app et workers compatibles déployés (smokes texte déjà passés sous flags bornés) ;
 - [x] flags désactivés par défaut (code) — runtime **OFF** hors Auth ;
 - [ ] smoke tests providers bornés — texte : **PASS** ; média : smoke 1× consommée (`108_`) · ledger soldé (`109_`) · HR REJECT (`110_`) ; budget 274/248/0/26 ;
