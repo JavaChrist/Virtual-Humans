@@ -60,16 +60,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              · glyphes corrompus · parent réutilisable · 0 OpenAI
              Phase 11A-BITMAP-GLYPH-DIAG (`120_`)
              · **BITMAP_GLYPH_RENDERING_FIXED_READY_FOR_RECOMPOSITION_PREFLIGHT**
-             · cause = hash LCG · atlas shapes-v1 · 1.1.0 local non déployé
+             Phase 11A-CORRECTED-RECOMPOSITION-PREFLIGHT (`121_`)
+             · **READY_FOR_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION**
+             · runtime 245bea2 · checksum b284e877… · 0 write
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed **249** / reserved **0** / available **25**
 Runtime AI : OFF
 Media jobs : 2 jobs image completed · 2 REJECT (smoke + composed) · parent pending
-P0         : pas de 3e OpenAI · ne pas activer les 3 assets · 0 écriture composed
-P1         : preflight recomposition mémoire du parent
-P1 fermé   : diagnostic glyphes · HR composed REJECT · compose Production
-Next major : AUTH_11A_CORRECTED_OVERLAY_RECOMPOSITION_PREFLIGHT_NO_PROVIDER
+P0         : pas de 3e OpenAI · ne pas activer les 3 assets · 0 écriture sans Auth
+P1         : execution recomposition (1 enfant + HR)
+P1 fermé   : preflight 1.1.0 · diagnostic glyphes · HR composed REJECT
+Next major : AUTH_11A_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION
 ```
 
 ## P0 — fondations
@@ -127,9 +129,9 @@ Next major : AUTH_11A_CORRECTED_OVERLAY_RECOMPOSITION_PREFLIGHT_NO_PROVIDER
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
-- **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · paid (`115_`) · decode PNG 0–4 (`116_`) · compose (`118_`) · composed HR REJECT (`119_`) · glyphes (`120_`) **BITMAP_GLYPH_RENDERING_FIXED_READY_FOR_RECOMPOSITION_PREFLIGHT**.
+- **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · paid (`115_`) · decode PNG 0–4 (`116_`) · compose (`118_`) · composed HR REJECT (`119_`) · glyphes (`120_`) · preflight 1.1.0 (`121_`) **READY_FOR_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION**.
 - **P1 budget** : hard **274** ; committed **249** ; reserved **0** ; available **25**.
-- **Prochaine porte majeure** : Auth **`AUTH_11A_CORRECTED_OVERLAY_RECOMPOSITION_PREFLIGHT_NO_PROVIDER`** — 0 OpenAI · 0 nouvel asset. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Prochaine porte majeure** : Auth **`AUTH_11A_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION`** — 0 OpenAI · 1 enfant corrigé. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

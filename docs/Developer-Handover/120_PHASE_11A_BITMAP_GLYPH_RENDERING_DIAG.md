@@ -173,7 +173,7 @@ Les PNG `.tmp` ne sont **pas** versionnés.
 
 ## 14. Prochaine autorisation
 
-**`AUTH_11A_CORRECTED_OVERLAY_RECOMPOSITION_PREFLIGHT_NO_PROVIDER`**
+**`AUTH_11A_CORRECTED_OVERLAY_RECOMPOSITION_PREFLIGHT_NO_PROVIDER`** — **consommée** (`121_`).
 
-Déployer la correction, relire **une fois** le parent provider existant, recomposer **uniquement en mémoire**, vérifier le checksum.  
-**0** nouvel asset · **0** OpenAI · **0** écriture Storage.
+Suivi : [`121_PHASE_11A_CORRECTED_OVERLAY_RECOMPOSITION_PREFLIGHT.md`](./121_PHASE_11A_CORRECTED_OVERLAY_RECOMPOSITION_PREFLIGHT.md) · verdict **`READY_FOR_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION`**.  
+Prochaine Auth : **`AUTH_11A_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION`**.

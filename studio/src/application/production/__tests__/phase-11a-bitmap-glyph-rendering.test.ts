@@ -85,6 +85,7 @@ function sampleCell(
 test("11A-GLYPH — required Unicode coverage is explicit and fail-closed", () => {
   const required = overlayCodepoints(`${TITLE}${CTA}`);
   const unique = [...new Set(required)];
+  assert.equal(unique.length, 22);
   assert.ok(unique.includes(0x44)); // D
   assert.ok(unique.includes(0x20));
   assert.ok(unique.includes(0x00e9)); // é

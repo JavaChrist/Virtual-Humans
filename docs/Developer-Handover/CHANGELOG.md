@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.144] — 2026-08-14
+
+### Added (Phase 11A corrected overlay recomposition preflight)
+
+- Preflight live `245bea2` (`121_`) : 1 lecture parent · composeur 1.1.0 mémoire ×2 · visuel PASS.
+- Checksum corrigé `b284e877…` · future id `4429654f…` · 0 write · 0 OpenAI.
+- Verdict **`READY_FOR_CORRECTED_EXISTING_PROVIDER_ASSET_RECOMPOSITION_EXECUTION`**.
+
 ## [2.0.143] — 2026-08-14
 
 ### Fixed (Phase 11A bitmap glyph rendering)
