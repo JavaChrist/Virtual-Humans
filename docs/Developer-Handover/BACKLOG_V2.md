@@ -52,15 +52,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11A-EXISTING-PROVIDER-COMPOSE-PREFLIGHT (`117_`)
              · **READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION**
              · 1 read · filtres 1–4 · compose mémoire PASS · 0 write
+             Phase 11A-EXISTING-PROVIDER-COMPOSE-EXECUTION (`118_`)
+             · **COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING**
+             · composed `6a2beca9` · QC PASS · HR seedée · 0 OpenAI
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 274 / committed **249** / reserved **0** / available **25**
 Runtime AI : OFF
-Media jobs : 2 jobs image completed · 1 REJECT · 1 pending_review · Motion MV-001 settled à part
-P0         : pas de 3e OpenAI · ne pas activer les assets image · ne pas écrire composed sans Auth
-P1         : execution compose de `7832765d…` (preflight PASS)
-P1 fermé   : preflight compose mémoire · decode PNG 0–4 · paid text-free 1 submit · preflight live e4c3de3 · strip overlay
-Next major : AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION
+Media jobs : 2 jobs image completed · 1 REJECT · 1 provider + 1 composed pending_review
+P0         : pas de 3e OpenAI · ne pas activer les 3 assets · ne pas décider HR
+P1         : preview privée de `6a2beca9…` puis Auth HR
+P1 fermé   : compose Production + seed HR · preflight mémoire · decode PNG 0–4
+Next major : AUTH_11A_COMPOSED_ASSET_PRIVATE_PREVIEW
 ```
 
 ## P0 — fondations
@@ -118,9 +121,9 @@ Next major : AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION
 - **Phase 11A** 🟡 Audit + prep premier smoke média : reco **1 image OpenAI** (~1–2¢, scene-2 text_motion) ; **DECISION_REQUIRED** (VHS-124 forbids real adapters on `/director`) (`58_…`). *Suspendue — ne pas relancer sans Auth.*
 - **Doc refresh** ✅ Canon 00–20 + `17_SUPABASE` alignés schéma réel / Phases 10–11A.
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
-- **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · preflight live (`114_`) · paid (`115_`) compose FAIL · decode PNG 0–4 (`116_`) · compose preflight (`117_`) **READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION**.
+- **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · preflight live (`114_`) · paid (`115_`) compose FAIL · decode PNG 0–4 (`116_`) · compose preflight (`117_`) · compose execution (`118_`) **COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING**.
 - **P1 budget** : hard **274** ; committed **249** ; reserved **0** ; available **25**.
-- **Prochaine porte majeure** : Auth **`AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`** — 0 OpenAI. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Prochaine porte majeure** : Auth **`AUTH_11A_COMPOSED_ASSET_PRIVATE_PREVIEW`** — 0 OpenAI. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

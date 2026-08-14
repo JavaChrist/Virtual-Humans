@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.141] — 2026-08-14
+
+### Added (Phase 11A existing-provider composition execution)
+
+- Composition Production de `7832765d…` (`118_`) : 1 PNG composed · asset `6a2beca9…` · QC PASS · HR seedée sans décision.
+- Replay idempotent · ledger inchangé 274/249/0/25 · 0 OpenAI · applicatif `60cc335`.
+- Verdict **`COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING`**.
+
 ## [2.0.140] — 2026-08-14
 
 ### Added (Phase 11A existing-provider composition preflight)

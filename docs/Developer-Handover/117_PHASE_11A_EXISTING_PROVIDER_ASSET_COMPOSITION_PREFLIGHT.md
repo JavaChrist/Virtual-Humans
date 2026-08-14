@@ -199,10 +199,10 @@ Commit documentaire + script de preflight **après** fermeture.
 
 ## 28. Prochaine autorisation exacte
 
-**`AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`**
+**`AUTH_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION`** — **consommée** (`118_`).
 
-Écrire l’objet composé · créer l’asset enfant · QC typographique · seeder Human Review **sans** décision · laisser les deux assets `active=false` · run en attente humaine.  
-**0** OpenAI · **0** retry · **0** ledger write · **0** activation.
+Suivi : [`118_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION.md`](./118_PHASE_11A_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION.md) · verdict **`COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING`**.  
+Prochaine Auth : **`AUTH_11A_COMPOSED_ASSET_PRIVATE_PREVIEW`**.
 
 ---
 

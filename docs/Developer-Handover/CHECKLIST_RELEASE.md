@@ -6,7 +6,7 @@
 - [x] changelog, migrations locales, flags et runbooks relus ;
 - [x] living handover `CURRENT_STATE_AND_RESUME.md` à jour + script de fraîcheur ;
 - [ ] sauvegarde récente et restauration testée **(distant — P1 `BACKUP_PRESENT_RESTORE_UNPROVEN`)** ;
-- [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : 2× image (`108_`/`115_`) · 1 REJECT · 1 pending_review compose mémoire PASS (`117_`) · 0 composed écrit ; budget 274/249/0/25 ;
+- [ ] quotas/providers confirmés **(distant)** — Marketing→Storyboard texte validés ; média : 2× image (`108_`/`115_`) · 1 REJECT · 1 provider + 1 composed pending_review (`118_`) · HR seedée sans décision ; budget 274/249/0/25 ;
 - [ ] support et fenêtre de déploiement informés **(distant)**.
 
 ## Qualité
@@ -26,11 +26,11 @@
 | Migrations | **30/30** (live 14 août · MT-005 incluse) |
 | pgTAP | **378** |
 | Intégration DB | **33/33** |
-| Unitaires | **1592/1592** (dont PNG filtres + preflight compose `117_`) |
+| Unitaires | **1594/1594** (dont scaffold compose `118_`) |
 | Living handover | `CURRENT_STATE_AND_RESUME.md` + `check-current-state-freshness.mjs` |
 | Runtime AI | **OFF** |
-| Media jobs Production | **2** image `completed` (1 REJECT · 1 pending_review, `115_`) |
-| OpenAI image Production path | **WIRED_DISABLED** runtime OFF · 2× soldé ledger · compose mémoire PASS (`117_`) · 0 composed écrit |
+| Media jobs Production | **2** image `completed` (1 REJECT · 1 provider + 1 composed pending_review, `118_`) |
+| OpenAI image Production path | **WIRED_DISABLED** runtime OFF · 2× soldé ledger · composed `6a2beca9…` privé (`118_`) · HR seedée |
 
 - [ ] test staging contrôlé.
 
@@ -89,6 +89,7 @@
 - [x] Paid text-free (`115_`) · **COMPOSITOR_FAILED_NO_RETRY** · 1 submit · 0 composed ;
 - [x] Harden PNG decoder filtres 0–4 (`116_`) · **READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_PREFLIGHT** · 0 OpenAI ;
 - [x] Preflight compose asset existant (`117_`) · **READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION** · 0 OpenAI · 0 write ;
+- [x] Compose execution asset existant (`118_`) · **COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** · 0 OpenAI · HR seedée ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -96,7 +97,7 @@
 ```text
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
-Phase 11A média : TECHNICAL PASS / ASSET HUMAN_REJECTED (`110_`) · overlay WIRED_DISABLED · paid (`115_`) compose FAIL · decode 0–4 (`116_`) · compose preflight (`117_`) · **READY_FOR_EXISTING_PROVIDER_ASSET_COMPOSITION_EXECUTION** — runtime OFF `60cc335`
+Phase 11A média : TECHNICAL PASS / ASSET HUMAN_REJECTED (`110_`) · overlay WIRED_DISABLED · paid (`115_`) compose FAIL · decode 0–4 (`116_`) · compose preflight (`117_`) · compose execution (`118_`) · **COMPOSED_ASSET_PRIVATE_HUMAN_REVIEW_PENDING** — applicatif `60cc335`
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 ```
