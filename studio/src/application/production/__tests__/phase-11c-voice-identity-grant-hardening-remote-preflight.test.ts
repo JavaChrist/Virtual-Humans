@@ -58,7 +58,7 @@ test("11C-GHRP — auth, flags OFF, apply and seed forbidden", () => {
     PHASE_11C_VOICE_GRANT_HARDENING_REMOTE_PREFLIGHT_NEXT_AUTH,
     "AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_ONCE",
   );
-  assert.equal(PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION, "20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql");
+  assert.equal(PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION, "20260815215407_vhs_11c_voice_identity_catalog_grant_hardening.sql");
   assert.equal(PHASE_11C_VOICE_GRANT_HARDENING_SHA256, "4db521b8165cf870b6d07dcf93f93783bc4fa26fb0beced2cfd2860011937b24");
   assert.equal(PHASE_11C_VOICE_GRANT_HARDENING_GIT_BLOB, "b0eb2eb50ba726df520fa60bb9008e725130bca9");
   assertPhase11CVoiceFlagsRemainOff({});

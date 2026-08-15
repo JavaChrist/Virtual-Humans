@@ -42,7 +42,7 @@ test("freshness — living file parses and required markers present", async () =
     "utf8",
   );
   const markers = mod.parseCurrentStateMarkers(markdown);
-  assert.equal(markers.nextPhase, "AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_ONCE");
+  assert.equal(markers.nextPhase, "AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT");
   assert.equal(markers.budgetHard, "437");
   assert.equal(markers.runtimePaidMedia, "OFF");
   assert.match(markers.unitTests, /^\d+\/\d+$/);

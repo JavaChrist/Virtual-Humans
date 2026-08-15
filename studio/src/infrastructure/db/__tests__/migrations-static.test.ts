@@ -47,7 +47,7 @@ const EXPECTED_FILES = [
   "20260807213803_vhs_134_legacy_art_timeout_retry.sql",
   "20260811211757_vhs_mt005_human_review_decision_extend.sql",
   "20260815195207_vhs_11c_voice_identity_catalog.sql",
-  "20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql",
+  "20260815215407_vhs_11c_voice_identity_catalog_grant_hardening.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -73,7 +73,7 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 32 local files after Voice grant hardening prep", () => {
+test("migrations — 32 versions aligned Production after Voice grant hardening", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
   assert.equal(files.length, 32);
@@ -355,7 +355,7 @@ test("migrations V2 — VHS-11C Voice identity catalog applied Production empty"
 
 test("migrations V2 — VHS-11C Voice grant hardening local-only, no DML", () => {
   const sql = readFileSync(
-    join(MIGRATIONS_DIR, "20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql"),
+    join(MIGRATIONS_DIR, "20260815215407_vhs_11c_voice_identity_catalog_grant_hardening.sql"),
     "utf8",
   );
   assert.match(sql, /REVOKE ALL ON TABLE public\.voice_identities FROM PUBLIC, anon, authenticated, service_role/i);

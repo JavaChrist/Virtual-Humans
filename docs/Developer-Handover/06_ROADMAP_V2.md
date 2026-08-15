@@ -62,7 +62,7 @@ Motion MV-001 **PASS** benchmark · Registry **DISABLED**. Restore drill **PASS*
 **Pas encore :** Voice réel, T2V/lipsync/merge-export **réels** sur `/director` HTTP ; activation ; runtime Motion Production.
 
 Pilotage courant : **`CURRENT_STATE_AND_RESUME.md`** puis **`BACKLOG_V2.md`**.  
-Prochaine porte : **`AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_ONCE`** — une migration ACL · 0 seed · 0 ElevenLabs.
+Prochaine porte : **`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`** — lecture seule · 0 write · 0 seed · 0 ElevenLabs.
 
 ## Priorités
 

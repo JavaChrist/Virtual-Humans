@@ -2,6 +2,12 @@
 
 **Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
 
+> **Delta `147_` (15 août 2026) — grant hardening APPLIED Production :**
+> `20260815215407_vhs_11c_voice_identity_catalog_grant_hardening.sql` (contenu = SHA-256 `4db521b8…` ; rename local depuis `20260815212100` pour aligner le timestamp MCP).
+> Production **32/32**. ACL cibles atteintes. Tables Voice **vides**. Consent append-only. 0 seed.
+> Verdict `VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF`.
+> Prochaine porte : `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`. Seed **interdit** jusqu’à Auth distincte.
+
 > **Delta `146_` (15 août 2026) — grant apply preflight, NOT APPLIED :**
 > Même SQL `20260815212100` · SHA-256 `4db521b8…` · blob `b0eb2eb5…`. Remote **31** / local **32**. Overlay inchangé. 0 apply.
 > Verdict `VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH`.

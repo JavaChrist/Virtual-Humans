@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.170] — 2026-08-15
+
+### Added (Phase 11C Voice catalog grant hardening remote apply)
+
+- Application unique ACL Production `20260815215407_vhs_11c_voice_identity_catalog_grant_hardening` (`147_`). SHA-256 / blob inchangés après rename MCP.
+- Alignement **32/32**. `service_role` : identities/bindings SELECT+INSERT+UPDATE · consent SELECT+INSERT. DELETE/TRUNCATE/REFERENCES/TRIGGER absents.
+- Tables toujours vides. Consent append-only. 0 seed. Voice runtime OFF. Budget 437/389/0/48¢.
+- Verdict **`VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF`**.
+- Prochaine porte **`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`**. Seed toujours interdit ici.
+
 ## [2.0.169] — 2026-08-15
 
 ### Added (Phase 11C Voice catalog grant hardening remote apply preflight)

@@ -22,7 +22,7 @@ export const PHASE_11C_VOICE_GRANT_HARDENING_NEXT_AUTH =
   "AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT" as const;
 
 export const PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION =
-  "20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql" as const;
+  "20260815215407_vhs_11c_voice_identity_catalog_grant_hardening.sql" as const;
 export const PHASE_11C_VOICE_GRANT_HARDENING_SHA256 =
   "4db521b8165cf870b6d07dcf93f93783bc4fa26fb0beced2cfd2860011937b24" as const;
 export const PHASE_11C_VOICE_GRANT_HARDENING_GIT_BLOB =
@@ -333,7 +333,7 @@ export function assertVoiceGrantHardeningDriftAdmissible(drift: VoiceGrantHarden
   if (drift.remoteUnknownLocally.length > 0) {
     throw new Error("Phase 11C grant hardening: remote migration unknown locally.");
   }
-  if (drift.localUnapplied.length !== 1 || drift.localUnapplied[0] !== "20260815212100") {
+  if (drift.localUnapplied.length !== 1 || drift.localUnapplied[0] !== "20260815215407") {
     throw new Error("Phase 11C grant hardening: local-only migration drift.");
   }
 }

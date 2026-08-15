@@ -64,7 +64,7 @@ test("11C-GH — auth, flags OFF, apply and seed forbidden", () => {
   );
   assert.equal(
     PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION,
-    "20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql",
+    "20260815215407_vhs_11c_voice_identity_catalog_grant_hardening.sql",
   );
   assert.equal(PHASE_11C_VOICE_IDENTITY_MIGRATION, "20260815195207_vhs_11c_voice_identity_catalog.sql");
   assert.equal(PHASE_11C_VOICE_GRANT_HARDENING_GIT_BLOB, "b0eb2eb50ba726df520fa60bb9008e725130bca9");
@@ -159,7 +159,7 @@ test("11C-GH — drift remote 31 / local 32 / one local-only", () => {
     remoteVersions: REMOTE_VERSIONS,
   });
   assertVoiceGrantHardeningDriftAdmissible(drift);
-  assert.deepEqual(drift.localUnapplied, ["20260815212100"]);
+  assert.deepEqual(drift.localUnapplied, ["20260815215407"]);
   assert.deepEqual(drift.remoteUnknownLocally, []);
   assert.throws(
     () =>

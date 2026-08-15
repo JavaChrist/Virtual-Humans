@@ -60,7 +60,7 @@ Activation et approbation restent indépendantes. APPROVE ≠ actif ≠ merge au
 
 ## Voice / TTS (`140_`)
 
-Chemin `/director` Voice câblé et **désactivé**. Capability `audio.voice`, action `voice`, modèle `eleven_multilingual_v2`. Le segment parlé se résout explicitement (projet I2V, script `349e2792` rev.1, `segment-2`, hash seulement). La vidéo I2V `9be6cb0c` est un contexte lipsync futur : Voice ne la lit pas et ne la mute pas. APPROVE Voice n’ouvre pas la porte lipsync. Runtime et downstream OFF. Catalogue `142_`–`146_` : quatre identités, sélecteur Narratrice/Narrateur inopérant, tables `voice_identities` / `voice_consent_attestations` / `project_voice_bindings` **appliquées vides**. Overlay DEFAULT PRIVILEGES sur `service_role` (DELETE/TRUNCATE) ; hardening local prêt, preflight apply READY, non appliqué. Config locale prête (prefixes). 0 seed. MV-001 ≠ Voice.
+Chemin `/director` Voice câblé et **désactivé**. Capability `audio.voice`, action `voice`, modèle `eleven_multilingual_v2`. Le segment parlé se résout explicitement (projet I2V, script `349e2792` rev.1, `segment-2`, hash seulement). La vidéo I2V `9be6cb0c` est un contexte lipsync futur : Voice ne la lit pas et ne la mute pas. APPROVE Voice n’ouvre pas la porte lipsync. Runtime et downstream OFF. Catalogue `142_`–`147_` : quatre identités, sélecteur Narratrice/Narrateur inopérant, tables `voice_identities` / `voice_consent_attestations` / `project_voice_bindings` **appliquées vides**. Grants durcis (`147_`) : consent append-only, DELETE/TRUNCATE absents. Config locale prête (prefixes). 0 seed. MV-001 ≠ Voice.
 
 ## Reprise
 

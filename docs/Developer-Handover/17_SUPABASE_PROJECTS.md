@@ -1,10 +1,10 @@
 # 17 — Projets Supabase (schéma réel)
 
-**Statut documentaire :** `CURRENT` (rafraîchi 15 août 2026 — `146_`)
-**Sources :** `studio/supabase/migrations/` (**32** fichiers locaux), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_` + `82_` + `142_`–`146_`.
+**Statut documentaire :** `CURRENT` (rafraîchi 15 août 2026 — `147_`)
+**Sources :** `studio/supabase/migrations/` (**32** fichiers locaux), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_` + `82_` + `142_`–`147_`.
 **Ne pas inventer** de table, colonne, RPC ou garantie absente du dépôt.
 
-> **Compteurs 15 août 2026 (`146_`) :** Production **31**. Local **32**. Dernière remote `20260815195207_vhs_11c_voice_identity_catalog`. Local-only grant hardening **non appliquée** · preflight apply READY. Tables Voice **vides**. Overlay `service_role` ALL via DEFAULT PRIVILEGES. RLS on · 0 policy. Hard limit live **437**. Le corps historique ci-dessous (29/122¢) reste un snapshot 11 août.
+> **Compteurs 15 août 2026 (`147_`) :** Production **32/32**. Dernière remote `20260815215407_vhs_11c_voice_identity_catalog_grant_hardening`. Tables Voice **vides**. Grants durcis (`service_role` identities/bindings `arw` · consent `ar`). RLS on · 0 policy. Hard limit live **437**. Le corps historique ci-dessous (29/122¢) reste un snapshot 11 août.
 
 ---
 
@@ -391,7 +391,7 @@ Production appliquées : **30**. Local : **31**. Les lignes 1–29 ci-dessous so
 | 29 | `20260807213803_vhs_134_legacy_art_timeout_retry.sql` |
 | 30 | `20260811211757_vhs_mt005_human_review_decision_extend.sql` — **appliquée** Production (`82_`) |
 | 31 | `20260815195207_vhs_11c_voice_identity_catalog.sql` — **appliquée** Production (`144_`) · tables vides · 0 seed |
-| 32 | `20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql` — **locale seulement** (`145_`/`146_`) · preflight READY · 0 apply |
+| 32 | `20260815215407_vhs_11c_voice_identity_catalog_grant_hardening.sql` — **appliquée** (`147_`) · ACL durcies · 0 seed |
 
 Règle : **ne jamais modifier** une migration déjà appliquée. Additif uniquement. Seed Voice = Auth distincte seulement.
 
