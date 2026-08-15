@@ -93,7 +93,7 @@ function seededCatalog() {
 test("11C-ID — auth, flags OFF, verdicts, no execution", () => {
   assert.equal(PHASE_11C_VOICE_IDENTITY_AUTH, "AUTH_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP");
   assert.equal(PHASE_11C_VOICE_IDENTITY_NEXT_AUTH, "AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT");
-  assert.equal(PHASE_11C_VOICE_IDENTITY_MIGRATION, "20260815182203_vhs_11c_voice_identity_catalog.sql");
+  assert.equal(PHASE_11C_VOICE_IDENTITY_MIGRATION, "20260815195207_vhs_11c_voice_identity_catalog.sql");
   assertPhase11CVoiceFlagsRemainOff({});
   assert.throws(
     () => assertPhase11CVoiceFlagsRemainOff({ [PHASE_11C_VOICE_CAPABILITY_FLAG_ENV]: "1" }),

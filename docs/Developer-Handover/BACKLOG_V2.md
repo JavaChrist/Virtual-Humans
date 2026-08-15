@@ -128,16 +128,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              · 4 identités · migration locale · env narrateur absente à l’époque
              Phase 11C-VOICE-PREFLIGHT (`143_`)
              · **VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH**
-             · 30 remote / 31 local · 0 write · config locale prête
+             Phase 11C-VOICE-APPLY (`144_`)
+             · **VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLIED_EMPTY_RUNTIME_OFF**
+             · 31/31 · 3 tables vides · 0 seed
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **389** / reserved **0** / available **48**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0         : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit · 0 ElevenLabs
-P1         : apply Voice · seed/bindings séparés · pricing non ferme
-P1 fermé   : preflight remote READY · catalogue + migration locale · binding refusé
-Next major : AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE
+P1         : seed/consent Voice · bindings projet · pricing non ferme
+P1 fermé   : apply catalog vide · preflight remote · catalogue locale
+Next major : AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT
 ```
 
 ## P0 — fondations
@@ -199,8 +201,9 @@ Next major : AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE
 - **P1 budget** : hard **437** ; committed **389** ; reserved **0** ; available **48**.
 - **Phase 11C Voice binding** ✅ **BLOCKED** (`141_`) — voix configurée = identité Mei · 0 persist Production · 0 ElevenLabs · runtime OFF.
 - **Phase 11C Voice catalog** ✅ **READY_BLOCKED_MISSING_SECURE_CONFIG** (`142_`) — 4 identités · migration locale.
-- **Phase 11C Voice remote preflight** ✅ **READY_FOR_APPLY_AUTH** (`143_`) — 30 remote / 31 local · 0 collision · 0 write · config locale prête (prefixes).
-- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE`** — une migration structurelle · 0 seed · 0 ElevenLabs. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Phase 11C Voice remote preflight** ✅ **READY_FOR_APPLY_AUTH** (`143_`).
+- **Phase 11C Voice remote apply** ✅ **APPLIED_EMPTY_RUNTIME_OFF** (`144_`) — 31/31 · 3 tables vides · 0 seed.
+- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`** — lecture seule · 0 write. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

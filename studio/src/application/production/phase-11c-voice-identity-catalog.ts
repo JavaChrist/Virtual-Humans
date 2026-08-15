@@ -22,7 +22,7 @@ export const PHASE_11C_VOICE_IDENTITY_VERDICT_MISSING =
 export const PHASE_11C_VOICE_IDENTITY_NEXT_AUTH =
   "AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT" as const;
 export const PHASE_11C_VOICE_IDENTITY_MIGRATION =
-  "20260815182203_vhs_11c_voice_identity_catalog.sql" as const;
+  "20260815195207_vhs_11c_voice_identity_catalog.sql" as const;
 
 export const VOICE_IDENTITY_STABLE_KEYS = [
   "character_mei",

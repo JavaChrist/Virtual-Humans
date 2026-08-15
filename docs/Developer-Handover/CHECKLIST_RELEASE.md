@@ -115,6 +115,7 @@
 - [x] Binding narrateur Voice (`141_`) · **BLOCKED_VOICE_NARRATOR_BINDING_CONFIG_UNAVAILABLE** · config = Mei · 0 persist ;
 - [x] Catalogue Voice 4 identités (`142_`) · **VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG** · migration locale · 0 apply ;
 - [x] Preflight remote Voice catalog (`143_`) · **VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH** · 0 write · 0 apply ;
+- [x] Apply remote Voice catalog (`144_`) · **VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLIED_EMPTY_RUNTIME_OFF** · 31/31 · 0 seed ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -124,7 +125,7 @@ Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
 I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
-Voice `/director` : **WIRED_DISABLED** (`140_`–`143_`) · catalogue 4 identités · config locale prête · migration non appliquée · 0 ElevenLabs · flags OFF
+Voice `/director` : **WIRED_DISABLED** (`140_`–`144_`) · catalog remote vide · 31/31 · 0 seed · 0 ElevenLabs · flags OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

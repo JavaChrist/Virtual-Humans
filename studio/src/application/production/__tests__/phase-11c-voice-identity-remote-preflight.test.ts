@@ -10,10 +10,7 @@ import { PHASE_11C_VOICE_CAPABILITY_FLAG_ENV, assertPhase11CVoiceFlagsRemainOff 
 import { PHASE_11C_VOICE_IDENTITY_MIGRATION } from "../phase-11c-voice-identity-catalog";
 import {
   PHASE_11C_APPLICATION_ONLY_GUARDS,
-  PHASE_11C_LOCAL_MIGRATION_COUNT,
   PHASE_11C_LOCAL_VOICE_FINGERPRINT_PREFIXES,
-  PHASE_11C_REMOTE_LAST_MIGRATION,
-  PHASE_11C_REMOTE_MIGRATION_COUNT,
   PHASE_11C_VOICE_GRANT_MATRIX,
   PHASE_11C_VOICE_IDENTITY_MIGRATION_GIT_BLOB,
   PHASE_11C_VOICE_IDENTITY_MIGRATION_SHA256,
@@ -62,7 +59,7 @@ test("11C-RP — auth, flags OFF, apply forbidden", () => {
     PHASE_11C_VOICE_IDENTITY_REMOTE_PREFLIGHT_NEXT_AUTH,
     "AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE",
   );
-  assert.equal(PHASE_11C_VOICE_IDENTITY_MIGRATION, "20260815182203_vhs_11c_voice_identity_catalog.sql");
+  assert.equal(PHASE_11C_VOICE_IDENTITY_MIGRATION, "20260815195207_vhs_11c_voice_identity_catalog.sql");
   assert.equal(PHASE_11C_VOICE_IDENTITY_MIGRATION_GIT_BLOB, "103d5b93adafa3e97b264ffe6370e18244965174");
   assertPhase11CVoiceFlagsRemainOff({});
   assert.throws(
@@ -112,13 +109,14 @@ test("11C-RP — grant matrix service_role only", () => {
   assert.deepEqual(PHASE_11C_VOICE_GRANT_MATRIX[1]?.serviceRole, ["SELECT", "INSERT"]);
 });
 
-test("11C-RP — drift admissible: 30 remote, 1 local-only", () => {
-  assert.equal(LOCAL_MIGRATION_FILES.length, PHASE_11C_LOCAL_MIGRATION_COUNT);
-  assert.equal(REMOTE_VERSIONS.length, PHASE_11C_REMOTE_MIGRATION_COUNT);
-  assert.equal(REMOTE_VERSIONS.at(-1), `${PHASE_11C_REMOTE_LAST_MIGRATION}.sql`);
+test("11C-RP — historical pre-apply drift still fail-closed", () => {
+  const preApplyLocal = [
+    ...REMOTE_VERSIONS.filter((file) => file !== PHASE_11C_VOICE_IDENTITY_MIGRATION),
+    "20260815182203_vhs_11c_voice_identity_catalog.sql",
+  ];
   const drift = compareVoiceIdentityMigrationDrift({
-    localFiles: LOCAL_MIGRATION_FILES,
-    remoteVersions: REMOTE_VERSIONS,
+    localFiles: preApplyLocal,
+    remoteVersions: REMOTE_VERSIONS.filter((file) => file !== PHASE_11C_VOICE_IDENTITY_MIGRATION),
   });
   assertVoiceIdentityMigrationDriftAdmissible(drift);
   assert.deepEqual(drift.localUnapplied, ["20260815182203"]);
@@ -170,14 +168,18 @@ test("11C-RP — remote facts refuse preexisting table or write", () => {
 });
 
 test("11C-RP — dry-run replay fingerprint stable, applyAllowed false", () => {
+  const preApplyLocal = [
+    ...REMOTE_VERSIONS,
+    "20260815182203_vhs_11c_voice_identity_catalog.sql",
+  ];
   const first = runVoiceIdentityRemotePreflightDryRun({
     sql: SQL,
-    localFiles: LOCAL_MIGRATION_FILES,
+    localFiles: preApplyLocal,
     remoteVersions: REMOTE_VERSIONS,
   });
   const second = runVoiceIdentityRemotePreflightDryRun({
     sql: SQL,
-    localFiles: LOCAL_MIGRATION_FILES,
+    localFiles: preApplyLocal,
     remoteVersions: REMOTE_VERSIONS,
   });
   assert.equal(first.fingerprint, second.fingerprint);

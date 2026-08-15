@@ -46,7 +46,7 @@ const EXPECTED_FILES = [
   "20260807213624_vhs_133_art_human_retry_input_artifact.sql",
   "20260807213803_vhs_134_legacy_art_timeout_retry.sql",
   "20260811211757_vhs_mt005_human_review_decision_extend.sql",
-  "20260815182203_vhs_11c_voice_identity_catalog.sql",
+  "20260815195207_vhs_11c_voice_identity_catalog.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -72,7 +72,7 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 31 versions (30 Production + 1 local-only Voice catalog)", () => {
+test("migrations — 31 versions aligned Production after Voice catalog apply", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
   assert.equal(files.length, 31);
@@ -330,9 +330,9 @@ test("migrations V2 — VHS-125 postproduction delivery RPCs et table présents"
   );
 });
 
-test("migrations V2 — VHS-11C Voice identity catalog local-only (not applied Production)", () => {
+test("migrations V2 — VHS-11C Voice identity catalog applied Production empty", () => {
   const sql = readFileSync(
-    join(MIGRATIONS_DIR, "20260815182203_vhs_11c_voice_identity_catalog.sql"),
+    join(MIGRATIONS_DIR, "20260815195207_vhs_11c_voice_identity_catalog.sql"),
     "utf8",
   );
   assert.match(sql, /CREATE TABLE public\.voice_identities/i);
@@ -348,7 +348,7 @@ test("migrations V2 — VHS-11C Voice identity catalog local-only (not applied P
   assert.ok(!/GRANT[\s\S]*TO authenticated/i.test(sql));
   assert.ok(!/voiceId/i.test(sql));
   assert.ok(!/ELEVENLABS_[A-Z_]*VOICE_ID=/i.test(sql));
-  assert.match(sql, /NOT applied to Production/i);
+  assert.match(sql, /Schema only: no seed rows/i);
   assert.match(sql, /project_voice_bindings_one_active_narrator_idx/);
 });
 

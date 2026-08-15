@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.167] — 2026-08-15
+
+### Added (Phase 11C Voice identity catalog remote apply)
+
+- Application unique de la migration Voice catalog sur Production (`144_`). Version distante MCP `20260815195207`. Alignement **31/31**.
+- Trois tables vides, RLS on, 0 policy, 0 seed, 0 ElevenLabs. Runtime Voice OFF.
+- Verdict **`VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLIED_EMPTY_RUNTIME_OFF`**.
+- Prochaine porte **`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`**.
+
 ## [2.0.166] — 2026-08-15
 
 ### Added (Phase 11C Voice identity catalog remote migration preflight)
