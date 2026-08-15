@@ -12,7 +12,7 @@
 
 Smokes provider texte (10B–10F) = hors CI ; preuves dans rapports `27`–`57`.
 Média réel : **0** (11A prep seulement).
-Voice/TTS 11C (`140_`/`141_`) : wiring + binding/consent fakes (`phase-11c-voice-tts-production-wiring.test.ts`, `phase-11c-narrator-binding-and-consent.test.ts`) ; **0** ElevenLabs / Storage / flags. VoiceId jamais dans les assertions.
+Voice/TTS 11C (`140_`–`142_`) : wiring + binding + catalogue 4 identités (`phase-11c-voice-identity-catalog.test.ts`) ; migrations-static 31 fichiers ; **0** ElevenLabs / Storage / flags. VoiceId jamais dans les assertions.
 Motion Transfer : tests cibles MT-001…011 (domain/…/worker/QC/review/obs fake) ; suite E2E synthétique MT-012 puis benchmark Auth MT-013 — voir `59_` / `72_`.
 Motion QC (MT-009) : `src/application/motion/__tests__/mt009-motion-qc.test.ts` — fake measurement only ; pas d’appel CV/provider.
 Motion Review (MT-010) : `src/application/motion/__tests__/mt010-motion-review.test.ts` — décisions append-only ; retry = **0** job/ledger/provider.

@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.165] — 2026-08-15
+
+### Added (Phase 11C Voice identity catalog)
+
+- Catalogue de quatre identités (`character_mei`, `character_tom`, `narrator_female`, `narrator_male`), règles dialogue/voice-over, sélecteur `/director`, migration locale RLS (`142_`).
+- Locators narrateur `ELEVENLABS_NARRATOR_FEMALE_VOICE_ID` / `ELEVENLABS_NARRATOR_MALE_VOICE_ID` — absents en local. 0 apply distant. 0 ElevenLabs.
+- Verdict **`VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG`**.
+- Prochaine porte **`AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT`**.
+
 ## [2.0.164] — 2026-08-15
 
 ### Added (Phase 11C Voice narrator binding and consent)

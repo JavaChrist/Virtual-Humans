@@ -18,6 +18,7 @@ import { StoryboardSection } from "./storyboard-section";
 import { PromptSection } from "./prompt-section";
 import { RoutingSection } from "./routing-section";
 import { ProductionSection } from "./production-section";
+import { VoiceNarratorSelector } from "./voice-narrator-selector";
 import { DeliverySection } from "./delivery-section";
 import { MotionReviewSection } from "./motion-review-section";
 import { StaleBadge } from "./stale-badge";
@@ -164,6 +165,7 @@ export function DirectorProjectClient({
         restartPoint={restartPoint}
       >
         <ScriptSection projectId={projectId} initialScript={initialScript} />
+        <VoiceNarratorSelector />
       </SectionShell>
       <SectionShell
         id="section-visual_direction"

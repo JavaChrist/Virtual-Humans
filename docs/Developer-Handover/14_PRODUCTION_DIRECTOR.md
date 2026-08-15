@@ -60,7 +60,7 @@ Activation et approbation restent indépendantes. APPROVE ≠ actif ≠ merge au
 
 ## Voice / TTS (`140_`)
 
-Chemin `/director` Voice câblé et **désactivé**. Capability `audio.voice`, action `voice`, modèle `eleven_multilingual_v2`. Le segment parlé se résout explicitement (projet I2V, script `349e2792` rev.1, `segment-2`, hash seulement). La vidéo I2V `9be6cb0c` est un contexte lipsync futur : Voice ne la lit pas et ne la mute pas. APPROVE Voice n’ouvre pas la porte lipsync. Runtime et downstream OFF. Binding `141_` : locator + fingerprint redacted ; live **refusé** (voix configurée = identité Mei). Consentement Voice narrateur **non persisté**. MV-001 ≠ Voice. Persistance Production exigerait une migration `voice_narrator_binding` / `voice_consent_attestation`.
+Chemin `/director` Voice câblé et **désactivé**. Capability `audio.voice`, action `voice`, modèle `eleven_multilingual_v2`. Le segment parlé se résout explicitement (projet I2V, script `349e2792` rev.1, `segment-2`, hash seulement). La vidéo I2V `9be6cb0c` est un contexte lipsync futur : Voice ne la lit pas et ne la mute pas. APPROVE Voice n’ouvre pas la porte lipsync. Runtime et downstream OFF. Catalogue `142_` : quatre identités, sélecteur Narratrice/Narrateur inopérant, migration locale `voice_identities` / `voice_consent_attestations` / `project_voice_bindings` **non appliquée**. Locators narrateur absents. MV-001 ≠ Voice.
 
 ## Reprise
 

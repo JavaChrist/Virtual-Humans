@@ -8,7 +8,9 @@ import type { SettingsResponse } from "@/lib/types";
 const KEYS = [
   { id: "openai", env: "OPENAI_API_KEY", use: "Images (gpt-image-1)", url: "https://platform.openai.com/api-keys" },
   { id: "elevenlabs", env: "ELEVENLABS_API_KEY", use: "Voix (TTS)", url: "https://elevenlabs.io/app/settings/api-keys" },
-  { id: "elevenlabsVoice", env: "ELEVENLABS_VOICE_ID", use: "Voix par défaut du personnage", url: "https://elevenlabs.io/app/voice-library" },
+  { id: "elevenlabsVoice", env: "ELEVENLABS_VOICE_ID", use: "Historique Mei — pas un fallback narrateur", url: "https://elevenlabs.io/app/voice-library" },
+  { id: "elevenlabsNarratorFemale", env: "ELEVENLABS_NARRATOR_FEMALE_VOICE_ID", use: "Narratrice voice-over (locale seulement)", url: "https://elevenlabs.io/app/voice-library" },
+  { id: "elevenlabsNarratorMale", env: "ELEVENLABS_NARRATOR_MALE_VOICE_ID", use: "Narrateur voice-over (locale seulement)", url: "https://elevenlabs.io/app/voice-library" },
   { id: "fal", env: "FAL_KEY", use: "Vidéo (Kling/Veo/MiniMax/Runway)", url: "https://fal.ai/dashboard/keys" },
   { id: "supabase", env: "SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY", use: "Budget + captures produits (Storage)", url: "https://supabase.com/dashboard/project/ejdbksxaswhdtsudnmvi/settings/api" },
 ] as const;
@@ -82,7 +84,11 @@ export default function SettingsPage() {
         </p>
         <pre className="textarea whitespace-pre overflow-x-auto text-xs">{`OPENAI_API_KEY=sk-...
 ELEVENLABS_API_KEY=...
+# Historique Mei — PAS un fallback narrateur
 ELEVENLABS_VOICE_ID=...
+# Narrateurs canoniques — valeurs locales seulement, jamais Git
+ELEVENLABS_NARRATOR_FEMALE_VOICE_ID=...
+ELEVENLABS_NARRATOR_MALE_VOICE_ID=...
 FAL_KEY=...
 
 # Supabase (budget + captures produits)

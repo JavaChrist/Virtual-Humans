@@ -113,6 +113,7 @@
 - [x] Cohérence pointeurs (`139_`) · **ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED** · 0 mutation live ;
 - [x] Wiring Voice/TTS `/director` (`140_`) · **VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT** · 0 ElevenLabs ;
 - [x] Binding narrateur Voice (`141_`) · **BLOCKED_VOICE_NARRATOR_BINDING_CONFIG_UNAVAILABLE** · config = Mei · 0 persist ;
+- [x] Catalogue Voice 4 identités (`142_`) · **VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG** · migration locale · 0 apply ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -122,7 +123,7 @@ Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
 I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
-Voice `/director` : **WIRED_DISABLED** (`140_`/`141_`) · binding refusé (config = Mei) · 0 ElevenLabs · flags OFF
+Voice `/director` : **WIRED_DISABLED** (`140_`–`142_`) · catalogue 4 identités · locators narrateur absents · 0 ElevenLabs · flags OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

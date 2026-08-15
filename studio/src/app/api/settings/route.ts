@@ -23,6 +23,8 @@ export async function GET(req: NextRequest) {
         openai: Boolean(process.env.OPENAI_API_KEY),
         elevenlabs: Boolean(process.env.ELEVENLABS_API_KEY),
         elevenlabsVoice: Boolean(process.env.ELEVENLABS_VOICE_ID),
+        elevenlabsNarratorFemale: Boolean(process.env.ELEVENLABS_NARRATOR_FEMALE_VOICE_ID),
+        elevenlabsNarratorMale: Boolean(process.env.ELEVENLABS_NARRATOR_MALE_VOICE_ID),
         fal: Boolean(process.env.FAL_KEY),
         supabase: Boolean(
           process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY,

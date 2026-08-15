@@ -123,15 +123,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11C-VOICE-BINDING (`141_`)
              · **BLOCKED_VOICE_NARRATOR_BINDING_CONFIG_UNAVAILABLE**
              · config = Mei · 0 persist · runtime OFF
+             Phase 11C-VOICE-CATALOG (`142_`)
+             · **VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG**
+             · 4 identités · migration locale · env narrateur absente
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **389** / reserved **0** / available **48**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0         : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit · 0 ElevenLabs
-P1         : identité narrateur (Mei) · migration Voice · pricing non ferme
-P1 fermé   : binding refusé fail-closed · Voice/TTS câblé désactivé · pointeurs durcis
-Next major : AUTH_11C_VOICE_NARRATOR_IDENTITY_DECISION
+P1         : locators narrateur · apply migration Voice · pricing non ferme
+P1 fermé   : catalogue + migration locale · binding refusé · Voice/TTS câblé désactivé
+Next major : AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT
 ```
 
 ## P0 — fondations
@@ -192,7 +195,8 @@ Next major : AUTH_11C_VOICE_NARRATOR_IDENTITY_DECISION
 - **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · paid (`115_`) · decode PNG 0–4 (`116_`) · compose (`118_`) · composed HR REJECT (`119_`) · glyphes (`120_`) · preflight 1.1.0 (`121_`) · recomposition 1.1.0 (`122_`) · HR 1.1.0 REJECT (`123_`) **PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED**.
 - **P1 budget** : hard **437** ; committed **389** ; reserved **0** ; available **48**.
 - **Phase 11C Voice binding** ✅ **BLOCKED** (`141_`) — voix configurée = identité Mei · 0 persist Production · 0 ElevenLabs · runtime OFF.
-- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_NARRATOR_IDENTITY_DECISION`** — voix distincte de Tom/Mei **ou** Auth Mei-explicite. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Phase 11C Voice catalog** ✅ **READY_BLOCKED_MISSING_SECURE_CONFIG** (`142_`) — 4 identités · migration locale non appliquée · locators narrateur absents.
+- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT`** — 0 write · 0 ElevenLabs. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

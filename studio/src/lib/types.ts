@@ -19,7 +19,15 @@ export interface TemplateResponse {
 }
 
 export interface SettingsResponse {
-  keys: { openai: boolean; elevenlabs: boolean; elevenlabsVoice: boolean; fal: boolean; supabase: boolean };
+  keys: {
+    openai: boolean;
+    elevenlabs: boolean;
+    elevenlabsVoice: boolean;
+    elevenlabsNarratorFemale: boolean;
+    elevenlabsNarratorMale: boolean;
+    fal: boolean;
+    supabase: boolean;
+  };
   sdk: { configured: boolean; character: string };
   pricing: { elevenlabsUsdPer1kChars: number };
   /** Fail-closed: session always required when this endpoint is reachable. */

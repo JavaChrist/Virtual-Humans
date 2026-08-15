@@ -48,7 +48,10 @@
 **voice secret locator** — référence de configuration (`env:ELEVENLABS_VOICE_ID`) résolue call-time ; jamais le voiceId brut (`141_`).
 **voice fingerprint** — hash sha256 redacted de la valeur configurée ; préfixe public seulement (`141_`).
 **BLOCKED_VOICE_NARRATOR_BINDING_CONFIG_UNAVAILABLE** — verdict `141_` : voix configurée collisionne avec Mei · binding non persisté · runtime OFF.
-**AUTH_11C_VOICE_NARRATOR_IDENTITY_DECISION** — prochaine porte : voix narrateur distincte de Tom/Mei, ou Auth explicite Mei-as-narrator.
+**AUTH_11C_VOICE_NARRATOR_IDENTITY_DECISION** — porte `141_` proposée puis absorbée par le catalogue `142_`.
+**voice identity catalog** — quatre identités distinctes `character_mei` / `character_tom` / `narrator_female` / `narrator_male` (`142_`).
+**VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG** — verdict `142_` : architecture prête · locators narrateur absents · migration locale non appliquée.
+**AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT** — prochaine porte : vérifier la migration locale sans write ni apply distant.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
