@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.164] — 2026-08-15
+
+### Added (Phase 11C Voice narrator binding and consent)
+
+- Contrats binding narrateur + attestation Voice bornée (`141_`) : locator `env:ELEVENLABS_VOICE_ID`, fingerprint redacted, store append-only de test.
+- Live fail-closed : la voix configurée collisionne avec l’identité **Mei**. 0 persist Production. 0 ElevenLabs.
+- Verdict **`BLOCKED_VOICE_NARRATOR_BINDING_CONFIG_UNAVAILABLE`**.
+- Prochaine porte **`AUTH_11C_VOICE_NARRATOR_IDENTITY_DECISION`**.
+
 ## [2.0.163] — 2026-08-15
 
 ### Added (Phase 11C Voice/TTS Production wiring)

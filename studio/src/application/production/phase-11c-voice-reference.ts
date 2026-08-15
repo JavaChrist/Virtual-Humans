@@ -15,33 +15,33 @@ import {
 } from "./phase-11c-voice-allowlist";
 
 export const PHASE_11C_LIVE_NARRATOR_VOICE_STATUS =
-  "missing_explicit_narrator_binding" as const;
+  "configured_voice_collides_with_mei" as const;
 export const PHASE_11C_LIVE_CONSENT_STATUS = "insufficient" as const;
 export const PHASE_11C_LIVE_CONSENT_NOTE =
-  "Privacy Pack MV-001 is benchmark-only and is not Voice consent." as const;
+  "Christian attested subscription rights, but the configured locator matches Mei. Narrator binding refused." as const;
 
 export function resolvePhase11CLiveNarratorVoice(): never {
   throw new Error(
-    "Phase 11C: no authorized narrator voice is bound to the I2V project. Fail-closed; no substitution.",
+    "Phase 11C: configured voice collides with Mei. Narrator binding refused; no character substitution.",
   );
 }
 
 export function inspectPhase11CLiveVoiceConsent(): {
-  technicalVoiceConfigured: false;
+  technicalVoiceConfigured: true;
   voiceUsageAuthorized: false;
   globalConsent: false;
   benchmarkOnlyConsent: true;
-  characterIdentityBound: false;
+  characterIdentityBound: true;
   clonedVoice: false;
   status: typeof PHASE_11C_LIVE_CONSENT_STATUS;
   note: typeof PHASE_11C_LIVE_CONSENT_NOTE;
 } {
   return {
-    technicalVoiceConfigured: false,
+    technicalVoiceConfigured: true,
     voiceUsageAuthorized: false,
     globalConsent: false,
     benchmarkOnlyConsent: true,
-    characterIdentityBound: false,
+    characterIdentityBound: true,
     clonedVoice: false,
     status: PHASE_11C_LIVE_CONSENT_STATUS,
     note: PHASE_11C_LIVE_CONSENT_NOTE,

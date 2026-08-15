@@ -45,6 +45,10 @@
 **ExistingVoiceReference** — contrat générique de voix Production (`140_`) : provider, modèle, langue, consent, id redacted ; jamais de clé API ni fallback env.
 **VHS11C_ELEVENLABS_VOICE_DIRECTOR_EXCEPTION** — exception temporaire bornée (OFF) pour ElevenLabs / `eleven_multilingual_v2` / `audio.voice` / projet+scène I2V ; n’active pas lipsync/merge ; n’est pas `providerMode=real`.
 **VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT** — verdict `140_` : chemin Voice/TTS câblé et désactivé · 0 ElevenLabs · narrateur non lié · MV-001 ≠ consent Voice.
+**voice secret locator** — référence de configuration (`env:ELEVENLABS_VOICE_ID`) résolue call-time ; jamais le voiceId brut (`141_`).
+**voice fingerprint** — hash sha256 redacted de la valeur configurée ; préfixe public seulement (`141_`).
+**BLOCKED_VOICE_NARRATOR_BINDING_CONFIG_UNAVAILABLE** — verdict `141_` : voix configurée collisionne avec Mei · binding non persisté · runtime OFF.
+**AUTH_11C_VOICE_NARRATOR_IDENTITY_DECISION** — prochaine porte : voix narrateur distincte de Tom/Mei, ou Auth explicite Mei-as-narrator.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

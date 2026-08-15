@@ -196,7 +196,7 @@ test("11C — 7/8/9 voix explicite, absence et consentement insuffisant", () => 
   assert.equal(voice.voiceProvider, "elevenlabs");
   assert.equal(voice.expectedModelId, PHASE_11C_MODEL);
   assert.match(voice.voiceConfigIdRedacted, /^el-voice:/);
-  assert.throws(() => resolvePhase11CLiveNarratorVoice(), /no authorized narrator voice/);
+  assert.throws(() => resolvePhase11CLiveNarratorVoice(), /Mei|substitution|narrator/i);
   const consent = inspectPhase11CLiveVoiceConsent();
   assert.equal(consent.status, "insufficient");
   assert.equal(consent.benchmarkOnlyConsent, true);
