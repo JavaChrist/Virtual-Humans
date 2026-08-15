@@ -57,7 +57,7 @@ Cette porte prépare le binding en **lecture seule**. Aucune écriture Productio
 | ahead / behind | **0 / 0** au départ |
 | Hors scope | AICCOS + `page.tsx` protégés |
 
-`documentedHead=cd88d9d` · `headStatus=pending commit`. Binding live **toujours absent**.
+HEAD de départ `cd88d9d`. Commit de phase `77dc1a7`. `documentedHead=77dc1a7` · `headStatus=pending commit`. Binding live **toujours absent**.
 
 ## 3. Working tree
 

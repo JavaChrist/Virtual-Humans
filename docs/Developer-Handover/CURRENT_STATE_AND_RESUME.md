@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-16T00:50:00+02:00
-documentedHead=cd88d9d
+documentedHead=77dc1a7
 headStatus=pending commit
 lastPhaseReport=150_PHASE_11C_I2V_NARRATOR_BINDING_PREFLIGHT.md
 nextPhase=AUTH_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE
@@ -20,8 +20,8 @@ globalStatus=I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH
 **Dernière vérification :** 2026-08-16 00:50 Europe/Paris  
 **Auteur de la mise à jour :** Cursor · `AUTH_11C_I2V_NARRATOR_BINDING_PREFLIGHT`  
 **Branche :** `main`  
-**HEAD local :** `cd88d9d` avant ce commit · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
-**origin/main :** `cd88d9d` avant ce commit  
+**HEAD local :** `77dc1a7` · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
+**origin/main :** `77dc1a7` après push  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS + `page.tsx` hors scope  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`** déployé  
@@ -455,7 +455,7 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-16 | `150_` I2V narrator binding preflight | I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH | à venir | 0 | 0 write · choix female · 0 binding | binding write |
+| 2026-08-16 | `150_` I2V narrator binding preflight | I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH | `77dc1a7` | 0 | 0 write · choix female · 0 binding | binding write |
 | 2026-08-16 | `149_` Voice seed/consent transaction | VOICE_IDENTITY_CATALOG_SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING | `2cf7642` | 0 | 8 INSERT · 4/4/0 · 0 binding | narrator binding preflight |
 | 2026-08-16 | `148_` Voice seed/consent preflight | VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH | `01a0861` | 0 | 0 write · plan 4+4 | seed transaction |
 | 2026-08-15 | `147_` Voice grant hardening apply | VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF | `6968876` | 0 | 1 ACL · 32/32 · 0 seed | seed/consent preflight |
