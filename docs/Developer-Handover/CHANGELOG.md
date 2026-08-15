@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.174] — 2026-08-16
+
+### Added (Phase 11C I2V narrator female binding single write)
+
+- Un INSERT atomique `project_voice_bindings` : projet I2V → `narrator_female` · execution=false (`151_`).
+- Replay idempotent `existing` · 0 second write · 0 ElevenLabs · compteurs 4/4/1.
+- Verdict **`I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF`**.
+- Prochaine porte **`AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER`**.
+
 ## [2.0.173] — 2026-08-16
 
 ### Added (Phase 11C I2V narrator female binding preflight)

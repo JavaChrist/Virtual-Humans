@@ -149,15 +149,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11C-I2V-NARRATOR-PREFLIGHT (`150_`)
              · **I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH**
              · choix female · 0 binding live
+             Phase 11C-I2V-NARRATOR-WRITE (`151_`)
+             · **I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF**
+             · 1 INSERT · 4/4/1 · execution=false
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **389** / reserved **0** / available **48**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0         : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit · 0 ElevenLabs
-P1         : binding narrateur I2V write · pricing non ferme
-P1 fermé   : binding preflight · seed transaction · seed preflight · grant apply
-Next major : AUTH_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE
+P1         : live preflight TTS sans provider · pricing non ferme
+P1 fermé   : binding write · binding preflight · seed transaction · seed preflight · grant apply
+Next major : AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER
 ```
 
 ## P0 — fondations
@@ -227,7 +230,8 @@ Next major : AUTH_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE
 - **Phase 11C Voice seed/consent preflight** ✅ **READY_FOR_SINGLE_TRANSACTION_AUTH** (`148_`) — plan 4+4 · 0 persist · 0 binding.
 - **Phase 11C Voice seed/consent transaction** ✅ **SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING** (`149_`) — 8 INSERT · 4/4/0 · execution=false.
 - **Phase 11C I2V narrator binding preflight** ✅ **READY_FOR_SINGLE_WRITE_AUTH** (`150_`) — choix `narrator_female` · 0 persist.
-- **Prochaine porte majeure** : Auth **`AUTH_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE`** — 1 binding female · execution=false · 0 ElevenLabs. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Phase 11C I2V narrator binding write** ✅ **I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF** (`151_`) — 1 INSERT · 4/4/1 · execution=false.
+- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER`** — dry-run TTS arrêté avant média et ElevenLabs. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

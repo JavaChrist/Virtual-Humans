@@ -60,7 +60,7 @@ Activation et approbation restent indépendantes. APPROVE ≠ actif ≠ merge au
 
 ## Voice / TTS (`140_`)
 
-Chemin `/director` Voice câblé et **désactivé**. Capability `audio.voice`, action `voice`, modèle `eleven_multilingual_v2`. Le segment parlé se résout explicitement (projet I2V, script `349e2792` rev.1, `segment-2`, hash seulement). La vidéo I2V `9be6cb0c` est un contexte lipsync futur : Voice ne la lit pas et ne la mute pas. APPROVE Voice n’ouvre pas la porte lipsync. Runtime et downstream OFF. Catalogue `142_`–`150_` : quatre identités persistées, tables **4/4/0**. Choix I2V `narrator_female` préparé (`150_`), non persisté. Sélecteur UI toujours inopérant. execution=false. MV-001 ≠ Voice.
+Chemin `/director` Voice câblé et **désactivé**. Capability `audio.voice`, action `voice`, modèle `eleven_multilingual_v2`. Le segment parlé se résout explicitement (projet I2V, script `349e2792` rev.1, `segment-2`, hash seulement). La vidéo I2V `9be6cb0c` est un contexte lipsync futur : Voice ne la lit pas et ne la mute pas. APPROVE Voice n’ouvre pas la porte lipsync. Runtime et downstream OFF. Catalogue `142_`–`151_` : quatre identités persistées, tables **4/4/1**. Binding I2V `narrator_female` persisté (`151_`). Sélecteur UI toujours inopérant. execution=false. MV-001 ≠ Voice.
 
 ## Reprise
 

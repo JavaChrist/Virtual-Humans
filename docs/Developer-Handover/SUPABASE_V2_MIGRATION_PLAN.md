@@ -2,6 +2,11 @@
 
 **Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
 
+> **Delta `151_` (16 août 2026) — I2V narrator binding APPLIED, 4/4/1 :**
+> Un INSERT `project_voice_bindings` : projet I2V → `narrator_female` · execution=false · 0 ElevenLabs.
+> Replay `existing`. ACL `147_` inchangées. Budget 437/389/0/48.
+> Prochaine porte : `AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER`.
+>
 > **Delta `150_` (16 août 2026) — I2V narrator binding PREFLIGHT, NOT PERSISTED :**
 > Choix humain `narrator_female` · plan déterministe · 0 binding live · execution=false.
 > Verdict `I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH`.
