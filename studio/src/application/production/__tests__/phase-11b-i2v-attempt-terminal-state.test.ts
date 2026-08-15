@@ -22,7 +22,9 @@ import {
   PHASE_11B_LIVE_RUN_ID,
   PHASE_11B_LIVE_VIDEO_ASSET_ID,
   PHASE_11B_LIVE_WORKSPACE_ID,
+  PHASE_11B_LIVE_RECONCILIATION_PREFLIGHT_AUTH,
   PHASE_11B_NEXT_LIVE_RECONCILIATION_AUTH,
+  PHASE_11B_PROPOSED_COMPLETED_AT,
   assertPhase11BPaidScriptMustNotResubmit,
   planPhase11BLiveAttemptReconciliation,
 } from "../phase-11b-i2v-attempt-terminal-state";
@@ -80,17 +82,25 @@ function liveFacts(
     runId: PHASE_11B_LIVE_RUN_ID,
     jobId: PHASE_11B_LIVE_JOB_ID,
     attemptStatus: "started",
+    attemptCompletedAt: null,
     attemptCountForRun: 1,
     jobStatus: "completed",
     runStatus: "completed",
     submitCount: 1,
     providerJobIdPresent: true,
     outputIngested: true,
+    outputCount: 1,
     humanReviewDecision: "approved",
+    humanReviewRejectedCount: 0,
     videoLifecycle: "approved",
     videoActive: false,
     ledgerSettledProvisional: true,
     reservedActive: false,
+    hardLimitMinor: 437,
+    committedMinor: 389,
+    reservedMinor: 0,
+    availableMinor: 48,
+    proposedCompletedAt: PHASE_11B_PROPOSED_COMPLETED_AT,
     ...overrides,
   };
 }
@@ -103,7 +113,7 @@ test("11B-ATTEMPT — auth, order, consumed script, no resubmit", () => {
   );
   assert.equal(
     PHASE_11B_NEXT_LIVE_RECONCILIATION_AUTH,
-    "AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT",
+    PHASE_11B_LIVE_RECONCILIATION_PREFLIGHT_AUTH,
   );
   assert.equal(PHASE_11B_I2V_PAID_SCRIPT_AUTH_CONSUMED, true);
   assert.equal(GENERATION_ATTEMPT_TRANSITION_ORDER[5], "attempt_terminal");
@@ -262,8 +272,11 @@ test("11B-ATTEMPT — dry-run accepts exact live target and refuses ambiguous on
   assert.equal(ok.accepted, true);
   assert.equal(ok.mutationAllowed, false);
   assert.equal(ok.desiredStatus, "completed");
+  assert.equal(ok.desiredCompletedAt, PHASE_11B_PROPOSED_COMPLETED_AT);
   assert.equal(ok.retryable, false);
   assert.equal(ok.currentStatus, "started");
+  assert.equal(ok.resubmitAllowed, false);
+  assert.equal(ok.expectedRows, 1);
 
   assert.equal(planPhase11BLiveAttemptReconciliation(liveFacts({ attemptId: "other" })).refuseCode, "attempt_mismatch");
   assert.equal(planPhase11BLiveAttemptReconciliation(liveFacts({ attemptCountForRun: 2 })).refuseCode, "ambiguous_attempts");

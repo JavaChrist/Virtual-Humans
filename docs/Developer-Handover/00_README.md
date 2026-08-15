@@ -62,13 +62,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **PHASE_11B_CLOSED_PASS_WITH_NOTES**
                            Attempt terminal hardening (`136_`)
                            · **I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT**
-Runtime AI / paid media  : OFF · wiring I2V **57de914** · preuve 1.2.0 **d395ec7** · runtime image **245bea2**
+                           Attempt live reconciliation preflight (`137_`)
+                           · **I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH**
+Runtime AI / paid media  : OFF · hardening **97f7ad7** déployé · preuve 1.2.0 **d395ec7** · runtime image **245bea2**
 Budget                   : hard 437 / committed 389 / reserved 0 / available 48 ¢
 production_jobs média    : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0                       : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit fal
-P1 ouverts               : attempt live `started` (code hardené) · pointeurs QR/PR I2V + GP 11A
-P1 fermé                 : hardening attempt · clôture 11B · HR I2V APPROVE · first paid I2V
-Prochaine porte majeure  : AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT
+P1 ouverts               : attempt live `started` (CAS prêt) · pointeurs QR/PR I2V + GP 11A
+P1 fermé                 : preflight reconciliation · hardening attempt · clôture 11B · HR I2V APPROVE
+Prochaine porte majeure  : AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -273,6 +275,7 @@ Utilisateur → AI Video Director (/director)
 | [`134_PHASE_11B_I2V_HUMAN_REVIEW_APPROVE.md`](./134_PHASE_11B_I2V_HUMAN_REVIEW_APPROVE.md) | **11B-I2V-HR-APPROVE · I2V_FIRST_PAID_VIDEO_HUMAN_APPROVED_PRIVATE_INACTIVE** |
 | [`135_PHASE_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md`](./135_PHASE_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md) | **11B-CLOSE · PHASE_11B_CLOSED_PASS_WITH_NOTES** |
 | [`136_PHASE_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING.md`](./136_PHASE_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING.md) | **11B-ATTEMPT-HARDENING · I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT** |
+| [`137_PHASE_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT.md`](./137_PHASE_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT.md) | **11B-ATTEMPT-RECON-PREFLIGHT · I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

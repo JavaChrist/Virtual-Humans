@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.160] — 2026-08-15
+
+### Added (Phase 11B I2V attempt live reconciliation preflight)
+
+- Preflight read-only (`137_`) : hardening `97f7ad7` déployé · CAS unique préparé · `completed_at` = ingest.
+- Attempt `6be95728…` toujours `started`. `mutationAllowed=false`.
+- Verdict **`I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH`**.
+- Prochaine porte **`AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE`**.
+
 ## [2.0.159] — 2026-08-15
 
 ### Added (Phase 11B I2V attempt terminal-state hardening)
