@@ -176,27 +176,27 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-La cohérence des pointeurs est **PASS** (`139_`) : `ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED`.
+Voice/TTS `/director` est **WIRED_DISABLED** (`140_`) : `VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT`.
 
-Stratégie C : résolution explicite par run/plan/output. **0** mutation de pointeur. `merge_ready` seul n’autorise jamais merge/export.
+Le chemin est câblé et testé en fakes. **0** ElevenLabs. Le projet I2V a un segment `voice_over` canonique (script `349e2792…` / `segment-2` / 81 car. / hash `f228654f…`). Aucune voix narrateur autorisée n’est liée. Le Privacy Pack MV-001 ≠ consentement Voice. Le pricing catalogue n’est pas ferme.
 
-Attempt `6be95728…` **`completed`**. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. GP actif = 11A rev.2. GP I2V rev.3 persisté non actif. Flags OFF.
+Attempt `6be95728…` **`completed`**. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF. Lipsync OFF.
 
 Phase active suivante :
 
-`AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`
+`AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT`
 
-Voice doit résoudre explicitement le bundle I2V. **Aucune** activation du GenerationPlan I2V pour masquer une faiblesse de résolution. **Aucun** merge/export.
+Lier explicitement une voix narrateur autorisée et documenter le consentement Voice. **Aucun** appel ElevenLabs. **Aucun** lipsync.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si `139_` est READY, Voice/TTS est la prochaine porte. Aucune reconciliation de pointeurs en parallèle. Aucun second write attempt.
+Si `140_` est STOP, la porte corrective est le binding voix + consent. Aucun live preflight Voice tant que cette porte n’est pas passée. Aucun second submit I2V.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -220,4 +220,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`. Les pointeurs sont durcis sans mutation (`139_`). L’attempt `138_` est completed. Aucun second write. Aucun second submit. Aucune activation. Merge/export interdits sans `mergeExportAuthorized`.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT`. Voice/TTS est câblé et désactivé (`140_`), bloqué voix/consent. Les pointeurs sont durcis (`139_`). L’attempt `138_` est completed. Aucun ElevenLabs. Aucun second submit. Aucune activation. Aucun lipsync.

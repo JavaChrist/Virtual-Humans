@@ -14,3 +14,4 @@ export * from "./schemas";
 export * from "./motion-transfer-media";
 export * from "./motion-transfer-prepare";
 export * from "./existing-media-asset-reference";
+export * from "./existing-voice-reference";

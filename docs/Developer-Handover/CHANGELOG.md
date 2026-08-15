@@ -2,6 +2,14 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.163] — 2026-08-15
+
+### Added (Phase 11C Voice/TTS Production wiring)
+
+- Chemin Voice/TTS `/director` câblé et désactivé (`140_`) : segment `voice_over` explicite, allowlist ElevenLabs, plan single-step, worker sync, QC humanOnly, HR sans lipsync auto.
+- Verdict **`VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT`** — narrateur non lié, MV-001 ≠ consent Voice, pricing catalogue non ferme.
+- Prochaine porte **`AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT`**. 0 ElevenLabs.
+
 ## [2.0.162] — 2026-08-15
 
 ### Added (Phase 11B artifact pointer coherence)

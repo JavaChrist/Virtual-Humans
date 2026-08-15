@@ -42,6 +42,9 @@
 **Naive active pointer set** — ensemble formé en prenant un actif par `artifact_type` ; peut mélanger des pipelines distincts (ex. GP 11A + QR/PR I2V).
 **mergeExportAuthorized** — autorisation explicite de merge/export, distincte de `delivery.status=merge_ready` et de Human Review APPROVE. Absent = false (fail-closed).
 **ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED** — verdict `139_` : contrat + guards durcis · 0 mutation de pointeur · prochaine porte Voice/TTS preflight.
+**ExistingVoiceReference** — contrat générique de voix Production (`140_`) : provider, modèle, langue, consent, id redacted ; jamais de clé API ni fallback env.
+**VHS11C_ELEVENLABS_VOICE_DIRECTOR_EXCEPTION** — exception temporaire bornée (OFF) pour ElevenLabs / `eleven_multilingual_v2` / `audio.voice` / projet+scène I2V ; n’active pas lipsync/merge ; n’est pas `providerMode=real`.
+**VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT** — verdict `140_` : chemin Voice/TTS câblé et désactivé · 0 ElevenLabs · narrateur non lié · MV-001 ≠ consent Voice.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

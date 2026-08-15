@@ -58,6 +58,10 @@ La résolution canonique est **explicite par run / GenerationPlan / output** (st
 
 Activation et approbation restent indépendantes. APPROVE ≠ actif ≠ merge autorisé.
 
+## Voice / TTS (`140_`)
+
+Chemin `/director` Voice câblé et **désactivé**. Capability `audio.voice`, action `voice`, modèle `eleven_multilingual_v2`. Le segment parlé se résout explicitement (projet I2V, script `349e2792` rev.1, `segment-2`, hash seulement). La vidéo I2V `9be6cb0c` est un contexte lipsync futur : Voice ne la lit pas et ne la mute pas. APPROVE Voice n’ouvre pas la porte lipsync. Runtime et downstream OFF. Blocage live : voix narrateur absente + consentement insuffisant (MV-001 ≠ Voice).
+
 ## Reprise
 
 Recalculer les étapes prêtes depuis les résultats persistés. Ne jamais refaire une sortie valide. L'annulation stoppe les nouveaux jobs et marque les appels non annulables en attente de callback.

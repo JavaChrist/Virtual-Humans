@@ -89,3 +89,5 @@ studio/src/application/motion/__tests__/mt010-motion-review.test.ts
 
 **MT-011** Observability/security **IMPLEMENTED** (`71_`) · Gate MT-9 **PASS**.  
 **MT-012** Full dry-run / synthetic E2E **IMPLEMENTED** (`72_`) · Gate MT-012 **PASS**. Suite : **MT-013** benchmark Auth (NOT AUTHORIZED).
+
+Voir aussi `140_` : Human Review Voice append-only · APPROVE ≠ activation ≠ porte lipsync.

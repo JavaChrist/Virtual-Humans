@@ -147,3 +147,5 @@ studio/src/application/motion/__tests__/mt009-motion-qc.test.ts
 ## 16. Suite
 
 **MT-010…012** — Review / Obs / Full synthetic E2E **IMPLEMENTED** (`70_`…`72_`). Aucun appel provider / benchmark.
+
+Voir aussi `140_` : QC Voice technique + perceptuel `unavailable_humanOnly` · 0 score inventé.

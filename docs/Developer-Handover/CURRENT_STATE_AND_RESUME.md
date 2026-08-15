@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-15T12:10:00+02:00
-documentedHead=26fd10e
+verifiedAt=2026-08-15T13:20:00+02:00
+documentedHead=df514c9
 headStatus=pending commit
-lastPhaseReport=139_PHASE_11B_ARTIFACT_POINTER_COHERENCE_HARDENING.md
-nextPhase=AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT
+lastPhaseReport=140_PHASE_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT.md
+nextPhase=AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT
 budgetHard=437
 budgetCommitted=389
 budgetReserved=0
 budgetAvailable=48
 runtimePaidMedia=OFF
-unitTests=1732/1732
-globalStatus=ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED
+unitTests=1747/1747
+globalStatus=VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED`  
-**Dernière vérification :** 2026-08-15 12:10 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`  
+**Statut global :** `VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT`  
+**Dernière vérification :** 2026-08-15 13:20 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`  
 **Branche :** `main`  
-**HEAD local :** `26fd10e` avant ce commit · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
-**origin/main :** `26fd10e` avant ce commit  
+**HEAD local :** `df514c9` avant ce commit · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
+**origin/main :** `df514c9` avant ce commit  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS hors scope protégés  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`** déployé  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`139_PHASE_11B_ARTIFACT_POINTER_COHERENCE_HARDENING.md`](./139_PHASE_11B_ARTIFACT_POINTER_COHERENCE_HARDENING.md)  
-**Prochaine phase exacte :** `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`
+**Dernier rapport de phase :** [`140_PHASE_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT.md`](./140_PHASE_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT.md)  
+**Prochaine phase exacte :** `AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -64,9 +64,10 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Overlay typographique | **WIRED_DISABLED** · 1.2.0 **HUMAN_APPROVED** privé inactif | checksum `9ac484b7…` · décision `fb2f886c…` |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
 | I2V `/director` | **11B CLOSED** · attempt **completed** · vidéo inactive | `138_` · 1 CAS · pointeurs durcis `139_` |
-| T2V / voice / lipsync / merge-export réels | **PREPARED** · hors 11B | pas de smoke |
-| Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / Motion / Director Paid AI · `finally` exécuté |
-| Prochaine étape | **PREPARED** | `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT` · 0 mutation pointeur |
+| T2V / lipsync / merge-export réels | **PREPARED** · hors 11C | pas de smoke |
+| Voice / TTS `/director` | **WIRED_DISABLED** · bloqué voix/consent | fakes `140_` · 0 ElevenLabs · narrateur non lié |
+| Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
+| Prochaine étape | **PREPARED** | `AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT` · 0 provider |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -98,7 +99,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Storyboard Director | PASS_REAL | 10F-V4 | 1 appel v4 | OpenAI texte | 5 | flags OFF | ne pas relancer |
 | Prompt Director | PASS_SYNTHETIC + correctif 11A | `113_`/`115_` | set no-text `2e8e9e6f` persisté | — | 0 | — | ne pas rejouer |
 | Router | PASS_SYNTHETIC | 9 / 11A plan | fakes + plan single-step | — | 0 | text_motion Registry | rester borné 11A |
-| Generation Engine | 11A+11B CLOSED PASS_WITH_NOTES | `102_`–`139_` | I2V 1 submit · HR APPROVE inactif · attempt completed · pointeurs durcis | OpenAI Image + fal Kling | 2 image · 140 I2V | Auth consommée | Voice preflight |
+| Generation Engine | 11A+11B CLOSED · Voice WIRED_DISABLED | `102_`–`140_` | I2V 1 submit · Voice path fakes · HR Voice non live | OpenAI Image + fal Kling | 2 image · 140 I2V | Voice bloqué voix/consent | binding narrateur |
 | Production queue/worker | PASS_REAL borné | `108_` + `115_` | 2 jobs image completed | — | inclus 2 | worker OFF | ne pas cron |
 | Ledger | PASS_REAL | `109_` + `115_` + `131_` + `133_` | 2×1¢ image + 140¢ I2V provisional · hard **437** | — | 389 committed | — | 0 réserve active |
 | Storage / assets | PASS_REAL image + 1 vidéo I2V | `108_`–`134_` | 5 PNG + 1 MP4 privés inactifs | Supabase Storage | ingest I2V | ni activation ni publish | clôture 11B audit |
@@ -106,7 +107,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Human Review | PASS_REAL image · I2V **APPROVE** | `110_`/`119_`/`123_`/`127_`/`134_` | 4 image + 1 Motion + 1 I2V APPROVE | — | 0 | 1 décision I2V `301ee080…` | 0 nouvelle HR |
 | OpenAI Image | **11A CLOSED** PASS_WITH_NOTES | `115_`–`128_` | enfant `49284892…` APPROVE inactif | `gpt-image-1` | 2 | 0 3ᵉ appel | pas d’activation |
 | Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `138_`/`139_` | attempt `6be95728…` **completed** · pointeurs sûrs sans mutation | fal Kling I2V | 140 provisional | flags OFF · 0 second write | Voice preflight |
-| Voice | PREPARED | legacy route | adapter ElevenLabs | ElevenLabs | 0 `/director` | pas de smoke V2 | preflight 11C |
+| Voice | WIRED_DISABLED · BLOCKED voix/consent | `140_` | allowlist + plan + worker fakes | ElevenLabs | 0 `/director` | narrateur non lié · consent insuffisant · pricing non ferme | binding + consent |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
 | Merge / export | PASS_SYNTHETIC + guard `139_` | 9 / `139_` | fake-merge · `merge_ready` insuffisant | — | 0 | `mergeExportAuthorized=false` live | avant Production |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
@@ -262,6 +263,12 @@ Dernière preuve fermeture : `133_` `finally` · `134_` 0 flag write · 7 flags 
 | `VHS11B_I2V_FAL_ENABLED` | idem | OFF | provider fal I2V | OFF |
 | `VHS11B_I2V_WORKER_ENABLED` | idem | OFF | worker I2V | OFF |
 | `VHS11B_I2V_DOWNSTREAM_ENABLED` | idem | OFF | voice/lipsync/merge | OFF |
+| `VHS11C_VOICE_CAPABILITY_ENABLED` | idem | OFF | capability Voice | OFF · non écrit Vercel |
+| `VHS11C_VOICE_PAID_ENABLED` | idem | OFF | paid Voice | OFF |
+| `VHS11C_VOICE_ELEVENLABS_ENABLED` | idem | OFF | provider ElevenLabs | OFF |
+| `VHS11C_VOICE_WORKER_ENABLED` | idem | OFF | worker Voice | OFF |
+| `VHS11C_ELEVENLABS_VOICE_DIRECTOR_EXCEPTION` | idem | OFF | exception Director Voice | OFF |
+| `VHS11C_VOICE_DOWNSTREAM_ENABLED` | idem | OFF | lipsync/merge Voice | OFF |
 | `MOTION_TRANSFER_ENABLED` | idem | OFF | capability Motion | OFF |
 | `MOTION_TRANSFER_PAID_ENABLED` | idem | OFF | paid fal | OFF |
 | `MOTION_TRANSFER_FAL_ENABLED` | idem | OFF | adapter fal | OFF |
@@ -280,7 +287,7 @@ Dernière preuve fermeture : `133_` `finally` · `134_` 0 flag write · 7 flags 
 | OpenAI | `image.text_to_image` | allowlist 11A | `gpt-image-1` low 1024 | HUMAN_APPROVED inactif | réel ×2 | `115_` | 2 | 2 | disabled |
 | fal | `video.motion_transfer` | Kling MC | benchmark | PASS_REAL benchmark | réel ×1 | `95_` | 1 | 135 | disabled |
 | fal | `video.image_to_video` | script borné 11B + wrapper | Kling v2 Master I2V 5s | **11B CLOSED** inactif | réel ×1 | `133_`–`135_` | 1 | 140 | disabled |
-| ElevenLabs | voice | legacy + port | `eleven_multilingual_v2` | PREPARED | fake V2 | — | 0 `/director` | 0 | disabled |
+| ElevenLabs | `audio.voice` | allowlist 11C + adapter | `eleven_multilingual_v2` | **WIRED_DISABLED** bloqué voix/consent | fake 11C | — | 0 `/director` | 0 | disabled |
 | Legacy `/api/generate/image` | image | historique | — | DEPRECATED / ≠ PASS | — | — | — | — | ne pas utiliser |
 
 Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image ; pas de fal compose comme fallback image.
@@ -291,16 +298,16 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1732/1732** | suite complète + cohérence pointeurs / merge | 2026-08-15 `139_` |
-| Typecheck / lint / build | **PASS** | contrat + guards + docs | `139_` |
+| Unitaires | **1747/1747** | suite complète + Voice/TTS wiring fakes | 2026-08-15 `140_` |
+| Typecheck / lint / build | **PASS** | allowlist + plan + worker + docs | `140_` |
 | migrations-static | PASS (14) | dernière complète | `120_` (non touchées) |
-| Secret scan diff `139_` | **PASS** | cette phase | `139_` |
-| Tests ciblés | cohérence + delivery **46/46** | cette phase | `139_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 15 août | `139_` |
+| Secret scan diff `140_` | **PASS** | cette phase | `140_` |
+| Tests ciblés | Voice/TTS wiring **15/15** | cette phase | `140_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 15 août | `140_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
-| Fraîcheur living handover | PASS | tooling | `131_` |
+| Fraîcheur living handover | PASS | tooling | `140_` |
 
 Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
@@ -311,7 +318,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | | |
 |---|---|
 | Branche | `main` |
-| HEAD / origin/main | `26fd10e` avant ce commit · Production Ready hardening **`97f7ad7`** `lpat9jazt` · wiring **`57de914`** |
+| HEAD / origin/main | `df514c9` avant ce commit · Production Ready hardening **`97f7ad7`** `lpat9jazt` · wiring **`57de914`** |
 | Dernier commit applicatif runtime image | **`245bea2`** composeur 1.1.0 |
 | Preuve composeur 1.2.0 | **`d395ec7`** · `127_` = HR APPROVE · ce commit `128_` = clôture docs |
 | Fingerprint composition 11A | `c532c400334f5b22` — **un commit docs ne le change pas** |
@@ -370,6 +377,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Reconciliation live preflight | **fait** (`137_`) | 0¢ · CAS prêt · 0 write | consommée | mutation live / provider |
 | Reconciliation live single-write | **fait** (`138_`) | 1 CAS · attempt completed | consommée | second write / provider |
 | Cohérence pointeurs artifacts | **fait** (`139_`) | 0 mutation · stratégie C · guards | consommée | activer GP I2V / merge |
+| Voice/TTS wiring preflight | **fait** (`140_`) | 0¢ · WIRED_DISABLED · bloqué voix/consent | consommée | ElevenLabs / flags / réserve |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -379,14 +387,14 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`** — câblage Voice/TTS en lecture/code. **Non exécutée ici.** 0 provider. 0 mutation pointeur. 0 merge.
+**`AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT`** — lier une voix narrateur autorisée + consentement Voice. **Non exécutée ici.** 0 ElevenLabs. 0 média. 0 réserve.
 
 ### Court terme
 
-1. Auth Voice/TTS preflight seulement (0 provider).
-2. Résoudre le bundle I2V **explicitement** (GP `3d1858eb` rev.3), jamais via les types actifs mélangés.
+1. Binding narrateur + consentement Voice seulement (0 provider).
+2. Ne pas traiter le pricing catalogue 0,15 USD/1k comme un prix ferme.
 3. Ne pas activer `49284892…` ni `9be6cb0c…` ni le GP I2V.
-4. Second submit fal **interdit**.
+4. Second submit fal **interdit**. Voice ne relance pas I2V.
 5. `merge_ready` **n’autorise pas** merge/export (`mergeExportAuthorized=false`).
 
 ### Avant beta
@@ -404,14 +412,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11B CLOSED · attempt 6be95728… completed · pointeurs durcis · budget 437/389/0/48 ¢
-Dernier verdict : ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED (139_)
-Preuve : stratégie C · merge_ready insuffisant · fingerprint 18078129d3a6b8e0…
-Blocage : Voice/TTS non câblé · mergeExportAuthorized=false
-Mission : uniquement AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT
-Auth consommées : pointeurs (139_) · single-write (138_) · preflight (137_)
-Interdit : mutation pointeur · provider · activer 9be6cb0c… · merge/export
-Attendu : preflight Voice/TTS · résolution explicite I2V · 0 write Production
+Contexte : VHS V2 · 11B CLOSED · Voice WIRED_DISABLED · budget 437/389/0/48 ¢
+Dernier verdict : VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT (140_)
+Preuve : dry-run fp 861975968090b18c… · script 349e2792… segment-2 · 81 car. · hash f228654f…
+Blocage : narrateur non lié · consent Voice insuffisant · pricing non ferme
+Mission : uniquement AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT
+Auth consommées : Voice wiring (140_) · pointeurs (139_) · attempt (138_)
+Interdit : ElevenLabs · flags Vercel · réserve · activer 9be6cb0c… · lipsync
+Attendu : binding voix + consent · 0 provider · 0 write Production
 ```
 
 ---
@@ -420,10 +428,10 @@ Attendu : preflight Voice/TTS · résolution explicite I2V · 0 write Production
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 139_PHASE_11B_ARTIFACT_POINTER_COHERENCE_HARDENING.md puis 138_.
-Vérifie Git. Attempt 6be95728… completed. Asset 9be6cb0c… approved active=false. Pointeurs durcis sans mutation. Budget 437/389/0/48. Flags OFF.
+Lis ensuite 140_PHASE_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT.md puis 139_.
+Vérifie Git. Voice/TTS câblé désactivé, bloqué voix/consent. Attempt 6be95728… completed. Asset 9be6cb0c… approved active=false. Budget 437/389/0/48. Flags OFF.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
-Aucun second write attempt. Aucun second submit fal. Aucune activation. Aucun merge/export.
+Aucun appel ElevenLabs. Aucun second submit fal. Aucune activation. Aucun lipsync.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne lis ni n’écris de média Production sans Auth.
 ```
@@ -434,7 +442,8 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-15 | `139_` artifact pointer coherence | ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED | à venir | 0 | 0 mutation pointeur · guards | Voice/TTS preflight |
+| 2026-08-15 | `140_` Voice/TTS wiring preflight | VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT | à venir | 0 | 0 provider · path disabled | binding voix + consent |
+| 2026-08-15 | `139_` artifact pointer coherence | ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED | `df514c9` | 0 | 0 mutation pointeur · guards | Voice/TTS preflight |
 | 2026-08-15 | `138_` attempt live reconciliation | I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT | `26fd10e` | 0 | 1 CAS · attempt completed | pointeurs P1 |
 | 2026-08-15 | `137_` attempt live reconciliation preflight | I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH | `e0b018c` | 0 | 0 write · CAS prêt · live started | single-write Auth |
 | 2026-08-15 | `136_` attempt terminal hardening | I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT | `97f7ad7` | 0 | code+tests · live started inchangé | reconciliation preflight |

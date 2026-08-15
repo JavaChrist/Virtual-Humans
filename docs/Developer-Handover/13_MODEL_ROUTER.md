@@ -9,7 +9,7 @@
 | Implémentation | Pure fonction + persist `generation_plan` (VHS-123) |
 | Production | **0** `generation_plan` actif |
 | Dry-run 11A | plan complet → `no_eligible_strategy` (registre legacy partiel ; fallbacks=0) |
-| Contrainte | `/director` fakes par défaut (VHS-124) ; exception image OFF (`102_`) ; exception I2V Kling OFF (`129_`) — pas de wildcard `providerMode=real` |
+| Contrainte | `/director` fakes par défaut (VHS-124) ; exception image OFF (`102_`) ; exception I2V Kling OFF (`129_`) ; exception Voice ElevenLabs OFF (`140_`) — pas de wildcard `providerMode=real` |
 | Motion Transfer | Registry MT-002 + Router **MT-003** (`routeMotionTransfer`, `maximumFallbacksPerStep=0`, **0** candidat Production → `motion_capability_unavailable`) ; adapter fal MT-007B **code-only / disabled / UNVERIFIED** (`67_`) ; `RUNTIME_NOT_IMPLEMENTED_YET` ; interdits fallback I2V/T2V silencieux |
 
 ## Mission
@@ -59,6 +59,10 @@ Capability Registry, Eligibility Filter, Cost Analyzer, Quality/Identity/Speed s
 - budget dur jamais dépassé ;
 - même registre/politique/entrée produit la même décision ;
 - indisponibilité et prix possèdent une date de validité.
+
+## Voice / TTS (`140_`)
+
+Profil ElevenLabs `audio.voice` / `eleven_multilingual_v2` : **disabled**, `paidExecution=false`, allowlist workspace/projet/scène/voix/texte. Aucun fallback de voix. Fake universel interdit. Le plan 11C est une slice TTS single-step : il n’instancie pas l’étape T2V de la stratégie library `voice_over`.
 
 ## Tests
 

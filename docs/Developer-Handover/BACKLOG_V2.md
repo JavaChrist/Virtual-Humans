@@ -117,15 +117,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11B-POINTER-COHERENCE (`139_`)
              · **ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED**
              · stratégie C · 0 mutation pointeur · merge_ready insuffisant
+             Phase 11C-VOICE-WIRING (`140_`)
+             · **VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT**
+             · path disabled · 0 ElevenLabs · narrateur non lié
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **389** / reserved **0** / available **48**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V completed · 1 MP4 approved inactif
-P0         : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit
-P1         : Voice/TTS non câblé Production
-P1 fermé   : pointeurs durcis sans mutation · attempt completed · clôture 11B
-Next major : AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT
+P0         : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit · 0 ElevenLabs
+P1         : narrateur Voice non lié · consent insuffisant · pricing non ferme
+P1 fermé   : Voice/TTS câblé désactivé · pointeurs durcis · attempt completed
+Next major : AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT
 ```
 
 ## P0 — fondations
@@ -185,7 +188,7 @@ Next major : AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT
 - **Motion / Performance Transfer** 🟡 Architecture `59_` · **MT-001…015A** (`60_`…`100_`) · MV-002 **DEFERRED** · Registry Motion **disabled** · MV-001 **PASS_WITH_HUMAN_APPROVAL** · Runtime UNAVAILABLE.
 - **Phase 11A média** 🟢 smoke réel (`108_`) · ledger 1¢ **soldé** (`109_`) · HR **REJECT** (`110_`) · overlay **WIRED_DISABLED** · strip (`113_`) · paid (`115_`) · decode PNG 0–4 (`116_`) · compose (`118_`) · composed HR REJECT (`119_`) · glyphes (`120_`) · preflight 1.1.0 (`121_`) · recomposition 1.1.0 (`122_`) · HR 1.1.0 REJECT (`123_`) **PASS_PROVIDER_AND_GLYPHS_TECHNICAL_COMPOSED_ASSET_HUMAN_REJECTED**.
 - **P1 budget** : hard **437** ; committed **389** ; reserved **0** ; available **48**.
-- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`** — 0 provider · 0 mutation pointeur. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_NARRATOR_BINDING_AND_CONSENT`** — 0 ElevenLabs · lier voix + consent. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

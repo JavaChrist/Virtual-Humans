@@ -7,7 +7,7 @@
 | | |
 |---|---|
 | Ports / adapters | Code réel OpenAI image, fal, ElevenLabs **présent** |
-| Wiring `/director` | **fakes** par défaut (VHS-124) ; allowlist OpenAI image **WIRED_DISABLED** (`102_`) ; prompt image **no-text** v2 (`111_`) ; variant image sans copy overlay (`113_`) |
+| Wiring `/director` | **fakes** par défaut (VHS-124) ; allowlist OpenAI image **WIRED_DISABLED** (`102_`) ; I2V Kling **WIRED_DISABLED** (`129_`) ; Voice ElevenLabs **WIRED_DISABLED** (`140_`) |
 | Legacy | `/api/generate/*` hors pipeline Director (ne prouve pas `production_jobs`) |
 | Kill switches | `PAID_GENERATION` ∧ `WORKER` requis pour exécution payante |
 | Motion Transfer | Dry-run Engine **MT-004** (`63_`) … fal adapter **MT-007B** (`67_`) + worker polling **MT-008** (`68_`, fake E2E, flags OFF) — paid execution unavailable |
@@ -51,6 +51,10 @@ Versionné et configurable : types d'entrée/sortie, ratios, durées, audio, dia
 ## Dry-run
 
 Valide transformation, assets, estimation, capacité, autorisation et sortie simulée sans soumettre de job payant. Le dry-run doit traverser la même logique hors appel externe.
+
+## Voice synchrone (`140_`)
+
+ElevenLabs TTS est potentiellement synchrone : pas de `providerJobId` inventé. Submit intent durable, un appel max, `submission_unknown` sans second appel. Les octets doivent être persistés avant settlement ; sinon hold prudent. Aucune dataUrl persistée. Legacy `/api/generate/voice` ≠ preuve Production.
 
 ## Provenance et pointeurs (`139_`)
 
