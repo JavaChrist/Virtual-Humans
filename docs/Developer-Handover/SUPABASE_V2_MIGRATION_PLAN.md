@@ -2,6 +2,11 @@
 
 **Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
 
+> **Delta `149_` (16 août 2026) — seed/consent APPLIED, 4/4/0 :**
+> Transaction atomique : 4 identities + 4 consentements · 0 binding · `active_for_provider_execution=false`.
+> Verdict `VOICE_IDENTITY_CATALOG_SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING`.
+> Prochaine porte : `AUTH_11C_I2V_NARRATOR_BINDING_PREFLIGHT`. Binding **interdit** jusqu’à Auth distincte.
+
 > **Delta `148_` (16 août 2026) — seed/consent PREFLIGHT, NOT PERSISTED :**
 > Plan 4 identities + 4 consentements · 0 binding · execution=false. Tables toujours **vides**. 0 write.
 > Verdict `VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH`.

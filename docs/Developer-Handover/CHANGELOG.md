@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.172] — 2026-08-16
+
+### Added (Phase 11C Voice catalog seed and consent single transaction)
+
+- Transaction atomique Production : 4 identities + 4 consentements · 0 binding · execution=false (`149_`).
+- 1 invocation · 8 INSERT · replay idempotent `existing` · 0 second write · 0 ElevenLabs.
+- Verdict **`VOICE_IDENTITY_CATALOG_SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING`**.
+- Prochaine porte **`AUTH_11C_I2V_NARRATOR_BINDING_PREFLIGHT`**.
+
 ## [2.0.171] — 2026-08-16
 
 ### Added (Phase 11C Voice catalog seed and consent preflight)

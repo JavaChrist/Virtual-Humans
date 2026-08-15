@@ -86,13 +86,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF**
                            Seed/consent preflight (`148_`)
                            · **VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH**
+                           Seed/consent transaction (`149_`)
+                           · **VOICE_IDENTITY_CATALOG_SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING**
 Runtime AI / paid media  : OFF · hardening **97f7ad7** déployé · preuve 1.2.0 **d395ec7** · runtime image **245bea2**
 Budget                   : hard 437 / committed 389 / reserved 0 / available 48 ¢
 production_jobs média    : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0                       : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit fal · 0 ElevenLabs
-P1 ouverts               : seed/consent transaction · bindings projet · pricing non ferme
-P1 fermé                 : seed preflight (`148_`) · grant apply (`147_`) · apply catalog vide (`144_`)
-Prochaine porte majeure  : AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION
+P1 ouverts               : binding narrateur I2V · pricing non ferme
+P1 fermé                 : seed transaction (`149_`) · seed preflight (`148_`) · grant apply (`147_`) · apply catalog vide (`144_`)
+Prochaine porte majeure  : AUTH_11C_I2V_NARRATOR_BINDING_PREFLIGHT
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -309,6 +311,7 @@ Utilisateur → AI Video Director (/director)
 | [`146_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT.md`](./146_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT.md) | **11C-VOICE-GRANTS-PREFLIGHT · VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH** |
 | [`147_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY.md`](./147_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY.md) | **11C-VOICE-GRANTS-APPLY · VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF** |
 | [`148_PHASE_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT.md`](./148_PHASE_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT.md) | **11C-VOICE-SEED-PREFLIGHT · VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH** |
+| [`149_PHASE_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION.md`](./149_PHASE_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION.md) | **11C-VOICE-SEED · VOICE_IDENTITY_CATALOG_SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
