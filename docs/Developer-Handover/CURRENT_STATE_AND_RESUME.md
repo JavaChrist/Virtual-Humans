@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-16T02:10:00+02:00
-documentedHead=6e519c4
+documentedHead=46eda6f
 headStatus=pending commit
 lastPhaseReport=152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md
 nextPhase=AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION
@@ -20,7 +20,7 @@ globalStatus=VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH
 **Dernière vérification :** 2026-08-16 02:10 Europe/Paris  
 **Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER`  
 **Branche :** `main`  
-**HEAD local :** `6e519c4` au départ · Production Ready **`6e519c4`** (`qywaw2ovo`) · wiring Voice **`770e844`** ancêtre · binding **`abaec84`** ancêtre  
+**HEAD local :** `46eda6f` · départ `6e519c4` · Production Ready **`6e519c4`** (`qywaw2ovo`) · wiring Voice **`770e844`** ancêtre · binding **`abaec84`** ancêtre  
 **origin/main :** `6e519c4` · ahead/behind **0/0** au départ  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS + `page.tsx` hors scope  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
@@ -457,7 +457,7 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-16 | `152_` Voice/TTS live preflight | VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH | pending | 0 | 0 write · dry-run OFF · cap 2¢ | first paid TTS |
+| 2026-08-16 | `152_` Voice/TTS live preflight | VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH | `46eda6f` | 0 | 0 write · dry-run OFF · cap 2¢ | first paid TTS |
 | 2026-08-16 | `151_` I2V narrator binding write | I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF | `abaec84` | 0 | 1 INSERT · 4/4/1 · execution=false | TTS live preflight |
 | 2026-08-16 | `150_` I2V narrator binding preflight | I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH | `77dc1a7` | 0 | 0 write · choix female · 0 binding | binding write |
 | 2026-08-16 | `149_` Voice seed/consent transaction | VOICE_IDENTITY_CATALOG_SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING | `2cf7642` | 0 | 8 INSERT · 4/4/0 · 0 binding | narrator binding preflight |

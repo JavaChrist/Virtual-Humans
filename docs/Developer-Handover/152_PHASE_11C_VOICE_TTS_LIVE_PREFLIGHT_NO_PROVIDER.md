@@ -71,7 +71,7 @@ Interdit et non fait : tout appel ElevenLabs (synthèse, preview, quota, compte)
 | ahead / behind | **0 / 0** au départ |
 | Hors scope | AICCOS + `page.tsx` protégés · non touchés · non stagés |
 
-HEAD de départ `6e519c4`. `studio/.env.local` ignoré.
+HEAD de départ `6e519c4`. Commit de phase `46eda6f`. `studio/.env.local` ignoré.
 
 ## 3. Working tree
 
