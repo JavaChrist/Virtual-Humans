@@ -176,27 +176,27 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Voice/TTS `/director` est **WIRED_DISABLED** (`140_`–`142_`) : `VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG`.
+Voice/TTS `/director` est **WIRED_DISABLED** (`140_`–`143_`) : `VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH`.
 
-Le chemin est câblé. Le catalogue de quatre identités est prêt (Mei/Tom dialogue, narratrice/narrateur voice-over). Migration locale `20260815182203` **non appliquée**. Les locators `ELEVENLABS_NARRATOR_FEMALE_VOICE_ID` et `ELEVENLABS_NARRATOR_MALE_VOICE_ID` sont **absents**. `ELEVENLABS_VOICE_ID` historique = Mei, plus un fallback. **0** ElevenLabs. Le projet I2V n’a pas encore de narrateur choisi.
+Le chemin est câblé. Le catalogue de quatre identités est prêt. Config locale Voice prête (4 prefixes distincts, 0 ID exposé). Migration `20260815182203` **non appliquée**. Production = **30** versions. `ELEVENLABS_VOICE_ID` historique = Mei, plus un fallback. **0** ElevenLabs. Le projet I2V n’a pas encore de narrateur choisi.
 
 Attempt `6be95728…` **`completed`**. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF. Lipsync OFF.
 
 Phase active suivante :
 
-`AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT`
+`AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE`
 
-Vérifier la migration locale sans write. **Aucun** apply distant. **Aucun** appel ElevenLabs. **Aucun** lipsync.
+Appliquer exactement une migration structurelle. **Aucun** seed. **Aucun** appel ElevenLabs. **Aucun** lipsync.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si `142_` est STOP, la porte suivante est le preflight de migration distante (sans write). Configurer d’abord les deux locators narrateur en local. Aucun second submit I2V.
+Si `143_` est STOP, la porte suivante est l’apply d’une seule migration structurelle (sans seed). Aucun second submit I2V.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -220,4 +220,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT`. Voice/TTS est câblé et désactivé. Le catalogue `142_` est prêt mais les locators narrateur manquent. Migration locale non appliquée. Aucun ElevenLabs. Aucun apply distant. Aucun second submit. Aucune activation. Aucun lipsync.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE`. Voice/TTS est câblé et désactivé. Le preflight `143_` est READY. Config locale Voice prête sans IDs. Migration locale non appliquée. Aucun ElevenLabs. Aucun seed dans l’apply. Aucun second submit. Aucune activation. Aucun lipsync.

@@ -2,6 +2,16 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.166] — 2026-08-15
+
+### Added (Phase 11C Voice identity catalog remote migration preflight)
+
+- Preflight distant lecture seule de `20260815182203_vhs_11c_voice_identity_catalog.sql` (`143_`).
+- Drift admissible : Production **30** / local **31** · 0 collision · RLS/grants service_role only · 0 seed.
+- Config locale Voice prête (4 prefixes distincts, 0 ID exposé). 0 apply. 0 ElevenLabs.
+- Verdict **`VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH`**.
+- Prochaine porte **`AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE`**.
+
 ## [2.0.165] — 2026-08-15
 
 ### Added (Phase 11C Voice identity catalog)

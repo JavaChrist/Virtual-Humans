@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-15T20:20:00+02:00
-documentedHead=b2828f8
+verifiedAt=2026-08-15T21:45:00+02:00
+documentedHead=d3bc5fc
 headStatus=pending commit
-lastPhaseReport=142_PHASE_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP.md
-nextPhase=AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT
+lastPhaseReport=143_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT.md
+nextPhase=AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE
 budgetHard=437
 budgetCommitted=389
 budgetReserved=0
 budgetAvailable=48
 runtimePaidMedia=OFF
-unitTests=1764/1764
-globalStatus=VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG
+unitTests=1774/1774
+globalStatus=VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG`  
-**Dernière vérification :** 2026-08-15 20:20 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP`  
+**Statut global :** `VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH`  
+**Dernière vérification :** 2026-08-15 21:45 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT`  
 **Branche :** `main`  
-**HEAD local :** `b2828f8` avant ce commit · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
-**origin/main :** `b2828f8` avant ce commit  
+**HEAD local :** `d3bc5fc` avant ce commit · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
+**origin/main :** `d3bc5fc` avant ce commit  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS hors scope protégés  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`** déployé  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`142_PHASE_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP.md`](./142_PHASE_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP.md)  
-**Prochaine phase exacte :** `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT`
+**Dernier rapport de phase :** [`143_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT.md`](./143_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT.md)  
+**Prochaine phase exacte :** `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -65,9 +65,9 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
 | I2V `/director` | **11B CLOSED** · attempt **completed** · vidéo inactive | `138_` · 1 CAS · pointeurs durcis `139_` |
 | T2V / lipsync / merge-export réels | **PREPARED** · hors 11C | pas de smoke |
-| Voice / TTS `/director` | **WIRED_DISABLED** · catalogue 4 identités | `140_`–`142_` · narrateurs env absents · 0 ElevenLabs |
+| Voice / TTS `/director` | **WIRED_DISABLED** · catalogue 4 identités · config locale prête | `140_`–`143_` · 4 fingerprints distincts · 0 ElevenLabs |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
-| Prochaine étape | **PREPARED** | `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT` · 0 provider |
+| Prochaine étape | **PREPARED** | `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE` · 0 seed · 0 provider |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -77,7 +77,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 
 | Source | Affirme | Réalité vérifiée 2026-08-14 | Action |
 |---|---|---|---|
-| `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | **30/30** alignées · hard **437** / committed **249** / reserved **0** / available **188** | ce fichier prime ; `17_` stale |
+| `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | Production **30** appliquées · local **31** · Voice catalog non appliqué · hard **437** / committed **389** / reserved **0** / available **48** | ce fichier prime ; `17_` bandeau `143_` |
 | `19_DEPLOYMENT.md` checkpoint 11 août | 0 job média · MT-005 NOT APPLIED · budget 122 | jobs `1 completed + 1 failed` · MT-005 **appliquée** · budget 437 | ce fichier prime |
 | `BACKLOG_V2.md` §P1 bas de liste | prochaine porte clôture 11A | portes `113_`–`132_` · next = first paid single execution | corrigé dans cette phase |
 | Vercel Production SHA | souvent égalé à HEAD | runtime **60cc335** OFF `fs4ephi9l-…` · HEAD Git peut devenir docs | ne pas promouvoir le commit docs |
@@ -90,7 +90,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Domaine | Statut | Dernière phase | Preuve | Provider | Coût réel connu (¢) | Blocage | Prochaine action |
 |---|---|---|---|---|---|---|---|
 | Fondations V2 | PASS_SYNTHETIC | 9 | unitaires + E2E fake | — | 0 | — | maintenir |
-| Supabase / migrations | PASS_REAL | MT-005 `82_` | 30/30 live | — | 0 | apply distant interdit sans Auth | ne pas rejouer |
+| Supabase / migrations | PASS_REAL + 1 local-only | MT-005 `82_` + preflight `143_` | 30 remote / 31 local | — | 0 | apply Voice interdit sans Auth apply | apply once |
 | Sécurité environnement | PASS_REAL | 7–10A | fail-closed | — | 0 | RLS distante non re-auditée 14 août | audit RLS distant |
 | Marketing Director | PASS_REAL | 10B | 1 appel | OpenAI texte | 4 | flags OFF | ne pas relancer |
 | Creative Director | PASS_REAL | 10C | 1 appel | OpenAI texte | 5 | flags OFF | ne pas relancer |
@@ -99,7 +99,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Storyboard Director | PASS_REAL | 10F-V4 | 1 appel v4 | OpenAI texte | 5 | flags OFF | ne pas relancer |
 | Prompt Director | PASS_SYNTHETIC + correctif 11A | `113_`/`115_` | set no-text `2e8e9e6f` persisté | — | 0 | — | ne pas rejouer |
 | Router | PASS_SYNTHETIC | 9 / 11A plan | fakes + plan single-step | — | 0 | text_motion Registry | rester borné 11A |
-| Generation Engine | 11A+11B CLOSED · Voice WIRED_DISABLED | `102_`–`142_` | I2V 1 submit · catalogue 4 identités · migration locale | OpenAI Image + fal Kling | 2 image · 140 I2V | narrateurs env absents | preflight migration |
+| Generation Engine | 11A+11B CLOSED · Voice WIRED_DISABLED | `102_`–`143_` | I2V 1 submit · catalogue 4 identités · preflight remote READY | OpenAI Image + fal Kling | 2 image · 140 I2V | migration Voice non appliquée | apply once |
 | Production queue/worker | PASS_REAL borné | `108_` + `115_` | 2 jobs image completed | — | inclus 2 | worker OFF | ne pas cron |
 | Ledger | PASS_REAL | `109_` + `115_` + `131_` + `133_` | 2×1¢ image + 140¢ I2V provisional · hard **437** | — | 389 committed | — | 0 réserve active |
 | Storage / assets | PASS_REAL image + 1 vidéo I2V | `108_`–`134_` | 5 PNG + 1 MP4 privés inactifs | Supabase Storage | ingest I2V | ni activation ni publish | clôture 11B audit |
@@ -107,7 +107,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Human Review | PASS_REAL image · I2V **APPROVE** | `110_`/`119_`/`123_`/`127_`/`134_` | 4 image + 1 Motion + 1 I2V APPROVE | — | 0 | 1 décision I2V `301ee080…` | 0 nouvelle HR |
 | OpenAI Image | **11A CLOSED** PASS_WITH_NOTES | `115_`–`128_` | enfant `49284892…` APPROVE inactif | `gpt-image-1` | 2 | 0 3ᵉ appel | pas d’activation |
 | Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `138_`/`139_` | attempt `6be95728…` **completed** · pointeurs sûrs sans mutation | fal Kling I2V | 140 provisional | flags OFF · 0 second write | Voice preflight |
-| Voice | WIRED_DISABLED · catalogue prêt · env narrateur absente | `140_`–`142_` | 4 identités + migration locale | ElevenLabs | 0 `/director` | female/male locators vides · 0 persist | preflight migration distante |
+| Voice | WIRED_DISABLED · config locale prête · migration non appliquée | `140_`–`143_` | 4 prefixes distincts · 0 collision · 0 write | ElevenLabs | 0 `/director` | 0 seed · 0 persist | apply structurel once |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
 | Merge / export | PASS_SYNTHETIC + guard `139_` | 9 / `139_` | fake-merge · `merge_ready` insuffisant | — | 0 | `mergeExportAuthorized=false` live | avant Production |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
@@ -206,24 +206,26 @@ Output Motion : `2d7ffcad-…` · privé · non actif comme livrable produit.
 
 ## 8. Production DB et migrations
 
-Vérifié live Supabase **2026-08-14** (lecture seule).
+Vérifié live Supabase **2026-08-15** (lecture seule, `143_`).
 
 | Champ | Valeur |
 |---|---|
 | Projet | `ejdb…nmvi` · **Virtual Humans Studio** · `eu-west-3` · `ACTIVE_HEALTHY` |
 | Migrations Production | **30** |
-| Migrations locales | **30** fichiers `studio/supabase/migrations/` |
-| Alignement | **aligné 30/30** (plus de drift fichier ↔ remote) |
-| Dernière migration | `20260811211757_vhs_mt005_human_review_decision_extend` |
+| Migrations locales | **31** fichiers `studio/supabase/migrations/` |
+| Alignement | drift **attendu** : 1 local-only Voice catalog |
+| Dernière migration remote | `20260811211757_vhs_mt005_human_review_decision_extend` |
+| Local-only | `20260815182203_vhs_11c_voice_identity_catalog` · **non appliquée** |
+| Tables Voice | **absentes** · 0 collision nom |
 | RLS | activée V2 · pas de policy anon/authenticated (modèle `service_role` serveur) |
 | Grants sensibles | service_role only — **ne pas élargir** |
 | Restore drill | PASS (`78_`) · cible `qmsh…qlnq` **supprimée** (`80_`) |
 | Backup | drill prouvé ; rétention ops à reconfirmer avant Production élargie |
-| pgTAP | **378** historique 11 août — **non relancé** le 14 août |
-| DB integration | **33/33** historique 11 août — **N/A** le 14 août (Docker absent, `113_`) |
+| pgTAP | **378** historique 11 août — **non relancé** le 15 août |
+| DB integration | **33/33** historique 11 août — **N/A** le 15 août (Docker absent) |
 | Dernier reset local | baseline post-10A (historique) |
-| LOCAL_ONLY | aucune migration locale non appliquée distante à cette vérif |
-| Ops distantes récentes | `138_` **1** CAS attempt · `6be95728…` `completed` · 0 second write · flags OFF |
+| LOCAL_ONLY | exactement la migration Voice catalog |
+| Ops distantes récentes | `143_` **0** write · `138_` **1** CAS attempt · `6be95728…` `completed` · flags OFF |
 
 ---
 
@@ -298,16 +300,16 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1764/1764** | suite complète + catalogue Voice 4 identités | 2026-08-15 `142_` |
-| Typecheck / lint / build | **PASS** | allowlist + plan + worker + docs | `140_` |
-| migrations-static | PASS (14) | dernière complète | `120_` (non touchées) |
-| Secret scan diff `140_` | **PASS** | cette phase | `140_` |
-| Tests ciblés | Voice/TTS wiring **15/15** | cette phase | `140_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 15 août | `140_` |
+| Unitaires | **1774/1774** | suite + preflight remote Voice | 2026-08-15 `143_` |
+| Typecheck / lint / build | **PASS** | preflight + docs | `143_` |
+| migrations-static | PASS (15) | 31 fichiers · 1 local-only | `142_`/`143_` |
+| Secret scan | **PASS** | migration + preflight + docs | `143_` |
+| Tests ciblés | preflight Voice **10/10** | cette phase | `143_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 15 août | `143_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
-| Fraîcheur living handover | PASS | tooling | `140_` |
+| Fraîcheur living handover | PASS | tooling | `143_` |
 
 Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
@@ -343,14 +345,14 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 - Activation / publication / merge-export de `9be6cb0c…` **interdites** sans Auth distincte. 0 second submit.
 - Pointeurs QR/PR I2V + GenerationPlan 11A rev.2 vs GP I2V rev.3 non actif — **fermé pour la sécurité** (`139_`, stratégie C, 0 mutation). Reste un écart opérationnel d’index, pas un risque merge/export.
 - Rétention/suppression des REJECT privés — politique future.
-- `17_` / `19_` stale (budget, migrations, jobs) — alignement docs ultérieur.
+- `17_` bandeau `143_` (30 remote / 31 local) ; `19_` stale (jobs/budget snapshot).
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
-- Voice / lipsync / merge-export réels non prouvés.
+- Apply Voice catalog + seed/bindings séparés ; lipsync / merge-export réels non prouvés.
 - MV-002 DEFERRED.
 
 ### P0/P1 fermés (extraits)
 
-- Cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -379,7 +381,8 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Cohérence pointeurs artifacts | **fait** (`139_`) | 0 mutation · stratégie C · guards | consommée | activer GP I2V / merge |
 | Voice/TTS wiring preflight | **fait** (`140_`) | 0¢ · WIRED_DISABLED · bloqué voix/consent | consommée | ElevenLabs / flags / réserve |
 | Binding narrateur + consent Voice | **fait** (`141_`) | 0¢ · config = Mei · 0 persist | consommée | substituer Mei · ElevenLabs |
-| Catalogue Voice 4 identités + migration locale | **fait** (`142_`) | 0¢ · env narrateur absente | consommée | apply distant · ElevenLabs |
+| Catalogue Voice 4 identités + migration locale | **fait** (`142_`) | 0¢ · env narrateur absente à l’époque | consommée | apply distant · ElevenLabs |
+| Preflight remote migration Voice catalog | **fait** (`143_`) | 0¢ · READY_FOR_APPLY_AUTH · 0 write | consommée | apply · seed · ElevenLabs |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -389,11 +392,11 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT`** — vérifier la migration locale sans write. **Non exécutée ici.** 0 ElevenLabs. 0 apply distant. Configurer d’abord `ELEVENLABS_NARRATOR_FEMALE_VOICE_ID` et `ELEVENLABS_NARRATOR_MALE_VOICE_ID` en local.
+**`AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE`** — appliquer **exactement une** migration structurelle. **Non exécutée ici.** 0 seed. 0 ElevenLabs. 0 activation Voice.
 
 ### Court terme
 
-1. Injecter les deux locators narrateur en local, puis preflight migration distante (0 provider).
+1. Apply once de `20260815182203` après Auth humaine, puis seed/bindings dans des portes distinctes.
 2. Ne pas traiter le pricing catalogue 0,15 USD/1k comme un prix ferme.
 3. Ne pas activer `49284892…` ni `9be6cb0c…` ni le GP I2V.
 4. Second submit fal **interdit**. Voice ne relance pas I2V.
@@ -415,13 +418,13 @@ Pas de délai calendaire.
 
 ```text
 Contexte : VHS V2 · 11B CLOSED · Voice WIRED_DISABLED · budget 437/389/0/48 ¢
-Dernier verdict : VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG (142_)
-Preuve : 4 identités · migration 20260815182203 locale · sélecteur /director
-Blocage : ELEVENLABS_NARRATOR_FEMALE/MALE_VOICE_ID absents · 0 apply distant
-Mission : uniquement AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT
-Auth consommées : catalogue (142_) · binding (141_) · Voice wiring (140_)
-Interdit : ElevenLabs · apply distant · flags Vercel · réserve · lipsync
-Attendu : preflight sans write · 0 provider · 0 persist Production
+Dernier verdict : VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH (143_)
+Preuve : 30 remote / 31 local · 0 collision · 4 prefixes distincts · 0 write
+Blocage : migration Voice non appliquée · 0 seed · runtime OFF
+Mission : uniquement AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE
+Auth consommées : preflight (143_) · catalogue (142_) · binding (141_) · wiring (140_)
+Interdit : seed dans l’apply · ElevenLabs · flags Vercel · réserve · lipsync
+Attendu : une migration structurelle · tables vides · 0 provider
 ```
 
 ---
@@ -430,10 +433,10 @@ Attendu : preflight sans write · 0 provider · 0 persist Production
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 142_PHASE_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP.md puis 141_ et 140_.
-Vérifie Git. Voice/TTS câblé désactivé. Catalogue 4 identités prêt. Locators narrateur absents. Migration locale non appliquée. Attempt 6be95728… completed. Asset 9be6cb0c… approved active=false. Budget 437/389/0/48. Flags OFF.
+Lis ensuite 143_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT.md puis 142_, 141_ et 140_.
+Vérifie Git. Voice/TTS câblé désactivé. Config locale Voice prête (4 prefixes, 0 ID exposé). Migration 20260815182203 non appliquée. Production 30 versions. Attempt 6be95728… completed. Asset 9be6cb0c… approved active=false. Budget 437/389/0/48. Flags OFF.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
-Aucun appel ElevenLabs. Aucun second submit fal. Aucune activation. Aucun lipsync.
+Aucun appel ElevenLabs. Aucun seed dans l’apply. Aucun second submit fal. Aucune activation. Aucun lipsync.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne lis ni n’écris de média Production sans Auth.
 ```
@@ -444,7 +447,8 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-15 | `142_` Voice identity catalog | VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG | à venir | 0 | migration locale · 0 apply | preflight migration |
+| 2026-08-15 | `143_` Voice catalog remote preflight | VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH | à venir | 0 | 0 write · drift 30/31 admissible | apply once |
+| 2026-08-15 | `142_` Voice identity catalog | VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG | `d3bc5fc` | 0 | migration locale · 0 apply | preflight migration |
 | 2026-08-15 | `141_` Voice narrator binding | BLOCKED_VOICE_NARRATOR_BINDING_CONFIG_UNAVAILABLE | `b2828f8` | 0 | 0 persist · config = Mei | décision d’identité |
 | 2026-08-15 | `140_` Voice/TTS wiring preflight | VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT | `770e844` | 0 | 0 provider · path disabled | binding voix + consent |
 | 2026-08-15 | `139_` artifact pointer coherence | ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED | `df514c9` | 0 | 0 mutation pointeur · guards | Voice/TTS preflight |

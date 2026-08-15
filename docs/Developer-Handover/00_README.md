@@ -3,7 +3,7 @@
 **Version :** 2.0
 **Architecture :** V2 Frozen
 **Date :** août 2026
-**Rafraîchi :** 14 août 2026
+**Rafraîchi :** 15 août 2026
 
 ## Qui fait autorité ?
 
@@ -74,13 +74,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **BLOCKED_VOICE_NARRATOR_BINDING_CONFIG_UNAVAILABLE**
                            Catalogue Voice (`142_`)
                            · **VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG**
+                           Preflight remote Voice (`143_`)
+                           · **VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH**
 Runtime AI / paid media  : OFF · hardening **97f7ad7** déployé · preuve 1.2.0 **d395ec7** · runtime image **245bea2**
 Budget                   : hard 437 / committed 389 / reserved 0 / available 48 ¢
 production_jobs média    : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0                       : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit fal · 0 ElevenLabs
-P1 ouverts               : locators narrateur absents · migration Voice non appliquée · pricing non ferme
-P1 fermé                 : catalogue 4 identités + migration locale (`142_`) · binding refusé (`141_`)
-Prochaine porte majeure  : AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT
+P1 ouverts               : apply Voice non autorisé · seed/bindings séparés · pricing non ferme
+P1 fermé                 : preflight remote READY (`143_`) · catalogue + migration locale (`142_`) · binding refusé (`141_`)
+Prochaine porte majeure  : AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -291,6 +293,7 @@ Utilisateur → AI Video Director (/director)
 | [`140_PHASE_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT.md`](./140_PHASE_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT.md) | **11C-VOICE-WIRING · VOICE_TTS_PATH_WIRED_DISABLED_BLOCKED_VOICE_OR_CONSENT** |
 | [`141_PHASE_11C_VOICE_NARRATOR_BINDING_AND_CONSENT.md`](./141_PHASE_11C_VOICE_NARRATOR_BINDING_AND_CONSENT.md) | **11C-VOICE-BINDING · BLOCKED_VOICE_NARRATOR_BINDING_CONFIG_UNAVAILABLE** |
 | [`142_PHASE_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP.md`](./142_PHASE_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP.md) | **11C-VOICE-CATALOG · VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG** |
+| [`143_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT.md`](./143_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT.md) | **11C-VOICE-PREFLIGHT · VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

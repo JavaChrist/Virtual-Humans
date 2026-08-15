@@ -1,8 +1,10 @@
 # 17 — Projets Supabase (schéma réel)
 
-**Statut documentaire :** `CURRENT` (rafraîchi 11 août 2026)
-**Sources :** `studio/supabase/migrations/` (29 fichiers), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_`.
+**Statut documentaire :** `CURRENT` (rafraîchi 15 août 2026 — `143_`)
+**Sources :** `studio/supabase/migrations/` (**31** fichiers locaux), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_` + `82_` + `142_`/`143_`.
 **Ne pas inventer** de table, colonne, RPC ou garantie absente du dépôt.
+
+> **Compteurs 15 août 2026 (`143_`) :** Production **30** versions appliquées (dernière `20260811211757_vhs_mt005_human_review_decision_extend`). Local **31**. Local-only : `20260815182203_vhs_11c_voice_identity_catalog` **non appliquée**. Tables Voice **absentes**. 0 collision. Budget live non relu cette phase (dernier connu 437/389/0/48). Le corps historique ci-dessous (29/122¢) reste un snapshot 11 août.
 
 ---
 
@@ -354,7 +356,9 @@ Purge automatique Storage : **non implémentée** (nettoyage futur / VHS-206).
 
 ---
 
-## 7. Migrations (29) — ordre canonique
+## 7. Migrations — ordre canonique
+
+Production appliquées : **30**. Local : **31**. Les lignes 1–29 ci-dessous sont le snapshot 11 août ; MT-005 et Voice catalog suivent.
 
 | # | Fichier |
 |---|---|
@@ -385,8 +389,10 @@ Purge automatique Storage : **non implémentée** (nettoyage futur / VHS-206).
 | 27 | `20260806120000_vhs_132_director_success_commit_remainder.sql` |
 | 28 | `20260807213624_vhs_133_art_human_retry_input_artifact.sql` |
 | 29 | `20260807213803_vhs_134_legacy_art_timeout_retry.sql` |
+| 30 | `20260811211757_vhs_mt005_human_review_decision_extend.sql` — **appliquée** Production (`82_`) |
+| 31 | `20260815182203_vhs_11c_voice_identity_catalog.sql` — **locale seulement** (`142_`/`143_`) · tables Voice absentes en Production |
 
-Règle : **ne jamais modifier** une migration déjà appliquée. Additif uniquement.
+Règle : **ne jamais modifier** une migration déjà appliquée. Additif uniquement. Apply de la ligne 31 = Auth `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE` seulement.
 
 ---
 

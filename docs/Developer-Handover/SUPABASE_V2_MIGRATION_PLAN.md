@@ -2,11 +2,11 @@
 
 **Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
 
-> **Delta `142_` (15 août 2026) — local only, NOT APPLIED :**
+> **Delta `143_` (15 août 2026) — preflight remote READY, NOT APPLIED :**
 > `20260815182203_vhs_11c_voice_identity_catalog.sql` — tables `voice_identities`, `voice_consent_attestations`, `project_voice_bindings`.
-> RLS on · 0 policy anon/authenticated · GRANT `service_role` seulement · 0 seed · 0 secret.
-> Production reste à **30** versions appliquées (incl. MT-005). Dépôt local : **31** fichiers.
-> Apply distant **interdit** sans `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT` puis Auth apply distincte.
+> Production **30** versions · local **31** · local-only exacte · 0 collision · RLS/grants `service_role` only · 0 seed.
+> Verdict `VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH`.
+> Apply distant **interdit** sans `AUTH_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY_ONCE` (structure seule, pas de seed).
 
 > **Baseline locale courante (post-10A / 11 août 2026) :**
 > migrations **29/29** · `db reset` PASS · pgTAP **378** · intégration DB **33/33** · target guard fail-closed.
