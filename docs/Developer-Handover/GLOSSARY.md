@@ -36,6 +36,7 @@
 **PHASE_11B_CLOSED_PASS_WITH_NOTES** — verdict `135_` : chaîne I2V réelle clôturée · vidéo privée inactive · attempt `started` P1 · resubmit impossible · 0 write.
 **I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT** — verdict `136_` : helper + script empêchent la récidive · attempt live toujours `started` · 0 write Production.
 **I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH** — verdict `137_` : hardening déployé · CAS unique préparé · `completed_at` ingest · attempt live toujours `started` · 0 write.
+**I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT** — verdict `138_` : 1 CAS · attempt `completed` · `completed_at` ingest · `retryable=false` · 0 resubmit.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

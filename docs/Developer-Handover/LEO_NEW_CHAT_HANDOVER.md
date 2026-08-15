@@ -176,27 +176,27 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Le preflight de reconciliation live est **PASS** (`137_`) : `I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH`.
+La reconciliation live de l’attempt est **PASS** (`138_`) : `I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT`.
 
-Hardening `97f7ad7` déployé. Attempt live `6be95728…` toujours `started`. CAS prêt (`completed_at` = ingest). Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF.
+Attempt `6be95728…` **`completed`**. `completed_at` ingest. `retryable=false`. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF.
 
 Phase active suivante :
 
-`AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE`
+`AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`
 
-Objectif : une seule écriture Production CAS. **Aucun** provider. **Aucun** média. **Aucun** budget. **Aucun** flag.
+Objectif : traiter ou différer la dette P1 des pointeurs d’artifacts. **Aucune** mutation de pointeur sans Auth distincte. **Aucun** Voice.
 
-Voice/TTS n’est pas ouvert tant que la reconciliation n’est pas faite ou explicitement différée.
+Voice/TTS n’est pas ouvert tant que cette dette n’est pas traitée ou explicitement différée.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si `137_` est READY, la mutation live exigera une Auth distincte. Voice/TTS reste après cette dette.
+Si `138_` est READY, Voice/TTS reste après la dette pointeurs. Aucun second write attempt.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -220,4 +220,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE`. Le preflight `137_` est READY. Attempt live toujours `started`. Une seule écriture CAS. Aucun provider. Aucun second submit. Aucune activation. Voice/TTS non ouvert.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`. L’attempt `138_` est completed. Aucun second write. Aucun second submit. Aucune activation. Voice/TTS non ouvert.

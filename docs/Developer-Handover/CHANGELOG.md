@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.161] — 2026-08-15
+
+### Added (Phase 11B I2V attempt live reconciliation)
+
+- CAS unique (`138_`) : attempt `6be95728…` `started` → `completed` · `completed_at` ingest · `retryable=false`.
+- Replay `existing` · 0 second write · budget et vidéo inchangés.
+- Verdict **`I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT`**.
+- Prochaine porte **`AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`**.
+
 ## [2.0.160] — 2026-08-15
 
 ### Added (Phase 11B I2V attempt live reconciliation preflight)

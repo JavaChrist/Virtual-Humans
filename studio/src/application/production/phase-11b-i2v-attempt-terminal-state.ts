@@ -1,6 +1,6 @@
 /**
- * Phase 11B — I2V attempt terminal-state hardening and live reconciliation dry-run.
- * Mutation of the live attempt is forbidden in this phase.
+ * Phase 11B — I2V attempt terminal-state hardening, dry-run, and post-write replay.
+ * The single live CAS is consumed. Replay is read-only.
  */
 import { createHash } from "node:crypto";
 import {
@@ -25,6 +25,18 @@ export const PHASE_11B_LIVE_RECONCILIATION_PREFLIGHT_VERDICT =
 
 export const PHASE_11B_NEXT_SINGLE_WRITE_AUTH =
   "AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE" as const;
+
+export const PHASE_11B_LIVE_RECONCILIATION_SINGLE_WRITE_AUTH =
+  "AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE" as const;
+
+export const PHASE_11B_LIVE_RECONCILIATION_SINGLE_WRITE_VERDICT =
+  "I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT" as const;
+
+export const PHASE_11B_NEXT_ARTIFACT_POINTER_AUTH =
+  "AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING" as const;
+
+export const PHASE_11B_LIVE_RECONCILIATION_WRITE_CONSUMED = true as const;
+export const PHASE_11B_LIVE_RECONCILIATION_WRITES = 1 as const;
 
 export const PHASE_11B_HARDENING_COMMIT_SHA = "97f7ad7" as const;
 
@@ -335,6 +347,51 @@ export function fingerprintPhase11BLiveReconciliationPlan(
     cas: plan.cas,
   };
   return createHash("sha256").update(JSON.stringify(stable)).digest("hex").slice(0, 16);
+}
+
+export type Phase11BLiveReconciliationReplay = {
+  status: "existing";
+  mutationNeeded: false;
+  mayResubmit: false;
+  secondWrite: false;
+  currentStatus: "completed";
+  completedAt: string;
+  retryable: false;
+};
+
+export function replayPhase11BLiveAttemptReconciliation(facts: {
+  attemptId: string;
+  attemptStatus: string;
+  completedAt: string | null;
+  retryable: boolean | null;
+}): Phase11BLiveReconciliationReplay | { status: "refused"; reason: string } {
+  if (facts.attemptId !== PHASE_11B_LIVE_ATTEMPT_ID) {
+    return { status: "refused", reason: "attempt_mismatch" };
+  }
+  if (facts.attemptStatus !== "completed") {
+    return { status: "refused", reason: "not_reconciled" };
+  }
+  if (!facts.completedAt || normalizeIso(facts.completedAt) !== PHASE_11B_PROPOSED_COMPLETED_AT) {
+    return { status: "refused", reason: "completed_at_mismatch" };
+  }
+  if (facts.retryable !== false) {
+    return { status: "refused", reason: "retryable_mismatch" };
+  }
+  return {
+    status: "existing",
+    mutationNeeded: false,
+    mayResubmit: false,
+    secondWrite: false,
+    currentStatus: "completed",
+    completedAt: PHASE_11B_PROPOSED_COMPLETED_AT,
+    retryable: false,
+  };
+}
+
+export function assertPhase11BLiveReconciliationMustNotWriteAgain(writesAlready: number): void {
+  if (writesAlready >= PHASE_11B_LIVE_RECONCILIATION_WRITES) {
+    throw new Error("AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE consumed — no second write");
+  }
 }
 
 export function liveAttemptFactsFromRecord(attempt: GenerationAttemptRecord): Pick<

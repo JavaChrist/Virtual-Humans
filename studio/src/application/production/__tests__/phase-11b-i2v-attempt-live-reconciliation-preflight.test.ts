@@ -14,13 +14,20 @@ import {
   PHASE_11B_LIVE_RECONCILIATION_PREFLIGHT_VERDICT,
   PHASE_11B_LIVE_RUN_ID,
   PHASE_11B_LIVE_WORKSPACE_ID,
+  PHASE_11B_LIVE_RECONCILIATION_SINGLE_WRITE_AUTH,
+  PHASE_11B_LIVE_RECONCILIATION_SINGLE_WRITE_VERDICT,
+  PHASE_11B_LIVE_RECONCILIATION_WRITE_CONSUMED,
+  PHASE_11B_LIVE_RECONCILIATION_WRITES,
+  PHASE_11B_NEXT_ARTIFACT_POINTER_AUTH,
   PHASE_11B_NEXT_SINGLE_WRITE_AUTH,
   PHASE_11B_PROPOSED_COMPLETED_AT,
   PHASE_11B_PROPOSED_COMPLETED_AT_SOURCE,
   PHASE_11B_VERIFIED_LIVE_FACTS,
+  assertPhase11BLiveReconciliationMustNotWriteAgain,
   assertPhase11BPaidScriptMustNotResubmit,
   fingerprintPhase11BLiveReconciliationPlan,
   planPhase11BLiveAttemptReconciliation,
+  replayPhase11BLiveAttemptReconciliation,
   selectPhase11BAttemptCompletedAt,
   type Phase11BLiveReconciliationFacts,
 } from "../phase-11b-i2v-attempt-terminal-state";
@@ -216,4 +223,42 @@ test("11B-RECON-PREFLIGHT — replay fingerprint deterministic, CAS one row, no 
   assert.throws(() => assertPhase11BPaidScriptMustNotResubmit(true));
   assert.match(redactGenerationAttemptError("failed https://db.example/x?token=abc"), /\[redacted-url\]/);
   assert.match(redactGenerationAttemptError("failed token=supersecrettokenvalue"), /token=\[redacted\]/);
+});
+
+test("11B-RECON-WRITE — replay existing after live completed, no second write", () => {
+  assert.equal(
+    PHASE_11B_LIVE_RECONCILIATION_SINGLE_WRITE_AUTH,
+    "AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE",
+  );
+  assert.equal(
+    PHASE_11B_LIVE_RECONCILIATION_SINGLE_WRITE_VERDICT,
+    "I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT",
+  );
+  assert.equal(PHASE_11B_NEXT_ARTIFACT_POINTER_AUTH, "AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING");
+  assert.equal(PHASE_11B_LIVE_RECONCILIATION_WRITE_CONSUMED, true);
+  assert.equal(PHASE_11B_LIVE_RECONCILIATION_WRITES, 1);
+  assert.throws(() => assertPhase11BLiveReconciliationMustNotWriteAgain(1));
+
+  const replay = replayPhase11BLiveAttemptReconciliation({
+    attemptId: PHASE_11B_LIVE_ATTEMPT_ID,
+    attemptStatus: "completed",
+    completedAt: "2026-08-14 22:24:41.938+00",
+    retryable: false,
+  });
+  assert.equal(replay.status, "existing");
+  if (replay.status !== "existing") return;
+  assert.equal(replay.mutationNeeded, false);
+  assert.equal(replay.mayResubmit, false);
+  assert.equal(replay.secondWrite, false);
+  assert.equal(replay.completedAt, PHASE_11B_PROPOSED_COMPLETED_AT);
+
+  assert.equal(
+    replayPhase11BLiveAttemptReconciliation({
+      attemptId: PHASE_11B_LIVE_ATTEMPT_ID,
+      attemptStatus: "started",
+      completedAt: null,
+      retryable: null,
+    }).status,
+    "refused",
+  );
 });

@@ -111,15 +111,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11B-ATTEMPT-RECON-PREFLIGHT (`137_`)
              · **I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH**
              · hardening déployé · CAS prêt · 0 write
+             Phase 11B-ATTEMPT-RECON (`138_`)
+             · **I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT**
+             · 1 CAS · attempt `completed` · 0 resubmit
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **389** / reserved **0** / available **48**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0         : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit
-P1         : attempt live `started` (CAS prêt) · pointeurs QR/PR I2V + GP 11A
-P1 fermé   : preflight reconciliation · hardening attempt · clôture 11B · HR I2V APPROVE
-Next major : AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE
+P1         : pointeurs QR/PR I2V + GP 11A vs GP I2V
+P1 fermé   : attempt completed · preflight · hardening · clôture 11B
+Next major : AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING
 ```
 
 ## P0 — fondations
