@@ -65,7 +65,9 @@
 **VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH** — verdict `148_` : plan 4+4 déterministe · 0 persist · runtime OFF.
 **AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION** — porte `149_` : 4 identities + 4 consentements · 0 binding · execution=false.
 **VOICE_IDENTITY_CATALOG_SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING** — verdict `149_` : catalog 4/4/0 · runtime OFF · 0 ElevenLabs.
-**AUTH_11C_I2V_NARRATOR_BINDING_PREFLIGHT** — prochaine porte : préparer le choix narrateur I2V sans write.
+**AUTH_11C_I2V_NARRATOR_BINDING_PREFLIGHT** — porte `150_` : préparer le choix `narrator_female` sans write.
+**I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH** — verdict `150_` : plan déterministe · 0 persist · runtime OFF.
+**AUTH_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE** — prochaine porte : un binding projet female · execution=false · 0 ElevenLabs.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

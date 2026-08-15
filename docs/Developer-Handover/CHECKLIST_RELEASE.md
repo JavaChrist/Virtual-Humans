@@ -121,6 +121,7 @@
 - [x] Grant apply (`147_`) · **VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF** · 32/32 · 0 seed ;
 - [x] Seed/consent preflight (`148_`) · **VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH** · 0 persist ;
 - [x] Seed/consent transaction (`149_`) · **VOICE_IDENTITY_CATALOG_SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING** · 4/4/0 · execution=false ;
+- [x] Binding narrateur I2V preflight (`150_`) · **I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH** · 0 persist ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -130,7 +131,7 @@ Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
 I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
-Voice `/director` : **WIRED_DISABLED** (`140_`–`149_`) · catalog 4/4/0 · grants durcis · execution=false · 0 binding · 32/32 · 0 ElevenLabs · flags OFF
+Voice `/director` : **WIRED_DISABLED** (`140_`–`150_`) · catalog 4/4/0 · choix `narrator_female` préparé · 0 binding live · 32/32 · 0 ElevenLabs · flags OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

@@ -2,6 +2,11 @@
 
 **Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
 
+> **Delta `150_` (16 août 2026) — I2V narrator binding PREFLIGHT, NOT PERSISTED :**
+> Choix humain `narrator_female` · plan déterministe · 0 binding live · execution=false.
+> Verdict `I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH`.
+> Prochaine porte : `AUTH_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE`.
+
 > **Delta `149_` (16 août 2026) — seed/consent APPLIED, 4/4/0 :**
 > Transaction atomique : 4 identities + 4 consentements · 0 binding · `active_for_provider_execution=false`.
 > Verdict `VOICE_IDENTITY_CATALOG_SEEDED_CONSENTED_RUNTIME_OFF_NO_BINDING`.

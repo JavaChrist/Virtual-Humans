@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.173] — 2026-08-16
+
+### Added (Phase 11C I2V narrator female binding preflight)
+
+- Choix humain `narrator_female` pour le projet I2V · plan de binding déterministe · 0 persist (`150_`).
+- CAS created/existing/conflict, refus Mei/Tom/`narrator_male`, résolution explicite hors fallback historique.
+- Verdict **`I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH`**.
+- Prochaine porte **`AUTH_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE`**.
+
 ## [2.0.172] — 2026-08-16
 
 ### Added (Phase 11C Voice catalog seed and consent single transaction)

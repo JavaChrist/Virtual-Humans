@@ -62,7 +62,7 @@ Motion MV-001 **PASS** benchmark · Registry **DISABLED**. Restore drill **PASS*
 **Pas encore :** Voice réel, T2V/lipsync/merge-export **réels** sur `/director` HTTP ; activation ; runtime Motion Production.
 
 Pilotage courant : **`CURRENT_STATE_AND_RESUME.md`** puis **`BACKLOG_V2.md`**.  
-Prochaine porte : **`AUTH_11C_I2V_NARRATOR_BINDING_PREFLIGHT`** — choix narrateur I2V lecture seule · 0 write · 0 provider.
+Prochaine porte : **`AUTH_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE`** — 1 binding `narrator_female` · execution=false · 0 provider.
 
 ## Priorités
 
