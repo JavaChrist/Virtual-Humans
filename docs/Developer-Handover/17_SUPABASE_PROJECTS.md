@@ -1,10 +1,10 @@
 # 17 — Projets Supabase (schéma réel)
 
-**Statut documentaire :** `CURRENT` (rafraîchi 15 août 2026 — `147_`)
-**Sources :** `studio/supabase/migrations/` (**32** fichiers locaux), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_` + `82_` + `142_`–`147_`.
+**Statut documentaire :** `CURRENT` (rafraîchi 16 août 2026 — `148_`)
+**Sources :** `studio/supabase/migrations/` (**32** fichiers locaux), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_` + `82_` + `142_`–`148_`.
 **Ne pas inventer** de table, colonne, RPC ou garantie absente du dépôt.
 
-> **Compteurs 15 août 2026 (`147_`) :** Production **32/32**. Dernière remote `20260815215407_vhs_11c_voice_identity_catalog_grant_hardening`. Tables Voice **vides**. Grants durcis (`service_role` identities/bindings `arw` · consent `ar`). RLS on · 0 policy. Hard limit live **437**. Le corps historique ci-dessous (29/122¢) reste un snapshot 11 août.
+> **Compteurs 16 août 2026 (`148_`) :** Production **32/32**. Tables Voice **vides**. Grants durcis. Seed/consent **préparé, non persisté**. RLS on · 0 policy. Hard limit live **437**. Le corps historique ci-dessous (29/122¢) reste un snapshot 11 août.
 
 ---
 

@@ -2,6 +2,11 @@
 
 **Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
 
+> **Delta `148_` (16 août 2026) — seed/consent PREFLIGHT, NOT PERSISTED :**
+> Plan 4 identities + 4 consentements · 0 binding · execution=false. Tables toujours **vides**. 0 write.
+> Verdict `VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH`.
+> Prochaine porte : `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION`.
+
 > **Delta `147_` (15 août 2026) — grant hardening APPLIED Production :**
 > `20260815215407_vhs_11c_voice_identity_catalog_grant_hardening.sql` (contenu = SHA-256 `4db521b8…` ; rename local depuis `20260815212100` pour aligner le timestamp MCP).
 > Production **32/32**. ACL cibles atteintes. Tables Voice **vides**. Consent append-only. 0 seed.

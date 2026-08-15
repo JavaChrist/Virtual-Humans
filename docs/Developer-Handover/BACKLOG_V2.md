@@ -140,15 +140,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11C-VOICE-GRANTS-APPLY (`147_`)
              · **VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF**
              · 32/32 · ACL durcies · 0 seed
+             Phase 11C-VOICE-SEED-PREFLIGHT (`148_`)
+             · **VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH**
+             · plan 4+4 · 0 persist · 0 binding
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **389** / reserved **0** / available **48**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0         : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit · 0 ElevenLabs
-P1         : seed/consent Voice · bindings projet · pricing non ferme
-P1 fermé   : grant apply · grant apply preflight · grant hardening local · apply catalog vide
-Next major : AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT
+P1         : seed/consent transaction · bindings projet · pricing non ferme
+P1 fermé   : seed preflight · grant apply · apply catalog vide
+Next major : AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION
 ```
 
 ## P0 — fondations
@@ -215,7 +218,8 @@ Next major : AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT
 - **Phase 11C Voice grant hardening preflight** ✅ **READY_FOR_REMOTE_APPLY_PREFLIGHT** (`145_`) — overlay DEFAULT PRIVILEGES · migration locale · 0 apply.
 - **Phase 11C Voice grant apply preflight** ✅ **READY_FOR_APPLY_AUTH** (`146_`) — drift 31/32 · checksum inchangé · 0 apply.
 - **Phase 11C Voice grant hardening apply** ✅ **GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF** (`147_`) — 32/32 · ACL durcies · 0 seed.
-- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`** — lecture seule · 0 write · 0 seed. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Phase 11C Voice seed/consent preflight** ✅ **READY_FOR_SINGLE_TRANSACTION_AUTH** (`148_`) — plan 4+4 · 0 persist · 0 binding.
+- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION`** — 4+4 · 0 binding · execution=false. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

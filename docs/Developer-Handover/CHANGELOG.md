@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.171] — 2026-08-16
+
+### Added (Phase 11C Voice catalog seed and consent preflight)
+
+- Plan atomique lecture seule : 4 identities + 4 consentements bornés · 0 binding · execution=false (`148_`).
+- IDs/idempotency déterministes, CAS created/existing/conflict, rollback transactionnel. 0 persist Production.
+- Verdict **`VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH`**.
+- Prochaine porte **`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION`**.
+
 ## [2.0.170] — 2026-08-15
 
 ### Added (Phase 11C Voice catalog grant hardening remote apply)

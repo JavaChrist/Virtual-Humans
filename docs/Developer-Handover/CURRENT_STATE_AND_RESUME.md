@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-15T23:59:00+02:00
-documentedHead=0a1b432
+verifiedAt=2026-08-16T00:20:00+02:00
+documentedHead=6968876
 headStatus=pending commit
-lastPhaseReport=147_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY.md
-nextPhase=AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT
+lastPhaseReport=148_PHASE_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT.md
+nextPhase=AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION
 budgetHard=437
 budgetCommitted=389
 budgetReserved=0
 budgetAvailable=48
 runtimePaidMedia=OFF
-unitTests=1801/1801
-globalStatus=VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF
+unitTests=1809/1809
+globalStatus=VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF`  
-**Dernière vérification :** 2026-08-15 23:59 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_ONCE`  
+**Statut global :** `VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH`  
+**Dernière vérification :** 2026-08-16 00:20 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`  
 **Branche :** `main`  
-**HEAD local :** `2db8249` avant ce commit · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
-**origin/main :** `2db8249` avant ce commit  
+**HEAD local :** `6968876` avant ce commit · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
+**origin/main :** `6968876` avant ce commit  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS + `page.tsx` hors scope  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`** déployé  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`147_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY.md`](./147_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY.md)  
-**Prochaine phase exacte :** `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`
+**Dernier rapport de phase :** [`148_PHASE_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT.md`](./148_PHASE_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT.md)  
+**Prochaine phase exacte :** `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -65,9 +65,9 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
 | I2V `/director` | **11B CLOSED** · attempt **completed** · vidéo inactive | `138_` · 1 CAS · pointeurs durcis `139_` |
 | T2V / lipsync / merge-export réels | **PREPARED** · hors 11C | pas de smoke |
-| Voice / TTS `/director` | **WIRED_DISABLED** · tables catalog vides · grants durcis | `140_`–`147_` · 32/32 · 0 seed · 0 ElevenLabs |
+| Voice / TTS `/director` | **WIRED_DISABLED** · tables catalog vides · seed préparé | `140_`–`148_` · 32/32 · 0 seed · 0 ElevenLabs |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
-| Prochaine étape | **PREPARED** | `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT` · 0 write · 0 seed ici |
+| Prochaine étape | **PREPARED** | `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION` · 0 write ici |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -77,7 +77,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 
 | Source | Affirme | Réalité vérifiée 2026-08-14 | Action |
 |---|---|---|---|
-| `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | Production **32/32** · catalog vide · grants durcis · hard **437** / committed **389** / reserved **0** / available **48** | ce fichier prime ; `17_` bandeau `147_` |
+| `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | Production **32/32** · catalog vide · grants durcis · seed préparé non exécuté · hard **437** / committed **389** / reserved **0** / available **48** | ce fichier prime ; `17_` bandeau `148_` |
 | `19_DEPLOYMENT.md` checkpoint 11 août | 0 job média · MT-005 NOT APPLIED · budget 122 | jobs `1 completed + 1 failed` · MT-005 **appliquée** · budget 437 | ce fichier prime |
 | `BACKLOG_V2.md` §P1 bas de liste | prochaine porte clôture 11A | portes `113_`–`132_` · next = first paid single execution | corrigé dans cette phase |
 | Vercel Production SHA | souvent égalé à HEAD | runtime **60cc335** OFF `fs4ephi9l-…` · HEAD Git peut devenir docs | ne pas promouvoir le commit docs |
@@ -90,7 +90,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Domaine | Statut | Dernière phase | Preuve | Provider | Coût réel connu (¢) | Blocage | Prochaine action |
 |---|---|---|---|---|---|---|---|
 | Fondations V2 | PASS_SYNTHETIC | 9 | unitaires + E2E fake | — | 0 | — | maintenir |
-| Supabase / migrations | PASS_REAL | MT-005 `82_` + Voice catalog `144_` + grants `147_` | **32/32** | — | 0 | seed interdit | seed/consent preflight |
+| Supabase / migrations | PASS_REAL | MT-005 `82_` + Voice catalog `144_` + grants `147_` | **32/32** | — | 0 | seed interdit | seed/consent transaction |
 | Sécurité environnement | PASS_REAL | 7–10A | fail-closed | — | 0 | RLS distante non re-auditée 14 août | audit RLS distant |
 | Marketing Director | PASS_REAL | 10B | 1 appel | OpenAI texte | 4 | flags OFF | ne pas relancer |
 | Creative Director | PASS_REAL | 10C | 1 appel | OpenAI texte | 5 | flags OFF | ne pas relancer |
@@ -99,7 +99,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Storyboard Director | PASS_REAL | 10F-V4 | 1 appel v4 | OpenAI texte | 5 | flags OFF | ne pas relancer |
 | Prompt Director | PASS_SYNTHETIC + correctif 11A | `113_`/`115_` | set no-text `2e8e9e6f` persisté | — | 0 | — | ne pas rejouer |
 | Router | PASS_SYNTHETIC | 9 / 11A plan | fakes + plan single-step | — | 0 | text_motion Registry | rester borné 11A |
-| Generation Engine | 11A+11B CLOSED · Voice WIRED_DISABLED | `102_`–`147_` | I2V 1 submit · catalog vide · grants durcis | OpenAI Image + fal Kling | 2 image · 140 I2V | 0 seed | seed/consent preflight |
+| Generation Engine | 11A+11B CLOSED · Voice WIRED_DISABLED | `102_`–`148_` | I2V 1 submit · catalog vide · seed préparé | OpenAI Image + fal Kling | 2 image · 140 I2V | 0 seed | seed/consent transaction |
 | Production queue/worker | PASS_REAL borné | `108_` + `115_` | 2 jobs image completed | — | inclus 2 | worker OFF | ne pas cron |
 | Ledger | PASS_REAL | `109_` + `115_` + `131_` + `133_` | 2×1¢ image + 140¢ I2V provisional · hard **437** | — | 389 committed | — | 0 réserve active |
 | Storage / assets | PASS_REAL image + 1 vidéo I2V | `108_`–`134_` | 5 PNG + 1 MP4 privés inactifs | Supabase Storage | ingest I2V | ni activation ni publish | clôture 11B audit |
@@ -107,7 +107,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Human Review | PASS_REAL image · I2V **APPROVE** | `110_`/`119_`/`123_`/`127_`/`134_` | 4 image + 1 Motion + 1 I2V APPROVE | — | 0 | 1 décision I2V `301ee080…` | 0 nouvelle HR |
 | OpenAI Image | **11A CLOSED** PASS_WITH_NOTES | `115_`–`128_` | enfant `49284892…` APPROVE inactif | `gpt-image-1` | 2 | 0 3ᵉ appel | pas d’activation |
 | Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `138_`/`139_` | attempt `6be95728…` **completed** · pointeurs sûrs sans mutation | fal Kling I2V | 140 provisional | flags OFF · 0 second write | Voice preflight |
-| Voice | WIRED_DISABLED · catalog vide · grants durcis | `140_`–`147_` | 3 tables · 0 lignes · 32/32 | ElevenLabs | 0 `/director` | consent append-only · 0 seed | seed/consent preflight |
+| Voice | WIRED_DISABLED · catalog vide · seed préparé | `140_`–`148_` | 3 tables · 0 lignes · 32/32 | ElevenLabs | 0 `/director` | 4 configs redacted · 0 persist | seed/consent transaction |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
 | Merge / export | PASS_SYNTHETIC + guard `139_` | 9 / `139_` | fake-merge · `merge_ready` insuffisant | — | 0 | `mergeExportAuthorized=false` live | avant Production |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
@@ -206,7 +206,7 @@ Output Motion : `2d7ffcad-…` · privé · non actif comme livrable produit.
 
 ## 8. Production DB et migrations
 
-Vérifié live Supabase **2026-08-15** (apply grants `147_` · 1 ACL · 0 seed).
+Vérifié live Supabase **2026-08-16** (seed/consent preflight `148_` · 0 write · 0 seed).
 
 | Champ | Valeur |
 |---|---|
@@ -226,7 +226,7 @@ Vérifié live Supabase **2026-08-15** (apply grants `147_` · 1 ACL · 0 seed).
 | DB integration | **33/33** historique 11 août — **N/A** le 15 août (Docker absent) |
 | Dernier reset local | baseline post-10A (historique) |
 | LOCAL_ONLY | **0** |
-| Ops distantes récentes | `147_` 1 ACL · `146_` 0 apply · `144_` 1 structurelle · 0 seed · flags OFF |
+| Ops distantes récentes | `148_` 0 write · `147_` 1 ACL · `144_` 1 structurelle · 0 seed · flags OFF |
 
 ---
 
@@ -301,16 +301,16 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1801/1801** | suite + grant apply | 2026-08-15 `147_` |
-| Typecheck / lint / build | **PASS** | apply grants + docs | `147_` |
-| migrations-static | PASS | **32/32** | `147_` |
-| Secret scan | **PASS** | module + docs | `147_` |
-| Tests ciblés | grant apply **4/4** + hardening existants | cette phase | `147_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 15 août | `147_` |
+| Unitaires | **1809/1809** | suite + seed preflight | 2026-08-16 `148_` |
+| Typecheck / lint / build | **PASS** | seed preflight + docs | `148_` |
+| migrations-static | PASS | **32/32** | `148_` |
+| Secret scan | **PASS** | module + docs | `148_` |
+| Tests ciblés | seed/consent preflight **8/8** | cette phase | `148_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 16 août | `148_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
-| Fraîcheur living handover | PASS | tooling | `147_` |
+| Fraîcheur living handover | PASS | tooling | `148_` |
 
 Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
@@ -348,12 +348,12 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 - Rétention/suppression des REJECT privés — politique future.
 - `17_` bandeau `145_` (31 remote / 32 local) ; `19_` stale (jobs/budget snapshot).
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
-- Seed/consent Voice (4 identités, 4 consentements, 0 binding) · lipsync / merge-export réels non prouvés.
+- Seed/consent Voice transaction (4 identités, 4 consentements, 0 binding) · lipsync / merge-export réels non prouvés.
 - MV-002 DEFERRED.
 
 ### P0/P1 fermés (extraits)
 
-- Grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -388,6 +388,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Grant hardening Voice preflight | **fait** (`145_`) | 0¢ · migration locale · 0 apply | consommée | apply grants · seed |
 | Grant hardening remote apply preflight | **fait** (`146_`) | 0¢ · READY_FOR_APPLY_AUTH · 0 apply | consommée | apply once · seed |
 | Grant hardening remote apply once | **fait** (`147_`) | 0¢ · 32/32 · ACL durcies · 0 seed | consommée | seed/consent preflight |
+| Seed/consent Voice preflight | **fait** (`148_`) | 0¢ · plan 4+4 · 0 persist | consommée | seed transaction |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -397,11 +398,11 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`** — préparer, **sans écrire**, quatre identities et quatre consentements bornés. **Non exécutée ici.** 0 seed. 0 ElevenLabs.
+**`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION`** — insérer **exactement** 4 identities + 4 consentements, 0 binding, execution=false. **Non exécutée ici.** 0 seed. 0 ElevenLabs.
 
 ### Court terme
 
-1. Auth seed/consent preflight (lecture seule), **puis** seed réel seulement avec Auth distincte (4 identités, 4 consentements, 0 binding).
+1. Auth seed/consent transaction, **puis** choix narrateur I2V par porte distincte.
 2. Ne pas traiter le pricing catalogue 0,15 USD/1k comme un prix ferme.
 3. Ne pas activer `49284892…` ni `9be6cb0c…` ni le GP I2V.
 4. Second submit fal **interdit**. Voice ne relance pas I2V.
@@ -423,13 +424,13 @@ Pas de délai calendaire.
 
 ```text
 Contexte : VHS V2 · 11B CLOSED · Voice WIRED_DISABLED · budget 437/389/0/48 ¢
-Dernier verdict : VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF (147_)
-Preuve : 32/32 · ACL durcies · consent append-only · 3 tables vides
-Blocage : seed interdit · runtime OFF
-Mission : uniquement AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT
-Auth consommées : grant apply (147_) · grant apply preflight (146_) · apply catalog (144_)
-Interdit : seed réel · ElevenLabs · flags Vercel · réserve · lipsync · second apply
-Attendu : preflight lecture seule · 0 write · 0 seed
+Dernier verdict : VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH (148_)
+Preuve : 32/32 · ACL durcies · 3 tables vides · 4 configs redacted · plan 4+4
+Blocage : seed interdit sans Auth transaction · runtime OFF
+Mission : uniquement AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_SINGLE_TRANSACTION
+Auth consommées : seed preflight (148_) · grant apply (147_) · apply catalog (144_)
+Interdit : seed sans Auth · binding · ElevenLabs · flags · réserve · lipsync
+Attendu : 4 identities · 4 consents · 0 binding · execution=false
 ```
 
 ---
@@ -438,8 +439,8 @@ Attendu : preflight lecture seule · 0 write · 0 seed
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 147_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY.md puis 146_, 145_, 144_, 143_, 142_, 141_ et 140_.
-Vérifie Git. Voice/TTS câblé désactivé. Catalog remote appliqué vide. Grants durcis 32/32. Consent append-only. Seed absent. Config locale prête (4 prefixes, 0 ID exposé). Attempt 6be95728… completed. Asset 9be6cb0c… approved active=false. Budget 437/389/0/48. Flags OFF.
+Lis ensuite 148_PHASE_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT.md puis 147_, 146_, 145_, 144_, 143_, 142_, 141_ et 140_.
+Vérifie Git. Voice/TTS câblé désactivé. Catalog remote appliqué vide. Grants durcis 32/32. Seed préparé non exécuté (4+4, 0 binding). Config locale prête (4 prefixes, 0 ID exposé). Attempt 6be95728… completed. Asset 9be6cb0c… approved active=false. Budget 437/389/0/48. Flags OFF.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 Aucun appel ElevenLabs. Aucun seed sans Auth distincte. Aucun second submit fal. Aucune activation. Aucun lipsync.
 N’appelle aucun provider sans Auth explicite dans CE chat.
@@ -452,7 +453,8 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-15 | `147_` Voice grant hardening apply | VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF | à venir | 0 | 1 ACL · 32/32 · 0 seed | seed/consent preflight |
+| 2026-08-16 | `148_` Voice seed/consent preflight | VOICE_IDENTITY_CATALOG_SEED_PREFLIGHT_READY_FOR_SINGLE_TRANSACTION_AUTH | à venir | 0 | 0 write · plan 4+4 | seed transaction |
+| 2026-08-15 | `147_` Voice grant hardening apply | VOICE_IDENTITY_CATALOG_GRANTS_HARDENED_REMOTE_TABLES_EMPTY_RUNTIME_OFF | `6968876` | 0 | 1 ACL · 32/32 · 0 seed | seed/consent preflight |
 | 2026-08-15 | `146_` Voice grant apply preflight | VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH | `2db8249` | 0 | 0 apply · drift 31/32 | apply once |
 | 2026-08-15 | `145_` Voice grant hardening preflight | VOICE_IDENTITY_CATALOG_GRANTS_HARDENING_READY_FOR_REMOTE_APPLY_PREFLIGHT | `ced73d0` | 0 | 0 apply · local 32e | grant apply preflight |
 | 2026-08-15 | `144_` Voice catalog remote apply | VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLIED_EMPTY_RUNTIME_OFF | `8332bee` | 0 | 1 migration · 3 tables vides | grant hardening |
