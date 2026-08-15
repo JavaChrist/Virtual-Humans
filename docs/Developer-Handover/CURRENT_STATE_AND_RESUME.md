@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-15T01:55:00+02:00
-documentedHead=b6f1712
+verifiedAt=2026-08-15T02:25:00+02:00
+documentedHead=7b64f2e
 headStatus=pending commit
-lastPhaseReport=135_PHASE_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md
-nextPhase=AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING
+lastPhaseReport=136_PHASE_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING.md
+nextPhase=AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT
 budgetHard=437
 budgetCommitted=389
 budgetReserved=0
 budgetAvailable=48
 runtimePaidMedia=OFF
-unitTests=1682/1682
-globalStatus=PHASE_11B_CLOSED_PASS_WITH_NOTES
+unitTests=1692/1692
+globalStatus=I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `PHASE_11B_CLOSED_PASS_WITH_NOTES`  
-**Dernière vérification :** 2026-08-15 01:55 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`  
+**Statut global :** `I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT`  
+**Dernière vérification :** 2026-08-15 02:25 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`  
 **Branche :** `main`  
-**HEAD local :** `b6f1712` avant ce commit · alias Production **`8c50b35`** · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
-**origin/main :** `b6f1712` avant ce commit  
+**HEAD local :** `7b64f2e` avant ce commit · alias Production **`8c50b35`** · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
+**origin/main :** `7b64f2e` avant ce commit  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS hors scope protégés  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · smoke I2V `1d75541` · HR `b6f1712`  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`135_PHASE_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md`](./135_PHASE_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md)  
-**Prochaine phase exacte :** `AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`
+**Dernier rapport de phase :** [`136_PHASE_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING.md`](./136_PHASE_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING.md)  
+**Prochaine phase exacte :** `AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -63,10 +63,10 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | OpenAI Image `/director` | **11A CLOSED** · PASS_WITH_NOTES · 1.2.0 **HUMAN_APPROVED** inactif | 2 appels · enfant `49284892…` privé |
 | Overlay typographique | **WIRED_DISABLED** · 1.2.0 **HUMAN_APPROVED** privé inactif | checksum `9ac484b7…` · décision `fb2f886c…` |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
-| I2V `/director` | **11B CLOSED** PASS_WITH_NOTES · HUMAN_APPROVED inactif | `b6f1712` · 1 fal · attempt `started` P1 · 0 activation |
+| I2V `/director` | **11B CLOSED** · attempt **code hardené** · live `started` | `7b64f2e` · 0 write live · next=reconciliation preflight |
 | T2V / voice / lipsync / merge-export réels | **PREPARED** · hors 11B | pas de smoke |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / Motion / Director Paid AI · `finally` exécuté |
-| Prochaine étape | **PREPARED** | `AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING` · 0 provider · 0 activation |
+| Prochaine étape | **PREPARED** | `AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT` · 0 write |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -105,7 +105,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | QC | PASS_REAL image · I2V technique partiel | `110_`/`127_`/`129_`/`134_` | PNG/checksum ; I2V visuel humanOnly APPROVE | — | 0 | probe vidéo absent | humanOnly |
 | Human Review | PASS_REAL image · I2V **APPROVE** | `110_`/`119_`/`123_`/`127_`/`134_` | 4 image + 1 Motion + 1 I2V APPROVE | — | 0 | 1 décision I2V `301ee080…` | 0 nouvelle HR |
 | OpenAI Image | **11A CLOSED** PASS_WITH_NOTES | `115_`–`128_` | enfant `49284892…` APPROVE inactif | `gpt-image-1` | 2 | 0 3ᵉ appel | pas d’activation |
-| Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `135_` | 1 fal · `9be6cb0c…` approved `active=false` | fal Kling I2V | 140 provisional | flags OFF · Auth consommée | hardening attempt |
+| Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `136_` | code attempt hardené · live `6be95728…` toujours `started` | fal Kling I2V | 140 provisional | flags OFF · 0 write live | reconciliation preflight |
 | Voice | PREPARED | legacy route | adapter ElevenLabs | ElevenLabs | 0 `/director` | pas de smoke V2 | DEFERRED |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
 | Merge / export | PASS_SYNTHETIC | 9 | fake-merge gated | — | 0 | pas de média réel | avant Production |
@@ -289,12 +289,12 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1682/1682** | suite complète + 5 close audit | 2026-08-15 `135_` |
-| Typecheck / lint / build | **PASS** | module audit | `135_` |
+| Unitaires | **1692/1692** | suite complète + 10 attempt terminal | 2026-08-15 `136_` |
+| Typecheck / lint / build | **PASS** | helper + script | `136_` |
 | migrations-static | PASS (14) | dernière complète | `120_` (non touchées) |
-| Secret scan diff `135_` | **PASS** | cette phase | `135_` |
-| Tests ciblés | close audit **5/5** | cette phase | `135_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 15 août | `135_` |
+| Secret scan diff `136_` | **PASS** | cette phase | `136_` |
+| Tests ciblés | attempt terminal **10/10** | cette phase | `136_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 15 août | `136_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
@@ -332,7 +332,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 ### P1 ouverts
 
 - Activation / publication / merge-export de `9be6cb0c…` **interdites** sans Auth distincte. 0 second submit.
-- Attempt I2V `6be95728…` reste `started` — **P1** · ne pas corriger sans Auth `AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING` puis Auth live distincte.
+- Attempt I2V `6be95728…` reste `started` — **P1** · code hardené (`136_`) · correction live **interdite** sans Auth `AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT` puis Auth mutation distincte.
 - Rétention/suppression des REJECT privés — politique future.
 - `17_` / `19_` stale (budget, migrations, jobs) — alignement docs ultérieur.
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
@@ -341,7 +341,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### P0/P1 fermés (extraits)
 
-- Clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -364,7 +364,8 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | I2V first paid single execution | **fait** (`133_`) | 140¢ provisional · 1 fal | consommée | second submit |
 | I2V preview privée + HR APPROVE | **fait** (`134_`) | 0¢ · 1 APPROVE inactif | consommée | activer / resoumettre |
 | Clôture 11B + next media gate | **fait** (`135_`) | 0¢ · PASS_WITH_NOTES | consommée | activer / provider |
-| Hardening attempt I2V | à ouvrir | 0¢ · 0 fal | Auth code-only | write live / provider |
+| Hardening attempt I2V | **fait** (`136_`) | 0¢ · code+tests | consommée | write live |
+| Reconciliation live attempt | à ouvrir | 0¢ · 0 write | Auth preflight distincte | mutation live / provider |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -374,15 +375,15 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`** — code + tests pour l’état terminal de l’attempt I2V. **Non exécutée ici.** 0 provider. 0 write live. 0 activation.
+**`AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT`** — relire l’attempt et préparer un CAS unique. **Non exécutée ici.** 0 write Production. 0 provider.
 
 ### Court terme
 
-1. Auth hardening attempt seulement (code/tests).
-2. Ne pas activer `49284892…` ni `9be6cb0c…`.
-3. Second submit fal **interdit** sans nouvelle Auth payante distincte.
-4. Correction DB live de l’attempt **interdite** sans Auth distincte après le hardening.
-5. Voice/TTS `/director` ensuite : `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`.
+1. Auth reconciliation preflight seulement.
+2. Ne pas muter `6be95728…` sans Auth mutation distincte.
+3. Ne pas activer `49284892…` ni `9be6cb0c…`.
+4. Second submit fal **interdit**.
+5. Voice/TTS **après** reconciliation ou décision explicite de différer.
 
 ### Avant beta
 
@@ -399,14 +400,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A+11B CLOSED PASS_WITH_NOTES · budget 437/389/0/48 ¢
-Dernier verdict : PHASE_11B_CLOSED_PASS_WITH_NOTES (135_)
-Preuve : 1 fal · 1 HR APPROVE 301ee080… · asset 9be6cb0c… approved active=false
-Blocage : attempt 6be95728… started = P1 · 0 resubmit
-Mission : uniquement AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING
-Auth consommées : clôture 11B (135_) · HR APPROVE (134_) · first paid I2V (133_)
-Interdit : second submit fal · activer 9be6cb0c… / 49284892… · write live attempt · flags ON
-Attendu : code+tests terminal attempt · 0 provider · 0 write Production
+Contexte : VHS V2 · 11B CLOSED · attempt code hardené · live started · budget 437/389/0/48 ¢
+Dernier verdict : I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT (136_)
+Preuve : helper générique · script 133_ refuse resubmit · dry-run mutationAllowed=false
+Blocage : attempt 6be95728… toujours started · 0 write live
+Mission : uniquement AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT
+Auth consommées : hardening (136_) · clôture 11B (135_) · HR APPROVE (134_)
+Interdit : mutation live · second submit fal · activer 9be6cb0c… · Voice sans décision
+Attendu : preflight CAS · 0 write Production · 0 provider
 ```
 
 ---
@@ -415,10 +416,10 @@ Attendu : code+tests terminal attempt · 0 provider · 0 write Production
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 135_PHASE_11B_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md puis 134_.
-Vérifie Git. Phase 11B CLOSED PASS_WITH_NOTES. Asset 9be6cb0c… approved active=false. Attempt 6be95728… started P1. Budget 437/389/0/48. Flags OFF.
+Lis ensuite 136_PHASE_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING.md puis 135_.
+Vérifie Git. Code attempt hardené. Attempt live 6be95728… toujours started. Asset 9be6cb0c… approved active=false. Budget 437/389/0/48. Flags OFF.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
-Aucun second submit fal. Aucune activation. Aucune correction live attempt sans Auth.
+Aucune mutation live attempt. Aucun second submit fal. Aucune activation.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne lis ni n’écris de média Production sans Auth.
 ```
@@ -429,7 +430,8 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-15 | `135_` clôture 11B + next gate | PHASE_11B_CLOSED_PASS_WITH_NOTES | à venir | 0 | 0 write · attempt P1 · next=hardening | hardening attempt |
+| 2026-08-15 | `136_` attempt terminal hardening | I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT | à venir | 0 | code+tests · live started inchangé | reconciliation preflight |
+| 2026-08-15 | `135_` clôture 11B + next gate | PHASE_11B_CLOSED_PASS_WITH_NOTES | `7b64f2e` | 0 | 0 write · attempt P1 · next=hardening | hardening attempt |
 | 2026-08-15 | `134_` I2V Human Review APPROVE | I2V_FIRST_PAID_VIDEO_HUMAN_APPROVED_PRIVATE_INACTIVE | `b6f1712` | 0 | 1 APPROVE inactif · 0 fal · 0 Storage | clôture 11B audit |
 | 2026-08-15 | `133_` I2V first paid single execution | I2V_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING | `1d75541` | 140 | 1 fal · 1 MP4 privé · HR pending | preview + décision humaine |
 | 2026-08-14 | `132_` I2V paid smoke final preflight | I2V_PAID_SMOKE_FINAL_PREFLIGHT_READY_FOR_SINGLE_PAID_AUTH | `8c50b35` | 0 | 0 write · 0 fal · 0 réserve | first paid single execution |

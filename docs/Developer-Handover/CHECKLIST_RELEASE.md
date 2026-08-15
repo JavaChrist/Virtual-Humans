@@ -107,6 +107,7 @@
 - [x] First paid I2V (`133_`) · **I2V_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** · 1 fal · HR pending · flags OFF ;
 - [x] HR I2V APPROVE (`134_`) · **I2V_FIRST_PAID_VIDEO_HUMAN_APPROVED_PRIVATE_INACTIVE** · `active=false` · 0 fal ;
 - [x] Clôture 11B (`135_`) · **PHASE_11B_CLOSED_PASS_WITH_NOTES** · attempt P1 · 0 write ;
+- [x] Attempt terminal hardening (`136_`) · **I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT** · 0 write live ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict

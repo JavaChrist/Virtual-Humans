@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.159] — 2026-08-15
+
+### Added (Phase 11B I2V attempt terminal-state hardening)
+
+- Helper générique + script 133_ corrigé (`136_`) : attempt terminale avant job/run.
+- Dry-run live `mutationAllowed=false`. Attempt `6be95728…` **non mutée**.
+- Verdict **`I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT`**.
+- Prochaine porte **`AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT`**.
+
 ## [2.0.158] — 2026-08-15
 
 ### Added (Phase 11B close and next media gate audit)

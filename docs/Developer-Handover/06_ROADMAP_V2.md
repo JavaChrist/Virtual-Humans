@@ -59,10 +59,10 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 **État 15 août 2026 :** Phase 11A **CLOSED** (`128_`) · Phase 11B **CLOSED PASS_WITH_NOTES** (`135_`) · still `49284892…` + vidéo `9be6cb0c…` inactifs.  
 Motion MV-001 **PASS** benchmark · Registry **DISABLED**. Restore drill **PASS** (`78_`).
 
-**Pas encore :** I2V/T2V/voice/lipsync/merge-export **réels** sur `/director` HTTP ; activation ; runtime Motion Production ; attempt I2V terminale.
+**Pas encore :** I2V/T2V/voice/lipsync/merge-export **réels** sur `/director` HTTP ; activation ; runtime Motion Production ; reconciliation live de l’attempt I2V.
 
 Pilotage courant : **`CURRENT_STATE_AND_RESUME.md`** puis **`BACKLOG_V2.md`**.  
-Prochaine porte : **`AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`** — code+tests · 0 provider · 0 write live.
+Prochaine porte : **`AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT`** — CAS read-only · 0 write Production.
 
 ## Priorités
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Phase 11B — first paid I2V single execution.
- * Max 1 reservation 168¢, 1 fal submit, 1 output. Never logs secrets or URLs.
+ * Phase 11B — first paid I2V single execution (HISTORICAL).
+ * Auth consumed. This file must not submit again.
+ * Lifecycle: attempt becomes terminal before job/run complete (see generation-attempt-terminal-state).
  *
  *   CONFIRM_PHASE_11B_I2V_FIRST_PAID_SINGLE_EXECUTION=1 \
  *   node --import tsx scripts/phase-11b-i2v-first-paid-single-execution.mjs
@@ -15,6 +16,14 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createClient } from "@supabase/supabase-js";
 import { fal } from "@fal-ai/client";
+import {
+  applyGenerationAttemptTerminalToStore,
+  resolveGenerationAttemptTerminalDecision,
+} from "../src/application/production/generation-attempt-terminal-state.ts";
+import {
+  PHASE_11B_I2V_PAID_SCRIPT_AUTH_CONSUMED,
+  assertPhase11BPaidScriptMustNotResubmit,
+} from "../src/application/production/phase-11b-i2v-attempt-terminal-state.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const studioRoot = resolve(__dirname, "..");
@@ -69,6 +78,78 @@ function redact(value) {
   return String(value ?? "")
     .replace(/https?:\/\/\S+/gi, "[redacted-url]")
     .replace(/token=[^&\s]+/gi, "token=[redacted]");
+}
+
+function attemptRecord(row) {
+  return {
+    id: row.id,
+    workspaceId: row.workspace_id,
+    projectId: row.project_id,
+    runId: row.run_id,
+    status: row.status,
+    externalJobId: row.external_job_id ?? null,
+    retryable: row.retryable ?? null,
+    completedAt: row.completed_at ?? null,
+    costStatus: row.cost_status ?? null,
+    providerId: row.provider_id,
+    modelId: row.model_id,
+  };
+}
+
+async function persistAttemptTerminal(db, attemptId, outcome, nowIso) {
+  const loaded = await db
+    .from("generation_attempts")
+    .select(
+      "id,workspace_id,project_id,run_id,status,external_job_id,retryable,completed_at,cost_status,provider_id,model_id",
+    )
+    .eq("id", attemptId)
+    .single();
+  if (loaded.error || !loaded.data) fail("attempt missing for terminal persist");
+  const current = attemptRecord(loaded.data);
+  const decision = resolveGenerationAttemptTerminalDecision({
+    outcome,
+    attempt: current,
+    expected: {
+      workspaceId: current.workspaceId,
+      projectId: current.projectId,
+      runId: current.runId,
+      attemptId: current.id,
+      currentStatus: current.status,
+    },
+    nowIso,
+    settlementCostStatus: "provisional",
+  });
+  const preview = applyGenerationAttemptTerminalToStore(
+    {
+      attempt: current,
+      job: { status: "running", submitCount: 1, externalJobId: current.externalJobId },
+      run: { status: "running" },
+      providerCalls: 0,
+      budgetWrites: 0,
+      assetWrites: 0,
+      flagsWritten: 0,
+      ledgerWrites: 0,
+    },
+    decision,
+  );
+  if (preview.result === "conflict" || preview.result === "refused") {
+    fail(`attempt terminal ${preview.result}`);
+  }
+  const patch = {
+    retryable: false,
+  };
+  if (preview.result === "applied") {
+    patch.status = preview.store.attempt.status;
+    patch.completed_at = preview.store.attempt.completedAt;
+    patch.cost_status = preview.store.attempt.costStatus;
+  }
+  const updated = await db
+    .from("generation_attempts")
+    .update(patch)
+    .eq("id", attemptId)
+    .eq("status", current.status)
+    .select("id");
+  if (updated.error) fail(`attempt terminal persist: ${updated.error.message}`);
 }
 
 function loadEnvFile(path) {
@@ -203,6 +284,7 @@ async function main() {
   if (process.env.CONFIRM_PHASE_11B_I2V_FIRST_PAID_SINGLE_EXECUTION !== "1") {
     fail("CONFIRM_PHASE_11B_I2V_FIRST_PAID_SINGLE_EXECUTION=1 is required");
   }
+  assertPhase11BPaidScriptMustNotResubmit(PHASE_11B_I2V_PAID_SCRIPT_AUTH_CONSUMED);
   const local = loadEnvFile(join(studioRoot, ".env.local"));
   const remote = loadEnvFile(join(studioRoot, ".env.remote.local"));
   const falKey = process.env.FAL_KEY || remote.FAL_KEY || local.FAL_KEY;
@@ -463,6 +545,7 @@ async function main() {
         })
         .eq("id", jobId);
       report.verdict = "I2V_FIRST_PAID_SINGLE_EXECUTION_SUBMISSION_UNKNOWN_NO_RESUBMIT";
+      await persistAttemptTerminal(db, attemptId, "submission_unknown", new Date().toISOString());
       report.budgetAfter = await budgetSnapshot(db);
       return report;
     }
@@ -480,6 +563,7 @@ async function main() {
     if (persist.error || !persist.data?.length) {
       report.providerStatus = "submission_unknown";
       report.verdict = "I2V_FIRST_PAID_SINGLE_EXECUTION_SUBMISSION_UNKNOWN_NO_RESUBMIT";
+      await persistAttemptTerminal(db, attemptId, "submission_unknown", new Date().toISOString());
       report.budgetAfter = await budgetSnapshot(db);
       return report;
     }
@@ -509,10 +593,12 @@ async function main() {
     if (status !== "COMPLETED" || !videoUrl) {
       if (status === "FAILED") {
         report.verdict = "I2V_FIRST_PAID_SINGLE_EXECUTION_FAILED_NO_RETRY";
+        await persistAttemptTerminal(db, attemptId, "provider_failed", new Date().toISOString());
         await db.from("production_jobs").update({ status: "failed" }).eq("id", jobId);
         await db.from("production_runs").update({ status: "failed" }).eq("id", runId);
       } else {
         report.verdict = "I2V_FIRST_PAID_SINGLE_EXECUTION_PROVIDER_JOB_PENDING_NO_RESUBMIT";
+        await persistAttemptTerminal(db, attemptId, "provider_pending", new Date().toISOString());
       }
       report.budgetAfter = await budgetSnapshot(db);
       return report;
@@ -522,6 +608,7 @@ async function main() {
       assertResultHost(videoUrl);
     } catch {
       report.verdict = "I2V_FIRST_PAID_SINGLE_EXECUTION_OUTPUT_QUARANTINED_NO_RETRY";
+      await persistAttemptTerminal(db, attemptId, "quarantined", new Date().toISOString());
       report.budgetAfter = await budgetSnapshot(db);
       await db.from("production_jobs").update({
         status: "failed",
@@ -532,18 +619,21 @@ async function main() {
     const downloaded = await fetch(videoUrl, { redirect: "error" });
     if (!downloaded.ok) {
       report.verdict = "I2V_FIRST_PAID_SINGLE_EXECUTION_OUTPUT_QUARANTINED_NO_RETRY";
+      await persistAttemptTerminal(db, attemptId, "quarantined", new Date().toISOString());
       report.budgetAfter = await budgetSnapshot(db);
       return report;
     }
     const mime = downloaded.headers.get("content-type")?.split(";")[0]?.trim() ?? "";
     if (mime !== "video/mp4" && mime !== "video/webm") {
       report.verdict = "I2V_FIRST_PAID_SINGLE_EXECUTION_OUTPUT_QUARANTINED_NO_RETRY";
+      await persistAttemptTerminal(db, attemptId, "quarantined", new Date().toISOString());
       report.budgetAfter = await budgetSnapshot(db);
       return report;
     }
     const bytes = Buffer.from(await downloaded.arrayBuffer());
     if (bytes.length <= 0 || bytes.length > MAX_BYTES) {
       report.verdict = "I2V_FIRST_PAID_SINGLE_EXECUTION_OUTPUT_QUARANTINED_NO_RETRY";
+      await persistAttemptTerminal(db, attemptId, "quarantined", new Date().toISOString());
       report.budgetAfter = await budgetSnapshot(db);
       return report;
     }
@@ -671,6 +761,14 @@ async function main() {
       console.log(`production_result insert skipped: ${redact(prInsert.error.message)}`);
     }
 
+    await persistAttemptTerminal(db, attemptId, "success", new Date().toISOString());
+    await db
+      .from("production_jobs")
+      .update({
+        status: "completed",
+        result: { outputAssetId: videoAssetId, checksum, bytes: bytes.length, mime },
+      })
+      .eq("id", jobId);
     await db
       .from("production_runs")
       .update({
@@ -693,13 +791,6 @@ async function main() {
         },
       })
       .eq("id", runId);
-    await db
-      .from("production_jobs")
-      .update({
-        status: "completed",
-        result: { outputAssetId: videoAssetId, checksum, bytes: bytes.length, mime },
-      })
-      .eq("id", jobId);
     report.humanReviewPending = true;
 
     const commit = await db.rpc("commit_budget_reservation", {

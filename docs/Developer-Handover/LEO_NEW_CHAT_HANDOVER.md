@@ -176,31 +176,27 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-La Phase 11B est **CLOSED** (`135_`) : `PHASE_11B_CLOSED_PASS_WITH_NOTES`.
+Le hardening attempt I2V est **PASS** (`136_`) : `I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT`.
 
-Auths consommées. Ledger : **437 / 389 / 0 / 48** ¢. 1 fal. Asset vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF. Attempt `6be95728…` `started` = **P1** · resubmit impossible.
+Code hardené. Attempt live `6be95728…` toujours `started`. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF.
 
 Phase active suivante :
 
-`AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`
+`AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT`
 
-Objectif : corriger le code et les tests de l’état terminal de l’attempt. **Aucun** provider. **Aucune** écriture Production live. **Aucune** activation.
+Objectif : vérifier le déploiement du hardening, relire l’attempt, préparer un CAS unique. **Aucune** écriture Production. **Aucun** provider. **Aucune** activation.
 
-Le wiring `57de914` est présent. L’image `49284892…` et la vidéo `9be6cb0c…` restent inactives. Flags OFF.
+Voice/TTS n’est pas ouvert tant que la reconciliation n’est pas faite ou explicitement différée.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si `135_` est PASS_WITH_NOTES, la porte suivante probable après hardening sera :
-
-`AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`
-
-Cette porte ne doit ni resoumettre fal ni activer l’asset automatiquement. La correction live de l’attempt exigera une Auth distincte.
+Si `136_` est READY, la mutation live exigera ensuite une Auth distincte. Voice/TTS reste après cette dette.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -224,4 +220,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_I2V_ATTEMPT_TERMINAL_STATE_HARDENING`. La Phase 11B est CLOSED PASS_WITH_NOTES. Attempt `started` P1. Aucun second submit. Aucune activation. Aucune écriture live attempt sans Auth distincte.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT`. Le hardening `136_` est READY. Attempt live toujours `started`. Aucune écriture Production. Aucun second submit. Aucune activation. Voice/TTS non ouvert.
