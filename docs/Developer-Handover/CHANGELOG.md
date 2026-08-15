@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.175] — 2026-08-16
+
+### Added (Phase 11C Voice/TTS live preflight no provider)
+
+- Dry-run Voice/TTS `providerMode=disabled` arrêté avant voiceId, URL signée, réserve, run/job et ElevenLabs (`152_`).
+- Pricing interne 0,15 USD/1k + docs publiques 0,10 · estimate 1¢ · cap **2¢** · budget 48¢ suffisant · `firm=false`.
+- Activation future **C** (Auth + flags `finally`, catalogue inchangé). Verdict **`VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH`**.
+- Prochaine porte **`AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`**.
+
 ## [2.0.174] — 2026-08-16
 
 ### Added (Phase 11C I2V narrator female binding single write)

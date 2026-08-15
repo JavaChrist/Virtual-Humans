@@ -69,7 +69,9 @@
 **I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH** — verdict `150_` : plan déterministe · 0 persist · runtime OFF.
 **AUTH_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE** — porte `151_` : un binding projet female · execution=false · 0 ElevenLabs.
 **I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF** — verdict `151_` : binding `e3a1cc87…` persisté · 4/4/1 · runtime OFF.
-**AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER** — prochaine porte : dry-run TTS arrêté avant média et ElevenLabs.
+**AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER** — porte `152_` : dry-run TTS arrêté avant média et ElevenLabs.
+**VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH** — verdict `152_` : wiring/binding/pricing/budget prêts · cap 2¢ · 0 ElevenLabs.
+**AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION** — prochaine porte : 1 appel ElevenLabs · 1 run/job/attempt/output privé · flags `finally`.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

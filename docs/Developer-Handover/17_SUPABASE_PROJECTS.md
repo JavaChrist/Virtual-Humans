@@ -1,10 +1,10 @@
 # 17 — Projets Supabase (schéma réel)
 
-**Statut documentaire :** `CURRENT` (rafraîchi 16 août 2026 — `151_`)
-**Sources :** `studio/supabase/migrations/` (**32** fichiers locaux), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_` + `82_` + `142_`–`151_`.
+**Statut documentaire :** `CURRENT` (rafraîchi 16 août 2026 — `152_`)
+**Sources :** `studio/supabase/migrations/` (**32** fichiers locaux), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_` + `82_` + `142_`–`152_`.
 **Ne pas inventer** de table, colonne, RPC ou garantie absente du dépôt.
 
-> **Compteurs 16 août 2026 (`151_`) :** Production **32/32**. Tables Voice **4 / 4 / 1**. Binding `narrator_female` **persisté** (`e3a1cc87…`) · execution=false. Grants durcis inchangés. RLS on · 0 policy. Hard limit live **437**. Le corps historique ci-dessous (29/122¢) reste un snapshot 11 août.
+> **Compteurs 16 août 2026 (`152_`) :** Production **32/32**. Tables Voice **4 / 4 / 1**. Binding `narrator_female` **persisté** (`e3a1cc87…`) · execution=false. Live preflight TTS **0 write**. Grants durcis inchangés. RLS on · 0 policy. Hard limit live **437**. Le corps historique ci-dessous (29/122¢) reste un snapshot 11 août.
 
 ---
 

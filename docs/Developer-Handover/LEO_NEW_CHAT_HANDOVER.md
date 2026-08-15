@@ -176,27 +176,27 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Voice/TTS `/director` est **WIRED_DISABLED** (`140_`–`151_`) : `I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF`.
+Voice/TTS `/director` est **LIVE_PREFLIGHT_READY** (`140_`–`152_`) : `VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH`.
 
-Le chemin est câblé. Catalog remote seedé : **4 identities + 4 consentements + 1 binding live**, alignement **32/32**. Grants durcis. `active_for_provider_execution=false`. Christian a choisi **`narrator_female`** pour le projet I2V ; le binding `e3a1cc87…` est **persisté**. `narrator_male` non choisi. Mei/Tom ne sont pas des narrateurs. **0** ElevenLabs.
+Le chemin est câblé et le dry-run est passé. Catalog remote seedé : **4 identities + 4 consentements + 1 binding live**, alignement **32/32**. Grants durcis. `active_for_provider_execution=false`. Christian a choisi **`narrator_female`** pour le projet I2V ; le binding `e3a1cc87…` est **persisté**. Cap de réservation future **2¢**. Activation future **C** (flags `finally`, catalogue inchangé). `narrator_male` non choisi. Mei/Tom ne sont pas des narrateurs. **0** ElevenLabs.
 
 Attempt `6be95728…` **`completed`**. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF. Lipsync OFF.
 
 Phase active suivante :
 
-`AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER`
+`AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`
 
-Dry-run TTS arrêté avant signature média et ElevenLabs. **Aucun** appel provider. **Aucun** lipsync.
+1 appel ElevenLabs · 1 run/job/attempt/output privé · 0 retry · 0 fallback · Human Review pending. **Aucun** lipsync.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si `151_` est STOP, la porte suivante est le live preflight TTS sans provider. Aucun ElevenLabs avant une Auth payante distincte. Aucun second submit I2V.
+Si `152_` est STOP, la porte suivante est le first paid TTS unique. Aucun ElevenLabs avant une Auth payante distincte. Aucun second submit I2V.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -220,4 +220,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER`. Voice/TTS est câblé et désactivé. Le catalog `149_` est seedé. Binding `narrator_female` persisté `151_` (4/4/1, execution=false). Grants durcis `147_`. Aucun ElevenLabs sans live preflight + Auth payante. Aucun second binding. Aucun second submit. Aucune activation. Aucun lipsync.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`. Voice/TTS live preflight READY (`152_`). Catalog `149_` seedé. Binding `narrator_female` persisté `151_` (4/4/1, execution=false). Cap 2¢. Activation C. Grants durcis `147_`. Aucun ElevenLabs sans Auth payante distincte. Aucun second binding. Aucun second submit. Aucun lipsync.
