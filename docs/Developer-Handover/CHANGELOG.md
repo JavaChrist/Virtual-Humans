@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.169] — 2026-08-15
+
+### Added (Phase 11C Voice catalog grant hardening remote apply preflight)
+
+- Preflight distant lecture seule de `20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql` (`146_`).
+- Drift remote **31** / local **32** · checksum/blob inchangés · overlay `service_role` confirmé · 0 apply.
+- Verdict **`VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH`**.
+- Prochaine porte **`AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_ONCE`**. Seed toujours interdit.
+
 ## [2.0.168] — 2026-08-15
 
 ### Added (Phase 11C Voice catalog grant hardening preflight)

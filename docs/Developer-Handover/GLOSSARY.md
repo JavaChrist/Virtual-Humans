@@ -57,7 +57,9 @@
 **VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLIED_EMPTY_RUNTIME_OFF** — verdict `144_` : 31/31 · 3 tables vides · runtime OFF.
 **AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_PREFLIGHT** — porte `145_` : audit ACL + migration locale grants.
 **VOICE_IDENTITY_CATALOG_GRANTS_HARDENING_READY_FOR_REMOTE_APPLY_PREFLIGHT** — verdict `145_` : overlay DEFAULT PRIVILEGES · local 32e · 0 apply.
-**AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT** — prochaine porte : revérifier le hardening sans l’appliquer.
+**AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT** — porte `146_` : revérifier le hardening sans l’appliquer.
+**VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH** — verdict `146_` : drift 31/32 · SQL inchangé · 0 apply.
+**AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_ONCE** — prochaine porte : une migration ACL, sans seed.
 **AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT** — porte ultérieure : préparer seed/consentements sans write, après hardening distant.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).

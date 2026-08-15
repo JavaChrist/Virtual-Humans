@@ -2,6 +2,11 @@
 
 **Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
 
+> **Delta `146_` (15 août 2026) — grant apply preflight, NOT APPLIED :**
+> Même SQL `20260815212100` · SHA-256 `4db521b8…` · blob `b0eb2eb5…`. Remote **31** / local **32**. Overlay inchangé. 0 apply.
+> Verdict `VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH`.
+> Prochaine porte : `AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_ONCE`. Seed **interdit** jusqu’à post-apply.
+
 > **Delta `145_` (15 août 2026) — grant hardening LOCAL ONLY :**
 > `20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql` (SHA-256 `4db521b8…`). **Non appliquée.**
 > Production **31** · local **32**. Overlay `service_role=arwdDxtm` via DEFAULT PRIVILEGES. Tables vides. 0 seed.
