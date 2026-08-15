@@ -2,11 +2,15 @@
 
 **Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
 
+> **Delta `145_` (15 août 2026) — grant hardening LOCAL ONLY :**
+> `20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql` (SHA-256 `4db521b8…`). **Non appliquée.**
+> Production **31** · local **32**. Overlay `service_role=arwdDxtm` via DEFAULT PRIVILEGES. Tables vides. 0 seed.
+> Verdict `VOICE_IDENTITY_CATALOG_GRANTS_HARDENING_READY_FOR_REMOTE_APPLY_PREFLIGHT`.
+> Seed **interdit** tant que le hardening distant n’est pas appliqué, puis `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`.
+
 > **Delta `144_` (15 août 2026) — APPLIED Production, empty :**
 > `20260815195207_vhs_11c_voice_identity_catalog.sql` (contenu = SHA-256 `58069e22…` ; rename local depuis `20260815182203` pour aligner le timestamp MCP).
-> Production **31/31**. Tables Voice présentes, **0** ligne. RLS on · 0 policy · 0 seed.
-> Verdict `VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLIED_EMPTY_RUNTIME_OFF`.
-> Seed **interdit** sans `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT` puis Auth seed distincte.
+> Production **31/31** au moment de l’apply. Tables Voice présentes, **0** ligne. RLS on · 0 policy · 0 seed.
 
 > **Baseline locale courante (post-10A / 11 août 2026) :**
 > migrations **29/29** · `db reset` PASS · pgTAP **378** · intégration DB **33/33** · target guard fail-closed.

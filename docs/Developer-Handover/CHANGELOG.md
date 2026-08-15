@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.168] — 2026-08-15
+
+### Added (Phase 11C Voice catalog grant hardening preflight)
+
+- Audit lecture seule des ACL Voice : overlay `DEFAULT PRIVILEGES` réel sur `service_role` (`145_`).
+- Migration locale `20260815212100_vhs_11c_voice_identity_catalog_grant_hardening` — non appliquée. Remote **31** / local **32**.
+- Verdict **`VOICE_IDENTITY_CATALOG_GRANTS_HARDENING_READY_FOR_REMOTE_APPLY_PREFLIGHT`**.
+- Prochaine porte **`AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT`**. Seed toujours interdit.
+
 ## [2.0.167] — 2026-08-15
 
 ### Added (Phase 11C Voice identity catalog remote apply)

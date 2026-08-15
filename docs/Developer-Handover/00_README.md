@@ -78,13 +78,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH**
                            Apply remote Voice (`144_`)
                            · **VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLIED_EMPTY_RUNTIME_OFF**
+                           Grant hardening Voice (`145_`)
+                           · **VOICE_IDENTITY_CATALOG_GRANTS_HARDENING_READY_FOR_REMOTE_APPLY_PREFLIGHT**
 Runtime AI / paid media  : OFF · hardening **97f7ad7** déployé · preuve 1.2.0 **d395ec7** · runtime image **245bea2**
 Budget                   : hard 437 / committed 389 / reserved 0 / available 48 ¢
 production_jobs média    : 2 image + 1 I2V completed · 1 MP4 approved inactif
 P0                       : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit fal · 0 ElevenLabs
-P1 ouverts               : seed/consent Voice · bindings projet · pricing non ferme
-P1 fermé                 : apply catalog vide (`144_`) · preflight remote (`143_`) · catalogue locale (`142_`)
-Prochaine porte majeure  : AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT
+P1 ouverts               : apply grants Voice · seed/consent · bindings projet · pricing non ferme
+P1 fermé                 : grant hardening local (`145_`) · apply catalog vide (`144_`) · preflight remote (`143_`)
+Prochaine porte majeure  : AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -297,6 +299,7 @@ Utilisateur → AI Video Director (/director)
 | [`142_PHASE_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP.md`](./142_PHASE_11C_VOICE_IDENTITY_CATALOG_AND_BINDING_MIGRATION_PREP.md) | **11C-VOICE-CATALOG · VOICE_IDENTITY_CATALOG_DESIGN_READY_BLOCKED_MISSING_SECURE_CONFIG** |
 | [`143_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT.md`](./143_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT.md) | **11C-VOICE-PREFLIGHT · VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_PREFLIGHT_READY_FOR_APPLY_AUTH** |
 | [`144_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY.md`](./144_PHASE_11C_VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLY.md) | **11C-VOICE-APPLY · VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLIED_EMPTY_RUNTIME_OFF** |
+| [`145_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_PREFLIGHT.md`](./145_PHASE_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_PREFLIGHT.md) | **11C-VOICE-GRANTS · VOICE_IDENTITY_CATALOG_GRANTS_HARDENING_READY_FOR_REMOTE_APPLY_PREFLIGHT** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

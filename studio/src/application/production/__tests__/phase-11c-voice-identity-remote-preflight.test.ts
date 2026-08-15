@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { test } from "node:test";
 import { PHASE_11C_VOICE_CAPABILITY_FLAG_ENV, assertPhase11CVoiceFlagsRemainOff } from "../phase-11c-voice-allowlist";
 import { PHASE_11C_VOICE_IDENTITY_MIGRATION } from "../phase-11c-voice-identity-catalog";
+import { PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION } from "../phase-11c-voice-identity-grant-hardening-preflight";
 import {
   PHASE_11C_APPLICATION_ONLY_GUARDS,
   PHASE_11C_LOCAL_VOICE_FINGERPRINT_PREFIXES,
@@ -37,7 +38,7 @@ const repoRoot = join(here, "..", "..", "..", "..", "..");
 const migrationsDir = join(repoRoot, "studio", "supabase", "migrations");
 
 const LOCAL_MIGRATION_FILES = readdirSync(migrationsDir)
-  .filter((file) => file.endsWith(".sql"))
+  .filter((file) => file.endsWith(".sql") && file !== PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION)
   .sort();
 
 const REMOTE_VERSIONS = LOCAL_MIGRATION_FILES.filter(

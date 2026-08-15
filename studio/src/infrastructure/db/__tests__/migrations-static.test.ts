@@ -47,6 +47,7 @@ const EXPECTED_FILES = [
   "20260807213803_vhs_134_legacy_art_timeout_retry.sql",
   "20260811211757_vhs_mt005_human_review_decision_extend.sql",
   "20260815195207_vhs_11c_voice_identity_catalog.sql",
+  "20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -72,15 +73,15 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 31 versions aligned Production after Voice catalog apply", () => {
+test("migrations — 32 local files after Voice grant hardening prep", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
-  assert.equal(files.length, 31);
+  assert.equal(files.length, 32);
   assert.deepEqual(
     files.filter((f) => f.startsWith("202607")),
     [...LEGACY_FILES],
   );
-  assert.equal(v2Files().length, 29);
+  assert.equal(v2Files().length, 30);
 });
 
 test("migrations V2 — VHS-129 human-retry allowlist (not auto-retry)", () => {
@@ -350,6 +351,22 @@ test("migrations V2 — VHS-11C Voice identity catalog applied Production empty"
   assert.ok(!/ELEVENLABS_[A-Z_]*VOICE_ID=/i.test(sql));
   assert.match(sql, /Schema only: no seed rows/i);
   assert.match(sql, /project_voice_bindings_one_active_narrator_idx/);
+});
+
+test("migrations V2 — VHS-11C Voice grant hardening local-only, no DML", () => {
+  const sql = readFileSync(
+    join(MIGRATIONS_DIR, "20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql"),
+    "utf8",
+  );
+  assert.match(sql, /REVOKE ALL ON TABLE public\.voice_identities FROM PUBLIC, anon, authenticated, service_role/i);
+  assert.match(sql, /GRANT SELECT, INSERT ON TABLE public\.voice_consent_attestations TO service_role/i);
+  assert.match(sql, /REVOKE UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON TABLE public\.voice_consent_attestations/i);
+  assert.ok(!/ALTER\s+DEFAULT\s+PRIVILEGES/i.test(sql));
+  assert.ok(!/^\s*INSERT\s+INTO/im.test(sql));
+  assert.ok(!/CREATE TABLE/i.test(sql));
+  assert.ok(!/CREATE POLICY/i.test(sql));
+  assert.ok(!/ALTER TABLE/i.test(sql));
+  assert.ok(!/voiceId/i.test(sql));
 });
 
 test("migrations V2 — MT-005 human_review decision extend (applied Production)", () => {

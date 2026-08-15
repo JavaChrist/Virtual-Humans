@@ -176,27 +176,27 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Voice/TTS `/director` est **WIRED_DISABLED** (`140_`–`144_`) : `VOICE_IDENTITY_CATALOG_REMOTE_MIGRATION_APPLIED_EMPTY_RUNTIME_OFF`.
+Voice/TTS `/director` est **WIRED_DISABLED** (`140_`–`145_`) : `VOICE_IDENTITY_CATALOG_GRANTS_HARDENING_READY_FOR_REMOTE_APPLY_PREFLIGHT`.
 
-Le chemin est câblé. Catalog remote appliqué : trois tables **vides**, alignement **31/31**. Config locale Voice prête (4 prefixes distincts, 0 ID exposé). `ELEVENLABS_VOICE_ID` historique = Mei, plus un fallback. **0** ElevenLabs. Le projet I2V n’a pas encore de narrateur choisi.
+Le chemin est câblé. Catalog remote appliqué : trois tables **vides**, remote **31** / local **32**. Overlay `service_role` ALL via DEFAULT PRIVILEGES. Hardening local prêt, **non appliqué**. Config locale Voice prête (4 prefixes distincts, 0 ID exposé). `ELEVENLABS_VOICE_ID` historique = Mei, plus un fallback. **0** ElevenLabs. Le projet I2V n’a pas encore de narrateur choisi.
 
 Attempt `6be95728…` **`completed`**. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF. Lipsync OFF.
 
 Phase active suivante :
 
-`AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`
+`AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT`
 
-Préparer seed/consentements en lecture seule. **Aucune** écriture Production. **Aucun** appel ElevenLabs. **Aucun** lipsync.
+Revérifier drift + SQL de hardening **sans apply**. **Aucun** seed. **Aucune** écriture Production. **Aucun** appel ElevenLabs. **Aucun** lipsync.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si `144_` est STOP, la porte suivante est le preflight seed/consent (sans write). Aucun second submit I2V.
+Si `145_` est STOP, la porte suivante est le preflight apply grants (sans apply, sans seed). Aucun second submit I2V.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -220,4 +220,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_IDENTITY_CATALOG_SEED_AND_CONSENT_PREFLIGHT`. Voice/TTS est câblé et désactivé. Le catalog `144_` est appliqué et vide. Config locale Voice prête sans IDs. Aucun ElevenLabs. Aucun seed réel. Aucun second submit. Aucune activation. Aucun lipsync.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_IDENTITY_CATALOG_GRANT_HARDENING_REMOTE_APPLY_PREFLIGHT`. Voice/TTS est câblé et désactivé. Le catalog `144_` est appliqué et vide. Overlay grants à durcir (`145_`). Config locale Voice prête sans IDs. Aucun ElevenLabs. Aucun seed réel. Aucun apply grants. Aucun second submit. Aucune activation. Aucun lipsync.

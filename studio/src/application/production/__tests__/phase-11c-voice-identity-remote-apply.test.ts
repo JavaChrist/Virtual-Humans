@@ -7,6 +7,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { test } from "node:test";
 import { PHASE_11C_VOICE_IDENTITY_MIGRATION } from "../phase-11c-voice-identity-catalog";
+import { PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION } from "../phase-11c-voice-identity-grant-hardening-preflight";
 import {
   PHASE_11C_APPLIED_MIGRATION_NAME,
   PHASE_11C_APPLIED_MIGRATION_VERSION,
@@ -28,7 +29,7 @@ import {
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..", "..", "..", "..", "..");
 const localFiles = readdirSync(join(repoRoot, "studio", "supabase", "migrations"))
-  .filter((file) => file.endsWith(".sql"))
+  .filter((file) => file.endsWith(".sql") && file !== PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION)
   .sort();
 
 test("11C-RA — auth, verdict, no second apply", () => {

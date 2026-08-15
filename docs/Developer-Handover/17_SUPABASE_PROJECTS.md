@@ -1,10 +1,10 @@
 # 17 — Projets Supabase (schéma réel)
 
-**Statut documentaire :** `CURRENT` (rafraîchi 15 août 2026 — `143_`)
-**Sources :** `studio/supabase/migrations/` (**31** fichiers locaux), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_` + `82_` + `142_`/`143_`.
+**Statut documentaire :** `CURRENT` (rafraîchi 15 août 2026 — `145_`)
+**Sources :** `studio/supabase/migrations/` (**32** fichiers locaux), `studio/supabase/tests/` (pgTAP), repos `studio/src/infrastructure/db/`, rapports `21_`–`58_` + `82_` + `142_`–`145_`.
 **Ne pas inventer** de table, colonne, RPC ou garantie absente du dépôt.
 
-> **Compteurs 15 août 2026 (`144_`) :** Production **31/31**. Dernière `20260815195207_vhs_11c_voice_identity_catalog`. Tables Voice **présentes et vides**. RLS on · 0 policy. Hard limit live **437**. Ledger/reservations inchangés. Le corps historique ci-dessous (29/122¢) reste un snapshot 11 août.
+> **Compteurs 15 août 2026 (`145_`) :** Production **31**. Local **32**. Dernière remote `20260815195207_vhs_11c_voice_identity_catalog`. Local-only grant hardening **non appliquée**. Tables Voice **vides**. Overlay `service_role` ALL via DEFAULT PRIVILEGES. RLS on · 0 policy. Hard limit live **437**. Le corps historique ci-dessous (29/122¢) reste un snapshot 11 août.
 
 ---
 
@@ -391,6 +391,7 @@ Production appliquées : **30**. Local : **31**. Les lignes 1–29 ci-dessous so
 | 29 | `20260807213803_vhs_134_legacy_art_timeout_retry.sql` |
 | 30 | `20260811211757_vhs_mt005_human_review_decision_extend.sql` — **appliquée** Production (`82_`) |
 | 31 | `20260815195207_vhs_11c_voice_identity_catalog.sql` — **appliquée** Production (`144_`) · tables vides · 0 seed |
+| 32 | `20260815212100_vhs_11c_voice_identity_catalog_grant_hardening.sql` — **locale seulement** (`145_`) · 0 apply |
 
 Règle : **ne jamais modifier** une migration déjà appliquée. Additif uniquement. Seed Voice = Auth distincte seulement.
 
