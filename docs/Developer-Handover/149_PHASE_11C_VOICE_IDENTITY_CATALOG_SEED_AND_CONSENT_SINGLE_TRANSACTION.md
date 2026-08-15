@@ -50,7 +50,7 @@ Aucun ElevenLabs, audio, binding projet, activation, lipsync, dépense, média, 
 | ahead / behind | **0 / 0** au départ |
 | Hors scope | AICCOS + `page.tsx` protégés |
 
-HEAD final = commit de cette phase. `documentedHead=01a0861` · `headStatus=pending commit`.
+HEAD final = `2cf7642`. `documentedHead=2cf7642` · `headStatus=pending commit`.
 
 ## 3. Working tree
 
@@ -138,7 +138,7 @@ Module apply + tests, rapport `149_`, living handover et index. AICCOS + `page.t
 
 ## 14. Commit / push
 
-Message prévu : `feat(studio): seed Voice catalog identities and consents`  
+Commit : `2cf7642` · `feat(studio): seed Voice catalog identities and consents`  
 Push `main` hors AICCOS / dashboard. Pas de force push.
 
 ## 15. Verdict
