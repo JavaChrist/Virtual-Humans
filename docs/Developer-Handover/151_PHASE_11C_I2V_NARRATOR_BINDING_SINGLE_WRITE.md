@@ -63,7 +63,7 @@ Aucun ElevenLabs, audio, changement d’identité ou de consentement, activation
 | ahead / behind | **0 / 0** au départ |
 | Hors scope | AICCOS + `page.tsx` protégés |
 
-HEAD de départ `f6a49e1`. Commit de phase à enregistrer au clôture. Binding live **présent**. `narrator_female` choisie. `active_for_provider_execution=false`. Voice runtime OFF.
+HEAD de départ `f6a49e1`. Commit de phase `abaec84`. `documentedHead=abaec84` · `headStatus=pending commit`. Binding live **présent**. `narrator_female` choisie. `active_for_provider_execution=false`. Voice runtime OFF.
 
 ## 3. Working tree
 
@@ -183,11 +183,16 @@ PASS. `VOICE_IDS_EXPOSED=false`. Prefixes et locators symboliques seulement.
 
 Module apply + tests, rapport `151_`, living handover et index. AICCOS + `page.tsx` exclus. `.env.local` hors Git.
 
-## 14. Verdict
+## 14. Commit / push
+
+Commit de phase : `abaec84` · `feat(studio): persist I2V narrator_female project binding`  
+Push `main` hors AICCOS / dashboard. Pas de force push.
+
+## 15. Verdict
 
 `I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF`
 
-## 15. Prochaine porte, non exécutée
+## 16. Prochaine porte, non exécutée
 
 `AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER`
 
