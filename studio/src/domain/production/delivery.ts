@@ -43,6 +43,11 @@ export type ProductionDelivery = {
   qualityReportId?: string;
   humanReviewId?: string;
   blockingCodes?: string[];
+  /**
+   * Explicit merge/export authorization. `delivery.status=merge_ready` is never
+   * sufficient on its own. Missing means false (fail-closed).
+   */
+  mergeExportAuthorized?: boolean;
 };
 
 export function canTransitionDelivery(from: DeliveryStatus, to: DeliveryStatus): boolean {

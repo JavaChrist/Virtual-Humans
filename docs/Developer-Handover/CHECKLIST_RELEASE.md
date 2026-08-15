@@ -110,6 +110,7 @@
 - [x] Attempt terminal hardening (`136_`) · **I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT** · 0 write live ;
 - [x] Attempt live reconciliation preflight (`137_`) · **I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH** · CAS prêt · 0 write ;
 - [x] Attempt live reconciliation (`138_`) · **I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT** · 1 CAS · attempt completed ;
+- [x] Cohérence pointeurs (`139_`) · **ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED** · 0 mutation live ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -118,7 +119,7 @@
 Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
-I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · flags OFF
+I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-15T11:25:00+02:00
-documentedHead=e0b018c
+verifiedAt=2026-08-15T12:10:00+02:00
+documentedHead=26fd10e
 headStatus=pending commit
-lastPhaseReport=138_PHASE_11B_I2V_ATTEMPT_LIVE_RECONCILIATION.md
-nextPhase=AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING
+lastPhaseReport=139_PHASE_11B_ARTIFACT_POINTER_COHERENCE_HARDENING.md
+nextPhase=AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT
 budgetHard=437
 budgetCommitted=389
 budgetReserved=0
 budgetAvailable=48
 runtimePaidMedia=OFF
-unitTests=1700/1700
-globalStatus=I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT
+unitTests=1732/1732
+globalStatus=ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT`  
-**Dernière vérification :** 2026-08-15 11:25 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11B_I2V_ATTEMPT_LIVE_RECONCILIATION_SINGLE_WRITE`  
+**Statut global :** `ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED`  
+**Dernière vérification :** 2026-08-15 12:10 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`  
 **Branche :** `main`  
-**HEAD local :** `e0b018c` avant ce commit · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
-**origin/main :** `e0b018c` avant ce commit  
+**HEAD local :** `26fd10e` avant ce commit · Production Ready hardening **`97f7ad7`** (`lpat9jazt`) · wiring I2V **`57de914`** ancêtre · composeur 1.2.0 **`d395ec7`**  
+**origin/main :** `26fd10e` avant ce commit  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS hors scope protégés  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`** déployé  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`138_PHASE_11B_I2V_ATTEMPT_LIVE_RECONCILIATION.md`](./138_PHASE_11B_I2V_ATTEMPT_LIVE_RECONCILIATION.md)  
-**Prochaine phase exacte :** `AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`
+**Dernier rapport de phase :** [`139_PHASE_11B_ARTIFACT_POINTER_COHERENCE_HARDENING.md`](./139_PHASE_11B_ARTIFACT_POINTER_COHERENCE_HARDENING.md)  
+**Prochaine phase exacte :** `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -63,10 +63,10 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | OpenAI Image `/director` | **11A CLOSED** · PASS_WITH_NOTES · 1.2.0 **HUMAN_APPROVED** inactif | 2 appels · enfant `49284892…` privé |
 | Overlay typographique | **WIRED_DISABLED** · 1.2.0 **HUMAN_APPROVED** privé inactif | checksum `9ac484b7…` · décision `fb2f886c…` |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
-| I2V `/director` | **11B CLOSED** · attempt **completed** · vidéo inactive | `138_` · 1 CAS · next=pointeurs P1 |
+| I2V `/director` | **11B CLOSED** · attempt **completed** · vidéo inactive | `138_` · 1 CAS · pointeurs durcis `139_` |
 | T2V / voice / lipsync / merge-export réels | **PREPARED** · hors 11B | pas de smoke |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / Motion / Director Paid AI · `finally` exécuté |
-| Prochaine étape | **PREPARED** | `AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING` · 0 write pointeur |
+| Prochaine étape | **PREPARED** | `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT` · 0 mutation pointeur |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -98,17 +98,17 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Storyboard Director | PASS_REAL | 10F-V4 | 1 appel v4 | OpenAI texte | 5 | flags OFF | ne pas relancer |
 | Prompt Director | PASS_SYNTHETIC + correctif 11A | `113_`/`115_` | set no-text `2e8e9e6f` persisté | — | 0 | — | ne pas rejouer |
 | Router | PASS_SYNTHETIC | 9 / 11A plan | fakes + plan single-step | — | 0 | text_motion Registry | rester borné 11A |
-| Generation Engine | 11A+11B CLOSED PASS_WITH_NOTES | `102_`–`138_` | I2V 1 submit · HR APPROVE inactif · attempt completed | OpenAI Image + fal Kling | 2 image · 140 I2V | Auth consommée | pointeurs P1 |
+| Generation Engine | 11A+11B CLOSED PASS_WITH_NOTES | `102_`–`139_` | I2V 1 submit · HR APPROVE inactif · attempt completed · pointeurs durcis | OpenAI Image + fal Kling | 2 image · 140 I2V | Auth consommée | Voice preflight |
 | Production queue/worker | PASS_REAL borné | `108_` + `115_` | 2 jobs image completed | — | inclus 2 | worker OFF | ne pas cron |
 | Ledger | PASS_REAL | `109_` + `115_` + `131_` + `133_` | 2×1¢ image + 140¢ I2V provisional · hard **437** | — | 389 committed | — | 0 réserve active |
 | Storage / assets | PASS_REAL image + 1 vidéo I2V | `108_`–`134_` | 5 PNG + 1 MP4 privés inactifs | Supabase Storage | ingest I2V | ni activation ni publish | clôture 11B audit |
 | QC | PASS_REAL image · I2V technique partiel | `110_`/`127_`/`129_`/`134_` | PNG/checksum ; I2V visuel humanOnly APPROVE | — | 0 | probe vidéo absent | humanOnly |
 | Human Review | PASS_REAL image · I2V **APPROVE** | `110_`/`119_`/`123_`/`127_`/`134_` | 4 image + 1 Motion + 1 I2V APPROVE | — | 0 | 1 décision I2V `301ee080…` | 0 nouvelle HR |
 | OpenAI Image | **11A CLOSED** PASS_WITH_NOTES | `115_`–`128_` | enfant `49284892…` APPROVE inactif | `gpt-image-1` | 2 | 0 3ᵉ appel | pas d’activation |
-| Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `138_` | attempt `6be95728…` **completed** · 1 CAS | fal Kling I2V | 140 provisional | flags OFF · 0 second write | pointeurs P1 |
-| Voice | PREPARED | legacy route | adapter ElevenLabs | ElevenLabs | 0 `/director` | pas de smoke V2 | DEFERRED |
+| Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `138_`/`139_` | attempt `6be95728…` **completed** · pointeurs sûrs sans mutation | fal Kling I2V | 140 provisional | flags OFF · 0 second write | Voice preflight |
+| Voice | PREPARED | legacy route | adapter ElevenLabs | ElevenLabs | 0 `/director` | pas de smoke V2 | preflight 11C |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
-| Merge / export | PASS_SYNTHETIC | 9 | fake-merge gated | — | 0 | pas de média réel | avant Production |
+| Merge / export | PASS_SYNTHETIC + guard `139_` | 9 / `139_` | fake-merge · `merge_ready` insuffisant | — | 0 | `mergeExportAuthorized=false` live | avant Production |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
 | UI finale | PREPARED | `/director` | parcours texte réel | — | 0 | pas produit final | avant beta |
 | Monitoring / ops | PREPARED | VHS-005 | redaction logs | — | 0 | traces distribuées | avant Production |
@@ -190,13 +190,15 @@ Aucun contenu, aucune URL. Usage futur : **réutiliser les artifacts texte actif
 | 11A image | `quality_report` | `67cfed04` r1 smoke · historiques 1.0.0/1.1.0 · `81b7acb6` 1.2.0 | +1 | historique 11A | `127_` | APPROVE `fb2f886c` |
 | 11A image | `production_result` | historiques + `0f2aa24e` 1.2.0 | +1 | historique 11A | `127_` | `delivery=merge_ready` inactif |
 | 11B I2V | `quality_report` | `0da85052` | 5 | pointeur actif I2V | `134_` | HR APPROVE `301ee080` |
-| 11B I2V | `production_result` | `fa5c42bd` | 10 | pointeur actif I2V | `134_` | `delivery=merge_ready` inactif · 0 merge |
+| 11B I2V | `production_result` | `fa5c42bd` | 10 | pointeur actif I2V | `134_`/`139_` | `delivery=merge_ready` · `mergeExportAuthorized=false` · 0 merge |
+| 11B I2V | `generation_plan` | `3d1858eb` | 3 | persisté **non actif** | `133_`/`139_` | résoudre explicitement · ne pas activer |
 | Motion | `quality_report` | `1516c218` | 1 | actif | `97_` | benchmark only |
 | Motion | `production_result` | `4adc49b3` r1 stale · `4054a206` r2 actif | 2 | APPROVE | `97_` | pas Registry Production |
 | Second jeu texte | `marketing_plan` `61138106` · `creative_concept` `d7d2dd93` · `video_script` `d540fdc5` | 1 | actifs (autre projet) | 10x | ne pas mélanger avec 11A |
 
 Assets média image : `5d68ef64` **rejected** · `7832765d` **pending_review** (parent conservé) · `6a2beca9` **1.0.0 rejected** · `4429654f` **1.1.0 rejected** · `49284892` **1.2.0 approved inactif** · tous `active=false`.  
 Asset vidéo I2V : `9be6cb0c` **approved** · `active=false` · `published=false` · checksum `e929f00a…` · décision `301ee080…` · Storage inchangé.  
+Pointeurs : ensemble naïf GP 11A + QR/PR I2V **incohérent** ; bundle I2V explicite **cohérent** (`139_`, stratégie C). Mutation live : **0**.  
 Output Motion : `2d7ffcad-…` · privé · non actif comme livrable produit.
 
 ---
@@ -289,12 +291,12 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1700/1700** | suite complète + 18 attempt/CAS/replay | 2026-08-15 `138_` |
-| Typecheck / lint / build | **PASS** | replay + docs | `138_` |
+| Unitaires | **1732/1732** | suite complète + cohérence pointeurs / merge | 2026-08-15 `139_` |
+| Typecheck / lint / build | **PASS** | contrat + guards + docs | `139_` |
 | migrations-static | PASS (14) | dernière complète | `120_` (non touchées) |
-| Secret scan diff `138_` | **PASS** | cette phase | `138_` |
-| Tests ciblés | attempt + preflight + replay **18/18** | cette phase | `138_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 15 août | `138_` |
+| Secret scan diff `139_` | **PASS** | cette phase | `139_` |
+| Tests ciblés | cohérence + delivery **46/46** | cette phase | `139_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 15 août | `139_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
@@ -309,7 +311,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | | |
 |---|---|
 | Branche | `main` |
-| HEAD / origin/main | `e0b018c` avant ce commit · Production Ready hardening **`97f7ad7`** `lpat9jazt` · wiring **`57de914`** |
+| HEAD / origin/main | `26fd10e` avant ce commit · Production Ready hardening **`97f7ad7`** `lpat9jazt` · wiring **`57de914`** |
 | Dernier commit applicatif runtime image | **`245bea2`** composeur 1.1.0 |
 | Preuve composeur 1.2.0 | **`d395ec7`** · `127_` = HR APPROVE · ce commit `128_` = clôture docs |
 | Fingerprint composition 11A | `c532c400334f5b22` — **un commit docs ne le change pas** |
@@ -332,7 +334,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 ### P1 ouverts
 
 - Activation / publication / merge-export de `9be6cb0c…` **interdites** sans Auth distincte. 0 second submit.
-- Pointeurs QR/PR I2V + GenerationPlan 11A rev.2 vs GP I2V rev.3 non actif — **P1** · `AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`.
+- Pointeurs QR/PR I2V + GenerationPlan 11A rev.2 vs GP I2V rev.3 non actif — **fermé pour la sécurité** (`139_`, stratégie C, 0 mutation). Reste un écart opérationnel d’index, pas un risque merge/export.
 - Rétention/suppression des REJECT privés — politique future.
 - `17_` / `19_` stale (budget, migrations, jobs) — alignement docs ultérieur.
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
@@ -341,7 +343,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### P0/P1 fermés (extraits)
 
-- Reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -367,7 +369,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Hardening attempt I2V | **fait** (`136_`) | 0¢ · code+tests | consommée | write live |
 | Reconciliation live preflight | **fait** (`137_`) | 0¢ · CAS prêt · 0 write | consommée | mutation live / provider |
 | Reconciliation live single-write | **fait** (`138_`) | 1 CAS · attempt completed | consommée | second write / provider |
-| Cohérence pointeurs artifacts | à ouvrir | 0 write pointeur | Auth code/read-only | mutation pointeur / Voice |
+| Cohérence pointeurs artifacts | **fait** (`139_`) | 0 mutation · stratégie C · guards | consommée | activer GP I2V / merge |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -377,15 +379,15 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`** — examiner QR/PR I2V et GenerationPlan. **Non exécutée ici.** 0 mutation pointeur. 0 Voice.
+**`AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`** — câblage Voice/TTS en lecture/code. **Non exécutée ici.** 0 provider. 0 mutation pointeur. 0 merge.
 
 ### Court terme
 
-1. Auth pointeurs seulement (read-only / code-only).
-2. Ne pas re-muter `6be95728…` (déjà `completed`).
-3. Ne pas activer `49284892…` ni `9be6cb0c…`.
+1. Auth Voice/TTS preflight seulement (0 provider).
+2. Résoudre le bundle I2V **explicitement** (GP `3d1858eb` rev.3), jamais via les types actifs mélangés.
+3. Ne pas activer `49284892…` ni `9be6cb0c…` ni le GP I2V.
 4. Second submit fal **interdit**.
-5. Voice/TTS **après** traitement ou différé explicite des pointeurs.
+5. `merge_ready` **n’autorise pas** merge/export (`mergeExportAuthorized=false`).
 
 ### Avant beta
 
@@ -402,14 +404,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11B CLOSED · attempt 6be95728… completed · budget 437/389/0/48 ¢
-Dernier verdict : I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT (138_)
-Preuve : 1 CAS · completed_at ingest · retryable=false · replay existing
-Blocage : pointeurs QR/PR I2V + GP 11A vs GP I2V · P1
-Mission : uniquement AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING
-Auth consommées : single-write (138_) · preflight (137_) · hardening (136_)
-Interdit : second write attempt · provider · activer 9be6cb0c… · Voice · mutation pointeur
-Attendu : audit/hardening code pointeurs · 0 write Production
+Contexte : VHS V2 · 11B CLOSED · attempt 6be95728… completed · pointeurs durcis · budget 437/389/0/48 ¢
+Dernier verdict : ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED (139_)
+Preuve : stratégie C · merge_ready insuffisant · fingerprint 18078129d3a6b8e0…
+Blocage : Voice/TTS non câblé · mergeExportAuthorized=false
+Mission : uniquement AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT
+Auth consommées : pointeurs (139_) · single-write (138_) · preflight (137_)
+Interdit : mutation pointeur · provider · activer 9be6cb0c… · merge/export
+Attendu : preflight Voice/TTS · résolution explicite I2V · 0 write Production
 ```
 
 ---
@@ -418,10 +420,10 @@ Attendu : audit/hardening code pointeurs · 0 write Production
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 138_PHASE_11B_I2V_ATTEMPT_LIVE_RECONCILIATION.md puis 137_.
-Vérifie Git. Attempt 6be95728… completed. Asset 9be6cb0c… approved active=false. Budget 437/389/0/48. Flags OFF.
+Lis ensuite 139_PHASE_11B_ARTIFACT_POINTER_COHERENCE_HARDENING.md puis 138_.
+Vérifie Git. Attempt 6be95728… completed. Asset 9be6cb0c… approved active=false. Pointeurs durcis sans mutation. Budget 437/389/0/48. Flags OFF.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
-Aucun second write attempt. Aucun second submit fal. Aucune activation.
+Aucun second write attempt. Aucun second submit fal. Aucune activation. Aucun merge/export.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne lis ni n’écris de média Production sans Auth.
 ```
@@ -432,7 +434,8 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-15 | `138_` attempt live reconciliation | I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT | à venir | 0 | 1 CAS · attempt completed | pointeurs P1 |
+| 2026-08-15 | `139_` artifact pointer coherence | ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED | à venir | 0 | 0 mutation pointeur · guards | Voice/TTS preflight |
+| 2026-08-15 | `138_` attempt live reconciliation | I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT | `26fd10e` | 0 | 1 CAS · attempt completed | pointeurs P1 |
 | 2026-08-15 | `137_` attempt live reconciliation preflight | I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH | `e0b018c` | 0 | 0 write · CAS prêt · live started | single-write Auth |
 | 2026-08-15 | `136_` attempt terminal hardening | I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT | `97f7ad7` | 0 | code+tests · live started inchangé | reconciliation preflight |
 | 2026-08-15 | `135_` clôture 11B + next gate | PHASE_11B_CLOSED_PASS_WITH_NOTES | `7b64f2e` | 0 | 0 write · attempt P1 · next=hardening | hardening attempt |

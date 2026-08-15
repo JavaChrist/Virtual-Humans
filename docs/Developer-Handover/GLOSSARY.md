@@ -37,6 +37,11 @@
 **I2V_ATTEMPT_TERMINAL_STATE_HARDENED_READY_FOR_LIVE_RECONCILIATION_PREFLIGHT** — verdict `136_` : helper + script empêchent la récidive · attempt live toujours `started` · 0 write Production.
 **I2V_ATTEMPT_LIVE_RECONCILIATION_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH** — verdict `137_` : hardening déployé · CAS unique préparé · `completed_at` ingest · attempt live toujours `started` · 0 write.
 **I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT** — verdict `138_` : 1 CAS · attempt `completed` · `completed_at` ingest · `retryable=false` · 0 resubmit.
+**Artifact bundle** — ensemble cohérent résolu explicitement (GenerationPlan, run, job, source, output, Quality Report, Production Result, Human Review, delivery). Ce n’est pas l’union des pointeurs actifs par type (`139_`).
+**Résolution explicite d’artifacts** — stratégie C : résoudre par run / plan / output, indépendamment des pointeurs globaux `active_artifact_revisions` (`139_`).
+**Naive active pointer set** — ensemble formé en prenant un actif par `artifact_type` ; peut mélanger des pipelines distincts (ex. GP 11A + QR/PR I2V).
+**mergeExportAuthorized** — autorisation explicite de merge/export, distincte de `delivery.status=merge_ready` et de Human Review APPROVE. Absent = false (fail-closed).
+**ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED** — verdict `139_` : contrat + guards durcis · 0 mutation de pointeur · prochaine porte Voice/TTS preflight.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

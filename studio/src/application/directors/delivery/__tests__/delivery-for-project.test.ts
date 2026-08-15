@@ -837,6 +837,32 @@ async function runToMergeReady(h: ReturnType<typeof harness>) {
   assert.equal(review.status, "recorded");
 }
 
+test("merge: merge_ready without mergeExportAuthorized is refused", async () => {
+  const h = harness();
+  await runToMergeReady(h);
+  const prActive = await h.artifacts.getActive(PROJECT_ID, "production_result");
+  const loaded = await h.artifacts.load(prActive!.artifactId);
+  const pr = loaded!.value as ProductionResult;
+  loaded!.value = {
+    ...pr,
+    delivery: { ...pr.delivery!, mergeExportAuthorized: false },
+    phase11b: { mergeExportAuthorized: false, outputActive: false },
+  };
+
+  const prepDry = await h.prepareMerge.dryRun({ projectId: PROJECT_ID }, ctx);
+  assert.equal(prepDry.executable, false);
+  assert.equal(prepDry.providerCalled, false);
+  assert.ok(
+    prepDry.validations.some((v) => v.code === "merge_ready_without_authorization"),
+    JSON.stringify(prepDry),
+  );
+
+  const prep = await h.prepareMerge.execute({ projectId: PROJECT_ID, confirmation: true }, ctx);
+  assert.equal(prep.status, "failed");
+  if (prep.status !== "failed") return;
+  assert.equal(prep.code, "merge_ready_without_authorization");
+});
+
 test("merge: prepare dry-run then execute completes with fake sync engine, delivery merged", async () => {
   const h = harness();
   await runToMergeReady(h);

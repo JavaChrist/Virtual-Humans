@@ -34,6 +34,11 @@ import {
 import { buildDirectorFinalAssetStoragePath } from "@/application/postproduction/director-final-asset-path";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
 import {
+  evaluateMergeExportAuthorization,
+  readMergeExportAuthorized,
+  redactCoherenceError,
+} from "@/application/production/artifact-bundle-coherence";
+import {
   loadProductionContext,
   type LoadProductionContextDeps,
 } from "./load-production-context";
@@ -50,6 +55,37 @@ async function activeProductionResultStale(
 ): Promise<boolean> {
   const active = await artifacts.getActive(projectId, "production_result");
   return active?.stale === true;
+}
+
+/** `merge_ready` alone is never sufficient. Fail-closed if authorization is missing. */
+function refuseMergeExportIfUnauthorized(productionResult: ProductionResult): {
+  ok: true;
+} | { ok: false; code: string; message: string } {
+  const authorized = readMergeExportAuthorized(productionResult);
+  const decision = evaluateMergeExportAuthorization({
+    deliveryStatus: productionResult.delivery?.status ?? null,
+    mergeExportAuthorized: authorized,
+    outputApproved: true,
+    outputSelected: true,
+    humanReviewApproved:
+      Boolean(productionResult.delivery?.humanReviewId) || authorized,
+    stale: false,
+    quarantined: false,
+    bundleCoherent: true,
+    downstreamEnabled: false,
+    requireActivation: false,
+  });
+  if (decision.mergeAllowed) return { ok: true };
+  const code = decision.reasons[0] ?? "merge_export_unauthorized";
+  return {
+    ok: false,
+    code,
+    message: redactCoherenceError(
+      code === "merge_ready_without_authorization"
+        ? "Merge non autorisé : merge_ready seul est insuffisant."
+        : "Merge ou export non autorisé.",
+    ),
+  };
 }
 
 export const QUALITY_REPORT_SCHEMA_VERSION = "1.0.0" as const;
@@ -768,6 +804,10 @@ export function createPrepareMergeForProject(deps: PrepareMergeDeps): PrepareMer
         message: `Merge non prêt (statut delivery: ${productionResult.delivery?.status ?? "not_started"}).`,
       };
     }
+    const authorization = refuseMergeExportIfUnauthorized(productionResult);
+    if (!authorization.ok) {
+      return { ok: false, code: authorization.code, message: authorization.message };
+    }
 
     const at = nowIso();
     const built = buildMergePlan({
@@ -1107,6 +1147,20 @@ export function createExecuteMergeForProject(deps: ExecuteMergeDeps): ExecuteMer
         input.projectId,
         "production_result",
       );
+      if (prActive) {
+        const authorization = refuseMergeExportIfUnauthorized(prActive.value);
+        if (!authorization.ok) {
+          return {
+            executable: false,
+            providerCalled: false,
+            productionResultArtifactId: prActive.artifactId,
+            productionResultRevision: prActive.revision,
+            validations: [{ code: authorization.code, passed: false, message: authorization.message }],
+            warnings: [],
+            missingInformation: [{ code: authorization.code, message: authorization.message }],
+          };
+        }
+      }
       const validation = await deps.mergeEngine.validate(mpActive.value.plan, {
         correlationId: context.correlationId,
         requestedAt: nowIso(),
@@ -1162,6 +1216,10 @@ export function createExecuteMergeForProject(deps: ExecuteMergeDeps): ExecuteMer
           `Merge non exécutable (statut delivery: ${productionResult.delivery?.status ?? "not_started"}).`,
           409,
         );
+      }
+      const authorization = refuseMergeExportIfUnauthorized(productionResult);
+      if (!authorization.ok) {
+        return failedX(authorization.code, authorization.message, 409);
       }
 
       const fields = [
@@ -1444,6 +1502,13 @@ export function createPrepareExportForProject(deps: PrepareExportDeps): PrepareE
 
     const prActive = await activeArtifact<ProductionResult>(deps.artifacts, projectId, "production_result");
     if (!prActive) return { ok: false, code: "production_result_missing", message: "ProductionResult introuvable." };
+    if (!readMergeExportAuthorized(prActive.value)) {
+      return {
+        ok: false,
+        code: "merge_export_unauthorized",
+        message: redactCoherenceError("Export non autorisé : merge_ready seul est insuffisant."),
+      };
+    }
 
     let humanReview: HumanReviewDecision | undefined;
     if (qrActive.value.status === "needs_review") {

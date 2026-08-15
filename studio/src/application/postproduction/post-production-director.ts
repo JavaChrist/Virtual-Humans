@@ -221,6 +221,7 @@ export function createPostProductionDirector(
         productionResult = patchDelivery(productionResult, "merge_ready", at, {
           mergePlanId: built.plan.id,
           qualityReportId: context.nextId(),
+          mergeExportAuthorized: true,
           blockingCodes: hasOverlayBlock
             ? ["unsupported_overlay"]
             : ["merge_execution_unavailable"],
@@ -248,6 +249,7 @@ export function createPostProductionDirector(
       productionResult = patchDelivery(productionResult, "merge_ready", at, {
         mergePlanId: built.plan.id,
         qualityReportId: context.nextId(),
+        mergeExportAuthorized: true,
       });
 
       return {
@@ -506,6 +508,7 @@ export function createPostProductionDirector(
       if (input.status === "approved") {
         productionResult = patchDelivery(productionResult, "merge_ready", at, {
           humanReviewId: humanReview.id,
+          mergeExportAuthorized: true,
         });
       } else {
         // rejected + retry intents → blocked; no enqueue / merge / export (MT-010)

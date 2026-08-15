@@ -52,6 +52,10 @@ Versionné et configurable : types d'entrée/sortie, ratios, durées, audio, dia
 
 Valide transformation, assets, estimation, capacité, autorisation et sortie simulée sans soumettre de job payant. Le dry-run doit traverser la même logique hors appel externe.
 
+## Provenance et pointeurs (`139_`)
+
+Un GenerationPlan actif n’implique pas que le Quality Report ou le Production Result actifs appartiennent au même run. Résoudre explicitement plan / run / output. `merge_ready` n’autorise pas un merge.
+
 ## Tests de contrat
 
 Chaque adaptateur passe la même suite : mapping, estimate, submit, polling, webhook, idempotence, timeout, erreur normalisée, annulation, output corrompu et redaction des logs.

@@ -176,27 +176,27 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-La reconciliation live de l’attempt est **PASS** (`138_`) : `I2V_ATTEMPT_LIVE_RECONCILED_TERMINAL_NO_RESUBMIT`.
+La cohérence des pointeurs est **PASS** (`139_`) : `ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED`.
 
-Attempt `6be95728…` **`completed`**. `completed_at` ingest. `retryable=false`. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF.
+Stratégie C : résolution explicite par run/plan/output. **0** mutation de pointeur. `merge_ready` seul n’autorise jamais merge/export.
+
+Attempt `6be95728…` **`completed`**. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. GP actif = 11A rev.2. GP I2V rev.3 persisté non actif. Flags OFF.
 
 Phase active suivante :
 
-`AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`
+`AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`
 
-Objectif : traiter ou différer la dette P1 des pointeurs d’artifacts. **Aucune** mutation de pointeur sans Auth distincte. **Aucun** Voice.
-
-Voice/TTS n’est pas ouvert tant que cette dette n’est pas traitée ou explicitement différée.
+Voice doit résoudre explicitement le bundle I2V. **Aucune** activation du GenerationPlan I2V pour masquer une faiblesse de résolution. **Aucun** merge/export.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si `138_` est READY, Voice/TTS reste après la dette pointeurs. Aucun second write attempt.
+Si `139_` est READY, Voice/TTS est la prochaine porte. Aucune reconciliation de pointeurs en parallèle. Aucun second write attempt.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -220,4 +220,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11B_ARTIFACT_POINTER_COHERENCE_HARDENING`. L’attempt `138_` est completed. Aucun second write. Aucun second submit. Aucune activation. Voice/TTS non ouvert.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`. Les pointeurs sont durcis sans mutation (`139_`). L’attempt `138_` est completed. Aucun second write. Aucun second submit. Aucune activation. Merge/export interdits sans `mergeExportAuthorized`.

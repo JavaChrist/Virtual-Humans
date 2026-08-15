@@ -49,8 +49,10 @@ export function DeliverySection({ projectId }: { projectId: string }) {
   const [mergeOutcome, setMergeOutcome] = useState<MergeOutcome | null>(null);
   const [mergeReady, setMergeReady] = useState(false);
   const [executeMergeReady, setExecuteMergeReady] = useState(false);
+  const [mergeBlockReason, setMergeBlockReason] = useState<string | null>(null);
   const [exportPkg, setExportPkg] = useState<ExportPkg | null>(null);
   const [exportReady, setExportReady] = useState(false);
+  const [exportBlockReason, setExportBlockReason] = useState<string | null>(null);
   const [reviewComment, setReviewComment] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -79,21 +81,36 @@ export function DeliverySection({ projectId }: { projectId: string }) {
       }
       if (mRes.ok) {
         const data = (await mRes.json()) as {
-          prepareDryRun?: { executable?: boolean };
+          prepareDryRun?: {
+            executable?: boolean;
+            missingInformation?: Array<{ code?: string; message?: string }>;
+            validations?: Array<{ code?: string; message?: string }>;
+          };
           executeDryRun?: { executable?: boolean };
           mergeOutcome?: MergeOutcome | null;
         };
         setMergeReady(Boolean(data.prepareDryRun?.executable));
         setExecuteMergeReady(Boolean(data.executeDryRun?.executable));
         setMergeOutcome(data.mergeOutcome ?? null);
+        const block =
+          data.prepareDryRun?.missingInformation?.[0]?.message ??
+          data.prepareDryRun?.validations?.find((v) => v.code && v.code !== "ok")?.message ??
+          null;
+        setMergeBlockReason(data.prepareDryRun?.executable ? null : block);
       }
       if (eRes.ok) {
         const data = (await eRes.json()) as {
-          dryRun?: { executable?: boolean };
+          dryRun?: {
+            executable?: boolean;
+            missingInformation?: Array<{ code?: string; message?: string }>;
+          };
           exportPackage?: ExportPkg | null;
         };
         setExportReady(Boolean(data.dryRun?.executable));
         setExportPkg(data.exportPackage ?? null);
+        setExportBlockReason(
+          data.dryRun?.executable ? null : (data.dryRun?.missingInformation?.[0]?.message ?? null),
+        );
       }
     } catch {
       setError("Lecture livraison impossible.");
@@ -421,6 +438,11 @@ export function DeliverySection({ projectId }: { projectId: string }) {
         <p>
           Delivery · {delivery?.status ?? "not_started"} · ProductionResult rév. {prRev || "—"}
         </p>
+        {delivery?.status === "merge_ready" && !mergeReady && (
+          <p className="text-[var(--muted)]">
+            <code>merge_ready</code> seul n’autorise pas le merge ni l’export.
+          </p>
+        )}
         {delivery?.blockingCodes?.length ? (
           <p className="text-[var(--danger)]">
             Blocages : {delivery.blockingCodes.join(", ")}
@@ -504,6 +526,9 @@ export function DeliverySection({ projectId }: { projectId: string }) {
           {executeMergeReady ? "disponible" : "indisponible"} · état{" "}
           {mergeOutcome?.status ?? "—"}
         </p>
+        {mergeBlockReason && (
+          <p className="text-[var(--muted)]">Blocage merge : {mergeBlockReason}</p>
+        )}
         {mergeOutcome?.reason && (
           <p className="text-[var(--muted)]">Raison : {mergeOutcome.reason}</p>
         )}
@@ -519,6 +544,9 @@ export function DeliverySection({ projectId }: { projectId: string }) {
           Export · readiness {exportReady ? "OK" : "non"} · paquet{" "}
           {exportPkg?.id ? exportPkg.id.slice(0, 8) + "…" : "—"}
         </p>
+        {exportBlockReason && (
+          <p className="text-[var(--muted)]">Blocage export : {exportBlockReason}</p>
+        )}
         {exportPkg?.manifest && (
           <p className="text-[var(--muted)]">
             Manifeste sûr · asset {exportPkg.manifest.finalAssetId ?? "—"} · qualité{" "}

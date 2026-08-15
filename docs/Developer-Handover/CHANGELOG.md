@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.162] — 2026-08-15
+
+### Added (Phase 11B artifact pointer coherence)
+
+- Contrat générique de bundle + guards merge/export (`139_`) : `merge_ready` seul insuffisant.
+- Résolution explicite par run/plan/output (stratégie C). **0** mutation de pointeur.
+- Verdict **`ARTIFACT_POINTER_COHERENCE_HARDENED_NO_LIVE_MUTATION_REQUIRED`**.
+- Prochaine porte **`AUTH_11C_VOICE_TTS_PRODUCTION_WIRING_PREFLIGHT`**.
+
 ## [2.0.161] — 2026-08-15
 
 ### Added (Phase 11B I2V attempt live reconciliation)

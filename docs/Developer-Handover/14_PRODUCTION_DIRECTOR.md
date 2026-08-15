@@ -48,6 +48,16 @@ Le texte marketing n’est plus peint par le modèle. Après ingest provider pri
 
 Limiter parallélisme par projet/provider, respecter quotas, verrouiller transition et réservation de coût, arrêter avant le plafond dur. Chaque coût est rattaché à `stepId`, tentative et facture provider.
 
+## Cohérence des artifacts (`139_`)
+
+Un pointeur actif est unique par `(project_id, artifact_type)`. Les pointeurs actifs de types différents n’appartiennent pas nécessairement au même pipeline.
+
+La résolution canonique est **explicite par run / GenerationPlan / output** (stratégie C). Un consumer ne doit pas combiner silencieusement le GenerationPlan actif, le Quality Report actif et le Production Result actif.
+
+`delivery.status=merge_ready` n’autorise jamais seul un merge ou un export. Il faut `mergeExportAuthorized=true` (fail-closed si absent) plus les autres guards (output approuvé/sélectionné, Human Review, absence de stale/quarantine, flag downstream distinct).
+
+Activation et approbation restent indépendantes. APPROVE ≠ actif ≠ merge autorisé.
+
 ## Reprise
 
 Recalculer les étapes prêtes depuis les résultats persistés. Ne jamais refaire une sortie valide. L'annulation stoppe les nouveaux jobs et marque les appels non annulables en attente de callback.
