@@ -9,7 +9,7 @@
 VERDICT = VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING
 AUTH_CONSUMED = true
 HEAD_INITIAL = 933d4af
-HEAD_FINAL = pending commit
+HEAD_FINAL = 72016ea
 ORIGIN_MAIN = 933d4af
 DEPLOYMENT_HOST = lf3o07217
 DEPLOYMENT_ID = dpl_Bccd…
@@ -71,6 +71,7 @@ Le script refuse désormais tout resubmit (`PHASE_11C_VOICE_TTS_PAID_SCRIPT_AUTH
 |---|---|
 | Branche | `main` |
 | HEAD / origin/main initiaux | `933d4af` |
+| Commit de phase | `72016ea` |
 | ahead / behind | **0 / 0** au départ |
 | Hors scope | AICCOS + `page.tsx` protégés · non touchés · non stagés |
 

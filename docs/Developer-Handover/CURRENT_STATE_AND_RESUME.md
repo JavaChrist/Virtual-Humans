@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-16T02:20:00+02:00
-documentedHead=933d4af
+documentedHead=72016ea
 headStatus=pending commit
 lastPhaseReport=153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md
 nextPhase=AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
@@ -20,7 +20,7 @@ globalStatus=VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING
 **Dernière vérification :** 2026-08-16 02:20 Europe/Paris  
 **Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`  
 **Branche :** `main`  
-**HEAD local :** `933d4af` · départ `933d4af` · Production Ready **`933d4af`** (`lf3o07217`) · wiring Voice **`770e844`** ancêtre · binding **`abaec84`** ancêtre  
+**HEAD local :** `72016ea` · départ `933d4af` · Production Ready **`933d4af`** (`lf3o07217`) · wiring Voice **`770e844`** ancêtre · binding **`abaec84`** ancêtre  
 **origin/main :** `933d4af` · ahead/behind **0/0** au départ  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS + `page.tsx` hors scope  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
@@ -459,7 +459,7 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-16 | `153_` Voice/TTS first paid | VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING | pending | 2 | 1 ElevenLabs · 1 MP3 privé · HR none | preview + HR |
+| 2026-08-16 | `153_` Voice/TTS first paid | VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING | `72016ea` | 2 | 1 ElevenLabs · 1 MP3 privé · HR none | preview + HR |
 | 2026-08-16 | `152_` Voice/TTS live preflight | VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH | `46eda6f` | 0 | 0 write · dry-run OFF · cap 2¢ | first paid TTS |
 | 2026-08-16 | `151_` I2V narrator binding write | I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF | `abaec84` | 0 | 1 INSERT · 4/4/1 · execution=false | TTS live preflight |
 | 2026-08-16 | `150_` I2V narrator binding preflight | I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH | `77dc1a7` | 0 | 0 write · choix female · 0 binding | binding write |
