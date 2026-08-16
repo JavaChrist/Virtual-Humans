@@ -176,27 +176,27 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Voice/TTS `/director` est **LIVE_PREFLIGHT_READY** (`140_`–`152_`) : `VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH`.
+Voice/TTS `/director` est **FIRST_PAID_PENDING_HR** (`140_`–`153_`) : `VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING`.
 
-Le chemin est câblé et le dry-run est passé. Catalog remote seedé : **4 identities + 4 consentements + 1 binding live**, alignement **32/32**. Grants durcis. `active_for_provider_execution=false`. Christian a choisi **`narrator_female`** pour le projet I2V ; le binding `e3a1cc87…` est **persisté**. Cap de réservation future **2¢**. Activation future **C** (flags `finally`, catalogue inchangé). `narrator_male` non choisi. Mei/Tom ne sont pas des narrateurs. **0** ElevenLabs.
+Une synthèse ElevenLabs unique a été exécutée. Catalog **4/4/1** inchangé. Binding `e3a1cc87…` → `narrator_female`. Output `bc36bba7…` privé `pending_review` · active=false · published=false. Settlement provisional **2¢**. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `153_` **consommée**. **0** second submit. **Aucun** lipsync.
 
-Attempt `6be95728…` **`completed`**. Ledger : **437 / 389 / 0 / 48** ¢. Vidéo `9be6cb0c…` `approved` / `active=false`. Flags OFF. Lipsync OFF.
+Attempt Voice `ea07475f…` **`completed`**. Vidéo `9be6cb0c…` inchangée. Runtime Voice OFF.
 
 Phase active suivante :
 
-`AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`
+`AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`
 
-1 appel ElevenLabs · 1 run/job/attempt/output privé · 0 retry · 0 fallback · Human Review pending. **Aucun** lipsync.
+1 lecture privée · 1 décision APPROVE ou REJECT. **Aucun** second submit, activation, lipsync ou downstream.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
 2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`.
+3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`.
 4. Ne pas refaire les phases déjà terminées.
 5. Vérifier le rapport et préparer la prochaine porte.
 
-Si `152_` est STOP, la porte suivante est le first paid TTS unique. Aucun ElevenLabs avant une Auth payante distincte. Aucun second submit I2V.
+Si `153_` est STOP, la porte suivante est la preview privée + décision humaine. Aucun second submit ElevenLabs. Aucun lipsync. Aucun second submit I2V.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -220,4 +220,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`. Voice/TTS live preflight READY (`152_`). Catalog `149_` seedé. Binding `narrator_female` persisté `151_` (4/4/1, execution=false). Cap 2¢. Activation C. Grants durcis `147_`. Aucun ElevenLabs sans Auth payante distincte. Aucun second binding. Aucun second submit. Aucun lipsync.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`. Voice first paid PENDING_HR (`153_`). Output `bc36bba7…` privé inactif. Catalog 4/4/1. Binding `narrator_female` `e3a1cc87…`. Budget 437/391/0/46. Flags OFF. Auth `153_` consommée. Aucun second submit. Aucun lipsync. Aucune activation.

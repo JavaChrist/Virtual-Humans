@@ -1,33 +1,33 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-16T02:10:00+02:00
-documentedHead=46eda6f
+verifiedAt=2026-08-16T02:20:00+02:00
+documentedHead=933d4af
 headStatus=pending commit
-lastPhaseReport=152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md
-nextPhase=AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION
+lastPhaseReport=153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md
+nextPhase=AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
 budgetHard=437
-budgetCommitted=389
+budgetCommitted=391
 budgetReserved=0
-budgetAvailable=48
+budgetAvailable=46
 runtimePaidMedia=OFF
-unitTests=1835/1835
-globalStatus=VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH
+unitTests=1845/1845
+globalStatus=VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH`  
-**Dernière vérification :** 2026-08-16 02:10 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER`  
+**Statut global :** `VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING`  
+**Dernière vérification :** 2026-08-16 02:20 Europe/Paris  
+**Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`  
 **Branche :** `main`  
-**HEAD local :** `46eda6f` · départ `6e519c4` · Production Ready **`6e519c4`** (`qywaw2ovo`) · wiring Voice **`770e844`** ancêtre · binding **`abaec84`** ancêtre  
-**origin/main :** `6e519c4` · ahead/behind **0/0** au départ  
+**HEAD local :** `933d4af` · départ `933d4af` · Production Ready **`933d4af`** (`lf3o07217`) · wiring Voice **`770e844`** ancêtre · binding **`abaec84`** ancêtre  
+**origin/main :** `933d4af` · ahead/behind **0/0** au départ  
 **Working tree à la vérification :** `headStatus=pending commit` · AICCOS + `page.tsx` hors scope  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md`](./152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md)  
-**Prochaine phase exacte :** `AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`
+**Dernier rapport de phase :** [`153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md`](./153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md)  
+**Prochaine phase exacte :** `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -65,9 +65,9 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
 | I2V `/director` | **11B CLOSED** · attempt **completed** · vidéo inactive | `138_` · 1 CAS · pointeurs durcis `139_` |
 | T2V / lipsync / merge-export réels | **PREPARED** · hors 11C | pas de smoke |
-| Voice / TTS `/director` | **LIVE_PREFLIGHT_READY** · catalog 4+4 · binding female · dry-run OFF | `140_`–`152_` · 32/32 · cap 2¢ · 0 ElevenLabs |
+| Voice / TTS `/director` | **FIRST_PAID_PENDING_HR** · 1 audio privé inactif | `140_`–`153_` · 1 ElevenLabs · 2¢ provisional · flags OFF |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
-| Prochaine étape | **PREPARED** | `AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION` · 1 ElevenLabs max |
+| Prochaine étape | **PREPARED** | `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION` · 0 second submit |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -77,7 +77,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 
 | Source | Affirme | Réalité vérifiée 2026-08-14 | Action |
 |---|---|---|---|
-| `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | Production **32/32** · catalog **4/4/1** · binding female persisté · hard **437** / committed **389** / reserved **0** / available **48** | ce fichier prime ; `17_` bandeau `152_` |
+| `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | Production **32/32** · catalog **4/4/1** · 1 audio Voice pending_review · hard **437** / committed **391** / reserved **0** / available **46** | ce fichier prime ; `17_` bandeau `153_` |
 | `19_DEPLOYMENT.md` checkpoint 11 août | 0 job média · MT-005 NOT APPLIED · budget 122 | jobs `1 completed + 1 failed` · MT-005 **appliquée** · budget 437 | ce fichier prime |
 | `BACKLOG_V2.md` §P1 bas de liste | prochaine porte clôture 11A | portes `113_`–`132_` · next = first paid single execution | corrigé dans cette phase |
 | Vercel Production SHA | souvent égalé à HEAD | runtime **60cc335** OFF `fs4ephi9l-…` · HEAD Git peut devenir docs | ne pas promouvoir le commit docs |
@@ -99,15 +99,15 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Storyboard Director | PASS_REAL | 10F-V4 | 1 appel v4 | OpenAI texte | 5 | flags OFF | ne pas relancer |
 | Prompt Director | PASS_SYNTHETIC + correctif 11A | `113_`/`115_` | set no-text `2e8e9e6f` persisté | — | 0 | — | ne pas rejouer |
 | Router | PASS_SYNTHETIC | 9 / 11A plan | fakes + plan single-step | — | 0 | text_motion Registry | rester borné 11A |
-| Generation Engine | 11A+11B CLOSED · Voice LIVE_PREFLIGHT_READY | `102_`–`152_` | I2V 1 submit · catalog 4+4 · dry-run TTS 0 write | OpenAI Image + fal Kling | 2 image · 140 I2V | 0 ElevenLabs | first paid TTS |
+| Generation Engine | 11A+11B CLOSED · Voice FIRST_PAID_PENDING_HR | `102_`–`153_` | I2V 1 submit · 1 TTS · catalog 4+4+1 | OpenAI Image + fal + ElevenLabs | 2 image · 140 I2V · 2 TTS | 1 ElevenLabs | preview + HR |
 | Production queue/worker | PASS_REAL borné | `108_` + `115_` | 2 jobs image completed | — | inclus 2 | worker OFF | ne pas cron |
-| Ledger | PASS_REAL | `109_` + `115_` + `131_` + `133_` | 2×1¢ image + 140¢ I2V provisional · hard **437** | — | 389 committed | — | 0 réserve active |
-| Storage / assets | PASS_REAL image + 1 vidéo I2V | `108_`–`134_` | 5 PNG + 1 MP4 privés inactifs | Supabase Storage | ingest I2V | ni activation ni publish | clôture 11B audit |
+| Ledger | PASS_REAL | `109_` + `115_` + `131_` + `133_` + `153_` | 2×1¢ image + 140¢ I2V + **2¢ TTS** provisional · hard **437** | — | 391 committed | — | 0 réserve active |
+| Storage / assets | PASS_REAL image + 1 vidéo + 1 audio | `108_`–`153_` | 5 PNG + 1 MP4 + 1 MP3 privés inactifs | Supabase Storage | ingest TTS | ni activation ni publish | preview + HR |
 | QC | PASS_REAL image · I2V technique partiel | `110_`/`127_`/`129_`/`134_` | PNG/checksum ; I2V visuel humanOnly APPROVE | — | 0 | probe vidéo absent | humanOnly |
 | Human Review | PASS_REAL image · I2V **APPROVE** | `110_`/`119_`/`123_`/`127_`/`134_` | 4 image + 1 Motion + 1 I2V APPROVE | — | 0 | 1 décision I2V `301ee080…` | 0 nouvelle HR |
 | OpenAI Image | **11A CLOSED** PASS_WITH_NOTES | `115_`–`128_` | enfant `49284892…` APPROVE inactif | `gpt-image-1` | 2 | 0 3ᵉ appel | pas d’activation |
 | Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `138_`/`139_` | attempt `6be95728…` **completed** · pointeurs sûrs sans mutation | fal Kling I2V | 140 provisional | flags OFF · 0 second write | Voice preflight |
-| Voice | LIVE_PREFLIGHT_READY · catalog seedé · binding female · dry-run OFF | `140_`–`152_` | 4 identities · 4 consents · 1 binding · cap 2¢ · fingerprint `2e86cee6…` | ElevenLabs | 0 `/director` | execution=false · 0 ElevenLabs | first paid TTS |
+| Voice | FIRST_PAID_PENDING_HR · catalog inchangé · 1 audio privé | `140_`–`153_` | run `2eaffebf…` · output `bc36bba7…` · pending_review | ElevenLabs | 1 `/director` | execution=false · flags OFF | preview + HR |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
 | Merge / export | PASS_SYNTHETIC + guard `139_` | 9 / `139_` | fake-merge · `merge_ready` insuffisant | — | 0 | `mergeExportAuthorized=false` live | avant Production |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
@@ -199,6 +199,7 @@ Aucun contenu, aucune URL. Usage futur : **réutiliser les artifacts texte actif
 
 Assets média image : `5d68ef64` **rejected** · `7832765d` **pending_review** (parent conservé) · `6a2beca9` **1.0.0 rejected** · `4429654f` **1.1.0 rejected** · `49284892` **1.2.0 approved inactif** · tous `active=false`.  
 Asset vidéo I2V : `9be6cb0c` **approved** · `active=false` · `published=false` · checksum `e929f00a…` · décision `301ee080…` · Storage inchangé.  
+Asset audio Voice : `bc36bba7` **pending_review** · `active=false` · `published=false` · checksum `2ca9ebbd…` · 80710 octets · `audio/mpeg` · HR **none**.  
 Pointeurs : ensemble naïf GP 11A + QR/PR I2V **incohérent** ; bundle I2V explicite **cohérent** (`139_`, stratégie C). Mutation live : **0**.  
 Output Motion : `2d7ffcad-…` · privé · non actif comme livrable produit.
 
@@ -206,7 +207,7 @@ Output Motion : `2d7ffcad-…` · privé · non actif comme livrable produit.
 
 ## 8. Production DB et migrations
 
-Vérifié live Supabase **2026-08-16** (TTS live preflight `152_` · 0 write · catalog 4/4/1).
+Vérifié live Supabase **2026-08-16** (first paid TTS `153_` · 1 audio privé · catalog 4/4/1 inchangé).
 
 | Champ | Valeur |
 |---|---|
@@ -226,7 +227,7 @@ Vérifié live Supabase **2026-08-16** (TTS live preflight `152_` · 0 write · 
 | DB integration | **33/33** historique 11 août — **N/A** le 15 août (Docker absent) |
 | Dernier reset local | baseline post-10A (historique) |
 | LOCAL_ONLY | **0** |
-| Ops distantes récentes | `152_` 0 write · `151_` 1 INSERT binding · `150_` 0 write · `149_` 8 INSERT Voice · flags OFF |
+| Ops distantes récentes | `153_` 1 ElevenLabs · 1 réserve/run/job/attempt/audio · settlement 2¢ · flags OFF |
 
 ---
 
@@ -237,10 +238,10 @@ Montants en **centimes USD**. Hard limit ≠ dépense réelle.
 | | ¢ USD | Source |
 |---|---|---|
 | Hard limit | **437** | live `workspace_budget_policies` 2026-08-15 `133_` |
-| Committed | **389** | 247 committed + 2 image provisional + **140** I2V provisional |
-| Reserved actif | **0** | réserve `451bdeb3…` status `committed` · plus active |
-| Available | **48** | 437 − 389 − 0 |
-| Dernière vérif | 2026-08-16 02:10 | MCP lecture seule `152_` · 0 write budget |
+| Committed | **391** | 247 committed + 2 image + **140** I2V + **2** TTS provisional |
+| Reserved actif | **0** | réserve Voice `ea8d89b6…` status `committed` · plus active |
+| Available | **46** | 437 − 391 − 0 |
+| Dernière vérif | 2026-08-16 02:20 | `153_` settlement provisional 2¢ · 0 réserve active |
 
 Coûts réels connus par chantier : texte Directors (voir §4) · Motion **135** · image 11A **2** provisional · I2V **140** provisional (liste officielle fal · pas de facture provider).  
 Réservations actives : **0**. Reconciliations ouvertes : **0**.  
@@ -290,7 +291,7 @@ Dernière preuve fermeture : `133_` `finally` · `134_` 0 flag write · 7 flags 
 | OpenAI | `image.text_to_image` | allowlist 11A | `gpt-image-1` low 1024 | HUMAN_APPROVED inactif | réel ×2 | `115_` | 2 | 2 | disabled |
 | fal | `video.motion_transfer` | Kling MC | benchmark | PASS_REAL benchmark | réel ×1 | `95_` | 1 | 135 | disabled |
 | fal | `video.image_to_video` | script borné 11B + wrapper | Kling v2 Master I2V 5s | **11B CLOSED** inactif | réel ×1 | `133_`–`135_` | 1 | 140 | disabled |
-| ElevenLabs | `audio.voice` | allowlist 11C + adapter | `eleven_multilingual_v2` | **LIVE_PREFLIGHT_READY** · 0 appel | dry-run 11C | — | 0 `/director` | 0 | disabled |
+| ElevenLabs | `audio.voice` | allowlist 11C + script borné | `eleven_multilingual_v2` | **FIRST_PAID_PENDING_HR** · 1 appel | réel ×1 | `153_` | 1 | 2 provisional | disabled |
 | Legacy `/api/generate/image` | image | historique | — | DEPRECATED / ≠ PASS | — | — | — | — | ne pas utiliser |
 
 Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image ; pas de fal compose comme fallback image.
@@ -301,16 +302,16 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1835/1835** | suite + TTS live preflight | 2026-08-16 `152_` |
-| Typecheck / lint / build | **PASS** | live preflight + docs | `152_` |
-| migrations-static | PASS | **32/32** | `152_` |
-| Secret scan | **PASS** | module + docs · `VOICE_IDS_EXPOSED=false` | `152_` |
-| Tests ciblés | dry-run disabled · pricing · activation C · refus substitution | cette phase | `152_` |
-| DB integration | N/A (stack locale non relancée) | **indisponible** 16 août | `152_` |
+| Unitaires | **1845/1845** | suite + first paid TTS guards | 2026-08-16 `153_` |
+| Typecheck / lint / build | **PASS** | first paid TTS + docs | `153_` |
+| migrations-static | PASS | **32/32** | `153_` |
+| Secret scan | **PASS** | module + docs · `VOICE_IDS_EXPOSED=false` | `153_` |
+| Tests ciblés | cap 2¢ · 1 submit · refus 2e · flags finally · redaction | cette phase | `153_` |
+| DB integration | N/A (stack locale non relancée) | **indisponible** 16 août | `153_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
-| Fraîcheur living handover | PASS | tooling | `152_` |
+| Fraîcheur living handover | PASS | tooling | `153_` |
 
 Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
@@ -321,13 +322,13 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | | |
 |---|---|
 | Branche | `main` |
-| HEAD / origin/main | `6e519c4` au départ · Production Ready Voice **`6e519c4`** `qywaw2ovo` · wiring Voice **`770e844`** · binding **`abaec84`** |
+| HEAD / origin/main | `933d4af` au départ · Production Ready Voice **`933d4af`** `lf3o07217` · wiring Voice **`770e844`** · binding **`abaec84`** |
 | Dernier commit applicatif runtime image | **`245bea2`** composeur 1.1.0 |
 | Preuve composeur 1.2.0 | **`d395ec7`** · `127_` = HR APPROVE · ce commit `128_` = clôture docs |
 | Fingerprint composition 11A | `c532c400334f5b22` — **un commit docs ne le change pas** |
 | Runtime applicatif compose | **245bea2** (1.1.0) · enfant `4429654f…` REJECT layout · flags OFF |
 | Auto-deploy | push docs peut redéployer — **ne pas** promouvoir comme preuve 1.1.0 |
-| Dernier Ready connu | Voice preflight `virtual-humans-qywaw2ovo-…` · SHA **`6e519c4`** · hardening image **`97f7ad7`** `lpat9jazt` |
+| Dernier Ready connu | Voice first paid `virtual-humans-lf3o07217-…` · SHA **`933d4af`** · hardening image **`97f7ad7`** `lpat9jazt` |
 
 ---
 
@@ -348,12 +349,12 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 - Rétention/suppression des REJECT privés — politique future.
 - `17_` bandeau `145_` (31 remote / 32 local) ; `19_` stale (jobs/budget snapshot).
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
-- First paid TTS (`narrator_female` seulement, cap 2¢, mécanisme C, execution=false) · lipsync / merge-export réels non prouvés.
+- Preview + décision humaine Voice (`bc36bba7…`) · lipsync / merge-export réels non prouvés.
 - MV-002 DEFERRED.
 
 ### P0/P1 fermés (extraits)
 
-- Live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- First paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -393,6 +394,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Binding narrateur I2V preflight | **fait** (`150_`) | 0¢ · choix `narrator_female` · 0 persist | consommée | binding write · ElevenLabs |
 | Binding narrateur I2V single write | **fait** (`151_`) | 0¢ · 1 INSERT · 4/4/1 · execution=false | consommée | TTS live preflight · ElevenLabs |
 | Voice/TTS live preflight no provider | **fait** (`152_`) | 0¢ · dry-run OFF · cap 2¢ · READY | consommée | first paid TTS · ElevenLabs |
+| Voice/TTS first paid single execution | **fait** (`153_`) | 2¢ provisional · 1 audio privé pending_review | consommée | preview + HR · 0 second submit |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -402,12 +404,12 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`** — une synthèse ElevenLabs unique pour le segment `voice_over` I2V / `narrator_female`. Cap de réservation **2¢**. 1 run · 1 job · 1 attempt · 1 output privé. 0 retry · 0 fallback. Flags ouverts au dernier moment et refermés dans `finally`. Human Review pending. Interdiction lipsync/downstream. **Non exécutée ici.**
+**`AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`** — une seule lecture privée de l’audio `bc36bba7…`, restitution locale pour écoute humaine, et une décision explicite APPROVE ou REJECT. **Aucun** second submit, activation, lipsync ou downstream. **Non exécutée ici.**
 
 ### Court terme
 
-1. Auth humaine payante distincte avant tout ElevenLabs · cap **2¢** · mécanisme C · flags `finally`.
-2. Ne pas traiter le pricing catalogue 0,15 USD/1k comme un prix ferme · plan perso inconnu.
+1. Auth distincte avant preview/HR Voice · 0 second submit · 0 activation · 0 lipsync.
+2. Ne pas traiter le settlement 2¢ comme un coût facturé ferme · plan perso inconnu.
 3. Ne pas activer `49284892…` ni `9be6cb0c…` ni le GP I2V.
 4. Second submit fal **interdit**. Voice ne relance pas I2V.
 5. `merge_ready` **n’autorise pas** merge/export (`mergeExportAuthorized=false`).
@@ -427,14 +429,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11B CLOSED · Voice LIVE_PREFLIGHT_READY · budget 437/389/0/48 ¢
-Dernier verdict : VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH (152_)
-Preuve : 32/32 · catalog 4/4/1 · binding e3a1cc87… · cap 2¢ · dry-run fingerprint 2e86cee6…
-Blocage : ElevenLabs interdit sans Auth payante distincte
-Mission : uniquement AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION
-Auth consommées : TTS live preflight (152_) · binding write (151_)
-Interdit : second binding · flags hors finally · retry · fallback · lipsync
-Attendu : 1 ElevenLabs · 1 run/job/attempt/output privé · Human Review pending
+Contexte : VHS V2 · 11B CLOSED · Voice FIRST_PAID_PENDING_HR · budget 437/391/0/46 ¢
+Dernier verdict : VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING (153_)
+Preuve : 1 ElevenLabs · output bc36bba7… pending_review · flags OFF · replay maySubmit=false
+Blocage : preview/HR interdits sans Auth distincte
+Mission : uniquement AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
+Auth consommées : first paid TTS (153_) · live preflight (152_) · binding write (151_)
+Interdit : second submit · activation · lipsync · downstream
+Attendu : 1 lecture privée · 1 décision APPROVE ou REJECT
 ```
 
 ---
@@ -443,10 +445,10 @@ Attendu : 1 ElevenLabs · 1 run/job/attempt/output privé · Human Review pendin
 
 ```text
 Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md puis 151_, 150_, 149_, 147_, 140_ et 139_.
-Vérifie Git. Voice/TTS live preflight READY. Catalog 4/4/1. Binding narrator_female persisté e3a1cc87… execution=false. Cap 2¢. Grants durcis 32/32. Attempt 6be95728… completed. Asset 9be6cb0c… approved active=false. Budget 437/389/0/48. Flags OFF.
+Lis ensuite 153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md puis 152_, 151_, 150_, 149_, 147_, 140_ et 139_.
+Vérifie Git. Voice first paid PENDING_HR. Output bc36bba7… pending_review inactif. Catalog 4/4/1. Binding narrator_female e3a1cc87… execution=false. Budget 437/391/0/46. Flags OFF. Auth 153_ consommée.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
-Aucun appel ElevenLabs sans Auth payante distincte. Aucun second binding. Aucun second submit fal. Aucune activation hors fenêtre C. Aucun lipsync.
+Aucun second submit ElevenLabs. Aucune activation. Aucun lipsync. Aucun downstream. Preview/HR seulement avec Auth distincte.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne lis ni n’écris de média Production sans Auth.
 ```
@@ -457,6 +459,7 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
+| 2026-08-16 | `153_` Voice/TTS first paid | VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING | pending | 2 | 1 ElevenLabs · 1 MP3 privé · HR none | preview + HR |
 | 2026-08-16 | `152_` Voice/TTS live preflight | VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH | `46eda6f` | 0 | 0 write · dry-run OFF · cap 2¢ | first paid TTS |
 | 2026-08-16 | `151_` I2V narrator binding write | I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF | `abaec84` | 0 | 1 INSERT · 4/4/1 · execution=false | TTS live preflight |
 | 2026-08-16 | `150_` I2V narrator binding preflight | I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH | `77dc1a7` | 0 | 0 write · choix female · 0 binding | binding write |

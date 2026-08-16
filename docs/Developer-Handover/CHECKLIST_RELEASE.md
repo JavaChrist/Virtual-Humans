@@ -124,6 +124,7 @@
 - [x] Binding narrateur I2V preflight (`150_`) · **I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH** · 0 persist ;
 - [x] Binding narrateur I2V write (`151_`) · **I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF** · 1 INSERT · 4/4/1 · execution=false ;
 - [x] Voice/TTS live preflight (`152_`) · **VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH** · 0 write · cap 2¢ ;
+- [x] Voice/TTS first paid (`153_`) · **VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** · 1 ElevenLabs · 1 MP3 privé · flags OFF ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -133,7 +134,7 @@ Phase 9 locale fakes : GO WITH EXCEPTIONS (snapshot 20_)
 Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
 I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
-Voice `/director` : **LIVE_PREFLIGHT_READY** (`140_`–`152_`) · catalog 4/4/1 · binding `narrator_female` · cap 2¢ · execution=false · 32/32 · 0 ElevenLabs · flags OFF
+Voice `/director` : **FIRST_PAID_PENDING_HR** (`140_`–`153_`) · catalog 4/4/1 · 1 MP3 `bc36bba7…` pending_review inactif · 2¢ provisional · flags OFF
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

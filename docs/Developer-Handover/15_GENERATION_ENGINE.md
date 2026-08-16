@@ -54,7 +54,7 @@ Valide transformation, assets, estimation, capacité, autorisation et sortie sim
 
 ## Voice synchrone (`140_`)
 
-ElevenLabs TTS est potentiellement synchrone : pas de `providerJobId` inventé. Submit intent durable, un appel max, `submission_unknown` sans second appel. Les octets doivent être persistés avant settlement ; sinon hold prudent. Aucune dataUrl persistée. Legacy `/api/generate/voice` ≠ preuve Production. Catalogue `142_`–`151_` : le plan Voice porte `voiceIdentityStableKey`, locator, fingerprint, binding/consent ids — jamais de voiceId. Changement de sélection → plan stale, 0 génération auto. `executionAuthorized=false`, `providerCallAllowed=false`. Tables catalog seedées 4/4/1. Binding I2V `narrator_female` persisté (`151_`) · live preflight READY (`152_`) · cap 2¢ · execution=false.
+ElevenLabs TTS est potentiellement synchrone : pas de `providerJobId` inventé. Submit intent durable, un appel max, `submission_unknown` sans second appel. Les octets doivent être persistés avant settlement ; sinon hold prudent. Aucune dataUrl persistée. Legacy `/api/generate/voice` ≠ preuve Production. Catalogue `142_`–`151_` : le plan Voice porte `voiceIdentityStableKey`, locator, fingerprint, binding/consent ids — jamais de voiceId. Changement de sélection → plan stale, 0 génération auto. `executionAuthorized=false`, `providerCallAllowed=false`. Tables catalog seedées 4/4/1. Binding I2V `narrator_female` persisté (`151_`) · first paid PENDING_HR (`153_`) · 1 output privé · execution=false · flags OFF.
 
 ## Provenance et pointeurs (`139_`)
 

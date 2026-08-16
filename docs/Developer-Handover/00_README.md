@@ -94,13 +94,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF**
                            Voice/TTS live preflight (`152_`)
                            · **VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH**
-Runtime AI / paid media  : OFF · Production Voice **6e519c4** · hardening **97f7ad7** · preuve 1.2.0 **d395ec7**
-Budget                   : hard 437 / committed 389 / reserved 0 / available 48 ¢
-production_jobs média    : 2 image + 1 I2V completed · 1 MP4 approved inactif
-P0                       : pas de 3e OpenAI · ne pas activer les 6 assets · 0 second submit fal · 0 ElevenLabs hors Auth
-P1 ouverts               : first paid TTS unique · pricing non ferme
-P1 fermé                 : TTS live preflight (`152_`) · binding write (`151_`) · binding preflight (`150_`) · seed transaction (`149_`)
-Prochaine porte majeure  : AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION
+                           Voice/TTS first paid (`153_`)
+                           · **VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING**
+Runtime AI / paid media  : OFF · Production Voice **933d4af** · hardening **97f7ad7** · preuve 1.2.0 **d395ec7**
+Budget                   : hard 437 / committed 391 / reserved 0 / available 46 ¢
+production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 approved + 1 MP3 pending_review inactifs
+P0                       : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
+P1 ouverts               : preview + décision humaine Voice · pricing TTS non ferme
+P1 fermé                 : first paid TTS (`153_`) · TTS live preflight (`152_`) · binding write (`151_`)
+Prochaine porte majeure  : AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
 Living handover          : CURRENT_STATE_AND_RESUME.md
 ```
 
@@ -321,6 +323,7 @@ Utilisateur → AI Video Director (/director)
 | [`150_PHASE_11C_I2V_NARRATOR_BINDING_PREFLIGHT.md`](./150_PHASE_11C_I2V_NARRATOR_BINDING_PREFLIGHT.md) | **11C-I2V-NARRATOR-PREFLIGHT · I2V_NARRATOR_FEMALE_BINDING_PREFLIGHT_READY_FOR_SINGLE_WRITE_AUTH** |
 | [`151_PHASE_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE.md`](./151_PHASE_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE.md) | **11C-I2V-NARRATOR-WRITE · I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF** |
 | [`152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md`](./152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md) | **11C-TTS-LIVE-PREFLIGHT · VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH** |
+| [`153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md`](./153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md) | **11C-TTS-FIRST-PAID · VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

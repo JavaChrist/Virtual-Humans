@@ -62,7 +62,7 @@ Capability Registry, Eligibility Filter, Cost Analyzer, Quality/Identity/Speed s
 
 ## Voice / TTS (`140_`)
 
-Profil ElevenLabs `audio.voice` / `eleven_multilingual_v2` : **disabled**, `paidExecution=false`, allowlist workspace/projet/scène/voix/texte. Aucun fallback de voix. Fake universel interdit. Le plan 11C est une slice TTS single-step : il n’instancie pas l’étape T2V de la stratégie library `voice_over`. Catalogue `142_`–`150_` : dialogue Mei/Tom obligatoires ; voice-over = narratrice ou narrateur choisi explicitement. `ELEVENLABS_VOICE_ID` n’est plus un fallback. Tables catalog **seedées 4/4/1**. Binding I2V `narrator_female` persisté (`151_`) · live preflight READY (`152_`) · execution=false · cap 2¢.
+Profil ElevenLabs `audio.voice` / `eleven_multilingual_v2` : **disabled**, `paidExecution=false`, allowlist workspace/projet/scène/voix/texte. Aucun fallback de voix. Fake universel interdit. Le plan 11C est une slice TTS single-step : il n’instancie pas l’étape T2V de la stratégie library `voice_over`. Catalogue `142_`–`150_` : dialogue Mei/Tom obligatoires ; voice-over = narratrice ou narrateur choisi explicitement. `ELEVENLABS_VOICE_ID` n’est plus un fallback. Tables catalog **seedées 4/4/1**. Binding I2V `narrator_female` persisté (`151_`) · first paid PENDING_HR (`153_`) · 1 output privé · execution=false · flags OFF.
 
 ## Tests
 

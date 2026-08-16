@@ -2,6 +2,11 @@
 
 **Classe :** plan ops + baseline — corps historique conservé ; totaux courants ci-dessous.
 
+> **Delta `153_` (16 août 2026) — Voice/TTS first paid, 1 audio privé :**
+> 1 ElevenLabs · 1 réserve/run/job/attempt/output · settlement provisional 2¢ · catalog 4/4/1 inchangé · flags OFF.
+> Verdict `VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING`.
+> Prochaine porte : `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`.
+>
 > **Delta `152_` (16 août 2026) — Voice/TTS live preflight, 0 write :**
 > Dry-run disabled · catalog 4/4/1 inchangé · cap 2¢ · execution=false · 0 ElevenLabs.
 > Verdict `VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH`.

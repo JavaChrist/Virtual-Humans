@@ -2,6 +2,15 @@
 
 Format inspiré de Keep a Changelog ; versions selon SemVer documentaire.
 
+## [2.0.176] — 2026-08-16
+
+### Added (Phase 11C Voice/TTS first paid single execution)
+
+- Une synthèse ElevenLabs unique `narrator_female` · cap 2¢ · 1 run/job/attempt · 1 MP3 privé `pending_review` (`153_`).
+- Settlement provisional 2¢ · ledger 437/391/0/46 · flags C fermés dans `finally` · replay `maySubmit=false`.
+- Verdict **`VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING`**.
+- Prochaine porte **`AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`**.
+
 ## [2.0.175] — 2026-08-16
 
 ### Added (Phase 11C Voice/TTS live preflight no provider)
