@@ -8,6 +8,7 @@ verifiedAt=2026-08-26
 sourceHead=0f3a3bb
 lastFunctionalCommit=72016ea
 lastDocumentationCommit=0f3a3bb
+thisGateDocumentationCommit=fca0637
 lastPhaseReport=153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md
 globalStatus=VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING
 nextAuth=AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
@@ -31,7 +32,7 @@ realMergeExportStatus=NOT_AUTHORIZED
 | `sourceHead` | `0f3a3bb` | HEAD Git **audité** le 2026-08-26, avant ce fichier |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
 | `lastDocumentationCommit` | `0f3a3bb` | dernier commit docs **avant** cette porte (SHA de `153_`) |
-| SHA de cette porte | **inconnu dans ce bloc au premier jet** | un sync docs ultérieur peut l’ajouter sans remplacer `sourceHead` |
+| `thisGateDocumentationCommit` | `fca0637` | premier commit docs de cette porte (fichier commun) |
 | SHA déployé Vercel | **non exposé par le CLI** | corrélation temporelle seulement, pas une preuve runtime |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.

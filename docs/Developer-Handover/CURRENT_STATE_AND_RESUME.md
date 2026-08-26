@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-26T20:19:00+02:00
-documentedHead=0f3a3bb
+documentedHead=fca0637
 headStatus=pending commit
 lastPhaseReport=153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md
 nextPhase=AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
@@ -464,7 +464,7 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-26 | `154_` reprise Léo+Cursor | VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY | pending | 0 | **docs-only** · 0 Production | preview + HR |
+| 2026-08-26 | `154_` reprise Léo+Cursor | VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY | `fca0637` | 0 | **docs-only** · 0 Production | preview + HR |
 | 2026-08-16 | `153_` Voice/TTS first paid | VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING | `72016ea` | 2 | 1 ElevenLabs · 1 MP3 privé · HR none | preview + HR |
 | 2026-08-16 | `152_` Voice/TTS live preflight | VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH | `46eda6f` | 0 | 0 write · dry-run OFF · cap 2¢ | first paid TTS |
 | 2026-08-16 | `151_` I2V narrator binding write | I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF | `abaec84` | 0 | 1 INSERT · 4/4/1 · execution=false | TTS live preflight |
