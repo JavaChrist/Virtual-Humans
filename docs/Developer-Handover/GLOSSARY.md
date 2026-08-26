@@ -73,7 +73,9 @@
 **VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH** — verdict `152_` : wiring/binding/pricing/budget prêts · cap 2¢ · 0 ElevenLabs.
 **AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION** — porte `153_` : 1 appel ElevenLabs · 1 run/job/attempt/output privé · flags `finally`.
 **VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** — verdict `153_` : 1 MP3 privé inactif · QC humanOnly · HR none · Auth consommée · 0 second submit.
-**AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION** — prochaine porte : 1 lecture privée · 1 décision APPROVE ou REJECT · 0 activation · 0 lipsync.
+**AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION** — porte `155_` : 1 lecture privée locale · 1 décision APPROVE · 0 activation · 0 lipsync · 0 second submit.
+**VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE** — verdict `155_` : audio `bc36bba7…` approved · active=false · HR `068a2b25…` · pointeurs I2V figés · Auth consommée.
+**AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT** — prochaine porte : audit de clôture Voice first paid · 0 provider · 0 activation automatique.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

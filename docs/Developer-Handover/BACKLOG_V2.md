@@ -158,15 +158,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Phase 11C-TTS-FIRST-PAID (`153_`)
              · **VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING**
              · 1 ElevenLabs · 1 MP3 privé · HR none · flags OFF
+             Phase 11C-TTS-HR-APPROVE (`155_`)
+             · **VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE**
+             · 1 APPROVE inactif · 0 ElevenLabs · pointeurs I2V figés
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
 Runtime AI : OFF
-Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 approved + 1 MP3 pending_review inactifs
+Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1         : preview + décision humaine Voice · pricing TTS non ferme
-P1 fermé   : first paid TTS · TTS live preflight · binding write · binding preflight
-Next major : AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
+P1         : clôture 11C + next gate · pricing TTS non ferme
+P1 fermé   : Voice HR APPROVE · first paid TTS · TTS live preflight · binding write
+Next major : AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT
 ```
 
 ## P0 — fondations
@@ -239,7 +242,8 @@ Next major : AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
 - **Phase 11C I2V narrator binding write** ✅ **I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF** (`151_`) — 1 INSERT · 4/4/1 · execution=false.
 - **Phase 11C Voice/TTS live preflight** ✅ **VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH** (`152_`) — 0 write · cap 2¢ · dry-run OFF.
 - **Phase 11C Voice/TTS first paid** ✅ **VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** (`153_`) — 1 ElevenLabs · 1 MP3 privé · 2¢ provisional · flags OFF.
-- **Prochaine porte majeure** : Auth **`AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`** — 1 lecture privée · 1 décision APPROVE ou REJECT · 0 second submit · 0 lipsync. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Phase 11C Voice/TTS Human Review APPROVE** ✅ **VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE** (`155_`) — 1 APPROVE inactif · 0 ElevenLabs · pointeurs I2V figés.
+- **Prochaine porte majeure** : Auth **`AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`** — clôture Voice · 0 second submit · 0 activation · 0 lipsync. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

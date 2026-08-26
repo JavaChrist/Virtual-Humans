@@ -6,7 +6,7 @@ Ce fichier décrit le **rôle Léo**. Pour un nouveau chat Léo **ou** Cursor, l
 
 `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`
 
-Audit de reprise : **2026-08-26**. sourceHead audité : `0f3a3bb`. Statut fonctionnel inchangé : `153_` / `VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING`.
+Audit de reprise : **2026-08-26**. Statut fonctionnel : `155_` / `VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE`.
 
 Léo ne code pas directement dans le dépôt. **Cursor code, teste, met à jour la documentation, produit un rapport STOP, commit et push.** Léo analyse chaque retour, décide de la porte suivante et rédige le prochain prompt complet destiné à Cursor.
 
@@ -180,28 +180,28 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Voice/TTS `/director` est **FIRST_PAID_PENDING_HR** (`140_`–`153_`) : `VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING`.
+Voice/TTS `/director` est **FIRST_PAID_HUMAN_APPROVED** (`140_`–`155_`) : `VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE`.
 
-Une synthèse ElevenLabs unique a été exécutée. Catalog **4/4/1** inchangé. Binding `e3a1cc87…` → `narrator_female`. Output `bc36bba7…` privé `pending_review` · active=false · published=false. Settlement provisional **2¢**. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `153_` **consommée**. **0** second submit. **Aucun** lipsync.
+Une synthèse ElevenLabs unique a été exécutée puis approuvée. Catalog **4/4/1** inchangé. Binding `e3a1cc87…` → `narrator_female`. Output `bc36bba7…` privé `approved` · active=false · published=false. HR `068a2b25…`. Settlement provisional **2¢**. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `155_` et `153_` **consommées**. **0** second submit. **Aucun** lipsync.
 
 Attempt Voice `ea07475f…` **`completed`**. Vidéo `9be6cb0c…` inchangée. Runtime Voice OFF.
 
 Phase active suivante :
 
-`AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`
+`AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`
 
-1 lecture privée · 1 décision APPROVE ou REJECT. **Aucun** second submit, activation, lipsync ou downstream.
+Audit de clôture Voice. **Aucun** second submit, activation, lipsync ou downstream.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `LEO_CURSOR_NEW_CHAT_RESUME.md`.
 2. Lire `CURRENT_STATE_AND_RESUME.md` puis ce fichier.
 3. Vérifier Git (HEAD a pu changer depuis `0f3a3bb` à cause de commits docs).
-4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`.
+4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`.
 5. Ne pas refaire les phases déjà terminées.
 6. Vérifier le rapport et préparer la prochaine porte.
 
-Si `153_` est STOP, la porte suivante est la preview privée + décision humaine. Aucun second submit ElevenLabs. Aucun lipsync. Aucun second submit I2V.
+Si `155_` est STOP, la porte suivante est l’audit de clôture Voice. Aucun second submit ElevenLabs. Aucun lipsync. Aucune activation. Aucun second submit I2V.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -225,4 +225,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `153_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`. Voice first paid PENDING_HR (`153_`). Output `bc36bba7…` privé inactif. Catalog 4/4/1. Binding `narrator_female` `e3a1cc87…`. Budget 437/391/0/46. Flags considérés OFF. Auth `153_` consommée. Aucun second submit. Aucun lipsync. Aucune activation.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `155_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`. Voice first paid HUMAN_APPROVED inactif (`155_`). Output `bc36bba7…` approved privé inactif. HR `068a2b25…`. Catalog 4/4/1. Binding `narrator_female` `e3a1cc87…`. Budget 437/391/0/46. Flags considérés OFF. Auth `155_` et `153_` consommées. Aucun second submit. Aucun lipsync. Aucune activation.

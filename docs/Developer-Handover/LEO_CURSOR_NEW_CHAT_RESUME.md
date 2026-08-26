@@ -1,25 +1,25 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : **docs-only**. Aucune phase fonctionnelle postérieure à `153_` n’est consommée ici.
+Nature : **docs-only à la création `154_`**. La porte fonctionnelle `155_` (HR APPROVE) est **consommée**. Voir living handover.
 
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-26
 sourceHead=0f3a3bb
 lastFunctionalCommit=72016ea
-lastDocumentationCommit=0f3a3bb
+lastDocumentationCommit=13fa947
 thisGateDocumentationCommit=fca0637
-lastPhaseReport=153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md
-globalStatus=VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING
-nextAuth=AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
+lastPhaseReport=155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md
+globalStatus=VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE
+nextAuth=AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
 budgetAvailable=46
 voiceRuntime=OFF
 paidMediaRuntime=OFF
-voiceOutputLifecycle=pending_review
-voiceHumanReviewDecision=none
+voiceOutputLifecycle=approved
+voiceHumanReviewDecision=approved
 voiceSecondSubmitAllowed=false
 lipsyncStatus=NOT_STARTED
 realMergeExportStatus=NOT_AUTHORIZED
@@ -123,7 +123,7 @@ Au moment de l’audit `VHS_CHAT_RESUME_STATE_ALIGNED_READY_FOR_PRIVATE_AUDIO_PR
 | Storyboard Director | PASS_REAL · runtime OFF |
 | OpenAI Image 11A | CLOSED PASS_WITH_NOTES · asset approuvé privé inactif |
 | I2V 11B | CLOSED PASS_WITH_NOTES · vidéo approuvée privée inactive |
-| Voice/TTS 11C | première exécution réelle réussie · audio privé `pending_review` |
+| Voice/TTS 11C | première exécution réelle réussie · audio privé **APPROVE** inactif |
 | Voice catalog | 4 identities · 4 consents · 1 binding |
 | `narrator_female` | liée au projet I2V · execution=false |
 | `narrator_male` | disponible · **non sélectionné** |
@@ -160,10 +160,9 @@ Au moment de l’audit `VHS_CHAT_RESUME_STATE_ALIGNED_READY_FOR_PRIVATE_AUDIO_PR
 - `audio/mpeg` · 80710 octets
 - checksum `2ca9ebbd98187dd64553dc1866cd21a3fc4b12ede97a4556a42f02258c33fdad`
 - bucket privé redacted
-- lifecycle=`pending_review` · active=false · published=false
-- Human Review decision=`none`
-- aucune URL signée créée durant l’audit
-- aucun MP3 local encore créé
+- lifecycle=`approved` · active=false · published=false
+- Human Review decision=`approved` · `068a2b25…`
+- copie privée locale `studio/.tmp/voice-tts-private-preview.mp3` (gitignorée, intégrité vérifiée)
 - aucun second submit ElevenLabs
 
 ---
@@ -291,21 +290,19 @@ Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils *
 ## 13. Prochaine porte canonique — non exécutée
 
 ```text
-AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
+AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT
 ```
 
 Périmètre futur uniquement :
 
-- une URL signée temporaire
-- une lecture privée
-- une copie MP3 locale sous `studio/.tmp` (gitignorée)
-- vérification d’intégrité
-- écoute humaine par Christian
-- décision séparée APPROVE ou REJECT
+- audit de clôture Voice first paid
+- définition explicite de la prochaine capacité
 
 Interdit : second submit ElevenLabs · activation · lipsync · downstream · merge/export · publication.
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
+
+`AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION` est **consommée** (`155_`).
 
 ---
 
@@ -316,13 +313,13 @@ Copier le bloc suivant dans un nouveau chat Léo :
 ```text
 Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md.
 
 Ne rejoue aucune phase terminée. Vérifie d’abord Git et les éventuels nouveaux STOP Cursor. Une autorisation d’un chat précédent n’est jamais réutilisable.
 
-La porte active est AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION. Elle n’est pas encore exécutée.
+La porte active est AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT. Elle n’est pas encore exécutée.
 
-L’audio bc36bba7… est privé, pending_review, actif=false, published=false, sans décision Human Review. L’Auth payante 153_ est consommée. submitCount=1. maySubmit=false. Tout second submit ElevenLabs est interdit.
+L’audio bc36bba7… est privé, approved, actif=false, published=false, HR 068a2b25…. L’Auth 155_ et l’Auth payante 153_ sont consommées. submitCount=1. maySubmit=false. Tout second submit ElevenLabs est interdit.
 
 Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. Le SHA Vercel Ready n’est pas prouvé.
 
@@ -338,15 +335,15 @@ Copier le bloc suivant dans un nouveau chat Cursor :
 ```text
 Tu es Cursor, exécutant code/test/doc de Virtual Humans Studio.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md.
 
 Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main.
 
 Protège les fichiers hors scope déjà dirty : studio/src/app/api/aiccos/send/route.ts, studio/src/components/send-to-aiccos.tsx, studio/src/app/page.tsx. Ne les modifie pas, ne les restaure pas, ne les stash pas, ne les stage pas.
 
-Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_. Aucun second submit ElevenLabs. Aucune URL signée, aucun média, aucune Human Review, aucun flag write, aucun provider sans Auth.
+Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_ ni 155_. Aucun second submit ElevenLabs. Aucune URL signée, aucun média, aucune Human Review, aucun flag write, aucun provider sans Auth.
 
-La prochaine porte fonctionnelle est AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION. Elle n’est pas autorisée par ce fichier de reprise.
+La prochaine porte fonctionnelle est AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT. Elle n’est pas autorisée par ce fichier de reprise.
 ```
 
 ---
@@ -355,14 +352,14 @@ La prochaine porte fonctionnelle est AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMA
 
 - [ ] Confirmer la racine Git `C:\Users\JavaChrist\Desktop\virtual-humans`
 - [ ] Confirmer branche `main` et relever HEAD / origin/main / ahead-behind
-- [ ] Lire le dernier STOP (ce fichier + living handover + `153_`)
+- [ ] Lire le dernier STOP (ce fichier + living handover + `155_`)
 - [ ] Vérifier le working tree sans le modifier
 - [ ] Protéger les trois fichiers hors scope
 - [ ] Confirmer budget 437 / 391 / 0 / 46
 - [ ] Confirmer flags / runtime considérés OFF ; revalider avant toute opération sensible
-- [ ] Confirmer output audio `bc36bba7…` `pending_review` · active=false · HR none
+- [ ] Confirmer output audio `bc36bba7…` `approved` · active=false · HR `068a2b25…`
 - [ ] Confirmer aucune nouvelle Human Review
-- [ ] Confirmer prochaine Auth = `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`
+- [ ] Confirmer prochaine Auth = `AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`
 - [ ] Ne lancer aucune action sensible avant autorisation
 
 ---
@@ -379,6 +376,7 @@ La prochaine porte fonctionnelle est AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMA
 | [`151_PHASE_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE.md`](./151_PHASE_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE.md) | Binding `e3a1cc87…` |
 | [`152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md`](./152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md) | Preflight TTS · cap 2¢ |
 | [`153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md`](./153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md) | Unique exécution payante |
+| [`155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md`](./155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md) | Human Review APPROVE inactif |
 | [`00_README.md`](./00_README.md) | Index |
 | [`.cursor/rules/living-handover.mdc`](../../.cursor/rules/living-handover.mdc) | Règle de clôture |
 

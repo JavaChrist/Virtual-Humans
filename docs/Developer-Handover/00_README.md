@@ -99,13 +99,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING**
                            Reprise Léo+Cursor docs-only (`154_`)
                            · **VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY**
-Runtime AI / paid media  : OFF · sourceHead audité **0f3a3bb** · fonctionnel **72016ea** · SHA Vercel Ready **non exposé**
+                           Voice/TTS Human Review APPROVE (`155_`)
+                           · **VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE**
+Runtime AI / paid media  : OFF · fonctionnel **72016ea** · SHA Vercel Ready **non exposé**
 Budget                   : hard 437 / committed 391 / reserved 0 / available 46 ¢
-production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 approved + 1 MP3 pending_review inactifs
+production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0                       : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1 ouverts               : preview + décision humaine Voice · pricing TTS non ferme
-P1 fermé                 : first paid TTS (`153_`) · TTS live preflight (`152_`) · binding write (`151_`)
-Prochaine porte majeure  : AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
+P1 ouverts               : clôture 11C + next gate · pricing TTS non ferme · lipsync/merge non prouvés
+P1 fermé                 : Voice HR APPROVE (`155_`) · first paid TTS (`153_`)
+Prochaine porte majeure  : AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT
 Living handover          : CURRENT_STATE_AND_RESUME.md
 Reprise nouveau chat     : LEO_CURSOR_NEW_CHAT_RESUME.md
 ```
@@ -329,6 +331,7 @@ Utilisateur → AI Video Director (/director)
 | [`152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md`](./152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md) | **11C-TTS-LIVE-PREFLIGHT · VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH** |
 | [`153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md`](./153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md) | **11C-TTS-FIRST-PAID · VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** |
 | [`154_VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_SYNC.md`](./154_VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_SYNC.md) | **DOCS-ONLY · VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY · 0 Production** |
+| [`155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md`](./155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md) | **11C-TTS-HR-APPROVE · VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
