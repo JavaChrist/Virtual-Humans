@@ -6,7 +6,7 @@ Ce fichier décrit le **rôle Léo**. Pour un nouveau chat Léo **ou** Cursor, l
 
 `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`
 
-Audit de reprise : **2026-08-26**. Statut fonctionnel : `156_` / `PHASE_11C_CLOSED_PASS_WITH_NOTES`.
+Audit de reprise : **2026-08-26**. Statut fonctionnel : `157_` / `RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED`.
 
 Léo ne code pas directement dans le dépôt. **Cursor code, teste, met à jour la documentation, produit un rapport STOP, commit et push.** Léo analyse chaque retour, décide de la porte suivante et rédige le prochain prompt complet destiné à Cursor.
 
@@ -180,28 +180,26 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Voice/TTS `/director` est **11C CLOSED** (`140_`–`156_`) : `PHASE_11C_CLOSED_PASS_WITH_NOTES`.
+RideCloud promo est **BLOCKED_INPUTS_REQUIRED** (`157_`). 11C reste CLOSED. Audience vérifiée (Google Play test + JavaChrist Beta Club Discord). Pack inputs manquant. **0** projet Production.
 
-Une synthèse ElevenLabs unique a été exécutée puis approuvée. Catalog **4/4/1** inchangé. Binding `e3a1cc87…` → `narrator_female`. Output `bc36bba7…` privé `approved` · active=false · published=false. HR `068a2b25…`. Settlement provisional **2¢**. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `156_`, `155_` et `153_` **consommées**. **0** second submit. **Aucun** lipsync. Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud.
-
-Attempt Voice `ea07475f…` **`completed`**. Vidéo `9be6cb0c…` inchangée. Runtime Voice OFF.
+Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud. Catalog **4/4/1**. Output `bc36bba7…` privé `approved` inactif. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `157_`, `156_`, `155_` et `153_` **consommées**.
 
 Phase active suivante :
 
-`AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER`
+`AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER`
 
-Collecte/preflight des inputs d’un projet RideCloud **séparé**. **Aucun** provider, dépense, média Production, activation, lipsync ou export.
+Christian fournit le pack manquant. **Aucun** provider, dépense, média Git, projet Production, activation, lipsync ou export. N’invente aucun claim.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `LEO_CURSOR_NEW_CHAT_RESUME.md`.
 2. Lire `CURRENT_STATE_AND_RESUME.md` puis ce fichier.
 3. Vérifier Git (HEAD a pu changer depuis `0f3a3bb` à cause de commits docs).
-4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER`.
+4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER`.
 5. Ne pas refaire les phases déjà terminées.
 6. Vérifier le rapport et préparer la prochaine porte.
 
-Si `156_` est STOP, la porte suivante est le preflight RideCloud séparé. Aucun provider. 0¢. Aucun second submit ElevenLabs. Aucun lipsync. Aucune activation. Aucun second submit I2V.
+Si `157_` est STOP, la porte suivante est le pack inputs RideCloud manquant. Aucun provider. 0¢. Aucun projet Production. N’invente aucun claim. Aucun lipsync. Aucune activation.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -225,4 +223,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `156_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER`. 11C CLOSED PASS_WITH_NOTES (`156_`). Output `bc36bba7…` approved privé inactif. HR `068a2b25…`. Catalog 4/4/1. Binding `narrator_female` `e3a1cc87…`. Budget 437/391/0/46. Flags considérés OFF. Auth `156_` / `155_` / `153_` consommées. Aucun provider. 0¢. Aucun second submit. Aucun lipsync. Aucune activation.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `157_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER`. RideCloud BLOCKED_INPUTS_REQUIRED (`157_`). 11C CLOSED. Budget 437/391/0/46. Flags considérés OFF. Auth `157_` / `156_` / `155_` / `153_` consommées. Aucun provider. 0¢. Aucun projet Production. N’invente aucun input RideCloud. Aucun lipsync. Aucune activation.

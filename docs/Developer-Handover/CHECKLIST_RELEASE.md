@@ -127,6 +127,7 @@
 - [x] Voice/TTS first paid (`153_`) · **VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** · 1 ElevenLabs · 1 MP3 privé · flags OFF ;
 - [x] Voice/TTS Human Review APPROVE (`155_`) · **VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE** · 1 APPROVE inactif · 0 ElevenLabs · pointeurs I2V figés ;
 - [x] Clôture 11C + next gate (`156_`) · **PHASE_11C_CLOSED_PASS_WITH_NOTES** · 0 Production · preuves privées · 0 provider ;
+- [x] RideCloud input preflight (`157_`) · **RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED** · 0 projet Production · pack manquant ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -137,6 +138,7 @@ Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
 I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
 Voice `/director` : **11C CLOSED** PASS_WITH_NOTES (`140_`–`156_`) · catalog 4/4/1 · 1 MP3 `bc36bba7…` approved inactif · HR `068a2b25…` · 2¢ provisional · flags OFF · preuves privées ≠ livrables RideCloud
+RideCloud promo : **BLOCKED_INPUTS_REQUIRED** (`157_`) · audience vérifiée · pack inputs manquant · 0 projet Production
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

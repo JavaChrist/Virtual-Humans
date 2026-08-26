@@ -103,13 +103,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE**
                            Clôture 11C + next gate (`156_`)
                            · **PHASE_11C_CLOSED_PASS_WITH_NOTES**
+                           RideCloud input preflight (`157_`)
+                           · **RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED**
 Runtime AI / paid media  : OFF · fonctionnel **72016ea** · SHA Vercel Ready **non exposé**
 Budget                   : hard 437 / committed 391 / reserved 0 / available 46 ¢
 production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0                       : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1 ouverts               : projet RideCloud séparé manquant · pricing TTS non ferme · lipsync/merge non prouvés
-P1 fermé                 : clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`)
-Prochaine porte majeure  : AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER
+P1 ouverts               : pack inputs RideCloud manquant · pricing TTS non ferme · lipsync/merge non prouvés
+P1 fermé                 : preflight RideCloud (`157_`) · clôture 11C (`156_`) · Voice HR APPROVE (`155_`)
+Prochaine porte majeure  : AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER
 Living handover          : CURRENT_STATE_AND_RESUME.md
 Reprise nouveau chat     : LEO_CURSOR_NEW_CHAT_RESUME.md
 ```
@@ -335,6 +337,7 @@ Utilisateur → AI Video Director (/director)
 | [`154_VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_SYNC.md`](./154_VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_SYNC.md) | **DOCS-ONLY · VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY · 0 Production** |
 | [`155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md`](./155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md) | **11C-TTS-HR-APPROVE · VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE** |
 | [`156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md`](./156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md) | **11C-CLOSE · PHASE_11C_CLOSED_PASS_WITH_NOTES** |
+| [`157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md`](./157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md) | **RIDECLOUD-INPUTS · BLOCKED_INPUTS_REQUIRED** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
