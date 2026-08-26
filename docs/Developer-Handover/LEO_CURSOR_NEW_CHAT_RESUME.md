@@ -1,17 +1,17 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : **docs-only à la création `154_`**. La porte fonctionnelle `155_` (HR APPROVE) est **consommée**. Voir living handover.
+Nature : living resume. `154_` docs-only · `155_` HR APPROVE **consommée** · `156_` clôture 11C **consommée**. Voir living handover.
 
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-26
-sourceHead=0f3a3bb
+sourceHead=600ac4b
 lastFunctionalCommit=72016ea
-lastDocumentationCommit=13fa947
-thisGateDocumentationCommit=fca0637
-lastPhaseReport=155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md
-globalStatus=VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE
-nextAuth=AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT
+lastDocumentationCommit=600ac4b
+thisGateDocumentationCommit=pending
+lastPhaseReport=156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md
+globalStatus=PHASE_11C_CLOSED_PASS_WITH_NOTES
+nextAuth=AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
@@ -29,10 +29,10 @@ realMergeExportStatus=NOT_AUTHORIZED
 
 | Pointeur | Valeur | Signification |
 |---|---|---|
-| `sourceHead` | `0f3a3bb` | HEAD Git **audité** le 2026-08-26, avant ce fichier |
+| `sourceHead` | `600ac4b` | HEAD Git **audité** le 2026-08-26, avant le commit `156_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
-| `lastDocumentationCommit` | `0f3a3bb` | dernier commit docs **avant** cette porte (SHA de `153_`) |
-| `thisGateDocumentationCommit` | `fca0637` | premier commit docs de cette porte (fichier commun) |
+| `lastDocumentationCommit` | `600ac4b` | dernier commit docs **avant** cette porte (SHA de `155_`) |
+| `thisGateDocumentationCommit` | pending | premier commit docs de la porte `156_` |
 | SHA déployé Vercel | **non exposé par le CLI** | corrélation temporelle seulement, pas une preuve runtime |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
@@ -290,19 +290,19 @@ Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils *
 ## 13. Prochaine porte canonique — non exécutée
 
 ```text
-AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT
+AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER
 ```
 
 Périmètre futur uniquement :
 
-- audit de clôture Voice first paid
-- définition explicite de la prochaine capacité
+- créer/préparer un projet RideCloud **séparé**
+- collecter et preflighter les inputs (brief, logo, captures, screen recordings, messages, CTA, musique autorisée)
 
-Interdit : second submit ElevenLabs · activation · lipsync · downstream · merge/export · publication.
+Interdit : provider · dépense · média Production · activation · lipsync · merge/export · publication · second submit.
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
 
-`AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION` est **consommée** (`155_`).
+`AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT` est **consommée** (`156_`).
 
 ---
 
@@ -313,13 +313,13 @@ Copier le bloc suivant dans un nouveau chat Léo :
 ```text
 Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md.
 
 Ne rejoue aucune phase terminée. Vérifie d’abord Git et les éventuels nouveaux STOP Cursor. Une autorisation d’un chat précédent n’est jamais réutilisable.
 
-La porte active est AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT. Elle n’est pas encore exécutée.
+La porte active est AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER. Elle n’est pas encore exécutée.
 
-L’audio bc36bba7… est privé, approved, actif=false, published=false, HR 068a2b25…. L’Auth 155_ et l’Auth payante 153_ sont consommées. submitCount=1. maySubmit=false. Tout second submit ElevenLabs est interdit.
+11C est CLOSED PASS_WITH_NOTES. L’audio bc36bba7… est privé, approved, actif=false, published=false, HR 068a2b25…. Auth 156_ / 155_ / 153_ consommées. submitCount=1. maySubmit=false. Tout second submit ElevenLabs est interdit. Aucun provider. 0¢.
 
 Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. Le SHA Vercel Ready n’est pas prouvé.
 
@@ -335,15 +335,15 @@ Copier le bloc suivant dans un nouveau chat Cursor :
 ```text
 Tu es Cursor, exécutant code/test/doc de Virtual Humans Studio.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md.
 
 Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main.
 
 Protège les fichiers hors scope déjà dirty : studio/src/app/api/aiccos/send/route.ts, studio/src/components/send-to-aiccos.tsx, studio/src/app/page.tsx. Ne les modifie pas, ne les restaure pas, ne les stash pas, ne les stage pas.
 
-Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_ ni 155_. Aucun second submit ElevenLabs. Aucune URL signée, aucun média, aucune Human Review, aucun flag write, aucun provider sans Auth.
+Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_ ni 156_. Aucun second submit ElevenLabs. Aucune URL signée, aucun média, aucune Human Review, aucun flag write, aucun provider sans Auth.
 
-La prochaine porte fonctionnelle est AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT. Elle n’est pas autorisée par ce fichier de reprise.
+La prochaine porte est AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER. Elle n’est pas autorisée par ce fichier de reprise. 0 provider. 0¢.
 ```
 
 ---
@@ -352,14 +352,14 @@ La prochaine porte fonctionnelle est AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT. E
 
 - [ ] Confirmer la racine Git `C:\Users\JavaChrist\Desktop\virtual-humans`
 - [ ] Confirmer branche `main` et relever HEAD / origin/main / ahead-behind
-- [ ] Lire le dernier STOP (ce fichier + living handover + `155_`)
+- [ ] Lire le dernier STOP (ce fichier + living handover + `156_`)
 - [ ] Vérifier le working tree sans le modifier
 - [ ] Protéger les trois fichiers hors scope
 - [ ] Confirmer budget 437 / 391 / 0 / 46
 - [ ] Confirmer flags / runtime considérés OFF ; revalider avant toute opération sensible
 - [ ] Confirmer output audio `bc36bba7…` `approved` · active=false · HR `068a2b25…`
 - [ ] Confirmer aucune nouvelle Human Review
-- [ ] Confirmer prochaine Auth = `AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`
+- [ ] Confirmer prochaine Auth = `AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER`
 - [ ] Ne lancer aucune action sensible avant autorisation
 
 ---
@@ -377,6 +377,7 @@ La prochaine porte fonctionnelle est AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT. E
 | [`152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md`](./152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md) | Preflight TTS · cap 2¢ |
 | [`153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md`](./153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md) | Unique exécution payante |
 | [`155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md`](./155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md) | Human Review APPROVE inactif |
+| [`156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md`](./156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md) | Clôture 11C PASS_WITH_NOTES |
 | [`00_README.md`](./00_README.md) | Index |
 | [`.cursor/rules/living-handover.mdc`](../../.cursor/rules/living-handover.mdc) | Règle de clôture |
 

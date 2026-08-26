@@ -56,13 +56,13 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 | MT-013E | MV-001 budget hard limit | **DONE** (`83_`) · hard 174 · available 62¢ · pas de réservation |
 | MT-013F… | Benchmark Auth contrôlé (exécution) | **NOT STARTED** · **PAID NOT AUTHORIZED** |
 
-**État 15 août 2026 :** Phase 11A **CLOSED** (`128_`) · Phase 11B **CLOSED PASS_WITH_NOTES** (`135_`) · still `49284892…` + vidéo `9be6cb0c…` inactifs.  
+**État 26 août 2026 :** Phase 11A **CLOSED** (`128_`) · Phase 11B **CLOSED PASS_WITH_NOTES** (`135_`) · Phase 11C **CLOSED PASS_WITH_NOTES** (`156_`) · still `49284892…` + vidéo `9be6cb0c…` + audio `bc36bba7…` **preuves privées inactives**, pas livrables RideCloud.  
 Motion MV-001 **PASS** benchmark · Registry **DISABLED**. Restore drill **PASS** (`78_`).
 
-**Pas encore :** T2V/lipsync/merge-export **réels** sur `/director` HTTP ; activation ; runtime Motion Production.
+**Pas encore :** projet RideCloud séparé · T2V/lipsync/merge-export **réels** ; activation ; runtime Motion Production.
 
 Pilotage courant : **`CURRENT_STATE_AND_RESUME.md`** puis **`BACKLOG_V2.md`**.  
-Prochaine porte : **`AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`** — clôture Voice · 0 second submit · 0 activation · 0 lipsync.
+Prochaine porte : **`AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER`** — collecte/preflight inputs RideCloud séparés · 0 provider · 0¢ · 0 média Production.
 
 ## Priorités
 

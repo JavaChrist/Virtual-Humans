@@ -75,7 +75,9 @@
 **VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** — verdict `153_` : 1 MP3 privé inactif · QC humanOnly · HR none · Auth consommée · 0 second submit.
 **AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION** — porte `155_` : 1 lecture privée locale · 1 décision APPROVE · 0 activation · 0 lipsync · 0 second submit.
 **VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE** — verdict `155_` : audio `bc36bba7…` approved · active=false · HR `068a2b25…` · pointeurs I2V figés · Auth consommée.
-**AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT** — prochaine porte : audit de clôture Voice first paid · 0 provider · 0 activation automatique.
+**AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT** — porte `156_` : audit de clôture Voice first paid · 0 provider · 0 activation automatique.
+**PHASE_11C_CLOSED_PASS_WITH_NOTES** — verdict `156_` : 11C clôturée · audio `bc36bba7…` approved inactif · HR `068a2b25…` · assets = preuves techniques privées · 0 activation.
+**AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER** — prochaine porte : collecte/preflight d’un projet RideCloud **séparé** · 0 provider · 0¢ · 0 média Production · 0 lipsync · 0 export.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
