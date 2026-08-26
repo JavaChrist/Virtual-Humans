@@ -3,7 +3,8 @@
 **Date :** 2026-08-26  
 **Auth :** `AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT`  
 **Nature :** clôture documentaire · lecture seule Production · **0** provider · **0** média · **0** écriture métier  
-**HEAD au départ :** `600ac4b` (`155_` SHA record)
+**HEAD au départ :** `600ac4b` (`155_` SHA record)  
+**HEAD de phase :** `bf49fda`
 
 ```text
 VERDICT = PHASE_11C_CLOSED_PASS_WITH_NOTES

@@ -8,7 +8,7 @@ verifiedAt=2026-08-26
 sourceHead=600ac4b
 lastFunctionalCommit=72016ea
 lastDocumentationCommit=600ac4b
-thisGateDocumentationCommit=pending
+thisGateDocumentationCommit=bf49fda
 lastPhaseReport=156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md
 globalStatus=PHASE_11C_CLOSED_PASS_WITH_NOTES
 nextAuth=AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER
@@ -32,7 +32,7 @@ realMergeExportStatus=NOT_AUTHORIZED
 | `sourceHead` | `600ac4b` | HEAD Git **audité** le 2026-08-26, avant le commit `156_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
 | `lastDocumentationCommit` | `600ac4b` | dernier commit docs **avant** cette porte (SHA de `155_`) |
-| `thisGateDocumentationCommit` | pending | premier commit docs de la porte `156_` |
+| `thisGateDocumentationCommit` | `bf49fda` | premier commit docs de la porte `156_` |
 | SHA déployé Vercel | **non exposé par le CLI** | corrélation temporelle seulement, pas une preuve runtime |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
