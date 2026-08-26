@@ -3,7 +3,8 @@
 **Date :** 2026-08-26  
 **Auth :** `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`  
 **Nature :** une décision Human Review APPROVE · asset audio privé inactif · **0** provider · **0** média Production  
-**HEAD au départ :** `13fa947` (`154_` docs SHA)
+**HEAD au départ :** `13fa947` (`154_` docs SHA)  
+**HEAD de phase :** `dd367a8`
 
 ```text
 VERDICT = VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE

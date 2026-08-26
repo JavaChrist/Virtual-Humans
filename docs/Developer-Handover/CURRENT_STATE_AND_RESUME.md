@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-26T21:05:00+02:00
-documentedHead=13fa947
+documentedHead=dd367a8
 headStatus=pending commit
 lastPhaseReport=155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md
 nextPhase=AUTH_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT
@@ -466,7 +466,7 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-26 | `155_` Voice HR APPROVE | VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE | pending | 0 | 1 APPROVE inactif · 0 ElevenLabs · pointeurs I2V figés | clôture 11C |
+| 2026-08-26 | `155_` Voice HR APPROVE | VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE | `dd367a8` | 0 | 1 APPROVE inactif · 0 ElevenLabs · pointeurs I2V figés | clôture 11C |
 | 2026-08-26 | `154_` reprise Léo+Cursor | VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY | `fca0637` | 0 | **docs-only** · 0 Production | preview + HR |
 | 2026-08-16 | `153_` Voice/TTS first paid | VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING | `72016ea` | 2 | 1 ElevenLabs · 1 MP3 privé · HR none | preview + HR |
 | 2026-08-16 | `152_` Voice/TTS live preflight | VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH | `46eda6f` | 0 | 0 write · dry-run OFF · cap 2¢ | first paid TTS |
