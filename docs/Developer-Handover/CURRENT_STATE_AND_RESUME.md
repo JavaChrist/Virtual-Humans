@@ -1,8 +1,8 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-16T02:20:00+02:00
-documentedHead=72016ea
+verifiedAt=2026-08-26T20:19:00+02:00
+documentedHead=0f3a3bb
 headStatus=pending commit
 lastPhaseReport=153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md
 nextPhase=AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
@@ -17,16 +17,18 @@ globalStatus=VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING
 
 **Projet :** Virtual Humans Studio V2  
 **Statut global :** `VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING`  
-**Dernière vérification :** 2026-08-16 02:20 Europe/Paris  
-**Auteur de la mise à jour :** Cursor · `AUTH_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION`  
+**Dernière vérification :** 2026-08-26 · audit de reprise + sync docs `154_`  
+**Auteur de la mise à jour :** Cursor · `AUTH_VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_CREATE_DOCS_ONLY`  
 **Branche :** `main`  
-**HEAD local :** `72016ea` · départ `933d4af` · Production Ready **`933d4af`** (`lf3o07217`) · wiring Voice **`770e844`** ancêtre · binding **`abaec84`** ancêtre  
-**origin/main :** `933d4af` · ahead/behind **0/0** au départ  
-**Working tree à la vérification :** `headStatus=pending commit` · AICCOS + `page.tsx` hors scope  
+**sourceHead audité :** `0f3a3bb` · commit fonctionnel **`72016ea`** · commit docs `153_` **`0f3a3bb`**  
+**origin/main à l’audit :** `0f3a3bb` · ahead/behind **0/0**  
+**Working tree à l’audit :** AICCOS + `page.tsx` hors scope (dirty, protégés)  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
-**Dernier rapport de phase :** [`153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md`](./153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md)  
+**Reprise nouveau chat :** [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)  
+**Dernier rapport fonctionnel :** [`153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md`](./153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md)  
+**Sync docs-only :** [`154_VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_SYNC.md`](./154_VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_SYNC.md)  
 **Prochaine phase exacte :** `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
@@ -37,10 +39,11 @@ globalStatus=VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING
 
 1. Code et migrations actuellement versionnés.
 2. État réel Supabase / Vercel **vérifié**.
-3. **Ce fichier** (`CURRENT_STATE_AND_RESUME.md`).
-4. `00_README.md`.
-5. Rapports de phase numérotés (snapshots immuables).
-6. Audits et documents historiques.
+3. [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md) — directive de reprise pratique (nouveau chat).
+4. **Ce fichier** (`CURRENT_STATE_AND_RESUME.md`) — living handover technique.
+5. `00_README.md`.
+6. Rapports de phase numérotés (snapshots immuables).
+7. Audits et documents historiques.
 
 En cas de divergence : **code + état réel vérifié** priment. Toute divergence connue est listée ci-dessous.
 
@@ -80,7 +83,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | Production **32/32** · catalog **4/4/1** · 1 audio Voice pending_review · hard **437** / committed **391** / reserved **0** / available **46** | ce fichier prime ; `17_` bandeau `153_` |
 | `19_DEPLOYMENT.md` checkpoint 11 août | 0 job média · MT-005 NOT APPLIED · budget 122 | jobs `1 completed + 1 failed` · MT-005 **appliquée** · budget 437 | ce fichier prime |
 | `BACKLOG_V2.md` §P1 bas de liste | prochaine porte clôture 11A | portes `113_`–`132_` · next = first paid single execution | corrigé dans cette phase |
-| Vercel Production SHA | souvent égalé à HEAD | runtime **60cc335** OFF `fs4ephi9l-…` · HEAD Git peut devenir docs | ne pas promouvoir le commit docs |
+| Vercel Production SHA | souvent égalé à HEAD | Ready observé 2026-08-26 `3waniv5tf-…` / `dpl_x87m…` · CLI **sans SHA** · corrélation `0f3a3bb` non prouvée | ne pas promouvoir un commit docs comme runtime |
 | pgTAP 378 / intégration 33 | présentés comme courants dans `17_` | **historiques** post-10A (11 août) · non relancés le 14 août | datés ci-dessous |
 
 ---
@@ -207,7 +210,7 @@ Output Motion : `2d7ffcad-…` · privé · non actif comme livrable produit.
 
 ## 8. Production DB et migrations
 
-Vérifié live Supabase **2026-08-16** (first paid TTS `153_` · 1 audio privé · catalog 4/4/1 inchangé).
+Vérifié live Supabase **2026-08-26** (audit lecture seule) : first paid TTS `153_` inchangé · 1 audio privé · catalog 4/4/1.
 
 | Champ | Valeur |
 |---|---|
@@ -241,7 +244,7 @@ Montants en **centimes USD**. Hard limit ≠ dépense réelle.
 | Committed | **391** | 247 committed + 2 image + **140** I2V + **2** TTS provisional |
 | Reserved actif | **0** | réserve Voice `ea8d89b6…` status `committed` · plus active |
 | Available | **46** | 437 − 391 − 0 |
-| Dernière vérif | 2026-08-16 02:20 | `153_` settlement provisional 2¢ · 0 réserve active |
+| Dernière vérif | 2026-08-26 | audit reprise · `153_` settlement provisional 2¢ · 0 réserve active |
 
 Coûts réels connus par chantier : texte Directors (voir §4) · Motion **135** · image 11A **2** provisional · I2V **140** provisional (liste officielle fal · pas de facture provider).  
 Réservations actives : **0**. Reconciliations ouvertes : **0**.  
@@ -252,7 +255,7 @@ Règle : toute dépense provider exige une Auth **dans le chat courant**. Auth I
 ## 10. Runtime et flags
 
 Valeurs **attendues maintenant** : OFF sauf persistence/UI de reprise. **Aucune valeur secrète.**  
-Dernière preuve fermeture : `133_` `finally` · `134_` 0 flag write · 7 flags 11B restent `0`. Runtime Paid Media : **OFF**.
+Dernière **preuve applicative forte** Voice : `finally` de `153_`. Audit 2026-08-26 : aucune activité payante nouvelle, **aucune preuve** qu’un flag soit resté à `1`, **sans lecture directe** de chaque valeur Vercel. Runtime Paid Media : **OFF**. La prochaine porte doit revalider fail-closed avant toute opération sensible.
 
 | Flag / kill | Env | Attendu | Protège | Fermeture |
 |---|---|---|---|---|
@@ -322,13 +325,14 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | | |
 |---|---|
 | Branche | `main` |
-| HEAD / origin/main | `933d4af` au départ · Production Ready Voice **`933d4af`** `lf3o07217` · wiring Voice **`770e844`** · binding **`abaec84`** |
+| sourceHead / origin/main audités | `0f3a3bb` · 0/0 le 2026-08-26 · fonctionnel **`72016ea`** · docs `153_` **`0f3a3bb`** |
 | Dernier commit applicatif runtime image | **`245bea2`** composeur 1.1.0 |
-| Preuve composeur 1.2.0 | **`d395ec7`** · `127_` = HR APPROVE · ce commit `128_` = clôture docs |
+| Preuve composeur 1.2.0 | **`d395ec7`** · `127_` = HR APPROVE · `128_` = clôture docs |
 | Fingerprint composition 11A | `c532c400334f5b22` — **un commit docs ne le change pas** |
 | Runtime applicatif compose | **245bea2** (1.1.0) · enfant `4429654f…` REJECT layout · flags OFF |
-| Auto-deploy | push docs peut redéployer — **ne pas** promouvoir comme preuve 1.1.0 |
-| Dernier Ready connu | Voice first paid `virtual-humans-lf3o07217-…` · SHA **`933d4af`** · hardening image **`97f7ad7`** `lpat9jazt` |
+| Auto-deploy | push docs peut redéployer — **ne pas** promouvoir comme preuve runtime |
+| Ready observé 2026-08-26 | host `3waniv5tf-…` · id `dpl_x87m…` · 2026-08-16 02:34:52 · CLI **sans SHA** · corrélation `0f3a3bb` non prouvée |
+| Ready documenté dans `153_` | `lf3o07217` / SHA **`933d4af`** — snapshot historique, plus ancien |
 
 ---
 
@@ -444,9 +448,10 @@ Attendu : 1 lecture privée · 1 décision APPROVE ou REJECT
 ## 17. RESTART PROMPT FOR NEW CHAT
 
 ```text
-Lis intégralement docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md.
-Lis ensuite 153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md puis 152_, 151_, 150_, 149_, 147_, 140_ et 139_.
-Vérifie Git. Voice first paid PENDING_HR. Output bc36bba7… pending_review inactif. Catalog 4/4/1. Binding narrator_female e3a1cc87… execution=false. Budget 437/391/0/46. Flags OFF. Auth 153_ consommée.
+Lis d’abord docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md.
+Lis ensuite CURRENT_STATE_AND_RESUME.md et 153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md.
+Vérifie Git. sourceHead audité 0f3a3bb. Voice first paid PENDING_HR. Output bc36bba7… pending_review inactif. Catalog 4/4/1. Binding narrator_female e3a1cc87… execution=false. Budget 437/391/0/46.
+Flags considérés OFF (preuve finally 153_ + absence d’activité ; pas de lecture directe de chaque valeur Vercel). Auth 153_ consommée.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 Aucun second submit ElevenLabs. Aucune activation. Aucun lipsync. Aucun downstream. Preview/HR seulement avec Auth distincte.
 N’appelle aucun provider sans Auth explicite dans CE chat.
@@ -459,6 +464,7 @@ Ne lis ni n’écris de média Production sans Auth.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
+| 2026-08-26 | `154_` reprise Léo+Cursor | VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY | pending | 0 | **docs-only** · 0 Production | preview + HR |
 | 2026-08-16 | `153_` Voice/TTS first paid | VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING | `72016ea` | 2 | 1 ElevenLabs · 1 MP3 privé · HR none | preview + HR |
 | 2026-08-16 | `152_` Voice/TTS live preflight | VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH | `46eda6f` | 0 | 0 write · dry-run OFF · cap 2¢ | first paid TTS |
 | 2026-08-16 | `151_` I2V narrator binding write | I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF | `abaec84` | 0 | 1 INSERT · 4/4/1 · execution=false | TTS live preflight |

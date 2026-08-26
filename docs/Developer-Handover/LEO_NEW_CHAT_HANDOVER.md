@@ -2,15 +2,19 @@
 
 ## Objet
 
-Ce fichier permet à un nouveau chat de reprendre immédiatement le rôle de **Léo**, chef d’orchestre/CTO du développement de Virtual Humans Studio.
+Ce fichier décrit le **rôle Léo**. Pour un nouveau chat Léo **ou** Cursor, le fichier commun à lire en premier est :
+
+`docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`
+
+Audit de reprise : **2026-08-26**. sourceHead audité : `0f3a3bb`. Statut fonctionnel inchangé : `153_` / `VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING`.
 
 Léo ne code pas directement dans le dépôt. **Cursor code, teste, met à jour la documentation, produit un rapport STOP, commit et push.** Léo analyse chaque retour, décide de la porte suivante et rédige le prochain prompt complet destiné à Cursor.
 
-Le document canonique technique à lire en priorité est :
+Le living handover technique reste :
 
 `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`
 
-Les rapports numérotés sont des snapshots historiques. Le living handover fait autorité pour l’état courant.
+Les rapports numérotés sont des snapshots historiques. Code + état Production vérifié priment sur les documents.
 
 ## Identité et style de collaboration
 
@@ -109,7 +113,7 @@ Runtime texte réel : OFF.
 
 - Restore drill isolé : PASS.
 - P1 `BACKUP_PRESENT_RESTORE_UNPROVEN` fermé.
-- Production/local : 30 migrations alignées.
+- Production/local : **32/32** (la mention historique « 30 » est périmée depuis `147_`).
 - MT-005 appliquée et vérifiée.
 
 ## Phase 11A — état final
@@ -125,7 +129,7 @@ Résultat fonctionnel : une image OpenAI no-text réelle, enrichie par overlay d
 - Deux appels OpenAI Image au total.
 - Coût Phase 11A : 2¢ provisional au total.
 - Aucun troisième appel OpenAI autorisé.
-- Ledger courant : hard 274¢ / committed 249¢ / reserved 0¢ / available 25¢.
+- Ledger **historique de clôture 11A** : hard 274¢ / committed 249¢ / reserved 0¢ / available 25¢. Ledger **courant** : 437 / 391 / 0 / 46.
 
 ### Asset final approuvé
 
@@ -190,11 +194,12 @@ Phase active suivante :
 
 ## Première action du nouveau chat
 
-1. Lire entièrement `CURRENT_STATE_AND_RESUME.md`.
-2. Lire ce fichier.
-3. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`.
-4. Ne pas refaire les phases déjà terminées.
-5. Vérifier le rapport et préparer la prochaine porte.
+1. Lire entièrement `LEO_CURSOR_NEW_CHAT_RESUME.md`.
+2. Lire `CURRENT_STATE_AND_RESUME.md` puis ce fichier.
+3. Vérifier Git (HEAD a pu changer depuis `0f3a3bb` à cause de commits docs).
+4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`.
+5. Ne pas refaire les phases déjà terminées.
+6. Vérifier le rapport et préparer la prochaine porte.
 
 Si `153_` est STOP, la porte suivante est la preview privée + décision humaine. Aucun second submit ElevenLabs. Aucun lipsync. Aucun second submit I2V.
 
@@ -220,4 +225,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement les fichiers `docs/Developer-Handover/LEO_NEW_CHAT_HANDOVER.md` et `docs/Developer-Handover/CURRENT_STATE_AND_RESUME.md`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`. Voice first paid PENDING_HR (`153_`). Output `bc36bba7…` privé inactif. Catalog 4/4/1. Binding `narrator_female` `e3a1cc87…`. Budget 437/391/0/46. Flags OFF. Auth `153_` consommée. Aucun second submit. Aucun lipsync. Aucune activation.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `153_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION`. Voice first paid PENDING_HR (`153_`). Output `bc36bba7…` privé inactif. Catalog 4/4/1. Binding `narrator_female` `e3a1cc87…`. Budget 437/391/0/46. Flags considérés OFF. Auth `153_` consommée. Aucun second submit. Aucun lipsync. Aucune activation.

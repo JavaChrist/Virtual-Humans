@@ -3,13 +3,14 @@
 **Version :** 2.0
 **Architecture :** V2 Frozen
 **Date :** août 2026
-**Rafraîchi :** 15 août 2026
+**Rafraîchi :** 26 août 2026
 
 ## Qui fait autorité ?
 
 | Besoin | Document |
 |---|---|
-| **État vivant + reprise de chat** | **[`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md)** |
+| **Reprise nouveau chat Léo + Cursor** | **[`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)** |
+| **État vivant + living handover** | **[`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md)** |
 | État opérationnel courant (portes, budget, flags, prochaine phase) | living handover → **`BACKLOG_V2.md`** → derniers rapports numérotés |
 | Contrats d’architecture immuables | `02_ARCHITECTURE.md` + ce README |
 | Schéma Supabase réel | **`17_SUPABASE_PROJECTS.md`** (pas les snapshots Phase 9) |
@@ -96,7 +97,9 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH**
                            Voice/TTS first paid (`153_`)
                            · **VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING**
-Runtime AI / paid media  : OFF · Production Voice **933d4af** · hardening **97f7ad7** · preuve 1.2.0 **d395ec7**
+                           Reprise Léo+Cursor docs-only (`154_`)
+                           · **VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY**
+Runtime AI / paid media  : OFF · sourceHead audité **0f3a3bb** · fonctionnel **72016ea** · SHA Vercel Ready **non exposé**
 Budget                   : hard 437 / committed 391 / reserved 0 / available 46 ¢
 production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 approved + 1 MP3 pending_review inactifs
 P0                       : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
@@ -104,6 +107,7 @@ P1 ouverts               : preview + décision humaine Voice · pricing TTS non 
 P1 fermé                 : first paid TTS (`153_`) · TTS live preflight (`152_`) · binding write (`151_`)
 Prochaine porte majeure  : AUTH_11C_VOICE_TTS_PRIVATE_PREVIEW_AND_HUMAN_DECISION
 Living handover          : CURRENT_STATE_AND_RESUME.md
+Reprise nouveau chat     : LEO_CURSOR_NEW_CHAT_RESUME.md
 ```
 
 ### Portes Directors texte
@@ -324,6 +328,7 @@ Utilisateur → AI Video Director (/director)
 | [`151_PHASE_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE.md`](./151_PHASE_11C_I2V_NARRATOR_BINDING_SINGLE_WRITE.md) | **11C-I2V-NARRATOR-WRITE · I2V_NARRATOR_FEMALE_BOUND_PRIVATE_RUNTIME_OFF** |
 | [`152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md`](./152_PHASE_11C_VOICE_TTS_LIVE_PREFLIGHT_NO_PROVIDER.md) | **11C-TTS-LIVE-PREFLIGHT · VOICE_TTS_LIVE_PREFLIGHT_READY_FOR_FINAL_PAID_AUTH** |
 | [`153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md`](./153_PHASE_11C_VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION.md) | **11C-TTS-FIRST-PAID · VOICE_TTS_FIRST_PAID_SINGLE_EXECUTION_PRIVATE_HUMAN_REVIEW_PENDING** |
+| [`154_VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_SYNC.md`](./154_VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_SYNC.md) | **DOCS-ONLY · VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY · 0 Production** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
@@ -335,6 +340,8 @@ Utilisateur → AI Video Director (/director)
 
 | Doc | Rôle |
 |---|---|
+| [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md) | **Reprise commune Léo + Cursor** |
+| [`LEO_NEW_CHAT_HANDOVER.md`](./LEO_NEW_CHAT_HANDOVER.md) | Rôle Léo (complémentaire) |
 | [`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md) | **Living handover — état réel + reprise** |
 | [`BACKLOG_V2.md`](./BACKLOG_V2.md) | **État ops + items** |
 | [`CHANGELOG.md`](./CHANGELOG.md) | Historique documentaire / livraisons |
@@ -347,16 +354,17 @@ Utilisateur → AI Video Director (/director)
 
 ## Ordre de lecture recommandé
 
-1. [`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md) (état réel + prochaine porte).
-2. Ce README (index).
-3. `BACKLOG_V2.md` + `CHANGELOG.md` (items).
-4. `02_ARCHITECTURE.md` + `05_DEVELOPMENT_RULES.md`.
-5. Contrats `07`–`15` selon le module.
-6. `17_SUPABASE_PROJECTS.md` pour toute question données.
-7. `18_TESTING.md` / `19_DEPLOYMENT.md` pour qualité et ops.
-8. Rapports `27`–`58` pour preuves smokes ; `20` / `03` seulement comme historique.
-9. Avant média image borné : `58_` puis décision humaine — **ne pas** relancer sans Auth.
-10. Chantier majeur Motion Transfer : `59_` → `60_`…`66_` (MT-001…007A) → MT-007B+ — **pas** de benchmark payant sans gates.
+1. [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md) (nouveau chat Léo ou Cursor).
+2. [`CURRENT_STATE_AND_RESUME.md`](./CURRENT_STATE_AND_RESUME.md) (état réel + prochaine porte).
+3. Ce README (index).
+4. `BACKLOG_V2.md` + `CHANGELOG.md` (items).
+5. `02_ARCHITECTURE.md` + `05_DEVELOPMENT_RULES.md`.
+6. Contrats `07`–`15` selon le module.
+7. `17_SUPABASE_PROJECTS.md` pour toute question données.
+8. `18_TESTING.md` / `19_DEPLOYMENT.md` pour qualité et ops.
+9. Rapports `27`–`58` pour preuves smokes ; `20` / `03` seulement comme historique.
+10. Avant média image borné : `58_` puis décision humaine — **ne pas** relancer sans Auth.
+11. Chantier majeur Motion Transfer : `59_` → `60_`…`66_` (MT-001…007A) → MT-007B+ — **pas** de benchmark payant sans gates.
 
 ---
 
