@@ -3,7 +3,8 @@
 **Date :** 2026-08-26  
 **Auth :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER`  
 **Nature :** collecte + inventaire + contrat de preflight · **0** provider · **0** média · **0** projet Production  
-**HEAD au départ :** `d115d63` (`156_` SHA record)
+**HEAD au départ :** `d115d63` (`156_` SHA record)  
+**HEAD de phase :** `3da4be0`
 
 ```text
 VERDICT = BLOCKED_INPUTS_REQUIRED

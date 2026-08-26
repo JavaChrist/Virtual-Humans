@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-26T23:50:00+02:00
-documentedHead=d115d63
+documentedHead=3da4be0
 headStatus=pending commit
 lastPhaseReport=157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md
 nextPhase=AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER
@@ -472,7 +472,7 @@ N’invente aucun claim, CTA, logo ou brief RideCloud.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-26 | `157_` RideCloud input preflight | RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED | pending | 0 | **docs + contrat** · 0 Production | pack inputs Christian |
+| 2026-08-26 | `157_` RideCloud input preflight | RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED | `3da4be0` | 0 | **docs + contrat** · 0 Production | pack inputs Christian |
 | 2026-08-26 | `156_` clôture 11C | PHASE_11C_CLOSED_PASS_WITH_NOTES | `bf49fda` | 0 | **docs + lecture seule** · 0 Production | RideCloud preflight |
 | 2026-08-26 | `155_` Voice HR APPROVE | VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE | `dd367a8` | 0 | 1 APPROVE inactif · 0 ElevenLabs · pointeurs I2V figés | clôture 11C |
 | 2026-08-26 | `154_` reprise Léo+Cursor | VHS_LEO_CURSOR_NEW_CHAT_HANDOVER_READY | `fca0637` | 0 | **docs-only** · 0 Production | preview + HR |
