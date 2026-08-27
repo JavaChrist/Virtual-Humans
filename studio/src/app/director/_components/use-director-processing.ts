@@ -6,9 +6,12 @@ import {
   isTextDirectorRunTerminal,
   type TextDirectorRunView,
 } from "@/application/directors/text-run-status";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 import {
   DIRECTOR_RUNNING_MESSAGES,
   isDirectorUiBusy,
+  isDirectorUiProcessing,
   type DirectorUiPhase,
   type TextDirectorKind,
 } from "./director-processing";
@@ -102,6 +105,11 @@ export function useDirectorProcessing(opts: Options) {
   }, []);
 
   const busy = isDirectorUiBusy(phase);
+  useUpdateBlocker(
+    isDirectorUiProcessing(phase),
+    UPDATE_BLOCKER_IDS.directorText(director),
+    UPDATE_BLOCKER_REASONS.generating,
+  );
 
   const applyTerminal = useCallback(
     async (run: TextDirectorRunView) => {

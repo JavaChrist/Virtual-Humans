@@ -14,6 +14,9 @@ import {
 import type { BriefFieldChange } from "@/domain/project";
 import type { ArtifactType } from "@/domain/project";
 import { formatDirectorDateTime } from "./format-director-datetime";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockNonDryBusy } from "@/lib/update-blocker-policy";
 
 export type BriefSectionInitial = {
   id: string;
@@ -112,6 +115,11 @@ export function BriefSection({
   const [fields, setFields] = useState<EditableFields>(() => toEditable(initialBrief));
   const [busy, setBusy] = useState<"dry-run" | "execute" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  useUpdateBlocker(
+    shouldBlockNonDryBusy(busy, ["dry-run"]),
+    UPDATE_BLOCKER_IDS.directorBriefRevision,
+    UPDATE_BLOCKER_REASONS.saving,
+  );
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
   const [changes, setChanges] = useState<BriefFieldChange[]>([]);
   const [wouldInvalidate, setWouldInvalidate] = useState<ArtifactType[]>([]);

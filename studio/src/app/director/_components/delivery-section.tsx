@@ -1,6 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useConfirm } from "@/components/confirm";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockNonDryBusy } from "@/lib/update-blocker-policy";
 import type { FinalQualityReport } from "@/domain/postproduction";
 import type { EvaluateQualityDryRunResult } from "@/application/directors/delivery/delivery-for-project";
 
@@ -56,6 +59,11 @@ export function DeliverySection({ projectId }: { projectId: string }) {
   const [reviewComment, setReviewComment] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  useUpdateBlocker(
+    shouldBlockNonDryBusy(busy, ["qc-dry"]),
+    UPDATE_BLOCKER_IDS.directorDelivery,
+    UPDATE_BLOCKER_REASONS.saving,
+  );
 
   async function refresh() {
     try {

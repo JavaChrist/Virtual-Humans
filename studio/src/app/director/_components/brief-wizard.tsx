@@ -26,6 +26,8 @@ import {
   clampStep,
 } from "@/application/director/progress";
 import { useBriefDraft } from "./use-brief-draft";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 
 export type BriefWizardProps = {
   /** Server-resolved: DIRECTOR_V2_ENABLED ∧ DIRECTOR_V2_PERSISTENCE_ENABLED */
@@ -78,6 +80,11 @@ export function BriefWizard({ persistenceEnabled = false }: BriefWizardProps) {
   const [finalizeError, setFinalizeError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const createIdsRef = useRef<{ projectId: string; artifactId: string } | null>(null);
+  useUpdateBlocker(
+    submitting,
+    UPDATE_BLOCKER_IDS.directorProjectCreate,
+    UPDATE_BLOCKER_REASONS.saving,
+  );
 
   const step = clampStep(draft.currentStep);
   const fields = draft.fields;
@@ -153,21 +160,21 @@ export function BriefWizard({ persistenceEnabled = false }: BriefWizardProps) {
     flush();
     setFinalizeError(null);
     setFieldErrors({});
+    let fields;
+    try {
+      fields = normalizeBriefFields({ ...draft.fields });
+    } catch (e) {
+      if (isBriefDomainError(e)) {
+        setFinalizeError(e.publicMessage);
+        if (e.field) setFieldErrors({ [e.field]: e.publicMessage });
+      } else {
+        setFinalizeError("Impossible de valider le brief.");
+      }
+      return;
+    }
+
     setSubmitting(true);
     try {
-      let fields;
-      try {
-        fields = normalizeBriefFields({ ...draft.fields });
-      } catch (e) {
-        if (isBriefDomainError(e)) {
-          setFinalizeError(e.publicMessage);
-          if (e.field) setFieldErrors({ [e.field]: e.publicMessage });
-        } else {
-          setFinalizeError("Impossible de valider le brief.");
-        }
-        return;
-      }
-
       if (!createIdsRef.current) {
         createIdsRef.current = {
           projectId: crypto.randomUUID(),

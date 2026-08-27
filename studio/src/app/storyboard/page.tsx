@@ -10,6 +10,9 @@ import { SendToAiccos } from "@/components/send-to-aiccos";
 import { useConfirm } from "@/components/confirm";
 import { LOCATION_PRESETS } from "@/lib/location-presets";
 import type { SettingsResponse } from "@/lib/types";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockStoryboard } from "@/lib/update-blocker-policy";
 
 interface VideoModel {
   id: string;
@@ -459,6 +462,19 @@ export default function Storyboard() {
   const [mergedUrl, setMergedUrl] = useState<string | null>(null);
   const [mergeError, setMergeError] = useState<string | null>(null);
   const mergeTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  useUpdateBlocker(
+    shouldBlockStoryboard({
+      masterBusy,
+      duoBusy,
+      mergeStatus,
+      mergedUrl,
+      mergeError,
+      shots,
+      partners,
+    }),
+    UPDATE_BLOCKER_IDS.generateStoryboard,
+    UPDATE_BLOCKER_REASONS.generating,
+  );
 
   const model = models.find((m) => m.id === modelId);
   const identityList = assets.identity ?? [];

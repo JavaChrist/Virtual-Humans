@@ -10,6 +10,9 @@ import { PageHeader } from "@/components/page-header";
 import { useConfirm } from "@/components/confirm";
 import { LOCATION_PRESETS } from "@/lib/location-presets";
 import type { CharacterResponse } from "@/lib/types";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockStudioJob } from "@/lib/update-blocker-policy";
 
 interface SavedScene {
   id: string;
@@ -101,6 +104,7 @@ export default function SceneStudio() {
   const [scenes, setScenes] = useState<SavedScene[]>([]);
   const [sceneName, setSceneName] = useState("");
   const [sceneMsg, setSceneMsg] = useState<string | null>(null);
+  const [sceneSaving, setSceneSaving] = useState(false);
 
   // Décor : image fixe du perso placé dans un lieu (identité préservée, PuLID),
   // utilisée ensuite comme frame de départ pour l'animation.
@@ -139,6 +143,7 @@ export default function SceneStudio() {
   async function saveCurrentScene() {
     const nm = sceneName.trim();
     if (!nm || !characterId) return;
+    setSceneSaving(true);
     try {
       const res = await apiPost<{ scene: SavedScene }>("/api/scenes", {
         name: nm,
@@ -151,6 +156,8 @@ export default function SceneStudio() {
       setTimeout(() => setSceneMsg(null), 2500);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Échec de l'enregistrement");
+    } finally {
+      setSceneSaving(false);
     }
   }
 
@@ -374,6 +381,14 @@ export default function SceneStudio() {
   }
 
   const busy = status !== null && status !== "Terminé" && !videoUrl && !error;
+  useUpdateBlocker(
+    sceneImgBusy ||
+      voiceBusy ||
+      shouldBlockStudioJob({ status, resultUrl: videoUrl, error }),
+    UPDATE_BLOCKER_IDS.generateScene,
+    UPDATE_BLOCKER_REASONS.generating,
+  );
+  useUpdateBlocker(sceneSaving, UPDATE_BLOCKER_IDS.sceneSave, UPDATE_BLOCKER_REASONS.saving);
 
   // Compteur de temps écoulé pour rassurer (Kling ≈ 3–4 min pour 5 s).
   const [elapsed, setElapsed] = useState(0);

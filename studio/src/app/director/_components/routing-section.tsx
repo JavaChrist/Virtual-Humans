@@ -1,6 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useConfirm } from "@/components/confirm";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockNonDryBusy } from "@/lib/update-blocker-policy";
 import type {
   GenerationPlanView,
   RoutingProjectDryRunResult,
@@ -28,6 +31,11 @@ export function RoutingSection({
   const [activeProjectRevision, setActiveProjectRevision] = useState(projectRevision);
   const [busy, setBusy] = useState<"dry" | "execute" | "approve" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  useUpdateBlocker(
+    shouldBlockNonDryBusy(busy, ["dry"]),
+    UPDATE_BLOCKER_IDS.directorRouting,
+    UPDATE_BLOCKER_REASONS.saving,
+  );
 
   useEffect(() => {
     setActiveProjectRevision(projectRevision);

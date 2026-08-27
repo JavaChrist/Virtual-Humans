@@ -45,3 +45,15 @@ test("update-blockers — sanitize HTML hors de la raison", () => {
   resetUpdateBlockersForTests();
   registerUpdateBlocker("html", "<b>danger</b>")();
 });
+
+test("update-blockers — cleanup idempotent et id vide sans entrée", () => {
+  resetUpdateBlockersForTests();
+  const noop = registerUpdateBlocker("   ", "x");
+  noop();
+  noop();
+  assert.deepEqual(getActiveUpdateBlockers(), []);
+  const release = registerUpdateBlocker("once", "Une génération est en cours.");
+  release();
+  release();
+  assert.deepEqual(getActiveUpdateBlockers(), []);
+});

@@ -10,6 +10,9 @@ import { PageHeader } from "@/components/page-header";
 import { PromptComposer } from "@/components/prompt-composer";
 import { SendToAiccos } from "@/components/send-to-aiccos";
 import type { SettingsResponse } from "@/lib/types";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockStudioJob } from "@/lib/update-blocker-policy";
 
 interface VideoModel {
   id: string;
@@ -184,6 +187,11 @@ export default function VideoStudio() {
   }
 
   const busy = status !== null && status !== "Terminé" && !videoUrl && !error;
+  useUpdateBlocker(
+    shouldBlockStudioJob({ status, resultUrl: videoUrl, error }),
+    UPDATE_BLOCKER_IDS.generateVideo,
+    UPDATE_BLOCKER_REASONS.generating,
+  );
 
   return (
     <div className="max-w-6xl">

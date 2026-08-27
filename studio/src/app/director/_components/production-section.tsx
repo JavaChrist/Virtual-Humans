@@ -1,6 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useConfirm } from "@/components/confirm";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockProductionRun } from "@/lib/update-blocker-policy";
 import type {
   ProductionProjectDryRunResult,
   ProductionRunView,
@@ -40,6 +43,11 @@ export function ProductionSection({
   const [busy, setBusy] = useState<"dry" | "execute" | "cancel" | "approve" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  useUpdateBlocker(
+    shouldBlockProductionRun(busy, run?.status),
+    UPDATE_BLOCKER_IDS.directorProduction,
+    UPDATE_BLOCKER_REASONS.generating,
+  );
 
   useEffect(() => {
     setActiveProjectRevision(projectRevision);

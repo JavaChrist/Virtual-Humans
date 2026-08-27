@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { apiGet, apiPost } from "@/lib/client";
 import { PageHeader } from "@/components/page-header";
 import { useConfirm } from "@/components/confirm";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 
 interface Product {
   id: string;
@@ -34,6 +36,7 @@ export default function ProductsStudio() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const confirm = useConfirm();
+  useUpdateBlocker(saving, UPDATE_BLOCKER_IDS.productsSave, UPDATE_BLOCKER_REASONS.saving);
 
   function resetForm() {
     setEditingId(null);
@@ -113,9 +116,17 @@ export default function ProductsStudio() {
 
   async function addScreens(productId: string, productName: string, files: FileList | null) {
     if (!files) return;
-    const urls = await Promise.all(Array.from(files).map(fileToDataUrl));
-    await apiPost("/api/products", { id: productId, name: productName, screens: urls });
-    load();
+    setSaving(true);
+    setError(null);
+    try {
+      const urls = await Promise.all(Array.from(files).map(fileToDataUrl));
+      await apiPost("/api/products", { id: productId, name: productName, screens: urls });
+      load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Erreur");
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function deleteScreen(productId: string, name: string) {
@@ -126,6 +137,7 @@ export default function ProductsStudio() {
       danger: true,
     });
     if (!ok) return;
+    setSaving(true);
     setError(null);
     try {
       const res = await fetch(
@@ -139,6 +151,8 @@ export default function ProductsStudio() {
       load();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Suppression impossible");
+    } finally {
+      setSaving(false);
     }
   }
 

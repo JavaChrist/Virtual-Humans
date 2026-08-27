@@ -5,6 +5,8 @@ import { apiGet, apiPost, refreshBudget, usd } from "@/lib/client";
 import { useCharacter } from "@/lib/character-context";
 import { PageHeader } from "@/components/page-header";
 import type { SettingsResponse } from "@/lib/types";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 
 export default function VoiceStudio() {
   const { characterId, characterName } = useCharacter();
@@ -16,6 +18,7 @@ export default function VoiceStudio() {
   const [loading, setLoading] = useState(false);
   const [audio, setAudio] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  useUpdateBlocker(loading, UPDATE_BLOCKER_IDS.generateVoice, UPDATE_BLOCKER_REASONS.generating);
 
   useEffect(() => {
     apiGet<SettingsResponse>("/api/settings")

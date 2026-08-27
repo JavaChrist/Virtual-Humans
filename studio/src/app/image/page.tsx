@@ -8,6 +8,8 @@ import { PromptComposer } from "@/components/prompt-composer";
 import { addRefImage } from "@/lib/reflib";
 import { setLastRefImage } from "@/lib/media-store";
 import type { SettingsResponse } from "@/lib/types";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 
 const SIZES = ["1024x1024", "1024x1536", "1536x1024"] as const;
 const QUALITIES = ["low", "medium", "high"] as const;
@@ -25,6 +27,7 @@ export default function ImageStudio() {
   const [error, setError] = useState<string | null>(null);
   const [refLabel, setRefLabel] = useState("");
   const [savedRef, setSavedRef] = useState(false);
+  useUpdateBlocker(loading, UPDATE_BLOCKER_IDS.generateImage, UPDATE_BLOCKER_REASONS.generating);
 
   useEffect(() => {
     apiGet<SettingsResponse>("/api/settings").then((s) => setReady(s.keys.openai)).catch(() => {});

@@ -7,6 +7,8 @@
 
 import { useCallback, useEffect, useId, useState } from "react";
 import { useConfirm } from "@/components/confirm";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 
 type MotionReviewContext = {
   runId: string;
@@ -87,6 +89,12 @@ export function MotionReviewSection({ projectId }: { projectId: string }) {
   const [attestation, setAttestation] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [unavailable, setUnavailable] = useState(false);
+  const [decisionBusy, setDecisionBusy] = useState(false);
+  useUpdateBlocker(
+    decisionBusy,
+    UPDATE_BLOCKER_IDS.directorMotionReview,
+    UPDATE_BLOCKER_REASONS.saving,
+  );
 
   const load = useCallback(async () => {
     setUi("loading");
@@ -164,6 +172,7 @@ export function MotionReviewSection({ projectId }: { projectId: string }) {
     });
     if (!ok) return;
 
+    setDecisionBusy(true);
     setUi("loading");
     setError(null);
     setSelected(decision);
@@ -224,6 +233,7 @@ export function MotionReviewSection({ projectId }: { projectId: string }) {
       setUi("error");
       setError("Enregistrement revue Motion impossible.");
     } finally {
+      setDecisionBusy(false);
       setSelected(null);
     }
   }

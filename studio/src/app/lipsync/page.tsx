@@ -7,6 +7,9 @@ import { getLastVideo, getLastVoice, setLastVoice } from "@/lib/media-store";
 import { PageHeader } from "@/components/page-header";
 import { SendToAiccos } from "@/components/send-to-aiccos";
 import type { SettingsResponse } from "@/lib/types";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockStudioJob } from "@/lib/update-blocker-policy";
 
 interface LipsyncModel {
   id: string;
@@ -125,6 +128,11 @@ export default function LipsyncStudio() {
   }
 
   const busy = status !== null && status !== "Terminé" && !resultUrl && !error;
+  useUpdateBlocker(
+    voiceBusy || shouldBlockStudioJob({ status, resultUrl, error }),
+    UPDATE_BLOCKER_IDS.generateLipsync,
+    UPDATE_BLOCKER_REASONS.generating,
+  );
 
   return (
     <div className="max-w-6xl">

@@ -1,5 +1,8 @@
 "use client";
 import { useState } from "react";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockNonDryBusy } from "@/lib/update-blocker-policy";
 import type {
   PromptProjectDryRunResult,
   ScenePackageSetView,
@@ -16,6 +19,11 @@ export function PromptSection({
   const [packageSet, setPackageSet] = useState<ScenePackageSetView | null>(initialPackageSet);
   const [busy, setBusy] = useState<"dry" | "execute" | null>(null);
   const [error, setError] = useState<string | null>(null);
+  useUpdateBlocker(
+    shouldBlockNonDryBusy(busy, ["dry"]),
+    UPDATE_BLOCKER_IDS.directorPrompts,
+    UPDATE_BLOCKER_REASONS.generating,
+  );
 
   async function check() {
     if (busy) return;

@@ -3,6 +3,8 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { PasswordField } from "./password-field";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 
 export default function LoginPage() {
   return (
@@ -18,6 +20,7 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const configHint = params.get("e") === "config";
+  useUpdateBlocker(busy, UPDATE_BLOCKER_IDS.login, UPDATE_BLOCKER_REASONS.login);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

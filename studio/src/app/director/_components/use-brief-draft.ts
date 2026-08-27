@@ -21,6 +21,9 @@ import {
   type AutosaveStatus,
 } from "@/application/director/progress";
 import type { VideoProjectBriefDraft, VideoProjectBriefFields } from "@/domain/brief";
+import { useUpdateBlocker } from "@/lib/use-update-blocker";
+import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
+import { shouldBlockAutosave } from "@/lib/update-blocker-policy";
 
 function subscribeDraftStorage(onChange: () => void): () => void {
   if (typeof window === "undefined") return () => {};
@@ -72,6 +75,12 @@ export function useBriefDraft() {
     : stored.ok
       ? "saved"
       : "idle";
+
+  useUpdateBlocker(
+    shouldBlockAutosave(displayStatus),
+    UPDATE_BLOCKER_IDS.directorBriefDraft,
+    UPDATE_BLOCKER_REASONS.unsaved,
+  );
 
   useEffect(() => {
     draftRef.current = draft;
