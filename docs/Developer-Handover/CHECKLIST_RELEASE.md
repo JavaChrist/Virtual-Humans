@@ -141,6 +141,7 @@
 - [x] UI parity Production preflight (`168_`) · **VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY** · 0 deploy · 0 flag write ;
 - [x] SDK_VERSION file tracing (`169_`) · **VHS_SDK_VERSION_FILE_TRACING_INCLUDE_READY** · include + NFT local · 0 deploy ;
 - [x] Dashboard doc cards isolate (`170_`) · **VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED** · `page.tsx` −12 · 0 AICCOS · 0 deploy ;
+- [x] UI parity Production deploy once (`171_`) · **VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_READY** · SHA `e4703bf` · 0 flag ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -152,7 +153,7 @@ Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`
 I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
 Voice `/director` : **11C CLOSED** PASS_WITH_NOTES (`140_`–`156_`) · catalog 4/4/1 · 1 MP3 `bc36bba7…` approved inactif · HR `068a2b25…` · 2¢ provisional · flags OFF · preuves privées ≠ livrables RideCloud
 RideCloud promo : **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · apply **suspendu** · projet `ba4a6021…` draft · CHECK distant 13 kinds · 0 apply
-UI localhost vs Production : **CARDS COMMITTED** (`170_`) · SDK tracing READY (`169_`) · 0 deploy
+UI localhost vs Production : **DEPLOY READY** (`171_`) · SHA `e4703bf` prouvé · 0 flag
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

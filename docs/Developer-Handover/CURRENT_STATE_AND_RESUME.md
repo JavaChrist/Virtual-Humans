@@ -1,33 +1,34 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-27T15:20:00+02:00
-documentedHead=67eb7fe
+verifiedAt=2026-08-27T15:25:00+02:00
+documentedHead=e4703bf
 headStatus=pending commit
-lastPhaseReport=170_PHASE_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT.md
-nextPhase=AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE
+lastPhaseReport=171_PHASE_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE.md
+nextPhase=AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
 budgetAvailable=46
 runtimePaidMedia=OFF
 unitTests=1909/1909
-globalStatus=VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED
+globalStatus=VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_READY
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED`  
-**Dernière vérification :** 2026-08-27 · dashboard doc cards isolate `170_`  
-**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT_NO_AICCOS_NO_DEPLOY`  
+**Statut global :** `VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_READY`  
+**Dernière vérification :** 2026-08-27 · UI parity deploy once `171_`  
+**Auteur de la mise à jour :** Cursor · `AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE`  
 **Branche :** `main`  
-**HEAD local au départ :** `7453858` · origin/main **`7453858`** · ahead/behind **0/0**  
-**Working tree :** 2 AICCOS hors scope (dirty, protégés) · `page.tsx` committé  
+**HEAD local au départ :** `e4703bf` · origin/main **`e4703bf`** · ahead/behind **0/0**  
+**Working tree :** 2 AICCOS hors scope (dirty, protégés) · `page.tsx` propre  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
-**Alias Production actuel :** host `2dlgmulzw-…` · id `dpl_Bc4oDFqG…` · Ready 2026-08-27 14:35:59 · SHA Git **non prouvé**  
+**Alias Production actuel :** host `l8dxm473r-…` · id `dpl_41zVp38…` · Ready 2026-08-27 15:20:50 · SHA Git **`e4703bf` prouvé** (`githubCommitSha`)  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
 **Reprise nouveau chat :** [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)  
-**Dernier rapport fonctionnel :** [`170_PHASE_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT.md`](./170_PHASE_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT.md)  
+**Dernier rapport fonctionnel :** [`171_PHASE_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE.md`](./171_PHASE_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE.md)  
+**UI parity deploy :** [`171_PHASE_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE.md`](./171_PHASE_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE.md)  
 **Cartes dashboard :** [`170_PHASE_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT.md`](./170_PHASE_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT.md)  
 **SDK tracing :** [`169_PHASE_VHS_SDK_VERSION_FILE_TRACING_INCLUDE.md`](./169_PHASE_VHS_SDK_VERSION_FILE_TRACING_INCLUDE.md)  
 **UI parity :** [`168_PHASE_VHS_PRODUCTION_UI_PARITY_PREFLIGHT.md`](./168_PHASE_VHS_PRODUCTION_UI_PARITY_PREFLIGHT.md)  
@@ -41,7 +42,7 @@ globalStatus=VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED
 **Storyboard initial :** [`160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md`](./160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md)  
 **Addendum HD :** [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md)  
 **Supply RideCloud :** [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md)  
-**Prochaine phase exacte :** `AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE`  
+**Prochaine phase exacte :** `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE`  
 **RideCloud apply :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER` — **suspendue, non consommée**
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
@@ -84,8 +85,8 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Voice / TTS `/director` | **11C CLOSED** · PASS_WITH_NOTES · 1 audio privé inactif | `140_`–`156_` · 1 ElevenLabs · HR APPROVE `068a2b25…` · flags OFF |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
 | RideCloud promo | **BIND KIND SCHEMA REMOTE PREFLIGHT READY** · apply **suspendu** | `167_` · CHECK distant 13 kinds · 0 apply |
-| UI localhost vs Production | **cartes committées** · SDK + cards **non déployés** | `170_` · `page.tsx` −12 · Director flag OFF |
-| Prochaine étape | **PREPARED** | `AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE` · 1 deploy · 0 flag |
+| UI localhost vs Production | **deploy Ready** · SHA `e4703bf` prouvé | `171_` · tracing + cartes live tree · Director flag OFF |
+| Prochaine étape | **PREPARED** | `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE` · 0 deploy · 0 flag |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -98,10 +99,10 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | `17_SUPABASE_PROJECTS.md` | 29 migrations · budget 122/112/0/10 | Production **32/32** · catalog **4/4/1** · 1 audio Voice approved inactif · hard **437** / committed **391** / reserved **0** / available **46** | ce fichier prime ; `17_` bandeau `156_` |
 | `19_DEPLOYMENT.md` checkpoint 11 août | 0 job média · MT-005 NOT APPLIED · budget 122 | jobs `1 completed + 1 failed` · MT-005 **appliquée** · budget 437 | ce fichier prime |
 | `BACKLOG_V2.md` §P1 bas de liste | prochaine porte clôture 11A | portes `113_`–`132_` · next = first paid single execution | corrigé dans cette phase |
-| Vercel Production SHA | souvent égalé à HEAD | Ready **actuel** 2026-08-27 `2dlgmulzw-…` / `dpl_Bc4oDFqG…` 14:35:59 · CLI **sans SHA** · corrélation `2cacf1b` non prouvée · prédécesseur `dpl_rVG3f6…` 14:16:10 ↔ `1d28f94` non prouvé | ne pas promouvoir un commit docs comme runtime |
-| Dashboard cartes 00_IDENTITY | Production « en retard » | **code committé** `170_` (−12) · Production **non déployée** sert encore l’ancien tree | deploy UI parity |
-| Réalisateur IA | code absent en Production | code `/director` **36 fichiers** dans `main` · nav gated par `DIRECTOR_V2_ENABLED` · Production UI = flag OFF | UI-only flag Auth distincte |
-| SDK unknown | version manquante du personnage | **corrigé localement** `169_` · include `../SDK_VERSION` + NFT `/api/character` · **non déployé** | deploy UI parity |
+| Vercel Production SHA | souvent égalé à HEAD | Ready **actuel** 2026-08-27 `l8dxm473r-…` / `dpl_41zVp38…` 15:20:50 · **`githubCommitSha=e4703bf` prouvé** · prédécesseur `dpl_C9pYvx…` ↔ `7453858` | ne pas promouvoir un commit docs comme runtime image `245bea2` |
+| Dashboard cartes 00_IDENTITY | Production « en retard » | **tree `e4703bf` déployé** · cartes absentes du source · live dashboard derrière login | `/api/version` preflight |
+| SDK unknown | version manquante du personnage | tracing `169_` **dans** `e4703bf` Ready · live `SDK 1.0.0` **non lu** (401) | session opérateur ou `/api/version` |
+| Réalisateur IA | code absent en Production | code `/director` **36 fichiers** dans `main` · nav gated par `DIRECTOR_V2_ENABLED` · flag **non écrit** cette porte | UI-only flag Auth distincte |
 | pgTAP 378 / intégration 33 | présentés comme courants dans `17_` | **historiques** post-10A (11 août) · non relancés le 14 août | datés ci-dessous |
 
 ---
@@ -133,7 +134,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Merge / export | PASS_SYNTHETIC + guard `139_` | 9 / `139_` | fake-merge · `merge_ready` insuffisant | — | 0 | `mergeExportAuthorized=false` live | avant Production |
 | RideCloud promo | **BIND PREFLIGHT READY** · apply **suspendu** | `167_` | contrat + manifeste conçus · 0 persist | — | 0 | kinds absents du CHECK · apply non consommé | UI parity puis apply once |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
-| UI finale | **CARDS COMMITTED** · non déployé | `170_` | `page.tsx` −12 · tracing `169_` local · 0 deploy | — | 0 | deploy UI parity · Director UI-only | 1 deploy · 0 flag |
+| UI finale | **DEPLOY READY** · SHA `e4703bf` | `171_` | tracing + cartes · 0 flag · Director OFF | — | 0 | `/api/version` preflight · Director UI-only | 0 deploy |
 | Monitoring / ops | PREPARED | VHS-005 | redaction logs | — | 0 | traces distribuées | avant Production |
 | Documentation / release | PASS_REAL living | cette phase | ce fichier | — | 0 | fraîcheur à tenir | script freshness |
 
@@ -351,7 +352,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Fingerprint composition 11A | `c532c400334f5b22` — **un commit docs ne le change pas** |
 | Runtime applicatif compose | **245bea2** (1.1.0) · enfant `4429654f…` REJECT layout · flags OFF |
 | Auto-deploy | push docs peut redéployer — **ne pas** promouvoir comme preuve runtime |
-| Ready observé 2026-08-27 | host `2dlgmulzw-…` · id `dpl_Bc4oDFqG…` · 14:35:59 · CLI **sans SHA** · corrélation `2cacf1b` non prouvée |
+| Ready observé 2026-08-27 | host `l8dxm473r-…` · id `dpl_41zVp38…` · 15:20:50 · **`githubCommitSha=e4703bf` prouvé** |
 | Prédécesseur 14:16 | host `4r6w5n9sb-…` · id `dpl_rVG3f6…` · 14:16:10 · corrélation `1d28f94` non prouvée |
 | Ready documenté dans `153_` | `lf3o07217` / SHA **`933d4af`** — snapshot historique, plus ancien |
 
@@ -375,12 +376,12 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 - `17_` bandeau `145_` (31 remote / 32 local) ; `19_` stale (jobs/budget snapshot).
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
 - Bind kind schema remote preflight RideCloud **fait** (`167_`) · READY_FOR_APPLY_AUTH · apply **suspendu** par `168_` · 0 apply · persist bind encore bloqué.
-- UI localhost vs Production : cartes **committées** (`170_`) · SDK tracing **fait** (`169_`) · **0 deploy** · Director flag OFF · SHA deploy non prouvé.
+- UI localhost vs Production : **deploy Ready** (`171_`) · SHA `e4703bf` **prouvé** · cartes + tracing dans le tree live · Director flag OFF · live `SDK 1.0.0` non lu (401).
 - MV-002 DEFERRED.
 
 ### P0/P1 fermés (extraits)
 
-- Cartes dashboard isolate (`170_`) · SDK_VERSION tracing (`169_`) · UI parity Production (`168_`) · Bind kind schema remote RideCloud (`167_`) · Bind kind schema RideCloud (`166_`) · Bind preflight RideCloud (`165_`) · Create idempotent RideCloud (`164_`) · Preflight create RideCloud (`163_`) · Polish VO RideCloud (`162_`) · Durcissement VO RideCloud (`161_`) · Storyboard RideCloud (`160_`) · Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- UI parity deploy once (`171_`) · Cartes dashboard isolate (`170_`) · SDK_VERSION tracing (`169_`) · UI parity Production (`168_`) · Bind kind schema remote RideCloud (`167_`) · Bind kind schema RideCloud (`166_`) · Bind preflight RideCloud (`165_`) · Create idempotent RideCloud (`164_`) · Preflight create RideCloud (`163_`) · Polish VO RideCloud (`162_`) · Durcissement VO RideCloud (`161_`) · Storyboard RideCloud (`160_`) · Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -435,8 +436,9 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Bind kind schema RideCloud | **fait** (`166_`) | 0¢ · migration locale · 0 apply | consommée | remote preflight · 0 apply |
 | Bind kind schema remote RideCloud | **fait** (`167_`) | 0¢ · READY_FOR_APPLY · 0 apply | consommée | apply once · 0 RPC |
 | UI parity Production preflight | **fait** (`168_`) | 0¢ · 0 deploy · 0 flag write | consommée | tracing SDK · isolate `page.tsx` · Director UI-only |
-| SDK_VERSION file tracing | **fait** (`169_`) | 0¢ · include + NFT local · 0 deploy | consommée | deploy UI parity · 0 flag |
-| Dashboard doc cards isolate | **fait** (`170_`) | 0¢ · `page.tsx` −12 committé · 0 AICCOS · 0 deploy | consommée | deploy UI parity · 0 flag |
+| SDK_VERSION file tracing | **fait** (`169_`) | 0¢ · include + NFT local · dans `e4703bf` | consommée | — |
+| Dashboard doc cards isolate | **fait** (`170_`) | 0¢ · `page.tsx` −12 · dans `e4703bf` | consommée | — |
+| UI parity Production deploy once | **fait** (`171_`) | 0¢ · `dpl_41zVp38…` Ready · SHA prouvé · 0 flag | consommée | `/api/version` preflight · 0 flag |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -446,7 +448,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE`** — un deploy unique des corrections `169_` (tracing `SDK_VERSION`) + `170_` (cartes dashboard). **Aucun** flag. **Aucun** Réalisateur IA. **Aucun** AICCOS.
+**`AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE`** — audit/conception `/api/version` + SW + notification. **Aucun** deploy. **Aucun** flag. **Aucune** implémentation pendant `171_`.
 
 RideCloud **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** — **suspendue, non consommée**. 0 apply.
 
@@ -473,14 +475,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A/11B/11C CLOSED · cards committed · SDK tracing READY · RideCloud apply SUSPENDU
-Dernier verdict : VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED (170_)
-Preuve : page.tsx −12 committé · 0 AICCOS · 0 deploy
-Blocage : deploy + Director UI-only interdits sans Auth
-Mission : uniquement AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE
-Auth consommées : cards isolate (170_) · tracing SDK (169_) · UI parity (168_)
-Interdit : flag write · Director enable · provider · apply RideCloud
-Attendu : 1 deploy · 0 flag
+Contexte : VHS V2 · 11A/11B/11C CLOSED · UI parity Ready · RideCloud apply SUSPENDU
+Dernier verdict : VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_READY (171_)
+Preuve : dpl_41zVp38… · githubCommitSha=e4703bf · 0 flag
+Blocage : Director UI-only + /api/version interdits sans Auth
+Mission : uniquement AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE
+Auth consommées : deploy once (171_) · cards isolate (170_) · tracing SDK (169_)
+Interdit : flag write · Director enable · provider · apply RideCloud · implémentation versioning
+Attendu : preflight docs · 0 deploy · 0 flag
 ```
 
 ---
@@ -489,12 +491,12 @@ Attendu : 1 deploy · 0 flag
 
 ```text
 Lis d’abord docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md.
-Lis ensuite CURRENT_STATE_AND_RESUME.md et 170_PHASE_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT.md.
-Vérifie Git. Cartes dashboard COMMITTED (170_). SDK tracing READY (169_). UI parity READY (168_). RideCloud apply suspendu (167_ READY, 0 apply). Pack 158_+159_. Storyboard 26 s. 11C CLOSED. Budget 437/391/0/46.
-Flags considérés OFF. Auth 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
+Lis ensuite CURRENT_STATE_AND_RESUME.md et 171_PHASE_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE.md.
+Vérifie Git. UI parity deploy READY (171_). SHA e4703bf prouvé. Cartes dashboard COMMITTED (170_). SDK tracing READY (169_). RideCloud apply suspendu (167_ READY, 0 apply). Pack 158_+159_. Storyboard 26 s. 11C CLOSED. Budget 437/391/0/46.
+Flags considérés OFF. Auth 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 Aucun provider. 0¢. Aucun deploy sans Auth. Aucun flag write. Aucun apply. Aucun persist bind. Aucun média Git. Aucun lipsync.
-Prochaine porte : AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE. 1 deploy. 0 flag. 0 Director enable.
+Prochaine porte : AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE. 0 deploy. 0 flag. 0 implémentation.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 ```
@@ -505,7 +507,8 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `170_` dashboard doc cards isolate | VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED | `67eb7fe` | 0 | **code committé** · 0 deploy | deploy UI parity |
+| 2026-08-27 | `171_` UI parity deploy once | VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_READY | pending | 0 | **`dpl_41zVp38…` Ready** · SHA `e4703bf` | `/api/version` preflight |
+| 2026-08-27 | `170_` dashboard doc cards isolate | VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED | `67eb7fe` | 0 | **code committé** puis dans `e4703bf` | deploy UI parity |
 | 2026-08-27 | `169_` SDK_VERSION file tracing | VHS_SDK_VERSION_FILE_TRACING_INCLUDE_READY | `1a0978c` | 0 | **code local** · NFT · 0 deploy | isolate page.tsx |
 | 2026-08-27 | `168_` UI parity Production preflight | VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY | `422c4e9` | 0 | **lecture seule** · 0 deploy · 0 flag | tracing SDK |
 | 2026-08-27 | `167_` RideCloud bind kind schema remote | RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH | `e93fc98` | 0 | **lecture seule** · 0 apply | apply once (suspendu) |
