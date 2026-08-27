@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-27T15:05:00+02:00
-documentedHead=2cacf1b
+documentedHead=422c4e9
 headStatus=pending commit
 lastPhaseReport=168_PHASE_VHS_PRODUCTION_UI_PARITY_PREFLIGHT.md
 nextPhase=AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE
@@ -502,7 +502,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `168_` UI parity Production preflight | VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY | pending | 0 | **lecture seule** · 0 deploy · 0 flag | tracing SDK |
+| 2026-08-27 | `168_` UI parity Production preflight | VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY | `422c4e9` | 0 | **lecture seule** · 0 deploy · 0 flag | tracing SDK |
 | 2026-08-27 | `167_` RideCloud bind kind schema remote | RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH | `e93fc98` | 0 | **lecture seule** · 0 apply | apply once (suspendu) |
 | 2026-08-27 | `166_` RideCloud bind kind schema | RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY | `8976e49` | 0 | **migration locale** · 0 apply | remote schema preflight |
 | 2026-08-27 | `165_` RideCloud bind preflight | RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY | `bc3e0c7` | 0 | **docs + contrat** · 0 persist | schema kinds |

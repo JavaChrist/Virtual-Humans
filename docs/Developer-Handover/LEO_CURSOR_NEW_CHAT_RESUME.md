@@ -8,7 +8,7 @@ verifiedAt=2026-08-27
 sourceHead=2cacf1b
 lastFunctionalCommit=72016ea
 lastDocumentationCommit=2cacf1b
-thisGateDocumentationCommit=pending
+thisGateDocumentationCommit=422c4e9
 lastPhaseReport=168_PHASE_VHS_PRODUCTION_UI_PARITY_PREFLIGHT.md
 globalStatus=VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY
 nextAuth=AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE
@@ -32,7 +32,7 @@ realMergeExportStatus=NOT_AUTHORIZED
 | `sourceHead` | `2cacf1b` | HEAD Git **audité** le 2026-08-27, avant le commit `168_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
 | `lastDocumentationCommit` | `2cacf1b` | dernier commit docs **avant** cette porte (SHA record `167_`) |
-| `thisGateDocumentationCommit` | pending | premier commit docs de la porte `168_` |
+| `thisGateDocumentationCommit` | `422c4e9` | premier commit docs de la porte `168_` |
 | SHA déployé Vercel | **non exposé par le CLI** | Ready actuel `dpl_Bc4oDFqG…` / `2dlgmulzw-…` 14:35:59 · corrélation `2cacf1b` non prouvée |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
