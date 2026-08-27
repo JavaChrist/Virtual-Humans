@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-27T13:45:00+02:00
-documentedHead=5b58fdc
+documentedHead=8976e49
 headStatus=pending commit
 lastPhaseReport=166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md
 nextPhase=AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER
@@ -487,7 +487,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `166_` RideCloud bind kind schema | RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY | pending | 0 | **migration locale** · 0 apply | remote schema preflight |
+| 2026-08-27 | `166_` RideCloud bind kind schema | RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY | `8976e49` | 0 | **migration locale** · 0 apply | remote schema preflight |
 | 2026-08-27 | `165_` RideCloud bind preflight | RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY | `bc3e0c7` | 0 | **docs + contrat** · 0 persist | schema kinds |
 | 2026-08-27 | `164_` RideCloud create idempotent | RIDECLOUD_SEPARATE_PROJECT_CREATED | `ec57ed5` | 0 | **1 projet draft + 1 brief rev.1** · replay existing | bind preflight |
 | 2026-08-27 | `163_` RideCloud create preflight | RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_READY | `628f61c` | 0 | **docs + contrat** · 0 projet créé | create idempotent |

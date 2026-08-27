@@ -4,7 +4,7 @@
 **Auth :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_NO_PROVIDER`  
 **Nature :** preflight **local** de l’extension CHECK · migration locale **non appliquée** · **0** DDL distant · **0** persist bind · **0** provider  
 **HEAD au départ :** `5b58fdc` (`165_` SHA record)  
-**HEAD de phase :** pending commit
+**HEAD de phase :** `8976e49`
 
 ```text
 VERDICT = RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY
