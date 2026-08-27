@@ -238,16 +238,19 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              · 1 push · Ready `8a7cc19` · 0 moteur
              Director E2E fake operability (`182_`)
              · **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY**
-             · SHA local `d376a7c` · 0 push · 0 moteur
+             · SHA `d376a7c` · 0 moteur
+             Director E2E fake sync+deploy (`183_`)
+             · **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_READY**
+             · 1 push · Ready `ad4a909` · 0 moteur
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1         : sync+deploy hardening UI/E2E · apply CHECK bind kinds bloqué · pricing TTS non ferme
-P1 fermé   : Director E2E fake hardening · merge/export sync+deploy · merge/export wiring disabled · lipsync sync+deploy · lipsync wiring disabled · blockers docs sync · blockers sync+deploy · blockers workflow · app-update docs sync · app-update sync+deploy · app-update implement · app-update preflight · deploy UI parity · cartes dashboard · SDK tracing · UI parity · remote schema RideCloud · schema kinds RideCloud · bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
-Next major : AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+P1         : docs sync `183_` · Director UI-only · apply CHECK bind kinds bloqué · pricing TTS non ferme
+P1 fermé   : Director E2E fake sync+deploy · Director E2E fake hardening · merge/export sync+deploy · merge/export wiring disabled · lipsync sync+deploy · lipsync wiring disabled · blockers docs sync · blockers sync+deploy · blockers workflow · app-update docs sync · app-update sync+deploy · app-update implement · app-update preflight · deploy UI parity · cartes dashboard · SDK tracing · UI parity · remote schema RideCloud · schema kinds RideCloud · bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
+Next major : AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE
 RideCloud apply : SUSPENDED (AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER)
 ```
 
@@ -348,8 +351,9 @@ RideCloud apply : SUSPENDED (AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_RE
 - **Lipsync `/director` wiring sync+deploy** ✅ **VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY** (`179_`) — 1 push · Ready `bb41dcc` · `/api/version` live · 0 provider · 0 flag · 0¢.
 - **Merge/export `/director` wiring disabled** ✅ **VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRED_DISABLED_READY** (`180_`) — SHA `a602de9` · fake metadata · 0 moteur · 0 flag · 0¢.
 - **Merge/export `/director` wiring sync+deploy** ✅ **VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY** (`181_`) — 1 push · Ready `8a7cc19` · 0 moteur · 0 flag · 0¢.
-- **Director E2E fake operability** ✅ **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY** (`182_`) — SHA local `d376a7c` · 0 push · 38/38 Playwright · 0 moteur · 0 flag · 0¢.
-- **Prochaine porte majeure** : Auth **`AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE`** — 1 push docs administratif · 0 nouveau rapport numéroté · 0 moteur · 0 flag. RideCloud apply **suspendu**. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Director E2E fake operability** ✅ **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY** (`182_`) — SHA `d376a7c` · 38/38 Playwright · 0 moteur · 0 flag · 0¢.
+- **Director E2E fake sync+deploy** ✅ **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_READY** (`183_`) — 1 push · Ready `ad4a909` · `/api/version` live · UI Prod **non observée** · 0 moteur · 0 flag · 0¢.
+- **Prochaine porte majeure** : Auth **`AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE`** — 1 push docs administratif · 0 nouveau rapport numéroté · 0 moteur · 0 flag. RideCloud apply **suspendu**. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).
