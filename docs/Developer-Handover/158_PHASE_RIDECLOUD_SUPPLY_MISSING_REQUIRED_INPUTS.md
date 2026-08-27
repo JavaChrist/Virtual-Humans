@@ -3,7 +3,8 @@
 **Date :** 2026-08-27  
 **Auth :** `AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER`  
 **Nature :** intégration du pack créatif verrouillé · références opaques + préfixes · **0** média Git · **0** provider · **0** projet Production  
-**HEAD au départ :** `80d3e4d` (`157_` SHA record)
+**HEAD au départ :** `80d3e4d` (`157_` SHA record)  
+**HEAD de phase :** `3eb8a0f`
 
 ```text
 VERDICT = READY

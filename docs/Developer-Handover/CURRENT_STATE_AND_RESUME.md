@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-27T10:45:00+02:00
-documentedHead=80d3e4d
+documentedHead=3eb8a0f
 headStatus=pending commit
 lastPhaseReport=158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md
 nextPhase=AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER
@@ -472,7 +472,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `158_` RideCloud supply pack | RIDECLOUD_INPUT_COLLECTION_READY | pending | 0 | **refs opaques** · 0 média Git · 0 Production | storyboard preflight |
+| 2026-08-27 | `158_` RideCloud supply pack | RIDECLOUD_INPUT_COLLECTION_READY | `3eb8a0f` | 0 | **refs opaques** · 0 média Git · 0 Production | storyboard preflight |
 | 2026-08-26 | `157_` RideCloud input preflight | RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED | `3da4be0` | 0 | **docs + contrat** · 0 Production | pack inputs Christian |
 | 2026-08-26 | `156_` clôture 11C | PHASE_11C_CLOSED_PASS_WITH_NOTES | `bf49fda` | 0 | **docs + lecture seule** · 0 Production | RideCloud preflight |
 | 2026-08-26 | `155_` Voice HR APPROVE | VOICE_TTS_FIRST_PAID_AUDIO_HUMAN_APPROVED_PRIVATE_INACTIVE | `dd367a8` | 0 | 1 APPROVE inactif · 0 ElevenLabs · pointeurs I2V figés | clôture 11C |
