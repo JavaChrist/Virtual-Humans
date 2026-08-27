@@ -6,7 +6,7 @@ Ce fichier décrit le **rôle Léo**. Pour un nouveau chat Léo **ou** Cursor, l
 
 `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`
 
-Audit de reprise : **2026-08-27**. Statut fonctionnel : `181_` / `VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY` (SHA build `8a7cc19` · tree `a602de9`). Lipsync DEPLOY READY (`179_`). App update blockers DEPLOY READY (`177_`).
+Audit de reprise : **2026-08-27**. Statut fonctionnel : `182_` / `VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY` (SHA local `d376a7c`, non poussé). Merge/export **WIRED_DISABLED**. Lipsync DEPLOY READY (`179_`). App update blockers DEPLOY READY (`177_`).
 
 Léo ne code pas directement dans le dépôt. **Cursor code, teste, met à jour la documentation, produit un rapport STOP, commit et push.** Léo analyse chaque retour, décide de la porte suivante et rédige le prochain prompt complet destiné à Cursor.
 
@@ -180,26 +180,26 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Merge/export `/director` est **WIRED_DISABLED DEPLOY READY** (`180_`/`181_`, SHA build `8a7cc19` · tree `a602de9`). Lipsync `/director` est **WIRED_DISABLED DEPLOY READY** (`178_`/`179_`). App update blockers deploy est **READY** (`177_`). RideCloud promo est **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · apply **suspendu**. Migration locale 33e non appliquée. Pack `158_` + `159_`.
+Director E2E fake est **HARDENED READY** (`182_`, SHA local `d376a7c`, non poussé). Merge/export `/director` est **WIRED_DISABLED** (`180_`/`181_`, SHA Prod `26e9b02` · tree `a602de9`). Lipsync `/director` est **WIRED_DISABLED DEPLOY READY** (`178_`/`179_`). App update blockers deploy est **READY** (`177_`). RideCloud promo est **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · apply **suspendu**. Migration locale 33e non appliquée. Pack `158_` + `159_`.
 
-Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `181_`, `180_`, `179_`, `178_`, `177_`, `176_`, `175_`, `174_`, `173_`, `172_`, `171_`, `170_`, `169_`, `168_`, `167_`, `166_`, `165_`, `164_`, `163_`, `162_`, `161_`, `160_`, `159_`, `158_`, `157_`, `156_`, `155_` et `153_` **consommées**.
+Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `182_`, `181_`, `180_`, `179_`, `178_`, `177_`, `176_`, `175_`, `174_`, `173_`, `172_`, `171_`, `170_`, `169_`, `168_`, `167_`, `166_`, `165_`, `164_`, `163_`, `162_`, `161_`, `160_`, `159_`, `158_`, `157_`, `156_`, `155_` et `153_` **consommées**.
 
 Phase active suivante :
 
-`AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE`
+`AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`
 
-Synchroniser administrativement le rapport `181_` sans nouvelle boucle de rapports. **Aucun** provider, moteur, flag, RPC bind, persist artifact, dépense, lecture/upload média, TTS, activation, merge réel ou export. N’invente aucun claim.
+Synchroniser et déployer une fois le hardening UI/E2E (`d376a7c`). **Aucun** provider, moteur, flag, RPC bind, persist artifact, dépense, lecture/upload média, TTS, activation, merge réel ou export. N’invente aucun claim.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `LEO_CURSOR_NEW_CHAT_RESUME.md`.
 2. Lire `CURRENT_STATE_AND_RESUME.md` puis ce fichier.
 3. Vérifier Git (HEAD a pu changer depuis `0f3a3bb` à cause de commits docs).
-4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE`.
+4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`.
 5. Ne pas refaire les phases déjà terminées.
 6. Vérifier le rapport et préparer la prochaine porte.
 
-Si `181_` est STOP, la prochaine priorité est la sync docs administrative de `181_` sans nouvelle boucle de rapports. Ne pas activer Director, RideCloud, AICCOS, ni un moteur merge. Aucun flag. Ne pas réécrire `sw.js`. Distinguer `a602de9` (merge/export), `8a7cc19` (SHA build) et le SHA local `181_` (non déployé). RideCloud apply reste suspendu. Aucun provider. 0¢. N’invente aucun claim. Aucun merge réel. Aucune activation.
+Si `182_` est STOP, la prochaine priorité est le sync+deploy unique du hardening UI/E2E. Ne pas activer Director, RideCloud, AICCOS, ni un moteur merge. Aucun flag. Ne pas réécrire `sw.js`. Distinguer `d376a7c` (hardening local), `a602de9` (merge/export), `26e9b02` (SHA Prod docs `181_`). RideCloud apply reste suspendu. Aucun provider. 0¢. N’invente aucun claim. Aucun merge réel. Aucune activation.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -223,4 +223,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `181_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE`. Merge/export WIRED_DISABLED DEPLOY READY (`181_`, SHA build `8a7cc19` · tree `a602de9`). Lipsync WIRED_DISABLED DEPLOY READY (`179_`). App update blockers DEPLOY READY (`177_`). RideCloud apply suspendu (`167_` READY). Migration locale 33e · 0 apply. Pack `158_`+`159_`. Budget 437/391/0/46. Flags considérés OFF. Auth `181_` / `180_` / `179_` / `178_` / `177_` / `176_` / `175_` / `174_` / `173_` / `172_` / `171_` / `170_` / `169_` / `168_` / `167_` / `166_` / `165_` / `164_` / `163_` / `162_` / `161_` / `160_` / `159_` / `158_` / `157_` / `156_` / `155_` / `153_` consommées. Aucun moteur. 0¢. Aucun deploy applicatif sans Auth. Aucun flag write. Aucun apply. Aucune RPC. Aucun persist bind. Aucun média Git. N’invente aucun claim. Aucun merge réel. Aucune activation. Distinguer `a602de9` (merge/export), `8a7cc19` (SHA build) et le SHA local `181_` (non déployé). Ne pas câbler AICCOS.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `182_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`. Director E2E fake HARDENED READY (`182_`, SHA local `d376a7c`). Merge/export WIRED_DISABLED (`181_`, SHA Prod `26e9b02` · tree `a602de9`). Lipsync WIRED_DISABLED DEPLOY READY (`179_`). App update blockers DEPLOY READY (`177_`). RideCloud apply suspendu (`167_` READY). Migration locale 33e · 0 apply. Pack `158_`+`159_`. Budget 437/391/0/46. Flags considérés OFF. Auth `182_` / `181_` / `180_` / `179_` / `178_` / `177_` consommées. Aucun moteur. 0¢. Aucun deploy applicatif sans Auth. Aucun flag write. Aucun apply. Aucune RPC. Aucun persist bind. Aucun média Git. N’invente aucun claim. Aucun merge réel. Aucune activation. Distinguer `d376a7c` (hardening local), `a602de9` (merge/export) et `26e9b02` (SHA Prod). Ne pas câbler AICCOS.

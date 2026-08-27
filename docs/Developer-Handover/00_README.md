@@ -154,13 +154,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRED_DISABLED_READY**
                            Merge/export `/director` wiring sync+deploy (`181_`)
                            · **VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY**
-Runtime AI / paid media  : OFF · fonctionnel **72016ea** · alias **`8a7cc19`** · merge/export **`a602de9`** · lipsync **`366abd6`**
+                           Director E2E fake operability (`182_`)
+                           · **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY**
+Runtime AI / paid media  : OFF · fonctionnel local **d376a7c** · alias Prod **`26e9b02`** · merge/export **`a602de9`** · lipsync **`366abd6`**
 Budget                   : hard 437 / committed 391 / reserved 0 / available 46 ¢
 production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0                       : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1 ouverts               : docs sync merge/export · Director UI-only · apply CHECK bind kinds suspendu · pricing TTS non ferme
-P1 fermé                 : merge/export sync+deploy (`181_`) · merge/export wiring disabled (`180_`) · lipsync sync+deploy (`179_`) · lipsync wiring disabled (`178_`) · blockers docs sync · blockers sync+deploy (`177_`) · blockers workflow (`176_`) · app-update docs sync (`175_`) · app-update sync+deploy (`174_`) · app-update implement (`173_`) · app-update preflight (`172_`) · deploy UI parity (`171_`) · cartes dashboard (`170_`) · SDK tracing (`169_`) · UI parity (`168_`) · remote schema (`167_`) · schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
-Prochaine porte majeure  : AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+P1 ouverts               : sync+deploy hardening UI/E2E · Director UI-only · apply CHECK bind kinds suspendu · pricing TTS non ferme
+P1 fermé                 : Director E2E fake hardening (`182_`) · merge/export sync+deploy (`181_`) · merge/export wiring disabled (`180_`) · lipsync sync+deploy (`179_`) · lipsync wiring disabled (`178_`) · blockers docs sync · blockers sync+deploy (`177_`) · blockers workflow (`176_`) · app-update docs sync (`175_`) · app-update sync+deploy (`174_`) · app-update implement (`173_`) · app-update preflight (`172_`) · deploy UI parity (`171_`) · cartes dashboard (`170_`) · SDK tracing (`169_`) · UI parity (`168_`) · remote schema (`167_`) · schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
+Prochaine porte majeure  : AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
 Living handover          : CURRENT_STATE_AND_RESUME.md
 Reprise nouveau chat     : LEO_CURSOR_NEW_CHAT_RESUME.md
 ```

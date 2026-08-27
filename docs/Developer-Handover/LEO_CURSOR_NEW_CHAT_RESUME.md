@@ -1,17 +1,17 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : living resume. `181_` merge/export `/director` **WIRED_DISABLED DEPLOY READY** (SHA build `8a7cc19` · tree `a602de9`). RideCloud apply **suspendu**. Voir living handover.
+Nature : living resume. `182_` Director E2E fake **HARDENED READY** (SHA local `d376a7c`, non poussé). Merge/export reste **WIRED_DISABLED**. RideCloud apply **suspendu**. Voir living handover.
 
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-27
-sourceHead=8a7cc19
-lastFunctionalCommit=a602de9
-lastDocumentationCommit=8a7cc19
+sourceHead=26e9b02
+lastFunctionalCommit=d376a7c
+lastDocumentationCommit=26e9b02
 thisGateDocumentationCommit=pending
-lastPhaseReport=181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md
-globalStatus=VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY
-nextAuth=AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+lastPhaseReport=182_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING.md
+globalStatus=VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY
+nextAuth=AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
@@ -29,11 +29,11 @@ realMergeExportStatus=WIRED_DISABLED
 
 | Pointeur | Valeur | Signification |
 |---|---|---|
-| `sourceHead` | `8a7cc19` | HEAD Git **poussé** · SHA build Production |
-| `lastFunctionalCommit` | `a602de9` | commit applicatif merge/export `/director` WIRED_DISABLED |
-| `lastDocumentationCommit` | `8a7cc19` | dernier commit docs **poussé** (`180_`) |
-| `thisGateDocumentationCommit` | pending | commit docs local `181_` |
-| SHA déployé Vercel | **`8a7cc19`** | alias `dpl_14MHhoRB…` · tree merge/export `a602de9` · tree lipsync `366abd6` |
+| `sourceHead` | `26e9b02` | HEAD Git **poussé** · SHA build Production (docs `181_`) |
+| `lastFunctionalCommit` | `d376a7c` | hardening UI/E2E fake `/director` — **local, non poussé** |
+| `lastDocumentationCommit` | `26e9b02` | dernier commit docs **poussé** (`181_`) |
+| `thisGateDocumentationCommit` | pending | commit docs local `182_` |
+| SHA déployé Vercel | **`26e9b02`** | alias docs `181_` · tree merge/export `a602de9` · tree lipsync `366abd6` · `d376a7c` absent |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
 
@@ -288,10 +288,10 @@ Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils *
 ## 13. Prochaine porte canonique — non exécutée
 
 ```text
-AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
 ```
 
-Synchroniser administrativement le rapport `181_` **sans** nouvelle boucle de rapports. **0 moteur. 0 flag.**
+Synchroniser et déployer **une fois** le hardening UI/E2E fake (`d376a7c`). **0 moteur. 0 flag.**
 
 RideCloud apply **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** reste **suspendue**.
 
@@ -299,6 +299,8 @@ Interdit : provider · dépense · média Git · lecture/upload pack · RPC bind
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
 
+`AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER` est **consommée** (`182_`).
+`AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE` est **consommée** (`26e9b02`).
 `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE` est **consommée** (`181_`).
 `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED_NO_PROVIDER_NO_DEPLOY_NO_FLAG_WRITE` est **consommée** (`180_`).
 `AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE` est **consommée** (`179_`).

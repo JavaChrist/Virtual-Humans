@@ -1,33 +1,34 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-27T22:30:00+02:00
-documentedHead=8a7cc19
+verifiedAt=2026-08-27T23:55:00+02:00
+documentedHead=d376a7c
 headStatus=pending commit
-lastPhaseReport=181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md
-nextPhase=AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+lastPhaseReport=182_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING.md
+nextPhase=AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
 budgetAvailable=46
 runtimePaidMedia=OFF
-unitTests=2002/2002
-globalStatus=VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY
+unitTests=2006/2006
+globalStatus=VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY`  
-**Dernière vérification :** 2026-08-27 · merge/export wiring sync+deploy `181_` · **1 push** · **0 flag** · **0 moteur**  
-**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`  
+**Statut global :** `VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY`  
+**Dernière vérification :** 2026-08-27 · Director E2E fake operability `182_` · **0 push** · **0 flag** · **0 moteur**  
+**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER`  
 **Branche :** `main`  
-**HEAD local fonctionnel :** `a602de9` · origin/main **`8a7cc19`** · ahead/behind après commit docs local **`1/0`**  
-**Working tree :** 2 AICCOS hors scope (dirty, protégés) · `page.tsx` propre  
+**HEAD local fonctionnel :** `d376a7c` · origin/main **`26e9b02`** · ahead/behind après commit docs local attendu **`2/0`**  
+**Working tree :** 2 AICCOS hors scope (dirty, protégés)  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
-**Alias Production actuel :** host `88bvs37tz-…` · id `dpl_14MHhoRB…` · auto-deploy **`8a7cc19`** · `/api/version` identité Git `8a7cc19` · tree merge/export = `a602de9` · tree lipsync = `366abd6`  
+**Alias Production actuel :** docs `181_` **`26e9b02`** · tree merge/export = `a602de9` · tree lipsync = `366abd6` · hardening `d376a7c` **non déployé**  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
 **Reprise nouveau chat :** [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)  
-**Dernier rapport de porte :** [`181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md`](./181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md)  
+**Dernier rapport de porte :** [`182_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING.md`](./182_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING.md)  
+**Merge/export wiring deploy :** [`181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md`](./181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md)  
 **Merge/export wiring implement :** [`180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md`](./180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md)  
 **Lipsync wiring implement :** [`178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md`](./178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md)  
 **Lipsync wiring deploy :** [`179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md`](./179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md)  
@@ -51,7 +52,7 @@ globalStatus=VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY
 **Storyboard initial :** [`160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md`](./160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md)  
 **Addendum HD :** [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md)  
 **Supply RideCloud :** [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md)  
-**Prochaine phase exacte :** `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE`  
+**Prochaine phase exacte :** `AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`  
 **RideCloud apply :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER` — **suspendue, non consommée**
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
@@ -90,13 +91,13 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Overlay typographique | **WIRED_DISABLED** · 1.2.0 **HUMAN_APPROVED** privé inactif | checksum `9ac484b7…` · décision `fb2f886c…` |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
 | I2V `/director` | **11B CLOSED** · attempt **completed** · vidéo inactive | `138_` · 1 CAS · pointeurs durcis `139_` |
-| T2V / lipsync / merge-export réels | lipsync **WIRED_DISABLED** · merge/export **WIRED_DISABLED DEPLOY READY** | `178_`/`180_` fakes · SHA build `8a7cc19` · 0 moteur |
+| T2V / lipsync / merge-export réels | lipsync **WIRED_DISABLED** · merge/export **WIRED_DISABLED** · E2E fake **HARDENED** | `178_`/`180_`/`182_` · SHA local `d376a7c` · 0 moteur |
 | Voice / TTS `/director` | **11C CLOSED** · PASS_WITH_NOTES · 1 audio privé inactif | `140_`–`156_` · 1 ElevenLabs · HR APPROVE `068a2b25…` · flags OFF |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
 | RideCloud promo | **BIND KIND SCHEMA REMOTE PREFLIGHT READY** · apply **suspendu** | `167_` · CHECK distant 13 kinds · 0 apply |
 | UI localhost vs Production | **deploy Ready** · SHA `e4703bf` prouvé · alias docs `c808fa2` | `171_` · tracing + cartes · Director flag OFF |
 | App update / PWA | **BLOCKERS DEPLOY READY** · SHA build `134631d` · fonctionnel `045f48a` | `177_` · docs sync **terminée** · 0 flag |
-| Prochaine étape | **DOCS SYNC MERGE/EXPORT** | `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE` · 0 moteur · 0 flag |
+| Prochaine étape | **SYNC+DEPLOY HARDENING UI/E2E** | `AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE` · 0 moteur · 0 flag |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -141,10 +142,10 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `138_`/`139_` | attempt `6be95728…` **completed** · pointeurs sûrs sans mutation | fal Kling I2V | 140 provisional | flags OFF · 0 second write | pack RideCloud |
 | Voice | **11C CLOSED** PASS_WITH_NOTES · catalog inchangé · 1 audio privé | `140_`–`156_` | run `2eaffebf…` · output `bc36bba7…` · APPROVE inactif · HR `068a2b25…` | ElevenLabs | 1 `/director` | execution=false · flags OFF | pack RideCloud |
 | Lipsync | **WIRED_DISABLED** · **DEPLOY READY** | `178_`/`179_` | fake local · SHA build `134631d` · tree `366abd6` | — | 0 | flags OFF · adapter réel absent · UI non observée | hors scope |
-| Merge / export | **WIRED_DISABLED DEPLOY READY** | `180_`/`181_` | fake metadata · SHA build `8a7cc19` · tree `a602de9` · `mergeExportAuthorized=false` | — | 0 | 0 moteur · 0 fichier · 0 URL | docs sync once |
+| Merge / export | **WIRED_DISABLED** · E2E fake **HARDENED** | `180_`/`181_`/`182_` | fake metadata · SHA local `d376a7c` · `mergeExportAuthorized=false` | — | 0 | 0 moteur · 0 fichier · 0 URL | sync+deploy hardening |
 | RideCloud promo | **BIND PREFLIGHT READY** · apply **suspendu** | `167_` | contrat + manifeste conçus · 0 persist | — | 0 | kinds absents du CHECK · apply non consommé | apply once (suspendu) |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
-| UI finale | **DEPLOY READY** · alias `8a7cc19` | `181_` | tree merge/export `a602de9` · tree lipsync `366abd6` · 0 flag | — | 0 | Director UI-only · merge désactivé | docs sync once |
+| UI finale | **HARDENED local** · alias Prod `26e9b02` | `182_` | pipeline + E2E fake · SHA `d376a7c` non déployé · 0 flag | — | 0 | Director UI-only · merge désactivé | sync+deploy once |
 | App update PWA | **BLOCKERS DEPLOY READY** · docs sync **terminée** | `177_` | 18 workflows · 0 SW write · SHA build `134631d` | — | 0 | AICCOS non câblé · blocker E2E=0 | hors scope |
 | Monitoring / ops | PREPARED | VHS-005 | redaction logs | — | 0 | traces distribuées | avant Production |
 | Documentation / release | PASS_REAL living | cette phase | ce fichier | — | 0 | fraîcheur à tenir | script freshness |
