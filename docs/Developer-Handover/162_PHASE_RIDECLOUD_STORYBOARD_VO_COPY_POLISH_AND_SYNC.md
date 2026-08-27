@@ -3,7 +3,8 @@
 **Date :** 2026-08-27  
 **Auth :** `AUTH_RIDECLOUD_STORYBOARD_VO_COPY_POLISH_AND_SYNC_NO_PROVIDER`  
 **Nature :** polish éditorial s03/s04 + sync Git · **0** provider · **0** TTS · **0** média · **0** projet Production  
-**HEAD au départ :** `83d819d` · `origin/main` `86b150c` · ahead **2**
+**HEAD au départ :** `83d819d` · `origin/main` `86b150c` · ahead **2**  
+**HEAD de phase :** `4bac13e`
 
 ```text
 VERDICT = RIDECLOUD_FIRST_AD_STORYBOARD_VO_COPY_POLISHED
