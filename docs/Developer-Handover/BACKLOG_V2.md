@@ -184,15 +184,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              RideCloud project create preflight (`163_`)
              · **RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_READY**
              · IDs déterministes · 0 write
+             RideCloud project create idempotent (`164_`)
+             · **RIDECLOUD_SEPARATE_PROJECT_CREATED**
+             · projet draft + brief rev.1 · replay existing
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1         : projet Production RideCloud manquant · pricing TTS non ferme
-P1 fermé   : create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
-Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER
+P1         : storyboard/pack non rattachés · pricing TTS non ferme
+P1 fermé   : create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
+Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_NO_PROVIDER
 ```
 
 ## P0 — fondations
@@ -274,7 +277,8 @@ Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER
 - **RideCloud storyboard VO harden** ✅ **RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED** (`161_`) — VO continue · CTA scindé · 0 silence.
 - **RideCloud storyboard VO polish** ✅ **RIDECLOUD_FIRST_AD_STORYBOARD_VO_COPY_POLISHED** (`162_`) — s03/s04 · 144/150 wpm · 0 silence.
 - **RideCloud project create preflight** ✅ **RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_READY** (`163_`) — IDs déterministes · 0 write · 0 projet créé.
-- **Prochaine porte majeure** : Auth **`AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER`** — create idempotent projet + brief · 0 provider · 0¢. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **RideCloud project create idempotent** ✅ **RIDECLOUD_SEPARATE_PROJECT_CREATED** (`164_`) — 1 RPC · draft + brief rev.1 · replay existing · 0¢.
+- **Prochaine porte majeure** : Auth **`AUTH_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_NO_PROVIDER`** — preflight bind textuel storyboard/pack · 0 provider · 0 média · 0¢. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

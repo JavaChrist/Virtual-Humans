@@ -6,7 +6,7 @@ Ce fichier décrit le **rôle Léo**. Pour un nouveau chat Léo **ou** Cursor, l
 
 `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`
 
-Audit de reprise : **2026-08-27**. Statut fonctionnel : `163_` / `RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_READY`.
+Audit de reprise : **2026-08-27**. Statut fonctionnel : `164_` / `RIDECLOUD_SEPARATE_PROJECT_CREATED`.
 
 Léo ne code pas directement dans le dépôt. **Cursor code, teste, met à jour la documentation, produit un rapport STOP, commit et push.** Léo analyse chaque retour, décide de la porte suivante et rédige le prochain prompt complet destiné à Cursor.
 
@@ -180,26 +180,26 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-RideCloud promo est **CREATE PREFLIGHT READY** (`163_`). 26 s, VO polie. Pack `158_` + `159_`. **0** projet Production.
+RideCloud promo est **CREATED** (`164_`). Projet draft `ba4a6021…` + brief rev.1. 26 s, VO polie. Pack `158_` + `159_`. Replay existing.
 
-Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `163_`, `162_`, `161_`, `160_`, `159_`, `158_`, `157_`, `156_`, `155_` et `153_` **consommées**.
+Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `164_`, `163_`, `162_`, `161_`, `160_`, `159_`, `158_`, `157_`, `156_`, `155_` et `153_` **consommées**.
 
 Phase active suivante :
 
-`AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER`
+`AUTH_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_NO_PROVIDER`
 
-Création idempotente du projet Production RideCloud séparé + brief initial. **Aucun** provider, dépense, média Git, TTS, activation, lipsync ou export. N’invente aucun claim.
+Preflight textuel du rattachement storyboard/pack au projet RideCloud. **Aucun** provider, dépense, lecture/upload média, TTS, activation, lipsync ou export. N’invente aucun claim.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `LEO_CURSOR_NEW_CHAT_RESUME.md`.
 2. Lire `CURRENT_STATE_AND_RESUME.md` puis ce fichier.
 3. Vérifier Git (HEAD a pu changer depuis `0f3a3bb` à cause de commits docs).
-4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER`.
+4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_NO_PROVIDER`.
 5. Ne pas refaire les phases déjà terminées.
 6. Vérifier le rapport et préparer la prochaine porte.
 
-Si `163_` est STOP, la porte suivante est la création idempotente du projet Production RideCloud séparé. Aucun provider. 0¢. Brief seulement. N’invente aucun claim. Aucun lipsync. Aucune activation.
+Si `164_` est STOP, la porte suivante est le preflight textuel du rattachement storyboard/pack. Aucun provider. 0¢. Aucune lecture ni upload média. N’invente aucun claim. Aucun lipsync. Aucune activation.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -223,4 +223,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `163_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER`. RideCloud create preflight READY (`163_`). Pack `158_`+`159_`. Budget 437/391/0/46. Flags considérés OFF. Auth `163_` / `162_` / `161_` / `160_` / `159_` / `158_` / `157_` / `156_` / `155_` / `153_` consommées. Aucun provider. 0¢. Aucun projet Production. Aucun média Git. N’invente aucun claim. Aucun lipsync. Aucune activation.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `164_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_NO_PROVIDER`. RideCloud projet CREATED (`164_`). Pack `158_`+`159_`. Budget 437/391/0/46. Flags considérés OFF. Auth `164_` / `163_` / `162_` / `161_` / `160_` / `159_` / `158_` / `157_` / `156_` / `155_` / `153_` consommées. Aucun provider. 0¢. Aucun upload média. Aucun média Git. N’invente aucun claim. Aucun lipsync. Aucune activation.

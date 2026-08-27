@@ -92,7 +92,9 @@
 **RIDECLOUD_FIRST_AD_STORYBOARD_VO_COPY_POLISHED** — verdict `162_` : s03 144 wpm · s04 150 wpm · plafond 165 · 26 s inchangées.
 **AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER** — porte `163_` : preflight création projet RideCloud séparé · 0 write · 0¢.
 **RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_READY** — verdict `163_` : IDs déterministes · RPC CAS prévue · 0 projet créé.
-**AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER** — prochaine porte : create idempotent projet + brief · 0 provider · 0 média · 0¢.
+**AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER** — porte `164_` : create idempotent projet + brief · 0 provider · 0 média · 0¢.
+**RIDECLOUD_SEPARATE_PROJECT_CREATED** — verdict `164_` : projet `ba4a6021…` draft · brief `adea092a…` rev.1 · replay existing.
+**AUTH_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_NO_PROVIDER** — prochaine porte : preflight textuel bind storyboard/pack · 0 provider · 0 média · 0¢.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
