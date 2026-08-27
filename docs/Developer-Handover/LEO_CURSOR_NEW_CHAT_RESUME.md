@@ -1,17 +1,17 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : living resume. `176_` app-update blockers **consommée** (code local `045f48a`). Alias Production = SHA **docs** `80cc7fa`. Tree applicatif live `68b09ee`. RideCloud apply **suspendu**. Voir living handover.
+Nature : living resume. `177_` app-update blockers sync+deploy **consommée** (SHA build `7d1c34c` · fonctionnel `045f48a`). Alias Production = `7d1c34c`. RideCloud apply **suspendu**. Voir living handover.
 
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-27
-sourceHead=80cc7fa
+sourceHead=7d1c34c
 lastFunctionalCommit=045f48a
-lastDocumentationCommit=80cc7fa
+lastDocumentationCommit=7d1c34c
 thisGateDocumentationCommit=pending
-lastPhaseReport=176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md
-globalStatus=VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT_READY
-nextAuth=AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE
+lastPhaseReport=177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md
+globalStatus=VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_READY
+nextAuth=AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
@@ -29,11 +29,11 @@ realMergeExportStatus=NOT_AUTHORIZED
 
 | Pointeur | Valeur | Signification |
 |---|---|---|
-| `sourceHead` | `80cc7fa` | HEAD Git **poussé** `175_` · SHA docs Production |
+| `sourceHead` | `7d1c34c` | HEAD Git **poussé** `176_` · SHA build Production |
 | `lastFunctionalCommit` | `045f48a` | commit applicatif blockers workflows |
-| `lastDocumentationCommit` | `80cc7fa` | dernier commit docs **poussé** |
-| `thisGateDocumentationCommit` | pending | commit docs local `176_` (après commit, non poussé) |
-| SHA déployé Vercel | **`80cc7fa` (docs)** | alias `dpl_2Th9fGvk…` · tree applicatif live `68b09ee` · blockers **non déployés** |
+| `lastDocumentationCommit` | `7d1c34c` | dernier commit docs **poussé** |
+| `thisGateDocumentationCommit` | pending | commit docs local `177_` (après commit, non poussé) |
+| SHA déployé Vercel | **`7d1c34c` (docs `176_`)** | alias `dpl_82gNhGqe…` · tree blockers `045f48a` |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
 
@@ -269,7 +269,7 @@ Attendus (non relus un par un le 26 août) : Voice / Paid Media / Worker payant 
 - stockage privé
 - budget et idempotence
 
-**Pack RideCloud (`158_` + `159_`) = READY.** Storyboard (`160_` + `161_` + `162_`) = **26 s / VO polie**. Create (`164_`) = **CREATED**. Bind preflight (`165_`) = **READY**. Bind kind schema (`166_` + `167_`) = **READY_FOR_APPLY** (apply **suspendu**). UI parity (`168_`) = **READY**. SDK tracing (`169_`) = **READY**. Cartes dashboard (`170_`) = **COMMITTED**. Deploy UI (`171_`) = **READY** (SHA `e4703bf`). App update preflight (`172_`) = **READY**. App update implement (`173_`) = **READY**. App update deploy (`174_`) = **READY**. App update docs (`175_`) = **READY**. App update blockers (`176_`) = **READY** local `045f48a` non poussé. Encore manquant ensuite :
+**Pack RideCloud (`158_` + `159_`) = READY.** Storyboard (`160_` + `161_` + `162_`) = **26 s / VO polie**. Create (`164_`) = **CREATED**. Bind preflight (`165_`) = **READY**. Bind kind schema (`166_` + `167_`) = **READY_FOR_APPLY** (apply **suspendu**). UI parity (`168_`) = **READY**. SDK tracing (`169_`) = **READY**. Cartes dashboard (`170_`) = **COMMITTED**. Deploy UI (`171_`) = **READY** (SHA `e4703bf`). App update preflight (`172_`) = **READY**. App update implement (`173_`) = **READY**. App update deploy (`174_`) = **READY**. App update docs (`175_`) = **READY**. App update blockers (`176_`) = **READY** (`045f48a`). App update blockers deploy (`177_`) = **READY** (`7d1c34c`). Encore manquant ensuite :
 
 - apply unique du **CHECK** (`storyboard_contract` + `media_input_manifest`) puis persister le bind
 - merge / export réel
@@ -288,17 +288,18 @@ Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils *
 ## 13. Prochaine porte canonique — non exécutée
 
 ```text
-AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE
+AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE
 ```
 
-Pousser les commits locaux (`3f83f4f`, `045f48a`, docs `176_`) et déployer **une fois** l’intégration des blockers. **0 flag provider.**
+Synchroniser le rapport local `177_` vers `origin/main`. **0 flag provider.** Puis retour au développement fonctionnel du Studio.
 
 RideCloud apply **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** reste **suspendue**.
 
-Interdit : provider · dépense · média Git · lecture/upload pack · RPC bind · persist bind · run/job/attempt/output · activation · lipsync · merge/export · publication · TTS · flag write · promouvoir `80cc7fa` comme feature · duplication PWA · câbler AICCOS · réécrire `sw.js`.
+Interdit : provider · dépense · média Git · lecture/upload pack · RPC bind · persist bind · run/job/attempt/output · activation · lipsync · merge/export · publication · TTS · flag write · déploiement manuel · duplication PWA · câbler AICCOS · réécrire `sw.js`.
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
 
+`AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE` est **consommée** (`177_`).
 `AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE` est **consommée** (`176_`).
 `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE` est **consommée** (`175_`).
 `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE` est **consommée** (`174_`).
@@ -328,15 +329,15 @@ Copier le bloc suivant dans un nouveau chat Léo :
 ```text
 Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md.
 
 Ne rejoue aucune phase terminée. Vérifie d’abord Git et les éventuels nouveaux STOP Cursor. Une autorisation d’un chat précédent n’est jamais réutilisable.
 
-La porte active est AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE. Elle n’est pas encore exécutée. RideCloud apply est suspendue.
+La porte active est AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE. Elle n’est pas encore exécutée. RideCloud apply est suspendue.
 
-App update blockers IMPLEMENT READY (176_) · origin/main 80cc7fa · ahead 3/0 (175_ + 045f48a + docs 176_ locaux). Alias Production = SHA docs 80cc7fa. Tree applicatif live 68b09ee. SHA fonctionnel blockers = 045f48a. RideCloud bind kind schema remote READY (167_) apply suspendu. Migration locale 33e non appliquée. Pack 158_ + 5 variantes HD 159_. Storyboard 26 s. Auth 176_ / 175_ / 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun provider. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply. Aucun deploy applicatif sans Auth. Aucun flag write. Ne pas promouvoir 80cc7fa comme nouvelle feature. Ne pas câbler AICCOS.
+App update blockers DEPLOY READY (177_) · origin/main 7d1c34c · ahead 1/0 (docs 177_ local). Alias Production = SHA 7d1c34c. SHA fonctionnel blockers = 045f48a. RideCloud bind kind schema remote READY (167_) apply suspendu. Migration locale 33e non appliquée. Pack 158_ + 5 variantes HD 159_. Storyboard 26 s. Auth 177_ / 176_ / 175_ / 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun provider. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply. Aucun deploy applicatif sans Auth. Aucun flag write. Distinguer 045f48a (fonctionnel) et 7d1c34c (SHA build). Ne pas câbler AICCOS.
 
-Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. L’alias Vercel Ready est le SHA docs 80cc7fa (`dpl_2Th9fGvk…`).
+Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. L’alias Vercel Ready est le SHA 7d1c34c (`dpl_82gNhGqe…`).
 
 Fournis les prompts Cursor comme un seul document continu. N’improvise aucune autorisation.
 ```
@@ -350,15 +351,15 @@ Copier le bloc suivant dans un nouveau chat Cursor :
 ```text
 Tu es Cursor, exécutant code/test/doc de Virtual Humans Studio.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md.
 
-Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main. origin/main attendu 80cc7fa. HEAD local ahead 3/0.
+Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main. origin/main attendu 7d1c34c. HEAD local ahead 1/0 (docs 177_).
 
 Protège les fichiers hors scope déjà dirty : studio/src/app/api/aiccos/send/route.ts, studio/src/components/send-to-aiccos.tsx. Ne les modifie pas, ne les restaure pas, ne les stash pas, ne les stage pas.
 
-Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_, 160_, 161_, 162_, 163_, 164_, 165_, 166_, 167_, 168_, 169_, 170_, 171_, 172_, 173_, 174_, 175_ ni 176_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun deploy applicatif sans Auth. Aucun flag write. N’invente aucun claim.
+Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_, 160_, 161_, 162_, 163_, 164_, 165_, 166_, 167_, 168_, 169_, 170_, 171_, 172_, 173_, 174_, 175_, 176_ ni 177_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun deploy applicatif sans Auth. Aucun flag write. N’invente aucun claim.
 
-La prochaine porte est AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE. Elle n’est pas autorisée par ce fichier de reprise. 0 flag. Ne pas réécrire sw.js. Ne pas promouvoir 80cc7fa comme nouvelle feature. Ne pas câbler AICCOS. RideCloud apply reste suspendue.
+La prochaine porte est AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE. Elle n’est pas autorisée par ce fichier de reprise. 0 flag. Ne pas réécrire sw.js. Distinguer 045f48a (fonctionnel) et 7d1c34c (SHA build). Ne pas câbler AICCOS. RideCloud apply reste suspendue.
 ```
 
 ---
@@ -367,14 +368,14 @@ La prochaine porte est AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AN
 
 - [ ] Confirmer la racine Git `C:\Users\JavaChrist\Desktop\virtual-humans`
 - [ ] Confirmer branche `main` et relever HEAD / origin/main / ahead-behind
-- [ ] Lire le dernier STOP (ce fichier + living handover + `176_`)
+- [ ] Lire le dernier STOP (ce fichier + living handover + `177_`)
 - [ ] Vérifier le working tree sans le modifier
 - [ ] Protéger les deux fichiers AICCOS hors scope
 - [ ] Confirmer budget 437 / 391 / 0 / 46
 - [ ] Confirmer flags / runtime considérés OFF ; revalider avant toute opération sensible
 - [ ] Confirmer output audio `bc36bba7…` `approved` · active=false · HR `068a2b25…`
 - [ ] Confirmer aucune nouvelle Human Review
-- [ ] Confirmer prochaine Auth = `AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE`
+- [ ] Confirmer prochaine Auth = `AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE`
 - [ ] Ne lancer aucune action sensible avant autorisation
 
 ---
@@ -413,6 +414,7 @@ La prochaine porte est AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AN
 | [`174_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE.md`](./174_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE.md) | App update versioning sync+deploy READY |
 | [`175_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE.md`](./175_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE.md) | App update versioning docs sync READY |
 | [`176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md`](./176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md) | App update blockers workflow IMPLEMENT READY |
+| [`177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md`](./177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md) | App update blockers sync+deploy READY |
 | [`00_README.md`](./00_README.md) | Index |
 | [`.cursor/rules/living-handover.mdc`](../../.cursor/rules/living-handover.mdc) | Règle de clôture |
 

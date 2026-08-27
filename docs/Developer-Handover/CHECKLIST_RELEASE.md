@@ -146,6 +146,8 @@
 - [x] App update versioning implement (`173_`) · **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_READY** · locale puis poussée · 0 flag ;
 - [x] App update versioning sync+deploy (`174_`) · **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_READY** · SHA `1765da6` · 0 flag ;
 - [x] App update versioning docs sync (`175_`) · **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_READY** · SHA docs `80cc7fa` · 0 flag ;
+- [x] App update blockers workflow (`176_`) · **VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT_READY** · SHA `045f48a` · 0 flag ;
+- [x] App update blockers sync+deploy (`177_`) · **VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_READY** · SHA `7d1c34c` · 0 flag ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -158,7 +160,7 @@ I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inac
 Voice `/director` : **11C CLOSED** PASS_WITH_NOTES (`140_`–`156_`) · catalog 4/4/1 · 1 MP3 `bc36bba7…` approved inactif · HR `068a2b25…` · 2¢ provisional · flags OFF · preuves privées ≠ livrables RideCloud
 RideCloud promo : **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · apply **suspendu** · projet `ba4a6021…` draft · CHECK distant 13 kinds · 0 apply
 UI localhost vs Production : **DEPLOY READY** (`171_`) · SHA `e4703bf` prouvé · 0 flag
-App update PWA : **BLOCKERS IMPLEMENT READY** (`176_`) · SHA local `045f48a` · alias docs `80cc7fa` · tree live `68b09ee` · 0 flag · non déployé
+App update PWA : **BLOCKERS DEPLOY READY** (`177_`) · SHA build `7d1c34c` · fonctionnel `045f48a` · 0 flag · docs `177_` local
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED
