@@ -27,6 +27,7 @@ import {
  * - /offline (shell only)
  * - static allowlist in matcher
  * - POST /api/internal/director-worker/run-once ONLY (worker secret — cookie never grants access)
+ * - GET /api/version (public build metadata only)
  *
  * No wildcard /api/internal/** exemption.
  */
@@ -45,20 +46,24 @@ function clientIp(req: NextRequest): string {
   );
 }
 
-function isPublicPath(pathname: string, method: string): boolean {
+export function isPublicPath(pathname: string, method: string): boolean {
   if (pathname === "/login") return true;
   if (pathname === "/offline") return true;
   if (pathname === "/api/login" && method === "POST") return true;
+  if (pathname === "/api/version" && method === "GET") return true;
   // Exact worker route only — never /api/internal/**
   if (isDirectorWorkerRunOncePost(pathname, method)) return true;
   return false;
 }
 
-function rateLimitPolicyFor(
+export function rateLimitPolicyFor(
   pathname: string,
   method: string,
 ): { keyPrefix: string; policy: (typeof RATE_LIMITS)[keyof typeof RATE_LIMITS] } | null {
   if (pathname === "/api/login") return { keyPrefix: "login", policy: RATE_LIMITS.login };
+  if (pathname === "/api/version" && method === "GET") {
+    return { keyPrefix: "version", policy: RATE_LIMITS.version };
+  }
   if (isDirectorWorkerRunOncePost(pathname, method)) {
     return { keyPrefix: "worker", policy: RATE_LIMITS.worker };
   }
@@ -74,6 +79,12 @@ function rateLimitPolicyFor(
   return null;
 }
 
+export function shouldApplyRateLimit(pathname: string, method: string): boolean {
+  if (!rateLimitPolicyFor(pathname, method)) return false;
+  if (pathname === "/api/version" && method === "GET") return true;
+  return isMutatingMethod(method);
+}
+
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const method = req.method.toUpperCase();
@@ -81,7 +92,7 @@ export async function proxy(req: NextRequest) {
 
   // --- Rate limiting (best-effort, in-memory) ---
   const rl = rateLimitPolicyFor(pathname, method);
-  if (rl && isMutatingMethod(method)) {
+  if (rl && shouldApplyRateLimit(pathname, method)) {
     const key = `${rl.keyPrefix}:${rateLimitClientKey(clientIp(req))}`;
     const hit = checkRateLimit(key, rl.policy);
     if (!hit.ok) {

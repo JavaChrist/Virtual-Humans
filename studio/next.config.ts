@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 import path from "node:path";
 import {
-  characterFsTracingIncludes,
   fileTracingExcludes,
+  studioTracingIncludes,
 } from "./file-tracing";
 
 // En développement, on NE fixe PAS `outputFileTracingRoot` sur la racine du repo :
@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
     ? {}
     : {
         outputFileTracingRoot: path.join(process.cwd(), ".."),
-        outputFileTracingIncludes: characterFsTracingIncludes(),
+        outputFileTracingIncludes: studioTracingIncludes(),
         outputFileTracingExcludes: fileTracingExcludes(),
       }),
   // Le SW et le manifest ne doivent JAMAIS être mis en cache longtemps,

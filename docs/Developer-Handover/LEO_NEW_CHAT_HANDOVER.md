@@ -6,7 +6,7 @@ Ce fichier décrit le **rôle Léo**. Pour un nouveau chat Léo **ou** Cursor, l
 
 `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`
 
-Audit de reprise : **2026-08-27**. Statut fonctionnel : `171_` / `VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_READY`.
+Audit de reprise : **2026-08-27**. Statut fonctionnel : `173_` / `VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_READY` (local, 0 push).
 
 Léo ne code pas directement dans le dépôt. **Cursor code, teste, met à jour la documentation, produit un rapport STOP, commit et push.** Léo analyse chaque retour, décide de la porte suivante et rédige le prochain prompt complet destiné à Cursor.
 
@@ -180,13 +180,13 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-App update versioning preflight est **READY** (`172_`). UI parity Production est **DEPLOY READY** (`171_`, SHA `e4703bf`). Cartes dashboard sont **COMMITTED** (`170_`). SDK tracing est **READY** (`169_`). RideCloud promo est **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · apply **suspendu**. Migration locale 33e non appliquée. Projet draft `ba4a6021…` + brief rev.1. 26 s, VO polie. Pack `158_` + `159_`.
+App update implement est **READY local 0 push** (`173_`). App update preflight est **READY** (`172_`). UI parity Production est **DEPLOY READY** (`171_`, SHA `e4703bf`). Cartes dashboard sont **COMMITTED** (`170_`). SDK tracing est **READY** (`169_`). RideCloud promo est **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · apply **suspendu**. Migration locale 33e non appliquée. Projet draft `ba4a6021…` + brief rev.1. 26 s, VO polie. Pack `158_` + `159_`.
 
-Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `172_`, `171_`, `170_`, `169_`, `168_`, `167_`, `166_`, `165_`, `164_`, `163_`, `162_`, `161_`, `160_`, `159_`, `158_`, `157_`, `156_`, `155_` et `153_` **consommées**.
+Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `173_`, `172_`, `171_`, `170_`, `169_`, `168_`, `167_`, `166_`, `165_`, `164_`, `163_`, `162_`, `161_`, `160_`, `159_`, `158_`, `157_`, `156_`, `155_` et `153_` **consommées**.
 
 Phase active suivante :
 
-`AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE`
+`AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE`
 
 Apply unique de la migration CHECK. **Aucune** RPC bind, persist artifact, provider, dépense, lecture/upload média, TTS, activation, lipsync ou export. N’invente aucun claim.
 
@@ -195,11 +195,11 @@ Apply unique de la migration CHECK. **Aucune** RPC bind, persist artifact, provi
 1. Lire entièrement `LEO_CURSOR_NEW_CHAT_RESUME.md`.
 2. Lire `CURRENT_STATE_AND_RESUME.md` puis ce fichier.
 3. Vérifier Git (HEAD a pu changer depuis `0f3a3bb` à cause de commits docs).
-4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE`.
+4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE`.
 5. Ne pas refaire les phases déjà terminées.
 6. Vérifier le rapport et préparer la prochaine porte.
 
-Si `172_` est STOP, la porte suivante est l’implémentation versioning/notification. Aucun deploy. Aucun flag. Ne pas réécrire `sw.js`. RideCloud apply reste suspendu. Aucun provider. 0¢. N’invente aucun claim. Aucun lipsync. Aucune activation.
+Si `173_` est STOP, la porte suivante est le sync + deploy once. Un push. Aucun flag. Ne pas réécrire `sw.js`. RideCloud apply reste suspendu. Aucun provider. 0¢. N’invente aucun claim. Aucun lipsync. Aucune activation.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -223,4 +223,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `172_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE`. App update preflight READY (`172_`). UI parity deploy READY (`171_`, SHA `e4703bf`). Cartes dashboard COMMITTED (`170_`). SDK tracing READY (`169_`). RideCloud apply suspendu (`167_` READY). Migration locale 33e · 0 apply. Pack `158_`+`159_`. Budget 437/391/0/46. Flags considérés OFF. Auth `172_` / `171_` / `170_` / `169_` / `168_` / `167_` / `166_` / `165_` / `164_` / `163_` / `162_` / `161_` / `160_` / `159_` / `158_` / `157_` / `156_` / `155_` / `153_` consommées. Aucun provider. 0¢. Aucun deploy sans Auth. Aucun flag write. Aucun apply. Aucune RPC. Aucun persist bind. Aucun média Git. N’invente aucun claim. Aucun lipsync. Aucune activation.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `173_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE`. App update implement READY local (`173_`, 0 push). App update preflight READY (`172_`). UI parity deploy READY (`171_`, SHA `e4703bf`). Cartes dashboard COMMITTED (`170_`). SDK tracing READY (`169_`). RideCloud apply suspendu (`167_` READY). Migration locale 33e · 0 apply. Pack `158_`+`159_`. Budget 437/391/0/46. Flags considérés OFF. Auth `173_` / `172_` / `171_` / `170_` / `169_` / `168_` / `167_` / `166_` / `165_` / `164_` / `163_` / `162_` / `161_` / `160_` / `159_` / `158_` / `157_` / `156_` / `155_` / `153_` consommées. Aucun provider. 0¢. Aucun deploy sans Auth. Aucun flag write. Aucun apply. Aucune RPC. Aucun persist bind. Aucun média Git. N’invente aucun claim. Aucun lipsync. Aucune activation.

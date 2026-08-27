@@ -13,6 +13,8 @@ import {
   assertTracingBoundsSafe,
   characterFsTracingIncludes,
   fileTracingExcludes,
+  studioTracingIncludes,
+  versionApiTracingIncludes,
 } from "../../../../file-tracing";
 
 test("file-tracing — includes bornés aux routes character/media", () => {
@@ -113,9 +115,24 @@ test("file-tracing — n'exclut jamais .next (runtime Turbopack serverless)", ()
 
 test("next.config — utilise file-tracing (pas /api/** glob)", () => {
   const cfg = readFileSync(join(process.cwd(), "next.config.ts"), "utf8");
-  assert.match(cfg, /characterFsTracingIncludes/);
+  assert.match(cfg, /studioTracingIncludes/);
   assert.match(cfg, /fileTracingExcludes/);
   assert.ok(!/["']\/api\/\*\*["']\s*:\s*\[\s*["']\.\.\/characters/.test(cfg));
+});
+
+test("file-tracing — /api/version inclut uniquement SDK_VERSION", () => {
+  const versionIncludes = versionApiTracingIncludes();
+  const merged = studioTracingIncludes();
+  assertTracingBoundsSafe({
+    includes: merged,
+    excludes: fileTracingExcludes(),
+  });
+  assert.deepEqual(versionIncludes["/api/version/**"], ["../SDK_VERSION"]);
+  assert.deepEqual(merged["/api/version/**"], ["../SDK_VERSION"]);
+  assert.ok(!merged["/api/version/**"]?.includes("../characters/**"));
+  assert.equal(merged["/api/**"], undefined);
+  assert.ok(merged["/api/character/**"]?.includes("../characters/**"));
+  assert.ok(merged["/api/character/**"]?.includes("../SDK_VERSION"));
 });
 
 test("sdk — REPO_ROOT / CHARACTERS_ROOT portent turbopackIgnore", () => {
@@ -144,6 +161,35 @@ test("nft — SDK_VERSION embarqué pour /api/character si build présent", () =
   assert.ok(
     files.some((f) => /(^|\/|\\)SDK_VERSION$/.test(f)),
     "character NFT must include repo-root SDK_VERSION",
+  );
+  if (!existsSync(budgetNft)) return;
+  const budget = JSON.parse(readFileSync(budgetNft, "utf8")) as {
+    files?: string[];
+  };
+  assert.ok(
+    !(budget.files ?? []).some((f) => /(^|\/|\\)SDK_VERSION$/.test(f)),
+    "budget NFT must not receive SDK_VERSION",
+  );
+});
+
+test("nft — SDK_VERSION embarqué pour /api/version si build présent", () => {
+  const versionNft = join(
+    process.cwd(),
+    ".next/server/app/api/version/route.js.nft.json",
+  );
+  const budgetNft = join(
+    process.cwd(),
+    ".next/server/app/api/budget/route.js.nft.json",
+  );
+  if (!existsSync(versionNft)) {
+    return;
+  }
+  const version = JSON.parse(readFileSync(versionNft, "utf8")) as {
+    files?: string[];
+  };
+  assert.ok(
+    (version.files ?? []).some((f) => /(^|\/|\\)SDK_VERSION$/.test(f)),
+    "version NFT must include repo-root SDK_VERSION",
   );
   if (!existsSync(budgetNft)) return;
   const budget = JSON.parse(readFileSync(budgetNft, "utf8")) as {

@@ -85,6 +85,22 @@ export function characterFsTracingIncludes(): Record<string, string[]> {
   );
 }
 
+/** Public version route reads only the root SDK_VERSION file — never characters/**. */
+export const VERSION_API_ROUTE_GLOB = "/api/version/**" as const;
+
+export function versionApiTracingIncludes(): Record<string, string[]> {
+  return {
+    [VERSION_API_ROUTE_GLOB]: [SDK_VERSION_INCLUDE_GLOB],
+  };
+}
+
+export function studioTracingIncludes(): Record<string, string[]> {
+  return {
+    ...characterFsTracingIncludes(),
+    ...versionApiTracingIncludes(),
+  };
+}
+
 export function fileTracingExcludes(): Record<string, string[]> {
   return {
     "/**": [...FILE_TRACING_EXCLUDE_GLOBS],

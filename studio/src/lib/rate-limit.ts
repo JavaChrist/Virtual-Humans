@@ -126,4 +126,6 @@ export const RATE_LIMITS = {
   worker: { limit: 30, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
   aiccos: { limit: 20, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
   defaultMutation: { limit: 120, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
+  // GET /api/version — 120s poll + focus/visibility + several tabs behind NAT.
+  version: { limit: 240, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
 } as const;

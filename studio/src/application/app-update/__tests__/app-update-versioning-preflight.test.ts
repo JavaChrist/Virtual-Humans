@@ -153,21 +153,21 @@ test("APP-UPDATE-PREFLIGHT — UX states and future file lists", () => {
   );
 });
 
-test("APP-UPDATE-PREFLIGHT — this gate did not create the route or rewrite PWA", () => {
+test("APP-UPDATE-PREFLIGHT — implement created /api/version inside existing PWA", () => {
   assert.equal(
     existsSync(join(studioRoot, "src", "app", "api", "version", "route.ts")),
-    false,
+    true,
   );
   const proxy = readFileSync(join(studioRoot, "src", "proxy.ts"), "utf8");
   assert.match(proxy, /function isPublicPath/);
-  assert.doesNotMatch(proxy, /\/api\/version/);
+  assert.match(proxy, /\/api\/version/);
   const pwa = readFileSync(
     join(studioRoot, "src", "components", "pwa-register.tsx"),
     "utf8",
   );
   assert.match(pwa, /Mise à jour disponible/);
-  assert.match(pwa, /SKIP_WAITING/);
-  assert.doesNotMatch(pwa, /\/api\/version/);
+  assert.match(pwa, /\/api\/version/);
+  assert.doesNotMatch(pwa, /window\.alert|window\.confirm/);
 });
 
 test("APP-UPDATE-PREFLIGHT — SW never intercepts /api and layout has one PWA mount", () => {
