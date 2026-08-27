@@ -1,36 +1,36 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-27T11:00:00+02:00
-documentedHead=4f1cf98
+verifiedAt=2026-08-27T11:30:00+02:00
+documentedHead=8d65bd8
 headStatus=pending commit
-lastPhaseReport=159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md
-nextPhase=AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER
+lastPhaseReport=160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md
+nextPhase=AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
 budgetAvailable=46
 runtimePaidMedia=OFF
-unitTests=1866/1866
-globalStatus=RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED
+unitTests=1872/1872
+globalStatus=RIDECLOUD_FIRST_AD_STORYBOARD_READY
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED`  
-**Dernière vérification :** 2026-08-27 · addendum variantes HD RideCloud `159_`  
-**Auteur de la mise à jour :** Cursor · `AUTH_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM_NO_PROVIDER`  
+**Statut global :** `RIDECLOUD_FIRST_AD_STORYBOARD_READY`  
+**Dernière vérification :** 2026-08-27 · storyboard première pub RideCloud `160_`  
+**Auteur de la mise à jour :** Cursor · `AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER`  
 **Branche :** `main`  
-**HEAD local au départ de `159_` :** `c7796f5` · supply RideCloud **`3eb8a0f`** · preflight **`3da4be0`**  
-**origin/main au départ :** `c7796f5` · ahead/behind **0/0**  
+**HEAD local au départ de `160_` :** `8d65bd8` · addendum HD **`4f1cf98`** · supply **`3eb8a0f`**  
+**origin/main au départ :** `8d65bd8` · ahead/behind **0/0**  
 **Working tree :** AICCOS + `page.tsx` hors scope (dirty, protégés)  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
 **Reprise nouveau chat :** [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)  
-**Dernier rapport fonctionnel :** [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md)  
+**Dernier rapport fonctionnel :** [`160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md`](./160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md)  
+**Addendum HD :** [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md)  
 **Supply RideCloud :** [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md)  
-**Preflight RideCloud :** [`157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md`](./157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md)  
-**Prochaine phase exacte :** `AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER`
+**Prochaine phase exacte :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -71,8 +71,8 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | T2V / lipsync / merge-export réels | **PREPARED** · hors 11C | pas de smoke |
 | Voice / TTS `/director` | **11C CLOSED** · PASS_WITH_NOTES · 1 audio privé inactif | `140_`–`156_` · 1 ElevenLabs · HR APPROVE `068a2b25…` · flags OFF |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
-| RideCloud promo | **READY** · pack + 5 variantes HD · 0 projet Production | `159_` · 10+4 captures · 2 banners · musique waived · 0¢ |
-| Prochaine étape | **PREPARED** | `AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER` · 0 provider · 0¢ |
+| RideCloud promo | **STORYBOARD READY** · 26 s · 0 projet Production | `160_` · 6 plans · pack `158_`+`159_` · 0¢ |
+| Prochaine étape | **PREPARED** | `AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER` · 0 provider · 0¢ |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -115,7 +115,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Voice | **11C CLOSED** PASS_WITH_NOTES · catalog inchangé · 1 audio privé | `140_`–`156_` | run `2eaffebf…` · output `bc36bba7…` · APPROVE inactif · HR `068a2b25…` | ElevenLabs | 1 `/director` | execution=false · flags OFF | pack RideCloud |
 | Lipsync | NOT_STARTED | — | — | — | 0 | — | avant beta |
 | Merge / export | PASS_SYNTHETIC + guard `139_` | 9 / `139_` | fake-merge · `merge_ready` insuffisant | — | 0 | `mergeExportAuthorized=false` live | avant Production |
-| RideCloud promo | **READY** | `159_` | 12 refs verrouillées + 5 variantes HD | — | 0 | 0 projet Production · musique waived | storyboard preflight |
+| RideCloud promo | **STORYBOARD READY** | `160_` | 6 plans 26 s · refs opaques | — | 0 | 0 projet Production · 0 TTS | project create preflight |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
 | UI finale | PREPARED | `/director` | parcours texte réel | — | 0 | pas produit final | avant beta |
 | Monitoring / ops | PREPARED | VHS-005 | redaction logs | — | 0 | traces distribuées | avant Production |
@@ -309,16 +309,16 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1866/1866** | suite + RideCloud HD variants | 2026-08-27 `159_` |
+| Unitaires | **1872/1872** | suite + RideCloud storyboard 26 s | 2026-08-27 `160_` |
 | Typecheck / lint / build | **PASS** | first paid TTS + docs | `153_` / `157_` |
 | migrations-static | PASS | **32/32** | `153_` |
 | Secret scan | **PASS** | module + docs · `VOICE_IDS_EXPOSED=false` | `156_` |
-| Tests ciblés | 12 locked + 5 variants · 0 remplacement · 0 write | cette phase | `159_` |
+| Tests ciblés | storyboard 6 plans · copy locked · 0 write | cette phase | `160_` |
 | DB integration | N/A (stack locale non relancée) | **indisponible** 16 août | `153_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
-| Fraîcheur living handover | PASS | tooling | `159_` |
+| Fraîcheur living handover | PASS | tooling | `160_` |
 
 Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
@@ -357,12 +357,12 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 - Rétention/suppression des REJECT privés — politique future.
 - `17_` bandeau `145_` (31 remote / 32 local) ; `19_` stale (jobs/budget snapshot).
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
-- Addendum HD RideCloud **fait** (`159_`) · 5 variantes · 12 refs `158_` inchangées · 0 projet Production · storyboard non commencé.
+- Storyboard première pub RideCloud **fait** (`160_`) · 26 s · 6 plans · 0 projet Production · génération / TTS / export non commencés.
 - MV-002 DEFERRED.
 
 ### P0/P1 fermés (extraits)
 
-- Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Storyboard RideCloud (`160_`) · Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -408,6 +408,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Preflight inputs RideCloud séparés | **fait** (`157_`) | 0¢ · BLOCKED_INPUTS_REQUIRED · 0 Production | consommée | pack manquant · 0 provider |
 | Supply pack RideCloud | **fait** (`158_`) | 0¢ · READY · refs opaques | consommée | variantes HD · 0 provider |
 | Addendum variantes HD RideCloud | **fait** (`159_`) | 0¢ · 5 variantes · 12 locked inchangées | consommée | storyboard · 0 provider |
+| Storyboard première pub RideCloud | **fait** (`160_`) | 0¢ · 26 s · 6 plans | consommée | projet séparé preflight · 0 provider |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -417,7 +418,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER`** — storyboard / plan de plans de la première pub RideCloud 20–30 s à partir du manifeste `158_` + addendum `159_`. **Aucun** provider, média Git, dépense, projet Production, activation, lipsync ou export. **Non exécutée ici.**
+**`AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER`** — preflight de création d’un projet Production RideCloud **séparé**, sans l’exécuter. **Aucun** provider, média Git, dépense, write Production, TTS ou export. **Non exécutée ici.**
 
 ### Court terme
 
@@ -442,14 +443,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A/11B/11C CLOSED · RideCloud READY + variantes HD · budget 437/391/0/46 ¢
-Dernier verdict : RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED (159_)
-Preuve : 12 refs 158_ inchangées · 5 variantes officielles · 0 projet Production
-Blocage : pas de storyboard · pas de génération
-Mission : uniquement AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER
-Auth consommées : addendum HD (159_) · supply RideCloud (158_) · preflight (157_) · clôture 11C (156_)
-Interdit : provider · dépense · média Git · projet Production · activation · lipsync · export
-Attendu : storyboard première pub 20–30 s sans provider
+Contexte : VHS V2 · 11A/11B/11C CLOSED · RideCloud storyboard 26 s READY · budget 437/391/0/46 ¢
+Dernier verdict : RIDECLOUD_FIRST_AD_STORYBOARD_READY (160_)
+Preuve : 6 plans · pack 158_+159_ · 0 projet Production
+Blocage : pas de projet Production · pas de génération
+Mission : uniquement AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER
+Auth consommées : storyboard (160_) · addendum HD (159_) · supply (158_) · preflight (157_)
+Interdit : provider · dépense · média Git · write Production · TTS · export
+Attendu : preflight projet séparé sans write
 ```
 
 ---
@@ -458,12 +459,12 @@ Attendu : storyboard première pub 20–30 s sans provider
 
 ```text
 Lis d’abord docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md.
-Lis ensuite CURRENT_STATE_AND_RESUME.md et 159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md.
-Vérifie Git. RideCloud READY + 5 variantes HD. Pack 158_ inchangé. 11C CLOSED. Budget 437/391/0/46.
-Flags considérés OFF. Auth 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
+Lis ensuite CURRENT_STATE_AND_RESUME.md et 160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md.
+Vérifie Git. RideCloud storyboard 26 s READY. Pack 158_+159_. 11C CLOSED. Budget 437/391/0/46.
+Flags considérés OFF. Auth 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 Aucun provider. 0¢. Aucun projet Production. Aucun média Git. Aucun lipsync.
-Prochaine porte : AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER. 0 provider. 0¢.
+Prochaine porte : AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER. 0 provider. 0¢.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 ```
@@ -474,6 +475,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
+| 2026-08-27 | `160_` RideCloud first-ad storyboard | RIDECLOUD_FIRST_AD_STORYBOARD_READY | pending | 0 | **docs + contrat** · 6 plans · 0 Production | project create preflight |
 | 2026-08-27 | `159_` RideCloud HD variants | RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED | `4f1cf98` | 0 | **5 variantes** · 12 locked inchangées · 0 Production | storyboard preflight |
 | 2026-08-27 | `158_` RideCloud supply pack | RIDECLOUD_INPUT_COLLECTION_READY | `3eb8a0f` | 0 | **refs opaques** · 0 média Git · 0 Production | variantes HD |
 | 2026-08-26 | `157_` RideCloud input preflight | RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED | `3da4be0` | 0 | **docs + contrat** · 0 Production | pack inputs Christian |

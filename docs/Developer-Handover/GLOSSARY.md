@@ -84,7 +84,9 @@
 **RIDECLOUD_INPUT_COLLECTION_READY** — verdict `158_` : pack verrouillé · 10 captures `720×1604` · logo `512×512` · musique waived · READY.
 **AUTH_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM_NO_PROVIDER** — porte `159_` : 5 variantes officielles HD · sans remplacer les 12 refs `158_` · 0 provider · 0 média Git.
 **RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED** — verdict `159_` : 4 captures `1080×2424` + bannière `1794×876` ajoutées comme variantes · claims inchangés.
-**AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER** — prochaine porte : storyboard première pub 20–30 s · 0 provider · 0¢ · 0 projet Production.
+**AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER** — porte `160_` : storyboard déterministe 26 s · 6 plans · 0 provider · 0 TTS.
+**RIDECLOUD_FIRST_AD_STORYBOARD_READY** — verdict `160_` : plan LinkedIn/Instagram verrouillé · copy `158_` uniquement.
+**AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER** — prochaine porte : preflight projet Production RideCloud séparé · 0 write · 0¢.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

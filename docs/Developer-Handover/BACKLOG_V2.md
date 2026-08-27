@@ -172,15 +172,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              RideCloud HD variants addendum (`159_`)
              · **RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED**
              · 5 variantes officielles · 12 refs `158_` inchangées
+             RideCloud first-ad storyboard (`160_`)
+             · **RIDECLOUD_FIRST_AD_STORYBOARD_READY**
+             · 26 s · 6 plans · 0 projet Production
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1         : storyboard RideCloud manquant · pricing TTS non ferme
-P1 fermé   : addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
-Next major : AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER
+P1         : projet Production RideCloud manquant · pricing TTS non ferme
+P1 fermé   : storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
+Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER
 ```
 
 ## P0 — fondations
@@ -258,7 +261,8 @@ Next major : AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER
 - **RideCloud input preflight** ✅ **RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED** (`157_`) — audience vérifiée · pack manquant · 0 projet Production.
 - **RideCloud supply pack** ✅ **RIDECLOUD_INPUT_COLLECTION_READY** (`158_`) — 10 captures + logo + banner · musique waived · refs opaques.
 - **RideCloud HD variants addendum** ✅ **RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED** (`159_`) — 4 captures `1080×2424` + banner `1794×876` · 12 refs `158_` inchangées.
-- **Prochaine porte majeure** : Auth **`AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER`** — storyboard première pub 20–30 s · 0 provider · 0¢ · 0 projet Production. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **RideCloud first-ad storyboard** ✅ **RIDECLOUD_FIRST_AD_STORYBOARD_READY** (`160_`) — 26 s · 6 plans · copy verrouillée · 0 provider.
+- **Prochaine porte majeure** : Auth **`AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER`** — preflight projet Production séparé · 0 write · 0¢. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).
