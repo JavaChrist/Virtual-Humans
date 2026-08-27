@@ -139,6 +139,7 @@
 - [x] RideCloud bind kind schema preflight (`166_`) · **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY** · migration locale · 0 apply ;
 - [x] RideCloud bind kind schema remote preflight (`167_`) · **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH** · 0 apply ;
 - [x] UI parity Production preflight (`168_`) · **VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY** · 0 deploy · 0 flag write ;
+- [x] SDK_VERSION file tracing (`169_`) · **VHS_SDK_VERSION_FILE_TRACING_INCLUDE_READY** · include + NFT local · 0 deploy ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -150,7 +151,7 @@ Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`
 I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
 Voice `/director` : **11C CLOSED** PASS_WITH_NOTES (`140_`–`156_`) · catalog 4/4/1 · 1 MP3 `bc36bba7…` approved inactif · HR `068a2b25…` · 2¢ provisional · flags OFF · preuves privées ≠ livrables RideCloud
 RideCloud promo : **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · apply **suspendu** · projet `ba4a6021…` draft · CHECK distant 13 kinds · 0 apply
-UI localhost vs Production : **PARITY PREFLIGHT READY** (`168_`) · 0 deploy · 0 flag write
+UI localhost vs Production : **SDK TRACING READY** (`169_`) · cartes dirty restantes · 0 deploy
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

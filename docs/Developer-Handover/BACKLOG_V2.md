@@ -197,6 +197,9 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              UI parity Production preflight (`168_`)
              · **VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY**
              · 0 deploy · 0 flag write
+             SDK_VERSION file tracing (`169_`)
+             · **VHS_SDK_VERSION_FILE_TRACING_INCLUDE_READY**
+             · include + NFT local · 0 deploy
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
@@ -205,7 +208,7 @@ Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inact
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
 P1         : apply CHECK bind kinds bloqué · pricing TTS non ferme
 P1 fermé   : remote schema RideCloud · schema kinds RideCloud · bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
-Next major : AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE
+Next major : AUTH_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT_NO_AICCOS_NO_DEPLOY
 RideCloud apply : SUSPENDED (AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER)
 ```
 
@@ -293,7 +296,8 @@ RideCloud apply : SUSPENDED (AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_RE
 - **RideCloud bind kind schema preflight** ✅ **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY** (`166_`) — migration locale `20260827133000` · 13 kinds + 2 · 0 apply · 0¢.
 - **RideCloud bind kind schema remote preflight** ✅ **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH** (`167_`) — distant 32 · CHECK 13 kinds · 0 apply · 0¢.
 - **UI parity Production preflight** ✅ **VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY** (`168_`) — cartes dirty · Director flag · SDK tracing · 0 deploy · 0 flag · 0¢.
-- **Prochaine porte majeure** : Auth **`AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE`** — include `../SDK_VERSION` · 0 deploy · 0 flag. RideCloud apply **suspendu**. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **SDK_VERSION file tracing** ✅ **VHS_SDK_VERSION_FILE_TRACING_INCLUDE_READY** (`169_`) — include `../SDK_VERSION` · NFT `/api/character` · 0 deploy · 0¢.
+- **Prochaine porte majeure** : Auth **`AUTH_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT_NO_AICCOS_NO_DEPLOY`** — `page.tsx` seul · 0 AICCOS · 0 deploy. RideCloud apply **suspendu**. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

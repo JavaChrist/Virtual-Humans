@@ -44,7 +44,7 @@ test("freshness — living file parses and required markers present", async () =
   const markers = mod.parseCurrentStateMarkers(markdown);
   assert.equal(
     markers.nextPhase,
-    "AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER",
+    "AUTH_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT_NO_AICCOS_NO_DEPLOY",
   );
   assert.equal(markers.budgetHard, "437");
   assert.equal(markers.runtimePaidMedia, "OFF");

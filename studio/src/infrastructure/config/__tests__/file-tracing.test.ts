@@ -3,12 +3,13 @@
  */
 
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { join, resolve } from "node:path";
 import { test } from "node:test";
 import {
   CHARACTER_FS_INCLUDE_GLOBS,
   CHARACTER_FS_ROUTE_GLOBS,
+  SDK_VERSION_INCLUDE_GLOB,
   assertTracingBoundsSafe,
   characterFsTracingIncludes,
   fileTracingExcludes,
@@ -21,7 +22,10 @@ test("file-tracing — includes bornés aux routes character/media", () => {
     excludes: fileTracingExcludes(),
   });
   assert.ok(CHARACTER_FS_ROUTE_GLOBS.length >= 8);
-  assert.deepEqual([...CHARACTER_FS_INCLUDE_GLOBS], ["../characters/**"]);
+  assert.deepEqual(
+    [...CHARACTER_FS_INCLUDE_GLOBS],
+    ["../characters/**", "../SDK_VERSION"],
+  );
   assert.equal(includes["/api/**"], undefined);
   assert.ok(includes["/api/v1/characters/**"]?.includes("../characters/**"));
   assert.ok(includes["/api/asset/**"]?.includes("../characters/**"));
@@ -32,6 +36,45 @@ test("file-tracing — includes bornés aux routes character/media", () => {
   // [projectId] would be a glob character-class — never use unescaped brackets here.
   assert.ok(!("/api/director/**" in includes), "never widen director wildcard");
   assert.ok(!("/api/budget/**" in includes));
+});
+
+test("file-tracing — SDK_VERSION racine est inclus et non exclu", () => {
+  const includes = characterFsTracingIncludes();
+  const excludes = fileTracingExcludes()["/**"] ?? [];
+  const repoFile = resolve(process.cwd(), "..", "SDK_VERSION");
+  assert.equal(SDK_VERSION_INCLUDE_GLOB, "../SDK_VERSION");
+  assert.ok(CHARACTER_FS_INCLUDE_GLOBS.includes(SDK_VERSION_INCLUDE_GLOB));
+  assert.equal(resolve(process.cwd(), SDK_VERSION_INCLUDE_GLOB), repoFile);
+  assert.equal(existsSync(repoFile), true);
+  assert.match(readFileSync(repoFile, "utf8").trim(), /^\d+\.\d+\.\d+$/);
+  assert.ok(includes["/api/character/**"]?.includes(SDK_VERSION_INCLUDE_GLOB));
+  assert.ok(includes["/api/v1/characters/**"]?.includes(SDK_VERSION_INCLUDE_GLOB));
+  assert.ok(
+    !excludes.some(
+      (g) =>
+        g === "../SDK_VERSION" ||
+        g === "../SDK_VERSION/**" ||
+        g.startsWith("../SDK_VERSION"),
+    ),
+    "excludes must not neutralize SDK_VERSION",
+  );
+  assert.ok(!CHARACTER_FS_INCLUDE_GLOBS.some((g) => g.includes("../**")));
+  assert.throws(
+    () =>
+      assertTracingBoundsSafe({
+        includes: { "/api/character/**": ["../**"] },
+        excludes: fileTracingExcludes(),
+      }),
+    /trop large/i,
+  );
+  assert.throws(
+    () =>
+      assertTracingBoundsSafe({
+        includes: { "/api/character/**": ["../docs/**"] },
+        excludes: fileTracingExcludes(),
+      }),
+    /inattendu/i,
+  );
 });
 
 test("file-tracing — excludes .git docs e2e et configs", () => {
@@ -79,4 +122,35 @@ test("sdk — REPO_ROOT / CHARACTERS_ROOT portent turbopackIgnore", () => {
   const sdk = readFileSync(join(process.cwd(), "src/lib/sdk.ts"), "utf8");
   assert.match(sdk, /turbopackIgnore:\s*true/);
   assert.match(sdk, /characters/);
+  assert.match(sdk, /SDK_VERSION/);
+});
+
+test("nft — SDK_VERSION embarqué pour /api/character si build présent", () => {
+  const characterNft = join(
+    process.cwd(),
+    ".next/server/app/api/character/route.js.nft.json",
+  );
+  const budgetNft = join(
+    process.cwd(),
+    ".next/server/app/api/budget/route.js.nft.json",
+  );
+  if (!existsSync(characterNft)) {
+    return;
+  }
+  const character = JSON.parse(readFileSync(characterNft, "utf8")) as {
+    files?: string[];
+  };
+  const files = character.files ?? [];
+  assert.ok(
+    files.some((f) => /(^|\/|\\)SDK_VERSION$/.test(f)),
+    "character NFT must include repo-root SDK_VERSION",
+  );
+  if (!existsSync(budgetNft)) return;
+  const budget = JSON.parse(readFileSync(budgetNft, "utf8")) as {
+    files?: string[];
+  };
+  assert.ok(
+    !(budget.files ?? []).some((f) => /(^|\/|\\)SDK_VERSION$/.test(f)),
+    "budget NFT must not receive SDK_VERSION",
+  );
 });

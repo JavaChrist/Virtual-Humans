@@ -5,6 +5,10 @@
  * We must include those assets for character/media API routes only — never for
  * every `/api/**` route (that duplicated ~250 MiB per function and exhausted
  * Vercel packaging disk).
+ *
+ * `SDK_VERSION` is a single file at the repo root. `getCharacterOverview` and
+ * the character loader read `REPO_ROOT/SDK_VERSION`. Without an explicit
+ * include, Production shows "SDK unknown" while `characters/**` still loads.
  */
 
 /** App Router route globs that may read `<repo>/characters` at runtime. */
@@ -29,8 +33,16 @@ export const CHARACTER_FS_ROUTE_GLOBS = [
   "/api/director/projects/*/art/**",
 ] as const;
 
-/** Paths always included for the character-fs routes (relative to studio cwd). */
-export const CHARACTER_FS_INCLUDE_GLOBS = ["../characters/**"] as const;
+/**
+ * Paths always included for the character-fs routes (relative to studio cwd).
+ * Next production sets `outputFileTracingRoot` to the repo parent, so these
+ * globs stay studio-relative (`../…`) — never repo-wide `../**`.
+ */
+export const SDK_VERSION_INCLUDE_GLOB = "../SDK_VERSION" as const;
+export const CHARACTER_FS_INCLUDE_GLOBS = [
+  "../characters/**",
+  SDK_VERSION_INCLUDE_GLOB,
+] as const;
 
 /**
  * Exclusions relative to `outputFileTracingRoot` (repo root when set to `..`).
@@ -97,9 +109,10 @@ export function assertTracingBoundsSafe(config: {
       if (g === "../**" || g === "../*" || g.includes("../**")) {
         throw new Error(`Tracing include parent trop large: ${g}`);
       }
-      if (!g.startsWith("../characters")) {
-        throw new Error(`Tracing include inattendu: ${g}`);
+      if (g.startsWith("../characters") || g === SDK_VERSION_INCLUDE_GLOB) {
+        continue;
       }
+      throw new Error(`Tracing include inattendu: ${g}`);
     }
   }
   const excludes = config.excludes["/**"] ?? [];
