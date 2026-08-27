@@ -81,18 +81,6 @@ export default function Dashboard() {
           </div>
         </div>
       </section>
-
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {char?.overview.documents.map((d) => (
-          <div key={d.file} className="card p-5">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold">{d.title}</h3>
-              <code className="text-[10px] text-[var(--muted)]">{d.file}</code>
-            </div>
-            <p className="text-sm text-[var(--muted)] mt-2 leading-relaxed">{d.excerpt}</p>
-          </div>
-        ))}
-      </section>
     </div>
   );
 }

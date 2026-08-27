@@ -105,7 +105,9 @@
 **VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY** — verdict `168_` : cartes dirty · Director flag OFF · SDK tracing manquant · SHA deploy non prouvé.
 **AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE** — porte `169_` : include NFT `../SDK_VERSION` · 0 deploy · 0 flag.
 **VHS_SDK_VERSION_FILE_TRACING_INCLUDE_READY** — verdict `169_` : tracing + NFT local `/api/character` · 0 deploy.
-**AUTH_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT_NO_AICCOS_NO_DEPLOY** — prochaine porte : commit isolé `page.tsx` · 0 AICCOS · 0 deploy.
+**AUTH_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT_NO_AICCOS_NO_DEPLOY** — porte `170_` : commit isolé `page.tsx` · 0 AICCOS · 0 deploy.
+**VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED** — verdict `170_` : cartes `overview.documents` absentes du code committé · 0 deploy.
+**AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE** — prochaine porte : 1 deploy (`169_` + `170_`) · 0 flag · 0 Director enable.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
