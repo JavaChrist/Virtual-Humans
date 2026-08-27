@@ -1,6 +1,6 @@
 /**
  * Universal fake ProviderAdapter (VHS-124).
- * No network, no secrets — always supports any model/action.
+ * No network, no secrets, no media bytes — metadata-only internal refs.
  */
 
 import type { MediaAction } from "@/domain/cost";
@@ -10,10 +10,6 @@ import type {
   ProviderExecutionContext,
   ProviderSubmissionResult,
 } from "@/domain/generation";
-
-/** Tiny 1×1 PNG as data URL — synthetic inline asset. */
-const SYNTHETIC_PNG_DATA_URL =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
 
 const FAKE_COST_MINOR = 1;
 
@@ -33,6 +29,7 @@ function mimeFor(kind: ReturnType<typeof assetKind>): string {
 
 /**
  * Create a deterministic fake adapter for any provider id (fal / openai / elevenlabs).
+ * Outputs are persistence-safe: internal storagePath only, never dataUrl or signed URL.
  */
 export function createUniversalFakeAdapter(providerId: string): ProviderAdapter {
   let submitCount = 0;
@@ -72,9 +69,11 @@ export function createUniversalFakeAdapter(providerId: string): ProviderAdapter 
           kind,
           mimeType: mimeFor(kind),
           source: {
-            kind: "inline_data_url",
-            dataUrl: SYNTHETIC_PNG_DATA_URL,
+            kind: "internal",
+            storagePath: `e2e-fake/${providerId}/${kind}/${submitCount}`,
           },
+          checksum: "e2e-fake-synthetic",
+          sizeBytes: 86,
           ...(durationSeconds != null ? { durationSeconds } : {}),
         },
         usage: {

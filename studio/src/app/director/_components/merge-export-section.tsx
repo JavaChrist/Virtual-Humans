@@ -5,21 +5,32 @@ import { useUpdateBlocker } from "@/lib/use-update-blocker";
 import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 import { shouldBlockMergeExportInFlight } from "@/lib/update-blocker-policy";
 import { buildMergeExportSectionView } from "./merge-export-section-view";
+import { announceDirectorStepReady } from "./director-pipeline-events";
 
-export function MergeExportSection() {
+export function MergeExportSection({
+  videoResolved = false,
+  audioResolved = false,
+  lipsyncResolved = false,
+}: {
+  videoResolved?: boolean;
+  audioResolved?: boolean;
+  lipsyncResolved?: boolean;
+}) {
   const [busy, setBusy] = useState<"dry" | "execute" | null>(null);
   const [runStatus, setRunStatus] = useState<string | null>(null);
   const [localNote, setLocalNote] = useState<string | null>(null);
+  const [fakePrepared, setFakePrepared] = useState(false);
   const view = useMemo(
     () =>
       buildMergeExportSectionView({
-        videoResolved: true,
-        audioResolved: true,
-        lipsyncResolved: true,
-        bundleCoherent: true,
+        videoResolved,
+        audioResolved,
+        lipsyncResolved,
+        bundleCoherent: videoResolved && audioResolved && lipsyncResolved,
         runtimeOff: true,
+        fakeState: fakePrepared ? "completed" : null,
       }),
-    [],
+    [videoResolved, audioResolved, lipsyncResolved, fakePrepared],
   );
 
   useUpdateBlocker(
@@ -29,7 +40,7 @@ export function MergeExportSection() {
   );
 
   return (
-    <section className="card p-6 mt-8" aria-labelledby="director-merge-export-title">
+    <section id="section-merge-export" className="card p-6 mt-8" aria-labelledby="director-merge-export-title" data-testid="director-merge-export-section">
       <h3 id="director-merge-export-title" className="font-semibold mb-1">
         {view.title}
       </h3>
@@ -70,11 +81,17 @@ export function MergeExportSection() {
           onClick={() => {
             setBusy("dry");
             setRunStatus(null);
-            setLocalNote("Dry-run local : chemin préparé, aucun moteur, aucun fichier, aucun blocker.");
+            setFakePrepared(true);
+            setLocalNote(
+              "Assemblage et export fake : manifeste synthétique en mémoire. Aucun fichier, aucune URL, aucune publication.",
+            );
+            announceDirectorStepReady("merge");
+            announceDirectorStepReady("export");
             setBusy(null);
           }}
+          disabled={!view.bundleResolved}
         >
-          Dry-run local
+          Préparer le manifeste synthétique
         </button>
         <button type="button" className="btn" disabled>
           Merge réel indisponible
@@ -87,6 +104,22 @@ export function MergeExportSection() {
         <p className="text-xs text-[var(--muted)] mt-3" role="status">
           {localNote}
         </p>
+      ) : null}
+      {fakePrepared ? (
+        <dl className="mt-4 text-sm" data-testid="director-synthetic-export-manifest">
+          <div className="flex justify-between gap-4">
+            <dt className="text-[var(--muted)]">Manifeste</dt>
+            <dd>synthétique · en mémoire</dd>
+          </div>
+          <div className="flex justify-between gap-4">
+            <dt className="text-[var(--muted)]">Fichier / URL / téléchargement</dt>
+            <dd>aucun</dd>
+          </div>
+          <div className="flex justify-between gap-4">
+            <dt className="text-[var(--muted)]">Export réel</dt>
+            <dd>non autorisé</dd>
+          </div>
+        </dl>
       ) : null}
     </section>
   );

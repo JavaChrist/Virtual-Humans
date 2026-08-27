@@ -4,6 +4,7 @@ import { useConfirm } from "@/components/confirm";
 import { useUpdateBlocker } from "@/lib/use-update-blocker";
 import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 import { shouldBlockNonDryBusy } from "@/lib/update-blocker-policy";
+import { announceDirectorStepReady } from "./director-pipeline-events";
 import type {
   GenerationPlanView,
   RoutingProjectDryRunResult,
@@ -99,7 +100,10 @@ export function RoutingSection({
             ? data.error
             : data.error?.message ?? "Routage impossible.";
         setError(msg);
-      } else if (data.plan) setPlan(data.plan);
+      } else if (data.plan) {
+        setPlan(data.plan);
+        announceDirectorStepReady("routing");
+      }
     } catch {
       setError("Routage impossible.");
     } finally {

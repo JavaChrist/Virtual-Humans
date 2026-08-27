@@ -325,47 +325,6 @@ export function DeliverySection({ projectId }: { projectId: string }) {
     }
   }
 
-  async function downloadMedia() {
-    if (busy || !exportPkg) return;
-    setBusy("dl-media");
-    setError(null);
-    try {
-      const response = await fetch(`/api/director/projects/${projectId}/export/download`);
-      if (!response.ok) {
-        let message = "Téléchargement média impossible.";
-        try {
-          const data = (await response.json()) as {
-            error?: { message?: string } | string;
-          };
-          message =
-            typeof data.error === "string"
-              ? data.error
-              : data.error?.message ?? message;
-        } catch {
-          /* non-JSON error body */
-        }
-        setError(message);
-        return;
-      }
-      const blob = await response.blob();
-      const disposition = response.headers.get("Content-Disposition") ?? "";
-      const match = /filename="([^"]+)"/.exec(disposition);
-      const filename = match?.[1] ?? "vh-final-media.bin";
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = filename;
-      anchor.rel = "noopener";
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-      URL.revokeObjectURL(url);
-    } catch {
-      setError("Téléchargement média impossible.");
-    } finally {
-      setBusy(null);
-    }
-  }
 
   const unknowns =
     quality?.technicalChecks
@@ -378,11 +337,18 @@ export function DeliverySection({ projectId }: { projectId: string }) {
         Livraison
       </h2>
       <p className="text-sm text-[var(--muted)] mb-4">
-        QC → revue humaine → MergePlan → merge fake → ExportPackage. Aucun fal / AICCOS réel.
-        <code className="ml-1">unknown</code> ne devient jamais <code>pass</code>.
+        Contrôle qualité, revue, assemblage et export restent en préparation locale.
+        Un contrôle incertain ne devient jamais une validation.
       </p>
       <p className="text-xs text-[var(--muted)] mb-4" role="status">
         {buildMergeExportSectionView({ runtimeOff: true }).disabledReason}
+      </p>
+      <p
+        className="text-sm mb-4"
+        role="status"
+        data-testid="director-export-status"
+      >
+        Export réel non autorisé. Aucun média Production. Aucun fichier téléchargeable réel. Publication fermée.
       </p>
 
       <div className="flex flex-wrap gap-3 mb-4">
@@ -424,20 +390,19 @@ export function DeliverySection({ projectId }: { projectId: string }) {
         <button
           type="button"
           className="btn btn-primary"
-          onClick={() => void downloadMedia()}
-          disabled={busy != null || !exportPkg}
-          aria-label="Télécharger le média final"
+          disabled
+          aria-label="Octets synthétiques locaux — aucun fichier téléchargeable"
         >
-          {busy === "dl-media" ? "Téléchargement…" : "Télécharger le média final"}
+          Octets synthétiques locaux
         </button>
-        <a
-          className={`btn btn-ghost ${exportPkg ? "" : "pointer-events-none opacity-50"}`}
-          href={`/api/director/projects/${projectId}/export/manifest`}
-          aria-disabled={!exportPkg}
-          aria-label="Télécharger le manifeste JSON redacted"
+        <button
+          type="button"
+          className="btn btn-ghost"
+          disabled
+          aria-label="Manifeste local non téléchargeable"
         >
-          Voir le manifeste
-        </a>
+          Manifeste local
+        </button>
       </div>
 
       {error && (
@@ -452,7 +417,7 @@ export function DeliverySection({ projectId }: { projectId: string }) {
         </p>
         {delivery?.status === "merge_ready" && !mergeReady && (
           <p className="text-[var(--muted)]">
-            <code>merge_ready</code> seul n’autorise pas le merge ni l’export.
+            Prêt pour assemblage n’autorise pas l’export réel.
           </p>
         )}
         {delivery?.blockingCodes?.length ? (

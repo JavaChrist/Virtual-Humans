@@ -3,8 +3,12 @@ import type { BrowserContext, Page, Request, Route } from "@playwright/test";
 const PROVIDER_HOST_RE =
   /(?:^|\.)(?:openai\.com|api\.openai\.com|fal\.ai|fal\.run|elevenlabs\.io|api\.elevenlabs\.io|aiccos|aicommandcenteros\.app)/i;
 
+const PRODUCTION_HOST_RE =
+  /(?:^|\.)(?:supabase\.co|supabase\.com|vercel\.app|vercel\.com|amazonaws\.com|storage\.googleapis\.com)/i;
+
 export type NetworkBarrier = {
   violations: string[];
+  blockedAttempts: number;
   assertClean: () => void;
   dispose: () => Promise<void>;
 };
@@ -17,14 +21,22 @@ function hostnameOf(url: string): string {
   }
 }
 
-/** Classifie une URL externe provider ; null si locale / hors provider. */
+function looksSigned(url: string): boolean {
+  return /[?&](?:token|X-Amz-Signature|X-Goog-Signature|sig)=/i.test(url);
+}
+
+/** Classifie une URL interdite ; null si locale / hors allowlist uniquement. */
 export function classifyExternalRequest(url: string): string | null {
   if (isLocalAllowedUrl(url)) return null;
+  if (looksSigned(url)) return "signed-url";
   const host = hostnameOf(url);
   if (PROVIDER_HOST_RE.test(host) || PROVIDER_HOST_RE.test(url)) {
     return host || url;
   }
-  return null;
+  if (PRODUCTION_HOST_RE.test(host) || PRODUCTION_HOST_RE.test(url)) {
+    return host || url;
+  }
+  return host || url;
 }
 
 export function isLocalAllowedUrl(url: string): boolean {
@@ -61,60 +73,46 @@ export function isLocalAllowedUrl(url: string): boolean {
   }
 }
 
-function recordViolation(violations: string[], url: string): void {
-  const classified = classifyExternalRequest(url);
-  if (classified) {
-    violations.push(url);
-  } else if (!isLocalAllowedUrl(url)) {
-    violations.push(`external:${url}`);
-  }
-}
-
 /**
  * Barrière réseau navigateur.
- * - Abort hard des hosts providers uniquement (évite de casser des navigations).
- * - Détecte tout hors-localhost et fail via assertClean.
+ * Toute URL hors allowlist locale est abortée immédiatement et fait échouer assertClean.
+ * Aucun mock silencieux.
  */
 export async function installNetworkBarrier(page: Page): Promise<NetworkBarrier> {
   const violations: string[] = [];
+  let blockedAttempts = 0;
   const context: BrowserContext = page.context();
 
   const onRequest = (request: Request) => {
-    recordViolation(violations, request.url());
+    const url = request.url();
+    if (!isLocalAllowedUrl(url)) {
+      violations.push(url);
+    }
   };
   page.on("request", onRequest);
 
-  const abortProvider = async (route: Route) => {
+  const abortNonLocal = async (route: Route) => {
     const url = route.request().url();
     if (isLocalAllowedUrl(url)) {
-      await route.fallback();
+      await route.continue();
       return;
     }
-    recordViolation(violations, url);
-    if (classifyExternalRequest(url)) {
-      await route.abort("blockedbyclient");
-      return;
-    }
-    // Non-provider externe : laisser passer le réseau mais enregistrer (assertClean).
-    await route.fallback();
+    blockedAttempts += 1;
+    if (!violations.includes(url)) violations.push(url);
+    await route.abort("blockedbyclient");
   };
 
-  await context.route("**/*openai.com/**", abortProvider);
-  await context.route("**/*fal.ai/**", abortProvider);
-  await context.route("**/*fal.run/**", abortProvider);
-  await context.route("**/*elevenlabs.io/**", abortProvider);
-  await context.route("**/*aicommandcenteros.app/**", abortProvider);
+  await context.route("**/*", abortNonLocal);
 
   return {
     violations,
+    get blockedAttempts() {
+      return blockedAttempts;
+    },
     assertClean: () => {
-      const providers = violations.filter((url) => {
-        const raw = url.replace(/^external:/, "");
-        return PROVIDER_HOST_RE.test(hostnameOf(raw)) || PROVIDER_HOST_RE.test(raw);
-      });
-      if (providers.length > 0) {
+      if (violations.length > 0 || blockedAttempts > 0) {
         throw new Error(
-          `E2E network barrier: provider requests detected:\n${providers.join("\n")}`,
+          `E2E network barrier: non-local requests detected (${blockedAttempts}):\n${violations.join("\n")}`,
         );
       }
     },

@@ -24,6 +24,17 @@ import { VoiceNarratorSelector } from "./voice-narrator-selector";
 import { DeliverySection } from "./delivery-section";
 import { MotionReviewSection } from "./motion-review-section";
 import { StaleBadge } from "./stale-badge";
+import { DirectorPipelineProgress } from "./director-pipeline-progress";
+import {
+  buildDirectorPipelineProgress,
+  humanArtifactLabel,
+} from "./director-pipeline-progress-model";
+import {
+  announceDirectorStepReady,
+  DIRECTOR_STEP_READY_EVENT,
+  type DirectorPipelineReadyStep,
+} from "./director-pipeline-events";
+import { DirectorUpdateBlockerStatus } from "./director-update-blocker-status";
 
 type Props = {
   projectId: string;
@@ -87,6 +98,20 @@ export function DirectorProjectClient({
   const [projectRevision, setProjectRevision] = useState(initialProjectRevision);
   const [staleMap, setStaleMap] = useState<Partial<Record<ArtifactType, string | null>>>({});
   const [restartPoint, setRestartPoint] = useState<ArtifactType | null>(null);
+  const [readySteps, setReadySteps] = useState({
+    marketing: Boolean(initialPlan),
+    creative: Boolean(initialConcept),
+    script: Boolean(initialScript),
+    voice: false,
+    art: Boolean(initialVisualDirection),
+    storyboard: Boolean(initialStoryboard),
+    prompt: Boolean(initialPackageSet),
+    routing: Boolean(initialPlanRouting),
+    production: false,
+    lipsync: false,
+    merge: false,
+    export: false,
+  });
 
   const refreshStale = useCallback(async () => {
     try {
@@ -113,8 +138,37 @@ export function DirectorProjectClient({
     void refreshStale();
   }, [refreshStale]);
 
+  useEffect(() => {
+    const onReady = (event: Event) => {
+      const step = (event as CustomEvent<{ step?: DirectorPipelineReadyStep }>).detail?.step;
+      if (!step) return;
+      setReadySteps((prev) => (prev[step] ? prev : { ...prev, [step]: true }));
+    };
+    window.addEventListener(DIRECTOR_STEP_READY_EVENT, onReady);
+    return () => window.removeEventListener(DIRECTOR_STEP_READY_EVENT, onReady);
+  }, []);
+
+  const pipeline = buildDirectorPipelineProgress({
+    hasBrief: true,
+    hasMarketing: readySteps.marketing,
+    hasCreative: readySteps.creative,
+    hasScript: readySteps.script,
+    hasVoiceChoice: readySteps.voice,
+    hasArt: readySteps.art,
+    hasStoryboard: readySteps.storyboard,
+    hasPrompts: readySteps.prompt,
+    hasRouting: readySteps.routing,
+    hasProduction: readySteps.production,
+    lipsyncPrepared: readySteps.lipsync,
+    mergePrepared: readySteps.merge,
+    exportPrepared: readySteps.export,
+  });
+
   return (
     <>
+      <DirectorUpdateBlockerStatus />
+      <DirectorPipelineProgress view={pipeline} />
+      <div id="section-brief">
       <BriefSection
         projectId={projectId}
         projectRevision={projectRevision}
@@ -125,21 +179,22 @@ export function DirectorProjectClient({
           void refreshStale();
         }}
       />
+      </div>
 
       {restartPoint && Object.keys(staleMap).length > 0 && (
         <div className="card p-4 mb-6 text-sm" role="status" aria-live="polite">
           <p className="font-medium mb-1">Pipeline obsolète</p>
           <p className="text-[var(--muted)]">
             {Object.keys(staleMap).length} section(s) marquée(s) obsolète(s). Point de
-            reprise recommandé : <strong>{restartPoint}</strong>. Relancez le Directeur
-            correspondant — production / QC / merge / export refusés tant que les
-            prérequis restent stale.
+            reprise recommandé : <strong>{humanArtifactLabel(restartPoint)}</strong>. Relancez
+            cette étape — production, contrôle qualité, assemblage et export restent
+            bloqués tant que les prérequis ne sont pas à jour.
           </p>
           <a
             href={`#section-${restartPoint}`}
             className="btn btn-primary mt-3 inline-flex"
           >
-            Aller à {restartPoint}
+            Aller à {humanArtifactLabel(restartPoint)}
           </a>
         </div>
       )}
@@ -167,7 +222,13 @@ export function DirectorProjectClient({
         restartPoint={restartPoint}
       >
         <ScriptSection projectId={projectId} initialScript={initialScript} />
-        <VoiceNarratorSelector />
+        <div id="section-voice">
+          <VoiceNarratorSelector
+            onSelected={(selected) => {
+              if (selected) announceDirectorStepReady("voice");
+            }}
+          />
+        </div>
       </SectionShell>
       <SectionShell
         id="section-visual_direction"
@@ -224,8 +285,15 @@ export function DirectorProjectClient({
           onProjectRevision={setProjectRevision}
         />
       </SectionShell>
-      <LipsyncSection />
-      <MergeExportSection />
+      <LipsyncSection
+        videoResolved={Boolean(initialPlanRouting)}
+        audioResolved={Boolean(initialScript)}
+      />
+      <MergeExportSection
+        videoResolved={Boolean(initialPlanRouting)}
+        audioResolved={Boolean(initialScript)}
+        lipsyncResolved={Boolean(initialPlanRouting) && Boolean(initialScript)}
+      />
       <SectionShell
         id="section-export_package"
         type="export_package"

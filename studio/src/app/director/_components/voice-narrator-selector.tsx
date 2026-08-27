@@ -9,8 +9,10 @@ import {
 
 export function VoiceNarratorSelector({
   initialView,
+  onSelected,
 }: {
   initialView?: VoiceNarratorSelectorView;
+  onSelected?: (selected: "" | "narrator_female" | "narrator_male") => void;
 }) {
   const [view, setView] = useState<VoiceNarratorSelectorView>(
     initialView ?? buildVoiceNarratorSelectorView(),
@@ -34,6 +36,7 @@ export function VoiceNarratorSelector({
             const next = event.target.value as "" | "narrator_female" | "narrator_male";
             const applied = applyNarratorSelection(view, next);
             setView(applied.view);
+            onSelected?.(next);
           }}
         >
           <option value="">Aucun choix — requis pour un voice-over</option>

@@ -23,6 +23,8 @@ test("merge/export view — préparé mais désactivé, pas de moteur, publicati
   assert.equal(view.mergeReadiness, "prepared_disabled");
   assert.equal(view.exportReadiness, "prepared_disabled");
   assert.match(view.disabledReason, /désactivé/);
+  assert.ok(view.blockingReasons.some((reason) => /export réel n’est pas autorisé/i.test(reason)));
+  assert.ok(!view.blockingReasons.some((reason) => /mergeExportAuthorized/i.test(reason)));
 });
 
 test("merge/export view — bundle incomplet bloque", () => {
@@ -45,12 +47,17 @@ test("merge/export source — UI n’expose aucun moteur et n’active pas Direc
   const section = readFileSync(join(here, "..", "merge-export-section.tsx"), "utf8");
   const delivery = readFileSync(join(here, "..", "delivery-section.tsx"), "utf8");
   const client = readFileSync(join(here, "..", "director-project-client.tsx"), "utf8");
+  assert.match(section, /Préparer le manifeste synthétique/);
   assert.match(section, /Merge réel indisponible/);
   assert.match(section, /Export réel indisponible/);
   assert.doesNotMatch(section, /<select/);
-  assert.doesNotMatch(section, /ffmpeg|fal|elevenlabs|openai/i);
+  assert.doesNotMatch(section, /(?<![A-Za-z])(?:ffmpeg|fal|elevenlabs|openai)(?![A-Za-z])/i);
   assert.doesNotMatch(section, /DIRECTOR_V2_ENABLED/);
   assert.match(delivery, /buildMergeExportSectionView/);
+  assert.match(delivery, /Export réel non autorisé/);
+  assert.doesNotMatch(delivery, /Télécharger le média final/);
+  assert.doesNotMatch(delivery, /anchor\.download/);
+  assert.doesNotMatch(delivery, /createElement\("a"\)/);
   assert.match(client, /<MergeExportSection/);
   assert.doesNotMatch(client, /DIRECTOR_V2_ENABLED/);
 });

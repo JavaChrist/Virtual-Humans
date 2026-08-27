@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useUpdateBlocker } from "@/lib/use-update-blocker";
 import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 import { shouldBlockNonDryBusy } from "@/lib/update-blocker-policy";
+import { announceDirectorStepReady } from "./director-pipeline-events";
 import type {
   PromptProjectDryRunResult,
   ScenePackageSetView,
@@ -76,7 +77,10 @@ export function PromptSection({
             ? data.error
             : data.error?.message ?? "Construction impossible.";
         setError(msg);
-      } else if (data.packageSet) setPackageSet(data.packageSet);
+      } else if (data.packageSet) {
+        setPackageSet(data.packageSet);
+        announceDirectorStepReady("prompt");
+      }
     } catch {
       setError("Construction impossible.");
     } finally {

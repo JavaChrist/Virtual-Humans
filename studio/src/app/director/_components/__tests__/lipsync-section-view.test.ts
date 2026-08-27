@@ -32,10 +32,13 @@ test("lipsync view — vidéo ou audio absents bloquent", () => {
 test("lipsync source — UI n’expose aucun choix de provider et n’active pas Director", () => {
   const section = readFileSync(join(here, "..", "lipsync-section.tsx"), "utf8");
   const client = readFileSync(join(here, "..", "director-project-client.tsx"), "utf8");
+  assert.match(section, /Préparer le fake local/);
   assert.match(section, /Exécution réelle indisponible/);
+  assert.doesNotMatch(section, /videoResolved: true/);
   assert.doesNotMatch(section, /<select/);
-  assert.doesNotMatch(section, /fal|elevenlabs|openai/i);
+  assert.doesNotMatch(section, /(?<![A-Za-z])(?:fal|elevenlabs|openai)(?![A-Za-z])/i);
   assert.doesNotMatch(section, /DIRECTOR_V2_ENABLED/);
   assert.match(client, /<LipsyncSection/);
+  assert.match(client, /videoResolved=\{Boolean\(initialPlanRouting\)\}/);
   assert.doesNotMatch(client, /DIRECTOR_V2_ENABLED/);
 });

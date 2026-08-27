@@ -45,11 +45,12 @@ export async function logoutViaUi(page: Page): Promise<void> {
   if (!res.ok()) {
     throw new Error(`logout API failed: ${res.status()}`);
   }
-  // Vérifie aussi le bouton UI quand il est présent (contrat accessible).
   const logout = page.getByRole("button", { name: /Déconnexion/i });
   if ((await logout.count()) > 0) {
     await logout.first().scrollIntoViewIfNeeded().catch(() => undefined);
     await logout.first().click({ force: true }).catch(() => undefined);
+    await page.waitForURL(/\/login/, { timeout: 15_000 });
+    return;
   }
   await page.goto("/director", { waitUntil: "domcontentloaded" });
   await page.waitForURL(/\/login/, { timeout: 15_000 });

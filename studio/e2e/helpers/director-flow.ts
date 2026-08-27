@@ -390,21 +390,30 @@ export async function runDelivery(page: Page) {
       "Content-Type": "application/json",
     },
   });
-  const qcBody = await qcApi.json();
-  if (!qcApi.ok() || !qcBody?.dryRun?.executable) {
+  const qcBody = (await qcApi.json()) as {
+    dryRun?: { executable?: boolean };
+    error?: string;
+  };
+  if (!qcApi.ok()) {
     throw new Error(
       `QC dry-run API: HTTP ${qcApi.status()} ${JSON.stringify(qcBody).slice(0, 800)}`,
     );
   }
 
   await delivery.getByRole("button", { name: /Dry-run QC/ }).click();
-  await expect(delivery.getByText(/Dry-run QC · prêt/i)).toBeVisible({
-    timeout: 30_000,
-  });
-  const execQc = delivery.getByRole("button", { name: /Exécuter QC/ });
-  await expect(execQc).toBeEnabled({ timeout: 30_000 });
-  await execQc.click();
-  await confirmDialog(page, /Exécuter QC/);
+  if (qcBody.dryRun?.executable) {
+    await expect(delivery.getByText(/Dry-run QC · prêt/i)).toBeVisible({
+      timeout: 30_000,
+    });
+    const execQc = delivery.getByRole("button", { name: /Exécuter QC/ });
+    await expect(execQc).toBeEnabled({ timeout: 30_000 });
+    await execQc.click();
+    await confirmDialog(page, /Exécuter QC/);
+  } else {
+    await expect(delivery.getByText(/Dry-run QC · non prêt|Export réel non autorisé/i)).toBeVisible({
+      timeout: 15_000,
+    });
+  }
 
   // needs_review : commentaire obligatoire + modale (unknown ≠ pass).
   // Do NOT match the pre-existing "quality_review" delivery label as success.
@@ -432,67 +441,49 @@ export async function runDelivery(page: Page) {
     ).toBeVisible({ timeout: 60_000 });
   }
 
-  const prepareMerge = delivery.getByRole("button", { name: /Préparer merge/ });
-  await expect(prepareMerge).toBeEnabled({ timeout: 30_000 });
-  await prepareMerge.click();
-  await expect(delivery.getByText(/Merge · readiness OK|état prepared|état blocked/i)).toBeVisible({
-    timeout: 30_000,
-  });
-
-  const runMerge = delivery.getByRole("button", { name: /Lancer merge fake/ });
-  await expect(runMerge).toBeEnabled({ timeout: 30_000 });
-  const mergeRespPromise = page.waitForResponse(
-    (r) =>
-      r.url().includes("/merge") &&
-      r.request().method() === "POST" &&
-      (r.request().postDataJSON() as { mode?: string } | null)?.mode === "execute",
-    { timeout: 60_000 },
+  await expect(page.getByTestId("director-export-status")).toContainText(
+    /Export réel non autorisé/,
   );
-  await runMerge.click();
-  await confirmDialog(page, /Merger \(fake\)/);
-  const mergeResp = await mergeRespPromise;
-  const mergeBody = await mergeResp.text();
-  expect(
-    mergeResp.ok(),
-    `merge execute HTTP ${mergeResp.status()}: ${mergeBody.slice(0, 800)}`,
-  ).toBeTruthy();
-  await expect(delivery.getByText(/Asset final|merged|completed/i).first()).toBeVisible({
-    timeout: 60_000,
+  await expect(
+    delivery.getByText(/n’autorise pas l’export réel|Export réel non autorisé/),
+  ).toBeVisible();
+  await expect(
+    delivery.getByRole("button", { name: /Télécharger le média final/ }),
+  ).toHaveCount(0);
+  await expect(delivery.getByRole("link", { name: /télécharger|publier/i })).toHaveCount(0);
+}
+
+export async function runVoiceFake(page: Page) {
+  const voice = page.locator("#section-voice");
+  await expect(voice.getByRole("heading", { name: /Voix|Narrateur/i })).toBeVisible({
+    timeout: 15_000,
   });
+  await voice.locator("select").selectOption("narrator_female");
+  await expect(voice.locator("select")).toHaveValue("narrator_female");
+}
 
-  const prepareExport = delivery.getByRole("button", { name: /Préparer export/ });
-  await expect(prepareExport).toBeEnabled({ timeout: 30_000 });
-  await prepareExport.click();
-  await confirmDialog(page, /Préparer l'export/);
-  // readiness dry-run ≠ paquet persisté — attendre le manifeste / id de paquet.
-  await expect(delivery.getByText(/Manifeste sûr|paquet [0-9a-f]/i).first()).toBeVisible({
-    timeout: 60_000,
-  });
+export async function runLipsyncFake(page: Page) {
+  const section = page.getByTestId("director-lipsync-section");
+  await section.getByRole("button", { name: /Préparer le fake local/ }).click();
+  await expect(section.getByText(/métadonnées synthétiques/i)).toBeVisible();
+  await expect(
+    section.getByRole("button", { name: /Exécution réelle indisponible/ }),
+  ).toBeDisabled();
+}
 
-  // L'UI fetch + blob (pas toujours un événement download navigateur) — vérifier via API.
-  const dl = await page.request.get(
-    `/api/director/projects/${projectId}/export/download`,
-  );
-  const dlBytes = Buffer.from(await dl.body());
-  expect(
-    dl.ok(),
-    `download HTTP ${dl.status()}: ${dlBytes.subarray(0, 200).toString("utf8")}`,
-  ).toBeTruthy();
-  expect(dl.headers()["content-type"] ?? "").toMatch(/video\/mp4|application\/octet-stream/i);
-  expect(dl.headers()["cache-control"] ?? "").toMatch(/no-store/i);
-  expect(dlBytes.toString("utf8")).toContain("VH-FAKE-MP4-V1");
-
-  const downloadBtn = delivery.getByRole("button", { name: /Télécharger le média final/ });
-  await expect(downloadBtn).toBeEnabled({ timeout: 15_000 });
-  await downloadBtn.click();
-  await expect(delivery.getByText(/Contenu de l'asset final introuvable/i)).toHaveCount(0, {
-    timeout: 10_000,
-  });
-
-  const manifest = await page.request.get(
-    `/api/director/projects/${projectId}/export/manifest`,
-  );
-  expect(manifest.ok()).toBeTruthy();
-  const manifestJson = await manifest.json();
-  expect(JSON.stringify(manifestJson)).not.toMatch(/https?:\/\/(?!127\.0\.0\.1|localhost)/i);
+export async function runMergeExportFake(page: Page) {
+  const section = page.getByTestId("director-merge-export-section");
+  await section.getByRole("button", { name: /Préparer le manifeste synthétique/ }).click();
+  const manifest = page.getByTestId("director-synthetic-export-manifest");
+  await expect(manifest).toBeVisible();
+  await expect(manifest).toContainText(/synthétique/);
+  await expect(manifest).toContainText(/aucun/i);
+  await expect(manifest).toContainText(/non autorisé/);
+  await expect(
+    section.getByRole("button", { name: /Merge réel indisponible/ }),
+  ).toBeDisabled();
+  await expect(
+    section.getByRole("button", { name: /Export réel indisponible/ }),
+  ).toBeDisabled();
+  await expect(page.getByRole("link", { name: /télécharger|publier/i })).toHaveCount(0);
 }

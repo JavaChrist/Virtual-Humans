@@ -5,19 +5,28 @@ import { useUpdateBlocker } from "@/lib/use-update-blocker";
 import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker-reasons";
 import { shouldBlockLipsyncInFlight } from "@/lib/update-blocker-policy";
 import { buildLipsyncSectionView } from "./lipsync-section-view";
+import { announceDirectorStepReady } from "./director-pipeline-events";
 
-export function LipsyncSection() {
+export function LipsyncSection({
+  videoResolved = false,
+  audioResolved = false,
+}: {
+  videoResolved?: boolean;
+  audioResolved?: boolean;
+}) {
   const [busy, setBusy] = useState<"dry" | "execute" | null>(null);
   const [runStatus, setRunStatus] = useState<string | null>(null);
   const [localNote, setLocalNote] = useState<string | null>(null);
+  const [fakePrepared, setFakePrepared] = useState(false);
   const view = useMemo(
     () =>
       buildLipsyncSectionView({
-        videoResolved: true,
-        audioResolved: true,
+        videoResolved,
+        audioResolved,
         runtimeOff: true,
+        fakeState: fakePrepared ? "completed" : null,
       }),
-    [],
+    [videoResolved, audioResolved, fakePrepared],
   );
 
   useUpdateBlocker(
@@ -27,7 +36,7 @@ export function LipsyncSection() {
   );
 
   return (
-    <section className="card p-6 mt-8" aria-labelledby="director-lipsync-title">
+    <section id="section-lipsync" className="card p-6 mt-8" aria-labelledby="director-lipsync-title" data-testid="director-lipsync-section">
       <h3 id="director-lipsync-title" className="font-semibold mb-1">
         {view.title}
       </h3>
@@ -60,11 +69,16 @@ export function LipsyncSection() {
           onClick={() => {
             setBusy("dry");
             setRunStatus(null);
-            setLocalNote("Dry-run local : chemin préparé, aucun provider, aucun blocker.");
+            setFakePrepared(true);
+            setLocalNote(
+              "Lipsync fake local : métadonnées synthétiques uniquement. Aucun média réel, aucun moteur distant.",
+            );
+            announceDirectorStepReady("lipsync");
             setBusy(null);
           }}
+          disabled={!videoResolved || !audioResolved}
         >
-          Dry-run local
+          Préparer le fake local
         </button>
         <button type="button" className="btn" disabled>
           Exécution réelle indisponible

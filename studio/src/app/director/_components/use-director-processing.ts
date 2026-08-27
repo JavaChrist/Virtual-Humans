@@ -15,6 +15,7 @@ import {
   type DirectorUiPhase,
   type TextDirectorKind,
 } from "./director-processing";
+import { announceDirectorStepReady } from "./director-pipeline-events";
 
 export type TextDirectorRunPollSnapshot = {
   director: TextDirectorKind;
@@ -131,6 +132,7 @@ export function useDirectorProcessing(opts: Options) {
               ? (successMessageRef.current ?? "Résultat enregistré.")
               : "Analyse terminée — actualisez pour voir le résultat.",
           );
+          if (ok) announceDirectorStepReady(director);
         } catch {
           if (!mountedRef.current) return;
           inFlightRef.current = false;
@@ -150,7 +152,7 @@ export function useDirectorProcessing(opts: Options) {
           "Le traitement a échoué. Relancez un dry-run avant une nouvelle tentative.",
       );
     },
-    [stopPoll],
+    [director, stopPoll],
   );
 
   const pollOnce = useCallback(async () => {
@@ -176,6 +178,7 @@ export function useDirectorProcessing(opts: Options) {
         if (ok) {
           setPhase("completed");
           setStatusMessage(successMessageRef.current ?? "Résultat enregistré.");
+          announceDirectorStepReady(director);
         } else {
           setPhase("failed");
           setStatusMessage(
@@ -290,7 +293,8 @@ export function useDirectorProcessing(opts: Options) {
     if (!mountedRef.current) return;
     setPhase("completed");
     setStatusMessage(message ?? successMessageRef.current ?? null);
-  }, [stopPoll]);
+    announceDirectorStepReady(director);
+  }, [director, stopPoll]);
 
   const markFailed = useCallback((message?: string | null) => {
     stopPoll();

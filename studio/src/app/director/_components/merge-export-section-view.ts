@@ -37,7 +37,7 @@ export function buildMergeExportSectionView(input?: {
   if (runtimeOff) {
     blockingReasons.push("Chemin merge/export préparé mais désactivé. Aucun moteur n’est sélectionné.");
   }
-  blockingReasons.push("mergeExportAuthorized reste false. Publication et téléchargement restent interdits.");
+  blockingReasons.push("L’export réel n’est pas autorisé. Publication et téléchargement restent interdits.");
   const prepared = bundleCoherent && runtimeOff;
   return {
     title: "Merge / Export",
