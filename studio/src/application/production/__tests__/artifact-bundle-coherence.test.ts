@@ -344,5 +344,7 @@ test("24 — compatibilité historique 11A", () => {
 test("fail-closed : mergeExportAuthorized absent est false", () => {
   assert.equal(readMergeExportAuthorized({ delivery: { status: "merge_ready" } }), false);
   assert.equal(readMergeExportAuthorized({ phase11a: { mergeExportAuthorized: true }, phase11b: { mergeExportAuthorized: false } }), false);
+  assert.equal(readMergeExportAuthorized({ phase11d: { mergeExportAuthorized: false } }), false);
+  assert.equal(readMergeExportAuthorized({ delivery: { mergeExportAuthorized: true }, phase11d: { mergeExportAuthorized: false } }), false);
   assert.equal(readMergeExportAuthorized({ delivery: { mergeExportAuthorized: true } }), true);
 });

@@ -43,6 +43,14 @@ export function shouldBlockProductionRun(
   return false;
 }
 
+/** Same dry-run exception as Production: validation/dry never register a blocker. */
+export function shouldBlockLipsyncInFlight(
+  busy: string | null | undefined,
+  runStatus: string | null | undefined,
+): boolean {
+  return shouldBlockProductionRun(busy, runStatus);
+}
+
 export function shouldBlockAutosave(status: AutosaveStatus): boolean {
   return status === "dirty" || status === "saving";
 }

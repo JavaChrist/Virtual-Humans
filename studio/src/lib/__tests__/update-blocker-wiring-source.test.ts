@@ -44,6 +44,7 @@ test("wiring source — single registry; selected workflows bind useUpdateBlocke
     "src/app/director/_components/routing-section.tsx",
     "src/app/director/_components/prompt-section.tsx",
     "src/app/director/_components/motion-review-section.tsx",
+    "src/app/director/_components/lipsync-section.tsx",
     "src/app/image/page.tsx",
     "src/app/voice/page.tsx",
     "src/app/video/page.tsx",

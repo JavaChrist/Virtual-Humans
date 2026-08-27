@@ -4,6 +4,7 @@ import {
   shouldBlockAutosave,
   shouldBlockDirectorUiProcessing,
   shouldBlockNonDryBusy,
+  shouldBlockLipsyncInFlight,
   shouldBlockProductionRun,
   shouldBlockStoryboard,
   shouldBlockStudioJob,
@@ -40,6 +41,16 @@ test("policy — production run blocks until terminal; dry does not", () => {
   assert.equal(shouldBlockProductionRun(null, "completed"), false);
   assert.equal(shouldBlockProductionRun(null, "failed"), false);
   assert.equal(shouldBlockProductionRun(null, "cancelled"), false);
+});
+
+test("policy — lipsync in-flight uses the same dry exception as Production", () => {
+  assert.equal(shouldBlockLipsyncInFlight("dry", null), false);
+  assert.equal(shouldBlockLipsyncInFlight(null, null), false);
+  assert.equal(shouldBlockLipsyncInFlight("execute", null), true);
+  assert.equal(shouldBlockLipsyncInFlight(null, "executing"), true);
+  assert.equal(shouldBlockLipsyncInFlight(null, "completed"), false);
+  assert.equal(shouldBlockLipsyncInFlight(null, "failed"), false);
+  assert.equal(shouldBlockLipsyncInFlight(null, "cancelled"), false);
 });
 
 test("policy — autosave dirty/saving only", () => {

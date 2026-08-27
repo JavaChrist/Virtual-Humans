@@ -18,6 +18,7 @@ import { StoryboardSection } from "./storyboard-section";
 import { PromptSection } from "./prompt-section";
 import { RoutingSection } from "./routing-section";
 import { ProductionSection } from "./production-section";
+import { LipsyncSection } from "./lipsync-section";
 import { VoiceNarratorSelector } from "./voice-narrator-selector";
 import { DeliverySection } from "./delivery-section";
 import { MotionReviewSection } from "./motion-review-section";
@@ -222,6 +223,7 @@ export function DirectorProjectClient({
           onProjectRevision={setProjectRevision}
         />
       </SectionShell>
+      <LipsyncSection />
       <SectionShell
         id="section-export_package"
         type="export_package"

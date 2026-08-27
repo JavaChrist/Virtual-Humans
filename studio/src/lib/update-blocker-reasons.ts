@@ -23,6 +23,7 @@ export const UPDATE_BLOCKER_IDS = {
   directorRouting: "director-routing",
   directorPrompts: "director-prompts",
   directorMotionReview: "director-motion-review",
+  directorLipsync: "director-lipsync",
   generateVideo: "generate-video",
   generateScene: "generate-scene",
   sceneSave: "scene-save",
