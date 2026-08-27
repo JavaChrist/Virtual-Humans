@@ -178,6 +178,9 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              RideCloud storyboard VO harden (`161_`)
              · **RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED**
              · VO continue · CTA scindé
+             RideCloud storyboard VO polish (`162_`)
+             · **RIDECLOUD_FIRST_AD_STORYBOARD_VO_COPY_POLISHED**
+             · s03/s04 · 144/150 wpm
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
@@ -185,7 +188,7 @@ Runtime AI : OFF
 Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
 P1         : projet Production RideCloud manquant · pricing TTS non ferme
-P1 fermé   : durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
+P1 fermé   : polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
 Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER
 ```
 
@@ -266,6 +269,7 @@ Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER
 - **RideCloud HD variants addendum** ✅ **RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED** (`159_`) — 4 captures `1080×2424` + banner `1794×876` · 12 refs `158_` inchangées.
 - **RideCloud first-ad storyboard** ✅ **RIDECLOUD_FIRST_AD_STORYBOARD_READY** (`160_`) — 26 s · 6 plans · copy verrouillée · 0 provider.
 - **RideCloud storyboard VO harden** ✅ **RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED** (`161_`) — VO continue · CTA scindé · 0 silence.
+- **RideCloud storyboard VO polish** ✅ **RIDECLOUD_FIRST_AD_STORYBOARD_VO_COPY_POLISHED** (`162_`) — s03/s04 · 144/150 wpm · 0 silence.
 - **Prochaine porte majeure** : Auth **`AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER`** — preflight projet Production séparé · 0 write · 0¢. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).

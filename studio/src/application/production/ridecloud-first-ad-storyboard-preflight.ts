@@ -30,8 +30,13 @@ export const RIDECLOUD_STORYBOARD_AUTH = RIDECLOUD_NEXT_AUTH_WHEN_READY;
 export const RIDECLOUD_STORYBOARD_HARDENING_AUTH =
   "AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING_NO_PROVIDER" as const;
 
+export const RIDECLOUD_STORYBOARD_COPY_POLISH_AUTH =
+  "AUTH_RIDECLOUD_STORYBOARD_VO_COPY_POLISH_AND_SYNC_NO_PROVIDER" as const;
+
 export const RIDECLOUD_STORYBOARD_VERDICT =
-  "RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED" as const;
+  "RIDECLOUD_FIRST_AD_STORYBOARD_VO_COPY_POLISHED" as const;
+
+export const RIDECLOUD_NATURAL_FRENCH_WPM_MAX = 165 as const;
 
 export const RIDECLOUD_STORYBOARD_NEXT_AUTH =
   "AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER" as const;
@@ -39,9 +44,9 @@ export const RIDECLOUD_STORYBOARD_NEXT_AUTH =
 export const RIDECLOUD_STORYBOARD_DURATION_SEC = 26 as const;
 
 export const RIDECLOUD_LOCKED_FOLLOW_NARRATION =
-  "suivi des entretiens, échéances et documents" as const;
+  "Suivez vos entretiens, vos échéances et vos documents en un seul endroit." as const;
 export const RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION =
-  "voiture, moto, scooter et utilitaire dans une même application" as const;
+  "Voiture, moto, scooter ou utilitaire : tout votre garage est réuni." as const;
 export const RIDECLOUD_LOCKED_CTA_INVITE =
   "Rejoignez le Programme Fondateur, testez RideCloud et remplissez le questionnaire." as const;
 export const RIDECLOUD_LOCKED_CTA_PREMIUM = "Bénéficiez de Premium à vie." as const;
@@ -192,6 +197,26 @@ export function assertRideCloudOnScreenTextIsLocked(text: string): void {
   }
 }
 
+export function rideCloudNarrationWordCount(text: string): number {
+  return text
+    .replace(/[«»":,.;!?]/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
+
+export function rideCloudNarrationWpm(text: string, windowSec: number): number {
+  if (windowSec <= 0) throw new Error("BLOCKED_RIDECLOUD_NARRATION_WINDOW");
+  return (rideCloudNarrationWordCount(text) / windowSec) * 60;
+}
+
+export function assertRideCloudNarrationFitsWindow(text: string, windowSec: number): void {
+  const wpm = rideCloudNarrationWpm(text, windowSec);
+  if (wpm > RIDECLOUD_NATURAL_FRENCH_WPM_MAX) {
+    throw new Error("BLOCKED_RIDECLOUD_NARRATION_TOO_DENSE");
+  }
+}
+
 export function assertRideCloudNarrationIsLocked(text: string | null): void {
   if (text === null) throw new Error("BLOCKED_RIDECLOUD_SILENT_SHOT");
   if (!(RIDECLOUD_ALLOWED_NARRATION as readonly string[]).includes(text)) {
@@ -204,6 +229,9 @@ export function assertRideCloudStoryboardAudioContinuity(
 ): void {
   for (const shot of shots) {
     assertRideCloudNarrationIsLocked(shot.narration);
+    if (shot.narration) {
+      assertRideCloudNarrationFitsWindow(shot.narration, shot.endSec - shot.startSec);
+    }
     if (shot.onScreenText.includes(RIDECLOUD_LOCKED_CTA)) {
       throw new Error("BLOCKED_RIDECLOUD_FULL_CTA_TOO_DENSE");
     }

@@ -21,10 +21,13 @@ import {
   RIDECLOUD_LOCKED_FOLLOW_NARRATION,
   RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION,
   RIDECLOUD_STORYBOARD_AUTH,
+  RIDECLOUD_STORYBOARD_COPY_POLISH_AUTH,
   RIDECLOUD_STORYBOARD_DURATION_SEC,
   RIDECLOUD_STORYBOARD_HARDENING_AUTH,
   RIDECLOUD_STORYBOARD_NEXT_AUTH,
   RIDECLOUD_STORYBOARD_VERDICT,
+  assertRideCloudNarrationFitsWindow,
+  rideCloudNarrationWpm,
   assertRideCloudNarrationIsLocked,
   assertRideCloudOnScreenTextIsLocked,
   assertRideCloudStoryboardAudioContinuity,
@@ -41,6 +44,10 @@ test("RIDECLOUD-STORYBOARD — locked Auth and 26s window", () => {
   assert.equal(
     RIDECLOUD_STORYBOARD_HARDENING_AUTH,
     "AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING_NO_PROVIDER",
+  );
+  assert.equal(
+    RIDECLOUD_STORYBOARD_COPY_POLISH_AUTH,
+    "AUTH_RIDECLOUD_STORYBOARD_VO_COPY_POLISH_AND_SYNC_NO_PROVIDER",
   );
   assert.equal(
     RIDECLOUD_STORYBOARD_NEXT_AUTH,
@@ -113,6 +120,27 @@ test("RIDECLOUD-STORYBOARD — timing is contiguous and crop rules stay fail-clo
   assert.equal(RIDECLOUD_FIRST_AD_SHOTS[5]!.cropRules.includes("do_not_show_google_play_badge"), true);
   const broken = [{ ...RIDECLOUD_FIRST_AD_SHOTS[0], startSec: 1, endSec: 4 }];
   assert.throws(() => assertRideCloudStoryboardTiming(broken), /TIMING/);
+});
+
+test("RIDECLOUD-STORYBOARD — polished s03/s04 lines fit their windows", () => {
+  assert.equal(
+    RIDECLOUD_LOCKED_FOLLOW_NARRATION,
+    "Suivez vos entretiens, vos échéances et vos documents en un seul endroit.",
+  );
+  assert.equal(
+    RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION,
+    "Voiture, moto, scooter ou utilitaire : tout votre garage est réuni.",
+  );
+  const s03Wpm = rideCloudNarrationWpm(RIDECLOUD_LOCKED_FOLLOW_NARRATION, 5);
+  const s04Wpm = rideCloudNarrationWpm(RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION, 4);
+  assert.equal(s03Wpm <= 165, true);
+  assert.equal(s04Wpm <= 165, true);
+  assertRideCloudNarrationFitsWindow(RIDECLOUD_LOCKED_FOLLOW_NARRATION, 5);
+  assertRideCloudNarrationFitsWindow(RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION, 4);
+  assert.throws(
+    () => assertRideCloudNarrationFitsWindow("a b c d e f g h i j k l m n o p q r s t u", 2),
+    /TOO_DENSE/,
+  );
 });
 
 test("RIDECLOUD-STORYBOARD — unused official refs stay documented and unused banners stay out", () => {
