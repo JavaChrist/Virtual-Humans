@@ -19,6 +19,7 @@ import { PromptSection } from "./prompt-section";
 import { RoutingSection } from "./routing-section";
 import { ProductionSection } from "./production-section";
 import { LipsyncSection } from "./lipsync-section";
+import { MergeExportSection } from "./merge-export-section";
 import { VoiceNarratorSelector } from "./voice-narrator-selector";
 import { DeliverySection } from "./delivery-section";
 import { MotionReviewSection } from "./motion-review-section";
@@ -224,6 +225,7 @@ export function DirectorProjectClient({
         />
       </SectionShell>
       <LipsyncSection />
+      <MergeExportSection />
       <SectionShell
         id="section-export_package"
         type="export_package"

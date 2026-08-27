@@ -51,6 +51,14 @@ export function shouldBlockLipsyncInFlight(
   return shouldBlockProductionRun(busy, runStatus);
 }
 
+/** Same dry-run exception: fake local sync and dry never register a blocker. */
+export function shouldBlockMergeExportInFlight(
+  busy: string | null | undefined,
+  runStatus: string | null | undefined,
+): boolean {
+  return shouldBlockProductionRun(busy, runStatus);
+}
+
 export function shouldBlockAutosave(status: AutosaveStatus): boolean {
   return status === "dirty" || status === "saving";
 }

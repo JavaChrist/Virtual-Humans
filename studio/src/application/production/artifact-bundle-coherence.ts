@@ -144,6 +144,7 @@ export function readMergeExportAuthorized(value: unknown): boolean {
   const phase11b = asRecord(rec.phase11b);
   const phase11c = asRecord(rec.phase11c);
   const phase11d = asRecord(rec.phase11d);
+  const phase11e = asRecord(rec.phase11e);
   const flags = [
     rec.mergeExportAuthorized,
     delivery.mergeExportAuthorized,
@@ -151,6 +152,7 @@ export function readMergeExportAuthorized(value: unknown): boolean {
     phase11b.mergeExportAuthorized,
     phase11c.mergeExportAuthorized,
     phase11d.mergeExportAuthorized,
+    phase11e.mergeExportAuthorized,
   ];
   if (flags.some((flag) => flag === false)) return false;
   return flags.some((flag) => flag === true);

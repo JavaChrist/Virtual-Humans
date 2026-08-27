@@ -126,6 +126,18 @@ test("integration — director lipsync in-flight blocks apply; dry-run does not"
   assert.deepEqual(getActiveUpdateBlockers(), []);
 });
 
+test("integration — director merge/export in-flight blocks apply; dry-run does not", () => {
+  resetUpdateBlockersForTests();
+  const dry = simulateHook(false, UPDATE_BLOCKER_IDS.directorMergeExport, UPDATE_BLOCKER_REASONS.generating);
+  assert.equal(dry, undefined);
+  assert.deepEqual(getActiveUpdateBlockers(), []);
+  const release = simulateHook(true, UPDATE_BLOCKER_IDS.directorMergeExport, UPDATE_BLOCKER_REASONS.generating);
+  assert.equal(getActiveUpdateBlockers()[0]?.id, UPDATE_BLOCKER_IDS.directorMergeExport);
+  assert.equal(getActiveUpdateBlockers()[0]?.reason, UPDATE_BLOCKER_REASONS.generating);
+  release?.();
+  assert.deepEqual(getActiveUpdateBlockers(), []);
+});
+
 test("integration — read-only fetch equivalent does not register", () => {
   resetUpdateBlockersForTests();
   const release = simulateHook(false, UPDATE_BLOCKER_IDS.directorDelivery, UPDATE_BLOCKER_REASONS.saving);

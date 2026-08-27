@@ -24,6 +24,7 @@ export const UPDATE_BLOCKER_IDS = {
   directorPrompts: "director-prompts",
   directorMotionReview: "director-motion-review",
   directorLipsync: "director-lipsync",
+  directorMergeExport: "director-merge-export",
   generateVideo: "generate-video",
   generateScene: "generate-scene",
   sceneSave: "scene-save",

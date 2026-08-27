@@ -6,6 +6,7 @@ import { UPDATE_BLOCKER_IDS, UPDATE_BLOCKER_REASONS } from "@/lib/update-blocker
 import { shouldBlockNonDryBusy } from "@/lib/update-blocker-policy";
 import type { FinalQualityReport } from "@/domain/postproduction";
 import type { EvaluateQualityDryRunResult } from "@/application/directors/delivery/delivery-for-project";
+import { buildMergeExportSectionView } from "./merge-export-section-view";
 
 type DeliveryState = {
   status?: string;
@@ -379,6 +380,9 @@ export function DeliverySection({ projectId }: { projectId: string }) {
       <p className="text-sm text-[var(--muted)] mb-4">
         QC → revue humaine → MergePlan → merge fake → ExportPackage. Aucun fal / AICCOS réel.
         <code className="ml-1">unknown</code> ne devient jamais <code>pass</code>.
+      </p>
+      <p className="text-xs text-[var(--muted)] mb-4" role="status">
+        {buildMergeExportSectionView({ runtimeOff: true }).disabledReason}
       </p>
 
       <div className="flex flex-wrap gap-3 mb-4">

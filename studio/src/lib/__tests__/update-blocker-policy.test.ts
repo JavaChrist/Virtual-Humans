@@ -5,6 +5,7 @@ import {
   shouldBlockDirectorUiProcessing,
   shouldBlockNonDryBusy,
   shouldBlockLipsyncInFlight,
+  shouldBlockMergeExportInFlight,
   shouldBlockProductionRun,
   shouldBlockStoryboard,
   shouldBlockStudioJob,
@@ -51,6 +52,16 @@ test("policy — lipsync in-flight uses the same dry exception as Production", (
   assert.equal(shouldBlockLipsyncInFlight(null, "completed"), false);
   assert.equal(shouldBlockLipsyncInFlight(null, "failed"), false);
   assert.equal(shouldBlockLipsyncInFlight(null, "cancelled"), false);
+});
+
+test("policy — merge/export in-flight uses the same dry exception as Production", () => {
+  assert.equal(shouldBlockMergeExportInFlight("dry", null), false);
+  assert.equal(shouldBlockMergeExportInFlight(null, null), false);
+  assert.equal(shouldBlockMergeExportInFlight("execute", null), true);
+  assert.equal(shouldBlockMergeExportInFlight(null, "executing"), true);
+  assert.equal(shouldBlockMergeExportInFlight(null, "completed"), false);
+  assert.equal(shouldBlockMergeExportInFlight(null, "failed"), false);
+  assert.equal(shouldBlockMergeExportInFlight(null, "cancelled"), false);
 });
 
 test("policy — autosave dirty/saving only", () => {
