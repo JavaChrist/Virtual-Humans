@@ -59,12 +59,12 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 **État 26 août 2026 :** Phase 11A **CLOSED** (`128_`) · Phase 11B **CLOSED PASS_WITH_NOTES** (`135_`) · Phase 11C **CLOSED PASS_WITH_NOTES** (`156_`) · still `49284892…` + vidéo `9be6cb0c…` + audio `bc36bba7…` **preuves privées inactives**, pas livrables RideCloud.  
 Motion MV-001 **PASS** benchmark · Registry **DISABLED**. Restore drill **PASS** (`78_`).
 
-**État 27 août 2026 :** RideCloud pack `158_` READY + addendum HD `159_` + storyboard `160_` + VO harden `161_` + polish VO `162_` + create preflight `163_` + create idempotent `164_` **CREATED** + bind preflight `165_` **READY** + bind kind schema `166_` **READY** + remote preflight `167_` **READY_FOR_APPLY** (apply **suspendu**) + UI parity `168_` **READY** + SDK tracing `169_` **READY** + cartes dashboard `170_` **COMMITTED** + deploy UI `171_` **READY** + app update preflight `172_` **READY** + app update implement `173_` **READY** + app update sync+deploy `174_` **READY** (`1765da6`). Migration locale 33e · 0 apply.
+**État 27 août 2026 :** RideCloud pack `158_` READY + addendum HD `159_` + storyboard `160_` + VO harden `161_` + polish VO `162_` + create preflight `163_` + create idempotent `164_` **CREATED** + bind preflight `165_` **READY** + bind kind schema `166_` **READY** + remote preflight `167_` **READY_FOR_APPLY** (apply **suspendu**) + UI parity `168_` **READY** + SDK tracing `169_` **READY** + cartes dashboard `170_` **COMMITTED** + deploy UI `171_` **READY** + app update preflight `172_` **READY** + app update implement `173_` **READY** + app update sync+deploy `174_` **READY** (`1765da6`) + app update docs sync `175_` **READY** (`80cc7fa` docs). Migration locale 33e · 0 apply.
 
-**Pas encore :** docs sync `174_` local · Director UI-only · apply distant CHECK · persist storyboard/pack · T2V/lipsync/merge-export **réels** ; activation ; runtime Motion Production.
+**Pas encore :** décision humaine post-app-update · Director UI-only · apply distant CHECK · persist storyboard/pack · T2V/lipsync/merge-export **réels** ; activation ; runtime Motion Production.
 
 Pilotage courant : **`CURRENT_STATE_AND_RESUME.md`** puis **`BACKLOG_V2.md`**.  
-Prochaine porte : **`AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE`** — 1 push docs · 0 flag. RideCloud apply **suspendu**.
+Prochaine porte : **`AUTH_VHS_POST_APP_UPDATE_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE`** — décision humaine · 0 flag. RideCloud apply **suspendu**.
 
 ## Priorités
 
