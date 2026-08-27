@@ -3,7 +3,8 @@
 **Date :** 2026-08-27  
 **Auth :** `AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING_NO_PROVIDER`  
 **Nature :** durcissement VO + CTA scindé · **0** provider · **0** TTS · **0** média Git · **0** projet Production  
-**HEAD au départ :** `86b150c` (`160_` SHA record)
+**HEAD au départ :** `86b150c` (`160_` SHA record)  
+**HEAD de phase :** `6284fbf`
 
 ```text
 VERDICT = RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED

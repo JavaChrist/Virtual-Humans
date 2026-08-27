@@ -8,7 +8,7 @@ verifiedAt=2026-08-27
 sourceHead=86b150c
 lastFunctionalCommit=72016ea
 lastDocumentationCommit=86b150c
-thisGateDocumentationCommit=pending
+thisGateDocumentationCommit=6284fbf
 lastPhaseReport=161_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING.md
 globalStatus=RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED
 nextAuth=AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER
@@ -32,7 +32,7 @@ realMergeExportStatus=NOT_AUTHORIZED
 | `sourceHead` | `86b150c` | HEAD Git **audité** le 2026-08-27, avant le commit `161_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
 | `lastDocumentationCommit` | `86b150c` | dernier commit docs **avant** cette porte (SHA de `160_`) |
-| `thisGateDocumentationCommit` | pending | premier commit docs de la porte `161_` |
+| `thisGateDocumentationCommit` | `6284fbf` | premier commit docs de la porte `161_` |
 | SHA déployé Vercel | **non exposé par le CLI** | corrélation temporelle seulement, pas une preuve runtime |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.

@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-27T11:45:00+02:00
-documentedHead=86b150c
+documentedHead=6284fbf
 headStatus=pending commit
 lastPhaseReport=161_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING.md
 nextPhase=AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER
@@ -477,7 +477,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `161_` RideCloud storyboard VO harden | RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED | pending | 0 | **docs + contrat** · VO continue · 0 Production | project create preflight |
+| 2026-08-27 | `161_` RideCloud storyboard VO harden | RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED | `6284fbf` | 0 | **docs + contrat** · VO continue · 0 Production | project create preflight |
 | 2026-08-27 | `160_` RideCloud first-ad storyboard | RIDECLOUD_FIRST_AD_STORYBOARD_READY | `55107d9` | 0 | **docs + contrat** · 6 plans · 0 Production | VO harden |
 | 2026-08-27 | `159_` RideCloud HD variants | RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED | `4f1cf98` | 0 | **5 variantes** · 12 locked inchangées · 0 Production | storyboard preflight |
 | 2026-08-27 | `158_` RideCloud supply pack | RIDECLOUD_INPUT_COLLECTION_READY | `3eb8a0f` | 0 | **refs opaques** · 0 média Git · 0 Production | variantes HD |
