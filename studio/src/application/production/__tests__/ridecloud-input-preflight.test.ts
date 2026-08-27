@@ -7,15 +7,20 @@ import { PHASE_11C_NEXT_AUTH } from "../phase-11c-close-and-next-gate-audit";
 import {
   RIDECLOUD_ALWAYS_REQUIRED_KEYS,
   RIDECLOUD_BANNER_REF,
+  RIDECLOUD_BANNER_VARIANT_REF,
   RIDECLOUD_CAPTURE_REFS,
+  RIDECLOUD_CAPTURE_VARIANT_REFS,
   RIDECLOUD_CURRENT_INVENTORY,
   RIDECLOUD_EXPECTED_CONSTRAINTS,
   RIDECLOUD_FIRST_AD_CONCEPT,
+  RIDECLOUD_HIGH_RES_ADDENDUM_AUTH,
   RIDECLOUD_INPUT_PREFLIGHT_AUTH,
   RIDECLOUD_INPUT_PREFLIGHT_VERDICT_BLOCKED,
   RIDECLOUD_INPUT_PREFLIGHT_VERDICT_READY,
   RIDECLOUD_LOCKED_CLAIM,
   RIDECLOUD_LOCKED_CTA,
+  RIDECLOUD_LOCKED_LEGAL,
+  RIDECLOUD_LOCKED_SIGNATURE,
   RIDECLOUD_LOGO_REF,
   RIDECLOUD_NEXT_AUTH_WHEN_BLOCKED,
   RIDECLOUD_NEXT_AUTH_WHEN_READY,
@@ -24,14 +29,17 @@ import {
   RIDECLOUD_PROJECT_KEY,
   RIDECLOUD_REJECTED_UNSAFE_SOURCES,
   RIDECLOUD_SUPPLY_AUTH,
+  RIDECLOUD_VARIANT_PREFERENCE,
   assertNotRideCloudDeliverable,
   assertRideCloudLocatorIsRedactedSafe,
+  assertRideCloudLockedRefsUnreplaced,
   assertRideCloudNoSideEffects,
   buildRideCloudCurrentManifest,
   buildRideCloudObservedManifest,
   chooseRideCloudNextAuth,
   evaluateRideCloudInputReadiness,
   missingRequiredRideCloudInputs,
+  rideCloudOfficialRefs,
   rideCloudRefIntegrityPrefix,
   type RideCloudInputKey,
   type RideCloudInputStatus,
@@ -94,10 +102,14 @@ test("RIDECLOUD-PREFLIGHT — supplied pack is READY without music or recordings
   assert.equal(manifest.CTA, RIDECLOUD_LOCKED_CTA);
   assert.equal(manifest.approvedClaims.includes(RIDECLOUD_LOCKED_CLAIM), true);
   assert.equal(manifest.captureReferences.length, 10);
+  assert.equal(manifest.captureVariantReferences.length, 4);
   assert.equal(manifest.brandAssetReferences.includes(RIDECLOUD_LOGO_REF), true);
   assert.equal(manifest.brandAssetReferences.includes(RIDECLOUD_BANNER_REF), true);
+  assert.deepEqual(manifest.brandVariantReferences, [RIDECLOUD_BANNER_VARIANT_REF]);
   assert.equal(manifest.recordingReferences.length, 0);
   assert.equal(manifest.missingRequiredInputs.length, 0);
+  assert.equal(manifest.approvedClaims.includes(RIDECLOUD_LOCKED_SIGNATURE), true);
+  assert.equal(manifest.approvedClaims.length, 2);
 });
 
 test("RIDECLOUD-PREFLIGHT — READY only when every required input is verified", () => {
@@ -150,7 +162,7 @@ test("RIDECLOUD-PREFLIGHT — 11A/11B/11C and SDK memory are not deliverables", 
 });
 
 test("RIDECLOUD-PREFLIGHT — opaque refs expose prefixes only", () => {
-  for (const ref of [RIDECLOUD_LOGO_REF, RIDECLOUD_BANNER_REF, ...RIDECLOUD_CAPTURE_REFS]) {
+  for (const ref of rideCloudOfficialRefs()) {
     assertRideCloudLocatorIsRedactedSafe(ref);
     const prefix = rideCloudRefIntegrityPrefix(ref);
     assert.equal(prefix.length, 12);
@@ -158,6 +170,32 @@ test("RIDECLOUD-PREFLIGHT — opaque refs expose prefixes only", () => {
     assert.equal(/[0-9a-f]{64}/.test(ref), false);
   }
   assert.equal(RIDECLOUD_CAPTURE_REFS.length, 10);
+  assert.equal(RIDECLOUD_CAPTURE_VARIANT_REFS.length, 4);
+  assert.equal(rideCloudOfficialRefs().length, 17);
+});
+
+test("RIDECLOUD-PREFLIGHT — high-res variants do not replace locked refs", () => {
+  assert.equal(
+    RIDECLOUD_HIGH_RES_ADDENDUM_AUTH,
+    "AUTH_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM_NO_PROVIDER",
+  );
+  const manifest = buildRideCloudCurrentManifest();
+  assertRideCloudLockedRefsUnreplaced(manifest);
+  assert.deepEqual([...manifest.captureReferences], [...RIDECLOUD_CAPTURE_REFS]);
+  assert.deepEqual([...manifest.captureVariantReferences], [...RIDECLOUD_CAPTURE_VARIANT_REFS]);
+  assert.equal(manifest.brandAssetReferences.includes(RIDECLOUD_BANNER_VARIANT_REF), false);
+  assert.equal(manifest.captureReferences.includes(RIDECLOUD_CAPTURE_VARIANT_REFS[0]), false);
+  assert.equal(RIDECLOUD_VARIANT_PREFERENCE.captures1080pExport.includes("keep_720x1604"), true);
+  assert.equal(RIDECLOUD_VARIANT_PREFERENCE.banner.includes("keep_1024x500"), true);
+  assert.equal(
+    RIDECLOUD_LOCKED_LEGAL.includes("banner_image_copy_is_not_an_authorized_claim"),
+    true,
+  );
+  const replaced = {
+    ...manifest,
+    brandAssetReferences: [RIDECLOUD_LOGO_REF, RIDECLOUD_BANNER_VARIANT_REF],
+  };
+  assert.throws(() => assertRideCloudLockedRefsUnreplaced(replaced), /LOCKED_BRAND_REPLACED/);
 });
 
 test("RIDECLOUD-PREFLIGHT — no side effects and next Auth follows verdict", () => {

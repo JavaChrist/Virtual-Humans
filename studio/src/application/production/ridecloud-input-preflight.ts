@@ -9,6 +9,9 @@ export const RIDECLOUD_INPUT_PREFLIGHT_AUTH = PHASE_11C_NEXT_AUTH;
 export const RIDECLOUD_SUPPLY_AUTH =
   "AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER" as const;
 
+export const RIDECLOUD_HIGH_RES_ADDENDUM_AUTH =
+  "AUTH_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM_NO_PROVIDER" as const;
+
 export const RIDECLOUD_INPUT_PREFLIGHT_VERDICT_READY = "READY" as const;
 export const RIDECLOUD_INPUT_PREFLIGHT_VERDICT_BLOCKED = "BLOCKED_INPUTS_REQUIRED" as const;
 
@@ -87,7 +90,9 @@ export type RideCloudInputManifest = {
   language: string | null;
   voiceRole: string | null;
   brandAssetReferences: readonly RideCloudOpaqueRef[];
+  brandVariantReferences: readonly RideCloudOpaqueRef[];
   captureReferences: readonly RideCloudOpaqueRef[];
+  captureVariantReferences: readonly RideCloudOpaqueRef[];
   recordingReferences: readonly RideCloudOpaqueRef[];
   approvedClaims: readonly string[];
   CTA: string | null;
@@ -155,6 +160,7 @@ export const RIDECLOUD_FIRST_AD_CONCEPT =
 
 export const RIDECLOUD_LOGO_REF = "ref:ridecloud-logo-512x512#5b3b85a3d8a5" as const;
 export const RIDECLOUD_BANNER_REF = "ref:ridecloud-banner-1024x500#d26a04137ca0" as const;
+export const RIDECLOUD_BANNER_VARIANT_REF = "ref:ridecloud-banner-1794x876#804bca9d9832" as const;
 
 export const RIDECLOUD_CAPTURE_REFS = [
   "ref:ridecloud-capture-720x1604-01#eed8f55e672a",
@@ -168,6 +174,18 @@ export const RIDECLOUD_CAPTURE_REFS = [
   "ref:ridecloud-capture-720x1604-09#314f7face28d",
   "ref:ridecloud-capture-720x1604-10#e6523b986d67",
 ] as const satisfies readonly RideCloudOpaqueRef[];
+
+export const RIDECLOUD_CAPTURE_VARIANT_REFS = [
+  "ref:ridecloud-capture-1080x2424-01#b0eb965287e6",
+  "ref:ridecloud-capture-1080x2424-02#031e72c27384",
+  "ref:ridecloud-capture-1080x2424-03#fba239a8de97",
+  "ref:ridecloud-capture-1080x2424-04#ea898663643e",
+] as const satisfies readonly RideCloudOpaqueRef[];
+
+export const RIDECLOUD_VARIANT_PREFERENCE = {
+  captures1080pExport: "prefer_1080x2424_variants_keep_720x1604",
+  banner: "prefer_1794x876_variant_keep_1024x500",
+} as const;
 
 const SENSITIVE_LOCATOR =
   /sk-[A-Za-z0-9]{12,}|X-Amz-Signature=|eyJ[A-Za-z0-9_-]{20,}\.|data:(?:image|audio|video)\/|[A-Za-z]:\\|[?&]token=/i;
@@ -319,8 +337,8 @@ export const RIDECLOUD_CURRENT_INPUT_NOTES: Record<RideCloudInputKey, string> = 
   productBrief: "Locked from Christian claim + signature. No extra brief invented.",
   campaignGoal: "20–30s founder-program ad for LinkedIn and Instagram.",
   audience: "LinkedIn and Instagram, locked by this Auth.",
-  logoBrand: "512×512 logo verified locally. Opaque ref + 12-hex prefix only.",
-  screenshots: "10 captures 720×1604 verified. Briefing said 8. Android overlay crop later.",
+  logoBrand: "512×512 logo verified locally. 1024×500 banner locked. 1794×876 banner is a variant only.",
+  screenshots: "10 captures 720×1604 locked. 4 captures 1080×2424 added as official variants. Android overlay crop later.",
   screenRecordings: "None supplied. Screenshots satisfy the visual-source rule.",
   approvedClaims: "One locked claim. No improvisation.",
   valueProposition: "Locked signature: Centralisez, anticipez, valorisez.",
@@ -338,7 +356,46 @@ export const RIDECLOUD_LOCKED_LEGAL = [
   "google_play_badge_only_if_distribution_claim_is_exact",
   "android_system_overlay_must_be_cropped_before_deliverable",
   "no_personal_data_in_sources",
+  "banner_image_copy_is_not_an_authorized_claim",
 ] as const;
+
+export function rideCloudOfficialRefs(): readonly RideCloudOpaqueRef[] {
+  return [
+    RIDECLOUD_LOGO_REF,
+    RIDECLOUD_BANNER_REF,
+    RIDECLOUD_BANNER_VARIANT_REF,
+    ...RIDECLOUD_CAPTURE_REFS,
+    ...RIDECLOUD_CAPTURE_VARIANT_REFS,
+  ];
+}
+
+export function assertRideCloudLockedRefsUnreplaced(manifest: RideCloudInputManifest): void {
+  if (manifest.brandAssetReferences.length !== 2) {
+    throw new Error("BLOCKED_RIDECLOUD_LOCKED_BRAND_REPLACED");
+  }
+  if (manifest.brandAssetReferences[0] !== RIDECLOUD_LOGO_REF) {
+    throw new Error("BLOCKED_RIDECLOUD_LOCKED_BRAND_REPLACED");
+  }
+  if (manifest.brandAssetReferences[1] !== RIDECLOUD_BANNER_REF) {
+    throw new Error("BLOCKED_RIDECLOUD_LOCKED_BRAND_REPLACED");
+  }
+  if (manifest.captureReferences.length !== RIDECLOUD_CAPTURE_REFS.length) {
+    throw new Error("BLOCKED_RIDECLOUD_LOCKED_CAPTURE_REPLACED");
+  }
+  for (const [index, ref] of RIDECLOUD_CAPTURE_REFS.entries()) {
+    if (manifest.captureReferences[index] !== ref) {
+      throw new Error("BLOCKED_RIDECLOUD_LOCKED_CAPTURE_REPLACED");
+    }
+  }
+  if (manifest.brandAssetReferences.includes(RIDECLOUD_BANNER_VARIANT_REF)) {
+    throw new Error("BLOCKED_RIDECLOUD_VARIANT_COLLAPSED_INTO_LOCKED");
+  }
+  for (const ref of RIDECLOUD_CAPTURE_VARIANT_REFS) {
+    if (manifest.captureReferences.includes(ref)) {
+      throw new Error("BLOCKED_RIDECLOUD_VARIANT_COLLAPSED_INTO_LOCKED");
+    }
+  }
+}
 
 export function buildRideCloudObservedRecords(): RideCloudInputRecord[] {
   return (Object.keys(RIDECLOUD_OBSERVED_INVENTORY) as RideCloudInputKey[]).map((key) => ({
@@ -362,7 +419,9 @@ export function buildRideCloudObservedManifest(): RideCloudInputManifest {
     language: null,
     voiceRole: null,
     brandAssetReferences: [],
+    brandVariantReferences: [],
     captureReferences: [],
+    captureVariantReferences: [],
     recordingReferences: [],
     approvedClaims: [],
     CTA: null,
@@ -388,14 +447,13 @@ export function buildRideCloudCurrentRecords(): RideCloudInputRecord[] {
 }
 
 export function buildRideCloudCurrentManifest(): RideCloudInputManifest {
-  const refs = [RIDECLOUD_LOGO_REF, RIDECLOUD_BANNER_REF, ...RIDECLOUD_CAPTURE_REFS];
-  for (const ref of refs) {
+  for (const ref of rideCloudOfficialRefs()) {
     assertRideCloudLocatorIsRedactedSafe(ref);
     rideCloudRefIntegrityPrefix(ref);
     assertNotRideCloudDeliverable(ref);
   }
   const missing = missingRequiredRideCloudInputs(RIDECLOUD_CURRENT_INVENTORY);
-  return {
+  const manifest = {
     projectKey: RIDECLOUD_PROJECT_KEY,
     productName: RIDECLOUD_PRODUCT_NAME,
     campaignGoal: "founder_program_ad_20_30s_linkedin_instagram",
@@ -406,7 +464,9 @@ export function buildRideCloudCurrentManifest(): RideCloudInputManifest {
     language: "fr",
     voiceRole: "narrator_female",
     brandAssetReferences: [RIDECLOUD_LOGO_REF, RIDECLOUD_BANNER_REF],
+    brandVariantReferences: [RIDECLOUD_BANNER_VARIANT_REF],
     captureReferences: RIDECLOUD_CAPTURE_REFS,
+    captureVariantReferences: RIDECLOUD_CAPTURE_VARIANT_REFS,
     recordingReferences: [],
     approvedClaims: [RIDECLOUD_LOCKED_CLAIM, RIDECLOUD_LOCKED_SIGNATURE],
     CTA: RIDECLOUD_LOCKED_CTA,
@@ -414,5 +474,7 @@ export function buildRideCloudCurrentManifest(): RideCloudInputManifest {
     legalConstraints: RIDECLOUD_LOCKED_LEGAL,
     missingRequiredInputs: missing,
     readinessVerdict: evaluateRideCloudInputReadiness(RIDECLOUD_CURRENT_INVENTORY),
-  };
+  } satisfies RideCloudInputManifest;
+  assertRideCloudLockedRefsUnreplaced(manifest);
+  return manifest;
 }

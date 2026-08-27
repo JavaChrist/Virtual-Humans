@@ -5,6 +5,7 @@
  */
 import {
   RIDECLOUD_FIRST_AD_CONCEPT,
+  RIDECLOUD_HIGH_RES_ADDENDUM_AUTH,
   RIDECLOUD_INPUT_PREFLIGHT_AUTH,
   RIDECLOUD_SUPPLY_AUTH,
   assertRideCloudNoSideEffects,
@@ -37,6 +38,7 @@ console.log(
     {
       collectionAuth: RIDECLOUD_INPUT_PREFLIGHT_AUTH,
       supplyAuth: RIDECLOUD_SUPPLY_AUTH,
+      highResAddendumAuth: RIDECLOUD_HIGH_RES_ADDENDUM_AUTH,
       ok: true,
       verdict: manifest.readinessVerdict,
       nextAuth,
@@ -47,7 +49,9 @@ console.log(
       })),
       missingRequiredInputs: manifest.missingRequiredInputs,
       captureCount: manifest.captureReferences.length,
+      captureVariantCount: manifest.captureVariantReferences.length,
       brandRefCount: manifest.brandAssetReferences.length,
+      brandVariantCount: manifest.brandVariantReferences.length,
       manifest,
     },
     null,
