@@ -150,6 +150,7 @@
 - [x] App update blockers sync+deploy (`177_`) · **VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_READY** · SHA `7d1c34c` · docs sync **terminée** (`9b62799`) · 0 flag ;
 - [x] Lipsync `/director` wiring disabled (`178_`) · **VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY** · SHA `366abd6` · 0 provider · 0 flag ;
 - [x] Lipsync `/director` wiring sync+deploy (`179_`) · **VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY** · SHA `bb41dcc` · 0 provider · 0 flag ;
+- [x] Merge/export `/director` wiring disabled (`180_`) · **VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRED_DISABLED_READY** · SHA `a602de9` · 0 moteur · 0 flag ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -163,7 +164,8 @@ Voice `/director` : **11C CLOSED** PASS_WITH_NOTES (`140_`–`156_`) · catalog 
 RideCloud promo : **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · apply **suspendu** · projet `ba4a6021…` draft · CHECK distant 13 kinds · 0 apply
 UI localhost vs Production : **DEPLOY READY** (`171_`) · SHA `e4703bf` prouvé · 0 flag
 App update PWA : **BLOCKERS DEPLOY READY** (`177_`) · SHA build `bb41dcc` · fonctionnel `045f48a` · 0 flag · docs sync **terminée**
-Lipsync `/director` : **WIRED_DISABLED DEPLOY READY** (`178_`/`179_`) · SHA build `bb41dcc` · tree `366abd6` · 0 provider · 0 flag
+Lipsync `/director` : **WIRED_DISABLED DEPLOY READY** (`178_`/`179_`) · SHA build `134631d` · tree `366abd6` · 0 provider · 0 flag
+Merge/export `/director` : **WIRED_DISABLED** (`180_`) · SHA `a602de9` · 0 moteur · 0 flag
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED
