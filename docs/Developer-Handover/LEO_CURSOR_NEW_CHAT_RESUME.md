@@ -1,16 +1,16 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : living resume. `160_` storyboard première pub RideCloud **consommée**. Voir living handover.
+Nature : living resume. `161_` durcissement VO storyboard **consommée**. Voir living handover.
 
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-27
-sourceHead=8d65bd8
+sourceHead=86b150c
 lastFunctionalCommit=72016ea
-lastDocumentationCommit=8d65bd8
-thisGateDocumentationCommit=55107d9
-lastPhaseReport=160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md
-globalStatus=RIDECLOUD_FIRST_AD_STORYBOARD_READY
+lastDocumentationCommit=86b150c
+thisGateDocumentationCommit=pending
+lastPhaseReport=161_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING.md
+globalStatus=RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED
 nextAuth=AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER
 budgetHard=437
 budgetCommitted=391
@@ -29,10 +29,10 @@ realMergeExportStatus=NOT_AUTHORIZED
 
 | Pointeur | Valeur | Signification |
 |---|---|---|
-| `sourceHead` | `8d65bd8` | HEAD Git **audité** le 2026-08-27, avant le commit `160_` |
+| `sourceHead` | `86b150c` | HEAD Git **audité** le 2026-08-27, avant le commit `161_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
-| `lastDocumentationCommit` | `8d65bd8` | dernier commit docs **avant** cette porte (SHA de `159_`) |
-| `thisGateDocumentationCommit` | `55107d9` | premier commit docs de la porte `160_` |
+| `lastDocumentationCommit` | `86b150c` | dernier commit docs **avant** cette porte (SHA de `160_`) |
+| `thisGateDocumentationCommit` | pending | premier commit docs de la porte `161_` |
 | SHA déployé Vercel | **non exposé par le CLI** | corrélation temporelle seulement, pas une preuve runtime |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
@@ -268,7 +268,7 @@ Attendus (non relus un par un le 26 août) : Voice / Paid Media / Worker payant 
 - stockage privé
 - budget et idempotence
 
-**Pack RideCloud (`158_` + `159_`) = READY.** Storyboard première pub (`160_`) = **26 s / 6 plans**. Encore manquant ensuite :
+**Pack RideCloud (`158_` + `159_`) = READY.** Storyboard (`160_` + `161_`) = **26 s / VO continue / CTA scindé**. Encore manquant ensuite :
 
 - créer un **projet séparé RideCloud** (preflight puis write distincts)
 - merge / export réel
@@ -299,6 +299,7 @@ Interdit : provider · dépense · média Git · write Production · activation 
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
 
+`AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING_NO_PROVIDER` est **consommée** (`161_`).
 `AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER` est **consommée** (`160_`).
 `AUTH_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM_NO_PROVIDER` est **consommée** (`159_`).  
 `AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER` est **consommée** (`158_`).
@@ -312,13 +313,13 @@ Copier le bloc suivant dans un nouveau chat Léo :
 ```text
 Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 161_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING.md.
 
 Ne rejoue aucune phase terminée. Vérifie d’abord Git et les éventuels nouveaux STOP Cursor. Une autorisation d’un chat précédent n’est jamais réutilisable.
 
 La porte active est AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER. Elle n’est pas encore exécutée.
 
-RideCloud storyboard 26 s READY (160_). Pack 158_ + 5 variantes HD 159_. Auth 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun provider. 0¢. N’invente aucun claim. Aucun média Git.
+RideCloud storyboard VO continue (161_). Pack 158_ + 5 variantes HD 159_. Auth 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun provider. 0¢. N’invente aucun claim. Aucun média Git.
 
 Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. Le SHA Vercel Ready n’est pas prouvé.
 
@@ -334,13 +335,13 @@ Copier le bloc suivant dans un nouveau chat Cursor :
 ```text
 Tu es Cursor, exécutant code/test/doc de Virtual Humans Studio.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 161_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING.md.
 
 Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main.
 
 Protège les fichiers hors scope déjà dirty : studio/src/app/api/aiccos/send/route.ts, studio/src/components/send-to-aiccos.tsx, studio/src/app/page.tsx. Ne les modifie pas, ne les restaure pas, ne les stash pas, ne les stage pas.
 
-Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_ ni 160_. Aucun provider. 0¢. Aucun projet Production. Aucun média Git. N’invente aucun claim.
+Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_, 160_ ni 161_. Aucun provider. 0¢. Aucun projet Production. Aucun média Git. N’invente aucun claim.
 
 La prochaine porte est AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER. Elle n’est pas autorisée par ce fichier de reprise. 0 provider. 0¢.
 ```
@@ -351,7 +352,7 @@ La prochaine porte est AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVI
 
 - [ ] Confirmer la racine Git `C:\Users\JavaChrist\Desktop\virtual-humans`
 - [ ] Confirmer branche `main` et relever HEAD / origin/main / ahead-behind
-- [ ] Lire le dernier STOP (ce fichier + living handover + `160_`)
+- [ ] Lire le dernier STOP (ce fichier + living handover + `161_`)
 - [ ] Vérifier le working tree sans le modifier
 - [ ] Protéger les trois fichiers hors scope
 - [ ] Confirmer budget 437 / 391 / 0 / 46
@@ -381,6 +382,7 @@ La prochaine porte est AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVI
 | [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md) | RideCloud pack READY |
 | [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md) | RideCloud 5 variantes HD |
 | [`160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md`](./160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md) | RideCloud storyboard 26 s |
+| [`161_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING.md`](./161_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING.md) | RideCloud VO continue |
 | [`00_README.md`](./00_README.md) | Index |
 | [`.cursor/rules/living-handover.mdc`](../../.cursor/rules/living-handover.mdc) | Règle de clôture |
 

@@ -16,12 +16,18 @@ import {
 import {
   RIDECLOUD_ALLOWED_ON_SCREEN_TEXT,
   RIDECLOUD_FIRST_AD_SHOTS,
+  RIDECLOUD_LOCKED_CTA_INVITE,
+  RIDECLOUD_LOCKED_CTA_PREMIUM,
+  RIDECLOUD_LOCKED_FOLLOW_NARRATION,
+  RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION,
   RIDECLOUD_STORYBOARD_AUTH,
   RIDECLOUD_STORYBOARD_DURATION_SEC,
+  RIDECLOUD_STORYBOARD_HARDENING_AUTH,
   RIDECLOUD_STORYBOARD_NEXT_AUTH,
   RIDECLOUD_STORYBOARD_VERDICT,
   assertRideCloudNarrationIsLocked,
   assertRideCloudOnScreenTextIsLocked,
+  assertRideCloudStoryboardAudioContinuity,
   assertRideCloudStoryboardTiming,
   assertRideCloudStoryboardVisuals,
   buildRideCloudFirstAdStoryboard,
@@ -32,6 +38,10 @@ test("RIDECLOUD-STORYBOARD — locked Auth and 26s window", () => {
   assert.equal(RIDECLOUD_STORYBOARD_AUTH, RIDECLOUD_NEXT_AUTH_WHEN_READY);
   assert.equal(RIDECLOUD_STORYBOARD_AUTH, "AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER");
   assert.equal(RIDECLOUD_STORYBOARD_DURATION_SEC, 26);
+  assert.equal(
+    RIDECLOUD_STORYBOARD_HARDENING_AUTH,
+    "AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING_NO_PROVIDER",
+  );
   assert.equal(
     RIDECLOUD_STORYBOARD_NEXT_AUTH,
     "AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER",
@@ -67,19 +77,33 @@ test("RIDECLOUD-STORYBOARD — prefers HD variants and keeps landing plus logo",
 
 test("RIDECLOUD-STORYBOARD — on-screen and VO stay inside locked copy", () => {
   const board = buildRideCloudFirstAdStoryboard();
-  const spoken = board.shots.map((shot) => shot.narration).filter((text) => text !== null);
+  const spoken = board.shots.map((shot) => shot.narration);
   assert.deepEqual(spoken, [
     RIDECLOUD_LOCKED_CLAIM,
     RIDECLOUD_LOCKED_SIGNATURE,
-    RIDECLOUD_LOCKED_CTA,
+    RIDECLOUD_LOCKED_FOLLOW_NARRATION,
+    RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION,
+    RIDECLOUD_LOCKED_CTA_INVITE,
+    RIDECLOUD_LOCKED_CTA_PREMIUM,
   ]);
   for (const shot of board.shots) {
     for (const text of shot.onScreenText) {
       assert.equal((RIDECLOUD_ALLOWED_ON_SCREEN_TEXT as readonly string[]).includes(text), true);
+      assert.equal(text === RIDECLOUD_LOCKED_CTA, false);
     }
   }
   assert.throws(() => assertRideCloudOnScreenTextIsLocked("L’entretien automobile simplifié"), /UNAPPROVED/);
   assert.throws(() => assertRideCloudNarrationIsLocked("Premium à vie sans conditions"), /UNAPPROVED/);
+  assert.throws(() => assertRideCloudOnScreenTextIsLocked(RIDECLOUD_LOCKED_CTA), /UNAPPROVED/);
+});
+
+test("RIDECLOUD-STORYBOARD — every shot has VO and the full CTA stays off-screen", () => {
+  assertRideCloudStoryboardAudioContinuity(RIDECLOUD_FIRST_AD_SHOTS);
+  assert.equal(RIDECLOUD_FIRST_AD_SHOTS.every((shot) => shot.narration !== null), true);
+  assert.equal(RIDECLOUD_FIRST_AD_SHOTS[5]!.onScreenText.includes(RIDECLOUD_LOCKED_CTA_PREMIUM), true);
+  assert.equal(RIDECLOUD_FIRST_AD_SHOTS[5]!.cropRules.includes("founder_program_terms_off_video"), true);
+  const silent = [{ ...RIDECLOUD_FIRST_AD_SHOTS[2], narration: null }];
+  assert.throws(() => assertRideCloudStoryboardAudioContinuity(silent), /SILENT_SHOT/);
 });
 
 test("RIDECLOUD-STORYBOARD — timing is contiguous and crop rules stay fail-closed", () => {

@@ -86,6 +86,8 @@
 **RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED** — verdict `159_` : 4 captures `1080×2424` + bannière `1794×876` ajoutées comme variantes · claims inchangés.
 **AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER** — porte `160_` : storyboard déterministe 26 s · 6 plans · 0 provider · 0 TTS.
 **RIDECLOUD_FIRST_AD_STORYBOARD_READY** — verdict `160_` : plan LinkedIn/Instagram verrouillé · copy `158_` uniquement.
+**AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING_NO_PROVIDER** — porte `161_` : VO continue · CTA scindé · 0 silence · 0 provider.
+**RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED** — verdict `161_` : 26 s parlées · end card CTA court · conditions hors vidéo.
 **AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER** — prochaine porte : preflight projet Production RideCloud séparé · 0 write · 0¢.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).

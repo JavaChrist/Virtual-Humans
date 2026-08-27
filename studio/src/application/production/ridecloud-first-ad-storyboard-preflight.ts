@@ -27,17 +27,39 @@ import {
 
 export const RIDECLOUD_STORYBOARD_AUTH = RIDECLOUD_NEXT_AUTH_WHEN_READY;
 
-export const RIDECLOUD_STORYBOARD_VERDICT = "RIDECLOUD_FIRST_AD_STORYBOARD_READY" as const;
+export const RIDECLOUD_STORYBOARD_HARDENING_AUTH =
+  "AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENING_NO_PROVIDER" as const;
+
+export const RIDECLOUD_STORYBOARD_VERDICT =
+  "RIDECLOUD_FIRST_AD_STORYBOARD_AUDIO_CONTINUITY_HARDENED" as const;
 
 export const RIDECLOUD_STORYBOARD_NEXT_AUTH =
   "AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER" as const;
 
 export const RIDECLOUD_STORYBOARD_DURATION_SEC = 26 as const;
 
+export const RIDECLOUD_LOCKED_FOLLOW_NARRATION =
+  "suivi des entretiens, échéances et documents" as const;
+export const RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION =
+  "voiture, moto, scooter et utilitaire dans une même application" as const;
+export const RIDECLOUD_LOCKED_CTA_INVITE =
+  "Rejoignez le Programme Fondateur, testez RideCloud et remplissez le questionnaire." as const;
+export const RIDECLOUD_LOCKED_CTA_PREMIUM = "Bénéficiez de Premium à vie." as const;
+
+export const RIDECLOUD_ALLOWED_NARRATION = [
+  RIDECLOUD_LOCKED_CLAIM,
+  RIDECLOUD_LOCKED_SIGNATURE,
+  RIDECLOUD_LOCKED_FOLLOW_NARRATION,
+  RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION,
+  RIDECLOUD_LOCKED_CTA_INVITE,
+  RIDECLOUD_LOCKED_CTA_PREMIUM,
+] as const;
+
 export const RIDECLOUD_ALLOWED_ON_SCREEN_TEXT = [
   RIDECLOUD_LOCKED_CLAIM,
   RIDECLOUD_LOCKED_SIGNATURE,
-  RIDECLOUD_LOCKED_CTA,
+  RIDECLOUD_LOCKED_CTA_INVITE,
+  RIDECLOUD_LOCKED_CTA_PREMIUM,
   RIDECLOUD_PRODUCT_NAME,
 ] as const;
 
@@ -123,7 +145,7 @@ export const RIDECLOUD_FIRST_AD_SHOTS = [
     motion: "hold",
     transitionOut: "dissolve",
     onScreenText: [],
-    narration: null,
+    narration: RIDECLOUD_LOCKED_FOLLOW_NARRATION,
     cropRules: [CROP_STATUS_BAR, CROP_SAFE_CENTER, CROP_NO_UNAPPROVED_UI_COPY],
   },
   {
@@ -135,7 +157,7 @@ export const RIDECLOUD_FIRST_AD_SHOTS = [
     motion: "hold",
     transitionOut: "dissolve",
     onScreenText: [],
-    narration: null,
+    narration: RIDECLOUD_LOCKED_VEHICLE_TYPES_NARRATION,
     cropRules: [CROP_STATUS_BAR, CROP_SAFE_CENTER],
   },
   {
@@ -146,8 +168,8 @@ export const RIDECLOUD_FIRST_AD_SHOTS = [
     visualRole: "founder_program_visual_preferred_1080",
     motion: "slow_push_in",
     transitionOut: "dissolve",
-    onScreenText: [RIDECLOUD_LOCKED_CTA],
-    narration: RIDECLOUD_LOCKED_CTA,
+    onScreenText: [RIDECLOUD_LOCKED_CTA_INVITE],
+    narration: RIDECLOUD_LOCKED_CTA_INVITE,
     cropRules: [CROP_STATUS_BAR, CROP_SAFE_CENTER, CROP_NO_UNAPPROVED_UI_COPY],
   },
   {
@@ -158,9 +180,9 @@ export const RIDECLOUD_FIRST_AD_SHOTS = [
     visualRole: "logo_endcard",
     motion: "hold",
     transitionOut: "cut",
-    onScreenText: [RIDECLOUD_PRODUCT_NAME, RIDECLOUD_LOCKED_CTA],
-    narration: null,
-    cropRules: [CROP_SAFE_CENTER, CROP_NO_PLAY_BADGE],
+    onScreenText: [RIDECLOUD_PRODUCT_NAME, RIDECLOUD_LOCKED_CTA_PREMIUM],
+    narration: RIDECLOUD_LOCKED_CTA_PREMIUM,
+    cropRules: [CROP_SAFE_CENTER, CROP_NO_PLAY_BADGE, "founder_program_terms_off_video"],
   },
 ] as const satisfies readonly RideCloudStoryboardShot[];
 
@@ -171,13 +193,20 @@ export function assertRideCloudOnScreenTextIsLocked(text: string): void {
 }
 
 export function assertRideCloudNarrationIsLocked(text: string | null): void {
-  if (text === null) return;
-  if (
-    text !== RIDECLOUD_LOCKED_CLAIM &&
-    text !== RIDECLOUD_LOCKED_SIGNATURE &&
-    text !== RIDECLOUD_LOCKED_CTA
-  ) {
+  if (text === null) throw new Error("BLOCKED_RIDECLOUD_SILENT_SHOT");
+  if (!(RIDECLOUD_ALLOWED_NARRATION as readonly string[]).includes(text)) {
     throw new Error("BLOCKED_RIDECLOUD_UNAPPROVED_NARRATION");
+  }
+}
+
+export function assertRideCloudStoryboardAudioContinuity(
+  shots: readonly RideCloudStoryboardShot[],
+): void {
+  for (const shot of shots) {
+    assertRideCloudNarrationIsLocked(shot.narration);
+    if (shot.onScreenText.includes(RIDECLOUD_LOCKED_CTA)) {
+      throw new Error("BLOCKED_RIDECLOUD_FULL_CTA_TOO_DENSE");
+    }
   }
 }
 
@@ -240,6 +269,7 @@ export function buildRideCloudFirstAdStoryboard(): RideCloudFirstAdStoryboard {
   });
   assertRideCloudStoryboardTiming(RIDECLOUD_FIRST_AD_SHOTS);
   assertRideCloudStoryboardVisuals(RIDECLOUD_FIRST_AD_SHOTS);
+  assertRideCloudStoryboardAudioContinuity(RIDECLOUD_FIRST_AD_SHOTS);
   return {
     projectKey: RIDECLOUD_PROJECT_KEY,
     productName: RIDECLOUD_PRODUCT_NAME,
