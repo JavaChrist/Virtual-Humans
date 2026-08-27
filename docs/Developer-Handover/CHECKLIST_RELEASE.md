@@ -135,6 +135,7 @@
 - [x] RideCloud storyboard VO polish (`162_`) · **RIDECLOUD_FIRST_AD_STORYBOARD_VO_COPY_POLISHED** · s03/s04 · 144/150 wpm ;
 - [x] RideCloud project create preflight (`163_`) · **RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_READY** · 0 projet créé ;
 - [x] RideCloud project create idempotent (`164_`) · **RIDECLOUD_SEPARATE_PROJECT_CREATED** · draft + brief rev.1 · replay existing ;
+- [x] RideCloud storyboard/pack bind preflight (`165_`) · **RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY** · 0 persist ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -145,7 +146,7 @@ Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
 I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
 Voice `/director` : **11C CLOSED** PASS_WITH_NOTES (`140_`–`156_`) · catalog 4/4/1 · 1 MP3 `bc36bba7…` approved inactif · HR `068a2b25…` · 2¢ provisional · flags OFF · preuves privées ≠ livrables RideCloud
-RideCloud promo : **CREATED** (`164_`) · projet `ba4a6021…` draft · brief `adea092a…` rev.1 · replay existing
+RideCloud promo : **BIND PREFLIGHT READY** (`165_`) · projet `ba4a6021…` draft · kinds conçus · 0 persist
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED
