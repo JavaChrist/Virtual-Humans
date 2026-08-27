@@ -44,7 +44,7 @@ test("freshness — living file parses and required markers present", async () =
   const markers = mod.parseCurrentStateMarkers(markdown);
   assert.equal(
     markers.nextPhase,
-    "AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE",
+    "AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE",
   );
   assert.equal(markers.budgetHard, "437");
   assert.equal(markers.runtimePaidMedia, "OFF");

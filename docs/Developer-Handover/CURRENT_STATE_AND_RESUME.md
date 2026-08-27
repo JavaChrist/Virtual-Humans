@@ -1,33 +1,34 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-27T21:10:00+02:00
-documentedHead=a602de9
+verifiedAt=2026-08-27T22:30:00+02:00
+documentedHead=8a7cc19
 headStatus=pending commit
-lastPhaseReport=180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md
-nextPhase=AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+lastPhaseReport=181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md
+nextPhase=AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
 budgetAvailable=46
 runtimePaidMedia=OFF
 unitTests=2002/2002
-globalStatus=VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRED_DISABLED_READY
+globalStatus=VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRED_DISABLED_READY`  
-**Dernière vérification :** 2026-08-27 · merge/export wiring disabled `180_` · **0 push** · **0 flag** · **0 moteur**  
-**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED_NO_PROVIDER_NO_DEPLOY_NO_FLAG_WRITE`  
+**Statut global :** `VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY`  
+**Dernière vérification :** 2026-08-27 · merge/export wiring sync+deploy `181_` · **1 push** · **0 flag** · **0 moteur**  
+**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`  
 **Branche :** `main`  
-**HEAD local fonctionnel :** `a602de9` · origin/main **`134631d`** · ahead/behind après commit docs local **`2/0`**  
+**HEAD local fonctionnel :** `a602de9` · origin/main **`8a7cc19`** · ahead/behind après commit docs local **`1/0`**  
 **Working tree :** 2 AICCOS hors scope (dirty, protégés) · `page.tsx` propre  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
-**Alias Production actuel :** host `hz2hud0do-…` · id `dpl_34oqVAp…` · auto-deploy **`134631d`** · `/api/version` identité Git `134631d` · tree lipsync = `366abd6` · merge/export local = `a602de9`  
+**Alias Production actuel :** host `88bvs37tz-…` · id `dpl_14MHhoRB…` · auto-deploy **`8a7cc19`** · `/api/version` identité Git `8a7cc19` · tree merge/export = `a602de9` · tree lipsync = `366abd6`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
 **Reprise nouveau chat :** [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)  
-**Dernier rapport fonctionnel :** [`180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md`](./180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md)  
+**Dernier rapport de porte :** [`181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md`](./181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md)  
+**Merge/export wiring implement :** [`180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md`](./180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md)  
 **Lipsync wiring implement :** [`178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md`](./178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md)  
 **Lipsync wiring deploy :** [`179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md`](./179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md)  
 **App update blockers deploy :** [`177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md`](./177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md) · **docs sync terminée**  
@@ -50,7 +51,7 @@ globalStatus=VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRED_DISABLED_READY
 **Storyboard initial :** [`160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md`](./160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md)  
 **Addendum HD :** [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md)  
 **Supply RideCloud :** [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md)  
-**Prochaine phase exacte :** `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`  
+**Prochaine phase exacte :** `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE`  
 **RideCloud apply :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER` — **suspendue, non consommée**
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
@@ -89,13 +90,13 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Overlay typographique | **WIRED_DISABLED** · 1.2.0 **HUMAN_APPROVED** privé inactif | checksum `9ac484b7…` · décision `fb2f886c…` |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
 | I2V `/director` | **11B CLOSED** · attempt **completed** · vidéo inactive | `138_` · 1 CAS · pointeurs durcis `139_` |
-| T2V / lipsync / merge-export réels | lipsync **WIRED_DISABLED** · merge/export **WIRED_DISABLED** | `178_`/`180_` fakes · 0 moteur |
+| T2V / lipsync / merge-export réels | lipsync **WIRED_DISABLED** · merge/export **WIRED_DISABLED DEPLOY READY** | `178_`/`180_` fakes · SHA build `8a7cc19` · 0 moteur |
 | Voice / TTS `/director` | **11C CLOSED** · PASS_WITH_NOTES · 1 audio privé inactif | `140_`–`156_` · 1 ElevenLabs · HR APPROVE `068a2b25…` · flags OFF |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
 | RideCloud promo | **BIND KIND SCHEMA REMOTE PREFLIGHT READY** · apply **suspendu** | `167_` · CHECK distant 13 kinds · 0 apply |
 | UI localhost vs Production | **deploy Ready** · SHA `e4703bf` prouvé · alias docs `c808fa2` | `171_` · tracing + cartes · Director flag OFF |
 | App update / PWA | **BLOCKERS DEPLOY READY** · SHA build `134631d` · fonctionnel `045f48a` | `177_` · docs sync **terminée** · 0 flag |
-| Prochaine étape | **SYNC+DEPLOY MERGE/EXPORT** | `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE` · 0 moteur · 0 flag |
+| Prochaine étape | **DOCS SYNC MERGE/EXPORT** | `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE` · 0 moteur · 0 flag |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -140,10 +141,10 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `138_`/`139_` | attempt `6be95728…` **completed** · pointeurs sûrs sans mutation | fal Kling I2V | 140 provisional | flags OFF · 0 second write | pack RideCloud |
 | Voice | **11C CLOSED** PASS_WITH_NOTES · catalog inchangé · 1 audio privé | `140_`–`156_` | run `2eaffebf…` · output `bc36bba7…` · APPROVE inactif · HR `068a2b25…` | ElevenLabs | 1 `/director` | execution=false · flags OFF | pack RideCloud |
 | Lipsync | **WIRED_DISABLED** · **DEPLOY READY** | `178_`/`179_` | fake local · SHA build `134631d` · tree `366abd6` | — | 0 | flags OFF · adapter réel absent · UI non observée | hors scope |
-| Merge / export | **WIRED_DISABLED** | `180_` | fake metadata · SHA `a602de9` · `mergeExportAuthorized=false` | — | 0 | 0 moteur · 0 fichier · 0 URL | sync+deploy once |
+| Merge / export | **WIRED_DISABLED DEPLOY READY** | `180_`/`181_` | fake metadata · SHA build `8a7cc19` · tree `a602de9` · `mergeExportAuthorized=false` | — | 0 | 0 moteur · 0 fichier · 0 URL | docs sync once |
 | RideCloud promo | **BIND PREFLIGHT READY** · apply **suspendu** | `167_` | contrat + manifeste conçus · 0 persist | — | 0 | kinds absents du CHECK · apply non consommé | apply once (suspendu) |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
-| UI finale | **DEPLOY READY** · alias `134631d` | `179_` | tree lipsync `366abd6` · merge/export local `a602de9` · 0 flag | — | 0 | Director UI-only · merge désactivé | sync+deploy once |
+| UI finale | **DEPLOY READY** · alias `8a7cc19` | `181_` | tree merge/export `a602de9` · tree lipsync `366abd6` · 0 flag | — | 0 | Director UI-only · merge désactivé | docs sync once |
 | App update PWA | **BLOCKERS DEPLOY READY** · docs sync **terminée** | `177_` | 18 workflows · 0 SW write · SHA build `134631d` | — | 0 | AICCOS non câblé · blocker E2E=0 | hors scope |
 | Monitoring / ops | PREPARED | VHS-005 | redaction logs | — | 0 | traces distribuées | avant Production |
 | Documentation / release | PASS_REAL living | cette phase | ce fichier | — | 0 | fraîcheur à tenir | script freshness |
@@ -390,12 +391,12 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 - UI localhost vs Production : **deploy Ready** (`171_`) · SHA `e4703bf` **prouvé** · alias docs `c808fa2` (`172_` lecture seule) · cartes + tracing dans le tree · Director flag OFF · live `SDK 1.0.0` non lu (401).
 - App update PWA : **blockers DEPLOY READY** (`177_`) · SHA build **`134631d`** · fonctionnel **`045f48a`** · docs sync **terminée** · 18 workflows · 0 flag · AICCOS non câblé · blocker E2E=0.
 - Lipsync `/director` : **WIRED_DISABLED DEPLOY READY** (`178_`/`179_`) · SHA build **`134631d`** · tree **`366abd6`** · 0 provider · 0 flag.
-- Merge/export `/director` : **WIRED_DISABLED** (`180_`) · SHA local **`a602de9`** · 0 moteur · 0 fichier · `mergeExportAuthorized=false`.
+- Merge/export `/director` : **WIRED_DISABLED DEPLOY READY** (`180_`/`181_`) · SHA build **`8a7cc19`** · tree **`a602de9`** · 0 moteur · 0 fichier · `mergeExportAuthorized=false`.
 - MV-002 DEFERRED.
 
 ### P0/P1 fermés (extraits)
 
-- Merge/export `/director` wiring disabled (`180_`) · Lipsync `/director` wiring disabled (`178_`) · App update blockers docs sync (terminée, pas de rapport séparé) · App update blockers sync+deploy (`177_`) · App update blockers workflow (`176_`) · App update versioning docs sync (`175_`) · App update versioning sync+deploy (`174_`) · App update versioning implement (`173_`) · App update versioning preflight (`172_`) · UI parity deploy once (`171_`) · Cartes dashboard isolate (`170_`) · SDK_VERSION tracing (`169_`) · UI parity Production (`168_`) · Bind kind schema remote RideCloud (`167_`) · Bind kind schema RideCloud (`166_`) · Bind preflight RideCloud (`165_`) · Create idempotent RideCloud (`164_`) · Preflight create RideCloud (`163_`) · Polish VO RideCloud (`162_`) · Durcissement VO RideCloud (`161_`) · Storyboard RideCloud (`160_`) · Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Merge/export `/director` wiring sync+deploy (`181_`) · Merge/export `/director` wiring disabled (`180_`) · Lipsync `/director` wiring disabled (`178_`) · App update blockers docs sync (terminée, pas de rapport séparé) · App update blockers sync+deploy (`177_`) · App update blockers workflow (`176_`) · App update versioning docs sync (`175_`) · App update versioning sync+deploy (`174_`) · App update versioning implement (`173_`) · App update versioning preflight (`172_`) · UI parity deploy once (`171_`) · Cartes dashboard isolate (`170_`) · SDK_VERSION tracing (`169_`) · UI parity Production (`168_`) · Bind kind schema remote RideCloud (`167_`) · Bind kind schema RideCloud (`166_`) · Bind preflight RideCloud (`165_`) · Create idempotent RideCloud (`164_`) · Preflight create RideCloud (`163_`) · Polish VO RideCloud (`162_`) · Durcissement VO RideCloud (`161_`) · Storyboard RideCloud (`160_`) · Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -463,7 +464,8 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Lipsync `/director` wiring disabled | **fait** (`178_`) | 0¢ · WIRED_DISABLED · SHA `366abd6` · 0 provider | consommée | — |
 | Lipsync `/director` wiring sync+deploy | **fait** (`179_`) | 0¢ · 1 push · Ready `bb41dcc` puis docs `134631d` · 0 provider | consommée | — |
 | Lipsync `/director` docs sync | **fait** (living, pas de rapport séparé) | 0¢ · origin/main `134631d` · 0 flag | consommée | — |
-| Merge/export `/director` wiring disabled | **fait** (`180_`) | 0¢ · WIRED_DISABLED · SHA `a602de9` · 0 moteur | consommée | sync+deploy once |
+| Merge/export `/director` wiring disabled | **fait** (`180_`) | 0¢ · WIRED_DISABLED · SHA `a602de9` · 0 moteur | consommée | — |
+| Merge/export `/director` wiring sync+deploy | **fait** (`181_`) | 0¢ · 1 push · Ready `8a7cc19` · 0 moteur | consommée | docs sync once |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -473,7 +475,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`** — synchroniser et déployer une fois le wiring merge/export `a602de9`. **0 moteur. 0 flag.** Ne pas activer Director, RideCloud, AICCOS, ni un moteur merge réel.
+**`AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE`** — synchroniser administrativement le rapport `181_` **sans** nouvelle boucle de rapports. **0 moteur. 0 flag.** Ne pas activer Director, RideCloud, AICCOS, ni un moteur merge réel.
 
 RideCloud **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** — **suspendue, non consommée**. 0 apply.
 
@@ -500,14 +502,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A/11B/11C CLOSED · lipsync WIRED_DISABLED DEPLOY READY · merge/export WIRED_DISABLED (a602de9) · RideCloud apply SUSPENDU
-Dernier verdict : VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRED_DISABLED_READY (180_)
-Preuve : origin/main 134631d · fonctionnel local a602de9 · 0 push · 0 moteur · 0 flag
+Contexte : VHS V2 · 11A/11B/11C CLOSED · lipsync WIRED_DISABLED DEPLOY READY · merge/export WIRED_DISABLED DEPLOY READY (8a7cc19 / a602de9) · RideCloud apply SUSPENDU
+Dernier verdict : VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY (181_)
+Preuve : origin/main 8a7cc19 · fonctionnel a602de9 · 1 push · Ready dpl_14MHhoRB… · 0 moteur · 0 flag
 Blocage : moteur merge absent · AICCOS non câblé · Director UI-only · mergeExportAuthorized=false
-Mission : uniquement AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
-Auth consommées : merge/export wiring (180_) · lipsync deploy (179_) · lipsync wiring (178_)
+Mission : uniquement AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+Auth consommées : merge/export deploy (181_) · merge/export wiring (180_) · lipsync deploy (179_) · lipsync wiring (178_)
 Interdit : flag write · Director enable · moteur · apply RideCloud · câbler AICCOS
-Attendu : 1 push · 1 deploy · 0 moteur · 0 flag
+Attendu : 1 push docs administratif · 0 nouveau rapport numéroté · 0 moteur · 0 flag
 ```
 
 ---
@@ -516,12 +518,12 @@ Attendu : 1 push · 1 deploy · 0 moteur · 0 flag
 
 ```text
 Lis d’abord docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md.
-Lis ensuite CURRENT_STATE_AND_RESUME.md et 180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md.
-Vérifie Git. Merge/export WIRED_DISABLED (180_) · SHA fonctionnel a602de9 · origin/main 134631d · ahead 2/0 (fonctionnel + docs 180_). Alias Production = SHA 134631d. SHA lipsync = 366abd6. RideCloud apply suspendu (167_ READY, 0 apply). Pack 158_+159_. Storyboard 26 s. 11C CLOSED. Budget 437/391/0/46.
-Flags considérés OFF. Auth 180_ / 179_ / 178_ / 177_ / 176_ / 175_ / 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
+Lis ensuite CURRENT_STATE_AND_RESUME.md et 181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md.
+Vérifie Git. Merge/export WIRED_DISABLED DEPLOY READY (181_) · SHA build 8a7cc19 · tree a602de9 · origin/main 8a7cc19 · ahead 1/0 après docs 181_ local. Alias Production = SHA 8a7cc19. SHA lipsync = 366abd6. RideCloud apply suspendu (167_ READY, 0 apply). Pack 158_+159_. Storyboard 26 s. 11C CLOSED. Budget 437/391/0/46.
+Flags considérés OFF. Auth 181_ / 180_ / 179_ / 178_ / 177_ / 176_ / 175_ / 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 Aucun provider. 0¢. Aucun deploy applicatif sans Auth. Aucun flag write. Aucun apply. Aucun persist bind. Aucun média Git. Aucun merge réel.
-Prochaine porte : AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE. 0 moteur. 0 flag. Ne pas réécrire sw.js. Ne pas câbler AICCOS. Distinguer a602de9 (merge/export local), 366abd6 (lipsync) et 134631d (SHA build).
+Prochaine porte : AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE. 0 moteur. 0 flag. Ne pas réécrire sw.js. Ne pas câbler AICCOS. Distinguer a602de9 (merge/export), 8a7cc19 (SHA build) et le SHA local 181_ (non déployé).
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 ```
@@ -532,7 +534,8 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `180_` merge/export `/director` wiring disabled | VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRED_DISABLED_READY | `a602de9` | 0 | **code** · 0 push · 0 moteur | sync+deploy once |
+| 2026-08-27 | `181_` merge/export wiring sync+deploy | VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY | `8a7cc19` | 0 | **1 push** · Ready · 0 moteur | docs sync once |
+| 2026-08-27 | `180_` merge/export `/director` wiring disabled | VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRED_DISABLED_READY | `a602de9` | 0 | **code** · poussé dans `8a7cc19` · 0 moteur | sync+deploy once |
 | 2026-08-27 | `179_` lipsync wiring sync+deploy | VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY | `bb41dcc` / docs `134631d` | 0 | **1 push** · Ready · docs sync **terminée** | merge/export wiring |
 | 2026-08-27 | `178_` lipsync `/director` wiring disabled | VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY | `366abd6` | 0 | **code** · poussé dans `bb41dcc` · 0 provider | sync+deploy once |
 | 2026-08-27 | `177_` app update blockers sync+deploy | VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_READY | `7d1c34c` / docs `9b62799` | 0 | **1 push** · Ready · docs sync **terminée** | lipsync wiring |
