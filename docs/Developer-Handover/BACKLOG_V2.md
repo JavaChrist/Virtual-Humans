@@ -189,16 +189,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              · projet draft + brief rev.1 · replay existing
              RideCloud storyboard/pack bind preflight (`165_`)
              · **RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY**
-             · kinds conçus · 0 persist
+             RideCloud bind kind schema preflight (`166_`)
+             · **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY**
+             · migration locale 33e · 0 apply
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1         : kinds bind absents du CHECK · pricing TTS non ferme
-P1 fermé   : bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
-Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_NO_PROVIDER
+P1         : apply CHECK bind kinds bloqué · pricing TTS non ferme
+P1 fermé   : schema kinds RideCloud · bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
+Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER
 ```
 
 ## P0 — fondations
@@ -282,7 +284,8 @@ Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_NO_PROVI
 - **RideCloud project create preflight** ✅ **RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_READY** (`163_`) — IDs déterministes · 0 write · 0 projet créé.
 - **RideCloud project create idempotent** ✅ **RIDECLOUD_SEPARATE_PROJECT_CREATED** (`164_`) — 1 RPC · draft + brief rev.1 · replay existing · 0¢.
 - **RideCloud storyboard/pack bind preflight** ✅ **RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY** (`165_`) — kinds `storyboard_contract` + `media_input_manifest` · 0 persist · 0¢.
-- **Prochaine porte majeure** : Auth **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_NO_PROVIDER`** — preflight schéma kinds · 0 apply · 0 provider · 0¢. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **RideCloud bind kind schema preflight** ✅ **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY** (`166_`) — migration locale `20260827133000` · 13 kinds + 2 · 0 apply · 0¢.
+- **Prochaine porte majeure** : Auth **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER`** — preflight distant · 0 apply · 0 provider · 0¢. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

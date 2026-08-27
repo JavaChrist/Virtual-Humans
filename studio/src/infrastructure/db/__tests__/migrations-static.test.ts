@@ -48,6 +48,7 @@ const EXPECTED_FILES = [
   "20260811211757_vhs_mt005_human_review_decision_extend.sql",
   "20260815195207_vhs_11c_voice_identity_catalog.sql",
   "20260815215407_vhs_11c_voice_identity_catalog_grant_hardening.sql",
+  "20260827133000_vhs_ridecloud_bind_artifact_kinds.sql",
 ] as const;
 
 const REMAINDER_MARKERS = [
@@ -73,15 +74,15 @@ function mutativeV2Sql(): string {
     .join("\n");
 }
 
-test("migrations — 32 versions aligned Production after Voice grant hardening", () => {
+test("migrations — 33 versions local; Production remains 32 until bind kinds remote apply", () => {
   const files = listMigrationFiles();
   assert.deepEqual(files, [...EXPECTED_FILES]);
-  assert.equal(files.length, 32);
+  assert.equal(files.length, 33);
   assert.deepEqual(
     files.filter((f) => f.startsWith("202607")),
     [...LEGACY_FILES],
   );
-  assert.equal(v2Files().length, 30);
+  assert.equal(v2Files().length, 31);
 });
 
 test("migrations V2 — VHS-129 human-retry allowlist (not auto-retry)", () => {
@@ -351,6 +352,25 @@ test("migrations V2 — VHS-11C Voice identity catalog applied Production empty"
   assert.ok(!/ELEVENLABS_[A-Z_]*VOICE_ID=/i.test(sql));
   assert.match(sql, /Schema only: no seed rows/i);
   assert.match(sql, /project_voice_bindings_one_active_narrator_idx/);
+});
+
+test("migrations V2 — RideCloud bind kinds CHECK expansion local-only, no DML", () => {
+  const sql = readFileSync(
+    join(MIGRATIONS_DIR, "20260827133000_vhs_ridecloud_bind_artifact_kinds.sql"),
+    "utf8",
+  );
+  assert.match(sql, /project_artifacts_type_check/);
+  assert.match(sql, /storyboard_contract/);
+  assert.match(sql, /media_input_manifest/);
+  assert.match(sql, /export_package/);
+  assert.match(sql, /DROP CONSTRAINT project_artifacts_type_check/);
+  assert.match(sql, /ADD CONSTRAINT project_artifacts_type_check/);
+  assert.ok(!/\bNOT\s+VALID\b/i.test(sql.replace(/--[^\n]*/g, "")));
+  assert.ok(!/^\s*INSERT\s+/im.test(sql));
+  assert.ok(!/CREATE\s+POLICY/i.test(sql));
+  assert.ok(!/GRANT\s+/i.test(sql));
+  assert.ok(!/CREATE\s+FUNCTION/i.test(sql));
+  assert.ok(!/active_artifact_revisions[\s\S]{0,220}storyboard_contract/i.test(sql));
 });
 
 test("migrations V2 — VHS-11C Voice grant hardening local-only, no DML", () => {

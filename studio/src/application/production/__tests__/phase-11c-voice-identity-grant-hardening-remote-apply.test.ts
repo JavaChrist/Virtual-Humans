@@ -37,7 +37,7 @@ import { assertVoiceTablesEmpty } from "../phase-11c-voice-identity-remote-apply
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..", "..", "..", "..", "..");
 const localFiles = readdirSync(join(repoRoot, "studio", "supabase", "migrations"))
-  .filter((file) => file.endsWith(".sql"))
+  .filter((file) => file.endsWith(".sql") && file.slice(0, 14) <= "20260815215407")
   .sort();
 
 test("11C-GHA — auth, verdict, one apply, no second apply", () => {

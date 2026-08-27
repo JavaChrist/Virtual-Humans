@@ -29,7 +29,7 @@ import {
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, "..", "..", "..", "..", "..");
 const localFiles = readdirSync(join(repoRoot, "studio", "supabase", "migrations"))
-  .filter((file) => file.endsWith(".sql") && file !== PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION)
+  .filter((file) => file.endsWith(".sql") && file !== PHASE_11C_VOICE_GRANT_HARDENING_MIGRATION && file.slice(0, 14) <= "20260815215407")
   .sort();
 
 test("11C-RA — auth, verdict, no second apply", () => {

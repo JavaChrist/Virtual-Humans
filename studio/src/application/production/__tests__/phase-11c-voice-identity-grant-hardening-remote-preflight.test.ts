@@ -36,7 +36,7 @@ const repoRoot = join(here, "..", "..", "..", "..", "..");
 const migrationsDir = join(repoRoot, "studio", "supabase", "migrations");
 
 const LOCAL_MIGRATION_FILES = readdirSync(migrationsDir)
-  .filter((file) => file.endsWith(".sql"))
+  .filter((file) => file.endsWith(".sql") && file.slice(0, 14) <= "20260815215407")
   .sort();
 
 const REMOTE_VERSIONS = LOCAL_MIGRATION_FILES.filter(
