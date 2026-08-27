@@ -3,7 +3,8 @@
 **Date :** 2026-08-27  
 **Auth :** `AUTH_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM_NO_PROVIDER`  
 **Nature :** addendum local · 5 variantes officielles · **sans remplacer** les 12 refs `158_` · **0** média Git · **0** provider · **0** projet Production · **0** storyboard  
-**HEAD au départ :** `c7796f5` (`158_` SHA record)
+**HEAD au départ :** `c7796f5` (`158_` SHA record)  
+**HEAD de phase :** `4f1cf98`
 
 ```text
 VERDICT = RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED
