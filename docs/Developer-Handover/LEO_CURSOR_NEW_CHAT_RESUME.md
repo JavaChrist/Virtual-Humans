@@ -1,17 +1,17 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : living resume. `183_` Director E2E fake **HARDENED DEPLOY READY** (SHA build `ad4a909` · tree `d376a7c`). Merge/export reste **WIRED_DISABLED**. RideCloud apply **suspendu**. Voir living handover.
+Nature : living resume. `184_` Director UI-only **PREFLIGHT READY_FOR_FLAG_AUTH**. `183_` E2E fake **HARDENED DEPLOY READY** (SHA docs `8081744` · tree `d376a7c`). Merge/export reste **WIRED_DISABLED**. RideCloud apply **suspendu**. Voir living handover.
 
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-28
-sourceHead=ad4a909
+sourceHead=8081744
 lastFunctionalCommit=d376a7c
-lastDocumentationCommit=ad4a909
+lastDocumentationCommit=8081744
 thisGateDocumentationCommit=pending
-lastPhaseReport=183_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE.md
-globalStatus=VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_READY
-nextAuth=AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+lastPhaseReport=184_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT.md
+globalStatus=VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT_READY_FOR_FLAG_AUTH
+nextAuth=AUTH_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_ONCE_NO_PROVIDER_NO_PERSISTENCE_NO_RUNTIME
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
@@ -29,11 +29,11 @@ realMergeExportStatus=WIRED_DISABLED
 
 | Pointeur | Valeur | Signification |
 |---|---|---|
-| `sourceHead` | `ad4a909` | HEAD Git **poussé** · SHA build Production (docs `182_`) |
+| `sourceHead` | `8081744` | HEAD Git **poussé** · SHA docs Production (`183_`) |
 | `lastFunctionalCommit` | `d376a7c` | hardening UI/E2E fake `/director` — **dans le tree servi** |
-| `lastDocumentationCommit` | `ad4a909` | dernier commit docs **poussé** (`182_`) |
-| `thisGateDocumentationCommit` | pending | commit docs local `183_` |
-| SHA déployé Vercel | **`ad4a909`** | alias docs `183_` · tree hardening `d376a7c` · tree merge/export `a602de9` · tree lipsync `366abd6` |
+| `lastDocumentationCommit` | `8081744` | dernier commit docs **poussé** (`183_`) |
+| `thisGateDocumentationCommit` | pending | commit local tests+docs `184_` (**non poussé**) |
+| SHA déployé Vercel | **`8081744`** | alias docs · tree hardening `d376a7c` · tree merge/export `a602de9` · tree lipsync `366abd6` |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
 
@@ -288,12 +288,12 @@ Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils *
 ## 13. Prochaine porte canonique — non exécutée
 
 ```text
-AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+AUTH_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_ONCE_NO_PROVIDER_NO_PERSISTENCE_NO_RUNTIME
 ```
 
-Synchroniser administrativement le rapport local `183_` **sans** nouvelle boucle de rapports. **0 moteur. 0 flag.**
+**Non exécutée.** Si autorisée : écrire uniquement `DIRECTOR_V2_ENABLED=1` sur la cible Vercel nommée. Persistence et tous runtimes **OFF**. Audience = session studio partagée. Écriture produit = brouillon localStorage seulement. **0 moteur. 0 provider.**
 
-Ensuite, Christian et Léo décideront entre une ouverture UI-only contrôlée du Director et le preflight d’une première capacité réelle. Aucune activation ni dépense n’est implicite.
+`184_` a prouvé l’isolé local. Aucune ouverture Production n’est faite. Aucune activation ni dépense n’est implicite.
 
 RideCloud apply **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** reste **suspendue**.
 
@@ -301,6 +301,7 @@ Interdit : provider · dépense · média Git · lecture/upload pack · RPC bind
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
 
+`AUTH_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER` est **consommée** (`184_`).
 `AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE` est **consommée** (`183_`).
 `AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER` est **consommée** (`182_`).
 `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE` est **consommée** (`26e9b02`).
@@ -339,15 +340,15 @@ Copier le bloc suivant dans un nouveau chat Léo :
 ```text
 Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 183_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 184_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT.md.
 
 Ne rejoue aucune phase terminée. Vérifie d’abord Git et les éventuels nouveaux STOP Cursor. Une autorisation d’un chat précédent n’est jamais réutilisable.
 
-La porte active est AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE. Elle n’est pas encore exécutée. RideCloud apply est suspendue.
+La porte active est AUTH_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_ONCE_NO_PROVIDER_NO_PERSISTENCE_NO_RUNTIME. Elle n’est pas encore exécutée. RideCloud apply est suspendue.
 
-Director E2E fake HARDENED DEPLOY READY (183_) · SHA build ad4a909 · tree d376a7c · origin/main ad4a909 · ahead 1/0 après docs 183_ local. Alias Production = SHA ad4a909. SHA merge/export = a602de9. SHA lipsync = 366abd6. RideCloud bind kind schema remote READY (167_) apply suspendu. Migration locale 33e non appliquée. Pack 158_ + 5 variantes HD 159_. Storyboard 26 s. Auth 183_ / 182_ / 181_ / 180_ / 179_ / 178_ / 177_ / 176_ / 175_ / 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun moteur. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply. Aucun deploy applicatif sans Auth. Aucun flag write. Distinguer d376a7c (hardening), ad4a909 (SHA build) et le SHA local 183_ (non déployé). Ne pas câbler AICCOS.
+Director UI-only PREFLIGHT READY (184_) · origin/main 8081744 · tree d376a7c. Director E2E fake HARDENED DEPLOY READY (183_). SHA merge/export = a602de9. SHA lipsync = 366abd6. RideCloud bind kind schema remote READY (167_) apply suspendu. Migration locale 33e non appliquée. Pack 158_ + 5 variantes HD 159_. Storyboard 26 s. Auth 184_ / 183_ / 182_ / 181_ / 180_ / 179_ / 178_ / 177_ / 176_ / 175_ / 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun moteur. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. Distinguer d376a7c (hardening), 8081744 (HEAD docs), commit local 184_ (non poussé). Ne pas câbler AICCOS.
 
-Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. L’alias Vercel Ready est le SHA ad4a909 (`dpl_9nsHqHin…`).
+Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF. Persistence Director OFF. L’alias Vercel Ready documenté est le SHA 8081744.
 
 Fournis les prompts Cursor comme un seul document continu. N’improvise aucune autorisation.
 ```
@@ -361,15 +362,15 @@ Copier le bloc suivant dans un nouveau chat Cursor :
 ```text
 Tu es Cursor, exécutant code/test/doc de Virtual Humans Studio.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 183_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 184_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT.md.
 
-Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main. origin/main attendu ad4a909. HEAD local ahead 1/0 après docs 183_ local.
+Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main. origin/main attendu 8081744. HEAD local ahead 1/0 après commit local 184_.
 
 Protège les fichiers hors scope déjà dirty : studio/src/app/api/aiccos/send/route.ts, studio/src/components/send-to-aiccos.tsx. Ne les modifie pas, ne les restaure pas, ne les stash pas, ne les stage pas.
 
-Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_, 160_, 161_, 162_, 163_, 164_, 165_, 166_, 167_, 168_, 169_, 170_, 171_, 172_, 173_, 174_, 175_, 176_, 177_, 178_, 179_, 180_, 181_, 182_ ni 183_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun deploy applicatif sans Auth. Aucun flag write. N’invente aucun claim.
+Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_, 160_, 161_, 162_, 163_, 164_, 165_, 166_, 167_, 168_, 169_, 170_, 171_, 172_, 173_, 174_, 175_, 176_, 177_, 178_, 179_, 180_, 181_, 182_, 183_ ni 184_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. N’invente aucun claim.
 
-La prochaine porte est AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE. Elle n’est pas autorisée par ce fichier de reprise. 0 moteur. 0 flag. Ne pas réécrire sw.js. Distinguer d376a7c (hardening), ad4a909 (SHA build) et le SHA local 183_ (non déployé). Ne pas câbler AICCOS. RideCloud apply reste suspendue.
+La prochaine porte est AUTH_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_ONCE_NO_PROVIDER_NO_PERSISTENCE_NO_RUNTIME. Elle n’est pas autorisée par ce fichier de reprise. 0 moteur. Persistence OFF. Ne pas réécrire sw.js. Distinguer d376a7c (hardening), 8081744 (HEAD docs), commit local 184_ (non poussé). Ne pas câbler AICCOS. RideCloud apply reste suspendue.
 ```
 
 ---
@@ -385,7 +386,7 @@ La prochaine porte est AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_D
 - [ ] Confirmer flags / runtime considérés OFF ; revalider avant toute opération sensible
 - [ ] Confirmer output audio `bc36bba7…` `approved` · active=false · HR `068a2b25…`
 - [ ] Confirmer aucune nouvelle Human Review
-- [ ] Confirmer prochaine Auth = `AUTH_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_DOCS_SYNC_ONCE_NO_PROVIDER_NO_FLAG_WRITE`
+- [ ] Confirmer prochaine Auth = `AUTH_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_ONCE_NO_PROVIDER_NO_PERSISTENCE_NO_RUNTIME`
 - [ ] Ne lancer aucune action sensible avant autorisation
 
 ---
@@ -429,6 +430,7 @@ La prochaine porte est AUTH_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_D
 | [`179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md`](./179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md) | Lipsync `/director` wiring sync+deploy READY |
 | [`180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md`](./180_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_IMPLEMENT_DISABLED.md) | Merge/export `/director` WIRED_DISABLED |
 | [`181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md`](./181_PHASE_VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md) | Merge/export `/director` wiring sync+deploy READY |
+| [`184_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT.md`](./184_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT.md) | Director UI-only preflight READY_FOR_FLAG_AUTH |
 | [`00_README.md`](./00_README.md) | Index |
 | [`.cursor/rules/living-handover.mdc`](../../.cursor/rules/living-handover.mdc) | Règle de clôture |
 

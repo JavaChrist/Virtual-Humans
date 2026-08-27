@@ -48,7 +48,7 @@ export default defineConfig({
         ...devices["Desktop Chrome"],
         ...(chromeChannel ? { channel: chromeChannel } : {}),
       },
-      testIgnore: [/director-off\.spec\.ts/],
+      testIgnore: [/director-off\.spec\.ts/, /director-ui-only\.spec\.ts/],
     },
     {
       name: "chromium-director-off",
@@ -58,6 +58,15 @@ export default defineConfig({
         ...(chromeChannel ? { channel: chromeChannel } : {}),
       },
       testMatch: /director-off\.spec\.ts/,
+    },
+    {
+      name: "chromium-director-ui-only",
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "http://127.0.0.1:3112",
+        ...(chromeChannel ? { channel: chromeChannel } : {}),
+      },
+      testMatch: /director-ui-only\.spec\.ts/,
     },
   ],
   webServer: [
@@ -70,6 +79,12 @@ export default defineConfig({
     {
       command: "node scripts/e2e-start-server.mjs --off --port=3110",
       url: "http://127.0.0.1:3110/login",
+      reuseExistingServer: false,
+      timeout: 180_000,
+    },
+    {
+      command: "node scripts/e2e-start-server.mjs --ui-only --port=3112",
+      url: "http://127.0.0.1:3112/login",
       reuseExistingServer: false,
       timeout: 180_000,
     },

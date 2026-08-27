@@ -154,6 +154,7 @@
 - [x] Merge/export `/director` wiring sync+deploy (`181_`) · **VHS_DIRECTOR_MERGE_EXPORT_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY** · SHA `8a7cc19` · 0 moteur · 0 flag ;
 - [x] Director E2E fake operability (`182_`) · **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY** · SHA `d376a7c` · 0 moteur · 0 flag ;
 - [x] Director E2E fake sync+deploy (`183_`) · **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_READY** · SHA build `ad4a909` · 1 push · 0 moteur · 0 flag ;
+- [x] Director UI-only preflight (`184_`) · **VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT_READY_FOR_FLAG_AUTH** · 0 flag write · 0 deploy · 0 push ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -169,7 +170,8 @@ UI localhost vs Production : **DEPLOY READY** (`171_`) · SHA `e4703bf` prouvé 
 App update PWA : **BLOCKERS DEPLOY READY** (`177_`) · SHA build `bb41dcc` · fonctionnel `045f48a` · 0 flag · docs sync **terminée**
 Lipsync `/director` : **WIRED_DISABLED DEPLOY READY** (`178_`/`179_`) · SHA build `134631d` · tree `366abd6` · 0 provider · 0 flag
 Merge/export `/director` : **WIRED_DISABLED** (`180_`/`181_`) · tree `a602de9` · 0 moteur · 0 flag
-Director E2E fake : **HARDENED DEPLOY READY** (`182_`/`183_`) · SHA build Prod `ad4a909` · tree `d376a7c` · UI Prod 0 · 0 moteur · 0 flag
+Director E2E fake : **HARDENED DEPLOY READY** (`182_`/`183_`) · SHA docs Prod `8081744` · tree `d376a7c` · UI Prod 0 · 0 moteur · 0 flag
+Director UI-only : **PREFLIGHT READY_FOR_FLAG_AUTH** (`184_`) · persistence OFF · 0 flag write · 0 deploy
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED
