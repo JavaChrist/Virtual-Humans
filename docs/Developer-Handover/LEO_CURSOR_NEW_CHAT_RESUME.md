@@ -6,9 +6,9 @@ Nature : living resume. `173_` app-update implement **consommée, locale, 0 push
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-27
 sourceHead=5ebf73c
-lastFunctionalCommit=pending
+lastFunctionalCommit=68b09ee
 lastDocumentationCommit=5ebf73c
-thisGateDocumentationCommit=pending
+thisGateDocumentationCommit=68b09ee
 lastPhaseReport=173_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT.md
 globalStatus=VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_READY
 nextAuth=AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE
@@ -30,9 +30,9 @@ realMergeExportStatus=NOT_AUTHORIZED
 | Pointeur | Valeur | Signification |
 |---|---|---|
 | `sourceHead` | `5ebf73c` | HEAD Git **audité** le 2026-08-27, avant les commits `173_` |
-| `lastFunctionalCommit` | pending | commit applicatif `/api/version` + PWA (après commit local) |
+| `lastFunctionalCommit` | `68b09ee` | commit applicatif `/api/version` + PWA |
 | `lastDocumentationCommit` | `5ebf73c` | SHA record `172_` |
-| `thisGateDocumentationCommit` | pending | premier commit de la porte `173_` |
+| `thisGateDocumentationCommit` | `68b09ee` | premier commit de la porte `173_` |
 | SHA déployé Vercel | **`c808fa2` alias** / **`e4703bf` applicatif** | alias `dpl_EUEqB8…` docs · applicatif `dpl_41zVp38…` |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.

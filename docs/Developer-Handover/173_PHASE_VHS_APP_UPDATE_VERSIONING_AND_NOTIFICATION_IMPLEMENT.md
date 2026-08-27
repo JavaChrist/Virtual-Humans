@@ -46,12 +46,12 @@ Implémentation + tests + commits **locaux**. Aucun `git push`. Aucun appel Verc
 | Champ | Attendu Auth | Réel initial | Réel final |
 |---|---|---|---|
 | Branche | `main` | `main` | `main` |
-| HEAD | `5ebf73c` | `5ebf73c` | commit fonctionnel + SHA record (local) |
+| HEAD | `5ebf73c` | `5ebf73c` | **`68b09ee`** (fonctionnel) + SHA record local |
 | origin/main | `5ebf73c` | `5ebf73c` | **`5ebf73c` inchangé** |
 | ahead/behind | `0/0` puis `2/0` | `0/0` | **`2/0`** |
 | Dirty protégés | 2 AICCOS | 2 AICCOS | 2 AICCOS, non stagés |
 
-Aucun reset, restore, stash ou push.
+Commit fonctionnel : **`68b09ee`**. SHA record : commit suivant (local). Aucun reset, restore, stash ou push.
 
 ## 3. Architecture implémentée
 
