@@ -59,12 +59,12 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 **État 26 août 2026 :** Phase 11A **CLOSED** (`128_`) · Phase 11B **CLOSED PASS_WITH_NOTES** (`135_`) · Phase 11C **CLOSED PASS_WITH_NOTES** (`156_`) · still `49284892…` + vidéo `9be6cb0c…` + audio `bc36bba7…` **preuves privées inactives**, pas livrables RideCloud.  
 Motion MV-001 **PASS** benchmark · Registry **DISABLED**. Restore drill **PASS** (`78_`).
 
-**État 27 août 2026 :** RideCloud pack `158_` READY + addendum HD `159_` + storyboard `160_` + VO harden `161_` + polish VO `162_` + create preflight `163_` + create idempotent `164_` **CREATED** + bind preflight `165_` **READY** + bind kind schema `166_` **READY** + remote preflight `167_` **READY_FOR_APPLY**. Migration locale 33e · 0 apply.
+**État 27 août 2026 :** RideCloud pack `158_` READY + addendum HD `159_` + storyboard `160_` + VO harden `161_` + polish VO `162_` + create preflight `163_` + create idempotent `164_` **CREATED** + bind preflight `165_` **READY** + bind kind schema `166_` **READY** + remote preflight `167_` **READY_FOR_APPLY** (apply **suspendu**) + UI parity `168_` **READY**. Migration locale 33e · 0 apply. 0 deploy UI.
 
-**Pas encore :** apply distant CHECK · persist storyboard/pack · T2V/lipsync/merge-export **réels** ; activation ; runtime Motion Production.
+**Pas encore :** tracing `SDK_VERSION` · isolate `page.tsx` · Director UI-only · apply distant CHECK · persist storyboard/pack · T2V/lipsync/merge-export **réels** ; activation ; runtime Motion Production.
 
 Pilotage courant : **`CURRENT_STATE_AND_RESUME.md`** puis **`BACKLOG_V2.md`**.  
-Prochaine porte : **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** — apply unique · 0 RPC · 0¢.
+Prochaine porte : **`AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE`** — include NFT · 0 deploy · 0 flag. RideCloud apply **suspendu**.
 
 ## Priorités
 

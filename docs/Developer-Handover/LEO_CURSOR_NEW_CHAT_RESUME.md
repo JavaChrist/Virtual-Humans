@@ -1,17 +1,17 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : living resume. `167_` bind kind schema remote RideCloud **consommée**. Voir living handover.
+Nature : living resume. `168_` UI parity Production **consommée**. RideCloud apply **suspendu**. Voir living handover.
 
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-27
-sourceHead=1d28f94
+sourceHead=2cacf1b
 lastFunctionalCommit=72016ea
-lastDocumentationCommit=1d28f94
-thisGateDocumentationCommit=e93fc98
-lastPhaseReport=167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md
-globalStatus=RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH
-nextAuth=AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER
+lastDocumentationCommit=2cacf1b
+thisGateDocumentationCommit=pending
+lastPhaseReport=168_PHASE_VHS_PRODUCTION_UI_PARITY_PREFLIGHT.md
+globalStatus=VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY
+nextAuth=AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
@@ -29,11 +29,11 @@ realMergeExportStatus=NOT_AUTHORIZED
 
 | Pointeur | Valeur | Signification |
 |---|---|---|
-| `sourceHead` | `1d28f94` | HEAD Git **audité** le 2026-08-27, avant le commit `167_` |
+| `sourceHead` | `2cacf1b` | HEAD Git **audité** le 2026-08-27, avant le commit `168_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
-| `lastDocumentationCommit` | `1d28f94` | dernier commit docs **avant** cette porte (SHA record `166_`) |
-| `thisGateDocumentationCommit` | `e93fc98` | premier commit docs de la porte `167_` |
-| SHA déployé Vercel | **non exposé par le CLI** | corrélation temporelle seulement, pas une preuve runtime |
+| `lastDocumentationCommit` | `2cacf1b` | dernier commit docs **avant** cette porte (SHA record `167_`) |
+| `thisGateDocumentationCommit` | pending | premier commit docs de la porte `168_` |
+| SHA déployé Vercel | **non exposé par le CLI** | Ready actuel `dpl_Bc4oDFqG…` / `2dlgmulzw-…` 14:35:59 · corrélation `2cacf1b` non prouvée |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
 
@@ -268,7 +268,7 @@ Attendus (non relus un par un le 26 août) : Voice / Paid Media / Worker payant 
 - stockage privé
 - budget et idempotence
 
-**Pack RideCloud (`158_` + `159_`) = READY.** Storyboard (`160_` + `161_` + `162_`) = **26 s / VO polie**. Create (`164_`) = **CREATED**. Bind preflight (`165_`) = **READY**. Bind kind schema (`166_` + `167_`) = **READY_FOR_APPLY** (migration locale 33e, 0 apply). Encore manquant ensuite :
+**Pack RideCloud (`158_` + `159_`) = READY.** Storyboard (`160_` + `161_` + `162_`) = **26 s / VO polie**. Create (`164_`) = **CREATED**. Bind preflight (`165_`) = **READY**. Bind kind schema (`166_` + `167_`) = **READY_FOR_APPLY** (apply **suspendu**). UI parity (`168_`) = **READY**. Encore manquant ensuite :
 
 - apply unique du **CHECK** (`storyboard_contract` + `media_input_manifest`) puis persister le bind
 - merge / export réel
@@ -287,20 +287,22 @@ Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils *
 ## 13. Prochaine porte canonique — non exécutée
 
 ```text
-AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER
+AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE
 ```
 
 Périmètre futur uniquement :
 
-- application distante unique de `20260827133000_vhs_ridecloud_bind_artifact_kinds.sql`
-- aucune RPC bind
-- aucun artifact write
-- aucun provider, lecture média, upload ou dépense
+- include NFT `../SDK_VERSION` + tests
+- aucun deploy, flag write, provider
+- aucun commit `page.tsx` / AICCOS
+
+RideCloud apply **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** reste **suspendue**.
 
 Interdit : provider · dépense · média Git · lecture/upload pack · RPC bind · persist bind · run/job/attempt/output · activation · lipsync · merge/export · publication · TTS.
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
 
+`AUTH_VHS_PRODUCTION_UI_PARITY_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE` est **consommée** (`168_`).
 `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER` est **consommée** (`167_`).
 `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_NO_PROVIDER` est **consommée** (`166_`).
 `AUTH_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_NO_PROVIDER` est **consommée** (`165_`).
@@ -321,13 +323,13 @@ Copier le bloc suivant dans un nouveau chat Léo :
 ```text
 Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 168_PHASE_VHS_PRODUCTION_UI_PARITY_PREFLIGHT.md.
 
 Ne rejoue aucune phase terminée. Vérifie d’abord Git et les éventuels nouveaux STOP Cursor. Une autorisation d’un chat précédent n’est jamais réutilisable.
 
-La porte active est AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER. Elle n’est pas encore exécutée.
+La porte active est AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE. Elle n’est pas encore exécutée. RideCloud apply est suspendue.
 
-RideCloud bind kind schema remote READY (167_). Migration locale 33e non appliquée. Bind preflight READY (165_). Projet CREATED (164_). Pack 158_ + 5 variantes HD 159_. Storyboard 26 s. Auth 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun provider. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply.
+UI parity READY (168_). RideCloud bind kind schema remote READY (167_) apply suspendu. Migration locale 33e non appliquée. Bind preflight READY (165_). Projet CREATED (164_). Pack 158_ + 5 variantes HD 159_. Storyboard 26 s. Auth 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun provider. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply. Aucun deploy. Aucun flag write.
 
 Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. Le SHA Vercel Ready n’est pas prouvé.
 
@@ -343,15 +345,15 @@ Copier le bloc suivant dans un nouveau chat Cursor :
 ```text
 Tu es Cursor, exécutant code/test/doc de Virtual Humans Studio.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 168_PHASE_VHS_PRODUCTION_UI_PARITY_PREFLIGHT.md.
 
 Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main.
 
 Protège les fichiers hors scope déjà dirty : studio/src/app/api/aiccos/send/route.ts, studio/src/components/send-to-aiccos.tsx, studio/src/app/page.tsx. Ne les modifie pas, ne les restaure pas, ne les stash pas, ne les stage pas.
 
-Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_, 160_, 161_, 162_, 163_, 164_, 165_, 166_ ni 167_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. N’invente aucun claim.
+Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_, 160_, 161_, 162_, 163_, 164_, 165_, 166_, 167_ ni 168_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun deploy. Aucun flag write. N’invente aucun claim.
 
-La prochaine porte est AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER. Elle n’est pas autorisée par ce fichier de reprise. 0 RPC. 0¢.
+La prochaine porte est AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE. Elle n’est pas autorisée par ce fichier de reprise. 0 deploy. 0 flag. RideCloud apply reste suspendue.
 ```
 
 ---
@@ -360,14 +362,14 @@ La prochaine porte est AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_A
 
 - [ ] Confirmer la racine Git `C:\Users\JavaChrist\Desktop\virtual-humans`
 - [ ] Confirmer branche `main` et relever HEAD / origin/main / ahead-behind
-- [ ] Lire le dernier STOP (ce fichier + living handover + `167_`)
+- [ ] Lire le dernier STOP (ce fichier + living handover + `168_`)
 - [ ] Vérifier le working tree sans le modifier
 - [ ] Protéger les trois fichiers hors scope
 - [ ] Confirmer budget 437 / 391 / 0 / 46
 - [ ] Confirmer flags / runtime considérés OFF ; revalider avant toute opération sensible
 - [ ] Confirmer output audio `bc36bba7…` `approved` · active=false · HR `068a2b25…`
 - [ ] Confirmer aucune nouvelle Human Review
-- [ ] Confirmer prochaine Auth = `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`
+- [ ] Confirmer prochaine Auth = `AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE`
 - [ ] Ne lancer aucune action sensible avant autorisation
 
 ---
@@ -397,6 +399,7 @@ La prochaine porte est AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_A
 | [`165_PHASE_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT.md`](./165_PHASE_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT.md) | RideCloud bind preflight READY |
 | [`166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md`](./166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md) | RideCloud bind kind schema READY |
 | [`167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md`](./167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md) | RideCloud bind kind schema remote READY |
+| [`168_PHASE_VHS_PRODUCTION_UI_PARITY_PREFLIGHT.md`](./168_PHASE_VHS_PRODUCTION_UI_PARITY_PREFLIGHT.md) | UI parity Production READY |
 | [`00_README.md`](./00_README.md) | Index |
 | [`.cursor/rules/living-handover.mdc`](../../.cursor/rules/living-handover.mdc) | Règle de clôture |
 

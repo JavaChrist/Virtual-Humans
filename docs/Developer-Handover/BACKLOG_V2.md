@@ -194,6 +194,9 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              RideCloud bind kind schema remote preflight (`167_`)
              · **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH**
              · CHECK distant 13 kinds · 0 apply
+             UI parity Production preflight (`168_`)
+             · **VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY**
+             · 0 deploy · 0 flag write
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
@@ -202,7 +205,8 @@ Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inact
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
 P1         : apply CHECK bind kinds bloqué · pricing TTS non ferme
 P1 fermé   : remote schema RideCloud · schema kinds RideCloud · bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
-Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER
+Next major : AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE
+RideCloud apply : SUSPENDED (AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER)
 ```
 
 ## P0 — fondations
@@ -288,7 +292,8 @@ Next major : AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_
 - **RideCloud storyboard/pack bind preflight** ✅ **RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY** (`165_`) — kinds `storyboard_contract` + `media_input_manifest` · 0 persist · 0¢.
 - **RideCloud bind kind schema preflight** ✅ **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY** (`166_`) — migration locale `20260827133000` · 13 kinds + 2 · 0 apply · 0¢.
 - **RideCloud bind kind schema remote preflight** ✅ **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH** (`167_`) — distant 32 · CHECK 13 kinds · 0 apply · 0¢.
-- **Prochaine porte majeure** : Auth **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** — apply unique · 0 RPC · 0 artifact write · 0¢. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **UI parity Production preflight** ✅ **VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY** (`168_`) — cartes dirty · Director flag · SDK tracing · 0 deploy · 0 flag · 0¢.
+- **Prochaine porte majeure** : Auth **`AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE`** — include `../SDK_VERSION` · 0 deploy · 0 flag. RideCloud apply **suspendu**. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).

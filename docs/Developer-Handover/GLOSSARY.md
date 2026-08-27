@@ -100,7 +100,10 @@
 **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY** — verdict `166_` : migration locale `20260827133000` · 13 kinds + 2 · 0 apply.
 **AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER** — porte `167_` : preflight distant CHECK bind kinds · 0 apply · 0¢.
 **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH** — verdict `167_` : distant 32 · local 33 · CHECK 13 kinds · 0 apply.
-**AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER** — prochaine porte : apply unique de `20260827133000` · 0 RPC · 0 artifact write.
+**AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER** — apply unique de `20260827133000` · 0 RPC · 0 artifact write · **suspendue** par `168_`.
+**AUTH_VHS_PRODUCTION_UI_PARITY_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE** — porte `168_` : diagnostic localhost vs Production · 0 deploy · 0 flag write · 0¢.
+**VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY** — verdict `168_` : cartes dirty · Director flag OFF · SDK tracing manquant · SHA deploy non prouvé.
+**AUTH_VHS_SDK_VERSION_FILE_TRACING_INCLUDE_NO_DEPLOY_NO_FLAG_WRITE** — prochaine porte : include NFT `../SDK_VERSION` · 0 deploy · 0 flag.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
