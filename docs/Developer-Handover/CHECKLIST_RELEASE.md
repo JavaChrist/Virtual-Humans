@@ -158,7 +158,7 @@ I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inac
 Voice `/director` : **11C CLOSED** PASS_WITH_NOTES (`140_`–`156_`) · catalog 4/4/1 · 1 MP3 `bc36bba7…` approved inactif · HR `068a2b25…` · 2¢ provisional · flags OFF · preuves privées ≠ livrables RideCloud
 RideCloud promo : **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · apply **suspendu** · projet `ba4a6021…` draft · CHECK distant 13 kinds · 0 apply
 UI localhost vs Production : **DEPLOY READY** (`171_`) · SHA `e4703bf` prouvé · 0 flag
-App update PWA : **DOCS SYNC READY** (`175_`) · alias docs `80cc7fa` · tree `68b09ee` · 0 flag
+App update PWA : **BLOCKERS IMPLEMENT READY** (`176_`) · SHA local `045f48a` · alias docs `80cc7fa` · tree live `68b09ee` · 0 flag · non déployé
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

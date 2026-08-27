@@ -141,13 +141,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_READY**
                            App update versioning docs sync (`175_`)
                            · **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_READY**
-Runtime AI / paid media  : OFF · fonctionnel **72016ea** · alias docs **`80cc7fa`** · tree **`68b09ee`**
+                           App update blockers workflow (`176_`)
+                           · **VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT_READY**
+Runtime AI / paid media  : OFF · fonctionnel **72016ea** · alias docs **`80cc7fa`** · tree live **`68b09ee`** · blockers local **`045f48a`**
 Budget                   : hard 437 / committed 391 / reserved 0 / available 46 ¢
 production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0                       : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1 ouverts               : décision humaine post-app-update · Director UI-only · apply CHECK bind kinds suspendu · pricing TTS non ferme
-P1 fermé                 : app-update docs sync (`175_`) · app-update sync+deploy (`174_`) · app-update implement (`173_`) · app-update preflight (`172_`) · deploy UI parity (`171_`) · cartes dashboard (`170_`) · SDK tracing (`169_`) · UI parity (`168_`) · remote schema (`167_`) · schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
-Prochaine porte majeure  : AUTH_VHS_POST_APP_UPDATE_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE
+P1 ouverts               : sync+deploy blockers · Director UI-only · apply CHECK bind kinds suspendu · pricing TTS non ferme
+P1 fermé                 : blockers workflow (`176_`) · app-update docs sync (`175_`) · app-update sync+deploy (`174_`) · app-update implement (`173_`) · app-update preflight (`172_`) · deploy UI parity (`171_`) · cartes dashboard (`170_`) · SDK tracing (`169_`) · UI parity (`168_`) · remote schema (`167_`) · schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
+Prochaine porte majeure  : AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE
 Living handover          : CURRENT_STATE_AND_RESUME.md
 Reprise nouveau chat     : LEO_CURSOR_NEW_CHAT_RESUME.md
 ```
@@ -392,6 +394,7 @@ Utilisateur → AI Video Director (/director)
 | [`173_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT.md`](./173_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT.md) | **APP-UPDATE-IMPLEMENT · VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_READY** |
 | [`174_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE.md`](./174_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE.md) | **APP-UPDATE-DEPLOY · VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_READY** |
 | [`175_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE.md`](./175_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE.md) | **APP-UPDATE-DOCS-SYNC · VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_READY** |
+| [`176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md`](./176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md) | **APP-UPDATE-BLOCKERS · VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT_READY** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

@@ -218,6 +218,9 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              App update versioning docs sync (`175_`)
              · **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_READY**
              · 1 push docs `80cc7fa` · pas une feature
+             App update blockers workflow (`176_`)
+             · **VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT_READY**
+             · SHA local `045f48a` · 18 workflows · 0 push · 0 SW
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
@@ -225,8 +228,8 @@ Runtime AI : OFF
 Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
 P1         : apply CHECK bind kinds bloqué · pricing TTS non ferme
-P1 fermé   : app-update docs sync · app-update sync+deploy · app-update implement · app-update preflight · deploy UI parity · cartes dashboard · SDK tracing · UI parity · remote schema RideCloud · schema kinds RideCloud · bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
-Next major : AUTH_VHS_POST_APP_UPDATE_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE
+P1 fermé   : blockers workflow · app-update docs sync · app-update sync+deploy · app-update implement · app-update preflight · deploy UI parity · cartes dashboard · SDK tracing · UI parity · remote schema RideCloud · schema kinds RideCloud · bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
+Next major : AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE
 RideCloud apply : SUSPENDED (AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER)
 ```
 
@@ -321,7 +324,8 @@ RideCloud apply : SUSPENDED (AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_RE
 - **App update versioning implement** ✅ **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_READY** (`173_`) — route + PwaRegister · poussé dans `1765da6` · 0¢.
 - **App update versioning sync+deploy** ✅ **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_READY** (`174_`) — 1 push · Ready `1765da6` · `/api/version` live · 0 flag · 0¢.
 - **App update versioning docs sync** ✅ **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_READY** (`175_`) — 1 push docs `80cc7fa` · alias docs · 0 flag · 0¢.
-- **Prochaine porte majeure** : Auth **`AUTH_VHS_POST_APP_UPDATE_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE`** — décision humaine · 0 flag. RideCloud apply **suspendu**. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **App update blockers workflow** ✅ **VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT_READY** (`176_`) — SHA local `045f48a` · 18 workflows · 0 push · 0 SW · AICCOS non câblé · 0¢.
+- **Prochaine porte majeure** : Auth **`AUTH_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE`** — 1 push + 1 deploy · 0 flag. RideCloud apply **suspendu**. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).
