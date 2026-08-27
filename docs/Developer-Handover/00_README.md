@@ -123,13 +123,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY**
                            RideCloud bind kind schema preflight (`166_`)
                            · **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY**
+                           RideCloud bind kind schema remote preflight (`167_`)
+                           · **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH**
 Runtime AI / paid media  : OFF · fonctionnel **72016ea** · SHA Vercel Ready **non exposé**
 Budget                   : hard 437 / committed 391 / reserved 0 / available 46 ¢
 production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0                       : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
 P1 ouverts               : apply CHECK bind kinds bloqué · pricing TTS non ferme · lipsync/merge non prouvés
-P1 fermé                 : schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
-Prochaine porte majeure  : AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER
+P1 fermé                 : remote schema (`167_`) · schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
+Prochaine porte majeure  : AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER
 Living handover          : CURRENT_STATE_AND_RESUME.md
 Reprise nouveau chat     : LEO_CURSOR_NEW_CHAT_RESUME.md
 ```
@@ -365,6 +367,7 @@ Utilisateur → AI Video Director (/director)
 | [`164_PHASE_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT.md`](./164_PHASE_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT.md) | **RIDECLOUD-CREATE · CREATED** |
 | [`165_PHASE_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT.md`](./165_PHASE_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT.md) | **RIDECLOUD-BIND-PREFLIGHT · READY** |
 | [`166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md`](./166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md) | **RIDECLOUD-BIND-KIND-SCHEMA · READY** |
+| [`167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md`](./167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md) | **RIDECLOUD-BIND-KIND-SCHEMA-REMOTE · READY_FOR_APPLY** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

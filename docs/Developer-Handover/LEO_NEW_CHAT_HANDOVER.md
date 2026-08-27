@@ -180,26 +180,26 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-RideCloud promo est **BIND KIND SCHEMA PREFLIGHT READY** (`166_`). Migration locale 33e non appliquée. Projet draft `ba4a6021…` + brief rev.1. 26 s, VO polie. Pack `158_` + `159_`.
+RideCloud promo est **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`). Migration locale 33e non appliquée. Projet draft `ba4a6021…` + brief rev.1. 26 s, VO polie. Pack `158_` + `159_`.
 
-Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `166_`, `165_`, `164_`, `163_`, `162_`, `161_`, `160_`, `159_`, `158_`, `157_`, `156_`, `155_` et `153_` **consommées**.
+Assets 11A/11B/11C = **preuves techniques privées**, pas livrables RideCloud. Ledger **437 / 391 / 0 / 46**. Flags OFF. Auth `167_`, `166_`, `165_`, `164_`, `163_`, `162_`, `161_`, `160_`, `159_`, `158_`, `157_`, `156_`, `155_` et `153_` **consommées**.
 
 Phase active suivante :
 
-`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER`
+`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`
 
-Preflight distant distinct. **Aucun** apply, provider, dépense, lecture/upload média, persist bind, TTS, activation, lipsync ou export. N’invente aucun claim.
+Apply unique de la migration CHECK. **Aucune** RPC bind, persist artifact, provider, dépense, lecture/upload média, TTS, activation, lipsync ou export. N’invente aucun claim.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `LEO_CURSOR_NEW_CHAT_RESUME.md`.
 2. Lire `CURRENT_STATE_AND_RESUME.md` puis ce fichier.
 3. Vérifier Git (HEAD a pu changer depuis `0f3a3bb` à cause de commits docs).
-4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER`.
+4. Recevoir le prochain rapport STOP de Cursor concernant `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`.
 5. Ne pas refaire les phases déjà terminées.
 6. Vérifier le rapport et préparer la prochaine porte.
 
-Si `166_` est STOP, la porte suivante est le preflight distant du CHECK. Aucun provider. 0¢. Aucun apply. Aucune lecture ni upload média. N’invente aucun claim. Aucun lipsync. Aucune activation.
+Si `167_` est STOP, la porte suivante est l’apply unique du CHECK. Aucun provider. 0¢. Aucune RPC. Aucune lecture ni upload média. N’invente aucun claim. Aucun lipsync. Aucune activation.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -223,4 +223,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `166_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER`. RideCloud bind kind schema READY (`166_`). Migration locale 33e · 0 apply. Pack `158_`+`159_`. Budget 437/391/0/46. Flags considérés OFF. Auth `166_` / `165_` / `164_` / `163_` / `162_` / `161_` / `160_` / `159_` / `158_` / `157_` / `156_` / `155_` / `153_` consommées. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. N’invente aucun claim. Aucun lipsync. Aucune activation.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `167_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La phase active est `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`. RideCloud bind kind schema remote READY (`167_`). Migration locale 33e · 0 apply. Pack `158_`+`159_`. Budget 437/391/0/46. Flags considérés OFF. Auth `167_` / `166_` / `165_` / `164_` / `163_` / `162_` / `161_` / `160_` / `159_` / `158_` / `157_` / `156_` / `155_` / `153_` consommées. Aucun provider. 0¢. Aucun apply. Aucune RPC. Aucun persist bind. Aucun média Git. N’invente aucun claim. Aucun lipsync. Aucune activation.

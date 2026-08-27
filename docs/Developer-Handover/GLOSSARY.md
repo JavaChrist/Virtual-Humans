@@ -98,7 +98,9 @@
 **RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY** — verdict `165_` : kinds `storyboard_contract` + `media_input_manifest` conçus · CHECK actuel refuse.
 **AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_NO_PROVIDER** — porte `166_` : preflight local CHECK `storyboard_contract` + `media_input_manifest` · 0 apply · 0¢.
 **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY** — verdict `166_` : migration locale `20260827133000` · 13 kinds + 2 · 0 apply.
-**AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER** — prochaine porte : preflight distant distinct · 0 apply · 0 provider · 0¢.
+**AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER** — porte `167_` : preflight distant CHECK bind kinds · 0 apply · 0¢.
+**RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH** — verdict `167_` : distant 32 · local 33 · CHECK 13 kinds · 0 apply.
+**AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER** — prochaine porte : apply unique de `20260827133000` · 0 RPC · 0 artifact write.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

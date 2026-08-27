@@ -137,6 +137,7 @@
 - [x] RideCloud project create idempotent (`164_`) · **RIDECLOUD_SEPARATE_PROJECT_CREATED** · draft + brief rev.1 · replay existing ;
 - [x] RideCloud storyboard/pack bind preflight (`165_`) · **RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY** · 0 persist ;
 - [x] RideCloud bind kind schema preflight (`166_`) · **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY** · migration locale · 0 apply ;
+- [x] RideCloud bind kind schema remote preflight (`167_`) · **RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH** · 0 apply ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -147,7 +148,7 @@ Phases 10B–10F texte réel : PASS (runtime OFF après chaque smoke)
 Phase 11A média : **CLOSED** PASS_WITH_NOTES · 1.2.0 HUMAN_APPROVED inactif (`128_`) — applicatif `d395ec7`
 I2V `/director` : **11B CLOSED** PASS_WITH_NOTES (`135_`) · HUMAN_APPROVED inactif · 1 fal · attempt **completed** (`138_`) · pointeurs durcis (`139_`) · flags OFF
 Voice `/director` : **11C CLOSED** PASS_WITH_NOTES (`140_`–`156_`) · catalog 4/4/1 · 1 MP3 `bc36bba7…` approved inactif · HR `068a2b25…` · 2¢ provisional · flags OFF · preuves privées ≠ livrables RideCloud
-RideCloud promo : **BIND KIND SCHEMA PREFLIGHT READY** (`166_`) · projet `ba4a6021…` draft · CHECK local 33e · 0 apply
+RideCloud promo : **BIND KIND SCHEMA REMOTE PREFLIGHT READY** (`167_`) · projet `ba4a6021…` draft · CHECK distant 13 kinds · 0 apply
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

@@ -1,33 +1,34 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-27T13:45:00+02:00
-documentedHead=8976e49
+verifiedAt=2026-08-27T14:40:00+02:00
+documentedHead=1d28f94
 headStatus=pending commit
-lastPhaseReport=166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md
-nextPhase=AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER
+lastPhaseReport=167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md
+nextPhase=AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
 budgetAvailable=46
 runtimePaidMedia=OFF
-unitTests=1899/1899
-globalStatus=RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY
+unitTests=1906/1906
+globalStatus=RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY`  
-**Dernière vérification :** 2026-08-27 · bind kind schema preflight RideCloud `166_`  
-**Auteur de la mise à jour :** Cursor · `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_NO_PROVIDER`  
+**Statut global :** `RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH`  
+**Dernière vérification :** 2026-08-27 · bind kind schema remote preflight RideCloud `167_`  
+**Auteur de la mise à jour :** Cursor · `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER`  
 **Branche :** `main`  
-**HEAD local au départ de `166_` :** `5b58fdc` · bind preflight **`bc3e0c7`**  
-**origin/main au départ :** `5b58fdc` · ahead/behind **0/0**  
+**HEAD local au départ de `167_` :** `1d28f94` · schema locale **`8976e49`**  
+**origin/main au départ :** `1d28f94` · ahead/behind **0/0**  
 **Working tree :** AICCOS + `page.tsx` hors scope (dirty, protégés)  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
 **Reprise nouveau chat :** [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)  
-**Dernier rapport fonctionnel :** [`166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md`](./166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md)  
+**Dernier rapport fonctionnel :** [`167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md`](./167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md)  
+**Bind kind schema locale :** [`166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md`](./166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md)  
 **Bind preflight :** [`165_PHASE_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT.md`](./165_PHASE_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT.md)  
 **Create idempotent :** [`164_PHASE_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT.md`](./164_PHASE_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT.md)  
 **Preflight create :** [`163_PHASE_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT.md`](./163_PHASE_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT.md)  
@@ -36,7 +37,7 @@ globalStatus=RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY
 **Storyboard initial :** [`160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md`](./160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md)  
 **Addendum HD :** [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md)  
 **Supply RideCloud :** [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md)  
-**Prochaine phase exacte :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER`
+**Prochaine phase exacte :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
 
@@ -77,8 +78,8 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | T2V / lipsync / merge-export réels | **PREPARED** · hors 11C | pas de smoke |
 | Voice / TTS `/director` | **11C CLOSED** · PASS_WITH_NOTES · 1 audio privé inactif | `140_`–`156_` · 1 ElevenLabs · HR APPROVE `068a2b25…` · flags OFF |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
-| RideCloud promo | **BIND KIND SCHEMA PREFLIGHT READY** · draft + brief rev.1 | `166_` · CHECK local 33e · 0 apply |
-| Prochaine étape | **PREPARED** | `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER` · 0 apply · 0¢ |
+| RideCloud promo | **BIND KIND SCHEMA REMOTE PREFLIGHT READY** · draft + brief rev.1 | `167_` · CHECK distant 13 kinds · 0 apply |
+| Prochaine étape | **PREPARED** | `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER` · 0 RPC · 0¢ |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -101,7 +102,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Domaine | Statut | Dernière phase | Preuve | Provider | Coût réel connu (¢) | Blocage | Prochaine action |
 |---|---|---|---|---|---|---|---|
 | Fondations V2 | PASS_SYNTHETIC | 9 | unitaires + E2E fake | — | 0 | — | maintenir |
-| Supabase / migrations | PASS_REAL + local ahead | MT-005 `82_` + Voice `147_` + bind kinds locale `166_` | **33 local / 32 remote** | — | 0 | apply bind kinds bloqué | remote preflight |
+| Supabase / migrations | PASS_REAL + local ahead | MT-005 `82_` + Voice `147_` + bind kinds locale `166_` | **33 local / 32 remote** | — | 0 | apply bind kinds bloqué | remote apply once |
 | Sécurité environnement | PASS_REAL | 7–10A | fail-closed | — | 0 | RLS distante non re-auditée 14 août | audit RLS distant |
 | Marketing Director | PASS_REAL | 10B | 1 appel | OpenAI texte | 4 | flags OFF | ne pas relancer |
 | Creative Director | PASS_REAL | 10C | 1 appel | OpenAI texte | 5 | flags OFF | ne pas relancer |
@@ -220,7 +221,7 @@ Output Motion : `2d7ffcad-…` · privé · non actif comme livrable produit.
 
 ## 8. Production DB et migrations
 
-Vérifié live Supabase **2026-08-26** (audit lecture seule) : first paid TTS `153_` inchangé · 1 audio privé · catalog 4/4/1.
+Vérifié live Supabase **2026-08-27** (audit lecture seule `167_`) : CHECK 13 kinds · 39 artifacts · RideCloud brief only · 0 apply.
 
 | Champ | Valeur |
 |---|---|
@@ -315,16 +316,16 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **1899/1899** | suite + schema bind RideCloud | 2026-08-27 `166_` |
-| Typecheck / lint / build | **PASS** | schema preflight + docs | `166_` |
-| migrations-static | PASS | **33 local** · remote 32 | `166_` |
-| Secret scan | **PASS** | module + docs · `VOICE_IDS_EXPOSED=false` | `166_` |
-| Tests ciblés | schema READY · 13 kinds + 2 · 0 DML | cette phase | `166_` |
+| Unitaires | **1906/1906** | suite + remote schema preflight RideCloud | 2026-08-27 `167_` |
+| Typecheck / lint / build | **PASS** | remote schema preflight + docs | `167_` |
+| migrations-static | PASS | **33 local** · remote 32 | `167_` |
+| Secret scan | **PASS** | module + docs · `VOICE_IDS_EXPOSED=false` | `167_` |
+| Tests ciblés | remote preflight READY · refus drift / DML | cette phase | `167_` |
 | DB integration | N/A (stack locale non relancée) | **indisponible** 16 août | `153_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
 | E2E Playwright `/director` | 15/15 ×2 | **historique** | Phase 9 |
-| Fraîcheur living handover | PASS | tooling | `166_` |
+| Fraîcheur living handover | PASS | tooling | `167_` |
 
 Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
@@ -363,12 +364,12 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 - Rétention/suppression des REJECT privés — politique future.
 - `17_` bandeau `145_` (31 remote / 32 local) ; `19_` stale (jobs/budget snapshot).
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
-- Bind kind schema RideCloud **fait** (`166_`) · READY · migration locale 33e · 0 apply · persist bind encore bloqué.
+- Bind kind schema remote preflight RideCloud **fait** (`167_`) · READY_FOR_APPLY_AUTH · 0 apply · persist bind encore bloqué.
 - MV-002 DEFERRED.
 
 ### P0/P1 fermés (extraits)
 
-- Bind kind schema RideCloud (`166_`) · Bind preflight RideCloud (`165_`) · Create idempotent RideCloud (`164_`) · Preflight create RideCloud (`163_`) · Polish VO RideCloud (`162_`) · Durcissement VO RideCloud (`161_`) · Storyboard RideCloud (`160_`) · Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Bind kind schema remote RideCloud (`167_`) · Bind kind schema RideCloud (`166_`) · Bind preflight RideCloud (`165_`) · Create idempotent RideCloud (`164_`) · Preflight create RideCloud (`163_`) · Polish VO RideCloud (`162_`) · Durcissement VO RideCloud (`161_`) · Storyboard RideCloud (`160_`) · Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -421,6 +422,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Create idempotent projet RideCloud | **fait** (`164_`) | 0¢ · created · replay existing | consommée | bind preflight · 0 provider |
 | Bind preflight storyboard/pack RideCloud | **fait** (`165_`) | 0¢ · READY · 0 persist | consommée | schema kinds · 0 provider |
 | Bind kind schema RideCloud | **fait** (`166_`) | 0¢ · migration locale · 0 apply | consommée | remote preflight · 0 apply |
+| Bind kind schema remote RideCloud | **fait** (`167_`) | 0¢ · READY_FOR_APPLY · 0 apply | consommée | apply once · 0 RPC |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -430,7 +432,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER`** — preflight distant **distinct** de la migration `20260827133000_vhs_ridecloud_bind_artifact_kinds`. Lecture seule. **Aucun apply**, provider, média, persist bind, dépense, run ou flag. **Non exécutée ici.**
+**`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** — application distante **unique** de `20260827133000_vhs_ridecloud_bind_artifact_kinds.sql`. **Aucune** RPC bind, persist artifact, provider, média, dépense, run ou flag. **Non exécutée ici.**
 
 ### Court terme
 
@@ -455,14 +457,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A/11B/11C CLOSED · RideCloud bind kind schema READY · budget 437/391/0/46 ¢
-Dernier verdict : RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY (166_)
-Preuve : migration locale 20260827133000 · 13 kinds + 2 · 0 apply
-Blocage : drift local ahead 1 · apply distant interdit sans preflight distant
-Mission : uniquement AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER
-Auth consommées : schema preflight (166_) · bind preflight (165_) · create idempotent (164_)
-Interdit : provider · dépense · média Git · apply schéma · persist bind · TTS · export
-Attendu : preflight distant lecture seule · 0 apply
+Contexte : VHS V2 · 11A/11B/11C CLOSED · RideCloud bind kind schema remote READY · budget 437/391/0/46 ¢
+Dernier verdict : RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH (167_)
+Preuve : distant 32 · local 33 · CHECK 13 kinds · 0 bind rows · 0 apply
+Blocage : apply distant interdit sans Auth apply once
+Mission : uniquement AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER
+Auth consommées : remote preflight (167_) · schema locale (166_) · bind preflight (165_)
+Interdit : provider · dépense · média Git · RPC bind · persist bind · TTS · export
+Attendu : apply unique de 20260827133000 · 0 RPC · 0 artifact write
 ```
 
 ---
@@ -471,12 +473,12 @@ Attendu : preflight distant lecture seule · 0 apply
 
 ```text
 Lis d’abord docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md.
-Lis ensuite CURRENT_STATE_AND_RESUME.md et 166_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT.md.
-Vérifie Git. RideCloud bind kind schema READY. Migration locale 33e non appliquée. Pack 158_+159_. Storyboard 26 s. 11C CLOSED. Budget 437/391/0/46.
-Flags considérés OFF. Auth 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
+Lis ensuite CURRENT_STATE_AND_RESUME.md et 167_PHASE_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT.md.
+Vérifie Git. RideCloud bind kind schema remote READY. Migration locale 33e non appliquée. Pack 158_+159_. Storyboard 26 s. 11C CLOSED. Budget 437/391/0/46.
+Flags considérés OFF. Auth 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun lipsync.
-Prochaine porte : AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER. 0 apply. 0¢.
+Prochaine porte : AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER. 0 RPC. 0¢.
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 ```
@@ -487,6 +489,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
+| 2026-08-27 | `167_` RideCloud bind kind schema remote | RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH | pending | 0 | **lecture seule** · 0 apply | apply once |
 | 2026-08-27 | `166_` RideCloud bind kind schema | RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_PREFLIGHT_READY | `8976e49` | 0 | **migration locale** · 0 apply | remote schema preflight |
 | 2026-08-27 | `165_` RideCloud bind preflight | RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY | `bc3e0c7` | 0 | **docs + contrat** · 0 persist | schema kinds |
 | 2026-08-27 | `164_` RideCloud create idempotent | RIDECLOUD_SEPARATE_PROJECT_CREATED | `ec57ed5` | 0 | **1 projet draft + 1 brief rev.1** · replay existing | bind preflight |
