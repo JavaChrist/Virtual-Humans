@@ -3,7 +3,8 @@
 **Date :** 2026-08-27  
 **Auth :** `AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER`  
 **Nature :** storyboard déterministe 26 s · refs opaques · **0** provider · **0** TTS · **0** génération · **0** projet Production · **0** média Git  
-**HEAD au départ :** `8d65bd8` (`159_` SHA record)
+**HEAD au départ :** `8d65bd8` (`159_` SHA record)  
+**HEAD de phase :** `55107d9`
 
 ```text
 VERDICT = RIDECLOUD_FIRST_AD_STORYBOARD_READY

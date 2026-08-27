@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-27T11:30:00+02:00
-documentedHead=8d65bd8
+documentedHead=55107d9
 headStatus=pending commit
 lastPhaseReport=160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md
 nextPhase=AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER
@@ -475,7 +475,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `160_` RideCloud first-ad storyboard | RIDECLOUD_FIRST_AD_STORYBOARD_READY | pending | 0 | **docs + contrat** · 6 plans · 0 Production | project create preflight |
+| 2026-08-27 | `160_` RideCloud first-ad storyboard | RIDECLOUD_FIRST_AD_STORYBOARD_READY | `55107d9` | 0 | **docs + contrat** · 6 plans · 0 Production | project create preflight |
 | 2026-08-27 | `159_` RideCloud HD variants | RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDED | `4f1cf98` | 0 | **5 variantes** · 12 locked inchangées · 0 Production | storyboard preflight |
 | 2026-08-27 | `158_` RideCloud supply pack | RIDECLOUD_INPUT_COLLECTION_READY | `3eb8a0f` | 0 | **refs opaques** · 0 média Git · 0 Production | variantes HD |
 | 2026-08-26 | `157_` RideCloud input preflight | RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED | `3da4be0` | 0 | **docs + contrat** · 0 Production | pack inputs Christian |
