@@ -1,16 +1,15 @@
 #!/usr/bin/env node
 /**
  * RideCloud input preflight — local contract only.
- * No provider, no Storage, no Supabase, no media I/O.
+ * No provider, no Storage, no Supabase, no Git media write.
  */
 import {
   RIDECLOUD_FIRST_AD_CONCEPT,
   RIDECLOUD_INPUT_PREFLIGHT_AUTH,
-  RIDECLOUD_NEXT_AUTH_WHEN_BLOCKED,
-  RIDECLOUD_REJECTED_UNSAFE_SOURCES,
+  RIDECLOUD_SUPPLY_AUTH,
   assertRideCloudNoSideEffects,
-  buildRideCloudObservedManifest,
-  buildRideCloudObservedRecords,
+  buildRideCloudCurrentManifest,
+  buildRideCloudCurrentRecords,
   chooseRideCloudNextAuth,
 } from "@/application/production/ridecloud-input-preflight";
 
@@ -30,23 +29,25 @@ assertRideCloudNoSideEffects({
   humanReviewWrites: 0,
 });
 
-const manifest = buildRideCloudObservedManifest();
+const manifest = buildRideCloudCurrentManifest();
 const nextAuth = chooseRideCloudNextAuth(manifest.readinessVerdict);
 
 console.log(
   JSON.stringify(
     {
-      auth: RIDECLOUD_INPUT_PREFLIGHT_AUTH,
+      collectionAuth: RIDECLOUD_INPUT_PREFLIGHT_AUTH,
+      supplyAuth: RIDECLOUD_SUPPLY_AUTH,
       ok: true,
       verdict: manifest.readinessVerdict,
       nextAuth,
       firstAdConcept: RIDECLOUD_FIRST_AD_CONCEPT,
-      rejectedUnsafe: RIDECLOUD_REJECTED_UNSAFE_SOURCES,
-      inventory: buildRideCloudObservedRecords().map((row) => ({
+      inventory: buildRideCloudCurrentRecords().map((row) => ({
         key: row.key,
         status: row.status,
       })),
       missingRequiredInputs: manifest.missingRequiredInputs,
+      captureCount: manifest.captureReferences.length,
+      brandRefCount: manifest.brandAssetReferences.length,
       manifest,
     },
     null,

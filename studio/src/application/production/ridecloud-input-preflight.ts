@@ -1,10 +1,13 @@
 /**
  * RideCloud separate-project input collection preflight.
- * No provider, no media I/O, no Production create/upload.
+ * No provider, no Git media, no Production create/upload.
  */
 import { PHASE_11C_NEXT_AUTH } from "./phase-11c-close-and-next-gate-audit";
 
 export const RIDECLOUD_INPUT_PREFLIGHT_AUTH = PHASE_11C_NEXT_AUTH;
+
+export const RIDECLOUD_SUPPLY_AUTH =
+  "AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER" as const;
 
 export const RIDECLOUD_INPUT_PREFLIGHT_VERDICT_READY = "READY" as const;
 export const RIDECLOUD_INPUT_PREFLIGHT_VERDICT_BLOCKED = "BLOCKED_INPUTS_REQUIRED" as const;
@@ -13,11 +16,14 @@ export type RideCloudInputPreflightVerdict =
   | typeof RIDECLOUD_INPUT_PREFLIGHT_VERDICT_READY
   | typeof RIDECLOUD_INPUT_PREFLIGHT_VERDICT_BLOCKED;
 
-export const RIDECLOUD_NEXT_AUTH_WHEN_BLOCKED =
-  "AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER" as const;
+export const RIDECLOUD_NEXT_AUTH_WHEN_BLOCKED = RIDECLOUD_SUPPLY_AUTH;
+
+export const RIDECLOUD_NEXT_AUTH_WHEN_READY =
+  "AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER" as const;
 
 export const RIDECLOUD_PROJECT_KEY = "ridecloud-promo-separate-v1" as const;
 export const RIDECLOUD_PRODUCT_NAME = "RideCloud" as const;
+export const RIDECLOUD_INTEGRITY_PREFIX_LENGTH = 12 as const;
 
 export type RideCloudInputStatus =
   | "AVAILABLE_VERIFIED"
@@ -53,7 +59,6 @@ export const RIDECLOUD_ALWAYS_REQUIRED_KEYS = [
   "durationFormats",
   "language",
   "voiceRole",
-  "musicRights",
   "legalConstraints",
 ] as const satisfies readonly RideCloudInputKey[];
 
@@ -103,6 +108,12 @@ export const RIDECLOUD_REJECTED_UNSAFE_SOURCES = [
   "ref:e2e-ridecloud-fixtures",
 ] as const satisfies readonly RideCloudOpaqueRef[];
 
+export const RIDECLOUD_LOCKED_CLAIM =
+  "Le carnet d’entretien intelligent de tous vos véhicules." as const;
+export const RIDECLOUD_LOCKED_SIGNATURE = "Centralisez, anticipez, valorisez." as const;
+export const RIDECLOUD_LOCKED_CTA =
+  "Rejoignez le Programme Fondateur, testez RideCloud, remplissez le questionnaire et bénéficiez de Premium à vie." as const;
+
 export const RIDECLOUD_EXPECTED_CONSTRAINTS = {
   logo: {
     kinds: ["svg", "png"] as const,
@@ -113,6 +124,7 @@ export const RIDECLOUD_EXPECTED_CONSTRAINTS = {
     kinds: ["png", "webp"] as const,
     source: "real_ridecloud_ui",
     pii: "forbidden",
+    androidOverlay: "crop_before_deliverable",
   },
   recordings: {
     kinds: ["mp4"] as const,
@@ -127,19 +139,35 @@ export const RIDECLOUD_EXPECTED_CONSTRAINTS = {
     count: 1,
     languageLocked: true,
   },
-  durationWindowSec: [15, 30] as const,
-  suggestedAspectRatios: ["9:16", "1:1", "16:9"] as const,
+  durationWindowSec: [20, 30] as const,
+  suggestedAspectRatios: ["9:16", "4:5", "1:1"] as const,
   voice: {
     recommendedRole: "narrator_female",
     lipsync: false,
   },
   music: {
-    licenseProof: "required_for_recommended_first_ad",
+    licenseProof: "waived_until_license",
   },
 } as const;
 
 export const RIDECLOUD_FIRST_AD_CONCEPT =
-  "captures_or_recordings -> animated_montage -> narrator_female -> texts_cta -> licensed_music -> private_export -> human_review" as const;
+  "captures -> animated_montage -> narrator_female -> texts_cta -> no_music -> private_export -> human_review" as const;
+
+export const RIDECLOUD_LOGO_REF = "ref:ridecloud-logo-512x512#5b3b85a3d8a5" as const;
+export const RIDECLOUD_BANNER_REF = "ref:ridecloud-banner-1024x500#d26a04137ca0" as const;
+
+export const RIDECLOUD_CAPTURE_REFS = [
+  "ref:ridecloud-capture-720x1604-01#eed8f55e672a",
+  "ref:ridecloud-capture-720x1604-02#06de5cced6e7",
+  "ref:ridecloud-capture-720x1604-03#df2d97b1bfec",
+  "ref:ridecloud-capture-720x1604-04#4b01c163a06e",
+  "ref:ridecloud-capture-720x1604-05#81bcc97236e1",
+  "ref:ridecloud-capture-720x1604-06#6d2886fc7aa3",
+  "ref:ridecloud-capture-720x1604-07#0aabc4c4e109",
+  "ref:ridecloud-capture-720x1604-08#ffc111b59fe9",
+  "ref:ridecloud-capture-720x1604-09#314f7face28d",
+  "ref:ridecloud-capture-720x1604-10#e6523b986d67",
+] as const satisfies readonly RideCloudOpaqueRef[];
 
 const SENSITIVE_LOCATOR =
   /sk-[A-Za-z0-9]{12,}|X-Amz-Signature=|eyJ[A-Za-z0-9_-]{20,}\.|data:(?:image|audio|video)\/|[A-Za-z]:\\|[?&]token=/i;
@@ -148,6 +176,18 @@ export function assertRideCloudLocatorIsRedactedSafe(value: string): void {
   if (SENSITIVE_LOCATOR.test(value)) {
     throw new Error("BLOCKED_RIDECLOUD_SENSITIVE_LOCATOR");
   }
+}
+
+export function assertRideCloudIntegrityPrefix(prefix: string): void {
+  if (!/^[0-9a-f]{12}$/.test(prefix)) {
+    throw new Error("BLOCKED_RIDECLOUD_INTEGRITY_PREFIX");
+  }
+}
+
+export function rideCloudRefIntegrityPrefix(ref: RideCloudOpaqueRef): string {
+  const hash = ref.split("#")[1] ?? "";
+  assertRideCloudIntegrityPrefix(hash);
+  return hash;
 }
 
 export function assertNotRideCloudDeliverable(source: string): void {
@@ -176,14 +216,23 @@ export function assertRideCloudNoSideEffects(input: {
   }
 }
 
+function isSatisfiedRequired(key: RideCloudInputKey, status: RideCloudInputStatus): boolean {
+  if (status === "AVAILABLE_VERIFIED") return true;
+  if (key === "musicRights" && status === "OPTIONAL") return true;
+  return false;
+}
+
 export function missingRequiredRideCloudInputs(
   inventory: Readonly<Record<RideCloudInputKey, RideCloudInputStatus>>,
 ): RideCloudInputKey[] {
   const missing: RideCloudInputKey[] = [];
   for (const key of RIDECLOUD_ALWAYS_REQUIRED_KEYS) {
-    if (inventory[key] !== "AVAILABLE_VERIFIED") {
+    if (!isSatisfiedRequired(key, inventory[key])) {
       missing.push(key);
     }
+  }
+  if (inventory.musicRights !== "AVAILABLE_VERIFIED" && inventory.musicRights !== "OPTIONAL") {
+    missing.push("musicRights");
   }
   const hasVerifiedVisual = RIDECLOUD_VISUAL_SOURCE_KEYS.some(
     (key) => inventory[key] === "AVAILABLE_VERIFIED",
@@ -206,14 +255,14 @@ export function evaluateRideCloudInputReadiness(
 
 export function chooseRideCloudNextAuth(
   verdict: RideCloudInputPreflightVerdict,
-): typeof RIDECLOUD_NEXT_AUTH_WHEN_BLOCKED {
-  if (verdict !== RIDECLOUD_INPUT_PREFLIGHT_VERDICT_BLOCKED) {
-    throw new Error("BLOCKED_RIDECLOUD_NEXT_AUTH_NOT_FOR_READY");
+): typeof RIDECLOUD_NEXT_AUTH_WHEN_BLOCKED | typeof RIDECLOUD_NEXT_AUTH_WHEN_READY {
+  if (verdict === RIDECLOUD_INPUT_PREFLIGHT_VERDICT_BLOCKED) {
+    return RIDECLOUD_NEXT_AUTH_WHEN_BLOCKED;
   }
-  return RIDECLOUD_NEXT_AUTH_WHEN_BLOCKED;
+  return RIDECLOUD_NEXT_AUTH_WHEN_READY;
 }
 
-/** Observed workspace facts. No invented campaign copy. */
+/** Snapshot 157_ — empty pack before this Auth. */
 export const RIDECLOUD_OBSERVED_INVENTORY = {
   productBrief: "MISSING_REQUIRED",
   campaignGoal: "AVAILABLE_UNVERIFIED",
@@ -234,7 +283,7 @@ export const RIDECLOUD_OBSERVED_INVENTORY = {
 export const RIDECLOUD_OBSERVED_INPUT_NOTES: Record<RideCloudInputKey, string> = {
   productBrief: "No RideCloud product brief was supplied for this separate promo project.",
   campaignGoal: "Christian stated promo videos for testers; the exact ad objective is not locked.",
-  audience: "Google Play test + JavaChrist Beta Club Discord, stated in this Auth.",
+  audience: "Google Play test + JavaChrist Beta Club Discord, stated in the 157_ Auth.",
   logoBrand: "No RideCloud logo or brand charter was supplied. VHS icon is rejected.",
   screenshots: "No RideCloud UI captures were supplied. VHS dashboard shots are rejected.",
   screenRecordings: "No RideCloud screen recordings were supplied.",
@@ -248,6 +297,49 @@ export const RIDECLOUD_OBSERVED_INPUT_NOTES: Record<RideCloudInputKey, string> =
   legalConstraints: "No Play/Discord/brand legal mentions were supplied.",
 };
 
+/** Current pack after AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER. */
+export const RIDECLOUD_CURRENT_INVENTORY = {
+  productBrief: "AVAILABLE_VERIFIED",
+  campaignGoal: "AVAILABLE_VERIFIED",
+  audience: "AVAILABLE_VERIFIED",
+  logoBrand: "AVAILABLE_VERIFIED",
+  screenshots: "AVAILABLE_VERIFIED",
+  screenRecordings: "OPTIONAL",
+  approvedClaims: "AVAILABLE_VERIFIED",
+  valueProposition: "AVAILABLE_VERIFIED",
+  cta: "AVAILABLE_VERIFIED",
+  durationFormats: "AVAILABLE_VERIFIED",
+  language: "AVAILABLE_VERIFIED",
+  voiceRole: "AVAILABLE_VERIFIED",
+  musicRights: "OPTIONAL",
+  legalConstraints: "AVAILABLE_VERIFIED",
+} as const satisfies Record<RideCloudInputKey, RideCloudInputStatus>;
+
+export const RIDECLOUD_CURRENT_INPUT_NOTES: Record<RideCloudInputKey, string> = {
+  productBrief: "Locked from Christian claim + signature. No extra brief invented.",
+  campaignGoal: "20–30s founder-program ad for LinkedIn and Instagram.",
+  audience: "LinkedIn and Instagram, locked by this Auth.",
+  logoBrand: "512×512 logo verified locally. Opaque ref + 12-hex prefix only.",
+  screenshots: "10 captures 720×1604 verified. Briefing said 8. Android overlay crop later.",
+  screenRecordings: "None supplied. Screenshots satisfy the visual-source rule.",
+  approvedClaims: "One locked claim. No improvisation.",
+  valueProposition: "Locked signature: Centralisez, anticipez, valorisez.",
+  cta: "One locked CTA. Premium à vie stays tied to Programme Fondateur.",
+  durationFormats: "20–30s. Future ratios 9:16, 4:5, optional 1:1.",
+  language: "French, locked by the approved copy.",
+  voiceRole: "narrator_female locked. Lipsync false.",
+  musicRights: "Explicitly none until a license is supplied.",
+  legalConstraints: "Founder terms, no vehicle partnership, Play badge only if exact.",
+};
+
+export const RIDECLOUD_LOCKED_LEGAL = [
+  "premium_lifetime_only_with_founder_program_terms",
+  "vehicle_brands_must_not_imply_partnership",
+  "google_play_badge_only_if_distribution_claim_is_exact",
+  "android_system_overlay_must_be_cropped_before_deliverable",
+  "no_personal_data_in_sources",
+] as const;
+
 export function buildRideCloudObservedRecords(): RideCloudInputRecord[] {
   return (Object.keys(RIDECLOUD_OBSERVED_INVENTORY) as RideCloudInputKey[]).map((key) => ({
     key,
@@ -259,10 +351,6 @@ export function buildRideCloudObservedRecords(): RideCloudInputRecord[] {
 
 export function buildRideCloudObservedManifest(): RideCloudInputManifest {
   const missing = missingRequiredRideCloudInputs(RIDECLOUD_OBSERVED_INVENTORY);
-  const verdict = evaluateRideCloudInputReadiness(RIDECLOUD_OBSERVED_INVENTORY);
-  for (const source of RIDECLOUD_REJECTED_UNSAFE_SOURCES) {
-    assertRideCloudLocatorIsRedactedSafe(source);
-  }
   return {
     projectKey: RIDECLOUD_PROJECT_KEY,
     productName: RIDECLOUD_PRODUCT_NAME,
@@ -281,6 +369,50 @@ export function buildRideCloudObservedManifest(): RideCloudInputManifest {
     musicRightsStatus: RIDECLOUD_OBSERVED_INVENTORY.musicRights,
     legalConstraints: [],
     missingRequiredInputs: missing,
-    readinessVerdict: verdict,
+    readinessVerdict: evaluateRideCloudInputReadiness(RIDECLOUD_OBSERVED_INVENTORY),
+  };
+}
+
+export function buildRideCloudCurrentRecords(): RideCloudInputRecord[] {
+  return (Object.keys(RIDECLOUD_CURRENT_INVENTORY) as RideCloudInputKey[]).map((key) => ({
+    key,
+    status: RIDECLOUD_CURRENT_INVENTORY[key],
+    note: RIDECLOUD_CURRENT_INPUT_NOTES[key],
+    references:
+      key === "logoBrand"
+        ? [RIDECLOUD_LOGO_REF]
+        : key === "screenshots"
+          ? RIDECLOUD_CAPTURE_REFS
+          : [],
+  }));
+}
+
+export function buildRideCloudCurrentManifest(): RideCloudInputManifest {
+  const refs = [RIDECLOUD_LOGO_REF, RIDECLOUD_BANNER_REF, ...RIDECLOUD_CAPTURE_REFS];
+  for (const ref of refs) {
+    assertRideCloudLocatorIsRedactedSafe(ref);
+    rideCloudRefIntegrityPrefix(ref);
+    assertNotRideCloudDeliverable(ref);
+  }
+  const missing = missingRequiredRideCloudInputs(RIDECLOUD_CURRENT_INVENTORY);
+  return {
+    projectKey: RIDECLOUD_PROJECT_KEY,
+    productName: RIDECLOUD_PRODUCT_NAME,
+    campaignGoal: "founder_program_ad_20_30s_linkedin_instagram",
+    audience: "linkedin+instagram",
+    targetPlatforms: ["linkedin", "instagram"],
+    aspectRatios: ["9:16", "4:5", "1:1"],
+    targetDuration: "20-30s",
+    language: "fr",
+    voiceRole: "narrator_female",
+    brandAssetReferences: [RIDECLOUD_LOGO_REF, RIDECLOUD_BANNER_REF],
+    captureReferences: RIDECLOUD_CAPTURE_REFS,
+    recordingReferences: [],
+    approvedClaims: [RIDECLOUD_LOCKED_CLAIM, RIDECLOUD_LOCKED_SIGNATURE],
+    CTA: RIDECLOUD_LOCKED_CTA,
+    musicRightsStatus: RIDECLOUD_CURRENT_INVENTORY.musicRights,
+    legalConstraints: RIDECLOUD_LOCKED_LEGAL,
+    missingRequiredInputs: missing,
+    readinessVerdict: evaluateRideCloudInputReadiness(RIDECLOUD_CURRENT_INVENTORY),
   };
 }

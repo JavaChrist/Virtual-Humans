@@ -59,10 +59,10 @@ Chaque phase produit un incrément déployable derrière un feature flag. Une ph
 **État 26 août 2026 :** Phase 11A **CLOSED** (`128_`) · Phase 11B **CLOSED PASS_WITH_NOTES** (`135_`) · Phase 11C **CLOSED PASS_WITH_NOTES** (`156_`) · still `49284892…` + vidéo `9be6cb0c…` + audio `bc36bba7…` **preuves privées inactives**, pas livrables RideCloud.  
 Motion MV-001 **PASS** benchmark · Registry **DISABLED**. Restore drill **PASS** (`78_`).
 
-**Pas encore :** pack inputs RideCloud (brief, logo, captures, claims, CTA, musique) · projet Production RideCloud · T2V/lipsync/merge-export **réels** ; activation ; runtime Motion Production.
+**Pas encore :** storyboard première pub RideCloud · projet Production RideCloud · T2V/lipsync/merge-export **réels** ; activation ; runtime Motion Production.
 
 Pilotage courant : **`CURRENT_STATE_AND_RESUME.md`** puis **`BACKLOG_V2.md`**.  
-Prochaine porte : **`AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER`** — pack inputs manquants fourni par Christian · 0 provider · 0¢ · 0 projet Production.
+Prochaine porte : **`AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER`** — storyboard 20–30 s · 0 provider · 0¢ · 0 projet Production.
 
 ## Priorités
 

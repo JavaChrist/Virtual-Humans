@@ -80,7 +80,9 @@
 **AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER** — porte `157_` : collecte/preflight inputs RideCloud séparés · 0 provider · 0¢ · 0 projet Production.
 **RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED** — verdict `157_` : audience vérifiée · 13 inputs requis manquants ou non vérifiés · 11A/11B/11C ≠ livrables.
 **BLOCKED_INPUTS_REQUIRED** — preflight fail-closed : READY seulement si tous les inputs obligatoires sont `AVAILABLE_VERIFIED`.
-**AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER** — prochaine porte : Christian fournit le pack manquant · 0 provider · 0¢ · 0 projet Production.
+**AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER** — porte `158_` : intégration du pack RideCloud · refs opaques + préfixes · 0 média Git · 0 provider.
+**RIDECLOUD_INPUT_COLLECTION_READY** — verdict `158_` : pack verrouillé · 10 captures `720×1604` · logo `512×512` · musique waived · READY.
+**AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER** — prochaine porte : storyboard première pub 20–30 s · 0 provider · 0¢ · 0 projet Production.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).

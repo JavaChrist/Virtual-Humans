@@ -44,7 +44,7 @@ test("freshness — living file parses and required markers present", async () =
   const markers = mod.parseCurrentStateMarkers(markdown);
   assert.equal(
     markers.nextPhase,
-    "AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER",
+    "AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER",
   );
   assert.equal(markers.budgetHard, "437");
   assert.equal(markers.runtimePaidMedia, "OFF");

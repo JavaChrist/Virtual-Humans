@@ -1,17 +1,17 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : living resume. `157_` RideCloud preflight **consommée** · `BLOCKED_INPUTS_REQUIRED`. Voir living handover.
+Nature : living resume. `158_` RideCloud supply **consommée** · `READY`. Voir living handover.
 
 <!-- RESUME_MARKERS
-verifiedAt=2026-08-26
-sourceHead=d115d63
+verifiedAt=2026-08-27
+sourceHead=80d3e4d
 lastFunctionalCommit=72016ea
-lastDocumentationCommit=d115d63
-thisGateDocumentationCommit=3da4be0
-lastPhaseReport=157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md
-globalStatus=RIDECLOUD_INPUT_COLLECTION_BLOCKED_INPUTS_REQUIRED
-nextAuth=AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER
+lastDocumentationCommit=80d3e4d
+thisGateDocumentationCommit=pending
+lastPhaseReport=158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md
+globalStatus=RIDECLOUD_INPUT_COLLECTION_READY
+nextAuth=AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
@@ -29,10 +29,10 @@ realMergeExportStatus=NOT_AUTHORIZED
 
 | Pointeur | Valeur | Signification |
 |---|---|---|
-| `sourceHead` | `d115d63` | HEAD Git **audité** le 2026-08-26, avant le commit `157_` |
+| `sourceHead` | `80d3e4d` | HEAD Git **audité** le 2026-08-27, avant le commit `158_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
-| `lastDocumentationCommit` | `d115d63` | dernier commit docs **avant** cette porte (SHA de `156_`) |
-| `thisGateDocumentationCommit` | `3da4be0` | premier commit docs de la porte `157_` |
+| `lastDocumentationCommit` | `80d3e4d` | dernier commit docs **avant** cette porte (SHA de `157_`) |
+| `thisGateDocumentationCommit` | pending | premier commit docs de la porte `158_` |
 | SHA déployé Vercel | **non exposé par le CLI** | corrélation temporelle seulement, pas une preuve runtime |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
@@ -268,17 +268,10 @@ Attendus (non relus un par un le 26 août) : Voice / Paid Media / Worker payant 
 - stockage privé
 - budget et idempotence
 
-**Encore manquant (preflight `157_` = BLOCKED_INPUTS_REQUIRED) :**
+**Pack RideCloud (`158_`) = READY.** Encore manquant ensuite :
 
-- brief produit RideCloud
-- objectif d’annonce verrouillé
-- logo / charte
-- captures **ou** screen recordings RideCloud
-- claims / proposition de valeur / CTA autorisés
-- durée, ratios, langue, rôle voix verrouillés
-- musique + preuve de licence
-- mentions légales
-- créer un **projet séparé RideCloud** (seulement après pack vérifié)
+- storyboard / plan de plans de la première pub 20–30 s
+- créer un **projet séparé RideCloud** (seulement après storyboard)
 - merge / export réel
 - QC et Human Review finale
 - lipsync seulement si un personnage doit parler face caméra
@@ -286,7 +279,7 @@ Attendus (non relus un par un le 26 août) : Voice / Paid Media / Worker payant 
 
 **Recommandation — première publicité RideCloud sans lipsync :**
 
-captures ou screen recordings RideCloud → montage animé → `narrator_female` → textes / CTA → musique autorisée → export privé → Human Review.
+captures RideCloud → montage animé → `narrator_female` → textes / CTA → pas de musique tant que licence absente → export privé → Human Review.
 
 Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils **ne sont pas** les livrables promotionnels RideCloud.
 
@@ -295,19 +288,19 @@ Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils *
 ## 13. Prochaine porte canonique — non exécutée
 
 ```text
-AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER
+AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER
 ```
 
 Périmètre futur uniquement :
 
-- fournir le pack RideCloud manquant listé dans `157_`
-- références opaques seulement
+- storyboard / plan de plans 20–30 s à partir du manifeste `158_`
+- aucun nouveau claim
 
-Interdit : provider · dépense · média Git · projet Production · activation · lipsync · merge/export · publication · improvisation de claims.
+Interdit : provider · dépense · média Git · projet Production · activation · lipsync · merge/export · publication.
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
 
-`AUTH_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT_NO_PROVIDER` est **consommée** (`157_`).
+`AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER` est **consommée** (`158_`).
 
 ---
 
@@ -318,13 +311,13 @@ Copier le bloc suivant dans un nouveau chat Léo :
 ```text
 Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md.
 
 Ne rejoue aucune phase terminée. Vérifie d’abord Git et les éventuels nouveaux STOP Cursor. Une autorisation d’un chat précédent n’est jamais réutilisable.
 
-La porte active est AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER. Elle n’est pas encore exécutée.
+La porte active est AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER. Elle n’est pas encore exécutée.
 
-RideCloud est BLOCKED_INPUTS_REQUIRED. 11C CLOSED. Auth 157_ / 156_ / 155_ / 153_ consommées. submitCount=1. maySubmit=false. Aucun provider. 0¢. N’invente aucun input RideCloud.
+RideCloud est READY. Pack verrouillé. Auth 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun provider. 0¢. N’invente aucun claim. Aucun média Git.
 
 Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. Le SHA Vercel Ready n’est pas prouvé.
 
@@ -340,15 +333,15 @@ Copier le bloc suivant dans un nouveau chat Cursor :
 ```text
 Tu es Cursor, exécutant code/test/doc de Virtual Humans Studio.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md.
 
 Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main.
 
 Protège les fichiers hors scope déjà dirty : studio/src/app/api/aiccos/send/route.ts, studio/src/components/send-to-aiccos.tsx, studio/src/app/page.tsx. Ne les modifie pas, ne les restaure pas, ne les stash pas, ne les stage pas.
 
-Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_ ni 157_. Aucun provider. 0¢. Aucun projet Production. N’invente aucun claim, CTA, logo ou brief RideCloud.
+Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_ ni 158_. Aucun provider. 0¢. Aucun projet Production. Aucun média Git. N’invente aucun claim.
 
-La prochaine porte est AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER. Elle n’est pas autorisée par ce fichier de reprise. 0 provider. 0¢.
+La prochaine porte est AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER. Elle n’est pas autorisée par ce fichier de reprise. 0 provider. 0¢.
 ```
 
 ---
@@ -357,14 +350,14 @@ La prochaine porte est AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER
 
 - [ ] Confirmer la racine Git `C:\Users\JavaChrist\Desktop\virtual-humans`
 - [ ] Confirmer branche `main` et relever HEAD / origin/main / ahead-behind
-- [ ] Lire le dernier STOP (ce fichier + living handover + `157_`)
+- [ ] Lire le dernier STOP (ce fichier + living handover + `158_`)
 - [ ] Vérifier le working tree sans le modifier
 - [ ] Protéger les trois fichiers hors scope
 - [ ] Confirmer budget 437 / 391 / 0 / 46
 - [ ] Confirmer flags / runtime considérés OFF ; revalider avant toute opération sensible
 - [ ] Confirmer output audio `bc36bba7…` `approved` · active=false · HR `068a2b25…`
 - [ ] Confirmer aucune nouvelle Human Review
-- [ ] Confirmer prochaine Auth = `AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER`
+- [ ] Confirmer prochaine Auth = `AUTH_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT_NO_PROVIDER`
 - [ ] Ne lancer aucune action sensible avant autorisation
 
 ---
@@ -384,6 +377,7 @@ La prochaine porte est AUTH_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS_NO_PROVIDER
 | [`155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md`](./155_PHASE_11C_VOICE_TTS_HUMAN_REVIEW_APPROVE.md) | Human Review APPROVE inactif |
 | [`156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md`](./156_PHASE_11C_CLOSE_AND_NEXT_MEDIA_GATE_AUDIT.md) | Clôture 11C PASS_WITH_NOTES |
 | [`157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md`](./157_PHASE_RIDECLOUD_SEPARATE_PROJECT_INPUT_COLLECTION_PREFLIGHT.md) | RideCloud inputs BLOCKED |
+| [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md) | RideCloud pack READY |
 | [`00_README.md`](./00_README.md) | Index |
 | [`.cursor/rules/living-handover.mdc`](../../.cursor/rules/living-handover.mdc) | Règle de clôture |
 
