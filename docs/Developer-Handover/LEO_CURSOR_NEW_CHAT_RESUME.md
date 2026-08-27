@@ -8,7 +8,7 @@ verifiedAt=2026-08-27
 sourceHead=c808fa2
 lastFunctionalCommit=72016ea
 lastDocumentationCommit=c808fa2
-thisGateDocumentationCommit=pending
+thisGateDocumentationCommit=4d14126
 lastPhaseReport=172_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT.md
 globalStatus=VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_READY
 nextAuth=AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE
@@ -32,7 +32,7 @@ realMergeExportStatus=NOT_AUTHORIZED
 | `sourceHead` | `c808fa2` | HEAD Git **audité** le 2026-08-27, avant le commit docs `172_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
 | `lastDocumentationCommit` | `c808fa2` | dernier commit docs **avant** cette porte (SHA record `171_`) |
-| `thisGateDocumentationCommit` | pending | premier commit de la porte `172_` (après commit) |
+| `thisGateDocumentationCommit` | `4d14126` | premier commit de la porte `172_` |
 | SHA déployé Vercel | **`c808fa2` alias** / **`e4703bf` applicatif** | alias `dpl_EUEqB8…` docs · applicatif `dpl_41zVp38…` |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.

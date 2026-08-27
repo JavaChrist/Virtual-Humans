@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-27T16:20:00+02:00
-documentedHead=c808fa2
+documentedHead=4d14126
 headStatus=pending commit
 lastPhaseReport=172_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT.md
 nextPhase=AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE
@@ -513,7 +513,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `172_` app update versioning preflight | VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_READY | pending | 0 | **docs + contrat** · 0 route · 0 SW | implement `/api/version` |
+| 2026-08-27 | `172_` app update versioning preflight | VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_READY | `4d14126` | 0 | **docs + contrat** · 0 route · 0 SW | implement `/api/version` |
 | 2026-08-27 | `171_` UI parity deploy once | VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_READY | `75b5e57` | 0 | **`dpl_41zVp38…` Ready** · SHA `e4703bf` | `/api/version` preflight |
 | 2026-08-27 | `170_` dashboard doc cards isolate | VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED | `67eb7fe` | 0 | **code committé** puis dans `e4703bf` | deploy UI parity |
 | 2026-08-27 | `169_` SDK_VERSION file tracing | VHS_SDK_VERSION_FILE_TRACING_INCLUDE_READY | `1a0978c` | 0 | **code local** · NFT · 0 deploy | isolate page.tsx |
