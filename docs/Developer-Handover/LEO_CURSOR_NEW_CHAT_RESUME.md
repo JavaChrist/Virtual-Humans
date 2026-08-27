@@ -8,7 +8,7 @@ verifiedAt=2026-08-27
 sourceHead=eb639b4
 lastFunctionalCommit=72016ea
 lastDocumentationCommit=eb639b4
-thisGateDocumentationCommit=pending
+thisGateDocumentationCommit=628f61c
 lastPhaseReport=163_PHASE_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT.md
 globalStatus=RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_READY
 nextAuth=AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER
@@ -32,7 +32,7 @@ realMergeExportStatus=NOT_AUTHORIZED
 | `sourceHead` | `eb639b4` | HEAD Git **audité** le 2026-08-27, avant le commit `163_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
 | `lastDocumentationCommit` | `eb639b4` | dernier commit docs **avant** cette porte (SHA de `162_`) |
-| `thisGateDocumentationCommit` | pending | premier commit docs de la porte `163_` |
+| `thisGateDocumentationCommit` | `628f61c` | premier commit docs de la porte `163_` |
 | SHA déployé Vercel | **non exposé par le CLI** | corrélation temporelle seulement, pas une preuve runtime |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.

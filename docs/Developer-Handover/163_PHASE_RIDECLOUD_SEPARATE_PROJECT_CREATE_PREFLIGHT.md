@@ -3,7 +3,8 @@
 **Date :** 2026-08-27  
 **Auth :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_NO_PROVIDER`  
 **Nature :** preflight local de création de projet · **0** write Production · **0** provider · **0** média  
-**HEAD au départ :** `eb639b4` (`162_` SHA record)
+**HEAD au départ :** `eb639b4` (`162_` SHA record)  
+**HEAD de phase :** `628f61c`
 
 ```text
 VERDICT = RIDECLOUD_SEPARATE_PROJECT_CREATE_PREFLIGHT_READY
