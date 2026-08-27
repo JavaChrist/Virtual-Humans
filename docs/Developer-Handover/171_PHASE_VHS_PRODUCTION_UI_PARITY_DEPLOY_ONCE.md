@@ -4,6 +4,7 @@
 **Auth :** `AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE`  
 **Nature :** unique déploiement Production de `e4703bf` · **0** flag write · **0** AICCOS · **0** second appel  
 **HEAD au départ :** `e4703bf` (`170_` SHA record)  
+**Commit documentaire :** `75b5e57`  
 **RideCloud apply :** **suspendue, non consommée**
 
 ```text

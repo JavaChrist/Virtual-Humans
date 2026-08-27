@@ -8,7 +8,7 @@ verifiedAt=2026-08-27
 sourceHead=e4703bf
 lastFunctionalCommit=72016ea
 lastDocumentationCommit=e4703bf
-thisGateDocumentationCommit=pending
+thisGateDocumentationCommit=75b5e57
 lastPhaseReport=171_PHASE_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE.md
 globalStatus=VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_READY
 nextAuth=AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE
@@ -32,7 +32,7 @@ realMergeExportStatus=NOT_AUTHORIZED
 | `sourceHead` | `e4703bf` | HEAD Git **audité** le 2026-08-27, avant le commit docs `171_` |
 | `lastFunctionalCommit` | `72016ea` | dernier commit applicatif Voice/TTS payant |
 | `lastDocumentationCommit` | `e4703bf` | dernier commit docs **avant** cette porte (SHA record `170_`) |
-| `thisGateDocumentationCommit` | pending | premier commit de la porte `171_` (renseigné au SHA record) |
+| `thisGateDocumentationCommit` | `75b5e57` | premier commit de la porte `171_` |
 | SHA déployé Vercel | **`e4703bf`** | Ready actuel `dpl_41zVp38…` / `l8dxm473r-…` 15:20:50 · `githubCommitSha` **prouvé** |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
