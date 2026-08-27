@@ -4,7 +4,7 @@
 **Auth :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_NO_PROVIDER`  
 **Nature :** preflight distant Supabase **lecture seule** · **0** apply · **0** DDL · **0** DML · **0** persist bind  
 **HEAD au départ :** `1d28f94` (`166_` SHA record)  
-**HEAD de phase :** pending commit
+**HEAD de phase :** `e93fc98`
 
 ```text
 VERDICT = RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH
