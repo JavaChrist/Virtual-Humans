@@ -2,7 +2,7 @@
 
 <!-- CURRENT_STATE_MARKERS
 verifiedAt=2026-08-27T15:20:00+02:00
-documentedHead=7453858
+documentedHead=67eb7fe
 headStatus=pending commit
 lastPhaseReport=170_PHASE_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT.md
 nextPhase=AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE
@@ -505,7 +505,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `170_` dashboard doc cards isolate | VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED | pending | 0 | **code committé** · 0 deploy | deploy UI parity |
+| 2026-08-27 | `170_` dashboard doc cards isolate | VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMITTED | `67eb7fe` | 0 | **code committé** · 0 deploy | deploy UI parity |
 | 2026-08-27 | `169_` SDK_VERSION file tracing | VHS_SDK_VERSION_FILE_TRACING_INCLUDE_READY | `1a0978c` | 0 | **code local** · NFT · 0 deploy | isolate page.tsx |
 | 2026-08-27 | `168_` UI parity Production preflight | VHS_PRODUCTION_UI_PARITY_PREFLIGHT_READY | `422c4e9` | 0 | **lecture seule** · 0 deploy · 0 flag | tracing SDK |
 | 2026-08-27 | `167_` RideCloud bind kind schema remote | RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_PREFLIGHT_READY_FOR_APPLY_AUTH | `e93fc98` | 0 | **lecture seule** · 0 apply | apply once (suspendu) |

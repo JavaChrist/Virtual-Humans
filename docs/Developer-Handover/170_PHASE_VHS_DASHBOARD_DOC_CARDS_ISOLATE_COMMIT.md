@@ -4,6 +4,7 @@
 **Auth :** `AUTH_VHS_DASHBOARD_DOC_CARDS_ISOLATE_COMMIT_NO_AICCOS_NO_DEPLOY`  
 **Nature :** commit isolé de `studio/src/app/page.tsx` · **0** deploy · **0** flag write · **0** AICCOS  
 **HEAD au départ :** `7453858` (`169_` SHA record)  
+**Commit fonctionnel :** `67eb7fe`  
 **RideCloud apply :** **suspendue, non consommée**
 
 ```text
