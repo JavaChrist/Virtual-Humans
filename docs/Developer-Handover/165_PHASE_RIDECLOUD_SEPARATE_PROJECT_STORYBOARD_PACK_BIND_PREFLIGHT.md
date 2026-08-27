@@ -4,7 +4,7 @@
 **Auth :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_NO_PROVIDER`  
 **Nature :** preflight textuel read-only du futur rattachement storyboard/pack · **0** write Production · **0** provider · **0** média  
 **HEAD au départ :** `0faf2d9` (`164_` SHA record)  
-**HEAD de phase :** pending commit (ce rapport)
+**HEAD de phase :** `bc3e0c7`
 
 ```text
 VERDICT = RIDECLOUD_SEPARATE_PROJECT_STORYBOARD_PACK_BIND_PREFLIGHT_READY
