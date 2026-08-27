@@ -4,7 +4,7 @@
 **Auth :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_CREATE_IDEMPOTENT_NO_PROVIDER`  
 **Nature :** une création Production idempotente · projet draft + brief textuel rev.1 · **0** provider · **0** média  
 **HEAD au départ :** `e8f544f` (`163_` SHA record)  
-**HEAD de phase :** pending commit (ce rapport)
+**HEAD de phase :** `ec57ed5`
 
 ```text
 VERDICT = RIDECLOUD_SEPARATE_PROJECT_CREATED
