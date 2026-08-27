@@ -1,34 +1,35 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-27T20:10:00+02:00
-documentedHead=366abd6
+verifiedAt=2026-08-27T20:05:00+02:00
+documentedHead=bb41dcc
 headStatus=pending commit
-lastPhaseReport=178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md
-nextPhase=AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+lastPhaseReport=179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md
+nextPhase=AUTH_VHS_POST_LIPSYNC_WIRING_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
 budgetAvailable=46
 runtimePaidMedia=OFF
 unitTests=1976/1976
-globalStatus=VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY
+globalStatus=VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY`  
-**Dernière vérification :** 2026-08-27 · lipsync `/director` wiring disabled `178_` · **0 push** · **0 flag**  
-**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED_NO_PROVIDER_NO_DEPLOY_NO_FLAG_WRITE`  
+**Statut global :** `VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY`  
+**Dernière vérification :** 2026-08-27 · lipsync wiring sync+deploy `179_` · **1 push** · **0 flag** · **0 provider**  
+**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`  
 **Branche :** `main`  
-**HEAD local fonctionnel :** `366abd6` · origin/main **`9b62799`** · ahead/behind après docs local **`2/0`**  
+**HEAD local fonctionnel :** `366abd6` · origin/main **`bb41dcc`** · ahead/behind après commit docs local **`1/0`**  
 **Working tree :** 2 AICCOS hors scope (dirty, protégés) · `page.tsx` propre  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
-**Alias Production actuel :** host `es3e5zdlm-…` · id `dpl_82gNhGqe…` · auto-deploy **`9b62799`** · `/api/version` identité Git `9b62799` · tree applicatif blockers = `045f48a` · lipsync local = `366abd6`  
+**Alias Production actuel :** host `hmqclrbae-…` · id `dpl_9i9MUDPd…` · auto-deploy **`bb41dcc`** · `/api/version` identité Git `bb41dcc` · tree applicatif lipsync = `366abd6` · blockers = `045f48a`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
 **Reprise nouveau chat :** [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)  
 **Dernier rapport fonctionnel :** [`178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md`](./178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md)  
-**App update blockers deploy :** [`177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md`](./177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md) · **docs sync terminée** (origin/main `9b62799`, pas de rapport séparé)  
+**Lipsync wiring deploy :** [`179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md`](./179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md)  
+**App update blockers deploy :** [`177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md`](./177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md) · **docs sync terminée**  
 **App update blockers :** [`176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md`](./176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md)  
 **App update docs sync :** [`175_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE.md`](./175_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE.md)  
 **App update sync+deploy :** [`174_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE.md`](./174_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE.md)  
@@ -48,7 +49,7 @@ globalStatus=VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY
 **Storyboard initial :** [`160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md`](./160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md)  
 **Addendum HD :** [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md)  
 **Supply RideCloud :** [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md)  
-**Prochaine phase exacte :** `AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`  
+**Prochaine phase exacte :** `AUTH_VHS_POST_LIPSYNC_WIRING_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE`  
 **RideCloud apply :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER` — **suspendue, non consommée**
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
@@ -92,8 +93,8 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
 | RideCloud promo | **BIND KIND SCHEMA REMOTE PREFLIGHT READY** · apply **suspendu** | `167_` · CHECK distant 13 kinds · 0 apply |
 | UI localhost vs Production | **deploy Ready** · SHA `e4703bf` prouvé · alias docs `c808fa2` | `171_` · tracing + cartes · Director flag OFF |
-| App update / PWA | **BLOCKERS DEPLOY READY** · SHA build `9b62799` · fonctionnel `045f48a` · alias `dpl_82gNhGqe…` | `177_` · docs sync **terminée** · 0 flag |
-| Prochaine étape | **LIPSYNC SYNC+DEPLOY ONCE** | `AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE` · 0 provider · 0 flag |
+| App update / PWA | **BLOCKERS DEPLOY READY** · SHA build `bb41dcc` · fonctionnel `045f48a` | `177_` · docs sync **terminée** · 0 flag |
+| Prochaine étape | **DÉCISION HUMAINE** | `AUTH_VHS_POST_LIPSYNC_WIRING_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE` · 0 provider · 0 flag |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -137,12 +138,12 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | OpenAI Image | **11A CLOSED** PASS_WITH_NOTES | `115_`–`128_` | enfant `49284892…` APPROVE inactif | `gpt-image-1` | 2 | 0 3ᵉ appel | pas d’activation |
 | Vidéo I2V | **11B CLOSED** · HUMAN_APPROVED inactif | `138_`/`139_` | attempt `6be95728…` **completed** · pointeurs sûrs sans mutation | fal Kling I2V | 140 provisional | flags OFF · 0 second write | pack RideCloud |
 | Voice | **11C CLOSED** PASS_WITH_NOTES · catalog inchangé · 1 audio privé | `140_`–`156_` | run `2eaffebf…` · output `bc36bba7…` · APPROVE inactif · HR `068a2b25…` | ElevenLabs | 1 `/director` | execution=false · flags OFF | pack RideCloud |
-| Lipsync | **WIRED_DISABLED** | `178_` | fake local · capability `audio.lipsync` · 0 provider | — | 0 | flags OFF · adapter réel absent | sync+deploy once |
+| Lipsync | **WIRED_DISABLED** · **DEPLOY READY** | `178_`/`179_` | fake local · SHA build `bb41dcc` · tree `366abd6` | — | 0 | flags OFF · adapter réel absent · UI non observée | décision humaine |
 | Merge / export | PASS_SYNTHETIC + guard `139_` | 9 / `139_` | fake-merge · `merge_ready` insuffisant | — | 0 | `mergeExportAuthorized=false` live | avant Production |
 | RideCloud promo | **BIND PREFLIGHT READY** · apply **suspendu** | `167_` | contrat + manifeste conçus · 0 persist | — | 0 | kinds absents du CHECK · apply non consommé | apply once (suspendu) |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
-| UI finale | **DEPLOY READY** · alias `9b62799` | `177_` | tree blockers `045f48a` · lipsync local `366abd6` · 0 flag | — | 0 | Director UI-only · lipsync désactivé | sync+deploy lipsync |
-| App update PWA | **BLOCKERS DEPLOY READY** · docs sync **terminée** | `177_` | 18 workflows en Production · 0 SW write · SHA build `9b62799` | — | 0 | AICCOS non câblé · blocker E2E=0 | hors scope 178_ |
+| UI finale | **DEPLOY READY** · alias `bb41dcc` | `179_` | tree lipsync `366abd6` · `/api/version` `bb41dcc` · 0 flag | — | 0 | Director UI-only · lipsync désactivé | décision humaine |
+| App update PWA | **BLOCKERS DEPLOY READY** · docs sync **terminée** | `177_` | 18 workflows · 0 SW write · SHA build `bb41dcc` | — | 0 | AICCOS non câblé · blocker E2E=0 | hors scope |
 | Monitoring / ops | PREPARED | VHS-005 | redaction logs | — | 0 | traces distribuées | avant Production |
 | Documentation / release | PASS_REAL living | cette phase | ce fichier | — | 0 | fraîcheur à tenir | script freshness |
 
@@ -386,8 +387,8 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 - VHS-005 métriques/traces ; RLS distante non re-auditée le 14 août.
 - Bind kind schema remote preflight RideCloud **fait** (`167_`) · READY_FOR_APPLY_AUTH · apply **suspendu** par `168_` · 0 apply · persist bind encore bloqué.
 - UI localhost vs Production : **deploy Ready** (`171_`) · SHA `e4703bf` **prouvé** · alias docs `c808fa2` (`172_` lecture seule) · cartes + tracing dans le tree · Director flag OFF · live `SDK 1.0.0` non lu (401).
-- App update PWA : **blockers DEPLOY READY** (`177_`) · SHA build **`9b62799`** · fonctionnel **`045f48a`** · docs sync **terminée** · alias **`dpl_82gNhGqe…`** · 18 workflows · 0 flag · AICCOS non câblé · blocker E2E=0.
-- Lipsync `/director` : **WIRED_DISABLED** (`178_`) · SHA local **`366abd6`** · 0 provider · 0 flag · 0 média Production.
+- App update PWA : **blockers DEPLOY READY** (`177_`) · SHA build **`bb41dcc`** · fonctionnel **`045f48a`** · docs sync **terminée** · 18 workflows · 0 flag · AICCOS non câblé · blocker E2E=0.
+- Lipsync `/director` : **WIRED_DISABLED DEPLOY READY** (`178_`/`179_`) · SHA build **`bb41dcc`** · tree **`366abd6`** · 0 provider · 0 flag · UI Production non observée.
 - MV-002 DEFERRED.
 
 ### P0/P1 fermés (extraits)
@@ -457,7 +458,8 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | App update blockers workflow | **fait** (`176_`) | 0¢ · code local `045f48a` · 0 flag | consommée | — |
 | App update blockers sync+deploy | **fait** (`177_`) | 0¢ · 1 push · Ready `7d1c34c` puis docs `9b62799` · 0 flag | consommée | — |
 | App update blockers docs sync | **fait** (living, pas de rapport séparé) | 0¢ · origin/main `9b62799` · 0 flag | consommée | — |
-| Lipsync `/director` wiring disabled | **fait** (`178_`) | 0¢ · WIRED_DISABLED · SHA `366abd6` · 0 provider | consommée | sync+deploy once |
+| Lipsync `/director` wiring disabled | **fait** (`178_`) | 0¢ · WIRED_DISABLED · SHA `366abd6` · 0 provider | consommée | — |
+| Lipsync `/director` wiring sync+deploy | **fait** (`179_`) | 0¢ · 1 push · Ready `bb41dcc` · 0 provider | consommée | décision humaine |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -467,7 +469,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE`** — synchroniser et déployer une fois le wiring lipsync `366abd6`. **0 provider. 0 flag.** Le wiring disabled (`178_`) est **fait**. La sync docs `177_` est **terminée**. Ne pas activer Director, RideCloud, AICCOS, filtre docs-only ni un provider lipsync.
+**`AUTH_VHS_POST_LIPSYNC_WIRING_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE`** — décider du prochain chantier fonctionnel. Le wiring lipsync est **WIRED_DISABLED** et **déployé** (`179_`, SHA build `bb41dcc`). Un push administratif du rapport `179_` reste possible **sans** nouvelle boucle de rapports. **0 provider. 0 flag.** Ne pas activer Director, RideCloud, AICCOS, filtre docs-only ni un provider lipsync.
 
 RideCloud **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** — **suspendue, non consommée**. 0 apply.
 
@@ -494,14 +496,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A/11B/11C CLOSED · lipsync WIRED_DISABLED (366abd6) · app-update BLOCKERS DEPLOY READY (9b62799 · fonctionnel 045f48a) · RideCloud apply SUSPENDU
-Dernier verdict : VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY (178_)
-Preuve : origin/main 9b62799 · fonctionnel local 366abd6 · 0 push 178_ · 0 provider · 0 flag
-Blocage : wiring local non déployé · AICCOS non câblé · Director UI-only · provider lipsync absent
-Mission : uniquement AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
-Auth consommées : lipsync wiring (178_) · blockers deploy (177_) · blockers implement (176_)
+Contexte : VHS V2 · 11A/11B/11C CLOSED · lipsync WIRED_DISABLED DEPLOY READY (366abd6 / bb41dcc) · app-update BLOCKERS DEPLOY READY · RideCloud apply SUSPENDU
+Dernier verdict : VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY (179_)
+Preuve : origin/main bb41dcc · alias dpl_9i9MUDPd… · /api/version bb41dcc · 1 push · 0 provider · 0 flag
+Blocage : provider lipsync absent · AICCOS non câblé · Director UI-only · merge/export interdit
+Mission : uniquement AUTH_VHS_POST_LIPSYNC_WIRING_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE
+Auth consommées : lipsync deploy (179_) · lipsync wiring (178_) · blockers deploy (177_)
 Interdit : flag write · Director enable · provider · apply RideCloud · câbler AICCOS
-Attendu : 1 push + 1 deploy du wiring lipsync · 0 provider · 0 flag
+Attendu : décision humaine · 0 provider · 0 flag
 ```
 
 ---
@@ -510,12 +512,12 @@ Attendu : 1 push + 1 deploy du wiring lipsync · 0 provider · 0 flag
 
 ```text
 Lis d’abord docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md.
-Lis ensuite CURRENT_STATE_AND_RESUME.md et 178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md.
-Vérifie Git. Lipsync WIRED_DISABLED (178_) · SHA fonctionnel 366abd6 · origin/main 9b62799 · ahead 2/0. Alias Production = SHA 9b62799. SHA fonctionnel blockers = 045f48a. RideCloud apply suspendu (167_ READY, 0 apply). Pack 158_+159_. Storyboard 26 s. 11C CLOSED. Budget 437/391/0/46.
-Flags considérés OFF. Auth 178_ / 177_ / 176_ / 175_ / 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
+Lis ensuite CURRENT_STATE_AND_RESUME.md et 179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md.
+Vérifie Git. Lipsync WIRED_DISABLED DEPLOY READY (179_) · SHA fonctionnel 366abd6 · origin/main bb41dcc · ahead 1/0 (docs 179_ local). Alias Production = SHA bb41dcc. SHA fonctionnel blockers = 045f48a. RideCloud apply suspendu (167_ READY, 0 apply). Pack 158_+159_. Storyboard 26 s. 11C CLOSED. Budget 437/391/0/46.
+Flags considérés OFF. Auth 179_ / 178_ / 177_ / 176_ / 175_ / 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 Aucun provider. 0¢. Aucun deploy applicatif sans Auth. Aucun flag write. Aucun apply. Aucun persist bind. Aucun média Git. Aucun lipsync réel.
-Prochaine porte : AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE. 0 provider. 0 flag. Ne pas réécrire sw.js. Ne pas câbler AICCOS. Distinguer 366abd6 (lipsync local), 045f48a (blockers) et 9b62799 (SHA build).
+Prochaine porte : AUTH_VHS_POST_LIPSYNC_WIRING_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE. 0 provider. 0 flag. Ne pas réécrire sw.js. Ne pas câbler AICCOS. Distinguer 366abd6 (lipsync), 045f48a (blockers) et bb41dcc (SHA build).
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 ```
@@ -526,7 +528,8 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-27 | `178_` lipsync `/director` wiring disabled | VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY | `366abd6` | 0 | **code local** · 0 provider · 0 push | sync+deploy once |
+| 2026-08-27 | `179_` lipsync wiring sync+deploy | VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY | `bb41dcc` | 0 | **1 push** · Ready `dpl_9i9MUDPd…` · `/api/version` `bb41dcc` | décision humaine |
+| 2026-08-27 | `178_` lipsync `/director` wiring disabled | VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY | `366abd6` | 0 | **code** · poussé dans `bb41dcc` · 0 provider | sync+deploy once |
 | 2026-08-27 | `177_` app update blockers sync+deploy | VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_READY | `7d1c34c` / docs `9b62799` | 0 | **1 push** · Ready · docs sync **terminée** | lipsync wiring |
 | 2026-08-27 | `176_` app update blockers workflow | VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT_READY | `045f48a` | 0 | **code** · poussé dans `7d1c34c` · 0 SW | sync + deploy once |
 | 2026-08-27 | `175_` app update versioning docs sync | VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_READY | `80cc7fa` | 0 | **1 push docs** · alias `dpl_2Th9fGvk…` · pas une feature | décision humaine |

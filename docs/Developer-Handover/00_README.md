@@ -148,13 +148,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · docs sync **terminée** (origin/main `9b62799`, pas de rapport séparé)
                            Lipsync `/director` wiring disabled (`178_`)
                            · **VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY**
-Runtime AI / paid media  : OFF · fonctionnel **72016ea** · alias **`9b62799`** · tree blockers **`045f48a`** · lipsync local **`366abd6`**
+                           Lipsync `/director` wiring sync+deploy (`179_`)
+                           · **VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY**
+Runtime AI / paid media  : OFF · fonctionnel **72016ea** · alias **`bb41dcc`** · tree lipsync **`366abd6`** · blockers **`045f48a`**
 Budget                   : hard 437 / committed 391 / reserved 0 / available 46 ¢
 production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0                       : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1 ouverts               : sync+deploy lipsync `178_` · Director UI-only · apply CHECK bind kinds suspendu · pricing TTS non ferme
-P1 fermé                 : lipsync wiring disabled (`178_`) · blockers docs sync · blockers sync+deploy (`177_`) · blockers workflow (`176_`) · app-update docs sync (`175_`) · app-update sync+deploy (`174_`) · app-update implement (`173_`) · app-update preflight (`172_`) · deploy UI parity (`171_`) · cartes dashboard (`170_`) · SDK tracing (`169_`) · UI parity (`168_`) · remote schema (`167_`) · schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
-Prochaine porte majeure  : AUTH_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_NO_PROVIDER_NO_FLAG_WRITE
+P1 ouverts               : décision humaine post-lipsync · Director UI-only · apply CHECK bind kinds suspendu · pricing TTS non ferme
+P1 fermé                 : lipsync sync+deploy (`179_`) · lipsync wiring disabled (`178_`) · blockers docs sync · blockers sync+deploy (`177_`) · blockers workflow (`176_`) · app-update docs sync (`175_`) · app-update sync+deploy (`174_`) · app-update implement (`173_`) · app-update preflight (`172_`) · deploy UI parity (`171_`) · cartes dashboard (`170_`) · SDK tracing (`169_`) · UI parity (`168_`) · remote schema (`167_`) · schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
+Prochaine porte majeure  : AUTH_VHS_POST_LIPSYNC_WIRING_HUMAN_NEXT_PRIORITY_DECISION_NO_DEPLOY_NO_FLAG_WRITE
 Living handover          : CURRENT_STATE_AND_RESUME.md
 Reprise nouveau chat     : LEO_CURSOR_NEW_CHAT_RESUME.md
 ```
@@ -402,6 +404,7 @@ Utilisateur → AI Video Director (/director)
 | [`176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md`](./176_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT.md) | **APP-UPDATE-BLOCKERS · VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_IMPLEMENT_READY** |
 | [`177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md`](./177_PHASE_VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE.md) | **APP-UPDATE-BLOCKERS-DEPLOY · VHS_APP_UPDATE_BLOCKERS_WORKFLOW_INTEGRATION_SYNC_AND_DEPLOY_ONCE_READY** |
 | [`178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md`](./178_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_IMPLEMENT_DISABLED.md) | **LIPSYNC-WIRING · VHS_DIRECTOR_LIPSYNC_PATH_WIRED_DISABLED_READY** |
+| [`179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md`](./179_PHASE_VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE.md) | **LIPSYNC-DEPLOY · VHS_DIRECTOR_LIPSYNC_PATH_WIRING_SYNC_AND_DEPLOY_ONCE_READY** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |
