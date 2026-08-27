@@ -1,17 +1,17 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : living resume. `173_` app-update implement **consommée, locale, 0 push**. RideCloud apply **suspendu**. Voir living handover.
+Nature : living resume. `174_` app-update sync+deploy **consommée, Production Ready `1765da6`**. RideCloud apply **suspendu**. Voir living handover.
 
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-27
-sourceHead=5ebf73c
+sourceHead=1765da6
 lastFunctionalCommit=68b09ee
-lastDocumentationCommit=5ebf73c
-thisGateDocumentationCommit=68b09ee
-lastPhaseReport=173_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT.md
-globalStatus=VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_READY
-nextAuth=AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE
+lastDocumentationCommit=1765da6
+thisGateDocumentationCommit=pending
+lastPhaseReport=174_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE.md
+globalStatus=VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_READY
+nextAuth=AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
@@ -29,11 +29,11 @@ realMergeExportStatus=NOT_AUTHORIZED
 
 | Pointeur | Valeur | Signification |
 |---|---|---|
-| `sourceHead` | `5ebf73c` | HEAD Git **audité** le 2026-08-27, avant les commits `173_` |
+| `sourceHead` | `1765da6` | HEAD Git **audité** le 2026-08-27, SHA déployé `174_` |
 | `lastFunctionalCommit` | `68b09ee` | commit applicatif `/api/version` + PWA |
-| `lastDocumentationCommit` | `5ebf73c` | SHA record `172_` |
-| `thisGateDocumentationCommit` | `68b09ee` | premier commit de la porte `173_` |
-| SHA déployé Vercel | **`c808fa2` alias** / **`e4703bf` applicatif** | alias `dpl_EUEqB8…` docs · applicatif `dpl_41zVp38…` |
+| `lastDocumentationCommit` | `1765da6` | SHA record `173_` **aussi** SHA Production |
+| `thisGateDocumentationCommit` | pending | commit docs local `174_` (après commit, non poussé) |
+| SHA déployé Vercel | **`1765da6`** | alias `dpl_6KhbWNjo…` · `/api/version` gitSha match |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
 
@@ -288,23 +288,23 @@ Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils *
 ## 13. Prochaine porte canonique — non exécutée
 
 ```text
-AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE
+AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE
 ```
 
 Périmètre futur uniquement :
 
-- vérifier les commits locaux `173_`
-- **un** `git push` de `main`
-- attendre l’auto-déploiement GitHub
-- tester `/api/version` + notification en Production
+- vérifier le commit documentaire local `174_`
+- **un** `git push` de `main` (docs)
+- ne pas promouvoir l’auto-deploy docs comme nouvelle feature
 - **aucun** flag · **ne pas** réécrire `sw.js`
 
 RideCloud apply **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** reste **suspendue**.
 
-Interdit : provider · dépense · média Git · lecture/upload pack · RPC bind · persist bind · run/job/attempt/output · activation · lipsync · merge/export · publication · TTS · flag write · second push · duplication PWA.
+Interdit : provider · dépense · média Git · lecture/upload pack · RPC bind · persist bind · run/job/attempt/output · activation · lipsync · merge/export · publication · TTS · flag write · déploiement applicatif supplémentaire · duplication PWA.
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
 
+`AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE` est **consommée** (`174_`).
 `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE` est **consommée** (`173_`).
 `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_NO_DEPLOY_NO_FLAG_WRITE` est **consommée** (`172_`).
 `AUTH_VHS_PRODUCTION_UI_PARITY_DEPLOY_ONCE_NO_FLAG_WRITE` est **consommée** (`171_`).
@@ -331,15 +331,15 @@ Copier le bloc suivant dans un nouveau chat Léo :
 ```text
 Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 173_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 174_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE.md.
 
 Ne rejoue aucune phase terminée. Vérifie d’abord Git et les éventuels nouveaux STOP Cursor. Une autorisation d’un chat précédent n’est jamais réutilisable.
 
-La porte active est AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE. Elle n’est pas encore exécutée. RideCloud apply est suspendue.
+La porte active est AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE. Elle n’est pas encore exécutée. RideCloud apply est suspendue.
 
-App update implement READY local (173_) · origin/main 5ebf73c · ahead 2/0. UI parity deploy READY (171_). SHA e4703bf applicatif. Alias docs c808fa2. Cartes dashboard COMMITTED (170_). SDK tracing READY (169_). RideCloud bind kind schema remote READY (167_) apply suspendu. Migration locale 33e non appliquée. Bind preflight READY (165_). Projet CREATED (164_). Pack 158_ + 5 variantes HD 159_. Storyboard 26 s. Auth 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun provider. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply. Aucun deploy sans Auth. Aucun flag write.
+App update sync+deploy READY (174_) · origin/main 1765da6 · ahead 1/0 (docs local). UI parity deploy READY (171_). SHA versioning 1765da6. Cartes dashboard COMMITTED (170_). SDK tracing READY (169_). RideCloud bind kind schema remote READY (167_) apply suspendu. Migration locale 33e non appliquée. Bind preflight READY (165_). Projet CREATED (164_). Pack 158_ + 5 variantes HD 159_. Storyboard 26 s. Auth 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. Aucun provider. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply. Aucun deploy applicatif sans Auth. Aucun flag write.
 
-Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. L’alias Vercel Ready est c808fa2 (docs) ; l’applicatif prouvé reste e4703bf.
+Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF avec preuve finally + absence d’activité, sans lecture directe de chaque valeur Vercel. L’alias Vercel Ready est 1765da6 (`dpl_6KhbWNjo…`).
 
 Fournis les prompts Cursor comme un seul document continu. N’improvise aucune autorisation.
 ```
@@ -353,15 +353,15 @@ Copier le bloc suivant dans un nouveau chat Cursor :
 ```text
 Tu es Cursor, exécutant code/test/doc de Virtual Humans Studio.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 173_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 174_PHASE_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE.md.
 
-Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main. origin/main attendu 5ebf73c. HEAD local ahead.
+Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main. origin/main attendu 1765da6. HEAD local ahead 1/0.
 
 Protège les fichiers hors scope déjà dirty : studio/src/app/api/aiccos/send/route.ts, studio/src/components/send-to-aiccos.tsx. Ne les modifie pas, ne les restaure pas, ne les stash pas, ne les stage pas.
 
-Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_, 160_, 161_, 162_, 163_, 164_, 165_, 166_, 167_, 168_, 169_, 170_, 171_, 172_ ni 173_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun deploy sans Auth. Aucun flag write. N’invente aucun claim.
+Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_, 155_, 156_, 157_, 158_, 159_, 160_, 161_, 162_, 163_, 164_, 165_, 166_, 167_, 168_, 169_, 170_, 171_, 172_, 173_ ni 174_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun deploy applicatif sans Auth. Aucun flag write. N’invente aucun claim.
 
-La prochaine porte est AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE. Elle n’est pas autorisée par ce fichier de reprise. 1 push. 0 flag. Ne pas réécrire sw.js. RideCloud apply reste suspendue.
+La prochaine porte est AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE. Elle n’est pas autorisée par ce fichier de reprise. 1 push docs. 0 flag. Ne pas réécrire sw.js. RideCloud apply reste suspendue.
 ```
 
 ---
@@ -370,14 +370,14 @@ La prochaine porte est AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_
 
 - [ ] Confirmer la racine Git `C:\Users\JavaChrist\Desktop\virtual-humans`
 - [ ] Confirmer branche `main` et relever HEAD / origin/main / ahead-behind
-- [ ] Lire le dernier STOP (ce fichier + living handover + `173_`)
+- [ ] Lire le dernier STOP (ce fichier + living handover + `174_`)
 - [ ] Vérifier le working tree sans le modifier
 - [ ] Protéger les deux fichiers AICCOS hors scope
 - [ ] Confirmer budget 437 / 391 / 0 / 46
 - [ ] Confirmer flags / runtime considérés OFF ; revalider avant toute opération sensible
 - [ ] Confirmer output audio `bc36bba7…` `approved` · active=false · HR `068a2b25…`
 - [ ] Confirmer aucune nouvelle Human Review
-- [ ] Confirmer prochaine Auth = `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE`
+- [ ] Confirmer prochaine Auth = `AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE`
 - [ ] Ne lancer aucune action sensible avant autorisation
 
 ---

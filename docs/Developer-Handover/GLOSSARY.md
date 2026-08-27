@@ -113,7 +113,9 @@
 **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_PREFLIGHT_READY** — verdict `172_` : contrat JSON, machine d’états, 0 route, 0 SW write.
 **AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_NO_DEPLOY_NO_FLAG_WRITE** — porte `173_` : implémenter `/api/version` + `PwaRegister` · 0 push · 0 flag.
 **VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_IMPLEMENT_READY** — verdict `173_` : route + client locaux · 0 deploy.
-**AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE** — prochaine porte : 1 push + auto-deploy GitHub + test Production · 0 flag.
+**AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_NO_FLAG_WRITE** — porte `174_` : 1 push + auto-deploy GitHub + test Production · 0 flag.
+**VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_SYNC_AND_DEPLOY_ONCE_READY** — verdict `174_` : SHA `1765da6` Ready · `/api/version` live.
+**AUTH_VHS_APP_UPDATE_VERSIONING_AND_NOTIFICATION_DOCS_SYNC_ONCE_NO_FLAG_WRITE** — prochaine porte : 1 push du commit docs `174_` · 0 flag.
 **human.i2v_visual_approved** — issue code HR I2V : vidéo privée visionnée et approuvée ; n’autorise ni activation ni downstream (`134_`).
 **human.overlay_typography_layout_not_production_ready** — motif HR 1.1.0 : glyphes lisibles mais typo/layout insuffisants (pixelisation, bandeaux, orphelin `Studio`) (`123_`).
 **ImageVisualVariant** — contrat Zod strict du visuel provider (sujet/action/environnement/espace négatif/no-text) ; aucune chaîne overlay (`113_`).
