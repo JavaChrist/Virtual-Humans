@@ -166,9 +166,14 @@ export function DirectorHome({
                           : formatDirectorDateTime(updated)}
                       </p>
                     </div>
-                    <Link href={`/director/${p.id}`} className="btn btn-ghost text-sm">
-                      Reprendre
-                    </Link>
+                    <div className="text-right">
+                      <Link href={`/director/${p.id}`} className="btn btn-ghost text-sm">
+                        Reprendre
+                      </Link>
+                      <p className="mt-1 text-xs text-[var(--muted)]">
+                        Consultable · génération indisponible
+                      </p>
+                    </div>
                   </li>
                 );
               })}
@@ -179,8 +184,8 @@ export function DirectorHome({
 
       <p className="mt-6 text-xs text-[var(--muted)]">
         {persistenceEnabled
-          ? "Le brouillon reste local jusqu’à « Créer le projet ». Aucun autosave serveur à chaque frappe. Les Directeurs métier ne sont pas encore actifs."
-          : "Le brouillon est sauvegardé uniquement dans ce navigateur. Les Directeurs métier et la production ne sont pas encore actifs."}
+          ? "Les projets et le brief peuvent être enregistrés. Les capacités de génération restent indisponibles. Un projet existant peut être ouvert en lecture, mais son exécution est désactivée."
+          : "Le brouillon est sauvegardé uniquement dans ce navigateur. La génération n’est pas encore disponible."}
       </p>
     </div>
   );

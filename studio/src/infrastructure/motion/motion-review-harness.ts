@@ -9,6 +9,8 @@ import {
   createMotionReviewOrchestrator,
   type MotionReviewOrchestrator,
 } from "@/application/motion/motion-review-orchestrator";
+import { isLocalMotionReviewHarness } from "@/application/director/director-action-policy";
+import { parseStrictEnabledFlag } from "@/infrastructure/config/feature-flags";
 
 const sessions = createMemoryMotionReviewSessionStore();
 const decisions = createMemoryMotionReviewDecisionStore();
@@ -22,10 +24,8 @@ export function createMotionReviewOrchestratorFromHarness(opts?: {
   events?: Parameters<typeof createMotionReviewOrchestrator>[0]["events"];
 }): MotionReviewOrchestrator {
   const defaultEnabled =
-    process.env.MOTION_TRANSFER_ENABLED === "1" ||
-    process.env.MOTION_TRANSFER_ENABLED === "true" ||
-    process.env.MOTION_TRANSFER_FAKE_HARNESS === "1" ||
-    process.env.NODE_ENV === "test";
+    parseStrictEnabledFlag(process.env.MOTION_TRANSFER_ENABLED) ||
+    isLocalMotionReviewHarness();
 
   return createMotionReviewOrchestrator({
     sessions,

@@ -42,6 +42,10 @@ import type { ProductionPorts } from "@/application/production/ports";
 import { runProductionDryRun } from "@/application/production/dry-run";
 import type { ProviderAdapterRegistry } from "@/application/generation/adapter-registry";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  authorizeDirectorAction,
+  canExecuteDirectorProduction,
+} from "@/application/director/director-action-policy";
 
 type Warning = { code: string; message: string };
 
@@ -604,7 +608,7 @@ export function createStartProductionForProject(
     return {
       executable: ready,
       providerCalled: false,
-      executionAvailable: ready,
+      executionAvailable: ready && canExecuteDirectorProduction(env),
       briefRevision: brief.revision,
       briefArtifactId: brief.artifactId,
       storyboardRevision: storyboard.revision,
@@ -660,6 +664,13 @@ export function createStartProductionForProject(
     dryRun: async (input) => dry(input),
 
     async execute(input, context) {
+      const denied = authorizeDirectorAction(
+        { routeId: "production", method: "POST", mode: "execute" },
+        env,
+      );
+      if (!denied.allowed) {
+        return failed(denied.code, denied.publicMessage, 503);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return failed("persistence_disabled", "Persistance Director désactivée.", 503);
       }

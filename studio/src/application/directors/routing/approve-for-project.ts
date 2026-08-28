@@ -6,6 +6,7 @@ import { createApproval, isApprovalCurrent, type Approval } from "@/domain/proje
 import type { ArtifactType } from "@/domain/project/artifact-types";
 import type { ArtifactRepository, ProjectRepository } from "@/application/projects/ports";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import { authorizeDirectorAction } from "@/application/director/director-action-policy";
 import type { DirectorRunContext } from "@/application/directors/marketing/result";
 
 export type ApproveArtifactInput = {
@@ -94,6 +95,17 @@ export function createApproveArtifactForProject(
 
   return {
     async execute(input, context) {
+      const mode =
+        input.artifactType === "generation_plan"
+          ? "approve_generation_plan"
+          : "approve_text";
+      const denied = authorizeDirectorAction(
+        { routeId: "approvals", method: "POST", mode },
+        env,
+      );
+      if (!denied.allowed) {
+        return failed(denied.code, denied.publicMessage, 503);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return failed("persistence_disabled", "Persistance Director désactivée.", 503);
       }

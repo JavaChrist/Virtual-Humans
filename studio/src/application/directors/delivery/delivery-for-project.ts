@@ -33,6 +33,7 @@ import {
 } from "@/application/postproduction/asset-content-port";
 import { buildDirectorFinalAssetStoragePath } from "@/application/postproduction/director-final-asset-path";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import { authorizeDirectorAction } from "@/application/director/director-action-policy";
 import {
   evaluateMergeExportAuthorization,
   readMergeExportAuthorized,
@@ -359,6 +360,13 @@ export function createEvaluateProductionQualityForProject(
     dryRun: dry,
 
     async execute(input, context) {
+      const denied = authorizeDirectorAction(
+        { routeId: "quality", method: "POST", mode: "execute" },
+        env,
+      );
+      if (!denied.allowed) {
+        return failedQ(denied.code, denied.publicMessage, 503);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return failedQ("persistence_disabled", "Persistance Director désactivée.", 503);
       }
@@ -598,6 +606,13 @@ export function createRecordQualityReviewForProject(
 
   return {
     async execute(input, context) {
+      const denied = authorizeDirectorAction(
+        { routeId: "quality_review", method: "POST", mode: "review" },
+        env,
+      );
+      if (!denied.allowed) {
+        return failedR(denied.code, denied.publicMessage, denied.status === 404 ? 404 : 503);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return failedR("persistence_disabled", "Persistance Director désactivée.", 503);
       }
@@ -933,6 +948,13 @@ export function createPrepareMergeForProject(deps: PrepareMergeDeps): PrepareMer
     dryRun: dry,
 
     async execute(input, context) {
+      const denied = authorizeDirectorAction(
+        { routeId: "merge", method: "POST", mode: "prepare" },
+        env,
+      );
+      if (!denied.allowed) {
+        return failedM(denied.code, denied.publicMessage, 503);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return failedM("persistence_disabled", "Persistance Director désactivée.", 503);
       }
@@ -1178,6 +1200,13 @@ export function createExecuteMergeForProject(deps: ExecuteMergeDeps): ExecuteMer
     },
 
     async execute(input, context) {
+      const denied = authorizeDirectorAction(
+        { routeId: "merge", method: "POST", mode: "execute" },
+        env,
+      );
+      if (!denied.allowed) {
+        return failedX(denied.code, denied.publicMessage, 503);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return failedX("persistence_disabled", "Persistance Director désactivée.", 503);
       }
@@ -1619,6 +1648,13 @@ export function createPrepareExportForProject(deps: PrepareExportDeps): PrepareE
     },
 
     async execute(input, context) {
+      const denied = authorizeDirectorAction(
+        { routeId: "export", method: "POST", mode: "execute" },
+        env,
+      );
+      if (!denied.allowed) {
+        return failedE(denied.code, denied.publicMessage, 503);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return failedE("persistence_disabled", "Persistance Director désactivée.", 503);
       }

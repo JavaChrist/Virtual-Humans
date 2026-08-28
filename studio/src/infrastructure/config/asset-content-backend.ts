@@ -4,7 +4,8 @@
  * Priority:
  * 1. Explicit dependency injection (tests)
  * 2. E2E fake + local gate + ASSET_STORAGE≠1 → process memory (Phase 8/9)
- * 3. Supabase configured + (persistence OR E2E_ASSET_STORAGE) → durable Storage
+ * 3. Supabase configured + explicit E2E_ASSET_STORAGE (local only) → durable Storage
+ *    Persistence alone never selects durable Storage.
  * 4. Local fake gate (Docker) without durable config → memory (local-only)
  * 5. Otherwise → unconfigured (fail-closed)
  *
@@ -18,10 +19,7 @@ import {
   type AssetContentBackend,
   type AssetContentPort,
 } from "@/application/postproduction/asset-content-port";
-import {
-  canUseDirectorV2Persistence,
-  parseStrictEnabledFlag,
-} from "@/infrastructure/config/feature-flags";
+import { parseStrictEnabledFlag } from "@/infrastructure/config/feature-flags";
 import { canUseProcessLocalFakeAssetContent } from "@/infrastructure/config/local-fake-delivery";
 import { isDirectorE2eFakeMode } from "./e2e-fake-mode";
 import { createSupabaseStorageAssetContentPort } from "@/infrastructure/storage/supabase-asset-content-port";
@@ -57,8 +55,8 @@ export function canUseDurableAssetContent(
   env: Record<string, string | undefined>,
 ): boolean {
   if (!hasSupabaseCredentials(env)) return false;
-  if (canUseDirectorV2Persistence(env)) return true;
-  // Explicit E2E Storage proof path (local only — gate already blocks remote).
+  // Persistence alone never authorizes Storage. Explicit local E2E Storage
+  // proof only — Production / remote / persistence-only stay fail-closed.
   if (
     parseStrictEnabledFlag(env.DIRECTOR_V2_E2E_ASSET_STORAGE) &&
     canUseProcessLocalFakeAssetContent(env)

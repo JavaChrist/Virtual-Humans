@@ -116,9 +116,11 @@ export async function POST(req: NextRequest) {
       const status =
         result.code === "conflict" || result.code === "project_brief_conflict"
           ? 409
-          : result.code === "not_found"
-            ? 503
-            : 400;
+          : result.code === "director_project_quota_exceeded"
+            ? 409
+            : result.code === "not_found"
+              ? 503
+              : 400;
       return obs.json(
         { error: result.publicMessage, code: result.code },
         { status }

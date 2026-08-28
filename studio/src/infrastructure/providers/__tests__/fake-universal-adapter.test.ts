@@ -10,7 +10,12 @@ test("fake adapter — métadonnées internes, aucun dataUrl ni URL signée", as
       action: "image",
       modelId: "e2e-fake-deterministic",
     } as CanonicalGenerationInput,
-    { requestedAt: "2026-08-27T00:00:00.000Z", idempotencyKey: "k1" },
+    {
+      requestedAt: "2026-08-27T00:00:00.000Z",
+      idempotencyKey: "k1",
+      correlationId: "corr-fake-adapter",
+      timeoutMs: 1_000,
+    },
   );
   assert.equal(result.status, "completed");
   assert.equal(result.output?.source.kind, "internal");

@@ -121,5 +121,15 @@ export function createSupabaseProjectRepository(deps: {
       if (error) throw mapSupabaseError(error);
       return (data ?? []).map(rowToProject);
     },
+
+    async countActiveNonArchived() {
+      const { count, error } = await client
+        .from("video_projects")
+        .select("id", { count: "exact", head: true })
+        .eq("workspace_id", workspaceId)
+        .is("archived_at", null);
+      if (error) throw mapSupabaseError(error);
+      return count ?? 0;
+    },
   };
 }

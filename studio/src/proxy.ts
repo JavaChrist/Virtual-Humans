@@ -70,6 +70,9 @@ export function rateLimitPolicyFor(
   if (pathname.startsWith("/api/generate")) {
     return { keyPrefix: "generate", policy: RATE_LIMITS.generate };
   }
+  if (pathname === "/api/director/projects" && method.toUpperCase() === "POST") {
+    return { keyPrefix: "director-create", policy: RATE_LIMITS.directorCreate };
+  }
   if (pathname.startsWith("/api/director")) {
     return { keyPrefix: "director", policy: RATE_LIMITS.director };
   }

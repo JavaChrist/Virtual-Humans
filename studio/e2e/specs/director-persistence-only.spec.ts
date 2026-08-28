@@ -65,6 +65,9 @@ test.describe("Director persistence-only production-like local", () => {
     await expect(page.getByRole("heading", { name: "Réalisateur IA" })).toBeVisible();
     await expect(page.getByRole("button", { name: "Créer une vidéo" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Projets récents" })).toBeVisible();
+    await expect(
+      page.getByText(/peuvent être enregistrés|génération restent indisponibles/i),
+    ).toBeVisible();
     await expect(page.getByText(PROVIDER_UI_RE)).toHaveCount(0);
 
     const flags = await page.evaluate(async () => {

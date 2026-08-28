@@ -137,29 +137,31 @@ test("hardening — production execute n’est pas gated worker/paid", () => {
   assert.match(route, /canUseDirectorV2Persistence/);
 });
 
-test("hardening — prompt/routing execute = readiness, pas flags AI", () => {
+test("hardening 187 — prompt/routing execute n’est plus readiness seule", () => {
   const prompt = readStudio("src/application/directors/prompt/build-for-project.ts");
-  assert.match(prompt, /executionAvailable: readiness\.executable/);
-  assert.doesNotMatch(prompt, /canExecuteMarketingAi|canExecutePaidGeneration/);
+  assert.match(prompt, /authorizeDirectorAction/);
+  assert.match(prompt, /canExecuteSyntheticDirectorPipeline/);
   const routing = readStudio("src/application/directors/routing/route-for-project.ts");
-  assert.match(routing, /executionAvailable: readiness\.executable/);
+  assert.match(routing, /authorizeDirectorAction/);
+  assert.match(routing, /canExecuteSyntheticDirectorPipeline/);
 });
 
-test("hardening — download sert des octets ; motion peut bypasser", () => {
+test("hardening 187 — download et motion sont gardés", () => {
   const download = readStudio(
     "src/app/api/director/projects/[projectId]/export/download/route.ts",
   );
-  assert.match(download, /canUseDirectorV2Persistence/);
-  assert.doesNotMatch(download, /VHS11E_EXPORT_CAPABILITY_ENABLED/);
+  assert.match(download, /authorizeDirectorAction/);
   const motion = readStudio(
     "src/app/api/director/projects/[projectId]/motion/review/route.ts",
   );
-  assert.match(motion, /MOTION_TRANSFER_FAKE_HARNESS|NODE_ENV === ["']test["']/);
+  assert.match(motion, /isLocalMotionReviewHarness/);
+  assert.doesNotMatch(motion, /NODE_ENV === ["']test["']/);
 });
 
-test("hardening — Storage durable s’allume dès persistence + creds", () => {
+test("hardening 187 — Storage durable n’est plus allumé par persistence seule", () => {
   const backend = readStudio("src/infrastructure/config/asset-content-backend.ts");
-  assert.match(backend, /if \(canUseDirectorV2Persistence\(env\)\) return true;/);
+  assert.doesNotMatch(backend, /if \(canUseDirectorV2Persistence\(env\)\) return true;/);
+  assert.match(backend, /DIRECTOR_V2_E2E_ASSET_STORAGE/);
 });
 
 test("création — Zod strict, expectedBriefRevision=1, IDs UUID", () => {

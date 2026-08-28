@@ -1,6 +1,10 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  authorizeDirectorAction,
+  directorActionHttp,
+} from "@/application/director/director-action-policy";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
 import {
@@ -40,6 +44,18 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   });
   if (!canUseDirectorV2Persistence()) {
     return obs.json({ error: "Persistance Director désactivée." }, { status: 404 });
+  }
+  const denied = directorActionHttp(
+    authorizeDirectorAction({ routeId: "quality_review", method: "POST", mode: "review" }),
+  );
+  if (denied) {
+    return obs.json(
+      {
+        status: "failed",
+        error: { code: denied.body.code, retryable: false, message: denied.body.error },
+      },
+      { status: denied.status },
+    );
   }
   const { projectId } = await params;
   if (!isUuid(projectId)) return obs.json({ error: "Identifiant invalide." }, { status: 400 });

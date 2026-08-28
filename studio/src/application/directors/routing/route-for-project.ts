@@ -34,6 +34,10 @@ import { buildRegistryFromStudioPricing } from "@/application/routing/build-from
 import { createModelRouter } from "@/application/routing/model-router";
 import { runModelRouterDryRun } from "@/application/routing/model-router/dry-run";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  authorizeDirectorAction,
+  canExecuteSyntheticDirectorPipeline,
+} from "@/application/director/director-action-policy";
 import type { DirectorRunContext } from "@/application/directors/marketing/result";
 import {
   isVhs124OpenAIImageExceptionEnabled,
@@ -695,7 +699,7 @@ export function createRouteGenerationPlanForProject(
       return {
         executable: true,
         providerCalled: false,
-        executionAvailable: true,
+        executionAvailable: canExecuteSyntheticDirectorPipeline(env),
         briefRevision: brief.revision,
         briefArtifactId: brief.artifactId,
         storyboardRevision: storyboard.revision,
@@ -752,7 +756,8 @@ export function createRouteGenerationPlanForProject(
     return {
       executable: readiness.executable,
       providerCalled: false,
-      executionAvailable: readiness.executable,
+      executionAvailable:
+        readiness.executable && canExecuteSyntheticDirectorPipeline(env),
       briefRevision: brief.revision,
       briefArtifactId: brief.artifactId,
       storyboardRevision: storyboard.revision,
@@ -781,6 +786,13 @@ export function createRouteGenerationPlanForProject(
   return {
     dryRun: async (input) => dry(input),
     async execute(input, context) {
+      const denied = authorizeDirectorAction(
+        { routeId: "routing", method: "POST", mode: "execute" },
+        env,
+      );
+      if (!denied.allowed) {
+        return failed(denied.code, denied.publicMessage, 503);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return failed("persistence_disabled", "Persistance Director désactivée.", 503);
       }

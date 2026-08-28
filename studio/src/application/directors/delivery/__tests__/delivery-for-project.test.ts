@@ -529,7 +529,14 @@ function harness() {
     destinations: [createDownloadExportAdapter(), createUnavailableAiccosExportAdapter()],
   });
 
-  const env = { DIRECTOR_V2_ENABLED: "true", DIRECTOR_V2_PERSISTENCE_ENABLED: "true" };
+  const env = {
+    DIRECTOR_V2_ENABLED: "true",
+    DIRECTOR_V2_PERSISTENCE_ENABLED: "true",
+    DIRECTOR_V2_E2E_FAKE_MODE: "1",
+    DIRECTOR_V2_E2E_HARNESS: "1",
+    NODE_ENV: "test",
+    SUPABASE_URL: "http://127.0.0.1:54321",
+  };
   const nowIso = () => AT;
   let counter = 0;
   const idFactory = () => {
@@ -910,7 +917,14 @@ test("merge execute: fails cleanly (no fabricated asset) when fake engine has no
     },
     artifacts: h.artifacts,
     deliveryRuns: h.deliveryRuns,
-    env: { DIRECTOR_V2_ENABLED: "true", DIRECTOR_V2_PERSISTENCE_ENABLED: "true" },
+    env: {
+      DIRECTOR_V2_ENABLED: "true",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "true",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
     idFactory: randomUUID,
     mergeEngine: bareEngine,

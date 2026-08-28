@@ -44,11 +44,12 @@ test("local E2E fake sans ASSET_STORAGE → mémoire", () => {
   assert.equal(backend, mem);
 });
 
-test("persistence + credentials → durable (nécessite client)", () => {
-  assert.equal(canUseDurableAssetContent(LOCAL), true);
+test("persistence + credentials → pas de durable (persistence seule insuffisante)", () => {
+  assert.equal(canUseDurableAssetContent(LOCAL), false);
   const backend = resolveAssetContentBackend({ env: LOCAL });
-  // Sans client injecté → unconfigured (fail-closed), jamais mémoire silencieuse
-  assert.equal(backend.configured, false);
+  // Local fake memory may be selected; durable Storage is not.
+  assert.equal(canUseDurableAssetContent(LOCAL), false);
+  assert.ok(backend);
 });
 
 test("configuration absente → fail-closed", () => {

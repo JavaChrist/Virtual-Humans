@@ -10,6 +10,10 @@ import {
   type VideoProjectBriefFields,
 } from "@/domain/brief";
 import type { CreateProjectWithBriefPort } from "@/infrastructure/db/repositories/create-project-with-brief";
+import type { PersistedVideoProject } from "./ports";
+import {
+  evaluateDirectorProjectQuota,
+} from "@/application/director/director-project-quota";
 
 export type CreateDirectorProjectCommand = {
   projectId: string;
@@ -48,6 +52,10 @@ export type CreateDirectorProject = {
 export type CreateDirectorProjectDeps = {
   port: CreateProjectWithBriefPort;
   nowIso: () => string;
+  /** Workspace-scoped load — used to allow idempotent replay at quota. */
+  loadExisting?: (projectId: string) => Promise<PersistedVideoProject | null>;
+  /** Workspace-scoped count of non-archived projects. */
+  countActiveNonArchived?: () => Promise<number>;
 };
 
 function asDraft(input: CreateDirectorProjectCommand["draft"]): VideoProjectBriefDraft {
@@ -102,6 +110,29 @@ export function createCreateDirectorProject(
           code: "invalid_brief",
           publicMessage,
         };
+      }
+
+      if (deps.loadExisting || deps.countActiveNonArchived) {
+        const existing = deps.loadExisting
+          ? await deps.loadExisting(command.projectId)
+          : null;
+        const existingInWorkspace = Boolean(
+          existing && existing.workspaceId === command.workspaceId,
+        );
+        const activeNonArchivedCount = deps.countActiveNonArchived
+          ? await deps.countActiveNonArchived()
+          : 0;
+        const quota = evaluateDirectorProjectQuota({
+          existingInWorkspace,
+          activeNonArchivedCount,
+        });
+        if (!quota.allowed) {
+          return {
+            status: "failed",
+            code: quota.code,
+            publicMessage: quota.publicMessage,
+          };
+        }
       }
 
       try {

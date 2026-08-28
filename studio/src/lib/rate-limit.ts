@@ -123,6 +123,7 @@ export const RATE_LIMITS = {
   } satisfies RateLimitPolicy,
   generate: { limit: 60, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
   director: { limit: 120, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
+  directorCreate: { limit: 20, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
   worker: { limit: 30, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
   aiccos: { limit: 20, windowMs: 60 * 1000 } satisfies RateLimitPolicy,
   defaultMutation: { limit: 120, windowMs: 60 * 1000 } satisfies RateLimitPolicy,

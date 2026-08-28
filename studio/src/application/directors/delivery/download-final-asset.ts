@@ -15,6 +15,7 @@ import {
   type AssetContentGetResult,
 } from "@/application/postproduction/asset-content-port";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import { authorizeDirectorAction } from "@/application/director/director-action-policy";
 import type { MergeOutcomeRecord } from "./delivery-for-project";
 import { buildSafeDownloadFilename } from "./safe-download-filename";
 
@@ -86,6 +87,13 @@ export function createDownloadFinalAssetForProject(
 
   return {
     async execute(input) {
+      const denied = authorizeDirectorAction(
+        { routeId: "export_download", method: "GET", mode: "download" },
+        env,
+      );
+      if (!denied.allowed) {
+        return fail(denied.code, denied.publicMessage, 404);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return fail("persistence_disabled", "Persistance Director désactivée.", 503);
       }

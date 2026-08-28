@@ -239,7 +239,14 @@ function harness(options?: { tiny?: boolean; registryMutator?: (r: ReturnType<ty
       createdAt,
       registryVersion,
     }),
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
     idFactory: (() => {
       let n = 0;
@@ -255,7 +262,14 @@ function harness(options?: { tiny?: boolean; registryMutator?: (r: ReturnType<ty
     projects,
     artifacts,
     approvals: approvalPort,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     idFactory: () => "11111111-1111-4111-8111-111111111111",
   });
 

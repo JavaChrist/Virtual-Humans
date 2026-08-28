@@ -1,6 +1,10 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  authorizeDirectorAction,
+  directorActionHttp,
+} from "@/application/director/director-action-policy";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
 import {
@@ -44,6 +48,25 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   }
   const body = BodySchema.safeParse(raw);
   if (!body.success) return obs.json({ error: "Requête invalide." }, { status: 400 });
+  const denied = directorActionHttp(
+    authorizeDirectorAction({
+      routeId: "approvals",
+      method: "POST",
+      mode:
+        body.data.artifactType === "generation_plan"
+          ? "approve_generation_plan"
+          : "approve_text",
+    }),
+  );
+  if (denied) {
+    return obs.json(
+      {
+        status: "failed",
+        error: { code: denied.body.code, retryable: false, message: denied.body.error },
+      },
+      { status: denied.status },
+    );
+  }
   const correlationId =
     resolveCorrelationId(req.headers.get("x-correlation-id")) ?? generateCorrelationId();
   try {

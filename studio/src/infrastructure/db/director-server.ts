@@ -781,6 +781,11 @@ export function createDirectorPersistenceStack(deps?: {
     createProject: createCreateDirectorProject({
       port: createPort,
       nowIso: deps?.nowIso ?? (() => new Date().toISOString()),
+      loadExisting: (projectId) => projects.load(projectId),
+      countActiveNonArchived: () =>
+        projects.countActiveNonArchived
+          ? projects.countActiveNonArchived()
+          : Promise.resolve(0),
     }),
     getProject: createGetDirectorProject({ projects, artifacts }),
     listProjects: createListDirectorProjects({ projects, artifacts }),

@@ -56,6 +56,8 @@ export interface ProjectRepository {
   ): Promise<PersistedVideoProject>;
   /** Recent projects in workspace — newest first (VHS-116). */
   listRecent?(limit: number): Promise<PersistedVideoProject[]>;
+  /** Non-archived projects in the repository workspace (quota). */
+  countActiveNonArchived?(): Promise<number>;
 }
 
 export interface ArtifactRepository {

@@ -6,6 +6,11 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  authorizeDirectorAction,
+  directorActionHttp,
+  isLocalMotionReviewHarness,
+} from "@/application/director/director-action-policy";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
 import { createMotionReviewOrchestratorFromHarness } from "@/infrastructure/motion/motion-review-harness";
@@ -46,11 +51,7 @@ async function resolveWorkspaceScope(projectId: string): Promise<{
   workspaceId: string;
 } | { ok: false; status: number; error: string }> {
   if (!canUseDirectorV2Persistence()) {
-    // Allow harness-only motion review when persistence flag off but harness on
-    if (
-      process.env.MOTION_TRANSFER_FAKE_HARNESS === "1" ||
-      process.env.NODE_ENV === "test"
-    ) {
+    if (isLocalMotionReviewHarness()) {
       return { ok: true, workspaceId: "ws-motion-harness" };
     }
     return { ok: false, status: 404, error: "Persistance Director désactivée." };
@@ -64,10 +65,7 @@ async function resolveWorkspaceScope(projectId: string): Promise<{
     return { ok: true, workspaceId: project.workspaceId };
   } catch (error) {
     if (error instanceof V2SupabaseConfigError) {
-      if (
-        process.env.MOTION_TRANSFER_FAKE_HARNESS === "1" ||
-        process.env.NODE_ENV === "test"
-      ) {
+      if (isLocalMotionReviewHarness()) {
         return { ok: true, workspaceId: "ws-motion-harness" };
       }
       return { ok: false, status: 503, error: error.message };
@@ -82,8 +80,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     operation: "director.motion.review.get",
   });
   const { projectId } = await params;
-  if (!isUuid(projectId) && process.env.NODE_ENV !== "test") {
-    // tests may use non-uuid project ids in harness
+  if (!isUuid(projectId) && !isLocalMotionReviewHarness()) {
     if (!/^[a-zA-Z0-9_-]{3,80}$/.test(projectId)) {
       return obs.json({ error: "Identifiant invalide." }, { status: 400 });
     }
@@ -131,10 +128,23 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     operation: "director.motion.review.post",
   });
   const { projectId } = await params;
-  if (!isUuid(projectId) && process.env.NODE_ENV !== "test") {
+  if (!isUuid(projectId) && !isLocalMotionReviewHarness()) {
     if (!/^[a-zA-Z0-9_-]{3,80}$/.test(projectId)) {
       return obs.json({ error: "Identifiant invalide." }, { status: 400 });
     }
+  }
+
+  const denied = directorActionHttp(
+    authorizeDirectorAction({ routeId: "motion_review", method: "POST", mode: "review" }),
+  );
+  if (denied) {
+    return obs.json(
+      {
+        status: "failed",
+        error: { code: denied.body.code, message: denied.body.error },
+      },
+      { status: denied.status },
+    );
   }
 
   let raw: unknown;

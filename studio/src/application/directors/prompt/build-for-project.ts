@@ -19,6 +19,10 @@ import {
 } from "@/domain/prompt";
 import type { ArtifactRepository, ProjectRepository } from "@/application/projects/ports";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  authorizeDirectorAction,
+  canExecuteSyntheticDirectorPipeline,
+} from "@/application/director/director-action-policy";
 import { createPromptDirector } from "./prompt-director";
 import type { PromptAnalyzerPort } from "./analyzer-port";
 import type { DirectorRunContext } from "./result";
@@ -377,7 +381,8 @@ export function createBuildScenePackagesForProject(
     return {
       executable: readiness.executable,
       providerCalled: false,
-      executionAvailable: readiness.executable,
+      executionAvailable:
+        readiness.executable && canExecuteSyntheticDirectorPipeline(env),
       briefRevision: brief.revision,
       briefArtifactId: brief.artifactId,
       marketingPlanRevision: plan.revision,
@@ -406,6 +411,13 @@ export function createBuildScenePackagesForProject(
   return {
     dryRun: async (input) => dry(input),
     async execute(input, context) {
+      const denied = authorizeDirectorAction(
+        { routeId: "prompts", method: "POST", mode: "execute" },
+        env,
+      );
+      if (!denied.allowed) {
+        return failed(denied.code, denied.publicMessage, 503);
+      }
       if (!canUseDirectorV2Persistence(env)) {
         return failed("persistence_disabled", "Persistance Director désactivée.", 503);
       }

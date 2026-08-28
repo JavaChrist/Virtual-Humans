@@ -1,5 +1,9 @@
 import { NextRequest } from "next/server";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  authorizeDirectorAction,
+  directorActionHttp,
+} from "@/application/director/director-action-policy";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
 import { logger, startObservedRoute } from "@/infrastructure/observability";
@@ -19,6 +23,12 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     route: "/api/director/projects/[projectId]/export/download",
     operation: "director.export.download",
   });
+  const denied = directorActionHttp(
+    authorizeDirectorAction({ routeId: "export_download", method: "GET", mode: "download" }),
+  );
+  if (denied) {
+    return obs.json(denied.body, { status: denied.status });
+  }
   if (!canUseDirectorV2Persistence()) {
     return obs.json({ error: "Persistance Director désactivée." }, { status: 404 });
   }

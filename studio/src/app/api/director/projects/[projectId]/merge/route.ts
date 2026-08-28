@@ -2,6 +2,10 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 import { redactDirectorStoragePathsForClient } from "@/application/postproduction/redact-director-storage-paths";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  authorizeDirectorAction,
+  directorActionHttp,
+} from "@/application/director/director-action-policy";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
 import {
@@ -105,6 +109,24 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         { correlationId, mode: "dry-run" },
       );
       return obs.json({ prepareDryRun, executeDryRun });
+    }
+    if (body.data.mode === "prepare" || body.data.mode === "execute") {
+      const denied = directorActionHttp(
+        authorizeDirectorAction({
+          routeId: "merge",
+          method: "POST",
+          mode: body.data.mode,
+        }),
+      );
+      if (denied) {
+        return obs.json(
+          {
+            status: "failed",
+            error: { code: denied.body.code, retryable: false, message: denied.body.error },
+          },
+          { status: denied.status },
+        );
+      }
     }
     if (body.data.mode === "prepare") {
       const result = await stack.prepareMerge.execute(

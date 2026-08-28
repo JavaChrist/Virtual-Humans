@@ -376,7 +376,14 @@ function harness(opts: HarnessOpts = {}) {
       planCache.set(p.id, p);
       packageCache.set(p.id, pkgs);
     },
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
     idFactory: (() => {
       let n = 0;

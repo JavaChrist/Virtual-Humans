@@ -301,7 +301,14 @@ test("download success — real bytes, headers, provenance", async () => {
     projects: repos.projects,
     artifacts: repos.artifacts,
     assetContent: content,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
   });
 
@@ -332,7 +339,14 @@ test("download refuses — content backend unconfigured (no fabrication)", async
     projects: repos.projects,
     artifacts: repos.artifacts,
     assetContent: createUnconfiguredAssetContentPort(),
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
   });
   const result = await download.execute({ projectId: PROJECT });
@@ -361,7 +375,14 @@ test("download refuses — content missing", async () => {
     projects: repos.projects,
     artifacts: repos.artifacts,
     assetContent: content,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
   });
   const result = await download.execute({ projectId: PROJECT });
@@ -389,7 +410,14 @@ test("download refuses — size mismatch", async () => {
     projects: repos.projects,
     artifacts: repos.artifacts,
     assetContent: content,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
   });
   const result = await download.execute({ projectId: PROJECT });
@@ -413,7 +441,14 @@ test("download refuses — invalid MIME", async () => {
     projects: repos.projects,
     artifacts: repos.artifacts,
     assetContent: content,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
   });
   const result = await download.execute({ projectId: PROJECT });
@@ -434,7 +469,14 @@ test("download refuses — other workspace project", async () => {
     projects: repos.projects,
     artifacts: repos.artifacts,
     assetContent: content,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
   });
   const result = await download.execute({ projectId: PROJECT });
@@ -459,7 +501,14 @@ test("download refuses — merge not completed", async () => {
     projects: repos.projects,
     artifacts: repos.artifacts,
     assetContent: content,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
   });
   const result = await download.execute({ projectId: PROJECT });
@@ -487,7 +536,14 @@ test("download refuses — needs_review without approval", async () => {
     projects: repos.projects,
     artifacts: repos.artifacts,
     assetContent: content,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
   });
   const result = await download.execute({ projectId: PROJECT });
@@ -515,7 +571,14 @@ test("error payloads never leak paths or secrets", async () => {
     projects: repos.projects,
     artifacts: repos.artifacts,
     assetContent: content,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
     nowIso: () => AT,
   });
   const result = await download.execute({ projectId: PROJECT });

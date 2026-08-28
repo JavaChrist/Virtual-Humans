@@ -1,6 +1,10 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { canUseDirectorV2Persistence } from "@/infrastructure/config/feature-flags";
+import {
+  authorizeDirectorAction,
+  directorActionHttp,
+} from "@/application/director/director-action-policy";
 import { createDirectorPersistenceStack } from "@/infrastructure/db/director-server";
 import { V2SupabaseConfigError } from "@/infrastructure/db/supabase-server";
 import {
@@ -77,6 +81,18 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     if (body.data.mode !== "execute") {
       const dryRun = await builder.dryRun({ projectId }, { correlationId, mode: "dry-run" });
       return obs.json({ dryRun });
+    }
+    const denied = directorActionHttp(
+      authorizeDirectorAction({ routeId: "prompts", method: "POST", mode: "execute" }),
+    );
+    if (denied) {
+      return obs.json(
+        {
+          status: "failed",
+          error: { code: denied.body.code, retryable: false, message: denied.body.error },
+        },
+        { status: denied.status },
+      );
     }
     const result = await builder.execute(
       {

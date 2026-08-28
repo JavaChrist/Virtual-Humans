@@ -120,7 +120,7 @@ test("dry-run — providerCalled false, zéro écriture", async () => {
   );
   assert.equal(dry.providerCalled, false);
   assert.equal(dry.executable, true);
-  assert.equal(dry.executionAvailable, true);
+  assert.equal(dry.executionAvailable, false);
   assert.equal(writes, 0);
   assert.equal(dry.storyboardRevision, 1);
 });
@@ -246,7 +246,14 @@ test("execute — lot atomique + replay idempotent + conflit révision", async (
     projects,
     artifacts,
     directorRuns,
-    env: { DIRECTOR_V2_ENABLED: "1", DIRECTOR_V2_PERSISTENCE_ENABLED: "1" },
+    env: {
+      DIRECTOR_V2_ENABLED: "1",
+      DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+      DIRECTOR_V2_E2E_FAKE_MODE: "1",
+      DIRECTOR_V2_E2E_HARNESS: "1",
+      NODE_ENV: "test",
+      SUPABASE_URL: "http://127.0.0.1:54321",
+    },
   });
   const first = await svc.execute(
     { projectId, expectedStoryboardRevision: 1 },
