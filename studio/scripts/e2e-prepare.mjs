@@ -184,6 +184,32 @@ const { error: bErr } = await client.from("workspace_budget_policies").upsert(
 );
 if (bErr) fail(`budget policy: ${bErr.message}`);
 
+// Keep headroom under Director quota 50 so persistence-only E2E can create.
+{
+  const { data: active, error: activeErr } = await client
+    .from("video_projects")
+    .select("id, updated_at")
+    .eq("workspace_id", runtime.workspaceId)
+    .is("archived_at", null)
+    .order("updated_at", { ascending: false });
+  if (activeErr) fail(`list active e2e projects: ${activeErr.message}`);
+  const keep = 10;
+  const excess = (active ?? []).slice(keep);
+  if (excess.length > 0) {
+    const ids = excess.map((row) => row.id);
+    const { error: archiveErr } = await client
+      .from("video_projects")
+      .update({
+        status: "archived",
+        archived_at: new Date().toISOString(),
+      })
+      .eq("workspace_id", runtime.workspaceId)
+      .in("id", ids);
+    if (archiveErr) fail(`archive excess e2e projects: ${archiveErr.message}`);
+    console.log(`e2e-prepare: archived ${ids.length} excess e2e projects (quota headroom).`);
+  }
+}
+
 // Drain queued/leased jobs on e2e-* workspaces only — claim RPC is global and
 // leftover synthetic jobs from prior runs starve the current workspace worker.
 {

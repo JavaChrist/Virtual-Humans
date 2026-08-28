@@ -613,3 +613,13 @@ test("recheck — routes HTTP execute : policy ou gate *_ai_disabled", () => {
     assert.ok(gateAt >= 0 && (beginAt < 0 || gateAt < beginAt), file);
   }
 });
+
+test("recheck 189 — Playwright persistence-only refuse le skip durable", () => {
+  const src = readFileSync(
+    join(studioRoot, "e2e/specs/director-persistence-only.spec.ts"),
+    "utf8",
+  );
+  assert.doesNotMatch(src, /durable path skipped/);
+  assert.match(src, /PERSISTENCE_DURABLE_E2E_SKIPPED=1/);
+  assert.match(src, /PERSISTENCE_DURABLE_E2E_SKIPPED=0/);
+});

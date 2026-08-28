@@ -1,7 +1,7 @@
 # Reprise commune Léo + Cursor — Virtual Humans Studio
 
 Fichier autonome pour un **nouveau chat Léo** et un **nouveau chat Cursor**, sans historique conversationnel.  
-Nature : living resume. `188_` persistence recheck **BLOCKED_LOCAL_INTEGRATION**. `187_` hardening **READY** mais preuve durable locale manquante. `185_` UI-only **ON / RUNTIME OFF**. SHA servi `baa92c4`. RideCloud apply **suspendu**. Voir living handover.
+Nature : living resume. `189_` persistence recheck local **READY_FOR_HARDENING_SYNC_AND_DEPLOY**. `187_` hardening **READY**. `185_` UI-only **ON / RUNTIME OFF**. SHA servi `baa92c4`. RideCloud apply **suspendu**. Voir living handover.
 
 <!-- RESUME_MARKERS
 verifiedAt=2026-08-28
@@ -9,9 +9,9 @@ sourceHead=baa92c4
 lastFunctionalCommit=a785949
 lastDocumentationCommit=baa92c4
 thisGateDocumentationCommit=pending
-lastPhaseReport=188_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK.md
-globalStatus=VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_BLOCKED_LOCAL_INTEGRATION_REQUIRED
-nextAuth=AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER
+lastPhaseReport=189_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE.md
+globalStatus=VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_READY_FOR_HARDENING_SYNC_AND_DEPLOY_AUTH
+nextAuth=AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
@@ -32,7 +32,7 @@ realMergeExportStatus=WIRED_DISABLED
 | `sourceHead` | `baa92c4` | HEAD Git **poussé** · SHA docs Production (`185_`) actuellement servi |
 | `lastFunctionalCommit` | `a785949` | hardening persistence `187_` — **local, non poussé** |
 | `lastDocumentationCommit` | `baa92c4` | dernier commit docs **poussé** (`185_`) |
-| `thisGateDocumentationCommit` | pending | commit local docs `188_` (**non poussé**) |
+| `thisGateDocumentationCommit` | pending | commit local docs `189_` (**non poussé**) |
 | SHA déployé Vercel | **`baa92c4`** | alias `dpl_8Bq6MJ72…` · UI-only ON · persistence OFF · tree `d376a7c` |
 
 > **Sécurité — interdit :** clé API, voiceId brut, URL signée, contenu audio/vidéo, base64, texte Production complet, credential, secret, chemin Storage canonique sensible.
@@ -288,12 +288,12 @@ Les assets actuels 11A / 11B / 11C **valident les capacités techniques**. Ils *
 ## 13. Prochaine porte canonique — non exécutée
 
 ```text
-AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER
+AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER
 ```
 
-**Non exécutée.** Rejouer le recheck **après** Docker Desktop running + `npx supabase start` isolé. **Aucun flag write.** Le flag persistence n’est autorisable qu’après `READY_FOR_FLAG_AND_WRITE_AUTH`.
+**Non exécutée.** Pousser et déployer jusqu’à `189_` avec persistence Production **toujours OFF**. Vérifier le hardening en lecture seule. **Aucun flag write.** Le flag persistence n’est autorisable qu’après `READY_FOR_FLAG_AND_WRITE_AUTH`.
 
-`188_` a prouvé 21/21 refus adversariaux in-memory. L’intégration durable locale est **absente** (daemon Docker OFF). Persistence et runtimes restent **OFF**.
+`189_` a prouvé le scénario durable local (DB 35/35 · Playwright 5/5 · `PERSISTENCE_DURABLE_E2E_SKIPPED=0`). Persistence et runtimes restent **OFF**.
 
 RideCloud apply **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** reste **suspendue**.
 
@@ -301,6 +301,7 @@ Interdit : provider · dépense · média Git · lecture/upload pack · RPC bind
 
 **Ne pas exécuter cette porte pendant la lecture de ce fichier.**
 
+`AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER` est **consommée** (`189_`).
 `AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER_NO_PRODUCTION_WRITE` est **consommée** (`188_`).
 `AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_IMPLEMENT_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER` est **consommée** (`187_`).
 `AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER_NO_PRODUCTION_WRITE` est **consommée** (`186_`).
@@ -344,13 +345,13 @@ Copier le bloc suivant dans un nouveau chat Léo :
 ```text
 Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 188_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md et le rapport 189_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE.md.
 
 Ne rejoue aucune phase terminée. Vérifie d’abord Git et les éventuels nouveaux STOP Cursor. Une autorisation d’un chat précédent n’est jamais réutilisable.
 
-La prochaine porte est le recheck après Supabase local. RideCloud apply est suspendue.
+La prochaine porte est le sync+deploy du hardening avec persistence OFF. RideCloud apply est suspendue.
 
-Persistence recheck BLOCKED_LOCAL (188_) · HARDENED (187_, a785949) · UI-only ON / RUNTIME OFF (185_) · origin/main baa92c4 · ahead 4/0 · alias dpl_8Bq6MJ72…. Docker daemon OFF. Auth 188_ / 187_ / 186_ / 185_ / 184_ / 183_ / 182_ / 181_ / 180_ / 179_ / 178_ / 177_ consommées. Aucun moteur. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. Distinguer a785949 (hardening local), 9dce256 (docs 187_), baa92c4 (servi). Ne pas câbler AICCOS.
+Persistence recheck local READY (189_) · HARDENED (187_, a785949) · UI-only ON / RUNTIME OFF (185_) · origin/main baa92c4 · ahead 5/0 · alias dpl_8Bq6MJ72…. Auth 189_ / 188_ / 187_ / 186_ / 185_ / 184_ / 183_ / 182_ / 181_ / 180_ / 179_ / 178_ / 177_ consommées. Aucun moteur. 0¢. N’invente aucun claim. Aucun média Git. Aucun apply. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. Distinguer a785949 (hardening local), 732875c (docs 188_), baa92c4 (servi). Ne pas câbler AICCOS.
 
 Budget 437/391/0/46. Voice runtime OFF. Flags considérés OFF. Persistence Director OFF. L’alias Vercel Ready documenté est le SHA baa92c4.
 
@@ -366,15 +367,15 @@ Copier le bloc suivant dans un nouveau chat Cursor :
 ```text
 Tu es Cursor, exécutant code/test/doc de Virtual Humans Studio.
 
-Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 188_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK.md.
+Lis entièrement docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md, puis CURRENT_STATE_AND_RESUME.md, .cursor/rules/living-handover.mdc et 189_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE.md.
 
-Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main. origin/main attendu baa92c4. HEAD local ahead 4/0 après commits 186_/187_/188_.
+Vérifie Git avant toute action. Racine attendue : C:\Users\JavaChrist\Desktop\virtual-humans. Branche main. origin/main attendu baa92c4. HEAD local ahead 5/0 après commits 186_/187_/188_/189_.
 
 Protège les fichiers hors scope déjà dirty : studio/src/app/api/aiccos/send/route.ts, studio/src/components/send-to-aiccos.tsx. Ne les modifie pas, ne les restaure pas, ne les stash pas, ne les stage pas.
 
-Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_–188_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. N’invente aucun claim.
+Ne commence aucune porte sans prompt Auth explicite de Léo/Christian dans CE chat. Ne rejoue pas 153_–189_. Aucun provider. 0¢. Aucun apply. Aucun persist bind. Aucun média Git. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. N’invente aucun claim.
 
-La prochaine porte est le recheck après Supabase local. Elle n’est pas autorisée par ce fichier de reprise. 0 moteur. Persistence OFF. Ne pas démarrer Docker sans Auth. Distinguer a785949 (hardening local), 9dce256 (docs 187_), baa92c4 (origin/main servi). Ne pas câbler AICCOS. RideCloud apply reste suspendue.
+La prochaine porte est le sync+deploy du hardening avec persistence OFF. Elle n’est pas autorisée par ce fichier de reprise. 0 moteur. Persistence OFF. Distinguer a785949 (hardening local), 732875c (docs 188_), baa92c4 (origin/main servi). Ne pas câbler AICCOS. RideCloud apply reste suspendue.
 ```
 
 ---
@@ -383,14 +384,14 @@ La prochaine porte est le recheck après Supabase local. Elle n’est pas autori
 
 - [ ] Confirmer la racine Git `C:\Users\JavaChrist\Desktop\virtual-humans`
 - [ ] Confirmer branche `main` et relever HEAD / origin/main / ahead-behind
-- [ ] Lire le dernier STOP (ce fichier + living handover + `188_`)
+- [ ] Lire le dernier STOP (ce fichier + living handover + `189_`)
 - [ ] Vérifier le working tree sans le modifier
 - [ ] Protéger les deux fichiers AICCOS hors scope
 - [ ] Confirmer budget 437 / 391 / 0 / 46
 - [ ] Confirmer flags / runtime considérés OFF ; revalider avant toute opération sensible
 - [ ] Confirmer output audio `bc36bba7…` `approved` · active=false · HR `068a2b25…`
 - [ ] Confirmer aucune nouvelle Human Review
-- [ ] Confirmer prochaine porte = recheck après Supabase local (aucun flag write)
+- [ ] Confirmer prochaine porte = sync+deploy hardening avec persistence OFF (aucun flag write)
 - [ ] Ne lancer aucune action sensible avant autorisation
 
 ---

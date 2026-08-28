@@ -159,6 +159,7 @@
 - [x] Director persistence preflight (`186_`) · **VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_BLOCKED_HARDENING_REQUIRED** · 0 flag write · 0 deploy · 0 push ;
 - [x] Director persistence hardening (`187_`) · **VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENED_READY_FOR_PREFLIGHT_RECHECK** · SHA `a785949` · 0 flag write · 0 deploy · 0 push ;
 - [x] Director persistence recheck (`188_`) · **VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_BLOCKED_LOCAL_INTEGRATION_REQUIRED** · 0 flag write · 0 deploy · 0 push ;
+- [x] Director persistence recheck local (`189_`) · **VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_READY_FOR_HARDENING_SYNC_AND_DEPLOY_AUTH** · 0 flag write · 0 deploy · 0 push ;
 - [ ] Legacy `/api/generate/image` — **≠** PASS Production.
 
 ## Verdict
@@ -176,7 +177,7 @@ Lipsync `/director` : **WIRED_DISABLED DEPLOY READY** (`178_`/`179_`) · SHA bui
 Merge/export `/director` : **WIRED_DISABLED** (`180_`/`181_`) · tree `a602de9` · 0 moteur · 0 flag
 Director E2E fake : **HARDENED DEPLOY READY** (`182_`/`183_`) · SHA docs Prod `8081744` · tree `d376a7c` · UI Prod 0 · 0 moteur · 0 flag
 Director UI-only : **ENABLED / RUNTIME OFF** (`185_`) · persistence OFF · SHA servi `baa92c4`
-Director persistence : **HARDENED** (`187_`) · recheck **BLOCKED_LOCAL_INTEGRATION** (`188_`) · flag OFF · SHA local `a785949` · 0 flag write · 0 deploy
+Director persistence : **HARDENED** (`187_`) · recheck local **READY** (`189_`) · flag OFF · SHA local `a785949` · 0 flag write · 0 deploy
 Motion : MV-001 PASS_WITH_HUMAN_APPROVAL · MV-002 DEFERRED
 Registry Motion Production : DISABLED
 Registry I2V Production : DISABLED

@@ -224,3 +224,21 @@ export function makeDomainRun(input: {
 }
 
 export { withRunUpdate, money, randomUUID };
+
+/** Local-only synthetic Director env for historical fake-pipeline integration. */
+export function localSyntheticDirectorEnv(
+  extras: Record<string, string | undefined> = {},
+): Record<string, string | undefined> {
+  return {
+    DIRECTOR_V2_ENABLED: "1",
+    DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
+    DIRECTOR_V2_E2E_FAKE_MODE: "1",
+    DIRECTOR_V2_E2E_HARNESS: "1",
+    SUPABASE_URL: process.env.SUPABASE_LOCAL_URL ?? "http://127.0.0.1:54321",
+    ...extras,
+    OPENAI_API_KEY: "",
+    FAL_KEY: "",
+    ELEVENLABS_API_KEY: "",
+    AICCOS_IMPORT_TOKEN: "",
+  };
+}

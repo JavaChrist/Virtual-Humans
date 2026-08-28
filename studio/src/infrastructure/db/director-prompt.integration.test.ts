@@ -5,7 +5,12 @@
 import assert from "node:assert/strict";
 import { test, after } from "node:test";
 import { resolveLocalSupabaseGate } from "./local-integration.gate";
-import { cleanupWorkspace, createLocalClients, randomUUID } from "./integration-harness";
+import {
+  cleanupWorkspace,
+  createLocalClients,
+  localSyntheticDirectorEnv,
+  randomUUID,
+} from "./integration-harness";
 import { createDirectorPersistenceStack } from "./director-server";
 import { makeValidCandidate } from "@/domain/marketing/__tests__/fixtures";
 import { makeValidCreativeCandidate } from "@/domain/creative/__tests__/fixtures";
@@ -90,7 +95,7 @@ test("VHS-122 — chain through scene_package_set (deterministic, no budget)", a
     createdBy: "tester",
   });
 
-  const env = {
+  const env = localSyntheticDirectorEnv({
     DIRECTOR_V2_ENABLED: "1",
     DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
     DIRECTOR_V2_MARKETING_AI_ENABLED: "1",
@@ -108,7 +113,7 @@ test("VHS-122 — chain through scene_package_set (deterministic, no budget)", a
     OPENAI_MARKETING_PRICE_VERSION: "it-v1",
     OPENAI_MARKETING_PRICE_INPUT_PER_MILLION_MINOR: "100",
     OPENAI_MARKETING_PRICE_OUTPUT_PER_MILLION_MINOR: "200",
-  };
+  });
 
   const stack = createDirectorPersistenceStack({
     client,

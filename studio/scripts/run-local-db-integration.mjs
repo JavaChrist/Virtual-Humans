@@ -89,6 +89,9 @@ const tests = run(
       SUPABASE_LOCAL_URL: url,
       SUPABASE_LOCAL_SERVICE_ROLE_KEY: serviceRoleKey,
       SUPABASE_LOCAL_ANON_KEY: local.ANON_KEY ?? local.PUBLISHABLE_KEY ?? "",
+      // Force any accidental fallback onto the already-validated local stack.
+      SUPABASE_URL: url,
+      SUPABASE_SERVICE_ROLE_KEY: serviceRoleKey,
     },
   }
 );

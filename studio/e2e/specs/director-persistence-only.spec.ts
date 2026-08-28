@@ -107,23 +107,14 @@ test.describe("Director persistence-only production-like local", () => {
       return res.status;
     });
     if (listBefore !== 200) {
-      test.info().annotations.push({
-        type: "note",
-        description: `Supabase local indisponible — durable path skipped (${listBefore}).`,
-      });
-      const created = await page.evaluate(async () => {
-        const res = await fetch("/api/director/projects", {
-          method: "POST",
-          credentials: "same-origin",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ projectId: "not-a-uuid" }),
-        });
-        return res.status;
-      });
-      expect(created).not.toBe(404);
-      barrier.assertClean();
-      return;
+      throw new Error(
+        `PERSISTENCE_DURABLE_E2E_SKIPPED=1 list=${listBefore} — chemin durable exigé pour READY 189.`,
+      );
     }
+    test.info().annotations.push({
+      type: "note",
+      description: "PERSISTENCE_DURABLE_E2E_SKIPPED=0",
+    });
 
     await fillPersistenceBrief(page);
     const createBtn = page.getByRole("button", { name: "Créer le projet" });
@@ -161,6 +152,7 @@ test.describe("Director persistence-only production-like local", () => {
             tone: "energetic",
             language: "fr",
             callToAction: "Réserver un trajet de démonstration",
+            mediaReferences: [],
           },
         }),
       });
@@ -245,11 +237,114 @@ test.describe("Director persistence-only production-like local", () => {
     expect(barrier.blockedAttempts).toBe(0);
   });
 
+  test("rate limit create 20/min : sous limite, 429, Retry-After, GET intact", async ({
+    page,
+  }) => {
+    const barrier = await installNetworkBarrier(page);
+    await loginViaUi(page);
+    const isolatedIp = "203.0.113.189";
+    const fields = {
+      projectName: "189 rate limit",
+      subjectType: "product",
+      subjectName: "Widget rate",
+      subjectDescription: "Texte synthétique minimal pour le rate limit 189.",
+      objective: "awareness",
+      platform: "instagram",
+      durationSeconds: 30,
+      aspectRatio: "9:16",
+      language: "fr",
+      tone: "warm",
+      mediaReferences: [],
+    };
+    const firstId = "18900000-0000-4000-8000-000000000001";
+    const first = await page.evaluate(
+      async ({ ip, id, fields: f }) => {
+        const res = await fetch("/api/director/projects", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "content-type": "application/json",
+            "x-forwarded-for": ip,
+          },
+          body: JSON.stringify({
+            projectId: id,
+            artifactId: "18900000-0000-4000-8000-000000000011",
+            expectedBriefRevision: 1,
+            fields: f,
+          }),
+        });
+        return { status: res.status, body: await res.json().catch(() => ({})) };
+      },
+      { ip: isolatedIp, id: firstId, fields },
+    );
+    expect([200, 409]).toContain(first.status);
+
+    const replay = await page.evaluate(
+      async ({ ip, id, fields: f }) => {
+        const res = await fetch("/api/director/projects", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "content-type": "application/json",
+            "x-forwarded-for": ip,
+          },
+          body: JSON.stringify({
+            projectId: id,
+            artifactId: "18900000-0000-4000-8000-000000000012",
+            expectedBriefRevision: 1,
+            fields: f,
+          }),
+        });
+        return res.status;
+      },
+      { ip: isolatedIp, id: firstId, fields },
+    );
+    expect([200, 409]).toContain(replay);
+
+    let limited: { status: number; retryAfter: string | null } | null = null;
+    let underLimitSeen = false;
+    for (let i = 0; i < 24; i += 1) {
+      const probe = await page.evaluate(async (ip) => {
+        const res = await fetch("/api/director/projects", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: {
+            "content-type": "application/json",
+            "x-forwarded-for": ip,
+          },
+          body: JSON.stringify({ projectId: "not-a-uuid" }),
+        });
+        return { status: res.status, retryAfter: res.headers.get("Retry-After") };
+      }, isolatedIp);
+      if (probe.status === 429) {
+        limited = probe;
+        break;
+      }
+      underLimitSeen = true;
+    }
+    expect(underLimitSeen).toBe(true);
+    expect(limited?.status).toBe(429);
+    expect(Number(limited?.retryAfter)).toBeGreaterThan(0);
+
+    const getAfter = await page.evaluate(async (ip) => {
+      const res = await fetch("/api/director/projects", {
+        credentials: "same-origin",
+        headers: { "x-forwarded-for": ip },
+      });
+      return res.status;
+    }, isolatedIp);
+    expect(getAfter).toBe(200);
+
+    barrier.assertClean();
+  });
+
   test("logout referme l’accès ; mobile utilisable", async ({ page }) => {
     const barrier = await installNetworkBarrier(page);
     await loginViaUi(page);
     await page.goto("/director", { waitUntil: "domcontentloaded" });
-    await page.getByRole("button", { name: /Déconnexion/i }).click();
+    await page.getByRole("button", { name: /Déconnexion/i }).evaluate((el) => {
+      (el as HTMLButtonElement).click();
+    });
     await expect(page).toHaveURL(/\/login/, { timeout: 15_000 });
     const again = await page.goto("/director", { waitUntil: "domcontentloaded" });
     expect(again?.status()).toBeLessThan(400);

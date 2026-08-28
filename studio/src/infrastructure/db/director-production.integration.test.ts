@@ -6,7 +6,12 @@
 import assert from "node:assert/strict";
 import { test, after } from "node:test";
 import { resolveLocalSupabaseGate } from "./local-integration.gate";
-import { cleanupWorkspace, createLocalClients, randomUUID } from "./integration-harness";
+import {
+  cleanupWorkspace,
+  createLocalClients,
+  localSyntheticDirectorEnv,
+  randomUUID,
+} from "./integration-harness";
 import { createDirectorPersistenceStack } from "./director-server";
 import { makeValidCandidate } from "@/domain/marketing/__tests__/fixtures";
 import { makeValidCreativeCandidate } from "@/domain/creative/__tests__/fixtures";
@@ -92,7 +97,7 @@ test("VHS-124 — routing+approvals+production+worker (fakes only)", async () =>
     createdBy: "tester",
   });
 
-  const env = {
+  const env = localSyntheticDirectorEnv({
     DIRECTOR_V2_ENABLED: "1",
     DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
     DIRECTOR_V2_WORKER_ENABLED: "1",
@@ -103,7 +108,6 @@ test("VHS-124 — routing+approvals+production+worker (fakes only)", async () =>
     DIRECTOR_V2_ART_AI_ENABLED: "1",
     DIRECTOR_V2_STORYBOARD_AI_ENABLED: "1",
     DIRECTOR_V2_PAID_AI_ENABLED: "1",
-    OPENAI_API_KEY: "sk-test-local",
     OPENAI_MARKETING_MODEL: "gpt-5.6-terra",
     OPENAI_CREATIVE_MODEL: "gpt-5.6-terra",
     OPENAI_SCRIPT_MODEL: "gpt-5.6-terra",
@@ -112,7 +116,7 @@ test("VHS-124 — routing+approvals+production+worker (fakes only)", async () =>
     OPENAI_MARKETING_PRICE_VERSION: "it-v1",
     OPENAI_MARKETING_PRICE_INPUT_PER_MILLION_MINOR: "100",
     OPENAI_MARKETING_PRICE_OUTPUT_PER_MILLION_MINOR: "200",
-  };
+  });
 
   const registryBase = makeRoutableRegistry();
   const stack = createDirectorPersistenceStack({

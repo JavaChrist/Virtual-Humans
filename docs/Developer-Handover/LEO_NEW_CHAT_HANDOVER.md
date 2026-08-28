@@ -6,7 +6,7 @@ Ce fichier décrit le **rôle Léo**. Pour un nouveau chat Léo **ou** Cursor, l
 
 `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`
 
-Audit de reprise : **2026-08-28**. Statut : `188_` / `VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_BLOCKED_LOCAL_INTEGRATION_REQUIRED`. UI-only ON / RUNTIME OFF (`185_`, SHA servi `baa92c4`). Persistence **OFF**. Docker local **OFF**. RideCloud apply **suspendu**.
+Audit de reprise : **2026-08-28**. Statut : `189_` / `VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_READY_FOR_HARDENING_SYNC_AND_DEPLOY_AUTH`. UI-only ON / RUNTIME OFF (`185_`, SHA servi `baa92c4`). Persistence **OFF**. Recheck local **READY**. RideCloud apply **suspendu**.
 
 Léo ne code pas directement dans le dépôt. **Cursor code, teste, met à jour la documentation, produit un rapport STOP, commit et push.** Léo analyse chaque retour, décide de la porte suivante et rédige le prochain prompt complet destiné à Cursor.
 
@@ -180,26 +180,26 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Director UI-only est **ON / RUNTIME OFF** (`185_`). Persistence hardening **HARDENED** (`187_`, SHA local `a785949`). Recheck **BLOCKED_LOCAL_INTEGRATION** (`188_`). Preflight local `186_` / `184_`. E2E fake est **HARDENED DEPLOY READY** (`183_`). Merge/export **WIRED_DISABLED**. RideCloud apply **suspendu**.
+Director UI-only est **ON / RUNTIME OFF** (`185_`). Persistence hardening **HARDENED** (`187_`, SHA local `a785949`). Recheck local **READY** (`189_`). Preflight local `186_` / `184_`. E2E fake est **HARDENED DEPLOY READY** (`183_`). Merge/export **WIRED_DISABLED**. RideCloud apply **suspendu**.
 
-Assets 11A/11B/11C = **preuves techniques privées**. Ledger **437 / 391 / 0 / 46**. Flag UI ON. Persistence OFF. Auth `188_`, `187_`, `186_`, `185_` **consommées**.
+Assets 11A/11B/11C = **preuves techniques privées**. Ledger **437 / 391 / 0 / 46**. Flag UI ON. Persistence OFF. Auth `189_`, `188_`, `187_`, `186_`, `185_` **consommées**.
 
 Phase active suivante :
 
-`AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER`
+`AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER`
 
-**Non exécutée.** Démarrer Docker Desktop + Supabase local, puis rejouer le recheck. **Aucun flag write.** **Aucun** provider. N’invente aucun claim.
+**Non exécutée.** Pousser et déployer jusqu’à `189_` avec persistence **toujours OFF**. **Aucun flag write.** **Aucun** provider. N’invente aucun claim.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `LEO_CURSOR_NEW_CHAT_RESUME.md`.
 2. Lire `CURRENT_STATE_AND_RESUME.md` puis ce fichier.
 3. Vérifier Git (HEAD a pu changer depuis `0f3a3bb` à cause de commits docs).
-4. Recevoir le prochain rapport STOP de Cursor concernant le **recheck après Supabase local** **seulement si Christian l’autorise**.
+4. Recevoir le prochain rapport STOP de Cursor concernant le **sync+deploy hardening** **seulement si Christian l’autorise**.
 5. Ne pas refaire les phases déjà terminées.
 6. Vérifier le rapport et préparer la prochaine porte.
 
-Si `188_` est STOP, la prochaine priorité est le recheck après Supabase local **si** Christian l’autorise. Ne pas activer persistence, RideCloud, AICCOS, ni un moteur réel sans Auth. Aucun flag sans Auth. Distinguer `a785949` (hardening local), `9dce256` (docs `187_`), `baa92c4` (origin/main servi). RideCloud apply reste suspendu. Aucun provider. 0¢. N’invente aucun claim.
+Si `189_` est READY, la prochaine priorité est le sync+deploy du hardening **si** Christian l’autorise, persistence **toujours OFF**. Ne pas activer persistence, RideCloud, AICCOS, ni un moteur réel sans Auth. Aucun flag sans Auth. Distinguer `a785949` (hardening local), `732875c` (docs `188_`), `baa92c4` (origin/main servi). RideCloud apply reste suspendu. Aucun provider. 0¢. N’invente aucun claim.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 

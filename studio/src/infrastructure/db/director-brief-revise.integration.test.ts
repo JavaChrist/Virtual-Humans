@@ -5,7 +5,12 @@
 import assert from "node:assert/strict";
 import { test, after } from "node:test";
 import { resolveLocalSupabaseGate } from "./local-integration.gate";
-import { cleanupWorkspace, createLocalClients, randomUUID } from "./integration-harness";
+import {
+  cleanupWorkspace,
+  createLocalClients,
+  localSyntheticDirectorEnv,
+  randomUUID,
+} from "./integration-harness";
 import { createDirectorPersistenceStack } from "./director-server";
 import { createSupabaseCreateProjectWithBriefPort } from "./repositories/create-project-with-brief";
 import { BRIEF_SCHEMA_VERSION, finalizeBrief } from "@/domain/brief";
@@ -84,10 +89,7 @@ test("VHS-126 — brief rev2 marks marketing stale and blocks production", async
     createdBy: "tester",
   });
 
-  const env = {
-    DIRECTOR_V2_ENABLED: "1",
-    DIRECTOR_V2_PERSISTENCE_ENABLED: "1",
-  };
+  const env = localSyntheticDirectorEnv();
   const stack = createDirectorPersistenceStack({ client, workspaceId, env });
   const at = "2026-08-03T15:05:00.000Z";
 
