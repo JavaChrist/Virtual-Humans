@@ -160,13 +160,15 @@ Phase 11A média          : smoke image réel (`108_`) · ledger 1¢ soldé (`10
                            · **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_READY**
                            Director UI-only preflight (`184_`)
                            · **VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT_READY_FOR_FLAG_AUTH**
-Runtime AI / paid media  : OFF · fonctionnel **d376a7c** · alias Prod **`8081744`** · merge/export **`a602de9`** · lipsync **`366abd6`**
+                           Director UI-only Production (`185_`)
+                           · **VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLED_RUNTIME_OFF**
+Runtime AI / paid media  : OFF · UI-only **ON** · fonctionnel **d376a7c** · alias Prod **`dpl_Fno67njpypVzs3Lxa96P66y9PF9J`** / SHA **`8081744`** · merge/export **`a602de9`** · lipsync **`366abd6`**
 Budget                   : hard 437 / committed 391 / reserved 0 / available 46 ¢
 production_jobs média    : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0                       : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1 ouverts               : flag Auth UI-only · apply CHECK bind kinds suspendu · pricing TTS non ferme
-P1 fermé                 : Director UI-only preflight (`184_`) · Director E2E fake sync+deploy (`183_`) · Director E2E fake hardening (`182_`) · merge/export sync+deploy (`181_`) · merge/export wiring disabled (`180_`) · lipsync sync+deploy (`179_`) · lipsync wiring disabled (`178_`) · blockers docs sync · blockers sync+deploy (`177_`) · blockers workflow (`176_`) · app-update docs sync (`175_`) · app-update sync+deploy (`174_`) · app-update implement (`173_`) · app-update preflight (`172_`) · deploy UI parity (`171_`) · cartes dashboard (`170_`) · SDK tracing (`169_`) · UI parity (`168_`) · remote schema (`167_`) · schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
-Prochaine porte majeure  : AUTH_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_ONCE_NO_PROVIDER_NO_PERSISTENCE_NO_RUNTIME
+P1 ouverts               : décision après UI-only ON · apply CHECK bind kinds suspendu · pricing TTS non ferme
+P1 fermé                 : Director UI-only Production (`185_`) · Director UI-only preflight (`184_`) · Director E2E fake sync+deploy (`183_`) · Director E2E fake hardening (`182_`) · merge/export sync+deploy (`181_`) · merge/export wiring disabled (`180_`) · lipsync sync+deploy (`179_`) · lipsync wiring disabled (`178_`) · blockers docs sync · blockers sync+deploy (`177_`) · blockers workflow (`176_`) · app-update docs sync (`175_`) · app-update sync+deploy (`174_`) · app-update implement (`173_`) · app-update preflight (`172_`) · deploy UI parity (`171_`) · cartes dashboard (`170_`) · SDK tracing (`169_`) · UI parity (`168_`) · remote schema (`167_`) · schema kinds (`166_`) · bind preflight (`165_`) · create idempotent (`164_`) · create preflight (`163_`) · polish VO (`162_`) · durcissement VO (`161_`) · storyboard RideCloud (`160_`) · addendum HD (`159_`) · supply (`158_`) · preflight (`157_`) · clôture 11C (`156_`)
+Prochaine porte majeure  : DECISION_AFTER_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLED
 Living handover          : CURRENT_STATE_AND_RESUME.md
 Reprise nouveau chat     : LEO_CURSOR_NEW_CHAT_RESUME.md
 ```
@@ -420,6 +422,7 @@ Utilisateur → AI Video Director (/director)
 | [`182_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING.md`](./182_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING.md) | **DIRECTOR-E2E-FAKE · VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY** |
 | [`183_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE.md`](./183_PHASE_VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE.md) | **DIRECTOR-E2E-FAKE-DEPLOY · VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_READY** |
 | [`184_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT.md`](./184_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT.md) | **DIRECTOR-UI-ONLY-PREFLIGHT · VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT_READY_FOR_FLAG_AUTH** |
+| [`185_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_AND_DEPLOY_ONCE.md`](./185_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_AND_DEPLOY_ONCE.md) | **DIRECTOR-UI-ONLY-PROD · VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLED_RUNTIME_OFF** |
 | [`75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md`](./75_MT013C_ISOLATED_RESTORE_TARGET_STOP.md) | **MT-013C STOP — coût branche ≠ 0 · pas de restore backup via MCP** |
 | [`76_MT013C_RESTORE_PAID_TARGET_STOP.md`](./76_MT013C_RESTORE_PAID_TARGET_STOP.md) | **MT-013C-PAID STOP — restore backup non disponible via MCP · clone Dashboard requis** |
 | [`77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md`](./77_MT013C_DASHBOARD_QUOTE_PREFLIGHT.md) | **MT-013C-QUOTE CAPTURED — total $10.18/mois · STOP avant Continue** |

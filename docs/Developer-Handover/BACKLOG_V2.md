@@ -245,15 +245,18 @@ Motion     : ARCHITECTURE_READY · MT-001…012 IMPLEMENTED · MT-013A…E DONE
              Director UI-only preflight (`184_`)
              · **VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT_READY_FOR_FLAG_AUTH**
              · 0 flag write · 0 deploy · 0 push
+             Director UI-only Production (`185_`)
+             · **VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLED_RUNTIME_OFF**
+             · 1 flag write · 1 deploy · 0 push · persistence OFF
              MV001 = PASS_WITH_HUMAN_APPROVAL · Motion Registry DISABLED
              RUNTIME_MOTION = UNAVAILABLE · RUNTIME_PAID_MEDIA = OFF
 Budget     : 437 / committed **391** / reserved **0** / available **46**
 Runtime AI : OFF
 Media jobs : 2 image + 1 I2V + 1 Voice completed · 1 MP4 + 1 MP3 approved inactifs
 P0         : pas de 3e OpenAI · ne pas activer les assets · 0 second submit fal/ElevenLabs
-P1         : flag Auth UI-only · apply CHECK bind kinds bloqué · pricing TTS non ferme
-P1 fermé   : Director UI-only preflight · Director E2E fake sync+deploy · Director E2E fake hardening · merge/export sync+deploy · merge/export wiring disabled · lipsync sync+deploy · lipsync wiring disabled · blockers docs sync · blockers sync+deploy · blockers workflow · app-update docs sync · app-update sync+deploy · app-update implement · app-update preflight · deploy UI parity · cartes dashboard · SDK tracing · UI parity · remote schema RideCloud · schema kinds RideCloud · bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
-Next major : AUTH_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_ONCE_NO_PROVIDER_NO_PERSISTENCE_NO_RUNTIME
+P1         : décision après UI-only ON · apply CHECK bind kinds bloqué · pricing TTS non ferme
+P1 fermé   : Director UI-only Production · Director UI-only preflight · Director E2E fake sync+deploy · Director E2E fake hardening · merge/export sync+deploy · merge/export wiring disabled · lipsync sync+deploy · lipsync wiring disabled · blockers docs sync · blockers sync+deploy · blockers workflow · app-update docs sync · app-update sync+deploy · app-update implement · app-update preflight · deploy UI parity · cartes dashboard · SDK tracing · UI parity · remote schema RideCloud · schema kinds RideCloud · bind preflight RideCloud · create idempotent RideCloud · create preflight RideCloud · polish VO RideCloud · durcissement VO RideCloud · storyboard RideCloud · addendum HD RideCloud · supply RideCloud · preflight RideCloud · clôture 11C · Voice HR APPROVE
+Next major : DECISION_AFTER_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLED
 RideCloud apply : SUSPENDED (AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER)
 ```
 
@@ -357,7 +360,8 @@ RideCloud apply : SUSPENDED (AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_RE
 - **Director E2E fake operability** ✅ **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENED_READY** (`182_`) — SHA `d376a7c` · 38/38 Playwright · 0 moteur · 0 flag · 0¢.
 - **Director E2E fake sync+deploy** ✅ **VHS_DIRECTOR_END_TO_END_FAKE_OPERABILITY_HARDENING_SYNC_AND_DEPLOY_ONCE_READY** (`183_`) — 1 push · Ready `ad4a909` · docs `8081744` · UI Prod **non ouverte** · 0 moteur · 0 flag · 0¢.
 - **Director UI-only preflight** ✅ **VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_PREFLIGHT_READY_FOR_FLAG_AUTH** (`184_`) — isolé local · persistence OFF · 0 flag write · 0 deploy · 0 push · 0¢.
-- **Prochaine porte majeure** : Auth **`AUTH_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_ONCE_NO_PROVIDER_NO_PERSISTENCE_NO_RUNTIME`** — **non exécutée** · flag UI seulement · persistence OFF · 0 moteur. RideCloud apply **suspendu**. Living handover : `CURRENT_STATE_AND_RESUME.md`.
+- **Director UI-only Production** ✅ **VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLED_RUNTIME_OFF** (`185_`) — `DIRECTOR_V2_ENABLED=1` · persistence OFF · 1 deploy `dpl_Fno67njpypVzs3Lxa96P66y9PF9J` · 0 push · 0¢.
+- **Prochaine porte majeure** : **`DECISION_AFTER_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLED`** — sync docs `184_`+`185_` · persistence · preflight capacité réelle. **Aucun runtime implicite.** RideCloud apply **suspendu**. Living handover : `CURRENT_STATE_AND_RESUME.md`.
 - Budget : hard **274** / committed **112** / available **162** (`87_`).
 - MT-005 remote : **APPLIED** (`82_`). Privacy : **ACCEPTED_LIMITED** (`81_`).
 - Cible restore `qmsh…qlnq` : **supprimée** (`80_`).
