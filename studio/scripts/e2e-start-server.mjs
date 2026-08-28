@@ -3,11 +3,13 @@
  * Uses `next start` to avoid Next.js single-dev-instance lock.
  * Requires a prior `npm run build`.
  *
- * Usage: node scripts/e2e-start-server.mjs [--off] [--ui-only] [--port=3100]
+ * Usage: node scripts/e2e-start-server.mjs [--off] [--ui-only] [--persistence-only] [--port=3100]
  *
  * --ui-only reads the off env file then forces DIRECTOR_V2_ENABLED=1 in this
  * process only, with every paid / AI / worker / persistence / E2E flag OFF.
- * That local value is never written to Vercel or committed.
+ * --persistence-only is the same isolation plus DIRECTOR_V2_PERSISTENCE_ENABLED=1
+ * (local Supabase from the off env file; never Production; never Vercel write).
+ * Those local values are never written to Vercel or committed.
  */
 import { spawn } from "node:child_process";
 import { readFileSync, existsSync } from "node:fs";
@@ -64,9 +66,21 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 const off = process.argv.includes("--off");
 const uiOnly = process.argv.includes("--ui-only");
+const persistenceOnly = process.argv.includes("--persistence-only");
 const portArg = process.argv.find((a) => a.startsWith("--port="));
-const port = portArg ? portArg.split("=")[1] : uiOnly ? "3112" : off ? "3110" : "3100";
-const envFile = join(root, off || uiOnly ? ".e2e-server-off.env" : ".e2e-server.env");
+const port = portArg
+  ? portArg.split("=")[1]
+  : persistenceOnly
+    ? "3113"
+    : uiOnly
+      ? "3112"
+      : off
+        ? "3110"
+        : "3100";
+const envFile = join(
+  root,
+  off || uiOnly || persistenceOnly ? ".e2e-server-off.env" : ".e2e-server.env",
+);
 
 if (!existsSync(envFile)) {
   console.error("e2e-start-server: run `node scripts/e2e-prepare.mjs` first.");
@@ -86,10 +100,13 @@ for (const line of readFileSync(envFile, "utf8").split(/\r?\n/)) {
   fileEnv[t.slice(0, i)] = t.slice(i + 1);
 }
 
-if (uiOnly) {
+if (uiOnly || persistenceOnly) {
   fileEnv.DIRECTOR_V2_ENABLED = "1";
   for (const name of UI_ONLY_FORCE_OFF) {
     fileEnv[name] = "0";
+  }
+  if (persistenceOnly) {
+    fileEnv.DIRECTOR_V2_PERSISTENCE_ENABLED = "1";
   }
 }
 

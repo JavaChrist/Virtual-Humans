@@ -6,7 +6,7 @@ Ce fichier décrit le **rôle Léo**. Pour un nouveau chat Léo **ou** Cursor, l
 
 `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`
 
-Audit de reprise : **2026-08-28**. Statut : `185_` / `VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLED_RUNTIME_OFF`. E2E fake HARDENED DEPLOY READY (`183_`, SHA docs `8081744` · tree `d376a7c`). Merge/export **WIRED_DISABLED**. Lipsync DEPLOY READY (`179_`). App update blockers DEPLOY READY (`177_`).
+Audit de reprise : **2026-08-28**. Statut : `186_` / `VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_BLOCKED_HARDENING_REQUIRED`. UI-only ON / RUNTIME OFF (`185_`, SHA servi `baa92c4`). Merge/export **WIRED_DISABLED**. RideCloud apply **suspendu**.
 
 Léo ne code pas directement dans le dépôt. **Cursor code, teste, met à jour la documentation, produit un rapport STOP, commit et push.** Léo analyse chaque retour, décide de la porte suivante et rédige le prochain prompt complet destiné à Cursor.
 
