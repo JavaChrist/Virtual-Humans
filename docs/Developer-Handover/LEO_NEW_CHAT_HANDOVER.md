@@ -6,7 +6,7 @@ Ce fichier décrit le **rôle Léo**. Pour un nouveau chat Léo **ou** Cursor, l
 
 `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`
 
-Audit de reprise : **2026-08-28**. Statut : `189_` / `VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_READY_FOR_HARDENING_SYNC_AND_DEPLOY_AUTH`. UI-only ON / RUNTIME OFF (`185_`, SHA servi `baa92c4`). Persistence **OFF**. Recheck local **READY**. RideCloud apply **suspendu**.
+Audit de reprise : **2026-08-28**. Statut : `190_` / `VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_READY`. UI-only ON / RUNTIME OFF (`185_`, SHA servi `1cadcb0`). Persistence **OFF**. Hardening **DEPLOY READY**. RideCloud apply **suspendu**.
 
 Léo ne code pas directement dans le dépôt. **Cursor code, teste, met à jour la documentation, produit un rapport STOP, commit et push.** Léo analyse chaque retour, décide de la porte suivante et rédige le prochain prompt complet destiné à Cursor.
 
@@ -180,26 +180,26 @@ L’activation de l’image n’est pas la prochaine étape : le pipeline doit a
 
 ## Phase active au changement de chat
 
-Director UI-only est **ON / RUNTIME OFF** (`185_`). Persistence hardening **HARDENED** (`187_`, SHA local `a785949`). Recheck local **READY** (`189_`). Preflight local `186_` / `184_`. E2E fake est **HARDENED DEPLOY READY** (`183_`). Merge/export **WIRED_DISABLED**. RideCloud apply **suspendu**.
+Director UI-only est **ON / RUNTIME OFF** (`185_`). Persistence hardening **HARDENED DEPLOY READY** (`190_`, SHA servi `1cadcb0`, tree `a785949`). Recheck local **READY** (`189_`). Preflight local `186_` / `184_`. E2E fake est **HARDENED DEPLOY READY** (`183_`). Merge/export **WIRED_DISABLED**. RideCloud apply **suspendu**.
 
-Assets 11A/11B/11C = **preuves techniques privées**. Ledger **437 / 391 / 0 / 46**. Flag UI ON. Persistence OFF. Auth `189_`, `188_`, `187_`, `186_`, `185_` **consommées**.
+Assets 11A/11B/11C = **preuves techniques privées**. Ledger **437 / 391 / 0 / 46**. Flag UI ON. Persistence OFF. Auth `190_`, `189_`, `188_`, `187_`, `186_`, `185_` **consommées**.
 
 Phase active suivante :
 
-`AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER`
+`AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_DOCS_SYNC_ONCE_NO_FLAG_WRITE_NO_PROVIDER`
 
-**Non exécutée.** Pousser et déployer jusqu’à `189_` avec persistence **toujours OFF**. **Aucun flag write.** **Aucun** provider. N’invente aucun claim.
+**Non exécutée.** Publier uniquement le rapport `190_`, sans nouvelle boucle `191_`. Persistence **toujours OFF**. **Aucun flag write.** **Aucun** provider. N’invente aucun claim.
 
 ## Première action du nouveau chat
 
 1. Lire entièrement `LEO_CURSOR_NEW_CHAT_RESUME.md`.
 2. Lire `CURRENT_STATE_AND_RESUME.md` puis ce fichier.
 3. Vérifier Git (HEAD a pu changer depuis `0f3a3bb` à cause de commits docs).
-4. Recevoir le prochain rapport STOP de Cursor concernant le **sync+deploy hardening** **seulement si Christian l’autorise**.
+4. Recevoir le prochain rapport STOP de Cursor concernant le **docs sync once `190_`** **seulement si Christian l’autorise**.
 5. Ne pas refaire les phases déjà terminées.
 6. Vérifier le rapport et préparer la prochaine porte.
 
-Si `189_` est READY, la prochaine priorité est le sync+deploy du hardening **si** Christian l’autorise, persistence **toujours OFF**. Ne pas activer persistence, RideCloud, AICCOS, ni un moteur réel sans Auth. Aucun flag sans Auth. Distinguer `a785949` (hardening local), `732875c` (docs `188_`), `baa92c4` (origin/main servi). RideCloud apply reste suspendu. Aucun provider. 0¢. N’invente aucun claim.
+Si `190_` est READY, la prochaine priorité est de publier `190_` **si** Christian l’autorise, persistence **toujours OFF**. Ne pas activer persistence, RideCloud, AICCOS, ni un moteur réel sans Auth. Aucun flag sans Auth. Distinguer `a785949` (fonctionnel), `1cadcb0` (servi), commit `190_` (docs local). RideCloud apply reste suspendu. Aucun provider. 0¢. N’invente aucun claim.
 
 Un second appel I2V payant ne pourra être autorisé que par une nouvelle autorisation humaine explicite dans le chat courant.
 
@@ -223,4 +223,4 @@ Ne jamais fragmenter un prompt en plusieurs messages ou plusieurs blocs indépen
 
 ## Directive de reprise à copier dans un nouveau chat
 
-Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `187_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La prochaine porte est le recheck preflight persistence. Director UI-only ON / RUNTIME OFF (`185_`). Persistence HARDENED (`187_`, `a785949`) · flag OFF. E2E fake HARDENED DEPLOY READY (`183_`, SHA docs `8081744` · tree `d376a7c`). Merge/export WIRED_DISABLED (`181_`, tree `a602de9`). Lipsync WIRED_DISABLED DEPLOY READY (`179_`). App update blockers DEPLOY READY (`177_`). RideCloud apply suspendu (`167_` READY). Migration locale 33e · 0 apply. Pack `158_`+`159_`. Budget 437/391/0/46. Flag UI ON. Persistence OFF. Auth `187_` / `186_` / `185_` / `184_` / `183_` / `182_` / `181_` / `180_` / `179_` / `178_` / `177_` consommées. Aucun moteur. 0¢. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. Aucun apply. Aucune RPC. Aucun persist bind. Aucun média Git. N’invente aucun claim. Aucun merge réel. Aucune activation. Distinguer `a785949` (hardening local), `4713d33` (preflight `186_`), `baa92c4` (origin/main servi). Ne pas câbler AICCOS.
+Tu es Léo, CTO et chef d’orchestre de Virtual Humans Studio. Cursor code, teste, documente, commit et push ; tu ne codes pas directement. Lis entièrement `docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md`, puis `CURRENT_STATE_AND_RESUME.md` et `190_`. Reprends à la phase active sans rejouer les phases terminées. Analyse chaque rapport STOP de Cursor, protège les providers, coûts, médias et environnements, puis fournis à Christian le prochain prompt Cursor sous la forme d’un seul document continu. La prochaine porte est le docs sync once de `190_`. Director UI-only ON / RUNTIME OFF (`185_`). Persistence HARDENED DEPLOY READY (`190_`, SHA servi `1cadcb0`, tree `a785949`) · flag OFF. E2E fake HARDENED DEPLOY READY (`183_`). Merge/export WIRED_DISABLED (`181_`, tree `a602de9`). Lipsync WIRED_DISABLED DEPLOY READY (`179_`). App update blockers DEPLOY READY (`177_`). RideCloud apply suspendu (`167_` READY). Migration locale 33e · 0 apply. Pack `158_`+`159_`. Budget 437/391/0/46. Flag UI ON. Persistence OFF. Auth `190_` / `189_` / `188_` / `187_` / `186_` / `185_` / `184_` / `183_` / `182_` / `181_` / `180_` / `179_` / `178_` / `177_` consommées. Aucun moteur. 0¢. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. Aucun apply. Aucune RPC. Aucun persist bind. Aucun média Git. N’invente aucun claim. Aucun merge réel. Aucune activation. Distinguer `a785949` (fonctionnel), `1cadcb0` (servi), commit `190_` (docs local). Ne pas câbler AICCOS.
