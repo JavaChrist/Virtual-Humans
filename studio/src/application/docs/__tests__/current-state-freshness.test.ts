@@ -44,7 +44,7 @@ test("freshness — living file parses and required markers present", async () =
   const markers = mod.parseCurrentStateMarkers(markdown);
   assert.equal(
     markers.nextPhase,
-    "AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER",
+    "AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER",
   );
   assert.equal(markers.budgetHard, "437");
   assert.equal(markers.runtimePaidMedia, "OFF");

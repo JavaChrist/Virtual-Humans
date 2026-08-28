@@ -176,6 +176,7 @@
 **director_capability_disabled** — code HTTP stable `187_` (503) lorsqu’une capability d’exécution est OFF ; message utilisateur non technique.
 **director_project_quota_exceeded** — code HTTP stable `187_` (409) lorsque le plafond de 50 projets non archivés par workspace est atteint ; replay idempotent autorisé.
 **VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENED_READY_FOR_PREFLIGHT_RECHECK** — verdict `187_` : 25 routes classées · 0 execute persistence-only · quota 50 · 0 flag write · prochaine porte = recheck preflight.
+**VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_BLOCKED_LOCAL_INTEGRATION_REQUIRED** — verdict `188_` : adversariaux 21/21 verts · READY interdit faute de base locale isolée fraîche.
 
 ## Termes proscrits
 

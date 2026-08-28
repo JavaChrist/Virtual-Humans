@@ -1,33 +1,34 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-28T12:00:00+02:00
-documentedHead=a785949
+verifiedAt=2026-08-28T11:15:00+02:00
+documentedHead=9dce256
 headStatus=pending commit
-lastPhaseReport=187_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_IMPLEMENT.md
-nextPhase=AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER
+lastPhaseReport=188_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK.md
+nextPhase=AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
 budgetAvailable=46
 runtimePaidMedia=OFF
-unitTests=2058/2058
-globalStatus=VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENED_READY_FOR_PREFLIGHT_RECHECK
+unitTests=2064/2064
+globalStatus=VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_BLOCKED_LOCAL_INTEGRATION_REQUIRED
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENED_READY_FOR_PREFLIGHT_RECHECK`  
-**Dernière vérification :** 2026-08-28 · Director persistence hardening `187_` · UI-only **ON** · persistence **OFF** · **0** flag write · **0** deploy · **0** push · **0** moteur  
-**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_IMPLEMENT_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER`  
+**Statut global :** `VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_BLOCKED_LOCAL_INTEGRATION_REQUIRED`  
+**Dernière vérification :** 2026-08-28 · Director persistence recheck `188_` · UI-only **ON** · persistence **OFF** · intégration locale **absente** · **0** flag write · **0** deploy · **0** push · **0** moteur  
+**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER_NO_PRODUCTION_WRITE`  
 **Branche :** `main`  
-**HEAD origin/main :** `baa92c4` · fonctionnel local **`a785949`** · preflight `4713d33` · ahead attendu **`3/0`** après commit docs  
+**HEAD origin/main :** `baa92c4` · fonctionnel local **`a785949`** · docs `187_` `9dce256` · ahead attendu **`4/0`** après commit `188_`  
 **Working tree :** 2 AICCOS hors scope (dirty, protégés)  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Alias Production actuel :** `dpl_8Bq6MJ72…` · SHA **`baa92c4`** · tree hardening = `d376a7c` · tree merge/export = `a602de9` · tree lipsync = `366abd6`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
 **Reprise nouveau chat :** [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)  
-**Dernier rapport de porte :** [`187_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_IMPLEMENT.md`](./187_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_IMPLEMENT.md)  
+**Dernier rapport de porte :** [`188_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK.md`](./188_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK.md)  
+**Director persistence recheck :** [`188_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK.md`](./188_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK.md)  
 **Director persistence hardening :** [`187_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_IMPLEMENT.md`](./187_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_IMPLEMENT.md)  
 **Director persistence preflight :** [`186_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT.md`](./186_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT.md)  
 **Director UI-only Production :** [`185_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_AND_DEPLOY_ONCE.md`](./185_PHASE_VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLEMENT_FLAG_WRITE_AND_DEPLOY_ONCE.md)  
@@ -58,7 +59,7 @@ globalStatus=VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENED_READY_FOR_P
 **Storyboard initial :** [`160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md`](./160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md)  
 **Addendum HD :** [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md)  
 **Supply RideCloud :** [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md)  
-**Prochaine phase exacte :** recheck preflight persistence sur le code durci — **aucun flag write**, **aucun write Production**. Le flag persistence n’est autorisable qu’après `READY_FOR_FLAG_AND_WRITE_AUTH`. **Aucun runtime implicite.**  
+**Prochaine phase exacte :** rejouer le recheck preflight **après** Supabase local isolé (Docker Desktop running). **Aucun flag write.** Le flag persistence n’est autorisable qu’après `READY_FOR_FLAG_AND_WRITE_AUTH`. **Aucun runtime implicite.**  
 **RideCloud apply :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER` — **suspendue, non consommée**
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
@@ -97,13 +98,13 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Overlay typographique | **WIRED_DISABLED** · 1.2.0 **HUMAN_APPROVED** privé inactif | checksum `9ac484b7…` · décision `fb2f886c…` |
 | Motion Transfer | **PASS_REAL** benchmark only | MV-001 APPROVE · Registry **DISABLED** · **hors** 11B |
 | I2V `/director` | **11B CLOSED** · attempt **completed** · vidéo inactive | `138_` · 1 CAS · pointeurs durcis `139_` |
-| T2V / lipsync / merge-export réels | lipsync **WIRED_DISABLED** · merge/export **WIRED_DISABLED** · E2E fake **HARDENED DEPLOY READY** · UI-only **ON / RUNTIME OFF** · persistence **HARDENED READY_FOR_RECHECK** · flag OFF | `178_`/`180_`/`182_`/`183_`/`184_`/`185_`/`186_`/`187_` · alias `dpl_8Bq6MJ72…` · SHA `baa92c4` · tree local `a785949` · 0 moteur |
+| T2V / lipsync / merge-export réels | lipsync **WIRED_DISABLED** · merge/export **WIRED_DISABLED** · E2E fake **HARDENED DEPLOY READY** · UI-only **ON / RUNTIME OFF** · persistence **HARDENED** · recheck **BLOCKED_LOCAL_INTEGRATION** · flag OFF | `178_`/`180_`/`182_`/`183_`/`184_`/`185_`/`186_`/`187_`/`188_` · alias `dpl_8Bq6MJ72…` · SHA `baa92c4` · tree local `a785949` · 0 moteur |
 | Voice / TTS `/director` | **11C CLOSED** · PASS_WITH_NOTES · 1 audio privé inactif | `140_`–`156_` · 1 ElevenLabs · HR APPROVE `068a2b25…` · flags OFF |
 | Production runtime flags | **OFF** | Paid Media / VHS-124 / VHS-11B / VHS-11C / Motion / Director Paid AI |
 | RideCloud promo | **BIND KIND SCHEMA REMOTE PREFLIGHT READY** · apply **suspendu** | `167_` · CHECK distant 13 kinds · 0 apply |
 | UI localhost vs Production | **deploy Ready** · SHA `e4703bf` prouvé · alias docs `c808fa2` | `171_` · tracing + cartes · Director flag OFF |
 | App update / PWA | **BLOCKERS DEPLOY READY** · SHA build `134631d` · fonctionnel `045f48a` | `177_` · docs sync **terminée** · 0 flag |
-| Prochaine étape | **recheck preflight persistence** | `187_` HARDENED · 25 routes classées · 0 execute persistence-only · 0 flag write |
+| Prochaine étape | **recheck après Supabase local** | `188_` BLOCKED_LOCAL_INTEGRATION · Docker daemon OFF · 0 flag write |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -119,7 +120,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Vercel Production SHA | souvent égalé à HEAD | Alias **actuel** `es3e5zdlm-…` / `dpl_82gNhGqe…` · **`githubCommitSha=7d1c34c`** (docs `176_`) · tree blockers `045f48a` | ne pas promouvoir `7d1c34c` comme le seul SHA fonctionnel |
 | Dashboard cartes 00_IDENTITY | Production « en retard » | **tree `e4703bf` dans l’image** · cartes absentes du source · live dashboard derrière login | implémentation `/api/version` |
 | SDK unknown | version manquante du personnage | tracing `169_` **dans** `e4703bf` · live `SDK 1.0.0` **non lu** (401) | session opérateur ou `/api/version` implement |
-| Réalisateur IA | code absent en Production | UI-only **ON** en Production (`185_`) · persistence **HARDENED** (`187_`) · flag OFF · `/api/director/*` 401 sans session | recheck preflight puis Auth flag distincte |
+| Réalisateur IA | code absent en Production | UI-only **ON** (`185_`) · persistence **HARDENED** (`187_`) · recheck **BLOCKED_LOCAL_INTEGRATION** (`188_`) · flag OFF · `/api/director/*` 401 | Docker local puis recheck |
 | pgTAP 378 / intégration 33 | présentés comme courants dans `17_` | **historiques** post-10A (11 août) · non relancés le 14 août | datés ci-dessous |
 
 ---
@@ -151,7 +152,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | Merge / export | **WIRED_DISABLED** · E2E fake **HARDENED DEPLOY READY** | `180_`/`181_`/`182_`/`183_` | fake metadata · SHA build `ad4a909` · tree `d376a7c` · `mergeExportAuthorized=false` | — | 0 | 0 moteur · 0 fichier · 0 URL | docs sync once |
 | RideCloud promo | **BIND PREFLIGHT READY** · apply **suspendu** | `167_` | contrat + manifeste conçus · 0 persist | — | 0 | kinds absents du CHECK · apply non consommé | apply once (suspendu) |
 | Motion Transfer | PASS_REAL benchmark | `97_`–`100_` | 1 appel fal · HR APPROVE | fal Kling MC | 135 | Registry DISABLED | MV-002 DEFERRED |
-| UI finale | **UI-only ON / RUNTIME OFF** · persistence **HARDENED READY_FOR_RECHECK** | `187_` | SHA `baa92c4` · tree local `a785949` · session voit Director · persistence OFF | — | 0 | flag persistence OFF | recheck preflight |
+| UI finale | **UI-only ON / RUNTIME OFF** · persistence **HARDENED** · recheck **BLOCKED_LOCAL** | `188_` | SHA `baa92c4` · tree local `a785949` · Docker daemon OFF | — | 0 | intégration locale | recheck après Supabase local |
 | App update PWA | **BLOCKERS DEPLOY READY** · docs sync **terminée** | `177_` | 18 workflows · 0 SW write · SHA build `134631d` | — | 0 | AICCOS non câblé · blocker E2E=0 | hors scope |
 | Monitoring / ops | PREPARED | VHS-005 | redaction logs | — | 0 | traces distribuées | avant Production |
 | Documentation / release | PASS_REAL living | cette phase | ce fichier | — | 0 | fraîcheur à tenir | script freshness |
@@ -344,7 +345,7 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **2058/2058** | suite + hardening persistence `187_` | 2026-08-28 `187_` |
+| Unitaires | **2064/2064** | suite + harnais adversatif `188_` | 2026-08-28 `188_` |
 | Typecheck / lint / build | **PASS** | `next build` local + NFT `/api/character` | `169_` |
 | migrations-static | PASS | **33 local** · remote 32 | `167_` |
 | Secret scan | **PASS** | module + docs · `VOICE_IDS_EXPOSED=false` | `167_` |
@@ -352,7 +353,7 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 | DB integration | N/A (stack locale non relancée) | **indisponible** 16 août | `153_` |
 | pgTAP | 378 | **historique** | 11 août / 10A |
 | Intégration DB | 33/33 | **historique** | 11 août / 10A |
-| E2E Playwright `/director` | OFF 1/1 · UI-only isolé 4/4 · persistence-only 3113 **4/4** · chemin durable skippé (Docker down) | `187_` local | 2026-08-28 |
+| E2E Playwright `/director` | persistence-only 3113 **4/4** · chemin durable **skippé** (`ECONNREFUSED 54321`) | `188_` local | 2026-08-28 |
 | Fraîcheur living handover | PASS | tooling | `184_` |
 
 Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
@@ -403,12 +404,13 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 - Director UI-only preflight : **READY_FOR_FLAG_AUTH** (`184_`) · isolé local · 0 flag write · 0 deploy · **consommée**.
 - Director UI-only Production : **ENABLED / RUNTIME OFF** (`185_`) · `DIRECTOR_V2_ENABLED=1` · persistence **OFF** · alias `dpl_8Bq6MJ72…` · SHA `baa92c4` · 0 moteur.
 - Director persistence preflight : **BLOCKED_HARDENING_REQUIRED** (`186_`) · schéma READY · 0 flag write · 0 deploy · **consommée**.
-- Director persistence hardening : **HARDENED_READY_FOR_PREFLIGHT_RECHECK** (`187_`) · 25 routes classées · quota 50 · 0 execute persistence-only · 0 flag write · 0 deploy.
+- Director persistence hardening : **HARDENED_READY_FOR_PREFLIGHT_RECHECK** (`187_`) · 25 routes classées · quota 50 · 0 execute persistence-only · 0 flag write · 0 deploy · **consommée**.
+- Director persistence recheck : **BLOCKED_LOCAL_INTEGRATION_REQUIRED** (`188_`) · 21/21 adversariaux · Docker daemon OFF · 0 flag write.
 - MV-002 DEFERRED.
 
 ### P0/P1 fermés (extraits)
 
-- Director persistence hardening (`187_`) · Director persistence preflight (`186_`) · Director UI-only Production (`185_`) · Director UI-only preflight (`184_`) · Director E2E fake sync+deploy (`183_`) · Director E2E fake hardening (`182_`) · Merge/export `/director` wiring sync+deploy (`181_`) · Merge/export `/director` wiring disabled (`180_`) · Lipsync `/director` wiring disabled (`178_`) · App update blockers docs sync (terminée, pas de rapport séparé) · App update blockers sync+deploy (`177_`) · App update blockers workflow (`176_`) · App update versioning docs sync (`175_`) · App update versioning sync+deploy (`174_`) · App update versioning implement (`173_`) · App update versioning preflight (`172_`) · UI parity deploy once (`171_`) · Cartes dashboard isolate (`170_`) · SDK_VERSION tracing (`169_`) · UI parity Production (`168_`) · Bind kind schema remote RideCloud (`167_`) · Bind kind schema RideCloud (`166_`) · Bind preflight RideCloud (`165_`) · Create idempotent RideCloud (`164_`) · Preflight create RideCloud (`163_`) · Polish VO RideCloud (`162_`) · Durcissement VO RideCloud (`161_`) · Storyboard RideCloud (`160_`) · Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
+- Director persistence recheck (`188_`) · Director persistence hardening (`187_`) · Director persistence preflight (`186_`) · Director UI-only Production (`185_`) · Director UI-only preflight (`184_`) · Director E2E fake sync+deploy (`183_`) · Director E2E fake hardening (`182_`) · Merge/export `/director` wiring sync+deploy (`181_`) · Merge/export `/director` wiring disabled (`180_`) · Lipsync `/director` wiring disabled (`178_`) · App update blockers docs sync (terminée, pas de rapport séparé) · App update blockers sync+deploy (`177_`) · App update blockers workflow (`176_`) · App update versioning docs sync (`175_`) · App update versioning sync+deploy (`174_`) · App update versioning implement (`173_`) · App update versioning preflight (`172_`) · UI parity deploy once (`171_`) · Cartes dashboard isolate (`170_`) · SDK_VERSION tracing (`169_`) · UI parity Production (`168_`) · Bind kind schema remote RideCloud (`167_`) · Bind kind schema RideCloud (`166_`) · Bind preflight RideCloud (`165_`) · Create idempotent RideCloud (`164_`) · Preflight create RideCloud (`163_`) · Polish VO RideCloud (`162_`) · Durcissement VO RideCloud (`161_`) · Storyboard RideCloud (`160_`) · Addendum HD RideCloud (`159_`) · Supply RideCloud (`158_`) · Preflight RideCloud (`157_`) · Clôture 11C (`156_`) · Voice HR APPROVE (`155_`) · first paid TTS (`153_`) · live preflight TTS (`152_`) · binding narrateur I2V write (`151_`) · binding preflight (`150_`) · seed/consent transaction (`149_`) · seed/consent preflight (`148_`) · grant apply (`147_`) · grant apply preflight (`146_`) · grant hardening local (`145_`) · apply Voice catalog (`144_`) · preflight remote Voice (`143_`) · catalogue Voice (`142_`) · binding narrateur (`141_`) · wiring Voice (`140_`) · cohérence pointeurs (`139_`) · reconciliation live attempt (`138_`) · preflight reconciliation (`137_`) · hardening attempt I2V (`136_`) · clôture 11B (`135_`) · HR I2V APPROVE (`134_`) · first paid I2V (`133_`) · paid smoke final preflight (`132_`) · hard limit 437¢ (`131_`) · live preflight I2V no provider (`130_`) · wiring I2V `/director` (`129_`) · clôture 11A + roadmap (`128_`) · HR 1.2.0 APPROVE (`127_`) · preview privée 1.2.0 · execution 1.2.0 (`126_`) · preflight parent réel 1.2.0 (`125_`) · typo/layout 1.2.0 local (`124_`) · HR 1.1.0 REJECT (`123_`) · execution recomposition 1.1.0 (`122_`) · preflight 1.1.0 (`121_`) · diagnostic glyphes (`120_`) · HR composed REJECT (`119_`) · compose execution (`118_`) · decode PNG 0–4 (`116_`) · paid text-free (`115_`) · HR smoke REJECT (`110_`) · restore (`78_`) · MT-005 (`82_`).
 
 ### Décisions humaines en attente
 
@@ -485,6 +487,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 | Director UI-only Production enablement | **fait** (`185_`) | 0¢ · 1 flag write · 1 deploy · RUNTIME OFF | consommée | — |
 | Director persistence Production preflight | **fait** (`186_`) | 0¢ · 0 flag · 0 deploy · **BLOCKED_HARDENING** | consommée | hardening isolé |
 | Director persistence Production hardening | **fait** (`187_`) | 0¢ · 0 flag · SHA `a785949` · **HARDENED** | consommée | recheck preflight |
+| Director persistence Production recheck | **fait** (`188_`) | 0¢ · 0 flag · **BLOCKED_LOCAL_INTEGRATION** | consommée | Docker local puis recheck |
 | MV-002 | rester DEFERRED / designer plus tard | coût fal | Auth Motion dédiée | fal / Registry |
 | Ouvrir flags Production | non par défaut | runtime payant | Auth flags | Vercel write |
 
@@ -494,7 +497,7 @@ Ne pas présenter 378/33/E2E comme relancés aujourd’hui.
 
 ### Immédiat
 
-**`AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_IMPLEMENT_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER`** — **consommée** (`187_`). 25 routes classées. Persistence **OFF**. Prochaine porte : **recheck preflight** sur le code durci. **Aucun flag write.** Le flag persistence n’est autorisable qu’après `READY_FOR_FLAG_AND_WRITE_AUTH`.
+**`AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_NO_FLAG_WRITE_NO_DEPLOY_NO_PROVIDER_NO_PRODUCTION_WRITE`** — **consommée** (`188_`). Adversariaux 21/21. Persistence **OFF**. Intégration locale **absente**. Prochaine porte : **même recheck après Supabase local**. **Aucun flag write.**
 
 RideCloud **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** — **suspendue, non consommée**. 0 apply.
 
@@ -521,14 +524,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A/11B/11C CLOSED · lipsync WIRED_DISABLED · merge/export WIRED_DISABLED · E2E fake HARDENED DEPLOY READY · UI-only ON / RUNTIME OFF (185_) · persistence HARDENED (187_) · flag OFF · RideCloud apply SUSPENDU
-Dernier verdict : VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENED_READY_FOR_PREFLIGHT_RECHECK (187_)
-Preuve : alias dpl_8Bq6MJ72… · SHA servi baa92c4 · tree local a785949 · directorV2 live ON · persistence OFF · 0 provider
-Blocage : flag persistence OFF · recheck requis avant toute Auth flag
-Mission : recheck preflight persistence sur le code durci. Aucun flag write.
-Auth consommées : persistence hardening (187_) · persistence preflight (186_) · UI-only Production (185_) · UI-only preflight (184_)
-Interdit : persistence ON · moteur · apply RideCloud · câbler AICCOS
-Attendu : Auth recheck nommée · 0 runtime implicite
+Contexte : VHS V2 · 11A/11B/11C CLOSED · lipsync WIRED_DISABLED · merge/export WIRED_DISABLED · E2E fake HARDENED DEPLOY READY · UI-only ON / RUNTIME OFF (185_) · persistence HARDENED (187_) · recheck BLOCKED_LOCAL (188_) · flag OFF · RideCloud apply SUSPENDU
+Dernier verdict : VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_BLOCKED_LOCAL_INTEGRATION_REQUIRED (188_)
+Preuve : alias dpl_8Bq6MJ72… · SHA servi baa92c4 · tree local a785949 · Docker daemon OFF · 0 provider
+Blocage : pas de base locale isolée · READY interdit sans intégration durable fraîche
+Mission : démarrer Docker Desktop + supabase start, puis re-autoriser le recheck. Aucun flag write.
+Auth consommées : persistence recheck (188_) · hardening (187_) · preflight (186_) · UI-only Production (185_)
+Interdit : persistence ON · moteur · apply RideCloud · câbler AICCOS · installer Docker sans humain
+Attendu : Auth recheck après Supabase local · 0 runtime implicite
 ```
 
 ---
@@ -537,12 +540,12 @@ Attendu : Auth recheck nommée · 0 runtime implicite
 
 ```text
 Lis d’abord docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md.
-Lis ensuite CURRENT_STATE_AND_RESUME.md et 187_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_IMPLEMENT.md.
-Vérifie Git. Persistence HARDENED (187_, a785949) · UI-only ON / RUNTIME OFF (185_) · origin/main baa92c4 · ahead 3/0 · alias dpl_8Bq6MJ72…. SHA merge/export = a602de9. SHA lipsync = 366abd6. RideCloud apply suspendu (167_ READY, 0 apply). Pack 158_+159_. Storyboard 26 s. 11C CLOSED. Budget 437/391/0/46.
-Flag UI ON. Persistence OFF. Autres runtimes OFF. Auth 187_ / 186_ / 185_ / 184_ / 183_ / 182_ / 181_ / 180_ / 179_ / 178_ / 177_ / 176_ / 175_ / 174_ / 173_ / 172_ / 171_ / 170_ / 169_ / 168_ / 167_ / 166_ / 165_ / 164_ / 163_ / 162_ / 161_ / 160_ / 159_ / 158_ / 157_ / 156_ / 155_ / 153_ consommées. maySubmit=false.
+Lis ensuite CURRENT_STATE_AND_RESUME.md et 188_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK.md.
+Vérifie Git. Persistence recheck BLOCKED_LOCAL (188_) · HARDENED (187_, a785949) · UI-only ON / RUNTIME OFF (185_) · origin/main baa92c4 · ahead 4/0 · alias dpl_8Bq6MJ72…. Docker daemon OFF. RideCloud apply suspendu (167_ READY, 0 apply). Pack 158_+159_. Budget 437/391/0/46.
+Flag UI ON. Persistence OFF. Autres runtimes OFF. Auth 188_ / 187_ / 186_ / 185_ / 184_ / 183_ / 182_ / 181_ / 180_ / 179_ / 178_ / 177_ consommées. maySubmit=false.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
 Aucun provider. 0¢. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. Aucun apply. Aucun persist bind. Aucun média Git. Aucun merge réel.
-Prochaine porte : recheck preflight persistence. Aucun runtime implicite. Ne pas réécrire sw.js. Ne pas câbler AICCOS. Distinguer a785949 (hardening local), 4713d33 (preflight 186_), baa92c4 (origin/main servi).
+Prochaine porte : recheck après Supabase local. Aucun runtime implicite. Ne pas réécrire sw.js. Ne pas câbler AICCOS. Distinguer a785949 (hardening local), 9dce256 (docs 187_), baa92c4 (origin/main servi).
 N’appelle aucun provider sans Auth explicite dans CE chat.
 Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 ```
@@ -553,6 +556,7 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
+| 2026-08-28 | `188_` Director persistence recheck | VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_BLOCKED_LOCAL_INTEGRATION_REQUIRED | local `188_` | 0 | **0 flag** · **0 deploy** · **0 push** | recheck après Supabase local |
 | 2026-08-28 | `187_` Director persistence hardening | VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENED_READY_FOR_PREFLIGHT_RECHECK | local `a785949` | 0 | **0 flag** · **0 deploy** · **0 push** | recheck preflight |
 | 2026-08-28 | `186_` Director persistence preflight | VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_BLOCKED_HARDENING_REQUIRED | local `4713d33` | 0 | **0 flag** · **0 deploy** · **0 push** | hardening isolé |
 | 2026-08-28 | `185_` Director UI-only Production | VHS_DIRECTOR_UI_ONLY_PRODUCTION_ENABLED_RUNTIME_OFF | `baa92c4` | 0 | **1 flag** · **1 deploy** `dpl_8Bq6MJ72…` · SHA servi `baa92c4` | persistence preflight |
