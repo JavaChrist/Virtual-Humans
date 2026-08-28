@@ -172,6 +172,10 @@
 **RESTORE_DRILL** — preuve de restauration vers cible isolée ≠ Production ; verdicts `PASS` \| `BLOCKED_TARGET_REQUIRED` \| `BLOCKED_CREDENTIALS_REQUIRED` \| `BLOCKED_BACKUP_UNAVAILABLE` \| `FAIL` (`74_`).
 **PRIVACY_DUE_DILIGENCE** — revue officielle des 5 décisions Motion ; verdicts `READY_FOR_HUMAN_DECISION` \| `MORE_INFORMATION_REQUIRED` \| `BLOCKED` \| `ACCEPTED_LIMITED_MV001` (`74_` / `81_`).
 **Motion Director** — Directeur éventuel **post-V1** ; traduit des contraintes, n’invente pas le mouvement, n’appelle pas de provider.
+**persistenceEnabled !== executionAuthorized** — règle `187_` : `DIRECTOR_V2_PERSISTENCE_ENABLED` n’autorise que create/list/get/revise/compare/stale et lectures ; jamais execute, budget, Storage, download, Human Review ou Motion Review.
+**director_capability_disabled** — code HTTP stable `187_` (503) lorsqu’une capability d’exécution est OFF ; message utilisateur non technique.
+**director_project_quota_exceeded** — code HTTP stable `187_` (409) lorsque le plafond de 50 projets non archivés par workspace est atteint ; replay idempotent autorisé.
+**VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENED_READY_FOR_PREFLIGHT_RECHECK** — verdict `187_` : 25 routes classées · 0 execute persistence-only · quota 50 · 0 flag write · prochaine porte = recheck preflight.
 
 ## Termes proscrits
 
