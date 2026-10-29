@@ -1,8 +1,8 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-10-29T16:26:00+02:00
-documentedHead=0759085
+verifiedAt=2026-10-29T16:30:00+02:00
+documentedHead=e3a5573
 headStatus=pending commit
 lastPhaseReport=190_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY.md
 nextPhase=OBSERVE_PRODUCTION_AUTO_DEPLOY_AFTER_TOM_PLATE_AND_DOCS_PUSH
@@ -21,7 +21,7 @@ globalStatus=TOM_LOCKED_GREEN_SCREEN_PLATE_AND_APP_DOCS_READY_TO_PUSH
 **Auteur de la mise à jour :** Cursor · plaque présentateur Tom + docs app  
 **Branche :** `main`  
 **HEAD origin/main :** `0759085` · docs `190_` **servi** · working tree applicatif : plaque Tom + docs app  
-**Working tree :** plaque Tom + README/`FICHE_IDENTITE` + wiring Studio · 6 fichiers AICCOS/pages = bruit CRLF seulement, non inclus  
+**Working tree :** 6 fichiers Studio restants (AICCOS, Lip-sync, Storyboard, Vidéo, `.env.example`) à inclure pour working tree propre  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
 **Alias Production actuel :** `dpl_8Zj37xvjiQCweDC9GmnmXQ2riHGw` · SHA **`0759085`** · env AICCOS + narrateurs présents · tree hardening = `a785949`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
