@@ -1,0 +1,15 @@
+{
+  "plates": [
+    {
+      "id": "tom_green-screen_phone_v001",
+      "role": "presenter_green_screen",
+      "locked": true,
+      "file": "approved/tom_green-screen_phone_v001.mp4",
+      "poster": "approved/tom_green-screen_phone_v001.jpg",
+      "durationSeconds": 5,
+      "framing": "full_body",
+      "action": "phone_look",
+      "notes": "Plaque présentateur permanente. Seul le calque décor change."
+    }
+  ]
+}

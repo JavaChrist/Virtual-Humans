@@ -50,6 +50,15 @@ interface Product {
   screens: string[];
 }
 
+interface VideoPlate {
+  id: string;
+  role: "presenter_green_screen";
+  locked: boolean;
+  relPath: string;
+  posterRelPath?: string;
+  durationSeconds?: number;
+}
+
 /** 3 parcours fiables — ordre demandé : plein pied → (micro-trottoir = Storyboard) → talking-head. */
 type SceneFormat = "plein-pied" | "talking-head";
 
@@ -110,6 +119,7 @@ export default function SceneStudio() {
   // utilisée ensuite comme frame de départ pour l'animation.
   const [sceneImageUrl, setSceneImageUrl] = useState<string | null>(null);
   const [sceneImgBusy, setSceneImgBusy] = useState(false);
+  const [lockedPlate, setLockedPlate] = useState<VideoPlate | null>(null);
 
   // Kling image→vidéo : identité verrouillée par la 1re frame (photo du perso).
   // Seedance (reference/image-to-video) est refusé par la modération FAL sur les
@@ -202,6 +212,17 @@ export default function SceneStudio() {
         if (c.behaviors[0]) setTone(c.behaviors[0].name);
       })
       .catch(() => {});
+    apiGet<{ lockedPlate: VideoPlate | null }>(withCharacter("/api/assets", characterId))
+      .then((d) => {
+        const plate = d.lockedPlate;
+        setLockedPlate(plate);
+        if (plate?.locked) {
+          setVideoUrl(
+            `/api/asset?character=${encodeURIComponent(characterId)}&path=${encodeURIComponent(plate.relPath)}`,
+          );
+        }
+      })
+      .catch(() => setLockedPlate(null));
   }, [characterId]);
 
   useEffect(() => {
@@ -254,10 +275,12 @@ export default function SceneStudio() {
 
   const safeFormat: SceneFormat = format === "talking-head" ? "talking-head" : "plein-pied";
   const formatMeta = FORMAT_META[safeFormat];
+  const plateLocked = Boolean(lockedPlate?.locked && format === "plein-pied");
   const canGenerate =
-    !!outfit &&
-    !!ready &&
-    !(formatMeta.decorRequired && !sceneImageUrl);
+    plateLocked ||
+    (!!outfit &&
+      !!ready &&
+      !(formatMeta.decorRequired && !sceneImageUrl));
 
   // Ajuste la durée aux valeurs acceptées par le modèle courant.
   useEffect(() => {
@@ -271,6 +294,12 @@ export default function SceneStudio() {
     : outfit?.name ?? "";
   const [decorPrompt, setDecorPrompt] = useState("");
   useEffect(() => {
+    if (lockedPlate?.locked && format === "plein-pied") {
+      setDecorPrompt(
+        `Photorealistic empty ${location}, no people, no presenter, wide establishing view usable as a background plate behind a full-body chroma-key presenter. Natural daylight, stable architecture, no text, no logos.`,
+      );
+      return;
+    }
     if (format === "talking-head") {
       setDecorPrompt(
         `Photorealistic medium close-up of the EXACT same person as the reference (same face, gender, age, ethnicity), looking at camera in ${location}. Soft natural light, background of ${location} visible. Single person only. Do not invent a different person.`,
@@ -282,7 +311,7 @@ export default function SceneStudio() {
       );
     }
     setSceneImageUrl(null);
-  }, [location, format, clothingHint]);
+  }, [location, format, clothingHint, lockedPlate]);
 
   async function makeSceneImage() {
     if (!decorPrompt.trim()) return;
@@ -325,6 +354,14 @@ export default function SceneStudio() {
   }
 
   async function generate() {
+    if (plateLocked && lockedPlate) {
+      setError(null);
+      setStatus(null);
+      setVideoUrl(
+        `/api/asset?character=${encodeURIComponent(characterId)}&path=${encodeURIComponent(lockedPlate.relPath)}`,
+      );
+      return;
+    }
     if (!model) return;
     if (formatMeta.decorRequired && !sceneImageUrl) {
       setError("Parcours plein pied : génère d'abord l'image de décor (une seule personne en pied dans le lieu).");
@@ -575,12 +612,16 @@ export default function SceneStudio() {
 
           <div className="border-t border-[var(--border)] pt-4">
             <label className="label">
-              {format === "talking-head"
+              {plateLocked
+                ? `Fond interchangeable — « ${location} » (sans ${name})`
+                : format === "talking-head"
                 ? `Image de décor (optionnel) — buste de ${name} dans « ${location} »`
                 : `Image de décor — obligatoire : ${name} EN PIED dans « ${location} »`}
             </label>
             <p className="text-xs text-[var(--muted)] mb-2">
-              Étape qui crée vraiment le fond. Sans ce bouton, la vidéo part d&apos;une photo studio (fond blanc).
+              {plateLocked
+                ? `La vidéo de ${name} reste la plaque officielle. Ce bouton ne change que le fond.`
+                : "Étape qui crée vraiment le fond. Sans ce bouton, la vidéo part d'une photo studio (fond blanc)."}
             </p>
             <textarea className="input min-h-[60px]" value={decorPrompt} onChange={(e) => setDecorPrompt(e.target.value)} />
             <div className="flex items-center gap-3 mt-2">
@@ -602,11 +643,17 @@ export default function SceneStudio() {
               <div className="mt-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={sceneImageUrl} alt="Décor généré" className="max-h-64 rounded-lg border border-[var(--border)]" />
-                <p className="text-xs text-[var(--muted)] mt-1">Cette image sert de 1re frame : {name} sera animé dans ce décor.</p>
+                <p className="text-xs text-[var(--muted)] mt-1">
+                  {plateLocked
+                    ? `Fond seulement. ${name} reste sur sa plaque fond vert.`
+                    : `Cette image sert de 1re frame : ${name} sera animé dans ce décor.`}
+                </p>
               </div>
             )}
             <p className="text-xs text-[var(--muted)] mt-2">
-              {format === "talking-head"
+              {plateLocked
+                ? `${name} ne se régénère pas. Change le lieu, puis génère un nouveau fond si besoin.`
+                : format === "talking-head"
                 ? `Sans décor, on part du portrait SDK (visage assez grand pour le lip-sync).`
                 : `Étape obligatoire (~2 min) : l'aperçu doit montrer ${name} DANS le lieu (pas un fond blanc). Si fond blanc → Régénérer le décor avant d'animer.`}
             </p>
@@ -649,7 +696,9 @@ export default function SceneStudio() {
               disabled={busy || !canGenerate}
               onClick={generate}
               title={
-                formatMeta.decorRequired && !sceneImageUrl
+                plateLocked
+                  ? `Garder la plaque officielle de ${name}`
+                  : formatMeta.decorRequired && !sceneImageUrl
                   ? "Génère d'abord l'image de décor"
                   : !outfit
                     ? "Choisis une tenue"
@@ -658,7 +707,9 @@ export default function SceneStudio() {
             >
               {busy
                 ? "En cours…"
-                : formatMeta.decorRequired
+                : plateLocked
+                  ? `Garder ${name} (plaque officielle)`
+                  : formatMeta.decorRequired
                   ? "2) Animer le plan"
                   : "Générer le plan"}
             </button>

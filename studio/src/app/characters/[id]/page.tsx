@@ -94,6 +94,12 @@ export default function CharacterDetailPage() {
   const id = params?.id;
   const [pkg, setPkg] = useState<CharacterPackage | null>(null);
   const [apiError, setApiError] = useState<{ status: number; error: ApiError } | null>(null);
+  const [lockedPlate, setLockedPlate] = useState<{
+    id: string;
+    relPath: string;
+    posterRelPath?: string;
+    durationSeconds?: number;
+  } | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -103,7 +109,16 @@ export default function CharacterDetailPage() {
       const json = await res.json();
       if (cancelled) return;
       if (res.ok) {
-        setPkg(json.character as CharacterPackage);
+        const next = json.character as CharacterPackage;
+        setPkg(next);
+        fetch(`/api/assets?character=${encodeURIComponent(next.directoryName)}`, { cache: "no-store" })
+          .then((a) => a.json())
+          .then((body) => {
+            if (!cancelled) setLockedPlate(body.lockedPlate ?? null);
+          })
+          .catch(() => {
+            if (!cancelled) setLockedPlate(null);
+          });
       } else {
         setApiError({ status: res.status, error: json.error as ApiError });
       }
@@ -202,6 +217,29 @@ export default function CharacterDetailPage() {
         <PhraseList label="Appels à l'action préférés" items={p.ctaPreferred} />
         <PhraseList label="Appels à l'action à éviter" items={p.ctaAvoided} danger />
       </Section>
+
+      {lockedPlate && (
+        <Section title="Plaque fond vert (permanente)" ok source="assets/videos/PLATES.json">
+          <p className="text-sm text-[var(--muted)] mb-3">
+            {pkg.displayName} reste sur cette vidéo. Seul le fond (concessionnaire, rue, studio…) change.
+          </p>
+          <video
+            src={`/api/asset?character=${encodeURIComponent(pkg.directoryName)}&path=${encodeURIComponent(lockedPlate.relPath)}`}
+            poster={
+              lockedPlate.posterRelPath
+                ? `/api/asset?character=${encodeURIComponent(pkg.directoryName)}&path=${encodeURIComponent(lockedPlate.posterRelPath)}`
+                : undefined
+            }
+            controls
+            className="w-full max-w-sm rounded-lg border border-[var(--border)]"
+          />
+          <Field label="Identifiant" value={lockedPlate.id} />
+          <Field
+            label="Durée"
+            value={lockedPlate.durationSeconds != null ? `${lockedPlate.durationSeconds}s` : null}
+          />
+        </Section>
+      )}
 
       <Section title="Assets" ok={pkg.outfits.length > 0}>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

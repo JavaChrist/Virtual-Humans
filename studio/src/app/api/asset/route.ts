@@ -3,7 +3,7 @@ import { CHARACTER_NAME, readAsset } from "@/lib/sdk";
 
 export const dynamic = "force-dynamic";
 
-/** Serve a character asset image by relative path (under the character's assets/). */
+/** Serve a character image or official video plate by relative path (under assets/). */
 export async function GET(req: NextRequest) {
   const character = req.nextUrl.searchParams.get("character") ?? CHARACTER_NAME;
   const relPath = req.nextUrl.searchParams.get("path") ?? "";

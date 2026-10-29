@@ -1,29 +1,29 @@
 # Virtual Humans Studio V2 — Current State and Resume
 
 <!-- CURRENT_STATE_MARKERS
-verifiedAt=2026-08-28T12:05:00+02:00
-documentedHead=1cadcb0
+verifiedAt=2026-10-29T16:26:00+02:00
+documentedHead=0759085
 headStatus=pending commit
 lastPhaseReport=190_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY.md
-nextPhase=AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_DOCS_SYNC_ONCE_NO_FLAG_WRITE_NO_PROVIDER
+nextPhase=OBSERVE_PRODUCTION_AUTO_DEPLOY_AFTER_TOM_PLATE_AND_DOCS_PUSH
 budgetHard=437
 budgetCommitted=391
 budgetReserved=0
 budgetAvailable=46
 runtimePaidMedia=OFF
-unitTests=2065/2065
-globalStatus=VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_READY
+unitTests=2065+2_plates_targeted
+globalStatus=TOM_LOCKED_GREEN_SCREEN_PLATE_AND_APP_DOCS_READY_TO_PUSH
 -->
 
 **Projet :** Virtual Humans Studio V2  
-**Statut global :** `VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_READY`  
-**Dernière vérification :** 2026-08-28 · Director persistence hardening sync+deploy `190_` · UI-only **ON** · persistence **OFF** · SHA servi **`1cadcb0`** · tree **`a785949`** · **0** flag write · **1** push · **1** auto-deploy Ready · **0** moteur  
-**Auteur de la mise à jour :** Cursor · `AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER`  
+**Statut global :** `TOM_LOCKED_GREEN_SCREEN_PLATE_AND_APP_DOCS_READY_TO_PUSH`  
+**Dernière vérification :** 2026-10-29 · plaque Tom fond vert **verrouillée** · README + fiche identité · docs sync `190_` **déjà poussé** (`0759085`) · UI-only **ON** · persistence **OFF** · **0** flag write · **0** moteur  
+**Auteur de la mise à jour :** Cursor · plaque présentateur Tom + docs app  
 **Branche :** `main`  
-**HEAD origin/main :** `1cadcb0` · fonctionnel **`a785949`** · docs `190_` local non poussé · ahead attendu **`1/0`** après commit `190_`  
-**Working tree :** 2 AICCOS hors scope (dirty, protégés)  
+**HEAD origin/main :** `0759085` · docs `190_` **servi** · working tree applicatif : plaque Tom + docs app  
+**Working tree :** plaque Tom + README/`FICHE_IDENTITE` + wiring Studio · 6 fichiers AICCOS/pages = bruit CRLF seulement, non inclus  
 **Environnement Production principal :** Vercel Production + Supabase `ejdb…nmvi` · `eu-west-3`  
-**Alias Production actuel :** `dpl_7mdw4kLr…` · SHA **`1cadcb0`** · tree hardening = `a785949` · tree merge/export = `a602de9` · tree lipsync = `366abd6`  
+**Alias Production actuel :** `dpl_8Zj37xvjiQCweDC9GmnmXQ2riHGw` · SHA **`0759085`** · env AICCOS + narrateurs présents · tree hardening = `a785949`  
 **Commit runtime applicatif image :** **`245bea2`** · preuve composeur 1.2.0 = **`d395ec7`** · wiring I2V = **`57de914`** · hardening attempt **`97f7ad7`**  
 **Index :** [`00_README.md`](./00_README.md)  
 **Reprise nouveau chat :** [`LEO_CURSOR_NEW_CHAT_RESUME.md`](./LEO_CURSOR_NEW_CHAT_RESUME.md)  
@@ -61,7 +61,7 @@ globalStatus=VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_D
 **Storyboard initial :** [`160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md`](./160_PHASE_RIDECLOUD_FIRST_AD_STORYBOARD_PREFLIGHT.md)  
 **Addendum HD :** [`159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md`](./159_PHASE_RIDECLOUD_PACK_HIGH_RES_VARIANTS_ADDENDUM.md)  
 **Supply RideCloud :** [`158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md`](./158_PHASE_RIDECLOUD_SUPPLY_MISSING_REQUIRED_INPUTS.md)  
-**Prochaine phase exacte :** docs sync once de `190_` **sans** nouvelle boucle `191_`. Persistence Production **toujours OFF**. **Aucun flag write.** Le flag persistence n’est autorisable qu’après une Auth **distincte**. **Aucun runtime implicite.**  
+**Prochaine phase exacte :** observer l’auto-deploy après push plaque Tom + docs app. Persistence Production **toujours OFF**. **Aucun flag write.** **Aucun `191_`.**  
 **RideCloud apply :** `AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER` — **suspendue, non consommée**
 
 > **Sécurité — interdit dans ce fichier :** URL signée, secret, credential, média, clé provider, chaîne de connexion, salt brut, prompt provider complet, base64, donnée biométrique.
@@ -106,7 +106,7 @@ Virtual Humans Studio est un Assistant Réalisateur IA. Le parcours `/director` 
 | RideCloud promo | **BIND KIND SCHEMA REMOTE PREFLIGHT READY** · apply **suspendu** | `167_` · CHECK distant 13 kinds · 0 apply |
 | UI localhost vs Production | **deploy Ready** · SHA `e4703bf` prouvé · alias docs `c808fa2` | `171_` · tracing + cartes · Director flag OFF |
 | App update / PWA | **BLOCKERS DEPLOY READY** · SHA build `134631d` · fonctionnel `045f48a` | `177_` · docs sync **terminée** · 0 flag |
-| Prochaine étape | **docs sync once `190_`** | SHA servi `1cadcb0` · persistence OFF · 0 flag write |
+| Prochaine étape | **observer auto-deploy** après push plaque Tom + docs | SHA servi `0759085` · persistence OFF · 0 flag write · 0 `191_` |
 
 **Risques principaux :** 3ᵉ appel OpenAI sans Auth ; réactiver les 4 assets ; lire/écrire un média Production sans Auth ; promouvoir un commit docs comme runtime.
 
@@ -347,7 +347,7 @@ Restrictions : pas de retry/fallback 11A ; pas de Motion depuis le chemin image 
 
 | Check | Valeur | Nature | Date / phase |
 |---|---|---|---|
-| Unitaires | **2065/2065** | suite + harnais adversatif `188_`/`189_` | 2026-08-28 `189_` |
+| Unitaires | **2065** + **2/2** plaques Tom | `video-plates.test.ts` ciblé PASS · suite complète non relancée | 2026-10-29 |
 | Typecheck / lint / build | **PASS** | `next build` local + NFT `/api/character` | `169_` |
 | migrations-static | PASS | **33 local** · remote 32 | `167_` |
 | Secret scan | **PASS** | module + docs · `VOICE_IDS_EXPOSED=false` | `167_` |
@@ -502,7 +502,7 @@ Ne pas présenter pgTAP 378 comme relancé aujourd’hui. L’intégration 35/35
 
 ### Immédiat
 
-**`AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER`** — **consommée** (`190_`). SHA servi `1cadcb0` · tree `a785949` · persistence **OFF** · 0 flag write. Prochaine porte : **docs sync once `190_`**. **Aucun flag write.**
+**`AUTH_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_NO_FLAG_WRITE_NO_PROVIDER`** — **consommée** (`190_`). SHA servi `0759085` · persistence **OFF** · 0 flag write. Docs sync `190_` **faite**. Plaque Tom fond vert **officielle / verrouillée**. **Aucun flag write.**
 
 RideCloud **`AUTH_RIDECLOUD_SEPARATE_PROJECT_BIND_KIND_SCHEMA_REMOTE_APPLY_ONCE_NO_PROVIDER`** — **suspendue, non consommée**. 0 apply.
 
@@ -529,14 +529,14 @@ Pas de délai calendaire.
 ## 16. Prochaine mission exacte (handoff)
 
 ```text
-Contexte : VHS V2 · 11A/11B/11C CLOSED · lipsync WIRED_DISABLED · merge/export WIRED_DISABLED · E2E fake HARDENED DEPLOY READY · UI-only ON / RUNTIME OFF (185_) · persistence HARDENED DEPLOY READY (190_) · flag OFF · RideCloud apply SUSPENDU
-Dernier verdict : VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_READY (190_)
-Preuve : alias dpl_7mdw4kLr… · SHA servi 1cadcb0 · tree a785949 · 0 provider · 0 flag write
-Blocage : rapport 190_ local non poussé · persistence Production OFF
-Mission : docs sync once de 190_ sans nouvelle boucle 191_. Aucun flag write.
-Auth consommées : sync+deploy (190_) · recheck local (189_) · recheck bloqué (188_) · hardening (187_) · preflight (186_) · UI-only Production (185_)
-Interdit : persistence ON · moteur · apply RideCloud · câbler AICCOS
-Attendu : Auth docs sync once · 0 runtime implicite
+Contexte : VHS V2 · 11A/11B/11C CLOSED · UI-only ON / RUNTIME OFF · persistence HARDENED mais OFF (190_) · plaque Tom fond vert verrouillée · RideCloud apply SUSPENDU
+Dernier verdict : TOM_LOCKED_GREEN_SCREEN_PLATE_AND_APP_DOCS_READY_TO_PUSH
+Preuve : SHA servi 0759085 · alias dpl_8Zj37xv… · plaque approved/tom_green-screen_phone_v001.mp4 · 0 flag write
+Blocage : persistence Production OFF · 6 fichiers CRLF AICCOS/pages non commités
+Mission : observer l’auto-deploy après ce push. Aucun 191_. Aucun flag write.
+Auth consommées : docs sync 190_ (0759085) · sync+deploy (190_) · 189_–178_
+Interdit : persistence ON · moteur · apply RideCloud · flag write
+Attendu : Ready sur virtual-humans.vercel.app · Tom reste, fond change
 ```
 
 ---
@@ -546,13 +546,13 @@ Attendu : Auth docs sync once · 0 runtime implicite
 ```text
 Lis d’abord docs/Developer-Handover/LEO_CURSOR_NEW_CHAT_RESUME.md.
 Lis ensuite CURRENT_STATE_AND_RESUME.md et 190_PHASE_VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY.md.
-Vérifie Git. Persistence hardening SYNC+DEPLOY READY (190_) · SHA servi 1cadcb0 · tree a785949 · UI-only ON / RUNTIME OFF (185_) · origin/main 1cadcb0 · ahead 1/0 après docs 190_. RideCloud apply suspendu (167_ READY, 0 apply). Pack 158_+159_. Budget 437/391/0/46.
-Flag UI ON. Persistence OFF. Autres runtimes OFF. Auth 190_ / 189_ / 188_ / 187_ / 186_ / 185_ / 184_ / 183_ / 182_ / 181_ / 180_ / 179_ / 178_ / 177_ consommées. maySubmit=false.
+Vérifie Git. SHA servi 0759085. Plaque Tom fond vert officielle verrouillée. UI-only ON / RUNTIME OFF. Persistence OFF. RideCloud apply suspendu. Budget 437/391/0/46.
+Flag UI ON. Persistence OFF. Autres runtimes OFF. Auth 190_–177_ consommées. maySubmit=false.
 Une autorisation provider d’un chat précédent n’est JAMAIS réutilisable.
-Aucun provider. 0¢. Aucun deploy applicatif sans Auth. Aucun flag write sans Auth. Aucun apply. Aucun persist bind. Aucun média Git. Aucun merge réel.
-Prochaine porte : docs sync once de 190_. Aucun runtime implicite. Ne pas réécrire sw.js. Ne pas câbler AICCOS. Distinguer a785949 (fonctionnel), 1cadcb0 (servi), commit 190_ (docs local non poussé).
+Aucun provider. 0¢. Aucun flag write sans Auth. Aucun apply. Aucun persist bind. Aucun merge réel.
+Prochaine porte : observer l’auto-deploy de ce push. Aucun 191_. Tom reste, le fond change.
 N’appelle aucun provider sans Auth explicite dans CE chat.
-Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
+N’invente aucun claim.
 ```
 
 ---
@@ -561,7 +561,8 @@ Ne copie aucun média RideCloud dans Git. N’invente aucun claim.
 
 | Date | Phase | Verdict | Commit | Coût ¢ | Effet Production | Porte suivante |
 |---|---|---|---|---|---|---|
-| 2026-08-28 | `190_` Director persistence hardening sync+deploy | VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_READY | local `190_` · servi `1cadcb0` | 0 | **1 push** · Ready `dpl_7mdw4kLr…` · **0 flag** | docs sync once |
+| 2026-10-29 | Plaque Tom fond vert + docs app | TOM_LOCKED_GREEN_SCREEN_PLATE_AND_APP_DOCS_READY_TO_PUSH | pending · base `0759085` | 0 | env AICCOS + narrateurs déjà en Production · **0 flag** | observer auto-deploy |
+| 2026-08-28 | `190_` Director persistence hardening sync+deploy | VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENING_SYNC_AND_DEPLOY_READY | servi `0759085` (docs `190_`) | 0 | **1 push** · Ready · **0 flag** | docs sync **faite** |
 | 2026-08-28 | `189_` Director persistence recheck local | VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_AFTER_LOCAL_SUPABASE_READY_FOR_HARDENING_SYNC_AND_DEPLOY_AUTH | `1cadcb0` | 0 | poussé dans `190_` · **0 flag** | sync+deploy hardening OFF |
 | 2026-08-28 | `188_` Director persistence recheck | VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_PREFLIGHT_RECHECK_BLOCKED_LOCAL_INTEGRATION_REQUIRED | local `732875c` | 0 | **0 flag** · **0 deploy** · **0 push** | recheck après Supabase local |
 | 2026-08-28 | `187_` Director persistence hardening | VHS_DIRECTOR_PERSISTENCE_PRODUCTION_ENABLEMENT_HARDENED_READY_FOR_PREFLIGHT_RECHECK | local `a785949` | 0 | **0 flag** · **0 deploy** · **0 push** | recheck preflight |

@@ -206,6 +206,8 @@ export interface AssetItem {
 }
 
 const IMAGE_EXT = new Set([".png", ".jpg", ".jpeg", ".webp"]);
+const VIDEO_EXT = new Set([".mp4", ".mov", ".webm"]);
+const MEDIA_EXT = new Set([...IMAGE_EXT, ...VIDEO_EXT]);
 
 function walkImages(dir: string, base: string): string[] {
   const out: string[] = [];
@@ -250,7 +252,71 @@ const MIME: Record<string, string> = {
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
   ".webp": "image/webp",
+  ".mp4": "video/mp4",
+  ".mov": "video/quicktime",
+  ".webm": "video/webm",
 };
+
+export type VideoPlateRole = "presenter_green_screen";
+
+export interface VideoPlate {
+  id: string;
+  role: VideoPlateRole;
+  locked: boolean;
+  /** Path relative to `assets/`, for `/api/asset`. */
+  relPath: string;
+  posterRelPath?: string;
+  durationSeconds?: number;
+  framing?: string;
+  action?: string;
+}
+
+/**
+ * Official video plates declared in `assets/videos/PLATES.json`.
+ * A locked presenter plate stays when the décor layer changes.
+ */
+export function listVideoPlates(character?: string): VideoPlate[] {
+  const videosDir = path.join(resolveCharacterDir(character), "assets", "videos");
+  const raw = readText(path.join(videosDir, "PLATES.json"));
+  if (!raw) return [];
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return [];
+  }
+  const rows = (parsed as { plates?: unknown }).plates;
+  if (!Array.isArray(rows)) return [];
+  const out: VideoPlate[] = [];
+  for (const row of rows) {
+    if (!row || typeof row !== "object") continue;
+    const r = row as Record<string, unknown>;
+    const id = typeof r.id === "string" ? r.id.trim() : "";
+    const file = typeof r.file === "string" ? r.file.trim().replace(/\\/g, "/") : "";
+    if (!id || !file || file.includes("..")) continue;
+    if (r.role !== "presenter_green_screen") continue;
+    if (!fs.existsSync(path.join(videosDir, file))) continue;
+    const poster =
+      typeof r.poster === "string" && !r.poster.includes("..")
+        ? r.poster.trim().replace(/\\/g, "/")
+        : undefined;
+    out.push({
+      id,
+      role: "presenter_green_screen",
+      locked: r.locked === true,
+      relPath: `videos/${file}`,
+      posterRelPath: poster ? `videos/${poster}` : undefined,
+      durationSeconds: typeof r.durationSeconds === "number" ? r.durationSeconds : undefined,
+      framing: typeof r.framing === "string" ? r.framing : undefined,
+      action: typeof r.action === "string" ? r.action : undefined,
+    });
+  }
+  return out;
+}
+
+export function lockedPresenterPlate(character?: string): VideoPlate | null {
+  return listVideoPlates(character).find((p) => p.role === "presenter_green_screen" && p.locked) ?? null;
+}
 
 // ---------------------------------------------------------------------------
 // Outfits (structured, from assets/outfits/LOOK_*/look.json)
@@ -337,7 +403,7 @@ export function readAsset(character: string, relPath: string): { buffer: Buffer;
   const full = path.resolve(assetsDir, relPath);
   if (!full.startsWith(assetsDir + path.sep)) return null; // path traversal guard
   const ext = path.extname(full).toLowerCase();
-  if (!IMAGE_EXT.has(ext)) return null;
+  if (!MEDIA_EXT.has(ext)) return null;
   try {
     return { buffer: fs.readFileSync(full), mime: MIME[ext] ?? "application/octet-stream" };
   } catch {
